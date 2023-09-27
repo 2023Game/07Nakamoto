@@ -53,12 +53,12 @@ void CApplication::Update()
 
 	if (mInput.Key('O'))
 	{
-		mEye = mEye - CVector(0.0f, 0.1f, 0.0f);
+		mEye = mEye + CVector(0.0f, 0.1f, 0.0f);
 	}
 
 	if (mInput.Key('M'))
 	{
-		mEye = mEye + CVector(0.0f, 0.1f, 0.0f);
+		mEye = mEye - CVector(0.0f, 0.1f, 0.0f);
 	}
 
 	//頂点1、頂点2、頂点3、法線データの作成
