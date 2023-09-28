@@ -13,10 +13,15 @@
 
 #include "CGame.h"
 #include "CSound.h"
+#include "CModel.h"
+
 
 class CApplication
 {
 private:
+	//モデルクラスのインスタンス作成
+	CModel mModel;
+
 	CSound mSoundBgm;	//BGM
 	CSound mSoundOver;	//ゲームオーバー
 	CGame* mpGame;
@@ -39,6 +44,7 @@ private:
 	CMiss* mpMiss;
 	//CCharacterのポインタの可変長配列
 //	std::vector<CCharacter*> mCharacters;
+
 public:
 	static CCharacterManager* CharacterManager();
 	static CTexture* Texture();

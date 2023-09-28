@@ -14,6 +14,9 @@ CCharacterManager CApplication::mCharacterManager;
 
 CVector mEye;
 
+//モデルデータの指定
+#define MODEL_OBJ "res\\obj.obj","res\\obj.mtl"
+
 CCharacterManager* CApplication::CharacterManager()
 {
 	return &mCharacterManager;
@@ -27,6 +30,10 @@ CTexture* CApplication::Texture()
 void CApplication::Start()
 {
 	mEye = CVector(1.0f, 2.0f, 3.0f);
+
+
+	//モデルファイルの入力
+	mModel.Load(MODEL_OBJ);
 }
 
 void CApplication::Update()
