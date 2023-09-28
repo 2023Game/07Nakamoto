@@ -34,6 +34,9 @@ void CModel::Load(char* obj, char* mtl)
 		printf("%s", buf);
 	}
 
+	//ファイルのクローズ
+	fclose(fp);
+
 	fp = fopen(obj, "r");
 
 	if (fp == NULL)
