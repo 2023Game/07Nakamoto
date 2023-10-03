@@ -22,7 +22,6 @@ private:
 	//ŽOŠpŒ`‚Ì‰Â•Ï’·”z—ñ
 	std::vector<CTriangle> mTriangles;
 	
-	
 };
 
 #endif
