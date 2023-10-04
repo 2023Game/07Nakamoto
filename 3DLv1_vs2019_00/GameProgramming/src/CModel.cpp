@@ -26,6 +26,8 @@ void CModel::Load(char* obj, char* mtl)
 {
 	//頂点データの保存(CVector型)
 	std::vector<CVector> vertex;
+	//法線データの保存(CVector型)
+	//法線ベクトル(CVector型)の可変長配列(stg::vector)normal
 	std::vector<CVector> normal;
 	//ファイルポインタ変数の作成
 	FILE* fp;
@@ -85,6 +87,7 @@ void CModel::Load(char* obj, char* mtl)
 			{
 				//可変長配列vertexに追加
 				//atof(文字列) 文字列からfloat型の値を返す
+				//先頭がvnの時、法線ベクトルを作成して追加する
 				normal.push_back(CVector(atof(str[1]), atof(str[2]), atof(str[3])));
 			}
 			//先頭がfの時、三角形を作成して追加する
@@ -102,7 +105,6 @@ void CModel::Load(char* obj, char* mtl)
 				t.Normal(normal[n[0] - 1], normal[n[1] - 1], normal[n[2] - 1]);
 				//可変長配列
 				mTriangles.push_back(t);
-
 			}
 			
 		}
