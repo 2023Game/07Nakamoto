@@ -2,6 +2,7 @@
 #include "CRectangle.h"
 #include "CVector.h"
 #include "CTriangle.h"
+#include "CMatrix.h"
 //OpenGL
 #include "glut.h"
 
@@ -31,6 +32,9 @@ CTexture* CApplication::Texture()
 
 void CApplication::Start()
 {
+	CMatrix matrix;
+	matrix.Print();
+
 	mEye = CVector(1.0f, 2.0f, 3.0f);
 
 	mBackGround.Load(MODEL_BACKGROUND);

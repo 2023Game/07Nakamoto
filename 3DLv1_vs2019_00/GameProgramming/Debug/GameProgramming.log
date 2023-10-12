@@ -1,14 +1,2 @@
-﻿  CModel.cpp
-C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CModel.cpp(77,41): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CModel.cpp(78,41): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CModel.cpp(79,41): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CModel.cpp(83,41): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CModel.cpp(120,61): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CModel.cpp(120,47): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CModel.cpp(120,33): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CModel.cpp(128,61): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CModel.cpp(128,47): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CModel.cpp(128,33): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CModel.cpp(168,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CModel.cpp(178,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+﻿  CMatrix.cpp
   GameProgramming.vcxproj -> C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\3DLv1_vs2019_00\Debug\GameProgramming.exe
