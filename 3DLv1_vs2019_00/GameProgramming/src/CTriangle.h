@@ -3,6 +3,7 @@
 #define CTRIANGLE_H
 
 #include "CVector.h"
+#include "CMatrix.h"
 /*
 三角形クラス
 */
@@ -25,6 +26,8 @@ public:
 	void Normal(const CVector& v0, const CVector& v1, const CVector& v2);
 	//描画
 	void Render();
+	//描画
+	void Render(const CMatrix& m);
 private:
 	int mMaterialIdx; //マテリアル番号
 	CVector mV[3]; //頂点座標

@@ -1,6 +1,24 @@
 #include "CMatrix.h"
+#include "CVector.h"
+
 //標準入出力関数のインクルード
 #include <stdio.h>
+
+float CMatrix::M(int r,int c)const
+{
+	return mM[r][c];
+}
+
+//拡大縮小行列の作成
+//Scale(倍率X,倍率Y,倍率Z)
+CMatrix CMatrix::Scale(float sx, float sy, float sz)
+{
+	mM[0][0] = mM[0][0] * sx;
+	mM[1][1] = mM[1][1] * sy;
+	mM[2][2] = mM[2][2] * sz;
+	//この行列を返す
+	return *this;
+}
 
 //デフォルトコンストラクタ
 CMatrix::CMatrix() {

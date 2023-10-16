@@ -20,6 +20,9 @@ public:
 	void Load(char* obj, char* mtl);
 	//描画
 	void Render();
+	//描画
+	//Render(行列)
+	void Render(const CMatrix& m);
 
 private:
 	//マテリアルポインタの可変長配列
