@@ -13,9 +13,21 @@ float CMatrix::M(int r,int c)const
 //Scale(”{—¦X,”{—¦Y,”{—¦Z)
 CMatrix CMatrix::Scale(float sx, float sy, float sz)
 {
-	mM[0][0] = mM[0][0] * sx;
-	mM[1][1] = mM[1][1] * sy;
-	mM[2][2] = mM[2][2] * sz;
+	for (int x = 0; x < 4; x++)
+	{
+		mM[x][0] = mM[x][0] * sx;
+	}
+
+	for (int y = 0; y < 4; y++)
+	{
+		mM[y][1] = mM[y][1] * sy;
+	}
+
+	for (int z = 0; z < 4; z++)
+	{
+		mM[z][2] = mM[z][2] * sz;
+	}
+	
 	//‚±‚Ìs—ñ‚ð•Ô‚·
 	return *this;
 }
