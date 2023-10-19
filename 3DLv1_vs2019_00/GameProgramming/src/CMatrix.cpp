@@ -7,6 +7,22 @@
 #define _USE_MATH_DEFINES
 //数学関数のインクルード
 #include <math.h>
+void CMatrix::M(int row, int col, float value)
+{
+	mM[row][col] = value;
+}
+
+//移動行列の作成
+//Translate(移動量X,移動量Y,移動量Z)
+CMatrix CMatrix::Translate(float mx, float my, float mz)
+{
+	mM[0][0] = 1; mM[0][1] = 0; mM[0][2] = 0; mM[0][3] = 0;
+	mM[1][0] = 0; mM[1][1] = 1; mM[1][2] = 0; mM[1][3] = 0;
+	mM[2][0] = 0; mM[2][1] = 0; mM[2][2] = 1; mM[2][3] = 0;
+	mM[3][0] = mx; mM[3][1] = my; mM[3][2] = mz; mM[3][3] = 1;
+	//この行列を返す
+	return *this;
+}
 
 //回転行列(Y軸)の作成
 //RotateY(角度)
