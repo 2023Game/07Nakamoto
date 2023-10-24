@@ -14,11 +14,13 @@
 #include "CGame.h"
 #include "CSound.h"
 #include "CModel.h"
-
+#include "CCharacter3.h"
 
 class CApplication
 {
 private:
+	CCharacter3 mPlayer;
+	CCharacter3 mCharacter;
 	CModel mBackGround;	//背景モデル
 	//モデルクラスのインスタンス作成
 	CModel mModel;
