@@ -1,2 +1,4 @@
-﻿  CTransform.cpp
+﻿  CPlayer.cpp
+C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CPlayer.cpp(13,1): warning C4005: 'VELOCITY': マクロが再定義されました。
+C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CCharacter.h(6): message : 'VELOCITY' の以前の定義を確認してください
   GameProgramming.vcxproj -> C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\3DLv1_vs2019_00\Debug\GameProgramming.exe

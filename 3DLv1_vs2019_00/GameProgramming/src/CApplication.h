@@ -19,7 +19,7 @@
 class CApplication
 {
 private:
-	CCharacter3 mPlayer;
+	CPlayer mPlayer;
 	CCharacter3 mCharacter;
 	CModel mBackGround;	//背景モデル
 	//モデルクラスのインスタンス作成
