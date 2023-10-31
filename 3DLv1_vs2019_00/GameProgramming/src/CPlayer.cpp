@@ -10,7 +10,7 @@
 #include "CPlayer.h"
 
 #define ROTATION_YV CVector(0.0f,1.0f,0.0f) //回転速度
-#define VELOCITY CVector(0.0f,0.0f,1.0f) //移動速度
+#define VELOCITY CVector(0.0f,0.0f,0.1f) //移動速度
 
 //CPlayer(位置,回転,スケール)
 CPlayer::CPlayer(const CVector& pos, const CVector& rot, const CVector& scale)

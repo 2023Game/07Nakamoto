@@ -11,6 +11,11 @@
 */
 class CMaterial {
 public:
+	//頂点数の設定
+	//VertexNum(頂点数)
+	void VertexNum(int num);
+	//頂点数の取得
+	int VertexNum();
 	//マテリアルを無効にする
 	void Disabled();
 	//テクスチャの取得
@@ -27,6 +32,8 @@ public:
 	//mDiffuseの配列の取得
 	float* Diffuse();
 private:
+	//マテリアルの毎に調点数
+	int mVertexNum;
 	//テクスチャ 
 	CTexture mTexture;
 	//マテリアル名

@@ -8,6 +8,16 @@ strncpy(char* str1, const char* str2, int len)
 コピー先str1にコピー元str2の文字をlen文字数までコピーする
 */
 
+int CMaterial::VertexNum()
+{
+	return mVertexNum;
+}
+
+void CMaterial::VertexNum(int num)
+{
+	mVertexNum = num;
+}
+
 char* strncpy(char* str1, const char* str2, int len)
 {
 	int i = 0;
@@ -23,7 +33,9 @@ char* strncpy(char* str1, const char* str2, int len)
 }
 
 //デフォルトコンストラクタ
-CMaterial::CMaterial() {
+CMaterial::CMaterial()
+	:mVertexNum(0)
+{
 	//名前を0で埋める
 	memset(mName, 0, sizeof(mName));
 	//0で埋める
