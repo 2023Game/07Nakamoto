@@ -21,6 +21,12 @@ CVector mEye;
 //モデルデータの指定
 #define MODEL_OBJ "res\\f14.obj","res\\f14.mtl"
 
+CTaskManager CApplication::mTaskManager;
+CTaskManager* CApplication::TaskManager()
+{
+	return &mTaskManager;
+}
+
 CCharacterManager* CApplication::CharacterManager()
 {
 	return &mCharacterManager;
@@ -109,8 +115,10 @@ void CApplication::Update()
 
 	mBackGround.Render();
 
-	mPlayer.bullet.Update();
-	mPlayer.bullet.Render();
+	//タスクマネージャの更新
+	mTaskManager.Update();
+	//タスクマネージャの描画
+	mTaskManager.Render();
 }
 
 

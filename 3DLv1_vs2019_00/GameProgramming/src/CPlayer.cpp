@@ -1,5 +1,6 @@
 #include "CPlayer.h"
 #include "CApplication.h"
+#include "CTaskManager.h"
 //#include "CGame.h"
 
 #define TEXCOORD 168, 188, 158, 128	//テクスチャマッピング
@@ -24,9 +25,12 @@ void CPlayer::Update()
 {
 	//スペースキー入力で弾発射
 	if (mInput.Key(VK_SPACE)) {
-		bullet.Set(0.1f, 1.5f);
-		bullet.Position(CVector(0.0f, 0.0f, 10.0f) * mMatrix);
-		bullet.Rotation(mRotation);
+		CBullet* bullet = new CBullet();
+		bullet->Set(0.1f, 1.5f);
+		bullet->Position(CVector(0.0f, 0.0f, 10.0f) * mMatrix);
+		bullet->Rotation(mRotation);
+		bullet->Update();
+		CApplication::TaskManager()->Add(bullet);
 	}
 	//Sキー入力で上向き
 	if (mInput.Key('S'))
