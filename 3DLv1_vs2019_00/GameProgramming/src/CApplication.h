@@ -22,7 +22,7 @@ class CApplication
 private:
 	static CTaskManager mTaskManager;
 	CPlayer mPlayer;
-	CCharacter3 mCharacter;
+	//CCharacter3 mCharacter;
 	CModel mBackGround;	//背景モデル
 	//モデルクラスのインスタンス作成
 	CModel mModel;

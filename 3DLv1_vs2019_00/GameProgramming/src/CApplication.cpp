@@ -56,6 +56,9 @@ void CApplication::Start()
 
 void CApplication::Update()
 {
+	//タスクマネージャの更新
+	mTaskManager.Update();
+
 	if (mInput.Key('J'))
 	{
 		mEye = mEye - CVector(0.1f, 0.0f, 0.0f);
@@ -97,7 +100,7 @@ void CApplication::Update()
 	//頂点3の座標を設定する
 	v2.Set(0.0f, 0.0f, -0.5f);
 
-	mPlayer.Update();
+	//mPlayer.Update();
 
 	//カメラのパラメータを作成する
 	CVector e, c, u; //視点、注視点、上方向
@@ -111,14 +114,12 @@ void CApplication::Update()
 	//gluLookAt(視点X,視点Y,視点Z,中心X,中心Y,中心Z,上向X,上向Y,上向Z)
 	gluLookAt(e.X(), e.Y(), e.Z(), c.X(), c.Y(), c.Z(), u.X(), u.Y(), u.Z());
 
-	mPlayer.Render();
+	//mPlayer.Render();
 
 	mBackGround.Render();
 
-	//タスクマネージャの更新
-	mTaskManager.Update();
+	//タスクマネージャの削除
+	mTaskManager.Delete();
 	//タスクマネージャの描画
 	mTaskManager.Render();
 }
-
-
