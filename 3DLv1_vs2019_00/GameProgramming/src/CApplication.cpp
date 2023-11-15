@@ -20,6 +20,8 @@ CVector mEye;
 #define MODEL_BACKGROUND "res\\sky.obj","res\\sky.mtl"
 //モデルデータの指定
 #define MODEL_OBJ "res\\f14.obj","res\\f14.mtl"
+//敵輸送機モデル
+#define MODEL_C5 "res\\c5.obj","res\\c5.mtl"
 
 CTaskManager CApplication::mTaskManager;
 CTaskManager* CApplication::TaskManager()
@@ -52,6 +54,15 @@ void CApplication::Start()
 	mBackGround.Load(MODEL_BACKGROUND);
 	//モデルファイルの入力
 	mModel.Load(MODEL_OBJ);
+
+	//C5モデルの読み込み
+	mModelC5.Load(MODEL_C5);
+	//敵機のインスタンス作成
+	new CEnemy(&mModelC5, CVector(0.0f, 10.0f, -100.0f), 
+		CVector(), CVector(0.1f, 0.1f, 0.1f));
+
+	new CEnemy(&mModelC5, CVector(30.0f, 10.0f, -130.0f),
+		CVector(), CVector(0.1f, 0.1f, 0.1f));
 }
 
 void CApplication::Update()
