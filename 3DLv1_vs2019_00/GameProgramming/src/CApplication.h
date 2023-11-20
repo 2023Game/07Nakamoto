@@ -22,7 +22,6 @@ class CApplication
 private:
 	//C5モデル
 	CModel mModelC5;
-	static CTaskManager mTaskManager;
 	CPlayer mPlayer;
 	//CCharacter3 mCharacter;
 	CModel mBackGround;	//背景モデル
@@ -53,7 +52,6 @@ private:
 //	std::vector<CCharacter*> mCharacters;
 
 public:
-	static CTaskManager* TaskManager();
 	static CCharacterManager* CharacterManager();
 	static CTexture* Texture();
 	//最初に一度だけ実行するプログラム

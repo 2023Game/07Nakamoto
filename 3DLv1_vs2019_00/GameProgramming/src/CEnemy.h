@@ -22,13 +22,5 @@ private:
 	CCollider mCollider1;
 	CCollider mCollider2;
 	CCollider mCollider3;
-public:
-	//確認用メソッド　削除予定
-	void CEnemy::Render() {
-		CCharacter3::Render();
-		mCollider1.Render();
-		mCollider2.Render();
-		mCollider3.Render();
-	}
 };
 #endif

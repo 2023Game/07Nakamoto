@@ -4,6 +4,7 @@
 #include "CTriangle.h"
 #include "CMatrix.h"
 #include "CTransform.h"
+#include "CCollisionManager.h"
 //OpenGL
 #include "glut.h"
 
@@ -22,12 +23,6 @@ CVector mEye;
 #define MODEL_OBJ "res\\f14.obj","res\\f14.mtl"
 //敵輸送機モデル
 #define MODEL_C5 "res\\c5.obj","res\\c5.mtl"
-
-CTaskManager CApplication::mTaskManager;
-CTaskManager* CApplication::TaskManager()
-{
-	return &mTaskManager;
-}
 
 CCharacterManager* CApplication::CharacterManager()
 {
@@ -68,7 +63,7 @@ void CApplication::Start()
 void CApplication::Update()
 {
 	//タスクマネージャの更新
-	mTaskManager.Update();
+	CTaskManager::Instance()->Update();
 
 	if (mInput.Key('J'))
 	{
@@ -130,7 +125,9 @@ void CApplication::Update()
 	mBackGround.Render();
 
 	//タスクマネージャの削除
-	mTaskManager.Delete();
+	CTaskManager::Instance()->Delete();
 	//タスクマネージャの描画
-	mTaskManager.Render();
+	CTaskManager::Instance()->Render();
+	//コライダの描画
+	CCollisionManager::Instance()->Render();
 }
