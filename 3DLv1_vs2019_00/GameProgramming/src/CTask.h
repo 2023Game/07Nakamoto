@@ -1,12 +1,16 @@
 #pragma once
 #ifndef CTASK_H
 #define CTASK_H
+
+class CCollisionManager;
 class CTaskManager;
+
 /*
 タスククラス
 タスクリストの要素
 */
 class CTask {
+	friend CCollisionManager;
 	friend CTaskManager;
 public:
 	//デフォルトコンストラクタ

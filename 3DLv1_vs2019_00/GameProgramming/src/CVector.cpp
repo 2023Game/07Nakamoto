@@ -1,4 +1,11 @@
 #include "CVector.h"
+#include <math.h>
+
+//ベクトルの長さを返す
+float CVector::Length() const {
+	//sqrt関数で平方根を返す
+	return sqrtf(mX * mX + mY * mY + mZ * mZ);
+}
 
 //Set(X座標,Y座標,Z座標)
 void CVector::Set(float x, float y, float z)
