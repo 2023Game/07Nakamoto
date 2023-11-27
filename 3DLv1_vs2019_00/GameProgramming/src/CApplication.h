@@ -31,7 +31,11 @@ private:
 	CSound mSoundBgm;	//BGM
 	CSound mSoundOver;	//ゲームオーバー
 	CGame* mpGame;
+
 	static CCharacterManager mCharacterManager;
+	//モデルビューの逆行列
+	static CMatrix mModelViewInverse;
+
 	enum class EState
 	{
 		ESTART,	//ゲーム開始
@@ -53,6 +57,9 @@ private:
 
 public:
 	static CCharacterManager* CharacterManager();
+	//モデルビュー行列の取得
+	static const CMatrix& ModelViewInverse();
+
 	static CTexture* Texture();
 	//最初に一度だけ実行するプログラム
 	void Start();

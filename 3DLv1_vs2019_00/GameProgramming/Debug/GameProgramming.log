@@ -1,2 +1,5 @@
-﻿  CApplication.cpp
+﻿  CMatrix.cpp
+C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CMatrix.cpp(67,12): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CMatrix.cpp(83,12): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CMatrix.cpp(99,12): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
   GameProgramming.vcxproj -> C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\3DLv1_vs2019_00\Debug\GameProgramming.exe

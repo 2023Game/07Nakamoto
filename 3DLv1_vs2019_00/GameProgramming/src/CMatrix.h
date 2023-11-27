@@ -8,6 +8,8 @@
 */
 class CMatrix {
 public:
+	//逆行列取得
+	CMatrix Transpose() const;
 	//行列の取得
 	float* M()const;
 	//*演算子のオーバーロード
@@ -46,7 +48,6 @@ public:
 	//単位行列の作成
 	CMatrix Identity();
 private:
-
 	//4×4の行列データを設定
 	float mM[4][4];
 };
