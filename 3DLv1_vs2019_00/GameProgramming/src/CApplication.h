@@ -10,6 +10,7 @@
 #include "CMiss.h"
 #include <vector>
 #include "CCharacterManager.h"
+#include "CColliderTriangle.h"
 
 #include "CGame.h"
 #include "CSound.h"
@@ -20,6 +21,9 @@
 class CApplication
 {
 private:
+	//三角コライダの作成
+	CColliderTriangle mColliderTriangle;
+	CColliderTriangle mColliderTriangle2;
 	//C5モデル
 	CModel mModelC5;
 	CPlayer mPlayer;

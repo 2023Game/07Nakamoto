@@ -1,6 +1,16 @@
 #include "CCollider.h"
 #include "CCollisionManager.h"
 
+CCollider::CCollider()
+	:mpParent(nullptr)
+	, mpMatrix(&mMatrix)
+	, mType(EType::ESPHERE)
+	, mRadius(0)
+{
+	//コリジョンマネージャに追加
+	CCollisionManager::Instance()->Add(this);
+}
+
 //衝突判定
 	//Collision(コライダ1,コライダ2)
 	//retrun:true(衝突している)false(衝突していない)
@@ -21,9 +31,11 @@ bool CCollider::Collision(CCollider* m, CCollider* o) {
 }
 
 CCollider::CCollider(CCharacter3* parent, CMatrix* matrix,
-	const CVector& position, float radius) {
+	const CVector& position, float radius)
+:CCollider()
+{
 	//コリジョンマネージャに追加
-	CCollisionManager::Instance()->Add(this);
+	//削除CCollisionManager::Instance()->Add(this);
 	//親設定
 	mpParent = parent;
 	//親行列設定

@@ -44,6 +44,18 @@ CTexture* CApplication::Texture()
 
 void CApplication::Start()
 {
+	//三角コライダの確認
+	mColliderTriangle.Set(nullptr, nullptr
+		, CVector(-50.0f, 0.0f, -50.0f)
+		, CVector(-50.0f, 0.0f, 50.0f)
+		, CVector(50.0f, 0.0f, -50.0f));
+
+	//三角コライダの確認
+	mColliderTriangle2.Set(nullptr, nullptr
+		, CVector(-50.0f, 0.0f, 50.0f)
+		, CVector(50.0f, 0.0f, 50.0f)
+		, CVector(50.0f, 0.0f, -50.0f));
+
 	mPlayer.Model(&mModel);
 	mPlayer.Scale(CVector(0.1f, 0.1f, 0.1f));
 	mPlayer.Position(CVector(0.0f, 0.0f, -3.0f));
