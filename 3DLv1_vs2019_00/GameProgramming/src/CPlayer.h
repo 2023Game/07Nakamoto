@@ -1,6 +1,7 @@
 #pragma once
 #include "CCharacter.h"
 #include "CInput.h"
+#include "CColliderLine.h"
 
 #ifndef CPLAYER_H
 #define CPLAYER_H
@@ -17,12 +18,15 @@ class CPlayer : public CCharacter3
 {
 public:
 	//CBullet bullet;
-	CPlayer(){}
+	CPlayer();
 	//CPlayer(位置,回転,スケール)
 	CPlayer(const CVector& pos, const CVector& rot, const CVector& scale);
 	//更新処理
 	void Update();
 private:
+	CColliderLine mLine; //線分コライダ
+	CColliderLine mLine2; //上下の線分コライダ
+	CColliderLine mLine3; //左右の線分コライダ
 	CInput mInput;
 };
 
