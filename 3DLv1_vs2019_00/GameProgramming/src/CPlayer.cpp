@@ -1,6 +1,7 @@
 #include "CPlayer.h"
 #include "CApplication.h"
 #include "CTaskManager.h"
+#include "CCollider.h"
 //#include "CGame.h"
 
 #define TEXCOORD 168, 188, 158, 128	//テクスチャマッピング
@@ -13,6 +14,26 @@
 #define ROTATION_XV CVector(1.0f,0.0f,0.0f) //回転速度
 #define ROTATION_YV CVector(0.0f,1.0f,0.0f) //回転速度
 #define VELOCITY CVector(0.0f,0.0f,0.1f) //移動速度
+
+void CPlayer::Collision(CCollider* m, CCollider* o) {
+	//自身のコライダタイプの判定
+	switch (m->Type()) {
+	case CCollider::EType::ELINE://線分コライダの時
+		//相手のコライダが三角コライダの時
+		if (o->Type() == CCollider::EType::ETRIANGLE) {
+			CVector adjust; //調整用ベクトル
+			//三角形と線分の衝突判定
+			if (CCollider::CollisionTraingleLine(o, m, &adjust))
+			{
+				//位置の更新(mPosition + adjust)
+				mPosition = mPosition + adjust;
+				//行列の更新
+				CTransform::Update();
+			}
+		}
+		break;
+	}
+}
 
 CPlayer::CPlayer()
 	:mLine(this, &mMatrix, CVector(0.0f, 0.0f, -14.0f), CVector(0.0f, 0.0f, 17.0f))
