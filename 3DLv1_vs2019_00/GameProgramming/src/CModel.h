@@ -14,6 +14,7 @@
 class CModel
 {
 public:
+	std::vector<CTriangle> Triangles() const;
 	//デストラクタの宣言
 	~CModel();
 	//モデルファイルの入力

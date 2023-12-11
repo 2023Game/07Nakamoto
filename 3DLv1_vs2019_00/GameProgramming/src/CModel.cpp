@@ -4,6 +4,11 @@
 //CVectorのインクルード
 #include "CVector.h"
 
+std::vector<CTriangle> CModel::Triangles() const
+{
+	return mTriangles;
+}
+
 void CModel::CreateVertexBuffer()
 {
 	mpVertexes = new CVertex[mTriangles.size() * 3];
