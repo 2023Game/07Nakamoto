@@ -3,6 +3,19 @@
 //タスクマネージャのインスタンス
 CTaskManager* CTaskManager::mpInstance = nullptr;
 
+//衝突処理
+void CTaskManager::Collision()
+{
+	//先頭から最後まで繰り返し
+	CTask* task = mHead.mpNext;
+	while (task->mpNext) {
+		//衝突処理を呼ぶ
+		task->Collision();
+		//次へ
+		task = task->mpNext;
+	}
+}
+
 //インスタンスの取得
 CTaskManager* CTaskManager::Instance()
 {

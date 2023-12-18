@@ -11,6 +11,7 @@
 class CEnemy : public CCharacter3
 {
 public:
+	void Collision();
 	//衝突処理
 	//Collision(コライダ1,コライダ2)
 	void Collision(CCollider* m, CCollider* o);

@@ -1,8 +1,22 @@
 #include "CEnemy.h"
 #include "CEffect.h"
+#include "CCollisionManager.h"
 
 //移動速度
 #define VELOCITY CVector(0.0f, 0.0f, 0.09f)
+
+//衝突処理
+void CEnemy::Collision()
+{
+	//コライダの優先度の変更
+	mCollider1.ChangePriority();
+	mCollider2.ChangePriority();
+	mCollider3.ChangePriority();
+	//衝突処理の実行
+	CCollisionManager::Instance()->Collision(&mCollider1, COLLISIONRANGE);
+	CCollisionManager::Instance()->Collision(&mCollider2, COLLISIONRANGE);
+	CCollisionManager::Instance()->Collision(&mCollider3, COLLISIONRANGE);
+}
 
 //衝突処理
 //Collision(コライダ1,コライダ2)
