@@ -25,6 +25,18 @@ CVector mEye;
 //敵輸送機モデル
 #define MODEL_C5 "res\\c5.obj","res\\c5.mtl"
 
+CApplication::~CApplication()
+{
+	delete spUi;	//インスタンスUiの削除
+}
+
+CUi* CApplication::spUi = nullptr;
+
+CUi* CApplication::Ui()
+{
+	return spUi;
+}
+
 CMatrix CApplication::mModelViewInverse;
 
 const CMatrix& CApplication::ModelViewInverse()
@@ -44,6 +56,8 @@ CTexture* CApplication::Texture()
 
 void CApplication::Start()
 {
+	spUi = new CUi();	//UIクラスの生成
+
 	mPlayer.Model(&mModel);
 	mPlayer.Scale(CVector(0.1f, 0.1f, 0.1f));
 	mPlayer.Position(CVector(0.0f, 0.0f, -3.0f));
@@ -154,4 +168,6 @@ void CApplication::Update()
 	CTaskManager::Instance()->Render();
 	//コライダの描画
 	CCollisionManager::Instance()->Render();
+
+	spUi->Render();		//UIの描画
 }

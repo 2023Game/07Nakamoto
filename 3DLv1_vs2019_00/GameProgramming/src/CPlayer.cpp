@@ -65,6 +65,11 @@ CPlayer::CPlayer(const CVector& pos, const CVector& rot, const CVector& scale)
 //更新処理
 void CPlayer::Update()
 {
+	//UI設定
+	CApplication::Ui()->PosY(mPosition.Y());
+	CApplication::Ui()->RotX(mRotation.X());
+	CApplication::Ui()->RotY(mRotation.Y());
+
 	//スペースキー入力で弾発射
 	if (mInput.Key(VK_SPACE)) {
 		CBullet* bullet = new CBullet();
