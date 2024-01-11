@@ -4,7 +4,7 @@
 //CVectorのインクルード
 #include "CVector.h"
 
-std::vector<CTriangle> CModel::Triangles() const
+const std::vector<CTriangle>& CModel::Triangles() const
 {
 	return mTriangles;
 }
