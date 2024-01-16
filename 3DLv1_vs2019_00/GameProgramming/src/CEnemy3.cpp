@@ -52,24 +52,21 @@ void CEnemy3::Update()
 		float dz = vp.Dot(mMatrixRotate.VectorZ());
 
 		//敵の前方にプレイヤーがいるとき
-		if (dx > 0)
+		//敵とプレイヤーの距離が30以内のとき
+		if (0 <= dz && dz <= 30)
 		{
-			//敵とプレイヤーの距離が30以内のとき
-			if (0 <= dz && dz <= 30)
+			//X軸のズレが2.0以下
+			if (-2.0f < dx && dx < 2.0f)
 			{
-				//X軸のズレが2.0以下
-				if (-2.0f < dx && dx < 2.0f)
+				//Y軸のズレが2.0以下
+				if (-2.0 < dy && dy < 2.0f)
 				{
-					//Y軸のズレが2.0以下
-					if (-2.0 < dy && dy < 2.0f)
-					{
-						//弾を発射します
-						CBullet* bullet = new CBullet();
-						bullet->Set(0.1f, 1.5f);
-						bullet->Position(CVector(0.0f, 0.0f, 10.0f) * mMatrix);
-						bullet->Rotation(mRotation);
-						bullet->Update();
-					}
+					//弾を発射します
+					CBullet* bullet = new CBullet();
+					bullet->Set(0.1f, 1.5f);
+					bullet->Position(CVector(0.0f, 0.0f, 10.0f) * mMatrix);
+					bullet->Rotation(mRotation);
+					bullet->Update();
 				}
 			}
 		}
