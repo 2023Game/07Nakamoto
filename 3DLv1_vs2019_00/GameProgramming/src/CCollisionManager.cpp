@@ -1,5 +1,4 @@
 #include "CCollisionManager.h"
-#include "CCollider.h"
 
 //Õ“Ëˆ—
 //Collision(ƒRƒ‰ƒCƒ_,”ÍˆÍ)
