@@ -22,6 +22,8 @@ public:
 	void Collision(CCollider* m, CCollider* o);
 	void Collision();
 private:
+	//目的地
+	CVector mPoint;
 	//ヒットポイント
 	int mHp;
 	//モデルデータ
