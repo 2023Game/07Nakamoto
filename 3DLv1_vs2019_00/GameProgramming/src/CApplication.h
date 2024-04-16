@@ -1,18 +1,13 @@
 #pragma once
-#include "CRectangle.h"
 #include "CTexture.h"
-#include "CCharacter.h"
 #include "CBullet.h"
 #include "CEnemy.h"
 #include "CPlayer.h"
 #include "CInput.h"
 #include "CFont.h"
-#include "CMiss.h"
 #include <vector>
-#include "CCharacterManager.h"
 #include "CColliderTriangle.h"
 
-#include "CGame.h"
 #include "CSound.h"
 #include "CModel.h"
 #include "CCharacter3.h"
@@ -22,7 +17,6 @@
 class CApplication
 {
 private:
-	static CUi* spUi;		//UIクラスのポインタ
 	//モデルからコライダを生成
 	CColliderMesh mColliderMesh;
 
@@ -40,9 +34,7 @@ private:
 
 	CSound mSoundBgm;	//BGM
 	CSound mSoundOver;	//ゲームオーバー
-	CGame* mpGame;
 
-	static CCharacterManager mCharacterManager;
 	//モデルビューの逆行列
 	static CMatrix mModelViewInverse;
 
@@ -61,16 +53,11 @@ private:
 //	CBullet* mpBullet;
 	CInput mInput;
 	CFont mFont;
-	CMiss* mpMiss;
 	//CCharacterのポインタの可変長配列
 //	std::vector<CCharacter*> mCharacters;
 
 public:
-	~CApplication();
 
-	static CUi* Ui();		//UIクラスのインスタンスを取得
-
-	static CCharacterManager* CharacterManager();
 	//モデルビュー行列の取得
 	static const CMatrix& ModelViewInverse();
 

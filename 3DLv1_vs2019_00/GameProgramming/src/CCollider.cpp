@@ -118,7 +118,7 @@ CCollider::CCollider()
 	CCollisionManager::Instance()->Add(this);
 }
 
-//衝突判定
+	//衝突判定
 	//Collision(コライダ1,コライダ2)
 	//retrun:true(衝突している)false(衝突していない)
 bool CCollider::Collision(CCollider* m, CCollider* o) {
