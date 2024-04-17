@@ -1,4 +1,6 @@
 #pragma once
+#include "CModelX.h"
+
 #include "CTexture.h"
 #include "CBullet.h"
 #include "CEnemy.h"
@@ -57,6 +59,7 @@ private:
 //	std::vector<CCharacter*> mCharacters;
 
 public:
+	CModelX mModelX;
 
 	//モデルビュー行列の取得
 	static const CMatrix& ModelViewInverse();
