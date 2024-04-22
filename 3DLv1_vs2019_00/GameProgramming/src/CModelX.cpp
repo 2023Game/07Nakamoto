@@ -4,6 +4,37 @@
 #include "CModelX.h"
 #include "glut.h"
 
+CModelX::~CModelX()
+{
+	if (mFrame.size() > 0)
+	{
+		delete mFrame[0];
+	}
+}
+
+/*
+SkipNode
+ノードを読み飛ばす
+*/
+void CModelX::SkipNode() {
+	//文字が終わったら終了
+	while (*mpPointer != '\0') {
+		GetToken();	//次の単語取得
+		//{が見つかったらループ終了
+		if (strchr(mToken, '{'))break;
+	}
+	int count = 1;
+
+	//文字が終わるか、カウントが0になったら終了
+	while (*mpPointer != '\0' && count > 0) {
+		GetToken();		//次の単語取得
+		//{を見つけるとカウントアップ
+		if (strchr(mToken, '{'))count++;
+		//}を見つけとカウントダウン
+		else if (strchr(mToken, '}'))count--;
+	}
+}
+
 /*
 IsDelimiter(c)
 cが\t\r\n スペースなどの空白文字
@@ -40,13 +71,13 @@ char* CModelX::GetToken() {
 	while (*p != '\0' && IsDelimiter(*p))p++;
 	if (*p == '{' || *p == '}') {
 		//{または}ならmTokenに代入し次の文字へ
-		*q++ = *p++;
+		*q++ = *p++;	//代入された後に1+される
 	}
 	else {
 		//タブ(\t)空白()改行(\r)(\n), ; " の区切り文字、
 		//または、} の文字になるまでmTokenに代入する
 		while (*p != '\0' && !IsDelimiter(*p) && *p != '}')
-			*q++ = *p++;
+			*q++ = *p++;	//代入された後に1+される
 	}
 
 	*q = '\0';		//mTokenの最後に\0を代入
@@ -109,19 +140,71 @@ void CModelX::Load(char* file){
 		GetToken();		//単語の取得
 		//単語がFarmleの場合
 		if (strcmp(mToken, "Frame") == 0) {
-			printf("%s", mToken); //Frame出力
-			GetToken();		//Frame名を取得
-			printf("%s\n", mToken); //Frame名を出力
-		}
-
-		if (strcmp(mToken, "AnimationSet") == 0) {
-			printf("%s", mToken); //AnimationSet出力
-			GetToken();		//AnimationSet名を取得
-			printf("%s\n", mToken); //AnimationSet名を出力
+			//フレームを作成する
+			new CModelXFrame(this);
 		}
 	}
 
 	fclose(fp);	//ファイルをクローズする
 
 	SAFE_DELETE_ARRAY(buf);	//確保した領域を解放する
+}
+
+CModelXFrame::~CModelXFrame()
+{
+	//子フレームを全て解放する
+	std::vector<CModelXFrame*>::iterator itr;
+	for (itr = mChild.begin(); itr != mChild.end(); itr++) {
+		delete* itr;
+	}
+	//名前のエリアを解放する
+	SAFE_DELETE_ARRAY(mpName);
+}
+
+/*
+CModelXFrame
+model:CModelXインスタンスへのポインタ
+フレームを制作する
+読み込み中にFrameが見つかれば、フレームを作成し
+子フレームに追加する
+*/
+CModelXFrame::CModelXFrame(CModelX* model)
+	:mpName(nullptr)
+	,mIndex()
+{
+	//現在のフレーム配列の要素数を取得し設定する
+	mIndex = model->mFrame.size();
+	//CModelXのフレーム配列に追加する
+	model->mFrame.push_back(this);
+	//変換行列を単位行列にする
+	mTransformMatrix.Identity();
+	//次の単語(フレーム名の予定)を取得する
+	model->GetToken();//frame name
+	//フレーム名分エリアを確保する
+	mpName = new char[strlen(model->mToken) + 1];
+	//フレーム名をコピーする
+	strcpy(mpName, model->mToken);
+	//次の単語({の予定)を取得する
+	model->GetToken();	//{
+	//文字がなくなったら終わり
+	while (*model->mpPointer != '\0') {
+		//次の単語取得
+		model->GetToken();	//Frame
+		//}かっこの場合は終了
+		if (strchr(model->mToken, '}'))break;
+		//新なフレームの場所は、子フレームに追加
+		if (strcmp(model->mToken, "Frame") == 0) {
+			//フレームを作成し、子フレームの配列に追加
+			mChild.push_back(
+				new CModelXFrame(model));
+		}
+		else {
+			//上記以外の要素は読み飛ばす
+			model->SkipNode();
+		}
+	}
+//デバッグバージョンのみ有効
+#ifdef _DEBUG
+	printf("%s\n", mpName);
+#endif
 }
