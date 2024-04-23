@@ -8,6 +8,11 @@
 //数学関数のインクルード
 #include <math.h>
 
+int CMatrix::Size()
+{
+	return sizeof(mM) / sizeof(float);
+}
+
 CVector CMatrix::VectorZ() const
 {
 	return CVector(mM[2][0], mM[2][1], mM[2][2]);
