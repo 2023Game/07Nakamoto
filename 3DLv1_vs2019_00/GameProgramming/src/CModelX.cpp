@@ -198,7 +198,7 @@ CModelXFrame::CModelXFrame(CModelX* model)
 			mChild.push_back(
 				new CModelXFrame(model));
 		}
-		else if(strcmp(model->mToken,"FrameTransformMatrux")){
+		else if (strcmp(model->mToken, "FrameTransformMatrix") == 0) {
 			model->GetToken(); // {
 			for (int i = 0; i < mTransformMatrix.Size(); i++) {
 				mTransformMatrix.M()[i] = atof(model->GetToken());
