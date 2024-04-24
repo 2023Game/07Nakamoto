@@ -47,6 +47,13 @@ public:
 	//各軸での値の設定
 	//Set(X座標,Y座標,Z座標)
 	void Set(float x, float y, float z);
+	//X座標の設定(X座標)
+	void X(float f);
+	//Y座標の設定(Y座標)
+	void Y(float f);
+	//Z座標の設定(Z座標)
+	void Z(float f);
+
 	//xの値を得る
 	float X() const;
 	//Yの値を得る

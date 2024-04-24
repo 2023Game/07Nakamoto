@@ -2,6 +2,8 @@
 #define CMODELX_H
 #include <vector>		//vectorクラスのインクルード(動的配列)
 #include "CMatrix.h"	//マトリクスクラスのインクルード
+
+class CMesh;			//CMeshクラスの宣言
 class CModelX;			//CModelXクラスに宣言
 class CModelXFrame;		//CModelXFeameクラスの宣言
 
@@ -9,6 +11,20 @@ class CModelXFrame;		//CModelXFeameクラスの宣言
 
 //領域開放をマクロ化
 #define SAFE_DELETE_ARRAY(a){if(a) delete[] a;a=nullptr;}
+
+class CMesh {
+public:
+	//コンストラクタ
+	CMesh();
+	//デストラクタ
+	~CMesh();
+	//読み込み処理
+	void Init(CModelX* model);
+private:
+	int mVertexNum;		//頂点数
+	CVector* mpVertex;	//頂点データ
+};
+
 /*
 CModelX
 Xファイル形式の3Dモデルデータをプログラムで認識する
@@ -16,6 +32,9 @@ Xファイル形式の3Dモデルデータをプログラムで認識する
 class CModelX{
 	friend CModelXFrame;
 public:
+	//mTokenのポインタを返す
+	char* Token();
+	//デストラクタ
 	~CModelX();
 	//ノードの読み飛ばし
 	void SkipNode();
@@ -41,6 +60,7 @@ public:
 	//デストラクタ
 	~CModelXFrame();
 private:
+	CMesh* mpMesh;	//Meshデータ
 	std::vector<CModelXFrame*>mChild;	//子フレームの配列
 	CMatrix mTransformMatrix;	//変換行列
 	char* mpName;	//フレーム名前
