@@ -9,11 +9,14 @@
 CMesh::CMesh()
 	:mVertexNum(0)
 	,mpVertex(nullptr)
+	,mFaceNum(0)
+	,mpVertexIndex(nullptr)
 {}
 
 //デストラクタ
 CMesh::~CMesh() {
 	SAFE_DELETE_ARRAY(mpVertex);
+	SAFE_DELETE_ARRAY(mpVertexIndex);
 }
 
 /*
@@ -38,6 +41,17 @@ void CMesh::Init(CModelX* model) {
 		mpVertex[i].Z(atof(model->GetToken()));
 	}
 
+	//面数読み込み
+	mFaceNum = atoi(model->GetToken());
+	//頂点数は1面に3頂点
+	mpVertexIndex = new int[mFaceNum * 3];
+	for (int i = 0; i < mFaceNum * 3; i += 3){
+		model->GetToken();	//頂点数読み飛ばし
+		mpVertexIndex[i] = atoi(model->GetToken());
+		mpVertexIndex[i + 1] = atoi(model->GetToken());
+		mpVertexIndex[i + 2] = atoi(model->GetToken());
+	}
+
 	//デバッグバージョンのみ有効
 #ifdef _DEBUG
 	printf("VertexNum:%d\n",mVertexNum);
@@ -45,6 +59,12 @@ void CMesh::Init(CModelX* model) {
 	{
 		printf("%10f %10f %10f\n",
 			mpVertex[i].X(), mpVertex[i].Y(), mpVertex[i].Z());
+	}
+
+	printf("FaceNum:%d\n", mFaceNum);
+	for (int i = 0; i < mFaceNum * 3; i += 3) {
+		printf("%2d %2d %2d\n",
+			mpVertexIndex[i], mpVertexIndex[i + 1], mpVertexIndex[i + 2]);
 	}
 #endif
 
@@ -128,7 +148,7 @@ char* CModelX::GetToken() {
 		//タブ(\t)空白()改行(\r)(\n), ; " の区切り文字、
 		//または、} の文字になるまでmTokenに代入する
 		while (*p != '\0' && !IsDelimiter(*p) && *p != '}')
-			*q++ = *p++;	//代入された後に1+される
+			*q++ = *p++;	//代入された後に+1される
 	}
 
 	*q = '\0';		//mTokenの最後に\0を代入
