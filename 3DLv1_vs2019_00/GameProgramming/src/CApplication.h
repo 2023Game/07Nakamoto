@@ -19,6 +19,8 @@
 class CApplication
 {
 private:
+	CMatrix mMatrix;
+
 	//モデルからコライダを生成
 	CColliderMesh mColliderMesh;
 

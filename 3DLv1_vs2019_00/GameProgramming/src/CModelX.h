@@ -20,6 +20,7 @@ public:
 	~CMesh();
 	//読み込み処理
 	void Init(CModelX* model);
+	void Render();
 private:
 	int mNormalNum;		//法線数
 	CVector* mpNormal;	//法線ベクトル
@@ -38,6 +39,7 @@ Xファイル形式の3Dモデルデータをプログラムで認識する
 class CModelX{
 	friend CModelXFrame;
 public:
+	void Render();
 	//mTokenのポインタを返す
 	char* Token();
 	//デストラクタ
@@ -65,6 +67,7 @@ public:
 	CModelXFrame(CModelX* model);
 	//デストラクタ
 	~CModelXFrame();
+	void Render();
 private:
 	CMesh* mpMesh;	//Meshデータ
 	std::vector<CModelXFrame*>mChild;	//子フレームの配列
