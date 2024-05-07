@@ -35,11 +35,66 @@ char* strncpy(char* str1, const char* str2, int len)
 //デフォルトコンストラクタ
 CMaterial::CMaterial()
 	:mVertexNum(0)
+	, mpTextureFilename(nullptr)
 {
 	//名前を0で埋める
 	memset(mName, 0, sizeof(mName));
 	//0で埋める
 	memset(mDiffuse, 0, sizeof(mDiffuse));
+}
+
+//コンストラクタ
+/*
+Materialデータの読み込みと設定
+*/
+CMaterial::CMaterial(CModelX* model)
+	:mpTextureFilename(nullptr)
+{
+	model->GetToken();	// { ? Name
+	if (strcmp(model->Token(), "{") != 0)
+	{
+		// { でないときはマテリアル名
+		strcpy(mName, model->Token());
+		model->GetToken();	//{
+	}
+
+	mDiffuse[0] = atof(model->GetToken());
+	mDiffuse[1] = atof(model->GetToken());
+	mDiffuse[2] = atof(model->GetToken());
+	mDiffuse[3] = atof(model->GetToken());
+
+	mPower = atof(model->GetToken());
+
+	mSpecular[0] = atof(model->GetToken());
+	mSpecular[1] = atof(model->GetToken());
+	mSpecular[2] = atof(model->GetToken());
+
+	mEmissive[0] = atof(model->GetToken());
+	mEmissive[1] = atof(model->GetToken());
+	mEmissive[2] = atof(model->GetToken());
+
+	model->GetToken();	//TextureFilename or }
+
+	if (strcmp(model->Token(), "TextureFilename") == 0)
+	{
+		//テクスチャありの場合、テクスチャファイル名取得
+		model->GetToken();	// {
+		model->GetToken();	// filename
+		mpTextureFilename = new char[strlen(model->Token()) + 1];
+		strcpy(mpTextureFilename, model->Token());
+		model->GetToken();	// }
+		model->GetToken();	// }
+	}
+}
+
+//デストラクタ
+CMaterial::~CMaterial()
+{
+	if (mpTextureFilename)
+	{
+		delete[] mpTextureFilename;
+	}
+	mpTextureFilename = nullptr;
 }
 
 //マテリアルを有効にする

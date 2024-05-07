@@ -6,6 +6,7 @@
 class CMesh;			//CMeshクラスの宣言
 class CModelX;			//CModelXクラスに宣言
 class CModelXFrame;		//CModelXFeameクラスの宣言
+class CMaterial;		//CMaterialクラスの宣言
 
 #define MODEL_FILE "res\\sample.blend.x"	//入力ファイル名＼は\
 
@@ -22,6 +23,11 @@ public:
 	void Init(CModelX* model);
 	void Render();
 private:
+	int mMaterialNum;	//マテリアル数
+	int mMaterialIndexNum;	//マテリアル番号数(面数)
+	int* mpMaterialIndex;	//マテリアル番号
+	std::vector<CMaterial*> mMaterial;	//マテリアルデータ
+
 	int mNormalNum;		//法線数
 	CVector* mpNormal;	//法線ベクトル
 
@@ -39,6 +45,9 @@ Xファイル形式の3Dモデルデータをプログラムで認識する
 class CModelX{
 	friend CModelXFrame;
 public:
+	//トークンが無くなったらtrue
+	bool EOT();
+	//描画
 	void Render();
 	//mTokenのポインタを返す
 	char* Token();
