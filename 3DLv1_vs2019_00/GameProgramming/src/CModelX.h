@@ -9,6 +9,7 @@ class CModelXFrame;		//CModelXFeameクラスの宣言
 class CMaterial;		//CMaterialクラスの宣言
 class CSkinWeights;		//スキンウェイトクラス
 class CAnimationSet;	//アニメーションセットクラス
+class CAnimation;		//アニメーションクラス
 
 #define MODEL_FILE "res\\sample.blend.x"	//入力ファイル名＼は\
 
@@ -50,7 +51,10 @@ Xファイル形式の3Dモデルデータをプログラムで認識する
 class CModelX{
 	friend CAnimationSet;
 	friend CModelXFrame;
+	friend CAnimation;
 public:
+	//フレーム名に該当するフレームのアドレスを返す
+	CModelXFrame* FindFrame(char* name);
 	//トークンが無くなったらtrue
 	bool EOT();
 	//描画
@@ -75,16 +79,19 @@ private:
 	bool IsDelimiter(char c);
 	char* mpPointer;		//読み込み位置
 	char mToken[1024];	//取り出した単語領域
+	
 };
 
 //CModelXFrameクラスの定義
 class CModelXFrame {
 	friend CModelX;
+	friend CAnimation;
 public:
 	//コンストラクタ
 	CModelXFrame(CModelX* model);
 	//デストラクタ
 	~CModelXFrame();
+	int Index();
 	void Render();
 private:
 	CMesh* mpMesh;	//Meshデータ
@@ -120,8 +127,25 @@ public:
 	CAnimationSet(CModelX* model);
 	~CAnimationSet();
 private:
+	//アニメーション
+	std::vector<CAnimation*> mAnimation;
 	//アニメーションセット名
 	char* mpName;
+};
+
+/*
+CAnimation
+アニメーションクラス
+*/
+class CAnimation {
+	friend CAnimationSet;
+public:
+	CAnimation(CModelX* model);
+	~CAnimation();
+private:
+	char* mpFrameName;	//フレーム名
+	int mFrameIndex;	//フレーム番号
+
 };
 
 #endif
