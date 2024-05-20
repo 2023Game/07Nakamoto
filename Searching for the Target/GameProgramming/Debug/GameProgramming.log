@@ -1,15 +1,38 @@
 ﻿  CApplication.cpp
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CApplication.cpp(56,41): warning C4309: '引数': 定数値が切り捨てられました。
+  CBullet.cpp
+  CCharacter.cpp
+  CCollider.cpp
+  CCollisionManager.cpp
   CInput.cpp
   CMaterial.cpp
+  CMatrix.cpp
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CMatrix.cpp(13,40): warning C4474: 'printf': 書式文字列に渡された引数の数が多すぎます
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CMatrix.cpp(13,40): message : プレースホルダーとそのパラメーターには 3 の可変個引数が必要ですが、4 が指定されています。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CMatrix.cpp(15,40): warning C4474: 'printf': 書式文字列に渡された引数の数が多すぎます
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CMatrix.cpp(15,40): message : プレースホルダーとそのパラメーターには 3 の可変個引数が必要ですが、4 が指定されています。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CMatrix.cpp(17,40): warning C4474: 'printf': 書式文字列に渡された引数の数が多すぎます
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CMatrix.cpp(17,40): message : プレースホルダーとそのパラメーターには 3 の可変個引数が必要ですが、4 が指定されています。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CMatrix.cpp(19,40): warning C4474: 'printf': 書式文字列に渡された引数の数が多すぎます
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CMatrix.cpp(19,40): message : プレースホルダーとそのパラメーターには 3 の可変個引数が必要ですが、4 が指定されています。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CMatrix.cpp(72,12): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CMatrix.cpp(87,12): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CMatrix.cpp(102,12): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
   CModel.cpp
-C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CModel.cpp(24,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CModel.cpp(205,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CModel.cpp(25,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CModel.cpp(209,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CModel.cpp(266,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CModel.cpp(268,21): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+  CPlayer.cpp
   CSound.cpp
+  CTarget.cpp
+  CTaskManager.cpp
   CTexture.cpp
+  CTransform.cpp
   CTriangle.cpp
   CVector.cpp
   main.cpp
   コードを生成中...
 LINK : warning LNK4098: defaultlib 'MSVCRT' は他のライブラリの使用と競合しています。/NODEFAULTLIB:library を使用してください。
 LINK : warning LNK4098: defaultlib 'LIBCMT' は他のライブラリの使用と競合しています。/NODEFAULTLIB:library を使用してください。
-  GameProgramming.vcxproj -> C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\Searching for the Target\Debug\GameProgramming.exe
+  GameProgramming.vcxproj -> C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\Debug\GameProgramming.exe

@@ -1,7 +1,8 @@
 #ifndef CTRIANGLE_H
 #define CTRIANGLE_H
 
-#include"CVector.h"
+#include "CVector.h"
+#include "CMatrix.h"
 /*
 三角形クラス
 */
@@ -47,8 +48,32 @@ public:
 	/// <param name="v2">頂点3</param>
 	void SetUV(const CVector& v0, const CVector& v1, const CVector& v2);
 
+	//頂点座標mV[0]の取得
+	const CVector& GetV0() const;
+	//頂点座標mV[1]の取得
+	const CVector& GetV1() const;
+	//頂点座標mV[2]の取得
+	const CVector& GetV2() const;
+	//法線mN[0]を取得
+	const CVector& GetN0() const;
+	//法線mN[1]を取得
+	const CVector& GetN1() const;
+	//法線mN[2]を取得
+	const CVector& GetN2() const;
+	//UV mUv[0]を取得
+	const CVector& GetmU0() const;
+	//UV mUv[1]を取得
+	const CVector& GetmU1() const;
+	//UV mUv[2]を取得
+	const CVector& GetmU2() const;
+
 	//描画
 	void Render();
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="m">行列</param>
+	void Render(const CMatrix& m);
 
 private:
 	int mMaterialIdx;	//マテリアル番号

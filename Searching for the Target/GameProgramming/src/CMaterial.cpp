@@ -24,6 +24,7 @@ char* strmcpy(char* str1, const char* str2, int len)
 
 //デフォルトコンストラクタ
 CMaterial::CMaterial()
+	:mVertexNum(0)
 {
 	//名前を0で埋める
 	memset(mName, 0, sizeof(mName));
@@ -87,4 +88,14 @@ void CMaterial::SetName(char* name)
 float* CMaterial::GetDiffuse()
 {
 	return mDiffuse;
+}
+
+void CMaterial::SetVertexNum(int num)
+{
+	mVertexNum = num;
+}
+
+int CMaterial::GetVertexNum()
+{
+	return mVertexNum;
 }

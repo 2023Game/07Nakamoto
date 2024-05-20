@@ -28,10 +28,22 @@ public:
 	/// <param name="name">マテリアルの名前</param>
 	void SetName(char* name);
 
-	/// 拡散校の取得
+	//拡散校の取得
 	float* GetDiffuse();
 
+	/// <summary>
+	/// 頂点数の設定
+	/// </summary>
+	/// <param name="num">頂点数</param>
+	void SetVertexNum(int num);
+
+	//頂点数の取得
+	int GetVertexNum();
+
 private:
+	//マテリアル毎の頂点数
+	int mVertexNum;
+
 	//テクスチャ
 	CTexture mTexture;
 	//マテリアル名
