@@ -11,6 +11,8 @@ class CVector;
 */
 class CMatrix {
 public:
+	//クオータニオンで回転行列を設定する
+	CMatrix Quaternion(float x, float y, float z, float w);
 	//要素数の取得
 	int Size();
 
