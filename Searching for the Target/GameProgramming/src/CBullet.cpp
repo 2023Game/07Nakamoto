@@ -39,7 +39,7 @@ void CBullet::Update()
 	{
 		CTransform::Update();
 		//位置更新
-		mPosition = mPosition + CVector(0.0f, 0.0f, 2.0f) * mMatrixRotate;
+		mPosition = mPosition + CVector(-2.0f, 0.0f, 0.0f) * mMatrixRotate;
 	}
 	else
 	{
@@ -47,23 +47,4 @@ void CBullet::Update()
 		mEnabled = false;
 	}
 	
-}
-//描画
-void CBullet::Render()
-{
-	//DIFFUSE黄色設定
-	float c[] = { 1.0f,1.0f,0.0f,1.0f };
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, c);
-	//三角形描画
-	mT.Render(mMatrix);
-}
-
-CVector CBullet::GetBulletPosition()
-{
-	return mPosition;
-}
-
-CVector CBullet::GetBulletRotation()
-{
-	return mRotation;
 }

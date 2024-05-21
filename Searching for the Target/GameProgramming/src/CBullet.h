@@ -30,11 +30,7 @@ public:
 
 	//更新
 	void Update();
-	//描画
-	void Render();
 
-	CVector GetBulletPosition();
-	CVector GetBulletRotation();
 private:
 	//三角形
 	CTriangle mT;

@@ -40,7 +40,7 @@ void CApplication::Start()
 	new CTarget(&mModelTarget, CVector(0.0f, 0.5f, -50.0f),
 		CVector(0.0f, -90.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 
-	new CTarget(&mModelBullet, CVector(0.0f, 0.5f, -25.0f),
+	new CTarget(&mModelTarget, CVector(0.0f, 0.5f, -25.0f),
 		CVector(0.0f, -90.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 
 	//三角コライダの確認
@@ -65,7 +65,7 @@ void CApplication::Update()
 		bullet->SetModel(&mModelBullet);
 		bullet->SetScale(CVector(10.0f, 10.0f, 10.0f));
 		bullet->SetPosition(CVector(0.0f, 0.0f, 10.0f) * mPlayer.GetMatrix());
-		bullet->SetRotation(mPlayer.GetRotation());
+		bullet->SetRotation(CVector(0.0f, 90.0f, 0.0f) + mPlayer.GetRotation());
 		bullet->Update();
 	}
 
@@ -87,6 +87,6 @@ void CApplication::Update()
 	//タスクマネージャの描画
 	CTaskManager::GetInstance()->Render();
 	//コリジョンマネージャの描画
-	CCollisionManager::GetInstance()->Render();
+	//CCollisionManager::GetInstance()->Render();
 
 }
