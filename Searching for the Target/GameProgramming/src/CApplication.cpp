@@ -34,14 +34,20 @@ void CApplication::Start()
 	mPlayer.SetPosition(CVector(0.0f, 0.0f, -5.0f));
 	mPlayer.SetRotation(CVector(0.0f, 180.0f, 0.0f));
 	
-	new CTarget(&mModelTarget, CVector(0.0f, 10.0f, -75.0f),
+	new CTarget(&mModelTarget, CVector(0.0f, 0.5f, -75.0f),
 		CVector(0.0f, -90.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 
-	new CTarget(&mModelTarget, CVector(0.0f, 7.0f, -50.0f),
+	new CTarget(&mModelTarget, CVector(0.0f, 0.5f, -50.0f),
 		CVector(0.0f, -90.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 
-	new CTarget(&mModelTarget, CVector(0.0f, 0.5f, -25.0f),
+	new CTarget(&mModelBullet, CVector(0.0f, 0.5f, -25.0f),
 		CVector(0.0f, -90.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
+
+	//三角コライダの確認
+	mColliderTriangle.SetColliderTriangle(nullptr, nullptr,
+		CVector(-50.0f, 0.0f, -50.0f),
+		CVector(-50.0f, 00.0f, 50.0f),
+		CVector(50.0f, 0.0f, -50.0f));
 
 }
 
@@ -55,7 +61,7 @@ void CApplication::Update()
 	//弾が表示されない
 	if (mInput.Key(VK_SPACE) || mInput.Key(WM_LBUTTONDOWN))
 	{
-		CBullet *bullet = new CBullet();
+ 		CBullet *bullet = new CBullet();
 		bullet->SetModel(&mModelBullet);
 		bullet->SetScale(CVector(10.0f, 10.0f, 10.0f));
 		bullet->SetPosition(CVector(0.0f, 0.0f, 10.0f) * mPlayer.GetMatrix());
@@ -81,6 +87,6 @@ void CApplication::Update()
 	//タスクマネージャの描画
 	CTaskManager::GetInstance()->Render();
 	//コリジョンマネージャの描画
-	//CCollisionManager::GetInstance()->Render();
+	CCollisionManager::GetInstance()->Render();
 
 }

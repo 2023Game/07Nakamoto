@@ -15,6 +15,7 @@
     <ClCompile Include="src\CBullet.cpp" />
     <ClCompile Include="src\CCharacter.cpp" />
     <ClCompile Include="src\CCollider.cpp" />
+    <ClCompile Include="src\CColliderTriangle.cpp" />
     <ClCompile Include="src\CCollisionManager.cpp" />
     <ClCompile Include="src\CInput.cpp" />
     <ClCompile Include="src\CMaterial.cpp" />
@@ -35,6 +36,7 @@
     <ClInclude Include="src\CBullet.h" />
     <ClInclude Include="src\CCharacter.h" />
     <ClInclude Include="src\CCollider.h" />
+    <ClInclude Include="src\CColliderTriangle.h" />
     <ClInclude Include="src\CCollisionManager.h" />
     <ClInclude Include="src\CInput.h" />
     <ClInclude Include="src\CMaterial.h" />

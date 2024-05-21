@@ -1,6 +1,2 @@
 ﻿  CModelX.cpp
-C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CModelX.cpp(699,10): warning C4477: 'printf' : 書式文字列 '%f' には、型 'double' の引数が必要ですが、可変個引数 1 は型 'float *' です
-C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CModelX.cpp(699,10): warning C4473: 'printf': 書式文字列として渡された引数が不足しています
-C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CModelX.cpp(699,10): message : プレースホルダーとそのパラメーターには 4 の可変個引数が必要ですが、1 が指定されています。
-C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CModelX.cpp(699,10): message : 不足している可変個引数 2 が書式文字列 '%f' に必要です
-  GameProgramming.vcxproj -> C:\Users\dogpo\OneDrive\デスクトップ\2023Game\07Nakamoto\3DLv1_vs2019_00\Debug\GameProgramming.exe
+  GameProgramming.vcxproj -> C:\Users\dogpo\Desktop\2023Game\07Nakamoto\3DLv1_vs2019_00\Debug\GameProgramming.exe

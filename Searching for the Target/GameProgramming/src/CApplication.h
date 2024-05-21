@@ -6,6 +6,7 @@
 #include "CBullet.h"
 #include "CTaskManager.h"
 #include "CCollisionManager.h"
+#include "CColliderTriangle.h"
 
 class CApplication
 {
@@ -26,6 +27,9 @@ private:
 	CModel mModelTarget;
 	//背景モデル
 	CModel mBackGround;
+
+	//三角コライダの作成
+	CColliderTriangle mColliderTriangle;
 
 	CInput mInput;
 	CVector mEye;

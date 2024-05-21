@@ -669,8 +669,7 @@ CAnimation::CAnimation(CModelX* model)
 				break;
 			}
 			model->GetToken(); // }
-		}
-		else {
+		} else {
 			model->SkipNode();
 		}
 	}		//whileの終わり
@@ -693,12 +692,14 @@ CAnimation::CAnimation(CModelX* model)
 	}
 
 //デバッグバージョンのみ有効
-#ifdef _DEBUG
-	printf("Animation:%s\n",mpFrameName);
+#ifdef _DEBUG/*
+	if (mpFrameName)
+	printf("Animation:%s\n", mpFrameName);
 	for (int i = 0; i < 4; i++) {
-		printf("%f %f %f %f\n", mpKey[i].mMatrix.M());
+		printf("%10f %10f %10f %10f \n", mpKey[i].mMatrix.M(i, 0), mpKey[i].mMatrix.M(i, 1)
+			, mpKey[i].mMatrix.M(i, 2), mpKey[i].mMatrix.M(i, 3));
 	}
-	
+	*/
 #endif
 
 }
