@@ -692,14 +692,12 @@ CAnimation::CAnimation(CModelX* model)
 	}
 
 //デバッグバージョンのみ有効
-#ifdef _DEBUG/*
-	if (mpFrameName)
+#ifdef _DEBUG
 	printf("Animation:%s\n", mpFrameName);
 	for (int i = 0; i < 4; i++) {
-		printf("%10f %10f %10f %10f \n", mpKey[i].mMatrix.M(i, 0), mpKey[i].mMatrix.M(i, 1)
-			, mpKey[i].mMatrix.M(i, 2), mpKey[i].mMatrix.M(i, 3));
+			printf("%10f %10f %10f %10f\n", mpKey->mMatrix.M(i, 0),
+				mpKey->mMatrix.M(i, 1), mpKey->mMatrix.M(i, 2), mpKey->mMatrix.M(i, 3));
 	}
-	*/
 #endif
 
 }
