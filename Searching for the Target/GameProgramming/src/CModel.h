@@ -28,6 +28,8 @@ public:
 	/// <param name="m">行列</param>
 	void Render(const CMatrix& m);
 
+	const std::vector<CTriangle>& Triangles() const;
+
 private:
 	//マテリアルポインタの可変長配列
 	std::vector<CMaterial*> mpMaterials;

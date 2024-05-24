@@ -4,6 +4,7 @@
 #include "CCharacter.h"
 #include "CInput.h"
 #include "CBullet.h"
+#include "CColliderLine.h"
 
 /*
 プレイヤークラス
@@ -13,7 +14,7 @@
 class CPlayer :public CCharacter {
 public:
 	//デフォルトコンストラクタ
-	CPlayer() {}
+	CPlayer();
 
 	/// <summary>
 	/// コンストラクタ
@@ -26,8 +27,15 @@ public:
 	//更新処理
 	void Update();
 
+	//衝突処理
+	void Collision(CCollider* m, CCollider* o);
+
 private:
 	CInput mInput;
+
+	CColliderLine mLine;	//前後の線分コライダ
+	CColliderLine mLine2;	//上下の線分コライダ
+	CColliderLine mLine3;	//左右の線分コライダ
 };
 
 #endif // !CPLAYER_H

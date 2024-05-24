@@ -50,6 +50,32 @@ float CVector::GetLength() const
 	return sqrtf(mX * mX + mY * mY + mZ * mZ);
 }
 
+//内積
+float CVector::Dot(const CVector& v) const
+{
+	return mX * v.mX + mY * v.mY + mZ * v.mZ;
+}
+
+//外積
+CVector CVector::Cross(const CVector& v)const
+{
+	return CVector(mY * v.mZ - mZ * v.mY, mZ * v.mX - mX * v.mZ, mX * v.mY - mY * v.mX);
+}
+
+//正規化
+CVector CVector::Nomalize() const 
+{
+	//ベクトルの大きさで割ったベクトルを返す(長さ1のベクトル)
+	return *this * (1.0f / GetLength());
+}
+
+//*演算子のオーバーロード
+//CVector * float の演算結果を返す
+CVector CVector::operator*(const float& f)const
+{
+	return CVector(mX * f, mY * f, mZ * f);
+}
+
 //+演算子のオーバーロード
 //CVector + CVectorの演算結果を返す
 CVector CVector::operator+(const CVector& v)const

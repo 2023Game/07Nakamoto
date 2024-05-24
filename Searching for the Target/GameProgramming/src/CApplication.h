@@ -7,6 +7,7 @@
 #include "CTaskManager.h"
 #include "CCollisionManager.h"
 #include "CColliderTriangle.h"
+#include "CColliderMesh.h"
 
 class CApplication
 {
@@ -29,7 +30,10 @@ private:
 	CModel mBackGround;
 
 	//三角コライダの作成
-	CColliderTriangle mColliderTriangle;
+	//削除　CColliderTriangle mColliderTriangle;
+
+	//モデルからコライダを生成
+	CColliderMesh mColliderMesh;
 
 	CInput mInput;
 	CVector mEye;

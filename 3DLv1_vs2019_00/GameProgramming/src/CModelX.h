@@ -74,6 +74,11 @@ public:
 	CModelX();
 	//ファイル読み込み
 	void Load(char* file);
+	
+	void AnimateFrame();
+
+	std::vector<CAnimationSet*> &AnimationSet();
+
 private:
 	//アニメーションセットの配列
 	std::vector<CAnimationSet*>mAnimationSet;
@@ -90,6 +95,7 @@ private:
 class CModelXFrame {
 	friend CModelX;
 	friend CAnimation;
+	friend CAnimationSet;
 public:
 	//コンストラクタ
 	CModelXFrame(CModelX* model);
@@ -127,10 +133,22 @@ CAnimationSet
 アニメーションセット
 */
 class CAnimationSet {
+	friend CModelX;
+	
 public:
 	CAnimationSet(CModelX* model);
 	~CAnimationSet();
+
+	void Time(float time);		//時間の設定
+	void Weight(float weight);	//重みの設定
+
+	void AnimateMatrix(CModelX* model);
+	std::vector < CAnimation*>& Animation();
 private:
+	float mTime;		//現在時間
+	float mWeight;		//重み
+	float mMaxTime;		//最大時間
+
 	//アニメーション
 	std::vector<CAnimation*> mAnimation;
 	//アニメーションセット名
@@ -143,6 +161,7 @@ CAnimation
 */
 class CAnimation {
 	friend CAnimationSet;
+	friend CModelX;
 public:
 	CAnimation(CModelX* model);
 	~CAnimation();

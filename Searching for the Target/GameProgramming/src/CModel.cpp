@@ -258,6 +258,11 @@ void CModel::Render(const CMatrix& m)
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
+const std::vector<CTriangle>& CModel::Triangles() const
+{
+	return mTriangles;
+}
+
 //’¸“_‚Ì”z—ñ
 void CModel::CreateVertexBuffer()
 {

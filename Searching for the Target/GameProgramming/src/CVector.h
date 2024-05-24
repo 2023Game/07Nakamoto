@@ -37,6 +37,30 @@ public:
 	//ベクトルの長さを返す
 	float GetLength() const;
 
+	/// <summary>
+	/// 内積
+	/// </summary>
+	/// <param name="v">ベクトル</param>
+	/// <returns></returns>
+	float Dot(const CVector& v) const;
+	
+	/// <summary>
+	/// 外積
+	/// </summary>
+	/// <param name="v">ベクトル</param>
+	/// <returns></returns>
+	CVector Cross(const CVector& v) const;
+
+	/// <summary>
+	/// 正規化
+	/// </summary>
+	/// <returns>大きさ1のベクトルを返す</returns>
+	CVector Nomalize() const;
+
+	//*演算子のオーバーロード
+	//CVector * float の演算結果を返す
+	CVector operator*(const float& f)const;
+
 	//+演算子のオーバーロード
 	//CVector + CVectorの演算結果を返す
 	CVector operator+(const CVector& v)const;

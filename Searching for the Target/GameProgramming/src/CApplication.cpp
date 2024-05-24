@@ -43,11 +43,16 @@ void CApplication::Start()
 	new CTarget(&mModelTarget, CVector(0.0f, 0.5f, -25.0f),
 		CVector(0.0f, -90.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 
-	//三角コライダの確認
-	mColliderTriangle.SetColliderTriangle(nullptr, nullptr,
+	//背景モデルから三角コライダを生成
+	//親インスタンスと親行列は無し
+	mColliderMesh.ColliderMeshSet(nullptr, nullptr, &mBackGround);
+
+	//三角コライダの確認 削除
+	/*mColliderTriangle.SetColliderTriangle(nullptr, nullptr,
 		CVector(-50.0f, 0.0f, -50.0f),
-		CVector(-50.0f, 00.0f, 50.0f),
+		CVector(-50.0f, 0.0f, 50.0f),
 		CVector(50.0f, 0.0f, -50.0f));
+		*/
 
 }
 
@@ -58,21 +63,24 @@ void CApplication::Update()
 	//コリジョンマネージャの衝突判定
 	CCollisionManager::GetInstance()->Collison();
 
-	//弾が表示されない
+	//弾を撃ち出す
 	if (mInput.Key(VK_SPACE) || mInput.Key(WM_LBUTTONDOWN))
 	{
  		CBullet *bullet = new CBullet();
 		bullet->SetModel(&mModelBullet);
 		bullet->SetScale(CVector(10.0f, 10.0f, 10.0f));
-		bullet->SetPosition(CVector(0.0f, 0.0f, 10.0f) * mPlayer.GetMatrix());
+		bullet->SetPosition(CVector(0.0f, 0.0f, 5.0f) * mPlayer.GetMatrix());
 		bullet->SetRotation(CVector(0.0f, 90.0f, 0.0f) + mPlayer.GetRotation());
-		bullet->Update();
 	}
 
 	//カメラのパラメータを作成する
 	CVector e, c, u;	//視点、注視点、上方向
 	//視点を求める
 	e = mPlayer.GetPosition() + CVector(0, 4, -10) * mPlayer.GetMatrixRotate();
+	
+	// 確認用の視点
+	//e = mPlayer.GetPosition() + CVector(-20.0f, 0.0f, -13.0f) * mPlayer.GetMatrixRotate();
+
 	//注視点を求める
 	c = mPlayer.GetPosition();
 	//上方向を求める
@@ -87,6 +95,6 @@ void CApplication::Update()
 	//タスクマネージャの描画
 	CTaskManager::GetInstance()->Render();
 	//コリジョンマネージャの描画
-	//CCollisionManager::GetInstance()->Render();
+	CCollisionManager::GetInstance()->Render();
 
 }

@@ -8,6 +8,13 @@
 //数学関数のインクルード
 #include <math.h>
 
+//*演算子のオーバーロード
+//CMatrix * float の演算結果を返す
+CMatrix CMatrix::operator*(const float& x)const
+{
+
+}
+
 //クオータニオンで回転行列を設定する
 CMatrix CMatrix::Quaternion(float x, float y, float z, float w) {
 	mM[0][0] = x * x - y * y - z * z + w * w;

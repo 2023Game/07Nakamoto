@@ -17,6 +17,7 @@ public:
 	enum class EType {
 		ESPHERE,	//球コライダ
 		ETRIANGLE,	//三角コライダ
+		ELINE,		//線分コライダ
 
 	};
 
@@ -37,6 +38,9 @@ public:
 
 	//親ポインタの取得
 	CCharacter* GetParent();
+	//コライダタイプの取得
+	CCollider::EType GetType();
+
 	//描画
 	void Render();
 
@@ -47,6 +51,16 @@ public:
 	/// <param name="o">コライダ2</param>
 	/// <returns>true(衝突している) false(衝突していない)</returns>
 	static bool Collision(CCollider* m, CCollider* o);
+
+	/// <summary>
+	/// 三角形と線分の衝突範囲
+	/// </summary>
+	/// <param name="triangle">三角コライダ</param>
+	/// <param name="line">線分コライダ</param>
+	/// <param name="adjust">調整値:衝突しない位置まで戻す値</param>
+	/// <returns>true(衝突している) false(衝突していない)</returns>
+	static bool CollisionTriangleLine(CCollider* triangle,
+		CCollider* line, CVector* adjust);
 
 protected:
 	EType mType;	//コライダタイプ

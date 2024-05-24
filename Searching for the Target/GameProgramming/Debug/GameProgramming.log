@@ -1,3 +1,2 @@
-﻿  CApplication.cpp
-C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CApplication.cpp(62,41): warning C4309: '引数': 定数値が切り捨てられました。
+﻿  CPlayer.cpp
   GameProgramming.vcxproj -> C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\Debug\GameProgramming.exe

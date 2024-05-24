@@ -8,6 +8,14 @@
 //ジャンプの仮のフラグ
 //bool a = false;
 
+//デフォルトコンストラクタ
+CPlayer::CPlayer()
+	: mLine(this, &mMatrix, CVector(0.0f, 0.3f, -1.5f), CVector(0.0f, 0.3f, 1.5f))
+	, mLine2(this, &mMatrix, CVector(0.0f, 2.0f, 0.0f), CVector(0.0f, -0.2f, 0.0f))
+	, mLine3(this, &mMatrix, CVector(1.1f, 0.3f, 0.0f), CVector(-1.1f, 0.3f, 0.0f))
+{
+}
+
 //コンストラクタ
 CPlayer::CPlayer(const CVector& pos, const CVector& rot
 	, const CVector& scale)
@@ -43,6 +51,15 @@ void CPlayer::Update()
 		mPosition = mPosition - VELOCITY * mMatrixRotate;
 	}
 
+	if (mInput.Key('K'))
+	{
+		mRotation = mRotation + CVector(1.0f, 0.0f, 0.0f);
+	}
+	if (mInput.Key('I'))
+	{
+		mRotation = mRotation - CVector(1.0f, 0.0f, 0.0f);
+	}
+
 	/* 衝突判定ができてからジャンプ実装予定
 	//SPACEキー入力でジャンプ
 	if (a == false) {
@@ -60,16 +77,29 @@ void CPlayer::Update()
 	}
 	*/
 
-	//左クリック入力で弾発射：三角形の弾
-	/*if (mInput.Key(VK_SPACE) || mInput.Key(WM_LBUTTONDOWN))
-	{
-		CBullet* bullet = new CBullet();
-		bullet->SetSize(0.2f, 1.5f);
-		bullet->SetPosition(CVector(0.0f, 0.0f, 10.0f) * mMatrix);
-		bullet->SetRotation(mRotation);
-		bullet->Update();
-	}*/
-
 	//変換行列の更新
 	CTransform::Update();
+}
+
+void CPlayer::Collision(CCollider* m, CCollider* o)
+{
+	//自身のコライダタイプの判定
+	switch (m->GetType())
+	{
+	case CCollider::EType::ELINE:	//線コライダ
+		//相手のコライダが三角コライダの時
+		if (o->GetType() == CCollider::EType::ETRIANGLE)
+		{
+			CVector adjust;	//調整用ベクトル
+			//三角形と線分の衝突判定
+			if (CCollider::CollisionTriangleLine(o, m, &adjust))
+			{
+				//位置の更新
+				mPosition = mPosition + adjust;
+				//行列の更新
+				CTransform::Update();
+			}
+		}
+		break;
+	}
 }
