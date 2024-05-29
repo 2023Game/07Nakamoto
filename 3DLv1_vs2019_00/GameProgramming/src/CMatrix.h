@@ -11,6 +11,14 @@ class CVector;
 */
 class CMatrix {
 public:
+	//+=演算子のオーバーロード
+	//CMatrix1 += CMatrix2 の演算結果を返す
+	void operator+=(const CMatrix& m);
+
+	//+演算子のオーバーロード
+	//CMatrix1 + CMatrix2 の演算結果を返す
+	CMatrix operator+(const CMatrix& m)const;
+
 	//*演算子のオーバーロード
 	//CMatrix * float の演算結果を返す
 	CMatrix operator*(const float& x)const;

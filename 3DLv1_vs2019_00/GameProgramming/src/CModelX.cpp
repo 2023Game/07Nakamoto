@@ -418,6 +418,18 @@ void CModelX::AnimateFrame() {
 		if (animSet->mWeight == 0)continue;
 		animSet->AnimateMatrix(this);
 	}
+
+//デバッグバージョンのみ有効
+#ifdef _DEBUG
+	for (int i = 0; i < mFrame.size(); i++) {
+		printf("Frame:%s\n", mFrame[i]->mpName);
+		for (int j = 0; j < 4; j++) {
+			printf("%10f %10f %10f %10f \n",
+				mFrame[i]->mTransformMatrix.M(j, 0), mFrame[i]->mTransformMatrix.M(j, 1),
+				mFrame[i]->mTransformMatrix.M(j, 2), mFrame[i]->mTransformMatrix.M(j, 3));
+		}
+	}
+#endif
 }
 
 CModelXFrame::~CModelXFrame()
