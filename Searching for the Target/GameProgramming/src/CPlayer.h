@@ -5,6 +5,7 @@
 #include "CInput.h"
 #include "CBullet.h"
 #include "CColliderLine.h"
+#include "CModel.h"
 
 /*
 プレイヤークラス
@@ -24,11 +25,15 @@ public:
 	/// <param name="scale">拡縮</param>
 	CPlayer(const CVector& pos, 
 		const CVector& rot, const CVector& scale);
+
 	//更新処理
 	void Update();
 
 	//衝突処理
 	void Collision(CCollider* m, CCollider* o);
+
+	//衝突処理
+	void Collision();
 
 private:
 	CInput mInput;
@@ -36,6 +41,8 @@ private:
 	CColliderLine mLine;	//前後の線分コライダ
 	CColliderLine mLine2;	//上下の線分コライダ
 	CColliderLine mLine3;	//左右の線分コライダ
+
+	bool mBulletFlag;
 };
 
 #endif // !CPLAYER_H

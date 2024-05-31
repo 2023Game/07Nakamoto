@@ -38,6 +38,9 @@ public:
 	//•`‰æ
 	void Render();
 
+	//—Dæ“x‚Ì•ÏX
+	void ChangePriority();
+
 };
 
 #endif // !CCOLLIDERTRIANGLE_H

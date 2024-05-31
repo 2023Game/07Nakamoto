@@ -1,9 +1,12 @@
 #include "CPlayer.h"
 #include "CTaskManager.h"
+#include "CApplication.h"
 
 #define ROTATION_YV CVector(0.0f,1.0f,0.0f)	//Yの回転速度
 #define VELOCITY CVector(0.0f,0.0f,0.1f) //移動速度
 #define VELOCITY_Y CVector(0.0f,2.0f,0.0f) //ジャンプ時の移動量
+
+#define ROTATION_YX CVector(1.0f,0.0f,0.0f)
 
 //ジャンプの仮のフラグ
 //bool a = false;
@@ -13,7 +16,9 @@ CPlayer::CPlayer()
 	: mLine(this, &mMatrix, CVector(0.0f, 0.3f, -1.5f), CVector(0.0f, 0.3f, 1.5f))
 	, mLine2(this, &mMatrix, CVector(0.0f, 2.0f, 0.0f), CVector(0.0f, -0.2f, 0.0f))
 	, mLine3(this, &mMatrix, CVector(1.1f, 0.3f, 0.0f), CVector(-1.1f, 0.3f, 0.0f))
+	, mBulletFlag(false)
 {
+
 }
 
 //コンストラクタ
@@ -51,13 +56,15 @@ void CPlayer::Update()
 		mPosition = mPosition - VELOCITY * mMatrixRotate;
 	}
 
+	//確認用 X軸回転(上)
 	if (mInput.Key('K'))
 	{
-		mRotation = mRotation + CVector(1.0f, 0.0f, 0.0f);
+		mRotation = mRotation + ROTATION_YX;
 	}
+	//確認用 X軸回転(下)
 	if (mInput.Key('I'))
 	{
-		mRotation = mRotation - CVector(1.0f, 0.0f, 0.0f);
+		mRotation = mRotation - ROTATION_YX;
 	}
 
 	/* 衝突判定ができてからジャンプ実装予定
@@ -76,11 +83,34 @@ void CPlayer::Update()
 		a = false;
 	}
 	*/
+	
+	//スペースかクリックで弾発射
+	//長押し入力しても弾が1発しか出ないようにする
+	if (mBulletFlag == false)
+	{
+		//スペース or 左クリックで弾を発射
+		if (mInput.Key(VK_SPACE) || mInput.Key(WM_LBUTTONDOWN))
+		{
+			CBullet* bullet = new CBullet();
+			bullet->SetModel(CBullet::GetModelBullet());
+			bullet->SetScale(CVector(10.0f, 10.0f, 10.0f));
+			bullet->SetPosition(CVector(0.0f, 1.75f, 3.0f) * mMatrix);
+			bullet->SetRotation(mRotation);
+			bullet->Update();
+			mBulletFlag = true;
+		}
+	}
+	//スペース or 左クリックが押されてないときフラグをtrueにする
+	if (!mInput.Key(VK_SPACE) && !mInput.Key(WM_LBUTTONDOWN) && mBulletFlag == true)
+	{
+		mBulletFlag = false;
+	}
 
 	//変換行列の更新
 	CTransform::Update();
 }
 
+//衝突処理
 void CPlayer::Collision(CCollider* m, CCollider* o)
 {
 	//自身のコライダタイプの判定
@@ -102,4 +132,17 @@ void CPlayer::Collision(CCollider* m, CCollider* o)
 		}
 		break;
 	}
+}
+
+//衝突処理
+void CPlayer::Collision()
+{
+	//コライダの優先度の変更
+	mLine.ChangePriority();
+	mLine2.ChangePriority();
+	mLine3.ChangePriority();
+	//衝突処理を実行
+	CCollisionManager::GetInstance()->Collision(&mLine, COLLISIONRANGE);
+	CCollisionManager::GetInstance()->Collision(&mLine2, COLLISIONRANGE);
+	CCollisionManager::GetInstance()->Collision(&mLine3, COLLISIONRANGE);
 }

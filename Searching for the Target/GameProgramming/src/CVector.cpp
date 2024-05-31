@@ -11,10 +11,11 @@ CVector::CVector()
 }
 
 CVector::CVector(float x, float y, float z)
+	: mX(x)
+	, mY(y)
+	, mZ(z)
 {
-	mX = x;
-	mY = y;
-	mZ = z;
+	
 }
 
 //Set(Xç¿ïW,Yç¿ïW,Zç¿ïW)

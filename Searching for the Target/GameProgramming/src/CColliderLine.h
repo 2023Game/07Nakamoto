@@ -33,6 +33,9 @@ public:
 
 	//•`‰æ
 	void Render();
+
+	//—Dæ“x‚Ì•ÏX
+	void ChangePriority();
 };
 
 #endif // !CCOLLIDERLINE_H

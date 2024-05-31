@@ -1,7 +1,7 @@
 #include "CTarget.h"
 
 //移動速度
-#define VELOCITY CVector(0.0f,0.0f,0.09f)
+#define VELOCITY CVector(0.1f,0.0f,0.0f)
 //移動範囲
 #define RANGE 300
 
@@ -18,7 +18,6 @@ CTarget::CTarget(CModel* model, const CVector& position,
 }
 
 //衝突処理
-
 void CTarget::Collision(CCollider* m, CCollider* o)
 {
 	//コライダのmとoが衝突しているか判定
@@ -27,6 +26,15 @@ void CTarget::Collision(CCollider* m, CCollider* o)
 		//衝突しているときは無効にする
 		mEnabled = false;
 	}
+}
+
+//衝突処理
+void CTarget::Collision()
+{
+	//コライダの優先度の変更
+	mCollider.ChangePriority();
+	//衝突処理の実行
+	CCollisionManager::GetInstance()->Collision(&mCollider, COLLISIONRANGE);
 }
 
 //更新処理

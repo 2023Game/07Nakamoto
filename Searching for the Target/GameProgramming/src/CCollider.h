@@ -53,6 +53,16 @@ public:
 	static bool Collision(CCollider* m, CCollider* o);
 
 	/// <summary>
+	/// 三角形と球の衝突判定
+	/// </summary>
+	/// <param name="triangle">三角コライダ</param>
+	/// <param name="sphere">球コライダ</param>
+	/// <param name="adjust">調整値:衝突しない位置まで戻す値</param>
+	/// <returns>true(衝突している) false(衝突していない)</returns>
+	static bool CollisionTriangleSphere(CCollider* triangle, CCollider* sphere,
+		CVector* adjust);
+
+	/// <summary>
 	/// 三角形と線分の衝突範囲
 	/// </summary>
 	/// <param name="triangle">三角コライダ</param>
@@ -61,6 +71,15 @@ public:
 	/// <returns>true(衝突している) false(衝突していない)</returns>
 	static bool CollisionTriangleLine(CCollider* triangle,
 		CCollider* line, CVector* adjust);
+
+	/// <summary>
+	/// 優先度の変更
+	/// </summary>
+	/// <param name="priority">優先度</param>
+	void ChangePriority(int priority);
+
+	//優先度の変更
+	virtual void ChangePriority();
 
 protected:
 	EType mType;	//コライダタイプ

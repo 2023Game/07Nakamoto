@@ -77,6 +77,19 @@ void CTaskManager::Add(CTask* addTask)
 	task->mpPrev = addTask;
 }
 
+//衝突処理
+void CTaskManager::Collision()
+{
+	//先頭から最後まで繰り返し
+	CTask* task = mHead.mpNext;
+	while (task->mpNext) {
+		//衝突処理を呼ぶ
+		task->Collision();
+		//次へ
+		task = task->mpNext;
+	}
+}
+
 //タスクマネージャのインスタンス
 CTaskManager* CTaskManager::mpInstance = nullptr;
 

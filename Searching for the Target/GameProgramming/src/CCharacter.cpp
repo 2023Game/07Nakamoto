@@ -20,10 +20,6 @@ void CCharacter::SetModel(CModel* m)
 {
 	mpModel = m;
 }
-void CCharacter::SetModelBullet(CModel* m)
-{
-	mpModelBullet = m;
-}
 
 //•`‰æˆ—
 void CCharacter::Render()

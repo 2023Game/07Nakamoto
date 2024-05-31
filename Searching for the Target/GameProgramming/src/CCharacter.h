@@ -24,7 +24,6 @@ public:
 	/// </summary>
 	/// <param name="m">モデルクラスのポインタ</param>
 	void SetModel(CModel* m);
-	void SetModelBullet(CModel* m);
 	//描画処理
 	void Render();
 
@@ -33,7 +32,6 @@ public:
 
 protected:
 	CModel* mpModel;	//モデルのポインタ
-	CModel* mpModelBullet;
 
 private:
 

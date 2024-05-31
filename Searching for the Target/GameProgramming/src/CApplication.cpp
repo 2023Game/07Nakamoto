@@ -7,10 +7,11 @@
 //OpenGL
 #include "glut.h"
 
-#define MODEL_TANK "res\\tank2.obj", "res\\tank2.mtl"			//プレイヤー
-#define MODEL_TARGET "res\\target.obj", "res\\target.mtl"		//的
-#define MODEL_BULLET "res\\bullet.obj", "res\\bullet.mtl"		//弾
+#define MODEL_TANK "res\\tank.obj", "res\\tank.mtl"			//プレイヤー
+#define MODEL_TARGET "res\\target.obj", "res\\target.mtl"	//的
+#define MODEL_BULLET "res\\bullet.obj", "res\\bullet.mtl"	//弾
 
+#define MODEL_MAP "res\\map.obj","res\\map.mtl"				//試作マップ
 //#define MODEL_F14 "res\\f14.obj","res\\f14.mtl"
 #define MODEL_SKY "res\\sky.obj","res\\sky.mtl"
 
@@ -21,8 +22,11 @@ void CApplication::Start()
 	//モデルファイルの入力
 	mModel.Load(MODEL_TANK);
 	mModelTarget.Load(MODEL_TARGET);
-	mModelBullet.Load(MODEL_BULLET);
+	// 削除 mModelBullet.Load(MODEL_BULLET);
+	mModelMap.Load(MODEL_MAP);
 	mBackGround.Load(MODEL_SKY);
+
+	CBullet::GetModelBullet()->Load(MODEL_BULLET);
 
 	mEye = CVector(0.0f, 2.0f, 13.0f);
 
@@ -34,18 +38,20 @@ void CApplication::Start()
 	mPlayer.SetPosition(CVector(0.0f, 0.0f, -5.0f));
 	mPlayer.SetRotation(CVector(0.0f, 180.0f, 0.0f));
 	
-	new CTarget(&mModelTarget, CVector(0.0f, 0.5f, -75.0f),
-		CVector(0.0f, -90.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
+	new CTarget(&mModelTarget, CVector(0.0f, 2.75f, -75.0f),
+		CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 
-	new CTarget(&mModelTarget, CVector(0.0f, 0.5f, -50.0f),
-		CVector(0.0f, -90.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
+	new CTarget(&mModelTarget, CVector(0.0f, 2.75f, -50.0f),
+		CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 
-	new CTarget(&mModelTarget, CVector(0.0f, 0.5f, -25.0f),
-		CVector(0.0f, -90.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
+	new CTarget(&mModelTarget, CVector(0.0f, 2.75f, -25.0f),
+		CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 
 	//背景モデルから三角コライダを生成
 	//親インスタンスと親行列は無し
 	mColliderMesh.ColliderMeshSet(nullptr, nullptr, &mBackGround);
+
+	mColliderMesh2.ColliderMeshSet(nullptr, nullptr, &mModelMap);
 
 	//三角コライダの確認 削除
 	/*mColliderTriangle.SetColliderTriangle(nullptr, nullptr,
@@ -53,7 +59,6 @@ void CApplication::Start()
 		CVector(-50.0f, 0.0f, 50.0f),
 		CVector(50.0f, 0.0f, -50.0f));
 		*/
-
 }
 
 void CApplication::Update()
@@ -61,22 +66,13 @@ void CApplication::Update()
 	//タスクマネージャの更新
 	CTaskManager::GetInstance()->Update();
 	//コリジョンマネージャの衝突判定
-	CCollisionManager::GetInstance()->Collison();
-
-	//弾を撃ち出す
-	if (mInput.Key(VK_SPACE) || mInput.Key(WM_LBUTTONDOWN))
-	{
- 		CBullet *bullet = new CBullet();
-		bullet->SetModel(&mModelBullet);
-		bullet->SetScale(CVector(10.0f, 10.0f, 10.0f));
-		bullet->SetPosition(CVector(0.0f, 0.0f, 5.0f) * mPlayer.GetMatrix());
-		bullet->SetRotation(CVector(0.0f, 90.0f, 0.0f) + mPlayer.GetRotation());
-	}
+	// 削除 CCollisionManager::GetInstance()->Collison();
+	CTaskManager::GetInstance()->Collision();
 
 	//カメラのパラメータを作成する
 	CVector e, c, u;	//視点、注視点、上方向
 	//視点を求める
-	e = mPlayer.GetPosition() + CVector(0, 4, -10) * mPlayer.GetMatrixRotate();
+	e = mPlayer.GetPosition() + CVector(0, 5, -10) * mPlayer.GetMatrixRotate();
 	
 	// 確認用の視点
 	//e = mPlayer.GetPosition() + CVector(-20.0f, 0.0f, -13.0f) * mPlayer.GetMatrixRotate();
@@ -89,6 +85,9 @@ void CApplication::Update()
 	gluLookAt(e.GetX(), e.GetY(), e.GetZ(), c.GetX(), c.GetY(), c.GetZ(), u.GetX(), u.GetY(), u.GetZ());
 
 	mBackGround.Render();
+
+	//試作マップの描画
+	mModelMap.Render();
 
 	//タスクリストの削除
 	CTaskManager::GetInstance()->Delete();

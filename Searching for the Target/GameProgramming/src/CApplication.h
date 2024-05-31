@@ -26,6 +26,8 @@ private:
 	CModel mModelBullet;
 	//的のモデル
 	CModel mModelTarget;
+	//マップのモデル
+	CModel mModelMap;
 	//背景モデル
 	CModel mBackGround;
 
@@ -34,6 +36,7 @@ private:
 
 	//モデルからコライダを生成
 	CColliderMesh mColliderMesh;
+	CColliderMesh mColliderMesh2;
 
 	CInput mInput;
 	CVector mEye;

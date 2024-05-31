@@ -19,6 +19,8 @@ public:
 	{}
 	//デストラクタ
 	virtual ~CTask() {}
+	//衝突処理
+	virtual void Collision() {}
 	//更新
 	virtual void Update() {}
 	//描画

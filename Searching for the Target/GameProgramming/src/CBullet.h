@@ -4,6 +4,7 @@
 #include "CCharacter.h"
 #include "CTriangle.h"
 #include "CCollider.h"
+#include "CModel.h"
 
 /*
 弾クラス
@@ -27,11 +28,19 @@ public:
 	/// <param name="m">コライダ1</param>
 	/// <param name="o">コライダ2</param>
 	void Collision(CCollider* m, CCollider* o);
-
+	
 	//更新
 	void Update();
+	//三角形の弾を描画
+	//void Render();
 
+	//衝突処理
+	void Collision();
+
+	static CModel* GetModelBullet();
 private:
+	static CModel mModelBullet;
+
 	//三角形
 	CTriangle mT;
 	//生存時間

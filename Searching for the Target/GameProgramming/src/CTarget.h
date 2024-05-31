@@ -3,6 +3,7 @@
 
 #include "CCharacter.h"
 #include "CCollider.h"
+#include "CCollisionManager.h"
 
 /*
 ターゲットクラス
@@ -19,6 +20,9 @@ public:
 	/// <param name="m">コライダ1</param>
 	/// <param name="o">コライダ2</param>
 	void Collision(CCollider* m, CCollider* o);
+
+	//衝突処理
+	void Collision();
 
 	//更新処理
 	void Update();
