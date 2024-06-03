@@ -1,12 +1,16 @@
 #include "CPlayer.h"
 #include "CTaskManager.h"
 #include "CApplication.h"
+#include <math.h>
 
 #define ROTATION_YV CVector(0.0f,1.0f,0.0f)	//Yの回転速度
 #define VELOCITY CVector(0.0f,0.0f,0.1f) //移動速度
 #define VELOCITY_Y CVector(0.0f,2.0f,0.0f) //ジャンプ時の移動量
 
 #define ROTATION_YX CVector(1.0f,0.0f,0.0f)
+
+#define MOS_POS_X 400	//マウス座標のX補正
+#define MOS_POS_Y 300	//マウス座標のY補正
 
 //ジャンプの仮のフラグ
 //bool a = false;
@@ -16,7 +20,7 @@ CPlayer::CPlayer()
 	: mLine(this, &mMatrix, CVector(0.0f, 0.3f, -1.5f), CVector(0.0f, 0.3f, 1.5f))
 	, mLine2(this, &mMatrix, CVector(0.0f, 2.0f, 0.0f), CVector(0.0f, -0.2f, 0.0f))
 	, mLine3(this, &mMatrix, CVector(1.1f, 0.3f, 0.0f), CVector(-1.1f, 0.3f, 0.0f))
-	, mBulletFlag(false)
+	, mBulletFlag(nullptr)
 {
 
 }
@@ -31,6 +35,25 @@ CPlayer::CPlayer(const CVector& pos, const CVector& rot
 //更新処理
 void CPlayer::Update()
 {
+	int mx, my;	//マウスカーソル取得用
+	//マウスカーソル座標の取得
+	CInput::GetMousePos(&mx, &my);
+
+	//マウスクリック検出
+	if (mInput.Key(VK_LBUTTON))
+	{
+		//マウス座標コンソールに出力
+		printf("%d, %d\n", mx, my);
+	}
+
+	//ゲーム画面中心からの座標へ変換する
+	mx -= MOS_POS_X;
+	my = MOS_POS_Y;
+
+	//プレイヤーとマウス座標の差を求める
+	mx -= mPosition.GetX();
+	my -= mPosition.GetY();
+
 	//Dキー入力で右回転
 	if (mInput.Key('D'))
 	{
@@ -67,23 +90,6 @@ void CPlayer::Update()
 		mRotation = mRotation - ROTATION_YX;
 	}
 
-	/* 衝突判定ができてからジャンプ実装予定
-	//SPACEキー入力でジャンプ
-	if (a == false) {
-		if (mInput.Key(VK_SPACE))
-		{
-			//Y軸方向の値を移動させる
-			mPosition = mPosition + VELOCITY_Y;
-			a = true;
-		}
-	}
-
-	if (a == true && !mInput.Key(VK_SPACE))
-	{
-		a = false;
-	}
-	*/
-	
 	//スペースかクリックで弾発射
 	//長押し入力しても弾が1発しか出ないようにする
 	if (mBulletFlag == false)

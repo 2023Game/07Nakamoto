@@ -53,12 +53,6 @@ void CApplication::Start()
 
 	mColliderMesh2.ColliderMeshSet(nullptr, nullptr, &mModelMap);
 
-	//三角コライダの確認 削除
-	/*mColliderTriangle.SetColliderTriangle(nullptr, nullptr,
-		CVector(-50.0f, 0.0f, -50.0f),
-		CVector(-50.0f, 0.0f, 50.0f),
-		CVector(50.0f, 0.0f, -50.0f));
-		*/
 }
 
 void CApplication::Update()
@@ -74,11 +68,11 @@ void CApplication::Update()
 	//視点を求める
 	e = mPlayer.GetPosition() + CVector(0, 5, -10) * mPlayer.GetMatrixRotate();
 	
-	// 確認用の視点
-	//e = mPlayer.GetPosition() + CVector(-20.0f, 0.0f, -13.0f) * mPlayer.GetMatrixRotate();
+	// 確認用の視点 右
+	//e = mPlayer.GetPosition() + CVector(-20.0f, 5.0f, 0.0f) * mPlayer.GetMatrixRotate();
 
 	//注視点を求める
-	c = mPlayer.GetPosition();
+	c = mPlayer.GetPosition() + CVector(0.0f,0.0f,0.0f);
 	//上方向を求める
 	u = CVector(0, 1, 0) * mPlayer.GetMatrixRotate();
 	//カメラ設定
@@ -87,7 +81,7 @@ void CApplication::Update()
 	mBackGround.Render();
 
 	//試作マップの描画
-	mModelMap.Render();
+	mModelMap.Render(); 
 
 	//タスクリストの削除
 	CTaskManager::GetInstance()->Delete();

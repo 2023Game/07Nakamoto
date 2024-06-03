@@ -15,15 +15,20 @@ class CCollider;
 */
 class CCharacter :public CTransform ,public CTask {
 public:
-	//コンストラクタ
+	//デフォルトコンストラクタ
 	CCharacter();
 	//デストラクタ
 	~CCharacter();
+
+	//コンストラクタ
+	CCharacter(int priority);
+
 	/// <summary>
 	/// モデルの設定
 	/// </summary>
 	/// <param name="m">モデルクラスのポインタ</param>
 	void SetModel(CModel* m);
+
 	//描画処理
 	void Render();
 

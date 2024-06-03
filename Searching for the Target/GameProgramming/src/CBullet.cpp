@@ -1,5 +1,6 @@
 #include "CBullet.h"
 #include "CCollisionManager.h"
+#include <stdio.h>
 
 //static変数の定義
 CModel CBullet::mModelBullet;
@@ -31,7 +32,7 @@ void CBullet::SetSize(float w, float d)
 //衝突処理
 void CBullet::Collision(CCollider* m, CCollider* o)
 {
-	/*
+	
 	//相手のコライダタイプの判定
 	switch (o->GetType())
 	{
@@ -41,24 +42,19 @@ void CBullet::Collision(CCollider* m, CCollider* o)
 		{
 			//衝突しているときは無効にする
 			mEnabled = false;
+			printf("球コライダにhit\n");
 		}
 		break;
 	case CCollider::EType::ETRIANGLE:	//三角コライダの時
+		CVector adjust;	//調整値
 		//コライダのmとoが衝突しているか判定
-		if (CCollider::Collision(m, o))
+		if (CCollider::CollisionTriangleSphere(m, o, &adjust))
 		{
 			//衝突しているときは無効にする
 			mEnabled = false;
+			printf("三角コライダにhit\n");
 		}
 		break;
-	}
-	*/
-
-	//コライダのmとoが衝突しているか判定
-	if (CCollider::Collision(m, o))
-	{
-		//衝突しているときは無効にする
-		mEnabled = false;
 	}
 }
 

@@ -30,8 +30,7 @@ void CColliderMesh::ColliderMeshSet(CCharacter* parent, CMatrix* matrix, CModel*
 			, model->Triangles()[i].GetV0()
 			, model->Triangles()[i].GetV1()
 			, model->Triangles()[i].GetV2());
+		//優先度の変更
 		mpColliderTriangles[i].ChangePriority();
 	}
 }
-
-//優先度の変更

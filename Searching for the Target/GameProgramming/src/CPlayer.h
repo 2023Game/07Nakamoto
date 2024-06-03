@@ -41,6 +41,7 @@ private:
 	CColliderLine mLine;	//前後の線分コライダ
 	CColliderLine mLine2;	//上下の線分コライダ
 	CColliderLine mLine3;	//左右の線分コライダ
+	CCollider mCollider;
 
 	bool mBulletFlag;
 };

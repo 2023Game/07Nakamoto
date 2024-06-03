@@ -4,6 +4,7 @@
 #include "GLFW/glfw3.h"
 #include "main.h"
 #include "CApplication.h"
+#include "CInput.h"
 
 CApplication gApplication;
 
@@ -85,6 +86,8 @@ int main(void)
 		glfwTerminate();
 		return -1;
 	}
+	//ウィンドウポインタ変数の設定
+	CInput::Init(window);
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 

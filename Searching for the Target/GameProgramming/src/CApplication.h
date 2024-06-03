@@ -31,9 +31,6 @@ private:
 	//背景モデル
 	CModel mBackGround;
 
-	//三角コライダの作成
-	//削除　CColliderTriangle mColliderTriangle;
-
 	//モデルからコライダを生成
 	CColliderMesh mColliderMesh;
 	CColliderMesh mColliderMesh2;

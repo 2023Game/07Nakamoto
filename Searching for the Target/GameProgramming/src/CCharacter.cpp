@@ -1,7 +1,7 @@
 #include "CCharacter.h"
 #include "CApplication.h"
 
-//コンストラクタ
+//デフォルトコンストラクタ
 CCharacter::CCharacter()
 	:mpModel(nullptr)
 {
@@ -13,6 +13,14 @@ CCharacter::~CCharacter()
 {
 	//タスクリストから削除
 	CTaskManager::GetInstance()->Remove(this);
+}
+
+//コンストラクタ
+CCharacter::CCharacter(int priority)
+	:mpModel(nullptr)
+{
+	mPriority = priority;
+	CTaskManager::GetInstance()->Add(this);
 }
 
 //モデルの設定
