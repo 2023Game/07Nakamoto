@@ -386,9 +386,38 @@ void CModelX::Render()
 	}
 }
 
+std::vector<CModelXFrame*>& CModelX::Frames()
+{
+	return mFrame;
+}
+
 std::vector<CAnimationSet*>& CModelX::AnimationSet()
 {
 	return mAnimationSet;
+}
+
+/*
+AnimateCombined
+合成行列の作成
+*/
+void CModelXFrame::AnimateCombined(CMatrix* parent) {
+	//自分の変換行列に、親からの変換行列を掛ける
+	mCombinedMatrix = mTransformMatrix * (*parent);
+	//子フレームの合成行列を作成する
+	for (size_t i = 0; i < mChild.size(); i++) {
+		mChild[i]->AnimateCombined(&mCombinedMatrix);
+	}
+
+#ifdef _DEBUG
+	printf("Frame:%s\n", mpName);
+	for (int i = 0; i < 4; i++) {
+		printf("%10f %10f %10f %10f\n", mCombinedMatrix.M(i,0), mCombinedMatrix.M(i, 1), mCombinedMatrix.M(i, 2), mCombinedMatrix.M(i, 3));
+		
+	}
+	
+
+#endif // !_DEBUG
+
 }
 
 /*
