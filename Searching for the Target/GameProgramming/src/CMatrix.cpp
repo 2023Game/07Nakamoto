@@ -121,6 +121,20 @@ CMatrix CMatrix::SetTranslate(float mx, float my, float mz)
 	return *this;
 }
 
+//逆行列取得
+CMatrix CMatrix::GetTranspose() const
+{
+	CMatrix t;
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++) 
+		{
+			t.mM[i][j] = mM[j][i];
+		}
+	}
+	return t;
+}
+
 //*演算子のオーバーロード
 const CMatrix CMatrix::operator*(const CMatrix& m)const
 {

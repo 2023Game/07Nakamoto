@@ -13,26 +13,15 @@ CBullet::CBullet()
 
 }
 
+//弾のモデルを取得する
 CModel* CBullet::GetModelBullet()
 {
 	return &mModelBullet;
 }
 
-//幅と奥行の
-void CBullet::SetSize(float w, float d)
-{
-	//スケール設定
-	mScale = CVector(5.0f, 5.0f, 5.0f);
-	//三角形の頂点設定a
-	mT.SetVertex(CVector(w, 0.0f, 0.0f), CVector(0.0f, 0.0f, -d), CVector(-w, 0.0f, 0.0f));
-	//三角形の法線設定
-	mT.SetNormal(CVector(0.0f, 1.0f, 0.0f)); 
-}
-
 //衝突処理
 void CBullet::Collision(CCollider* m, CCollider* o)
 {
-	
 	//相手のコライダタイプの判定
 	switch (o->GetType())
 	{
@@ -48,7 +37,7 @@ void CBullet::Collision(CCollider* m, CCollider* o)
 	case CCollider::EType::ETRIANGLE:	//三角コライダの時
 		CVector adjust;	//調整値
 		//コライダのmとoが衝突しているか判定
-		if (CCollider::CollisionTriangleSphere(m, o, &adjust))
+		if (CCollider::CollisionTriangleSphere(o, m, &adjust))
 		{
 			//衝突しているときは無効にする
 			mEnabled = false;
@@ -73,19 +62,7 @@ void CBullet::Update()
 		//無効にする
 		mEnabled = false;
 	}
-	
 }
-
-//三角形の弾の描画
-/*
-void CBullet::Render() {
-	//DIFFUSE黄色設定
-	float c[] = { 1.0f,1.0f,0.0f,1.0f };
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, c);
-	//三角形描写
-	mT.Render(mMatrix);
-}
-*/
 
 //衝突処理
 void CBullet::Collision()

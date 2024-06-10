@@ -10,6 +10,14 @@
 class CColliderLine :public CCollider
 {
 public:
+
+	enum class ESType
+	{
+		ELine1,
+		ELine2,
+		ELine3,
+	};
+
 	//デフォルトコンストラクタ
 	CColliderLine() {}
 	

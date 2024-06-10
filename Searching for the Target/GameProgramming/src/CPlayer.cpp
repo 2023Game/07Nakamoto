@@ -4,13 +4,14 @@
 #include <math.h>
 
 #define ROTATION_YV CVector(0.0f,1.0f,0.0f)	//Yの回転速度
-#define VELOCITY CVector(0.0f,0.0f,0.1f) //移動速度
-#define VELOCITY_Y CVector(0.0f,2.0f,0.0f) //ジャンプ時の移動量
-
-#define ROTATION_YX CVector(1.0f,0.0f,0.0f)
+#define ROTATION_YX CVector(1.0f,0.0f,0.0f)	//Xの回転速度　削除予定
+#define VELOCITY CVector(0.0f,0.0f,0.1f)	//移動速度
+//#define VELOCITY_Y CVector(0.0f,2.0f,0.0f) //ジャンプ時の移動量
 
 #define MOS_POS_X 400	//マウス座標のX補正
 #define MOS_POS_Y 300	//マウス座標のY補正
+
+#define AIM_POS 10		//照準の補正値
 
 //ジャンプの仮のフラグ
 //bool a = false;
@@ -18,9 +19,13 @@
 //デフォルトコンストラクタ
 CPlayer::CPlayer()
 	: mLine(this, &mMatrix, CVector(0.0f, 0.3f, -1.5f), CVector(0.0f, 0.3f, 1.5f))
-	, mLine2(this, &mMatrix, CVector(0.0f, 2.0f, 0.0f), CVector(0.0f, -0.2f, 0.0f))
+	, mLine2(this, &mMatrix, CVector(0.0f, 2.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f))
 	, mLine3(this, &mMatrix, CVector(1.1f, 0.3f, 0.0f), CVector(-1.1f, 0.3f, 0.0f))
 	, mBulletFlag(nullptr)
+	, mCursorX(0)
+	, mCursorY(0)
+	, mFx(0)
+	, mFy(0)
 {
 
 }
@@ -28,6 +33,12 @@ CPlayer::CPlayer()
 //コンストラクタ
 CPlayer::CPlayer(const CVector& pos, const CVector& rot
 	, const CVector& scale)
+	: mBulletFlag(nullptr)
+	, mCursorX(0)
+	, mCursorY(0)
+	, mFx(0)
+	, mFy(0)
+	
 {
 	CTransform::Update(pos, rot, scale);	//行列の更新
 }
@@ -35,24 +46,51 @@ CPlayer::CPlayer(const CVector& pos, const CVector& rot
 //更新処理
 void CPlayer::Update()
 {
-	int mx, my;	//マウスカーソル取得用
 	//マウスカーソル座標の取得
-	CInput::GetMousePos(&mx, &my);
+	CInput::GetMousePos(&mCursorX, &mCursorY);
 
 	//マウスクリック検出
 	if (mInput.Key(VK_LBUTTON))
 	{
 		//マウス座標コンソールに出力
-		printf("%d, %d\n", mx, my);
-	}
+		printf("マウスの座標:%d, %d\n", mCursorX, mCursorY);
+	
 
 	//ゲーム画面中心からの座標へ変換する
-	mx -= MOS_POS_X;
-	my = MOS_POS_Y;
+	mCursorX -= MOS_POS_X;
+	mCursorY = MOS_POS_Y - mCursorY;
 
 	//プレイヤーとマウス座標の差を求める
-	mx -= mPosition.GetX();
-	my -= mPosition.GetY();
+	mCursorX -= mPosition.GetX();
+	mCursorY -= mPosition.GetY();
+
+	printf("プレイヤーとマウス座標の差:%d, %d\n", mCursorX, mCursorY);
+
+	}
+
+	//X軸で移動
+	if (mCursorX < -100 && mFx > -4.0f)
+	{
+		//カメラ注視点を左へ移動
+		mFx -= 0.1f;
+	}
+	else if (mCursorX > 100 && mFx < 4.0f)
+	{
+		//カメラ注視点を右へ移動
+		mFx += 0.1f;
+	}
+
+	//Y軸で移動
+	if (mCursorY < -100 && mFy > -4.0f)
+	{
+		//カメラ注視点を下へ移動
+		mFy -= 0.1f;
+	}
+	else if (mCursorY > 100 && mFy < 4.0f)
+	{
+		//カメラ注視点を上へ移動
+		mFy += 0.1f;
+	}
 
 	//Dキー入力で右回転
 	if (mInput.Key('D'))
@@ -101,7 +139,8 @@ void CPlayer::Update()
 			bullet->SetModel(CBullet::GetModelBullet());
 			bullet->SetScale(CVector(10.0f, 10.0f, 10.0f));
 			bullet->SetPosition(CVector(0.0f, 1.75f, 3.0f) * mMatrix);
-			bullet->SetRotation(mRotation);
+			//bullet->SetRotation(mRotation);
+			bullet->SetRotation(mRotation + CVector(mCursorY / AIM_POS, -mCursorX / AIM_POS, 0.0f));
 			bullet->Update();
 			mBulletFlag = true;
 		}
@@ -111,6 +150,10 @@ void CPlayer::Update()
 	{
 		mBulletFlag = false;
 	}
+
+
+	//前の線コライダが当たったらX軸を回転
+	//mPosition = mPosition - CVector(0.0f, 0.1f, 0.0f);
 
 	//変換行列の更新
 	CTransform::Update();
@@ -132,6 +175,11 @@ void CPlayer::Collision(CCollider* m, CCollider* o)
 			{
 				//位置の更新
 				mPosition = mPosition + adjust;
+
+				
+				//坂に当たったら回転
+				mRotation = mRotation + ROTATION_YX;
+
 				//行列の更新
 				CTransform::Update();
 			}
@@ -151,4 +199,15 @@ void CPlayer::Collision()
 	CCollisionManager::GetInstance()->Collision(&mLine, COLLISIONRANGE);
 	CCollisionManager::GetInstance()->Collision(&mLine2, COLLISIONRANGE);
 	CCollisionManager::GetInstance()->Collision(&mLine3, COLLISIONRANGE);
+}
+
+//カーソルのX座標を取得
+float CPlayer::GetFx()
+{
+	return mFx;
+}
+//カーソルのY座標を取得
+float CPlayer::GetFy()
+{
+	return mFy;
 }

@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CApplication.cpp" />
+    <ClCompile Include="src\CBillBoard.cpp" />
     <ClCompile Include="src\CBullet.cpp" />
     <ClCompile Include="src\CCharacter.cpp" />
     <ClCompile Include="src\CCollider.cpp" />
@@ -19,6 +20,7 @@
     <ClCompile Include="src\CColliderMesh.cpp" />
     <ClCompile Include="src\CColliderTriangle.cpp" />
     <ClCompile Include="src\CCollisionManager.cpp" />
+    <ClCompile Include="src\CEffect.cpp" />
     <ClCompile Include="src\CInput.cpp" />
     <ClCompile Include="src\CMaterial.cpp" />
     <ClCompile Include="src\CMatrix.cpp" />
@@ -35,6 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CApplication.h" />
+    <ClInclude Include="src\CBillBoard.h" />
     <ClInclude Include="src\CBullet.h" />
     <ClInclude Include="src\CCharacter.h" />
     <ClInclude Include="src\CCollider.h" />
@@ -42,6 +45,7 @@
     <ClInclude Include="src\CColliderMesh.h" />
     <ClInclude Include="src\CColliderTriangle.h" />
     <ClInclude Include="src\CCollisionManager.h" />
+    <ClInclude Include="src\CEffect.h" />
     <ClInclude Include="src\CInput.h" />
     <ClInclude Include="src\CMaterial.h" />
     <ClInclude Include="src\CMatrix.h" />

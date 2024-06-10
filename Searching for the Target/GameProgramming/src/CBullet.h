@@ -16,13 +16,6 @@ public:
 	CBullet();
 
 	/// <summary>
-	/// 幅と奥行の設定
-	/// </summary>
-	/// <param name="w">幅</param>
-	/// <param name="d">奥行</param>
-	void SetSize(float w, float d);
-
-	/// <summary>
 	/// 衝突処理
 	/// </summary>
 	/// <param name="m">コライダ1</param>
@@ -41,11 +34,9 @@ public:
 private:
 	static CModel mModelBullet;
 
-	//三角形
-	CTriangle mT;
 	//生存時間
 	int mLife;
-	//コライダ
+	//球コライダ
 	CCollider mCollider;
 };
 

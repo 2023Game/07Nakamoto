@@ -35,13 +35,25 @@ public:
 	//衝突処理
 	void Collision();
 
+	//カーソルのX座標を取得
+	float GetFx();
+	//カーソルのY座標を取得
+	float GetFy();
+
 private:
+	int mCursorX, mCursorY;	//マウスカーソル取得用
+	float mFx, mFy;			//カメラの移動量
+
 	CInput mInput;
 
 	CColliderLine mLine;	//前後の線分コライダ
 	CColliderLine mLine2;	//上下の線分コライダ
 	CColliderLine mLine3;	//左右の線分コライダ
-	CCollider mCollider;
+
+	CColliderLine mRighat;	//右
+	CColliderLine mLeft;	//左
+	CColliderLine mForward; //前
+	CColliderLine mBehind;	//後ろ
 
 	bool mBulletFlag;
 };

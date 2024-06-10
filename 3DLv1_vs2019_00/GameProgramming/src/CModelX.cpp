@@ -411,11 +411,10 @@ void CModelXFrame::AnimateCombined(CMatrix* parent) {
 #ifdef _DEBUG
 	printf("Frame:%s\n", mpName);
 	for (int i = 0; i < 4; i++) {
-		printf("%10f %10f %10f %10f\n", mCombinedMatrix.M(i,0), mCombinedMatrix.M(i, 1), mCombinedMatrix.M(i, 2), mCombinedMatrix.M(i, 3));
-		
+		printf("%10f %10f %10f %10f\n",
+			mCombinedMatrix.M(i,0), mCombinedMatrix.M(i, 1), mCombinedMatrix.M(i, 2), mCombinedMatrix.M(i, 3));
 	}
 	
-
 #endif // !_DEBUG
 
 }

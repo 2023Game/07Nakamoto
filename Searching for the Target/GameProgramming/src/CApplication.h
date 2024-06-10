@@ -17,6 +17,9 @@ public:
 	//繰り返し実行するプログラム
 	void Update();
 
+	//モデルビュー行列の取得
+	static const CMatrix& ModelViewInverse();
+
 private:
 	CPlayer mPlayer;	
 	
@@ -37,4 +40,7 @@ private:
 
 	CInput mInput;
 	CVector mEye;
+
+	//モデルビュー逆行列
+	static CMatrix mModelViewInverse;
 };

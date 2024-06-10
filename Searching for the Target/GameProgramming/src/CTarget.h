@@ -11,8 +11,15 @@
 */
 class CTarget :public CCharacter {
 public:
+	//Targetのタイプ
+	enum class EState
+	{
+		ESTAY,		//滞在
+		EMOVE1,		//横移動
+	};
+
 	CTarget(CModel* model, const CVector& position,
-		const CVector& rotation, const CVector& scale);
+		const CVector& rotation, const CVector& scale, EState state);
 
 	/// <summary>
 	/// 衝突処理
@@ -28,6 +35,8 @@ public:
 	void Update();
 
 private:
+	//タイプ
+	EState mType;
 	//コライダ
 	CCollider mCollider;
 

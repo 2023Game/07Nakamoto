@@ -71,6 +71,9 @@ public:
 	/// <returns></returns>
 	CMatrix SetTranslate(float mx, float my, float mz);
 
+	//逆行列取得
+	CMatrix GetTranspose() const;
+
 	// *演算子のオーバーロード
 	//CMatrix * CMatrix の演算結果を返す
 	const CMatrix operator* (const CMatrix& m)const;
