@@ -26,10 +26,20 @@ public:
 	CMesh();
 	//デストラクタ
 	~CMesh();
+
+	//頂点にアニメーション適用
+	void AnimateVertex(CModelX* model);
+
+	//スキンウェイトにフレーム番号を設定する
+	void SetSkinWeightFrameIndex(CModelX* model);
+
 	//読み込み処理
 	void Init(CModelX* model);
 	void Render();
 private:
+	CVector* mpAnimateVertex;	//アニメーション用頂点
+	CVector* mpAnimateNormal;	//アニメーション用法線
+
 	//スキンウェイト
 	std::vector<CSkinWeights*> mSkinWeights;
 
@@ -57,7 +67,10 @@ class CModelX{
 	friend CModelXFrame;
 	friend CAnimation;
 public:
-
+	//頂点にアニメーションを適用
+	void AnimateVertex();
+	//スキンウェイトのフレーム番号設定
+	void SetSkinWeightFrameIndex();
 	//フレーム名に該当するフレームのアドレスを返す
 	CModelXFrame* FindFrame(char* name);
 	//トークンが無くなったらtrue
@@ -100,6 +113,8 @@ class CModelXFrame {
 	friend CAnimation;
 	friend CAnimationSet;
 public:
+	const CMatrix& CombinedMatrix();
+
 	//合成行列の作成
 	void AnimateCombined(CMatrix* parent);
 	//コンストラクタ
@@ -144,6 +159,9 @@ class CAnimationSet {
 public:
 	CAnimationSet(CModelX* model);
 	~CAnimationSet();
+
+	float Time();
+	float MaxTime();
 
 	void Time(float time);		//時間の設定
 	void Weight(float weight);	//重みの設定

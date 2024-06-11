@@ -76,6 +76,14 @@ CVector::CVector(float x, float y, float z)
 	,mZ(z)
 {}
 
+CVector CVector::operator+=(const CVector& v)
+{
+	mX += v.mX;
+	mY += v.mY;
+	mZ += v.mZ;
+	return *this;
+}
+
 CVector CVector::operator*(const CMatrix& m)
 {
 	//Š|‚¯ŽZ‚ÌŒ‹‰Ê‚ðCVectorŒ^‚Ì’l‚Å•Ô‚·
