@@ -2,6 +2,11 @@
 #include "CCollisionManager.h"
 #include "CColliderLine.h"
 
+//円周率M_PIを有効にする
+#define _USE_MATH_DEFINES
+//数学関数のインクルード
+#include <math.h>
+
 //デフォルトコンストラクタ
 CCollider::CCollider()
 	: mpParent(nullptr)
@@ -64,6 +69,7 @@ void CCollider::Render()
 	glPopMatrix();
 }
 
+
 //衝突判定
 bool CCollider::Collision(CCollider* m, CCollider* o)
 {
@@ -101,6 +107,41 @@ bool CCollider::CollisionTriangleSphere(CCollider* t, CCollider* s, CVector* a)
 	return CollisionTriangleLine(t, &line, a);
 
 }
+
+//斜面
+CVector CCollider::Slope(CCollider* p, CCollider* t, CVector* a)
+{
+	//三角コライダの法線を求める
+	CVector v[3], sv, ev;
+	//各コライダの頂点をワールド座標へ変換
+	v[0] = t->mV[0] * *t->mpMatrix;
+	v[1] = t->mV[1] * *t->mpMatrix;
+	v[2] = t->mV[2] * *t->mpMatrix;
+	//面の法線を、外積を正規化して求める
+	CVector TYvector = (v[1] - v[0]).Cross(v[2] - v[0]).Nomalize();
+	
+	//プレイヤーのZ軸方向のベクトルを求める
+	CVector PZvector = CVector(0, 0, 1) * p->mMatrixRotate;
+	//プレイヤーのX軸方向のベクトルを求める
+	CVector TXvector = TYvector.Cross(PZvector).Nomalize();
+
+	//三角コライダのZ軸方向のベクトルを求める
+	CVector TZvector = TYvector.Cross(TXvector).Nomalize();
+
+	float ax, ay, az;
+
+	//X軸の回転値を求める
+	ax = asin(TZvector.GetY());
+	//Y軸の回転値を求める
+	ay = atan2(TXvector.GetX(), TZvector.GetZ());
+	//Z軸の回転値を求める
+	az = atan2(TXvector.GetY(), TYvector.GetY());
+	
+	*a = CVector(ax, ay, az);
+
+	return *a;
+}
+
 
 //三角形と線分の衝突判定
 bool CCollider::CollisionTriangleLine(CCollider* t, CCollider* l, CVector* a)

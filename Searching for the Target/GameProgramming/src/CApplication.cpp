@@ -38,7 +38,7 @@ void CApplication::Start()
 
 	mPlayer.SetModel(&mModel);
 	mPlayer.SetScale(CVector(1.5f, 1.5f, 1.5f));
-	mPlayer.SetPosition(CVector(0.0f, -1.0f, -5.0f));
+	mPlayer.SetPosition(CVector(0.0f, 2.0f, -5.0f));
 	mPlayer.SetRotation(CVector(0.0f, 180.0f, 0.0f));
 	
 	new CTarget(&mModelTarget, CVector(-20.0f, 5.0f, -1.0f),

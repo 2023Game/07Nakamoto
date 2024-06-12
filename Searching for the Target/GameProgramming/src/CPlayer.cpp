@@ -173,12 +173,16 @@ void CPlayer::Collision(CCollider* m, CCollider* o)
 			//三角形と線分の衝突判定
 			if (CCollider::CollisionTriangleLine(o, m, &adjust))
 			{
+				CVector a;
+				CCollider::Slope(m, o, &a);
+
 				//位置の更新
 				mPosition = mPosition + adjust;
-
+				
+				
 				
 				//坂に当たったら回転
-				mRotation = mRotation + ROTATION_YX;
+				SetRotation(a);
 
 				//行列の更新
 				CTransform::Update();

@@ -45,6 +45,14 @@ public:
 	void Render();
 
 	/// <summary>
+	/// 斜面にプレイヤーを合わせる
+	/// </summary>
+	/// <param name="p">プレイヤー</param>
+	/// <param name="t">三角コライダ</param>
+	/// <returns></returns>
+	static CVector Slope(CCollider* p, CCollider* t, CVector* adjust);
+
+	/// <summary>
 	/// 衝突判定
 	/// </summary>
 	/// <param name="m">コライダ1</param>

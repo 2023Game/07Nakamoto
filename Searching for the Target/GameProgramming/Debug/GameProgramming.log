@@ -1,9 +1,2 @@
-﻿  CPlayer.cpp
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': マクロが再定義されました。
-C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\include\GLFW\glfw3.h(98): message : 'APIENTRY' の以前の定義を確認してください
-C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CPlayer.cpp(136,42): warning C4309: '引数': 定数値が切り捨てられました。
-C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CPlayer.cpp(149,43): warning C4309: '引数': 定数値が切り捨てられました。
-  CTarget.cpp
-  main.cpp
-  コードを生成中...
+﻿  CCollider.cpp
   GameProgramming.vcxproj -> C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\Debug\GameProgramming.exe
