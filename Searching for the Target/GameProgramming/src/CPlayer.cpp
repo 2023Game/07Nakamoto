@@ -1,6 +1,7 @@
 #include "CPlayer.h"
 #include "CTaskManager.h"
 #include "CApplication.h"
+#include "CColliderLine.h"
 #include <math.h>
 
 #define ROTATION_YV CVector(0.0f,1.0f,0.0f)	//Yの回転速度
@@ -53,7 +54,7 @@ void CPlayer::Update()
 	if (mInput.Key(VK_LBUTTON))
 	{
 		//マウス座標コンソールに出力
-		printf("マウスの座標:%d, %d\n", mCursorX, mCursorY);
+		//printf("マウスの座標:%d, %d\n", mCursorX, mCursorY);
 	
 
 	//ゲーム画面中心からの座標へ変換する
@@ -64,7 +65,7 @@ void CPlayer::Update()
 	mCursorX -= mPosition.GetX();
 	mCursorY -= mPosition.GetY();
 
-	printf("プレイヤーとマウス座標の差:%d, %d\n", mCursorX, mCursorY);
+	//printf("プレイヤーとマウス座標の差:%d, %d\n", mCursorX, mCursorY);
 
 	}
 
@@ -151,10 +152,6 @@ void CPlayer::Update()
 		mBulletFlag = false;
 	}
 
-
-	//前の線コライダが当たったらX軸を回転
-	//mPosition = mPosition - CVector(0.0f, 0.1f, 0.0f);
-
 	//変換行列の更新
 	CTransform::Update();
 }
@@ -173,16 +170,22 @@ void CPlayer::Collision(CCollider* m, CCollider* o)
 			//三角形と線分の衝突判定
 			if (CCollider::CollisionTriangleLine(o, m, &adjust))
 			{
-				CVector a;
-				CCollider::Slope(m, o, &a);
 
 				//位置の更新
 				mPosition = mPosition + adjust;
-				
-				
-				
-				//坂に当たったら回転
-				SetRotation(a);
+
+				if (m == &mLine)
+				{
+					CVector ajustRote;
+					CCollider::Slope(m, o, &ajustRote);
+
+					//坂に当たったら回転
+					mRotation = mRotation + ajustRote;
+
+					printf("%10f %10f %10f\n",
+						mRotation.GetX(), mRotation.GetY(), mRotation.GetZ());
+
+				}
 
 				//行列の更新
 				CTransform::Update();

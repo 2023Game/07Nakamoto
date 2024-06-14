@@ -4,6 +4,7 @@
 #include "CTransform.h"
 #include "CTarget.h"
 #include "CBillBoard.h"
+#include "CMoveFloor.h"
 
 //OpenGL
 #include "glut.h"
@@ -12,11 +13,13 @@
 #define MODEL_TARGET "res\\target.obj", "res\\target.mtl"	//的
 #define MODEL_BULLET "res\\bullet.obj", "res\\bullet.mtl"	//弾
 
-#define MODEL_MAP "res\\map3.obj","res\\map3.mtl"				//試作マップ
-//#define MODEL_F14 "res\\f14.obj","res\\f14.mtl"
-#define MODEL_SKY "res\\sky.obj","res\\sky.mtl"
+#define MODEL_MAP "res\\map3.obj","res\\map3.mtl"			//試作マップ
+#define MODEL_SKY "res\\sky.obj","res\\sky.mtl"				//背景仮
 
-//#define MODEL_BACKGROUND "res\\sky.obj","res\\sky.mtl"			//背景モデル
+#define MODEL_REDCUBE "res\\RedCube.obj" ,"res\\RedCube.mtl"	//赤色の四角形
+#define MODEL_BLUECUBE "res\\BlueCube.obj" ,"res\\BlueCube.mtl"	//青色の四角形
+
+//#define MODEL_BACKGROUND "res\\sky.obj","res\\sky.mtl"	//背景モデル
 
 void CApplication::Start()
 {
@@ -30,6 +33,9 @@ void CApplication::Start()
 	mBackGround.Load(MODEL_SKY);
 
 	CBullet::GetModelBullet()->Load(MODEL_BULLET);
+
+	CMoveFloor::GetModelRedCube()->Load(MODEL_REDCUBE);
+	CMoveFloor::GetModelBlueCube()->Load(MODEL_BLUECUBE);
 
 	mEye = CVector(0.0f, 2.0f, 13.0f);
 
@@ -75,6 +81,8 @@ void CApplication::Update()
 	
 	// 確認用の視点 右
 	//e = mPlayer.GetPosition() + CVector(-10.0f, 1.0f, 0.0f) * mPlayer.GetMatrixRotate();
+
+	//e = mPlayer.GetPosition() + CVector(-5.0f, 1.0f, 3.0f) * mPlayer.GetMatrixRotate();
 
 	//注視点を求める
 	c = mPlayer.GetPosition() + CVector(0.0f, 3.0f, 0.0f);

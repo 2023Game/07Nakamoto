@@ -69,7 +69,6 @@ void CCollider::Render()
 	glPopMatrix();
 }
 
-
 //衝突判定
 bool CCollider::Collision(CCollider* m, CCollider* o)
 {
@@ -122,16 +121,15 @@ CVector CCollider::Slope(CCollider* p, CCollider* t, CVector* a)
 	
 	//プレイヤーのZ軸方向のベクトルを求める
 	CVector PZvector = CVector(0, 0, 1) * p->mMatrixRotate;
-	//プレイヤーのX軸方向のベクトルを求める
+	//三角コライダのX軸方向のベクトルを求める
 	CVector TXvector = TYvector.Cross(PZvector).Nomalize();
 
 	//三角コライダのZ軸方向のベクトルを求める
 	CVector TZvector = TYvector.Cross(TXvector).Nomalize();
-
 	float ax, ay, az;
 
 	//X軸の回転値を求める
-	ax = asin(TZvector.GetY());
+	ax = -asin(TZvector.GetY());
 	//Y軸の回転値を求める
 	ay = atan2(TXvector.GetX(), TZvector.GetZ());
 	//Z軸の回転値を求める

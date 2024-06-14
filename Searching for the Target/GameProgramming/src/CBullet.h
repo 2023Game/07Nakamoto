@@ -2,7 +2,6 @@
 #define CBULLET_H
 
 #include "CCharacter.h"
-#include "CTriangle.h"
 #include "CCollider.h"
 #include "CModel.h"
 
@@ -24,8 +23,6 @@ public:
 	
 	//XV
 	void Update();
-	//OŠpŒ`‚Ì’e‚ğ•`‰æ
-	//void Render();
 
 	//Õ“Ëˆ—
 	void Collision();

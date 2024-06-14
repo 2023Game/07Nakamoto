@@ -34,6 +34,9 @@ private:
 	//背景モデル
 	CModel mBackGround;
 
+	CModel mRedCube;
+	CModel mBuleCube;
+
 	//モデルからコライダを生成
 	CColliderMesh mColliderMesh;
 	CColliderMesh mColliderMesh2;

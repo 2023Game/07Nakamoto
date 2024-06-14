@@ -18,7 +18,6 @@ void CColliderLine::ColliderLineSet(CCharacter* parent, CMatrix* matrix,
 	//ü•ª’¸“_İ’è
 	mV[0] = v0;
 	mV[1] = v1;
-
 }
 
 void CColliderLine::Render()

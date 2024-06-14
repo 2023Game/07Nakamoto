@@ -25,6 +25,7 @@
     <ClCompile Include="src\CMaterial.cpp" />
     <ClCompile Include="src\CMatrix.cpp" />
     <ClCompile Include="src\CModel.cpp" />
+    <ClCompile Include="src\CMoveFloor.cpp" />
     <ClCompile Include="src\CPlayer.cpp" />
     <ClCompile Include="src\CSound.cpp" />
     <ClCompile Include="src\CTarget.cpp" />
@@ -50,6 +51,7 @@
     <ClInclude Include="src\CMaterial.h" />
     <ClInclude Include="src\CMatrix.h" />
     <ClInclude Include="src\CModel.h" />
+    <ClInclude Include="src\CMoveFloor.h" />
     <ClInclude Include="src\CPlayer.h" />
     <ClInclude Include="src\CSound.h" />
     <ClInclude Include="src\CTarget.h" />
