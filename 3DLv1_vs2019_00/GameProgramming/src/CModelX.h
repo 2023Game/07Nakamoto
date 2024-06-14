@@ -12,7 +12,7 @@ class CAnimationSet;	//アニメーションセットクラス
 class CAnimation;		//アニメーションクラス
 class CAnimationKey;	//アニメーションキークラス
 
-#define MODEL_FILE "res\\sample.blend.x"	//入力ファイル名＼は\
+#define MODEL_FILE "res\\ラグナ.x"	//入力ファイル名
 
 //領域開放をマクロ化
 #define SAFE_DELETE_ARRAY(a){if(a) delete[] a;a=nullptr;}
@@ -67,6 +67,11 @@ class CModelX{
 	friend CModelXFrame;
 	friend CAnimation;
 public:
+	//マテリアルの検索
+	CMaterial* FindMaterial(char* name);
+	//マテリアル配列の取得
+	std::vector<CMaterial*>& Material();
+
 	//頂点にアニメーションを適用
 	void AnimateVertex();
 	//スキンウェイトのフレーム番号設定
@@ -96,6 +101,8 @@ public:
 	std::vector<CAnimationSet*> &AnimationSet();
 
 private:
+	//マテリアル配列
+	std::vector<CMaterial*> mMaterial;
 	//アニメーションセットの配列
 	std::vector<CAnimationSet*>mAnimationSet;
 

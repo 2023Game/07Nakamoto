@@ -136,6 +136,13 @@ void CMesh::Init(CModelX* model) {
 					if (strcmp(model->Token(), "Material") == 0) {
 						mMaterial.push_back(new CMaterial(model));
 					}
+					else {
+						// { 既出
+						model->GetToken();		//MaterialName
+						mMaterial.push_back(
+							model->FindMaterial(model->Token()));
+						model->GetToken();		// }
+					}
 				}
 				model->GetToken();	// } 
 			}//End of MeshMaterialList
@@ -148,8 +155,9 @@ void CMesh::Init(CModelX* model) {
 				//以外のノードは読み飛ばし
 				model->SkipNode();
 		}
-
-		//デバッグバージョンのみ有効
+		
+//デバッグバージョンのみ有効
+	/*
 #ifdef _DEBUG
 
 		printf("VertexNum:%d\n", mVertexNum);
@@ -171,7 +179,7 @@ void CMesh::Init(CModelX* model) {
 				mpNormal[i].X(), mpNormal[i].Y(), mpNormal[i].Z());
 		}
 #endif
-
+	*/
 }
 
 void CMesh::AnimateVertex(CModelX* model)
@@ -200,6 +208,26 @@ void CMesh::AnimateVertex(CModelX* model)
 	for (int i = 0; i < mNormalNum; i++) {
 		mpAnimateNormal[i] = mpAnimateNormal[i].Nomalize();
 	}
+}
+
+CMaterial* CModelX::FindMaterial(char* name)
+{
+	//マテリアル配列のイテレータ作成
+	std::vector<CMaterial*>::iterator itr;
+	//マテリアル配列を先頭から順に検索
+	for (itr = mMaterial.begin(); itr != mMaterial.end(); itr++) {
+		//名前が一致すればマテリアルのポインタを返却
+		if (strcmp(name, (*itr)->Name()) == 0) {
+			return *itr;
+		}
+	}
+	//無いときはnullptrを返却
+	return nullptr;
+}
+
+std::vector<CMaterial*>& CModelX::Material()
+{
+	return mMaterial;
 }
 
 /*
@@ -290,6 +318,11 @@ CModelX::~CModelX()
 	{
 		delete mAnimationSet[i];
 	}
+	//マテリアルの解放
+	for (size_t i = 0; i < mMaterial.size(); i++)
+	{
+		delete mMaterial[i];
+	}
 }
 
 bool CModelX::EOT()
@@ -335,11 +368,15 @@ cが\t\r\n スペースなどの空白文字
 */
 bool CModelX::IsDelimiter(char c)
 {
+	if (c < 0)
+	{
+		return false;
+	}
+
 	//isspace(c)
 	//cが空白文字なら0以外を返す
 	if (isspace(c) != 0)
 		return true;
-
 	/*
 	strchr(文字列,文字)
 	文字列に文字が含まれていれば、
@@ -348,6 +385,7 @@ bool CModelX::IsDelimiter(char c)
 	*/
 	if (strchr(",;\"", c) != NULL)
 		return true;
+
 	//区切り文字ではない
 	return false;
 }
@@ -430,8 +468,16 @@ void CModelX::Load(char* file){
 	//文字列の最後まで繰り返し
 	while (*mpPointer != '\0'){
 		GetToken();		//単語の取得
+		//template読み飛ばし
+		if (strcmp(mToken, "template") == 0) {
+			SkipNode();
+		}
+		//Materialの時
+		else if (strcmp(mToken, "Material") == 0) {
+			new CMaterial(this);
+		}
 		//単語がFarmleの場合
-		if (strcmp(mToken, "Frame") == 0) {
+		else if (strcmp(mToken, "Frame") == 0) {
 			//フレームを作成する
 			new CModelXFrame(this);
 		}
@@ -487,15 +533,15 @@ void CModelXFrame::AnimateCombined(CMatrix* parent) {
 		mChild[i]->AnimateCombined(&mCombinedMatrix);
 	}
 
+	/*
 #ifdef _DEBUG
 	printf("Frame:%s\n", mpName);
 	for (int i = 0; i < 4; i++) {
 		printf("%10f %10f %10f %10f\n",
 			mCombinedMatrix.M(i,0), mCombinedMatrix.M(i, 1), mCombinedMatrix.M(i, 2), mCombinedMatrix.M(i, 3));
 	}
-	
 #endif // !_DEBUG
-
+	*/
 }
 
 /*
@@ -527,6 +573,7 @@ void CModelX::AnimateFrame() {
 	}
 
 //デバッグバージョンのみ有効
+	/*
 #ifdef _DEBUG
 	for (int i = 0; i < mFrame.size(); i++) {
 		printf("Frame:%s\n", mFrame[i]->mpName);
@@ -537,6 +584,7 @@ void CModelX::AnimateFrame() {
 		}
 	}
 #endif
+	*/
 }
 
 CModelXFrame::~CModelXFrame()
@@ -610,10 +658,12 @@ CModelXFrame::CModelXFrame(CModelX* model)
 		}
 	}
 //デバッグバージョンのみ有効
+	/*
 #ifdef _DEBUG
 	printf("%s\n", mpName);
 	mTransformMatrix.Print();
 #endif
+	*/
 }
 
 int CModelXFrame::Index()
@@ -670,6 +720,7 @@ CSkinWeights::CSkinWeights(CModelX* model)
 	model->GetToken();	// }
 
 //デバッグバージョンのみ有効
+	/*
 #ifdef _DEBUG
 	printf("SkinWeights %s\n",mpFrameName);
 	for (int i = 0; i < mIndexNum; i++)
@@ -682,7 +733,7 @@ CSkinWeights::CSkinWeights(CModelX* model)
 	}
 
 #endif
-
+	*/
 }
 
 //デストラクタ
@@ -718,9 +769,11 @@ CAnimationSet::CAnimationSet(CModelX* model)
 	}
 
 //デバッグバージョンのみ有効
+	/*
 #ifdef _DEBUG
 	printf("AnimationSet:%s\n", mpName);
 #endif
+	*/
 
 	//終了時間設定
 	mMaxTime = mAnimation[0]->mpKey[mAnimation[0]->mKeyNum - 1].mTime;
@@ -919,6 +972,7 @@ CAnimation::CAnimation(CModelX* model)
 	}
 
 //デバッグバージョンのみ有効
+	/*
 #ifdef _DEBUG
 	printf("Animation:%s\n", mpFrameName);
 	for (int i = 0; i < 4; i++) {
@@ -926,7 +980,7 @@ CAnimation::CAnimation(CModelX* model)
 				mpKey->mMatrix.M(i, 1), mpKey->mMatrix.M(i, 2), mpKey->mMatrix.M(i, 3));
 	}
 #endif
-
+	*/
 }
 //デストラクタ
 CAnimation::~CAnimation() {

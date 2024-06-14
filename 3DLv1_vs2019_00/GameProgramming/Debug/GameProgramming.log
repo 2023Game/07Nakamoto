@@ -1,26 +1,2 @@
-﻿  CApplication.cpp
-  CBillBoard.cpp
-  CBullet.cpp
-  CCharacter3.cpp
-  CCollider.cpp
-  CColliderLine.cpp
-  CColliderMesh.cpp
-  CColliderTraiangle.cpp
-  CCollisionManager.cpp
-  CEffect.cpp
-  CEnemy.cpp
-  CEnemy3.cpp
-  CMaterial.cpp
-  CMatrix.cpp
-C:\Users\dogpo\Desktop\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CMatrix.cpp(142,12): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\dogpo\Desktop\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CMatrix.cpp(158,12): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\dogpo\Desktop\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CMatrix.cpp(174,12): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
-  CModel.cpp
-C:\Users\dogpo\Desktop\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CModel.cpp(16,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\dogpo\Desktop\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CModel.cpp(18,21): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\dogpo\Desktop\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CModel.cpp(242,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\dogpo\Desktop\2023Game\07Nakamoto\3DLv1_vs2019_00\GameProgramming\src\CModel.cpp(253,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-  CVector.cpp
-  main.cpp
-  コードを生成中...
+﻿  CModelX.cpp
   GameProgramming.vcxproj -> C:\Users\dogpo\Desktop\2023Game\07Nakamoto\3DLv1_vs2019_00\Debug\GameProgramming.exe
