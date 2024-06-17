@@ -8,6 +8,8 @@
 #include "CCollisionManager.h"
 #include "CColliderTriangle.h"
 #include "CColliderMesh.h"
+#include "CMoveFloor.h"
+
 
 class CApplication
 {
@@ -26,7 +28,7 @@ private:
 	//モデルクラスのインスタンス作成
 	CModel mModel;
 	//弾のモデル
-	CModel mModelBullet;
+	//CModel mModelBullet;
 	//的のモデル
 	CModel mModelTarget;
 	//マップのモデル
@@ -34,12 +36,13 @@ private:
 	//背景モデル
 	CModel mBackGround;
 
-	CModel mRedCube;
-	CModel mBuleCube;
+	CModel mRed;
 
 	//モデルからコライダを生成
 	CColliderMesh mColliderMesh;
 	CColliderMesh mColliderMesh2;
+	
+	CColliderMesh mColliderMeshRed;
 
 	CInput mInput;
 	CVector mEye;

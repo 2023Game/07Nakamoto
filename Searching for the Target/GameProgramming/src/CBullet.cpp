@@ -1,6 +1,7 @@
 #include "CBullet.h"
 #include "CCollisionManager.h"
 #include <stdio.h>
+#include "CMoveFloor.h"
 
 //staticïœêîÇÃíËã`
 CModel CBullet::mModelBullet;
@@ -9,6 +10,7 @@ CModel CBullet::mModelBullet;
 CBullet::CBullet()
 	: mLife(50)
 	, mCollider(this, &mMatrix, CVector(0.0f, 0.0f, 0.0f), 0.5f)
+	//, mMesh(this, &mMatrix, CMoveFloor::GetModelRedCube())
 {
 
 }

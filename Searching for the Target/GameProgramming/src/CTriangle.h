@@ -67,7 +67,6 @@ public:
 	//UV mUv[2]‚ðŽæ“¾
 	const CVector& GetmU2() const;
 
-	//•`‰æ
 	void Render();
 	/// <summary>
 	/// •`‰æ

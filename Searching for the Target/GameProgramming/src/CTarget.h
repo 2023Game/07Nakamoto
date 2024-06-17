@@ -18,6 +18,14 @@ public:
 		EMOVE1,		//横移動
 	};
 
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="model">モデル</param>
+	/// <param name="position">位置</param>
+	/// <param name="rotation">回転</param>
+	/// <param name="scale">拡縮</param>
+	/// <param name="state">状態</param>
 	CTarget(CModel* model, const CVector& position,
 		const CVector& rotation, const CVector& scale, EState state);
 
@@ -35,8 +43,8 @@ public:
 	void Update();
 
 private:
-	//タイプ
-	EState mType;
+	//状態
+	EState mState;
 	//コライダ
 	CCollider mCollider;
 

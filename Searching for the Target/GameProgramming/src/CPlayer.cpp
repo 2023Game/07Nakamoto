@@ -14,9 +14,6 @@
 
 #define AIM_POS 10		//照準の補正値
 
-//ジャンプの仮のフラグ
-//bool a = false;
-
 //デフォルトコンストラクタ
 CPlayer::CPlayer()
 	: mLine(this, &mMatrix, CVector(0.0f, 0.3f, -1.5f), CVector(0.0f, 0.3f, 1.5f))
@@ -181,6 +178,11 @@ void CPlayer::Collision(CCollider* m, CCollider* o)
 
 					//坂に当たったら回転
 					mRotation = mRotation + ajustRote;
+
+					//SetRotation(ajustRote);
+
+					printf("%10f %10f %10f\n",
+						ajustRote.GetX(), ajustRote.GetY(), ajustRote.GetZ());
 
 					printf("%10f %10f %10f\n",
 						mRotation.GetX(), mRotation.GetY(), mRotation.GetZ());

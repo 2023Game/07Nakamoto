@@ -23,7 +23,6 @@ CCollider::CCollider(CCharacter* parent, CMatrix* matrix,
 	const CVector& position, float radius) 
 	:CCollider() 
 {
-	
 //親設定
 mpParent = parent;
 //親行列設定
@@ -120,22 +119,22 @@ CVector CCollider::Slope(CCollider* p, CCollider* t, CVector* a)
 	CVector TYvector = (v[1] - v[0]).Cross(v[2] - v[0]).Nomalize();
 	
 	//プレイヤーのZ軸方向のベクトルを求める
-	CVector PZvector = CVector(0, 0, 1) * p->mMatrixRotate;
+	CVector PZvector = CVector(0, 0, 1) * p->mpParent->GetMatrixRotate();
 	//三角コライダのX軸方向のベクトルを求める
-	CVector TXvector = TYvector.Cross(PZvector).Nomalize();
+	CVector TXvector = TYvector.Cross(PZvector).Nomalize();// **t->mpMatrix;
 
 	//三角コライダのZ軸方向のベクトルを求める
-	CVector TZvector = TYvector.Cross(TXvector).Nomalize();
+	CVector TZvector = TYvector.Cross(TXvector).Nomalize();// **t->mpMatrix;
 	float ax, ay, az;
 
 	//X軸の回転値を求める
 	ax = -asin(TZvector.GetY());
 	//Y軸の回転値を求める
-	ay = atan2(TXvector.GetX(), TZvector.GetZ());
+	ay = atan2(TZvector.GetX(), TZvector.GetZ());
 	//Z軸の回転値を求める
 	az = atan2(TXvector.GetY(), TYvector.GetY());
 	
-	*a = CVector(ax, ay, az);
+	*a = CVector(ay, az, ax);
 
 	return *a;
 }

@@ -15,7 +15,7 @@ CTarget::CTarget(CModel* model, const CVector& position,
 	mPosition = position;	//位置の設定
 	mRotation = rotation;	//回転の設定
 	mScale = scale;			//拡縮の設定
-	mType = state;
+	mState = state;			//状態の設定
 }
 
 //衝突処理
@@ -49,9 +49,9 @@ void CTarget::Update()
 	//行列を更新
 	CTransform::Update();
 
-	switch (mType)
+	switch (mState)
 	{
-	case CTarget::EState::ESTAY:		//滞在
+	case CTarget::EState::ESTAY:	//滞在
 		
 		break;
 

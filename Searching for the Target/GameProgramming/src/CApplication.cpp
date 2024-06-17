@@ -4,7 +4,6 @@
 #include "CTransform.h"
 #include "CTarget.h"
 #include "CBillBoard.h"
-#include "CMoveFloor.h"
 
 //OpenGL
 #include "glut.h"
@@ -32,6 +31,8 @@ void CApplication::Start()
 	mModelMap.Load(MODEL_MAP);
 	mBackGround.Load(MODEL_SKY);
 
+	mRed.Load(MODEL_REDCUBE);
+
 	CBullet::GetModelBullet()->Load(MODEL_BULLET);
 
 	CMoveFloor::GetModelRedCube()->Load(MODEL_REDCUBE);
@@ -42,11 +43,13 @@ void CApplication::Start()
 	CMatrix matrix;
 	matrix.Print();
 
+	//プレイヤー生成
 	mPlayer.SetModel(&mModel);
 	mPlayer.SetScale(CVector(1.5f, 1.5f, 1.5f));
 	mPlayer.SetPosition(CVector(0.0f, 2.0f, -5.0f));
 	mPlayer.SetRotation(CVector(0.0f, 180.0f, 0.0f));
 	
+	//的のコライダを生成
 	new CTarget(&mModelTarget, CVector(-20.0f, 5.0f, -1.0f),
 		CVector(0.0f, 90.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f), CTarget::EState::ESTAY);
 
@@ -61,6 +64,8 @@ void CApplication::Start()
 	mColliderMesh.ColliderMeshSet(nullptr, nullptr, &mBackGround);
 
 	mColliderMesh2.ColliderMeshSet(nullptr, nullptr, &mModelMap);
+
+	mColliderMeshRed.ColliderMeshSet(nullptr, nullptr, &mRed);
 
 	//ビルボードの生成
 	new CBillBoard(CVector(-0.6f, 3.0f, -10.0f), 1.0f, 1.0f);
@@ -105,6 +110,8 @@ void CApplication::Update()
 
 	//試作マップの描画
 	mModelMap.Render(); 
+
+	mRed.Render();
 
 	//タスクリストの削除
 	CTaskManager::GetInstance()->Delete();
