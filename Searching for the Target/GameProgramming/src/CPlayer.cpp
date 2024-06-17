@@ -171,7 +171,7 @@ void CPlayer::Collision(CCollider* m, CCollider* o)
 				//位置の更新
 				mPosition = mPosition + adjust;
 
-				if (m == &mLine)
+				if (m == &mLine || m == &mLine2)
 				{
 					CVector ajustRote;
 					CCollider::Slope(m, o, &ajustRote);
@@ -181,10 +181,10 @@ void CPlayer::Collision(CCollider* m, CCollider* o)
 
 					//SetRotation(ajustRote);
 
-					printf("%10f %10f %10f\n",
+					printf("修正値：%10f %10f %10f\n",
 						ajustRote.GetX(), ajustRote.GetY(), ajustRote.GetZ());
 
-					printf("%10f %10f %10f\n",
+					printf("修正後：%10f %10f %10f\n",
 						mRotation.GetX(), mRotation.GetY(), mRotation.GetZ());
 
 				}
