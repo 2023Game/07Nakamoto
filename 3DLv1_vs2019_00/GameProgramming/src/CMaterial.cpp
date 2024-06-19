@@ -53,7 +53,7 @@ CMaterial::CMaterial(CModelX* model)
 	//CModelXにマテリアルを追加する
 	model->Material().push_back(this);
 
-	model->GetToken();	// { ? Name
+	model->GetToken();	// { Name
 	if (strcmp(model->Token(), "{") != 0)
 	{
 		// { でないときはマテリアル名
@@ -85,6 +85,10 @@ CMaterial::CMaterial(CModelX* model)
 		model->GetToken();	// filename
 		mpTextureFilename = new char[strlen(model->Token()) + 1];
 		strcpy(mpTextureFilename, model->Token());
+
+		//テクスチャファイルの読み込み
+		mTexture.Load(mpTextureFilename);
+
 		model->GetToken();	// }
 		model->GetToken();	// }
 	}

@@ -6,7 +6,7 @@
 #include "CVector.h"
 #include "glut.h"
 
-//コンストラクタ
+//デフォルトコンストラクタ
 CMesh::CMesh()
 	:mVertexNum(0)
 	, mpVertex(nullptr)
@@ -19,6 +19,7 @@ CMesh::CMesh()
 	, mpMaterialIndex(nullptr)
 	, mpAnimateVertex(nullptr)
 	, mpAnimateNormal(nullptr)
+	, mpTextureCoords(nullptr)
 {}
 
 //デストラクタ
@@ -29,6 +30,7 @@ CMesh::~CMesh() {
 	SAFE_DELETE_ARRAY(mpVertexIndex);
 	SAFE_DELETE_ARRAY(mpNormal);
 	SAFE_DELETE_ARRAY(mpMaterialIndex);
+	SAFE_DELETE_ARRAY(mpTextureCoords);
 	//スキンウェイトの削除
 	for (size_t i = 0; i < mSkinWeights.size(); i++)
 	{
@@ -150,6 +152,18 @@ void CMesh::Init(CModelX* model) {
 			else if (strcmp(model->Token(), "SkinWeights") == 0) {
 				//CSkinWeightsクラスのインスタンスを作成し、配列に追加
 				mSkinWeights.push_back(new CSkinWeights(model));
+			}
+			//テクスチャ座標の時
+			else if (strcmp(model->Token(), "MeshTexturCoords") == 0) {
+				model->GetToken();	//  {
+				//テクスチャ座標数を取得
+				int textureCoordsNum = atoi(model->GetToken()) * 2;
+				//テクスチャ座標を配列に取り込む
+				mpTextureCoords = new float[textureCoordsNum];
+				for (int i = 0; textureCoordsNum; i++) {
+					mpTextureCoords[i] = atof(model->GetToken());
+				}
+				model->GetToken();	// }
 			}
 			else
 				//以外のノードは読み飛ばし
@@ -284,10 +298,13 @@ void CMesh::Render()
 	/*頂点データ,法線データの配列を有効にする*/
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
+	//テクスチャマッピングの配列を有効にする
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	/*頂点データ,法線データ,テクスチャ座標の場所を指定する*/
 	glVertexPointer(3, GL_FLOAT, 0, mpAnimateVertex);
 	glNormalPointer(GL_FLOAT, 0, mpAnimateNormal);
+	glTexCoordPointer(2, GL_FLOAT, 0, mpTextureCoords);
 
 	/*頂点のインデックスの場所を指定して図形を描画する*/
 	for (int i = 0; i < mFaceNum; i++) {
@@ -295,12 +312,13 @@ void CMesh::Render()
 		mMaterial[mpMaterialIndex[i]]->Enabled();
 		glDrawElements(GL_TRIANGLES, 3,
 			GL_UNSIGNED_INT, (mpVertexIndex + i * 3));
+		mMaterial[mpMaterialIndex[i]]->Disabled();
 	}
 	
-
 	/*頂点データ,法線データの配列を無効にする*/
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
+
 }
 
 char* CModelX::Token()
@@ -573,7 +591,7 @@ void CModelX::AnimateFrame() {
 	}
 
 //デバッグバージョンのみ有効
-	/*
+	
 #ifdef _DEBUG
 	for (int i = 0; i < mFrame.size(); i++) {
 		printf("Frame:%s\n", mFrame[i]->mpName);
@@ -584,7 +602,7 @@ void CModelX::AnimateFrame() {
 		}
 	}
 #endif
-	*/
+	
 }
 
 CModelXFrame::~CModelXFrame()
