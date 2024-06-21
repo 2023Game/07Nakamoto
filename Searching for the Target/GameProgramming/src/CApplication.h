@@ -9,6 +9,7 @@
 #include "CColliderTriangle.h"
 #include "CColliderMesh.h"
 #include "CMoveFloor.h"
+#include "CCube.h"
 
 
 class CApplication
@@ -23,12 +24,12 @@ public:
 	static const CMatrix& ModelViewInverse();
 
 private:
-	CPlayer mPlayer;	
+	CPlayer mPlayer;
 	
+	//CCube mCube;
+
 	//モデルクラスのインスタンス作成
 	CModel mModel;
-	//弾のモデル
-	//CModel mModelBullet;
 	//的のモデル
 	CModel mModelTarget;
 	//マップのモデル
@@ -42,7 +43,7 @@ private:
 	CColliderMesh mColliderMesh;
 	CColliderMesh mColliderMesh2;
 	
-	CColliderMesh mColliderMeshRed;
+	//CColliderMesh mColliderMeshRed;
 
 	CInput mInput;
 	CVector mEye;

@@ -23,6 +23,8 @@ CCollider::CCollider(CCharacter* parent, CMatrix* matrix,
 	const CVector& position, float radius) 
 	:CCollider() 
 {
+//タイプの設定
+mType = EType::ESPHERE;
 //親設定
 mpParent = parent;
 //親行列設定
@@ -120,21 +122,30 @@ CVector CCollider::Slope(CCollider* p, CCollider* t, CVector* a)
 	
 	//プレイヤーのZ軸方向のベクトルを求める
 	CVector PZvector = CVector(0, 0, 1) * p->mpParent->GetMatrixRotate();
-	//三角コライダのX軸方向のベクトルを求める
-	CVector TXvector = TYvector.Cross(PZvector).Nomalize();// **t->mpMatrix;
+	//プレイヤーのX軸方向のベクトルを求める
+	CVector PXvector = TYvector.Cross(PZvector).Nomalize();
 
-	//三角コライダのZ軸方向のベクトルを求める
-	CVector TZvector = TYvector.Cross(TXvector).Nomalize();// **t->mpMatrix;
-	float ax, ay, az;
+	//プレイヤーのZ軸方向のベクトルを求める
+	CVector TZvector = TYvector.Cross(PXvector).Nomalize();
+	
+	double rx, ry, rz;	//求めたラジアンを格納
+	float x, y, z;		//求めた度数を格納
 
 	//X軸の回転値を求める
-	ax = -asin(TZvector.GetY());
+	rx = -asin(TZvector.GetY());
 	//Y軸の回転値を求める
-	ay = atan2(TZvector.GetX(), TZvector.GetZ());
+	ry = atan2(TZvector.GetX(), TZvector.GetZ());
 	//Z軸の回転値を求める
-	az = atan2(TXvector.GetY(), TYvector.GetY());
+	rz = atan2(PXvector.GetY(), TYvector.GetY());
+
+	x = rx * 180 / M_PI;
+	y = ry * 180 / M_PI;
+	z = rz * 180 / M_PI;
 	
-	*a = CVector(ay, az, ax);
+	*a = CVector(x, y, z);
+
+	printf("ラジアン : %10f %10f %10f\n", rx, ry, rz);
+	printf("度数     : %10f %10f %10f\n", x, y, z);
 
 	return *a;
 }

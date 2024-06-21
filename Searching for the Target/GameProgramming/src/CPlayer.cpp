@@ -14,11 +14,15 @@
 
 #define AIM_POS 10		//照準の補正値
 
+#define GRAVITY (0.1f)	//重力加速度
+
 //デフォルトコンストラクタ
 CPlayer::CPlayer()
-	: mLine(this, &mMatrix, CVector(0.0f, 0.3f, -1.5f), CVector(0.0f, 0.3f, 1.5f))
+	: mLine(this, &mMatrix, CVector(0.0f, 0.3f, 1.5f), CVector(0.0f, 0.3f, -1.5f))
 	, mLine2(this, &mMatrix, CVector(0.0f, 2.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f))
 	, mLine3(this, &mMatrix, CVector(1.1f, 0.3f, 0.0f), CVector(-1.1f, 0.3f, 0.0f))
+	, mLine4(this, &mMatrix, CVector(0.0f, 2.0f, 0.0f), CVector(0.0f, -0.2f, 0.0f))
+	//, mSphere(this, &mMatrix, CVector(0.0f, 1.0f, 0.0f), 3.0f)
 	, mBulletFlag(nullptr)
 	, mCursorX(0)
 	, mCursorY(0)
@@ -116,14 +120,20 @@ void CPlayer::Update()
 	}
 
 	//確認用 X軸回転(上)
-	if (mInput.Key('K'))
-	{
-		mRotation = mRotation + ROTATION_YX;
-	}
+	//if (mInput.Key('K'))
+	//{
+	//	mRotation = mRotation + ROTATION_YX;
+	//}
 	//確認用 X軸回転(下)
-	if (mInput.Key('I'))
+	//if (mInput.Key('I'))
+	//{
+	//	mRotation = mRotation - ROTATION_YX;
+	//}
+
+	//重力
+	if (mInput.Key('G'))
 	{
-		mRotation = mRotation - ROTATION_YX;
+		mPosition = mPosition - CVector(0.0f, GRAVITY, 0.0f);
 	}
 
 	//スペースかクリックで弾発射
@@ -137,7 +147,6 @@ void CPlayer::Update()
 			bullet->SetModel(CBullet::GetModelBullet());
 			bullet->SetScale(CVector(10.0f, 10.0f, 10.0f));
 			bullet->SetPosition(CVector(0.0f, 1.75f, 3.0f) * mMatrix);
-			//bullet->SetRotation(mRotation);
 			bullet->SetRotation(mRotation + CVector(mCursorY / AIM_POS, -mCursorX / AIM_POS, 0.0f));
 			bullet->Update();
 			mBulletFlag = true;
@@ -167,32 +176,52 @@ void CPlayer::Collision(CCollider* m, CCollider* o)
 			//三角形と線分の衝突判定
 			if (CCollider::CollisionTriangleLine(o, m, &adjust))
 			{
-
+				if(m == &mLine || m == &mLine2 || m == &mLine3)
 				//位置の更新
 				mPosition = mPosition + adjust;
-
-				if (m == &mLine || m == &mLine2)
+				
+				if (m == &mLine4)
 				{
 					CVector ajustRote;
 					CCollider::Slope(m, o, &ajustRote);
 
+					printf("修正前：%10f %10f %10f\n",
+						mRotation.GetX(), mRotation.GetY(), mRotation.GetZ());
+
 					//坂に当たったら回転
-					mRotation = mRotation + ajustRote;
+					//mRotation = mRotation + ajustRote;
 
-					//SetRotation(ajustRote);
+					SetRotation(ajustRote);
 
-					printf("修正値：%10f %10f %10f\n",
-						ajustRote.GetX(), ajustRote.GetY(), ajustRote.GetZ());
+					//printf("修正値：%10f %10f %10f\n",
+					//	ajustRote.GetX(), ajustRote.GetY(), ajustRote.GetZ());
 
 					printf("修正後：%10f %10f %10f\n",
 						mRotation.GetX(), mRotation.GetY(), mRotation.GetZ());
-
 				}
+				
 
 				//行列の更新
 				CTransform::Update();
 			}
 		}
+		break;
+
+	case CCollider::EType::ESPHERE:	//球コライダ
+		//相手のコライダが三角コライダの時
+		if (o->GetType() == CCollider::EType::ETRIANGLE)
+		{
+			CVector adjust;	//調整値
+		//コライダのmとoが衝突しているか判定
+			if (CCollider::CollisionTriangleSphere(o, m, &adjust))
+			{
+				//printf("HIT");
+
+
+			}
+		}
+
+
 		break;
 	}
 }
@@ -204,10 +233,15 @@ void CPlayer::Collision()
 	mLine.ChangePriority();
 	mLine2.ChangePriority();
 	mLine3.ChangePriority();
+	mLine4.ChangePriority();
+
+	//mSphere.ChangePriority();
 	//衝突処理を実行
 	CCollisionManager::GetInstance()->Collision(&mLine, COLLISIONRANGE);
 	CCollisionManager::GetInstance()->Collision(&mLine2, COLLISIONRANGE);
 	CCollisionManager::GetInstance()->Collision(&mLine3, COLLISIONRANGE);
+	//CCollisionManager::GetInstance()->Collision(&mSphere, COLLISIONRANGE);
+	CCollisionManager::GetInstance()->Collision(&mLine4, COLLISIONRANGE);
 }
 
 //カーソルのX座標を取得

@@ -49,6 +49,10 @@ private:
 	CColliderLine mLine2;	//上下の線分コライダ
 	CColliderLine mLine3;	//左右の線分コライダ
 
+	CColliderLine mLine4;	//下の線分コライダ
+
+	//CCollider mSphere;		//球コライダー
+
 	bool mBulletFlag;
 };
 

@@ -1,9 +1,2 @@
-﻿  CApplication.cpp
-  CBillBoard.cpp
-  CBullet.cpp
-  CCharacter3.cpp
-  CCollider.cpp
-  CColliderLine.cpp
-  main.cpp
-  コードを生成中...
+﻿  CModelX.cpp
   GameProgramming.vcxproj -> C:\Users\dogpo\Desktop\2023Game\07Nakamoto\3DLv1_vs2019_00\Debug\GameProgramming.exe

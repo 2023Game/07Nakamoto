@@ -591,7 +591,7 @@ void CModelX::AnimateFrame() {
 	}
 
 //デバッグバージョンのみ有効
-	
+	/*
 #ifdef _DEBUG
 	for (int i = 0; i < mFrame.size(); i++) {
 		printf("Frame:%s\n", mFrame[i]->mpName);
@@ -602,7 +602,7 @@ void CModelX::AnimateFrame() {
 		}
 	}
 #endif
-	
+	*/
 }
 
 CModelXFrame::~CModelXFrame()

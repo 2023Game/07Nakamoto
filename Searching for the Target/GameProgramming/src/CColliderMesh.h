@@ -3,11 +3,12 @@
 
 #include "CModel.h"
 #include "CColliderTriangle.h"
+#include "CCollider.h"
 
 /*
 モデルデータから三角コライダの生成
 */
-class CColliderMesh
+class CColliderMesh : public CCollider
 {
 public:
 	//コンストラクタ

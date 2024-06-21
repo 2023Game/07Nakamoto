@@ -20,7 +20,7 @@ public:
 	/// <param name="scale">ägèk</param>
 	CMoveFloor(CVector& pos,
 		CVector& rot, CVector& scale);
-
+	
 	//çXêV
 	void Update();
 
