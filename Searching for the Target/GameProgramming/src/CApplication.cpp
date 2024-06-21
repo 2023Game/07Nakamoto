@@ -12,8 +12,8 @@
 #define MODEL_TARGET "res\\target.obj", "res\\target.mtl"	//的
 #define MODEL_BULLET "res\\bullet.obj", "res\\bullet.mtl"	//弾
 
-//#define MODEL_MAP "res\\map3.obj","res\\map3.mtl"			//試作マップ
-#define MODEL_MAP "res\\SlopeMap2.obj","res\\SlopeMap2.mtl"			//試作マップ
+#define MODEL_MAP "res\\map3.obj","res\\map3.mtl"			//試作マップ
+//#define MODEL_MAP "res\\SlopeMap2.obj","res\\SlopeMap2.mtl"			//試作マップ
 #define MODEL_SKY "res\\sky.obj","res\\sky.mtl"				//背景仮
 
 #define MODEL_REDCUBE "res\\RedCube.obj" ,"res\\RedCube.mtl"	//赤色の四角形
@@ -46,7 +46,7 @@ void CApplication::Start()
 
 	//プレイヤー生成
 	mPlayer.SetModel(&mModel);
-	mPlayer.SetScale(CVector(1.0f, 1.0f, 1.0f));
+	mPlayer.SetScale(CVector(1.5f, 1.5f, 1.5f));
 	mPlayer.SetPosition(CVector(0.0f, 0.0f, -5.0f));
 	mPlayer.SetRotation(CVector(0.0f, 180.0f, 0.0f));
 

@@ -131,10 +131,7 @@ void CPlayer::Update()
 	//}
 
 	//重力
-	if (mInput.Key('G'))
-	{
-		mPosition = mPosition - CVector(0.0f, GRAVITY, 0.0f);
-	}
+	mPosition = mPosition - CVector(0.0f, GRAVITY, 0.0f);
 
 	//スペースかクリックで弾発射
 	//長押し入力しても弾が1発しか出ないようにする
