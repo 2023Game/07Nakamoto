@@ -154,20 +154,23 @@ void CMesh::Init(CModelX* model) {
 				mSkinWeights.push_back(new CSkinWeights(model));
 			}
 			//テクスチャ座標の時
-			else if (strcmp(model->Token(), "MeshTexturCoords") == 0) {
+			else if (strcmp(model->Token(), "MeshTextureCoords") == 0) {
 				model->GetToken();	//  {
 				//テクスチャ座標数を取得
 				int textureCoordsNum = atoi(model->GetToken()) * 2;
 				//テクスチャ座標を配列に取り込む
 				mpTextureCoords = new float[textureCoordsNum];
-				for (int i = 0; textureCoordsNum; i++) {
+				for (int i = 0; i < textureCoordsNum; i++) {
 					mpTextureCoords[i] = atof(model->GetToken());
 				}
 				model->GetToken();	// }
 			}
 			else
+			{
 				//以外のノードは読み飛ばし
 				model->SkipNode();
+			}
+				
 		}
 		
 //デバッグバージョンのみ有効
