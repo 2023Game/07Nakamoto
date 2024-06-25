@@ -11,6 +11,7 @@ CTarget::CTarget(CModel* model, const CVector& position,
 	: count(0)
 	, mCollider(this, &mMatrix, CVector(0.0f, 0.0f, 0.0f), 0.8f)
 {
+	mTag = ETag::ETARGET;	//タグ
 	mpModel = model;		//モデルの設定
 	mPosition = position;	//位置の設定
 	mRotation = rotation;	//回転の設定
@@ -27,7 +28,7 @@ void CTarget::Collision(CCollider* m, CCollider* o)
 		//コライダのmとoが衝突しているか判定
 		if (CCollider::Collision(m, o))
 		{
-			//衝突しているときは無効にする
+			//衝突したときは無効にする
 			mEnabled = false;
 			break;
 		}

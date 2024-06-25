@@ -16,8 +16,10 @@
 //#define MODEL_MAP "res\\SlopeMap2.obj","res\\SlopeMap2.mtl"			//試作マップ
 #define MODEL_SKY "res\\sky.obj","res\\sky.mtl"				//背景仮
 
-#define MODEL_REDCUBE "res\\RedCube.obj" ,"res\\RedCube.mtl"	//赤色の四角形
-#define MODEL_BLUECUBE "res\\BlueCube.obj" ,"res\\BlueCube.mtl"	//青色の四角形
+#define MODEL_SLOPE "res\\Slope2.obj","res\\Slope2.mtl"		//坂
+
+#define MODEL_SPHERE "res\\sphere.obj" ,"res\\sphere.mtl"	//赤色の四角形
+//#define MODEL_BLUECUBE "res\\BlueCube.obj" ,"res\\BlueCube.mtl"	//青色の四角形
 
 //#define MODEL_BACKGROUND "res\\sky.obj","res\\sky.mtl"	//背景モデル
 
@@ -31,13 +33,10 @@ void CApplication::Start()
 	mModelTarget.Load(MODEL_TARGET);
 	mModelMap.Load(MODEL_MAP);
 	mBackGround.Load(MODEL_SKY);
-
-	mRed.Load(MODEL_REDCUBE);
+	mModelSlope.Load(MODEL_SLOPE);
+	mModelSwitch.Load(MODEL_SPHERE);
 
 	CBullet::GetModelBullet()->Load(MODEL_BULLET);
-
-	CMoveFloor::GetModelRedCube()->Load(MODEL_REDCUBE);
-	CMoveFloor::GetModelBlueCube()->Load(MODEL_BLUECUBE);
 
 	mEye = CVector(0.0f, 2.0f, 13.0f);
 
@@ -50,32 +49,29 @@ void CApplication::Start()
 	mPlayer.SetPosition(CVector(0.0f, 0.0f, -5.0f));
 	mPlayer.SetRotation(CVector(0.0f, 180.0f, 0.0f));
 
-	//四角形生成
-	/*
-	mCube.SetModel(&mRed);
-	mCube.SetScale(CVector(1.0f, 1.0f, 1.0f));
-	mCube.SetPosition(CVector(5.0f, 5.0f, -15.0f));
-	mCube.SetRotation(CVector(0.0f, 0.0f, 0.0f));
-	*/
-	
 	//的のコライダを生成
 	new CTarget(&mModelTarget, CVector(-20.0f, 5.0f, -1.0f),
 		CVector(0.0f, 90.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f), CTarget::EState::ESTAY);
-
 	new CTarget(&mModelTarget, CVector(0.0f, 2.75f, -50.0f),
 		CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f), CTarget::EState::EMOVE1);
-
 	new CTarget(&mModelTarget, CVector(0.0f, 2.75f, -25.0f),
 		CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f), CTarget::EState::EMOVE1);
 
-	//背景モデルから三角コライダを生成
+	//スイッチの生成
+	new CSwitch(&mModelSwitch, CVector(0.5f, 0.0f, 0.5f),
+		CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
+
+	//坂の生成
+	mSlope.SetSlope(CVector(-5.0f, 0.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f),
+		CVector(1.0f, 1.0f, 1.0f), &mModelSlope);
+
+	//モデルから三角コライダを生成
 	//親インスタンスと親行列は無し
-	//mColliderMesh.ColliderMeshSet(nullptr, nullptr, &mBackGround);
-
+	//背景のモデル
+	mColliderMesh.ColliderMeshSet(nullptr, nullptr, &mBackGround);
+	//ステージのモデル
 	mColliderMesh2.ColliderMeshSet(nullptr, nullptr, &mModelMap);
-
-	//mColliderMeshRed.ColliderMeshSet(nullptr, nullptr, &mRed);
-
+	
 	//ビルボードの生成
 	new CBillBoard(CVector(-0.6f, 3.0f, -10.0f), 1.0f, 1.0f);
 }
@@ -85,7 +81,6 @@ void CApplication::Update()
 	//タスクマネージャの更新
 	CTaskManager::GetInstance()->Update();
 	//コリジョンマネージャの衝突判定
-	// 削除 CCollisionManager::GetInstance()->Collison();
 	CTaskManager::GetInstance()->Collision();
 
 	//カメラのパラメータを作成する
@@ -115,12 +110,11 @@ void CApplication::Update()
 	mModelViewInverse.SetM(1, 3, 0);
 	mModelViewInverse.SetM(2, 3, 0);
 
-	//mBackGround.Render();
+	//背景
+	mBackGround.Render();
 
 	//試作マップの描画
 	mModelMap.Render(); 
-
-	//mRed.Render();
 
 	//タスクリストの削除
 	CTaskManager::GetInstance()->Delete();

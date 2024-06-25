@@ -10,7 +10,6 @@ CModel CBullet::mModelBullet;
 CBullet::CBullet()
 	: mLife(50)
 	, mCollider(this, &mMatrix, CVector(0.0f, 0.0f, 0.0f), 0.5f)
-	//, mMesh(this, &mMatrix, CMoveFloor::GetModelRedCube())
 {
 
 }
@@ -31,9 +30,13 @@ void CBullet::Collision(CCollider* m, CCollider* o)
 		//コライダのmとoが衝突しているか判定
 		if (CCollider::Collision(m, o)) 
 		{
-			//衝突しているときは無効にする
-			mEnabled = false;
-			printf("球コライダにhit\n");
+			if (o->GetParent()->GetTag() == CCharacter::ETag::ETARGET)
+			{
+				//衝突しているときは無効にする
+				mEnabled = false;
+
+				printf("TargetにHit\n");
+			}
 		}
 		break;
 	case CCollider::EType::ETRIANGLE:	//三角コライダの時
@@ -41,8 +44,17 @@ void CBullet::Collision(CCollider* m, CCollider* o)
 		//コライダのmとoが衝突しているか判定
 		if (CCollider::CollisionTriangleSphere(o, m, &adjust))
 		{
+			if (o->GetParent() != nullptr)
+			{
+				if (o->GetParent()->GetTag() == CCharacter::ETag::ESWITCH)
+				{
+					printf("SWitchタイプ");
+				}
+			}
+			
 			//衝突しているときは無効にする
 			mEnabled = false;
+
 			printf("三角コライダにhit\n");
 		}
 		break;

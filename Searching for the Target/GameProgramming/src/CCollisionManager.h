@@ -13,7 +13,7 @@ public:
 	//インスタンスの取得
 	static CCollisionManager* GetInstance();
 	//衝突処理
-	void Collison();
+	void Collision();
 
 	/// <summary>
 	/// 衝突処理

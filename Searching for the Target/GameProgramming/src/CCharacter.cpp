@@ -4,6 +4,7 @@
 //デフォルトコンストラクタ
 CCharacter::CCharacter()
 	:mpModel(nullptr)
+	,mTag(ETag::ENULL)
 {
 	//タスクリストに追加
 	CTaskManager::GetInstance()->Add(this);
@@ -18,6 +19,7 @@ CCharacter::~CCharacter()
 //コンストラクタ
 CCharacter::CCharacter(int priority)
 	:mpModel(nullptr)
+	, mTag(ETag::ENULL)
 {
 	mPriority = priority;
 	CTaskManager::GetInstance()->Add(this);
@@ -27,6 +29,18 @@ CCharacter::CCharacter(int priority)
 void CCharacter::SetModel(CModel* m)
 {
 	mpModel = m;
+}
+
+//タグの設定
+CCharacter::ETag CCharacter::SetTag(ETag tag)
+{
+	return mTag = tag;
+}
+
+//タグの取得
+CCharacter::ETag CCharacter::GetTag()
+{
+	return mTag;
 }
 
 //描画処理

@@ -9,8 +9,8 @@
 #include "CColliderTriangle.h"
 #include "CColliderMesh.h"
 #include "CMoveFloor.h"
-#include "CCube.h"
-
+#include "CSwitch.h"
+#include "CSlope.h"
 
 class CApplication
 {
@@ -24,9 +24,12 @@ public:
 	static const CMatrix& ModelViewInverse();
 
 private:
+	//プレイヤー
 	CPlayer mPlayer;
-	
-	//CCube mCube;
+	//坂
+	CSlope mSlope;
+	//スイッチ
+	//CSwitch mSwitch;
 
 	//モデルクラスのインスタンス作成
 	CModel mModel;
@@ -36,8 +39,10 @@ private:
 	CModel mModelMap;
 	//背景モデル
 	CModel mBackGround;
-
-	CModel mRed;
+	//坂のモデル
+	CModel mModelSlope;
+	//スイッチのモデル
+	CModel mModelSwitch;
 
 	//モデルからコライダを生成
 	CColliderMesh mColliderMesh;

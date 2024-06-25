@@ -90,7 +90,10 @@
     <ClCompile Include="src\CMoveFloor.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="src\CCube.cpp">
+    <ClCompile Include="src\CSwitch.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CSlope.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -173,7 +176,10 @@
     <ClInclude Include="src\CMoveFloor.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="src\CCube.h">
+    <ClInclude Include="src\CSwitch.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CSlope.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,4 +1,6 @@
-﻿  CApplication.cpp
+﻿  CCharacter.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': マクロが再定義されました。
 C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\include\GLFW\glfw3.h(98): message : 'APIENTRY' の以前の定義を確認してください
+  CSwitch.cpp
+  コードを生成中...
   GameProgramming.vcxproj -> C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\Debug\GameProgramming.exe

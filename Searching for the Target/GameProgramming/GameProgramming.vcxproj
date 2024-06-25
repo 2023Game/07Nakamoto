@@ -20,7 +20,7 @@
     <ClCompile Include="src\CColliderMesh.cpp" />
     <ClCompile Include="src\CColliderTriangle.cpp" />
     <ClCompile Include="src\CCollisionManager.cpp" />
-    <ClCompile Include="src\CCube.cpp" />
+    <ClCompile Include="src\CSwitch.cpp" />
     <ClCompile Include="src\CEffect.cpp" />
     <ClCompile Include="src\CInput.cpp" />
     <ClCompile Include="src\CMaterial.cpp" />
@@ -28,6 +28,7 @@
     <ClCompile Include="src\CModel.cpp" />
     <ClCompile Include="src\CMoveFloor.cpp" />
     <ClCompile Include="src\CPlayer.cpp" />
+    <ClCompile Include="src\CSlope.cpp" />
     <ClCompile Include="src\CSound.cpp" />
     <ClCompile Include="src\CTarget.cpp" />
     <ClCompile Include="src\CTaskManager.cpp" />
@@ -47,7 +48,7 @@
     <ClInclude Include="src\CColliderMesh.h" />
     <ClInclude Include="src\CColliderTriangle.h" />
     <ClInclude Include="src\CCollisionManager.h" />
-    <ClInclude Include="src\CCube.h" />
+    <ClInclude Include="src\CSwitch.h" />
     <ClInclude Include="src\CEffect.h" />
     <ClInclude Include="src\CInput.h" />
     <ClInclude Include="src\CMaterial.h" />
@@ -55,6 +56,7 @@
     <ClInclude Include="src\CModel.h" />
     <ClInclude Include="src\CMoveFloor.h" />
     <ClInclude Include="src\CPlayer.h" />
+    <ClInclude Include="src\CSlope.h" />
     <ClInclude Include="src\CSound.h" />
     <ClInclude Include="src\CTarget.h" />
     <ClInclude Include="src\CTask.h" />

@@ -29,7 +29,11 @@ public:
 	//更新処理
 	void Update();
 
-	//衝突処理
+	/// <summary>
+	/// 衝突処理
+	/// </summary>
+	/// <param name="m">自分のコライダ</param>
+	/// <param name="o">相手のコライダ</param>
 	void Collision(CCollider* m, CCollider* o);
 
 	//衝突処理
@@ -45,13 +49,13 @@ private:
 
 	CInput mInput;
 
-	CColliderLine mLine;	//前後の線分コライダ
-	CColliderLine mLine2;	//上下の線分コライダ
-	CColliderLine mLine3;	//左右の線分コライダ
+	//CColliderLine mLine;	//前後の線分コライダ
+	//CColliderLine mLine2;	//上下の線分コライダ
+	//CColliderLine mLine3;	//左右の線分コライダ
 
 	CColliderLine mLine4;	//下の線分コライダ
 
-	//CCollider mSphere;		//球コライダー
+	CCollider mSphere;		//球コライダー
 
 	bool mBulletFlag;
 };

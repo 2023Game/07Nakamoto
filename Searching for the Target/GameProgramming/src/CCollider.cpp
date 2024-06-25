@@ -108,7 +108,7 @@ bool CCollider::CollisionTriangleSphere(CCollider* t, CCollider* s, CVector* a)
 
 }
 
-//斜面
+//線分と斜面の衝突処理
 CVector CCollider::Slope(CCollider* p, CCollider* t, CVector* a)
 {
 	//三角コライダの法線を求める
@@ -126,26 +126,28 @@ CVector CCollider::Slope(CCollider* p, CCollider* t, CVector* a)
 	CVector PXvector = TYvector.Cross(PZvector).Nomalize();
 
 	//プレイヤーのZ軸方向のベクトルを求める
-	CVector TZvector = TYvector.Cross(PXvector).Nomalize();
+	CVector TZvector = PXvector.Cross(TYvector).Nomalize();
 	
 	double rx, ry, rz;	//求めたラジアンを格納
 	float x, y, z;		//求めた度数を格納
 
-	//X軸の回転値を求める
+	//X軸の回転値(ラジアン)を求める
 	rx = -asin(TZvector.GetY());
-	//Y軸の回転値を求める
+	//Y軸の回転値(ラジアン)を求める
 	ry = atan2(TZvector.GetX(), TZvector.GetZ());
-	//Z軸の回転値を求める
+	//Z軸の回転値(ラジアン)を求める
 	rz = atan2(PXvector.GetY(), TYvector.GetY());
 
+	//ラジアンから角度を求める
 	x = rx * 180 / M_PI;
 	y = ry * 180 / M_PI;
 	z = rz * 180 / M_PI;
 	
 	*a = CVector(x, y, z);
 
-	printf("ラジアン : %10f %10f %10f\n", rx, ry, rz);
-	printf("度数     : %10f %10f %10f\n", x, y, z);
+	//確認用
+	//printf("ラジアン : %10f %10f %10f\n", rx, ry, rz);
+	//printf("度数     : %10f %10f %10f\n", x, y, z);
 
 	return *a;
 }

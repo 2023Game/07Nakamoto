@@ -15,10 +15,14 @@
 #include "CCharacter3.h"
 #include "CTaskManager.h"
 #include "CColliderMesh.h"
+#include "CXCharacter.h"
 
 class CApplication
 {
 private:
+	//キャラクタのインスタンス
+	CXCharacter mCharacter;
+
 	CMatrix mMatrix;
 
 	//モデルからコライダを生成

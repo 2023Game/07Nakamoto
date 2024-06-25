@@ -1,8 +1,8 @@
 #include "CMoveFloor.h"
 
 //static変数の定義
-CModel CMoveFloor::mModelRedCube;
-CModel CMoveFloor::mModelBuleCube;
+//CModel CMoveFloor::mModelRedCube;
+//CModel CMoveFloor::mModelBuleCube;
 
 //デフォルトコンストラクタ
 CMoveFloor::CMoveFloor()
@@ -19,17 +19,17 @@ CMoveFloor::CMoveFloor(CVector& pos,
 	mScale = scale;
 }
 
-CModel* CMoveFloor::GetModelRedCube()
-{
-	return &mModelRedCube;
-}
+//CModel* CMoveFloor::GetModelRedCube()
+//{
+//	return &mModelRedCube;
+//
 
-CModel* CMoveFloor::GetModelBlueCube()
-{
-	return &mModelBuleCube;
-}
+//CModel* CMoveFloor::GetModelBlueCube()
+//{
+//	return &mModelBuleCube;
+//}
 
-void CMoveFloor::Update()
-{
-
-}
+//void CMoveFloor::Update()
+//{
+//
+//}

@@ -22,15 +22,15 @@ public:
 		CVector& rot, CVector& scale);
 	
 	//çXêV
-	void Update();
+	//void Update();
 
-	static CModel* GetModelRedCube();
-	static CModel* GetModelBlueCube();
+	//static CModel* GetModelRedCube();
+	//static CModel* GetModelBlueCube();
 private:
-	static CModel mModelRedCube;
-	static CModel mModelBuleCube;
+	//static CModel mModelRedCube;
+	//static CModel mModelBuleCube;
 
-	CColliderMesh mColliderMesh;
+	//CColliderMesh mColliderMesh;
 };
 
 #endif // !CMOVEFLOOR_H
