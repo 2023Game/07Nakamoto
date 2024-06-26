@@ -57,7 +57,7 @@ void CApplication::Update()
 	{
 		Index++;
 
-		if (Index == 11)
+		if (Index == 12)
 		{
 			Index = 1;
 		}
