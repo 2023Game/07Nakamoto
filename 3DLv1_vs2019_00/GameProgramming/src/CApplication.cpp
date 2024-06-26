@@ -46,7 +46,7 @@ void CApplication::Start()
 	mFont.Load("FontG.png", 1, 4096 / 64);
 }
 
-int Index = 1;
+int Index = 0;
 
 void CApplication::Update()
 {
@@ -56,10 +56,10 @@ void CApplication::Update()
 	if (mCharacter.IsAnimationFinished())
 	{
 		Index++;
-
+		
 		if (Index == 12)
 		{
-			Index = 1;
+			Index = 0;
 		}
 	}
 
