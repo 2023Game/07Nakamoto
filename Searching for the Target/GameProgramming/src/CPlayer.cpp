@@ -203,6 +203,17 @@ void CPlayer::Collision(CCollider* m, CCollider* o)
 			//行列の更新
 			CTransform::Update();
 		}
+		/*球と球の当たり判定、めり込まない処理の予定
+		//相手のコライダが球コライダの時
+		else if (o->GetType() == CCollider::EType::ESPHERE)
+		{
+			//コライダのmとoが衝突しているか判定
+			if (CCollider::Collision(m, o))
+			{
+
+			}
+		}
+		*/
 		break;
 
 	case CCollider::EType::ELINE:	//線コライダ

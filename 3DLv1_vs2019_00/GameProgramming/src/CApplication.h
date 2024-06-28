@@ -16,6 +16,7 @@
 #include "CTaskManager.h"
 #include "CColliderMesh.h"
 #include "CXCharacter.h"
+#include "CXPlayer.h"
 
 class CApplication
 {
@@ -65,6 +66,9 @@ private:
 //	std::vector<CCharacter*> mCharacters;
 
 public:
+	//キャラクタのインスタンス
+	CXPlayer mXPlayer;
+
 	CModelX mModelX;
 
 	//モデルビュー行列の取得

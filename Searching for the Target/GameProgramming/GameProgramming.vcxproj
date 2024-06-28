@@ -20,6 +20,7 @@
     <ClCompile Include="src\CColliderMesh.cpp" />
     <ClCompile Include="src\CColliderTriangle.cpp" />
     <ClCompile Include="src\CCollisionManager.cpp" />
+    <ClCompile Include="src\CMovingDoor.cpp" />
     <ClCompile Include="src\CSwitch.cpp" />
     <ClCompile Include="src\CEffect.cpp" />
     <ClCompile Include="src\CInput.cpp" />
@@ -48,6 +49,7 @@
     <ClInclude Include="src\CColliderMesh.h" />
     <ClInclude Include="src\CColliderTriangle.h" />
     <ClInclude Include="src\CCollisionManager.h" />
+    <ClInclude Include="src\CMovingDoor.h" />
     <ClInclude Include="src\CSwitch.h" />
     <ClInclude Include="src\CEffect.h" />
     <ClInclude Include="src\CInput.h" />

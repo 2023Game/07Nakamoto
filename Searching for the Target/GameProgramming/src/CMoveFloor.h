@@ -24,13 +24,8 @@ public:
 	//çXêV
 	//void Update();
 
-	//static CModel* GetModelRedCube();
-	//static CModel* GetModelBlueCube();
 private:
-	//static CModel mModelRedCube;
-	//static CModel mModelBuleCube;
 
-	//CColliderMesh mColliderMesh;
 };
 
 #endif // !CMOVEFLOOR_H

@@ -3,7 +3,6 @@
 
 #include "CCharacter.h"
 #include "CCollider.h"
-#include "CCollisionManager.h"
 
 /*
 ターゲットクラス
@@ -29,6 +28,9 @@ public:
 	CTarget(CModel* model, const CVector& position,
 		const CVector& rotation, const CVector& scale, EState state);
 
+	//更新処理
+	void Update();
+
 	/// <summary>
 	/// 衝突処理
 	/// </summary>
@@ -38,9 +40,6 @@ public:
 
 	//衝突処理
 	void Collision();
-
-	//更新処理
-	void Update();
 
 private:
 	//状態

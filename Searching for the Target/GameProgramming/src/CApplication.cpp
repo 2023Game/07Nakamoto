@@ -4,6 +4,7 @@
 #include "CTransform.h"
 #include "CTarget.h"
 #include "CBillBoard.h"
+#include "CMovingDoor.h"
 
 //OpenGL
 #include "glut.h"
@@ -16,10 +17,11 @@
 //#define MODEL_MAP "res\\SlopeMap2.obj","res\\SlopeMap2.mtl"			//試作マップ
 #define MODEL_SKY "res\\sky.obj","res\\sky.mtl"				//背景仮
 
-#define MODEL_SLOPE "res\\Slope2.obj","res\\Slope2.mtl"		//坂
+#define MODEL_SLOPE "res\\Slope.obj","res\\Slope.mtl"		//坂
 
-#define MODEL_SPHERE "res\\sphere.obj" ,"res\\sphere.mtl"	//赤色の四角形
-//#define MODEL_BLUECUBE "res\\BlueCube.obj" ,"res\\BlueCube.mtl"	//青色の四角形
+#define MODEL_SPHERE "res\\sphere.obj" ,"res\\sphere.mtl"	//球(スイッチ)
+
+#define MODEL_BLUECUBE "res\\BlueCube.obj" ,"res\\BlueCube.mtl"	//青色の四角形
 
 //#define MODEL_BACKGROUND "res\\sky.obj","res\\sky.mtl"	//背景モデル
 
@@ -35,8 +37,8 @@ void CApplication::Start()
 	mBackGround.Load(MODEL_SKY);
 	mModelSlope.Load(MODEL_SLOPE);
 	mModelSwitch.Load(MODEL_SPHERE);
-
 	CBullet::GetModelBullet()->Load(MODEL_BULLET);
+	CMovingDoor::GetModelCube()->Load(MODEL_BLUECUBE);
 
 	mEye = CVector(0.0f, 2.0f, 13.0f);
 
@@ -57,12 +59,16 @@ void CApplication::Start()
 	new CTarget(&mModelTarget, CVector(0.0f, 2.75f, -25.0f),
 		CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f), CTarget::EState::EMOVE1);
 
-	//スイッチの生成
-	new CSwitch(&mModelSwitch, CVector(0.5f, 0.0f, 0.5f),
-		CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
+	//スイッチと扉の生成
+	mSwitch.SetSwitch(&mSwitch, &mModelSwitch,
+		CVector(0.5f, 3.0f, 0.5f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f),
+		CVector(1.0f, 1.0f, -6.0f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 
+	mSwitch2.SetSwitch(&mSwitch2, &mModelSwitch,
+		CVector(0.5f, 3.0f, -4.5f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f),
+		CVector(1.0f, 3.0f, -6.0f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 	//坂の生成
-	mSlope.SetSlope(CVector(-5.0f, 0.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f),
+	mSlope.SetSlope(CVector(-5.0f, 5.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f),
 		CVector(1.0f, 1.0f, 1.0f), &mModelSlope);
 
 	//モデルから三角コライダを生成

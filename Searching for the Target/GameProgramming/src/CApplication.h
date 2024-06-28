@@ -29,7 +29,8 @@ private:
 	//坂
 	CSlope mSlope;
 	//スイッチ
-	//CSwitch mSwitch;
+	CSwitch mSwitch;
+	CSwitch mSwitch2;
 
 	//モデルクラスのインスタンス作成
 	CModel mModel;
@@ -44,12 +45,13 @@ private:
 	//スイッチのモデル
 	CModel mModelSwitch;
 
+	//青い四角形のモデル
+	CModel mModelCube;
+
 	//モデルからコライダを生成
 	CColliderMesh mColliderMesh;
 	CColliderMesh mColliderMesh2;
 	
-	//CColliderMesh mColliderMeshRed;
-
 	CInput mInput;
 	CVector mEye;
 

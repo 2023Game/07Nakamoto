@@ -18,7 +18,7 @@ CCharacter::~CCharacter()
 
 //コンストラクタ
 CCharacter::CCharacter(int priority)
-	:mpModel(nullptr)
+	: mpModel(nullptr)
 	, mTag(ETag::ENULL)
 {
 	mPriority = priority;

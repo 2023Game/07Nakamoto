@@ -1,7 +1,6 @@
 #include "CBullet.h"
 #include "CCollisionManager.h"
 #include <stdio.h>
-#include "CMoveFloor.h"
 
 //static変数の定義
 CModel CBullet::mModelBullet;
@@ -12,12 +11,6 @@ CBullet::CBullet()
 	, mCollider(this, &mMatrix, CVector(0.0f, 0.0f, 0.0f), 0.5f)
 {
 
-}
-
-//弾のモデルを取得する
-CModel* CBullet::GetModelBullet()
-{
-	return &mModelBullet;
 }
 
 //衝突処理
@@ -36,6 +29,13 @@ void CBullet::Collision(CCollider* m, CCollider* o)
 				mEnabled = false;
 
 				printf("TargetにHit\n");
+			}
+			else if (o->GetParent()->GetTag() == CCharacter::ETag::ESWITCH)
+			{
+				//衝突しているときは無効にする
+				mEnabled = false;
+
+				printf("SwitchにHit\n");
 			}
 		}
 		break;
@@ -85,4 +85,10 @@ void CBullet::Collision()
 	mCollider.ChangePriority();
 	//衝突処理の実行
 	CCollisionManager::GetInstance()->Collision(&mCollider, COLLISIONRANGE);
+}
+
+//弾のモデルを取得する
+CModel* CBullet::GetModelBullet()
+{
+	return &mModelBullet;
 }

@@ -4,7 +4,6 @@
 #include "CCharacter.h"
 #include "CCollider.h"
 #include "CModel.h"
-#include "CColliderMesh.h"
 
 /*
 弾クラス
@@ -36,8 +35,6 @@ private:
 	int mLife;
 	//球コライダ
 	CCollider mCollider;
-
-	CColliderMesh mMesh;
 };
 
 #endif // !CBULLET_H

@@ -1,4 +1,5 @@
 #include "CTarget.h"
+#include "CCollisionManager.h"
 
 //移動速度
 #define VELOCITY CVector(0.1f,0.0f,0.0f)
@@ -19,31 +20,6 @@ CTarget::CTarget(CModel* model, const CVector& position,
 	mState = state;			//状態の設定
 }
 
-//衝突処理
-void CTarget::Collision(CCollider* m, CCollider* o)
-{
-	switch (o->GetType())
-	{
-	case CCollider::EType::ESPHERE:	//球コライダの時
-		//コライダのmとoが衝突しているか判定
-		if (CCollider::Collision(m, o))
-		{
-			//衝突したときは無効にする
-			mEnabled = false;
-			break;
-		}
-	}
-}
-
-//衝突処理
-void CTarget::Collision()
-{
-	//コライダの優先度の変更
-	mCollider.ChangePriority();
-	//衝突処理の実行
-	CCollisionManager::GetInstance()->Collision(&mCollider, COLLISIONRANGE);
-}
-
 //更新処理
 void CTarget::Update()
 {
@@ -53,7 +29,7 @@ void CTarget::Update()
 	switch (mState)
 	{
 	case CTarget::EState::ESTAY:	//滞在
-		
+
 		break;
 
 	case CTarget::EState::EMOVE1:	//横移動
@@ -75,6 +51,38 @@ void CTarget::Update()
 		}
 		break;
 	}
-
-	
 }
+
+//衝突処理
+void CTarget::Collision(CCollider* m, CCollider* o)
+{
+	switch (o->GetType())
+	{
+	case CCollider::EType::ESPHERE:	//球コライダの時
+		//コライダのmとoが衝突しているか判定
+		if (CCollider::Collision(m, o))
+		{
+			//タグがnullptrのコライダーは判定しない
+			if (o->GetParent() != nullptr)
+			{
+				//相手のタグが弾か判定
+				if (o->GetParent()->GetTag() == CCharacter::ETag::EBULLET)
+				{
+					//衝突したときは無効にする
+					mEnabled = false;
+				}
+			}
+			break;
+		}
+	}
+}
+
+//衝突処理
+void CTarget::Collision()
+{
+	//コライダの優先度の変更
+	mCollider.ChangePriority();
+	//衝突処理の実行
+	CCollisionManager::GetInstance()->Collision(&mCollider, COLLISIONRANGE);
+}
+
