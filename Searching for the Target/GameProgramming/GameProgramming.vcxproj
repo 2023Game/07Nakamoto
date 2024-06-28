@@ -14,12 +14,14 @@
     <ClCompile Include="src\CApplication.cpp" />
     <ClCompile Include="src\CBillBoard.cpp" />
     <ClCompile Include="src\CBullet.cpp" />
+    <ClCompile Include="src\CCamera.cpp" />
     <ClCompile Include="src\CCharacter.cpp" />
     <ClCompile Include="src\CCollider.cpp" />
     <ClCompile Include="src\CColliderLine.cpp" />
     <ClCompile Include="src\CColliderMesh.cpp" />
     <ClCompile Include="src\CColliderTriangle.cpp" />
     <ClCompile Include="src\CCollisionManager.cpp" />
+    <ClCompile Include="src\CFont.cpp" />
     <ClCompile Include="src\CMovingDoor.cpp" />
     <ClCompile Include="src\CSwitch.cpp" />
     <ClCompile Include="src\CEffect.cpp" />
@@ -36,6 +38,7 @@
     <ClCompile Include="src\CTexture.cpp" />
     <ClCompile Include="src\CTransform.cpp" />
     <ClCompile Include="src\CTriangle.cpp" />
+    <ClCompile Include="src\CUi.cpp" />
     <ClCompile Include="src\CVector.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
@@ -43,12 +46,14 @@
     <ClInclude Include="src\CApplication.h" />
     <ClInclude Include="src\CBillBoard.h" />
     <ClInclude Include="src\CBullet.h" />
+    <ClInclude Include="src\CCamera.h" />
     <ClInclude Include="src\CCharacter.h" />
     <ClInclude Include="src\CCollider.h" />
     <ClInclude Include="src\CColliderLine.h" />
     <ClInclude Include="src\CColliderMesh.h" />
     <ClInclude Include="src\CColliderTriangle.h" />
     <ClInclude Include="src\CCollisionManager.h" />
+    <ClInclude Include="src\CFont.h" />
     <ClInclude Include="src\CMovingDoor.h" />
     <ClInclude Include="src\CSwitch.h" />
     <ClInclude Include="src\CEffect.h" />
@@ -66,6 +71,7 @@
     <ClInclude Include="src\CTexture.h" />
     <ClInclude Include="src\CTransform.h" />
     <ClInclude Include="src\CTriangle.h" />
+    <ClInclude Include="src\CUi.h" />
     <ClInclude Include="src\CVector.h" />
     <ClInclude Include="src\CVertex.h" />
     <ClInclude Include="src\main.h" />

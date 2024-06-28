@@ -11,10 +11,14 @@
 #include "CMoveFloor.h"
 #include "CSwitch.h"
 #include "CSlope.h"
+#include "CMovingDoor.h"
+#include "CUi.h"
 
 class CApplication
 {
 public:
+	~CApplication();
+
 	//最初に一度だけ実行するプログラム
 	void Start();
 	//繰り返し実行するプログラム
@@ -23,14 +27,19 @@ public:
 	//モデルビュー行列の取得
 	static const CMatrix& ModelViewInverse();
 
+	static CUi* Ui();	//UIクラスのインスタンスを取得
+
 private:
 	//プレイヤー
 	CPlayer mPlayer;
 	//坂
 	CSlope mSlope;
 	//スイッチ
-	CSwitch mSwitch;
-	CSwitch mSwitch2;
+	//CSwitch mSwitch;
+	//CSwitch mSwitch2;
+
+	CSwitch mSwhith3;
+	CMovingDoor mDoor;
 
 	//モデルクラスのインスタンス作成
 	CModel mModel;
@@ -57,4 +66,6 @@ private:
 
 	//モデルビュー逆行列
 	static CMatrix mModelViewInverse;
+
+	static CUi* spUi;		//UIクラスのポインタ
 };
