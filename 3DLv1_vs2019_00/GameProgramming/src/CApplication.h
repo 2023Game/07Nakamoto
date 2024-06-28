@@ -23,6 +23,8 @@ class CApplication
 private:
 	//キャラクタのインスタンス
 	CXCharacter mCharacter;
+	//キャラクタのインスタンス
+	CXPlayer mXPlayer;
 
 	CMatrix mMatrix;
 
@@ -66,9 +68,6 @@ private:
 //	std::vector<CCharacter*> mCharacters;
 
 public:
-	//キャラクタのインスタンス
-	CXPlayer mXPlayer;
-
 	CModelX mModelX;
 
 	//モデルビュー行列の取得
