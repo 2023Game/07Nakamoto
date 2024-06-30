@@ -21,7 +21,7 @@ CPlayer::CPlayer()
 	//: mLine(this, &mMatrix, CVector(0.0f, 0.0f, 0.5f), CVector(0.0f, 0.0f, -0.5f))
 	//, mLine2(this, &mMatrix, CVector(0.0f, 2.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f))
 	//, mLine3(this, &mMatrix, CVector(1.1f, 0.0f, 0.0f), CVector(-1.1f, 0.0f, 0.0f))
-	, mLine4(this, &mMatrix, CVector(0.0f, 2.0f, 3.0f), CVector(0.0f, -2.1f, 0.0f))
+	//, mLine4(this, &mMatrix, CVector(0.0f, 2.0f, 3.0f), CVector(0.0f, -2.1f, 0.0f))
 	, mBulletFlag(nullptr)
 	, mCursorX(0)
 	, mCursorY(0)
@@ -269,19 +269,18 @@ void CPlayer::Collision(CCollider* m, CCollider* o)
 void CPlayer::Collision()
 {
 	//コライダの優先度の変更
+	mSphere.ChangePriority();
 	//mLine.ChangePriority();
 	//mLine2.ChangePriority();
 	//mLine3.ChangePriority();
-	mLine4.ChangePriority();
+	//mLine4.ChangePriority();
 
-	mSphere.ChangePriority();
 	//衝突処理を実行
+	CCollisionManager::GetInstance()->Collision(&mSphere, COLLISIONRANGE);
 	//CCollisionManager::GetInstance()->Collision(&mLine, COLLISIONRANGE);
 	//CCollisionManager::GetInstance()->Collision(&mLine2, COLLISIONRANGE);
 	//CCollisionManager::GetInstance()->Collision(&mLine3, COLLISIONRANGE);
-	CCollisionManager::GetInstance()->Collision(&mLine4, COLLISIONRANGE);
-	CCollisionManager::GetInstance()->Collision(&mSphere, COLLISIONRANGE);
-	
+	//CCollisionManager::GetInstance()->Collision(&mLine4, COLLISIONRANGE);
 }
 
 //カーソルのX座標を取得

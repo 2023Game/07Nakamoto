@@ -15,11 +15,12 @@
 #define MODEL_TARGET "res\\target.obj", "res\\target.mtl"	//的
 #define MODEL_BULLET "res\\bullet.obj", "res\\bullet.mtl"	//弾
 
-#define MODEL_MAP "res\\map3.obj","res\\map3.mtl"			//試作マップ
-//#define MODEL_MAP "res\\SlopeMap2.obj","res\\SlopeMap2.mtl"			//試作マップ
+#define MODEL_MAP "res\\mainmap.obj","res\\mainmap.mtl"		//試作マップ
+//#define MODEL_MAP "res\\slope.obj","res\\slope.mtl"			//試作マップ
+
 #define MODEL_SKY "res\\sky.obj","res\\sky.mtl"				//背景仮
 
-#define MODEL_SLOPE "res\\Slope.obj","res\\Slope.mtl"		//坂
+#define MODEL_SLOPE "res\\slopeobj.obj","res\\slopeobj.mtl"		//坂
 
 #define MODEL_SPHERE "res\\sphere.obj" ,"res\\sphere.mtl"	//球(スイッチ)
 
@@ -55,7 +56,7 @@ void CApplication::Start()
 	//プレイヤー生成
 	mPlayer.SetModel(&mModel);
 	mPlayer.SetScale(CVector(1.5f, 1.5f, 1.5f));
-	mPlayer.SetPosition(CVector(0.0f, 0.0f, -5.0f));
+	mPlayer.SetPosition(CVector(0.0f, 0.0f, 55.0f));
 	mPlayer.SetRotation(CVector(0.0f, 180.0f, 0.0f));
 
 	//的のコライダを生成
@@ -78,14 +79,14 @@ void CApplication::Start()
 
 	//スイッチの生成
 	mSwhith3.SetSwitch(&mModelSwitch,
-		CVector(0.5f, 3.0f, 0.5f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
+		CVector(6.5f, 3.0f, 0.5f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 	//扉の生成
-	mDoor.SetMovingDoor(&mSwhith3, CVector(1.0f, 3.0f, -6.0f), CVector(0.0f, 0.0f, 0.0f), 
-		CVector(1.0f, 1.0f, 1.0f));
+	mDoor.SetMovingDoor(&mSwhith3, 
+		CVector(6.5f, 1.0f, -6.0f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 
 
 	//坂の生成
-	mSlope.SetSlope(CVector(-5.0f, 5.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f),
+	mSlope.SetSlope(CVector(0.0f, 0.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f),
 		CVector(1.0f, 1.0f, 1.0f), &mModelSlope);
 
 	//モデルから三角コライダを生成
