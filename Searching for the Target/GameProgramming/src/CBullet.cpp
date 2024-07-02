@@ -8,7 +8,7 @@ CModel CBullet::mModelBullet;
 //デフォルトコンストラクタ
 CBullet::CBullet()
 	: mLife(50)
-	, mCollider(this, &mMatrix, CVector(0.0f, 0.0f, 0.0f), 0.5f)
+	, mCollider(this, &mMatrix, CVector(0.0f, 0.0f, 0.3f), 0.5f)
 {
 
 }

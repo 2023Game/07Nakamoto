@@ -17,7 +17,7 @@ CMovingDoor::CMovingDoor(CSwitch* parent, const CVector& position,
 	, mMoveDistance(0)
 {
 	mTag = ETag::ENULL;
-	mSwhitch = parent;
+	mpSwhitch = parent;
 	mpModel = &mModelCube;
 	mPosition = position;
 	mRotation = rotation;
@@ -31,12 +31,12 @@ void CMovingDoor::SetMovingDoor(CSwitch* parent, const CVector& position,
 	const CVector& rotation, const CVector& scale)
 {
 	mTag = ETag::ENULL;
-	mSwhitch = parent;
+	mpSwhitch = parent;
 	mpModel = &mModelCube;
 	mPosition = position;
 	mRotation = rotation;
 	mScale = scale;
-	mMoveDistance = 5;
+	mMoveDistance = 10;
 
 	mColliderMesh.ColliderMeshSet(this, &mMatrix, mpModel);
 }
@@ -45,9 +45,9 @@ void CMovingDoor::SetMovingDoor(CSwitch* parent, const CVector& position,
 void CMovingDoor::Update()
 {
 	//弾がSwhichオブジェクトに当たったら
-	if (mSwhitch->GetFlag() == true && mMove <= mMoveDistance) 
+	if (mpSwhitch->GetFlag() == true && mMove <= mMoveDistance) 
 	{
-		mPosition = mPosition + CVector(0.1f, 0.0f, 0.0f);
+		mPosition = mPosition + CVector(0.0f, 0.0f, 0.1f);
 		mMove += 0.1;
 	}
 

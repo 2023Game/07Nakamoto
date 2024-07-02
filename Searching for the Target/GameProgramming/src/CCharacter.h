@@ -34,6 +34,9 @@ public:
 	//コンストラクタ
 	CCharacter(int priority);
 
+	//有効フラグを取得
+	bool GetEnabled();
+
 	/// <summary>
 	/// モデルの設定
 	/// </summary>

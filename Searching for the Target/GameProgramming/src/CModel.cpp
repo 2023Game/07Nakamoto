@@ -81,6 +81,11 @@ void CModel::Load(char* obj, char* mtl)
 			//配列の長さを取得
 			idx = mpMaterials.size() - 1;
 		}
+		//先頭がmap_Kdの時、テクスチャを入力する
+		else if (strcmp(str[0], "map_Kd") == 0)
+		{
+			mpMaterials[idx]->GetTexture()->Load(str[1]);
+		}
 		//先頭がKdの時、Diffseを設定する
 		else if (strcmp(str[0], "Kd") == 0)
 		{
@@ -93,11 +98,7 @@ void CModel::Load(char* obj, char* mtl)
 		{
 			mpMaterials[idx]->GetDiffuse()[3] = atof(str[1]);
 		}
-		//先頭がmap_Kdの時、テクスチャを入力する
-		else if (strcmp(str[0], "map_Kd") == 0)
-		{
-			mpMaterials[idx]->GetTexture()->Load(str[1]);
-		}
+		
 	}
 
 	//ファイルのクローズ
@@ -142,6 +143,19 @@ void CModel::Load(char* obj, char* mtl)
 			//atof(文字列) 文字列からfloat型の値を返す
 			uv.push_back(CVector(atof(str[1]), atof(str[2]), 0.0));
 		}
+		//先頭がusemtlの時、マテリアルデックスを取得する
+		else if (strcmp(str[0], "usemtl") == 0)
+		{
+			//可変長配列を後から比較
+			for (idx = mpMaterials.size() - 1; idx > 0; idx--)
+			{
+				//同じ名前のマテリアルがあればループ終了
+				if (strcmp(mpMaterials[idx]->GetName(), str[1]) == 0)
+				{
+					break;	//ループ終了
+				}
+			}
+		}
 		//先頭がfの時、三角形を作成して追加する
 		else if (strcmp(str[0], "f") == 0) {
 			//頂点と法線の番号作成
@@ -182,19 +196,7 @@ void CModel::Load(char* obj, char* mtl)
 				mTriangles.push_back(t);
 			}
 		}
-		//先頭がusemtlの時、マテリアルデックスを取得する
-		else if (strcmp(str[0], "usemtl") == 0)
-		{
-			//可変長配列を後から比較
-			for (idx = mpMaterials.size() - 1; idx > 0; idx--)
-			{
-				//同じ名前のマテリアルがあればループ終了
-				if (strcmp(mpMaterials[idx]->GetName(), str[1]) == 0)
-				{
-					break;	//ループ終了
-				}
-			}
-		}
+		
 	}
 	//ファイルのクローズ
 	fclose(fp);

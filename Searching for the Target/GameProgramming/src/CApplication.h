@@ -17,7 +17,16 @@
 class CApplication
 {
 public:
-	~CApplication();
+	enum class EState
+	{
+		ESTART,		//ゲーム開始
+		EPLAY,		//ゲーム中
+		ECLEAR,		//ゲームクリア
+		EOVER,		//ゲームオーバー
+		ERSTART,	//再スタート
+	};
+
+	CApplication();
 
 	//最初に一度だけ実行するプログラム
 	void Start();
@@ -27,9 +36,10 @@ public:
 	//モデルビュー行列の取得
 	static const CMatrix& ModelViewInverse();
 
-	static CUi* Ui();	//UIクラスのインスタンスを取得
+	static CUi* GetUi();	//UIクラスのインスタンスを取得
 
 private:
+
 	//プレイヤー
 	CPlayer mPlayer;
 	//坂
@@ -62,7 +72,12 @@ private:
 	CColliderMesh mColliderMesh2;
 	
 	CInput mInput;
+
+	//カメラのパラメータを作成する
+	CVector e, c, u;	//視点、注視点、上方向
 	CVector mEye;
+
+	EState mState;
 
 	//モデルビュー逆行列
 	static CMatrix mModelViewInverse;

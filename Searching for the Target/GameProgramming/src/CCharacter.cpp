@@ -25,6 +25,12 @@ CCharacter::CCharacter(int priority)
 	CTaskManager::GetInstance()->Add(this);
 }
 
+//有効フラグの取得
+bool CCharacter::GetEnabled()
+{
+	return mEnabled;
+}
+
 //モデルの設定
 void CCharacter::SetModel(CModel* m)
 {

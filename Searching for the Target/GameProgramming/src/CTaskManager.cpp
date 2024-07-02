@@ -28,6 +28,30 @@ void CTaskManager::Delete()
 		}
 	}
 }
+//全インスタンス削除
+void CTaskManager::AllDelete()
+{
+	//イテレータの生成
+	std::vector<CCharacter*>::iterator itr;
+	//イテレータを先頭へ
+	itr = mpCharacters.begin();
+	//最後まで繰り返し
+	while (itr != mpCharacters.end())
+	{
+		if ((*itr)->GetEnabled())
+		{
+			//次へ
+			itr++;
+		}
+		else
+		{
+			//falseの時、インスタンス削除
+			delete* itr;
+			itr = mpCharacters.erase(itr);
+		}
+	}
+}
+
 //リストから削除
 void CTaskManager::Remove(CTask* task)
 {

@@ -1,5 +1,6 @@
 #include "CTarget.h"
 #include "CCollisionManager.h"
+#include "CApplication.h"
 
 //ˆÚ“®‘¬“x
 #define VELOCITY CVector(0.1f,0.0f,0.0f)
@@ -70,6 +71,8 @@ void CTarget::Collision(CCollider* m, CCollider* o)
 				{
 					//Õ“Ë‚µ‚½‚Æ‚«‚Í–³Œø‚É‚·‚é
 					mEnabled = false;
+
+					CApplication::GetUi()->AddPoint();
 				}
 			}
 			break;

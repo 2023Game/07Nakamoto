@@ -2,6 +2,8 @@
 #define CTASKMANAGER_H
 
 #include "CTask.h"
+#include "CCharacter.h"
+#include <vector>
 
 /*
 タスクマネージャ
@@ -14,6 +16,9 @@ public:
 
 	//タスクの削除
 	void Delete();
+
+	//全インスタンス削除
+	void AllDelete();
 
 	/// <summary>
 	/// リストから削除
@@ -48,6 +53,9 @@ protected:
 private:
 	//タスクマネージャのインスタンス
 	static CTaskManager* mpInstance;
+
+	//CCharacterのポインタの可変長配列
+	std::vector<CCharacter*>mpCharacters;
 };
 
 #endif // !CTASKMANAGER_H

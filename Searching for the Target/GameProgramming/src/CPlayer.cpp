@@ -19,7 +19,7 @@
 CPlayer::CPlayer()
 	: mSphere(this, &mMatrix, CVector(0.0f, 1.0f, 0.0f), 2.0f)
 	//: mLine(this, &mMatrix, CVector(0.0f, 0.0f, 0.5f), CVector(0.0f, 0.0f, -0.5f))
-	//, mLine2(this, &mMatrix, CVector(0.0f, 2.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f))
+	//, mLine2(this, &mMatrix, CVector(0.0f, 2.0f, 0.0f), CVector(0.0f, -3.0f, 0.0f))
 	//, mLine3(this, &mMatrix, CVector(1.1f, 0.0f, 0.0f), CVector(-1.1f, 0.0f, 0.0f))
 	//, mLine4(this, &mMatrix, CVector(0.0f, 2.0f, 3.0f), CVector(0.0f, -2.1f, 0.0f))
 	, mBulletFlag(nullptr)
@@ -142,7 +142,7 @@ void CPlayer::Update()
 			CBullet* bullet = new CBullet();
 			bullet->SetTag(ETag::EBULLET);
 			bullet->SetModel(CBullet::GetModelBullet());
-			bullet->SetScale(CVector(10.0f, 10.0f, 10.0f));
+			bullet->SetScale(CVector(5.0f, 5.0f, 5.0f));
 			bullet->SetPosition(CVector(0.0f, 1.75f, 3.0f) * mMatrix);
 			bullet->SetRotation(mRotation + CVector(-mCursorY / AIM_POS, -mCursorX / AIM_POS, 0.0f));
 			bullet->Update();
@@ -170,7 +170,7 @@ void CPlayer::Collision(CCollider* m, CCollider* o)
 		if (o->GetType() == CCollider::EType::ETRIANGLE)
 		{
 			CVector adjust;	//調整値
-			//コライダのmとoが衝突しているか判定
+			//三角形と球の衝突判定
 			if (CCollider::CollisionTriangleSphere(o, m, &adjust))
 			{
 				//位置の更新
@@ -203,17 +203,6 @@ void CPlayer::Collision(CCollider* m, CCollider* o)
 			//行列の更新
 			CTransform::Update();
 		}
-		/*球と球の当たり判定、めり込まない処理の予定
-		//相手のコライダが球コライダの時
-		else if (o->GetType() == CCollider::EType::ESPHERE)
-		{
-			//コライダのmとoが衝突しているか判定
-			if (CCollider::Collision(m, o))
-			{
-
-			}
-		}
-		*/
 		break;
 
 	case CCollider::EType::ELINE:	//線コライダ
@@ -222,14 +211,14 @@ void CPlayer::Collision(CCollider* m, CCollider* o)
 		{
 			CVector adjust;	//調整用ベクトル
 			//三角形と線分の衝突判定
-			if (!CCollider::CollisionTriangleLine(o, m, &adjust))
+			if (CCollider::CollisionTriangleLine(o, m, &adjust))
 			{
 
 				//printf("HIT");
 
 				//if (m == &mLine || m == &mLine2 || m == &mLine3)
 					//位置の更新
-				//	mPosition = mPosition + adjust;
+				mPosition = mPosition + adjust;
 
 				//if (m == &mLine4)
 				//{

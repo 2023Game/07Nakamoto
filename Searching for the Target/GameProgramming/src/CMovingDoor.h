@@ -34,7 +34,7 @@ public:
 
 private:
 	//スイッチ(親)
-	CSwitch* mSwhitch;
+	CSwitch* mpSwhitch;
 	//モデルを格納
 	static CModel mModelCube;
 	//コライダ
