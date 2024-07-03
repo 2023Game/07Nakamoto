@@ -17,6 +17,7 @@
 #include "CColliderMesh.h"
 #include "CXCharacter.h"
 #include "CXPlayer.h"
+#include "CXEnemy.h"
 
 class CApplication
 {
@@ -69,6 +70,8 @@ private:
 
 public:
 	CModelX mModelX;
+
+	CXEnemy mXEnemy;
 
 	//モデルビュー行列の取得
 	static const CMatrix& ModelViewInverse();

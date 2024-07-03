@@ -27,6 +27,8 @@ public:
 	//デストラクタ
 	~CMesh();
 
+	void AnimateVertex(CMatrix*);
+
 	//頂点にアニメーション適用
 	void AnimateVertex(CModelX* model);
 
@@ -70,6 +72,7 @@ class CModelX{
 	friend CModelXFrame;
 	friend CAnimation;
 public:
+	void AnimateVertex(CMatrix*);
 	//マテリアルの検索
 	CMaterial* FindMaterial(char* name);
 	//マテリアル配列の取得

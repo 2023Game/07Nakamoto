@@ -9,6 +9,10 @@ class CXCharacter :public CCharacter3{
 public:
 	//デフォルトコンストラクタ
 	CXCharacter();
+	//デストラクタ
+	virtual ~CXCharacter() {
+		SAFE_DELETE_ARRAY(mpCombinedMatrix);
+	}
 	//初期化処理
 	void Init(CModelX* model);
 	//アニメーションの変更
@@ -24,6 +28,7 @@ public:
 	bool IsAnimationFinished();
 	int AnimationIndex();	//アニメーション番号の取得
 protected:
+	CMatrix* mpCombinedMatrix;	//合成行列退避
 	CModelX* mpModel;			//モデルデータ
 	int mAnimationIndex;		//アニメーション番号
 	bool mAnimationLoopFlg;		//true:アニメーションを繰り返す

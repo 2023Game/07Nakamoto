@@ -35,6 +35,7 @@ public:
 	CCollider(CCharacter* parent, CMatrix* matrix,
 		const CVector& position, float radius);
 
+
 	//親ポインタの取得
 	CCharacter* GetParent();
 	//コライダタイプの取得

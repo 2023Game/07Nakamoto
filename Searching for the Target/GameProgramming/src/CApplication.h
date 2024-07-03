@@ -70,12 +70,16 @@ private:
 	//モデルからコライダを生成
 	CColliderMesh mColliderMesh;
 	CColliderMesh mColliderMesh2;
+	//補強コライダ
+	CColliderTriangle mTriangle;
 	
 	CInput mInput;
 
 	//カメラのパラメータを作成する
 	CVector e, c, u;	//視点、注視点、上方向
 	CVector mEye;
+
+	CCollider mC;
 
 	EState mState;
 

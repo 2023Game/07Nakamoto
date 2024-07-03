@@ -44,6 +44,12 @@ void CUi::AddPoint()
 {
 	mPoint++;
 }
+
+void CUi::SetPoint()
+{
+	mPoint = 0;
+}
+
 //ƒ|ƒCƒ“ƒg‚ÌŽæ“¾
 int CUi::GetPoint()
 {

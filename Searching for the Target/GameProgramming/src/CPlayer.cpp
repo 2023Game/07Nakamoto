@@ -23,6 +23,7 @@ CPlayer::CPlayer()
 	//, mLine3(this, &mMatrix, CVector(1.1f, 0.0f, 0.0f), CVector(-1.1f, 0.0f, 0.0f))
 	//, mLine4(this, &mMatrix, CVector(0.0f, 2.0f, 3.0f), CVector(0.0f, -2.1f, 0.0f))
 	, mBulletFlag(nullptr)
+	, mSlopeFlag(false)
 	, mCursorX(0)
 	, mCursorY(0)
 	, mFx(0)
@@ -35,6 +36,7 @@ CPlayer::CPlayer()
 CPlayer::CPlayer(const CVector& pos, const CVector& rot
 	, const CVector& scale)
 	: mBulletFlag(nullptr)
+	, mSlopeFlag(false)
 	, mCursorX(0)
 	, mCursorY(0)
 	, mFx(0)
@@ -176,11 +178,25 @@ void CPlayer::Collision(CCollider* m, CCollider* o)
 				//位置の更新
 				mPosition = mPosition + adjust;
 
+				/*
+				if (mInput.Key('W') || mInput.Key('A') || mInput.Key('S') || mInput.Key('D'))
+				{
+					//回転値の修正値を格納
+					CVector ajustRote;
+					//斜面の角度を求める
+					CCollider::Slope(m, o, &ajustRote);
+					//坂に当たったら斜面に合わせて回転
+					SetRotation(ajustRote);
+				}
+				*/
+				
 				//タグがnullptrのコライダーは判定しない
 				if (o->GetParent() != nullptr) {
 					//坂のタグがついているか判定
 					if (o->GetParent()->GetTag() == CCharacter::ETag::ESLOPE)
 					{
+						//mSlopeFlag = true;
+						//回転値の修正値を格納
 						CVector ajustRote;
 						//斜面の角度を求める
 						CCollider::Slope(m, o, &ajustRote);
@@ -199,6 +215,18 @@ void CPlayer::Collision(CCollider* m, CCollider* o)
 						//	mRotation.GetX(), mRotation.GetY(), mRotation.GetZ());
 					}
 				}
+				/*
+				if (mSlopeFlag == false)
+				{
+					//回転値の修正値を格納
+					CVector ajustRote;
+					//斜面の角度を求める
+					CCollider::Slope(m, o, &ajustRote);
+					//坂に当たったら斜面に合わせて回転
+					SetRotation(ajustRote);
+				}
+				mSlopeFlag = false;
+				*/
 			}
 			//行列の更新
 			CTransform::Update();
@@ -282,3 +310,4 @@ float CPlayer::GetFy()
 {
 	return mFy;
 }
+

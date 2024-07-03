@@ -52,7 +52,7 @@ void CApplication::Start()
 	//プレイヤー生成
 	mPlayer.SetModel(&mModel);
 	mPlayer.SetScale(CVector(1.5f, 1.5f, 1.5f));
-	mPlayer.SetPosition(CVector(0.0f, 0.0f, -0.0f));
+	mPlayer.SetPosition(CVector(0.0f, 0.0f, -5.0f));
 	mPlayer.SetRotation(CVector(0.0f, 180.0f, 0.0f));
 
 	//的のコライダを生成
@@ -92,8 +92,12 @@ void CApplication::Start()
 	//親インスタンスと親行列は無し
 	//背景のモデル
 	mColliderMesh.ColliderMeshSet(nullptr, nullptr, &mBackGround);
+
+	//落ちてしまうところを補強する
+	mTriangle.SetColliderTriangle(nullptr, nullptr, CVector(-13.0f, -1.0f, 4.0f), CVector(13.0f, -1.0f, 4.0f), CVector(0.0f, -1.0f, -13.0f));
+
 	//ステージのモデル
-	//mColliderMesh2.ColliderMeshSet(nullptr, nullptr, &mModelMap);
+	mColliderMesh2.ColliderMeshSet(nullptr, nullptr, &mModelMap);
 	
 	//ビルボードの生成
 	//new CBillBoard(CVector(-0.6f, 3.0f, -10.0f), 1.0f, 1.0f);
@@ -138,6 +142,8 @@ void CApplication::Update()
 		//試作マップの描画
 		mModelMap.Render();
 
+		mTriangle.Render();
+
 		//タスクマネージャの描画
 		CTaskManager::GetInstance()->Render();
 
@@ -180,7 +186,7 @@ void CApplication::Update()
 		mBackGround.Render();
 
 		//試作マップの描画
-		//mModelMap.Render();
+		mModelMap.Render();
 
 		//タスクリストの削除
 		CTaskManager::GetInstance()->Delete();
@@ -232,12 +238,21 @@ void CApplication::Update()
 		spUi->Clear();
 		spUi->Render();
 
+		if (mInput.Key(VK_RETURN))
+		{
+			CUi::SetPoint();
+			mState = EState::EPLAY;
+		}
+
 		break;
 
 	//case CApplication::EState::EOVER:
 	//	break;
-	//case CApplication::EState::ERSTART:
-	//	break;
+	case CApplication::EState::ERSTART:
+
+		
+
+		break;
 	//default:
 	//	break;
 

@@ -17,7 +17,9 @@ public:
 	void Time();
 	//‰ó‚µ‚½“I‚Ì”‚ğ‰ÁZ
 	void AddPoint();
-
+	//‰ó‚µ‚½“I‚Ì”‚ğ‰Šú‰»
+	static void SetPoint();
+	//‰ó‚µ‚½“I‚Ì”‚ğæ“¾
 	static int GetPoint();
 
 	//•`‰æ
