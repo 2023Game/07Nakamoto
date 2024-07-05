@@ -2,6 +2,11 @@
 #include "CCollisionManager.h"
 #include "CColliderLine.h"
 
+void CCollider::Matrix(CMatrix* m)
+{
+	mpMatrix = m;
+}
+
 //—Dæ“x‚Ì•ÏX
 void CCollider::ChangePriority()
 {

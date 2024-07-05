@@ -38,7 +38,7 @@ private:
 	
 	//C5モデル
 	CModel mModelC5;
-	CPlayer mPlayer;
+	//CPlayer mPlayer;
 	//CCharacter3 mCharacter;
 	CModel mBackGround;	//背景モデル
 	//モデルクラスのインスタンス作成

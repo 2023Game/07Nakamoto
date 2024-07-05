@@ -1,5 +1,12 @@
 #include "CXPlayer.h"
 
+CXPlayer::CXPlayer()
+	: mColShereBody(this, nullptr, CVector(), 0.5f)
+	, mColShereHead(this, nullptr, CVector(0.0f, 5.0f, -3.0f), 0.5f)
+	, mColShereSword(this, nullptr, CVector(-10.0f, 10.0f, 50.0f), 0.3f)
+{
+}
+
 void CXPlayer::Update()
 {
 	if (AnimationIndex() != 3 && AnimationIndex() != 4)
@@ -50,4 +57,16 @@ void CXPlayer::Update()
 	}
 
 	CXCharacter::Update();
+}
+
+void CXPlayer::Init(CModelX* model)
+{
+	CXCharacter::Init(model);
+	//çáê¨çsóÒÇÃê›íË
+	//ëÃ
+	mColShereBody.Matrix(&mpCombinedMatrix[8]);
+	//ì™
+	mColShereHead.Matrix(&mpCombinedMatrix[11]);
+	//åï
+	mColShereSword.Matrix(&mpCombinedMatrix[21]);
 }

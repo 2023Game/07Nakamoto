@@ -2,10 +2,22 @@
 #define XCENEMY_H
 
 #include "CXCharacter.h"
+#include "CCollider.h"
 
 class CXEnemy :public CXCharacter
 {
+public:
+	//デフォルトコンストラクタ
+	CXEnemy();
 
+	//初期設定
+	void Init(CModelX* model);
+
+private:
+	//コライダの宣言
+	CCollider mColShereBody;	//体
+	CCollider mColShereHead;	//頭
+	CCollider mColShereSword;	//剣
 };
 
 #endif // !CXENEMY_H

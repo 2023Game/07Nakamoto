@@ -1,2 +1,7 @@
-﻿  CXCharacter.cpp
+﻿  CApplication.cpp
+  CBillBoard.cpp
+  CCharacter3.cpp
+  CPlayer.cpp
+  main.cpp
+  コードを生成中...
   GameProgramming.vcxproj -> C:\Users\dogpo\Desktop\2023Game\07Nakamoto\3DLv1_vs2019_00\Debug\GameProgramming.exe

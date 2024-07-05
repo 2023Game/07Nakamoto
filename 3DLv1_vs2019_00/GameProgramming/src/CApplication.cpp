@@ -104,6 +104,8 @@ void CApplication::Update()
 	mXPlayer.Render();
 	//“G•`‰æ
 	mXEnemy.Render();
+	//ƒRƒ‰ƒCƒ_‚Ì•`‰æ
+	CCollisionManager::Instance()->Render();
 
 	//2D•`‰æŠJn
 	CCamera::Start(0, 800, 0, 600);
