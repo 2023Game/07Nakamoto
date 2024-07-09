@@ -13,6 +13,8 @@ public:
 	//‰Šúİ’è
 	void Init(CModelX* model);
 
+	//Õ“Ëˆ—
+	void Collision(CCollider* m, CCollider* o);
 private:
 	//ƒRƒ‰ƒCƒ_‚ÌéŒ¾
 	CCollider mColShereBody;	//‘Ì

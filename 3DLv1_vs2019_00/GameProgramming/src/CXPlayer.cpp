@@ -3,7 +3,7 @@
 CXPlayer::CXPlayer()
 	: mColShereBody(this, nullptr, CVector(), 0.5f)
 	, mColShereHead(this, nullptr, CVector(0.0f, 5.0f, -3.0f), 0.5f)
-	, mColShereSword(this, nullptr, CVector(-10.0f, 10.0f, 50.0f), 0.3f)
+	, mColShereSword(this, nullptr, CVector(-10.0f, 10.0f, 50.0f), 0.3f,CCollider::ETag::ESWORD)
 {
 }
 

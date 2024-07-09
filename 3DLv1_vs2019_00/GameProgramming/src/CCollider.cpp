@@ -2,6 +2,11 @@
 #include "CCollisionManager.h"
 #include "CColliderLine.h"
 
+CCollider::ETag CCollider::Tag()
+{
+	return mTag;
+}
+
 void CCollider::Matrix(CMatrix* m)
 {
 	mpMatrix = m;
@@ -143,9 +148,10 @@ bool CCollider::Collision(CCollider* m, CCollider* o) {
 }
 
 CCollider::CCollider(CCharacter3* parent, CMatrix* matrix,
-	const CVector& position, float radius)
+	const CVector& position, float radius, ETag tag)
 :CCollider()
 {
+	mTag = tag;	//タグの設定
 	//コリジョンマネージャに追加
 	//削除CCollisionManager::Instance()->Add(this);
 	//親設定
