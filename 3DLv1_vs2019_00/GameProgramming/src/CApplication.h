@@ -71,6 +71,8 @@ private:
 public:
 	CModelX mModelX;
 
+	CModelX mKnight;
+
 	CXEnemy mXEnemy;
 
 	//モデルビュー行列の取得

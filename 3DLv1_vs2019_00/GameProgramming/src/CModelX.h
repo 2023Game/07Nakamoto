@@ -117,7 +117,6 @@ private:
 	bool IsDelimiter(char c);
 	char* mpPointer;		//読み込み位置
 	char mToken[1024];	//取り出した単語領域
-	
 };
 
 //CModelXFrameクラスの定義
@@ -130,6 +129,8 @@ public:
 
 	//合成行列の作成
 	void AnimateCombined(CMatrix* parent);
+	//デフォルトコンストラクタ
+	CModelXFrame();
 	//コンストラクタ
 	CModelXFrame(CModelX* model);
 	//デストラクタ

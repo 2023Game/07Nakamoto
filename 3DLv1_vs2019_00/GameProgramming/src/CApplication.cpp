@@ -24,6 +24,8 @@ CVector mEye;
 #define MODEL_OBJ "res\\f14.obj","res\\f14.mtl"
 //敵輸送機モデル
 #define MODEL_C5 "res\\c5.obj","res\\c5.mtl"
+//敵モデル(Knight)
+#define MODEL_KNIGHT "res\\knight\\knight_low.x"
 
 CMatrix CApplication::mModelViewInverse;
 
@@ -41,15 +43,18 @@ void CApplication::Start()
 {
 	//3Dモデルファイルの読み込み
 	mModelX.Load(MODEL_FILE);
+	mKnight.Load(MODEL_KNIGHT);
+
 	//キャラクターにモデルを設定
 	mXPlayer.Init(&mModelX);
 
 	//敵の初期化設定
-	mXEnemy.Init(&mModelX);
+	mXEnemy.Init(&mKnight);
 	//敵の配置
 	mXEnemy.Position(CVector(7.0f, 0.0f, 0.0f));
 
 	mFont.Load("FontG.png", 1, 4096 / 64);
+
 }
 
 void CApplication::Update()
