@@ -20,6 +20,17 @@ public:
 		ELINE,		//線分コライダ
 	};
 
+	//タイプ
+	enum class ETag
+	{
+		ENULL,		//なし
+		EFLOOR,		//床
+		ESLOPE,		//斜面
+		EBULLET,	//弾
+		ETARGET,	//的
+		ESWITCH,	//スイッチ
+	};
+
 	//デフォルトコンストラクタ
 	CCollider();
 	//デストラクタ
@@ -89,8 +100,14 @@ public:
 	//優先度の変更
 	virtual void ChangePriority();
 
+	//タイプの設定
+	void SetTag(ETag tag);
+	//タイプの取得
+	CCollider::ETag GetTag();
+
 protected:
 	EType mType;	//コライダタイプ
+	ETag mTag;		//タグ
 
 	//頂点
 	CVector mV[3];

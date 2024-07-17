@@ -11,7 +11,7 @@ class CColliderTriangle :public CCollider
 {
 public:
 	//デフォルトコンストラクタ
-	CColliderTriangle() {}
+	CColliderTriangle();
 
 	/// <summary>
 	/// コンストラクタ

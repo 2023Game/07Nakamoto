@@ -6,6 +6,8 @@
 #include "CBillBoard.h"
 #include "CMovingDoor.h"
 
+#include "CColliderHitManager.h"
+
 //OpenGL
 #include "glut.h"
 
@@ -114,6 +116,7 @@ void CApplication::Update()
 {
 	switch (mState)
 	{
+	//スタート画面
 	case CApplication::EState::ESTART:
 
 		//視点を求める
@@ -156,11 +159,17 @@ void CApplication::Update()
 		}
 
 		break;
+
+		//ゲーム中
 	case CApplication::EState::EPLAY:
 		//タスクマネージャの更新
 		CTaskManager::GetInstance()->Update();
 		//コリジョンマネージャの衝突判定
 		CTaskManager::GetInstance()->Collision();
+
+		mPlayer.HitCollision(mPlayer.GetCollider(), CColliderHitManager::GetInstance()->HitColliderSerch());
+
+		CColliderHitManager::GetInstance()->Delete();
 
 		//視点を求める
 		e = mPlayer.GetPosition() + CVector(0, 5, -8) * mPlayer.GetMatrixRotate();
@@ -204,6 +213,7 @@ void CApplication::Update()
 		}
 		break;
 		
+	//クリア画面
 	case CApplication::EState::ECLEAR:
 
 		//視点を求める
@@ -274,3 +284,4 @@ CUi* CApplication::GetUi()
 {
 	return spUi;	//インスタンスのポインタを返す
 }
+

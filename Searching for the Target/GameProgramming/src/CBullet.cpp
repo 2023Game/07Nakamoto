@@ -10,7 +10,7 @@ CBullet::CBullet()
 	: mLife(50)
 	, mCollider(this, &mMatrix, CVector(0.0f, 0.0f, 0.3f), 0.5f)
 {
-
+	mCollider.SetTag(CCollider::ETag::EBULLET);
 }
 
 //衝突処理
@@ -23,14 +23,14 @@ void CBullet::Collision(CCollider* m, CCollider* o)
 		//コライダのmとoが衝突しているか判定
 		if (CCollider::Collision(m, o)) 
 		{
-			if (o->GetParent()->GetTag() == CCharacter::ETag::ETARGET)
+			if (o->GetTag() == CCollider::ETag::ETARGET)
 			{
 				//衝突しているときは無効にする
 				mEnabled = false;
 
 				printf("TargetにHit\n");
 			}
-			else if (o->GetParent()->GetTag() == CCharacter::ETag::ESWITCH)
+			else if (o->GetTag() == CCollider::ETag::ESWITCH)
 			{
 				//衝突しているときは無効にする
 				mEnabled = false;
@@ -46,7 +46,7 @@ void CBullet::Collision(CCollider* m, CCollider* o)
 		{
 			if (o->GetParent() != nullptr)
 			{
-				if (o->GetParent()->GetTag() == CCharacter::ETag::ESWITCH)
+				if (o->GetTag() == CCollider::ETag::ESWITCH)
 				{
 					printf("SWitchタイプ");
 				}

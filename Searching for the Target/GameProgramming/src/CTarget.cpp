@@ -13,7 +13,7 @@ CTarget::CTarget(CModel* model, const CVector& position,
 	: count(0)
 	, mCollider(this, &mMatrix, CVector(0.0f, 0.0f, 0.0f), 0.8f)
 {
-	mTag = ETag::ETARGET;	//タグ
+	mCollider.SetTag(CCollider::ETag::ETARGET);	//タグ
 	mpModel = model;		//モデルの設定
 	mPosition = position;	//位置の設定
 	mRotation = rotation;	//回転の設定
@@ -67,7 +67,7 @@ void CTarget::Collision(CCollider* m, CCollider* o)
 			if (o->GetParent() != nullptr)
 			{
 				//相手のタグが弾か判定
-				if (o->GetParent()->GetTag() == CCharacter::ETag::EBULLET)
+				if (o->GetTag() == CCollider::ETag::EBULLET)
 				{
 					//衝突したときは無効にする
 					mEnabled = false;

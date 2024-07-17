@@ -10,13 +10,12 @@ CSlope::CSlope()
 void CSlope::SetSlope(const CVector& pos,
 	const CVector& rot, const CVector& scale, CModel* model)
 {
-	mTag = ETag::ESLOPE;
 	mPosition = pos;
 	mRotation = rot;
 	mScale = scale;
 	mpModel = model;
 
-	mColliderSlope.ColliderMeshSet(this, &mMatrix, mpModel);
+	mColliderSlope.ColliderMeshSet(this, &mMatrix, mpModel, CCollider::ETag::ESLOPE);
 }
 
 //çXêVèàóù

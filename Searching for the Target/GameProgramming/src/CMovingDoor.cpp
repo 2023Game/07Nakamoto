@@ -16,7 +16,6 @@ CMovingDoor::CMovingDoor(CSwitch* parent, const CVector& position,
 	: mMove(0)
 	, mMoveDistance(0)
 {
-	mTag = ETag::ENULL;
 	mpSwhitch = parent;
 	mpModel = &mModelCube;
 	mPosition = position;
@@ -30,7 +29,6 @@ CMovingDoor::CMovingDoor(CSwitch* parent, const CVector& position,
 void CMovingDoor::SetMovingDoor(CSwitch* parent, const CVector& position,
 	const CVector& rotation, const CVector& scale)
 {
-	mTag = ETag::ENULL;
 	mpSwhitch = parent;
 	mpModel = &mModelCube;
 	mPosition = position;

@@ -21,9 +21,11 @@ public:
 	/// <param name="collider">コライダ</param>
 	/// <param name="range">範囲</param>
 	void Collision(CCollider* c, int range);
+
 private:
 	//マネージャのインスタンス
 	static CCollisionManager* mpInstance;
+	
 };
 
 #endif // !CCOLLISIONMANAGER_H

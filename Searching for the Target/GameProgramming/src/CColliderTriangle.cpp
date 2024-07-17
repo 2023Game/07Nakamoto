@@ -1,6 +1,12 @@
 #include "CColliderTriangle.h"
 #include "CCollisionManager.h"
 
+//デフォルトコンストラクタ
+CColliderTriangle::CColliderTriangle()
+{
+
+}
+
 //コンストラクタ
 CColliderTriangle::CColliderTriangle(CCharacter* parent, CMatrix* matrix,
 	const CVector& v0, const CVector& v1, const CVector& v2)

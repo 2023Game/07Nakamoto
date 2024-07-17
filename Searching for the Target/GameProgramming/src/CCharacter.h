@@ -16,15 +16,7 @@ class CCollider;
 class CCharacter :public CTransform ,public CTask 
 {
 public:
-	//タイプ
-	enum class ETag
-	{
-		ENULL,		//なし
-		ESLOPE,		//斜面
-		EBULLET,	//弾
-		ETARGET,	//的
-		ESWITCH,	//スイッチ
-	};
+	
 
 	//デフォルトコンストラクタ
 	CCharacter();
@@ -43,11 +35,6 @@ public:
 	/// <param name="m">モデルクラスのポインタ</param>
 	void SetModel(CModel* m);
 
-	//タイプの設定
-	CCharacter::ETag SetTag(ETag tag);
-	//タイプの取得
-	CCharacter::ETag GetTag();
-
 	//描画処理
 	void Render();
 
@@ -56,7 +43,6 @@ public:
 
 protected:
 	CModel* mpModel;	//モデルのポインタ
-	CCharacter::ETag mTag;
 
 private:
 	

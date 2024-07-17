@@ -108,7 +108,9 @@ bool CCollider::CollisionTriangleSphere(CCollider* t, CCollider* s, CVector* a)
 
 }
 
-//線分と斜面の衝突処理
+CVector mCopy = CVector(0, 0, 0);
+
+//球と斜面の衝突処理
 CVector CCollider::Slope(CCollider* p, CCollider* t, CVector* a)
 {
 	//三角コライダの法線を求める
@@ -143,13 +145,50 @@ CVector CCollider::Slope(CCollider* p, CCollider* t, CVector* a)
 	y = ry * 180 / M_PI;
 	z = rz * 180 / M_PI;
 	
+	//坂の角度
 	*a = CVector(x, y, z);
+
+	return *a;
+
+	/*
+	printf("%10f\n", a->GetX());
+	printf("%10f\n", ajust.GetX());
+	*/
+
+	/*
+	float ax = 0, ay = 0, az = 0;
+	float w = 10;
+
+	if (mCopy.GetX() > a->GetX())
+		ax = a->GetX() / w;
+	else if (mCopy.GetX() < a->GetX())
+		ax = a->GetX() / w;
+	else 
+		ax = 0;
+	if (mCopy.GetY() > a->GetY())
+		ay = a->GetY() / 10;
+	else if (mCopy.GetY() < a->GetY())
+		ay = a->GetY() / 10;
+	else
+		ay = 0;
+	if (mCopy.GetZ() > a->GetZ())
+		az = a->GetZ() / 10;
+	else if (mCopy.GetZ() < a->GetZ())
+		az = a->GetZ() / 10;
+	else
+		az = 0;
+
+	mCopy = *a;
+	*/
 
 	//確認用
 	//printf("ラジアン : %10f %10f %10f\n", rx, ry, rz);
 	//printf("度数     : %10f %10f %10f\n", x, y, z);
 
-	return *a;
+	//*a = CVector(ax, 0, 0);
+	//printf("度数     : %10f %10f %10f\n", ax, ay, az);
+	
+	//return *a;
 }
 
 
@@ -240,4 +279,16 @@ void CCollider::ChangePriority()
 	CVector pos = mPosition * *mpMatrix;
 	//ベクトルの長さが優先度
 	CCollider::ChangePriority(pos.GetLength());
+}
+
+//タグの設定
+void CCollider::SetTag(ETag tag)
+{
+	mTag = tag;
+}
+
+//タグの取得
+CCollider::ETag CCollider::GetTag()
+{
+	return mTag;
 }

@@ -72,6 +72,13 @@ class CModelX{
 	friend CModelXFrame;
 	friend CAnimation;
 public:
+
+	//アニメーションセットの追加
+	void AddAnimationSet(const char* file);
+
+	//モデルデータを読み込み済みか
+	bool IsLoaded();
+
 	/*
 	アニメーションを抜き出す
 	idx:分割したいアニメーションセットの番号
@@ -105,6 +112,7 @@ public:
 	void SkipNode();
 	//単語の取り出し
 	char* GetToken();
+	//デフォルトコンストラクタ
 	CModelX();
 	//ファイル読み込み
 	void Load(char* file);
@@ -116,6 +124,8 @@ public:
 	std::vector<CAnimationSet*> &AnimationSet();
 
 private:
+	bool mLoaded;
+
 	//マテリアル配列
 	std::vector<CMaterial*> mMaterial;
 	//アニメーションセットの配列

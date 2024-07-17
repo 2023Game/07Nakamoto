@@ -79,8 +79,6 @@ private:
 	CVector e, c, u;	//視点、注視点、上方向
 	CVector mEye;
 
-	CCollider mC;
-
 	EState mState;
 
 	//モデルビュー逆行列

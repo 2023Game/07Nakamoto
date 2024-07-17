@@ -7,13 +7,18 @@
 #include "CColliderLine.h"
 #include "CModel.h"
 
+#include "CColliderHitManager.h"
+
+#include <vector>
+
 /*
 プレイヤークラス
 キャラクタクラスを継承
 */
 
-class CPlayer :public CCharacter {
+class CPlayer :public CCharacter , public CColliderHitManager{
 public:
+
 	//デフォルトコンストラクタ
 	CPlayer();
 
@@ -39,17 +44,35 @@ public:
 	//衝突処理
 	void Collision();
 
+	//コライダの取得
+	CCollider *GetCollider();
+
 	//カーソルのX座標を取得
 	float GetFx();
 	//カーソルのY座標を取得
 	float GetFy();
+
+	/// <summary>
+	/// プレイヤーに当たっていっるコライダを格納
+	/// </summary>
+	/// <param name="o">相手のコライダ</param>
+	//void AddHitCollider(CCollider* o);
+
+	//タグの確認
+	//CCollider HitColliderSerch();
+	//可変長配列の削除
+	//void Delete();
+
+	//球コライダの取得
+	//CCollider GetCollider();
+
 private:
 	int mCursorX, mCursorY;	//マウスカーソル取得用
 	float mFx, mFy;			//カメラの移動量
 
 	CInput mInput;
 
-	bool mSlopeFlag;
+	//bool mSlopeFlag;
 
 	//CColliderLine mLine;	//前後の線分コライダ
 	//CColliderLine mLine2;	//上下の線分コライダ
@@ -60,6 +83,10 @@ private:
 	CCollider mSphere;		//球コライダー
 
 	bool mBulletFlag;
+
+	//可変長配列のインスタンス
+	CColliderHitManager mCollisionManager;
+
 };
 
 #endif // !CPLAYER_H

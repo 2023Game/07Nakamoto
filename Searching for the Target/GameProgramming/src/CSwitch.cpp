@@ -7,14 +7,13 @@ CSwitch::CSwitch()
 	: mCollider(this, &mMatrix, CVector(0.0f, 1.0f, 0.0f), 1.5f)
 	, mFlag(false)
 {
-	
+	mCollider.SetTag(CCollider::ETag::ESWITCH);
 }
 
 //スイッチの生成
 void CSwitch::SetSwitch(CModel* model, const CVector& pos,
 	const CVector& rot, const CVector& scale)
 {
-	mTag = ETag::ESWITCH;	//タグ
 	mpModel = model;		//モデル
 	mPosition = pos;		//位置
 	mRotation = rot;		//回転
@@ -27,7 +26,6 @@ void CSwitch::SetSwitch(CSwitch* parent, CModel* model,
 	const CVector& spos, const CVector& srot,const CVector& sscale,
 	const CVector& dpos, const CVector& drot, const CVector& dscale)
 {
-	mTag = ETag::ESWITCH;	//タグ
 	mpModel = model;		//モデル
 	mPosition = spos;		//位置
 	mRotation = srot;		//回転
@@ -62,7 +60,7 @@ void CSwitch::Collision(CCollider* m, CCollider* o)
 		{
 			if (o->GetParent() != nullptr) {
 				//タグが弾の時
-				if (o->GetParent()->GetTag() == CCharacter::ETag::EBULLET)
+				if (o->GetTag() == CCollider::ETag::EBULLET)
 				{
 
 					mFlag = true;

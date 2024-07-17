@@ -4,6 +4,8 @@
 #include "CColliderLine.h"
 #include <math.h>
 
+#include "CColliderHitManager.h"
+
 #define ROTATION_YV CVector(0.0f,1.0f,0.0f)	//Yの回転速度
 #define ROTATION_YX CVector(1.0f,0.0f,0.0f)	//Xの回転速度　削除予定
 #define VELOCITY CVector(0.0f,0.0f,0.3f)	//移動速度
@@ -23,7 +25,7 @@ CPlayer::CPlayer()
 	//, mLine3(this, &mMatrix, CVector(1.1f, 0.0f, 0.0f), CVector(-1.1f, 0.0f, 0.0f))
 	//, mLine4(this, &mMatrix, CVector(0.0f, 2.0f, 3.0f), CVector(0.0f, -2.1f, 0.0f))
 	, mBulletFlag(nullptr)
-	, mSlopeFlag(false)
+	//, mSlopeFlag(false)
 	, mCursorX(0)
 	, mCursorY(0)
 	, mFx(0)
@@ -36,7 +38,7 @@ CPlayer::CPlayer()
 CPlayer::CPlayer(const CVector& pos, const CVector& rot
 	, const CVector& scale)
 	: mBulletFlag(nullptr)
-	, mSlopeFlag(false)
+	//, mSlopeFlag(false)
 	, mCursorX(0)
 	, mCursorY(0)
 	, mFx(0)
@@ -131,6 +133,7 @@ void CPlayer::Update()
 	//	mRotation = mRotation - ROTATION_YX;
 	//}
 
+	//坂にいるとき重力を消したい
 	//重力
 	mPosition = mPosition - CVector(0.0f, GRAVITY, 0.0f);
 
@@ -142,7 +145,6 @@ void CPlayer::Update()
 		if (mInput.Key(VK_SPACE) || mInput.Key(WM_LBUTTONDOWN))
 		{
 			CBullet* bullet = new CBullet();
-			bullet->SetTag(ETag::EBULLET);
 			bullet->SetModel(CBullet::GetModelBullet());
 			bullet->SetScale(CVector(5.0f, 5.0f, 5.0f));
 			bullet->SetPosition(CVector(0.0f, 1.75f, 3.0f) * mMatrix);
@@ -164,6 +166,9 @@ void CPlayer::Update()
 //衝突処理
 void CPlayer::Collision(CCollider* m, CCollider* o)
 {
+	if (o == nullptr)
+		return;
+	
 	//自身のコライダタイプの判定
 	switch (m->GetType())
 	{
@@ -171,12 +176,12 @@ void CPlayer::Collision(CCollider* m, CCollider* o)
 		//相手のコライダが三角コライダの時
 		if (o->GetType() == CCollider::EType::ETRIANGLE)
 		{
+
 			CVector adjust;	//調整値
 			//三角形と球の衝突判定
 			if (CCollider::CollisionTriangleSphere(o, m, &adjust))
 			{
-				//位置の更新
-				mPosition = mPosition + adjust;
+				
 
 				/*
 				if (mInput.Key('W') || mInput.Key('A') || mInput.Key('S') || mInput.Key('D'))
@@ -189,47 +194,67 @@ void CPlayer::Collision(CCollider* m, CCollider* o)
 					SetRotation(ajustRote);
 				}
 				*/
-				
-				//タグがnullptrのコライダーは判定しない
-				if (o->GetParent() != nullptr) {
-					//坂のタグがついているか判定
-					if (o->GetParent()->GetTag() == CCharacter::ETag::ESLOPE)
-					{
-						//mSlopeFlag = true;
-						//回転値の修正値を格納
-						CVector ajustRote;
-						//斜面の角度を求める
-						CCollider::Slope(m, o, &ajustRote);
 
+				//坂のタグがついているか判定
+				if (o->GetTag() == CCollider::ETag::ESLOPE || o->GetTag() == CCollider::ETag::ENULL)
+				{
+					//当たった三角コライダを可変長配列に格納
+					mCollisionManager.AddColliders(o);
+
+					//位置の更新
+					mPosition = mPosition + adjust;
+
+					//mSlopeFlag = true;
+					//回転値の修正値を格納
+				//	CVector ajustRote;
+					//斜面の角度を求める
+				//	CCollider::Slope(m, o, &ajustRote);
+
+				//	printf("%10f %10f %10f\n", ajustRote.GetX(), ajustRote.GetY(), ajustRote.GetZ());
+
+
+					//if (mRotation.GetX() + ajustRote.GetX() < -1 || mRotation.GetX() + ajustRote.GetX() > 1)
+					//{
 						//確認用
 						//printf("修正前：%10f %10f %10f\n",
-						//	mRotation.GetX(), mRotation.GetY(), mRotation.GetZ());
+						//mRotation.GetX(), mRotation.GetY(), mRotation.GetZ();
 
-						//坂に当たったら斜面に合わせて回転
-						SetRotation(ajustRote);
-
-						//確認用
-						//printf("修正値：%10f %10f %10f\n",
-						//	ajustRote.GetX(), ajustRote.GetY(), ajustRote.GetZ());
-						//printf("修正後：%10f %10f %10f\n",
-						//	mRotation.GetX(), mRotation.GetY(), mRotation.GetZ());
-					}
-				}
-				/*
-				if (mSlopeFlag == false)
-				{
-					//回転値の修正値を格納
-					CVector ajustRote;
-					//斜面の角度を求める
-					CCollider::Slope(m, o, &ajustRote);
+					//	mRotation.Set(mRotation.GetX() + ajustRote.GetX() / 10, ajustRote.GetY(), ajustRote.GetZ());
+					//}
+					//else
+					//{
 					//坂に当たったら斜面に合わせて回転
-					SetRotation(ajustRote);
+				//	SetRotation(ajustRote);
+					//}
+
+
+					//確認用
+					//printf("修正値：%10f %10f %10f\n",
+					//	ajustRote.GetX(), ajustRote.GetY(), ajustRote.GetZ());
+					//printf("修正後：%10f %10f %10f\n",
+					//	mRotation.GetX(), mRotation.GetY(), mRotation.GetZ());
+
+					//坂を滑らないようにする
+					//mPosition.Set(mPosition.GetX(), mPosition.GetY(), mPosition.GetZ() - 0.1f);
 				}
-				mSlopeFlag = false;
-				*/
 			}
-			//行列の更新
-			CTransform::Update();
+
+			//if (mSlopeFlag == false)
+			//{
+				//回転値の修正値を格納
+			//	CVector ajustRote;
+				//斜面の角度を求める
+			//	CCollider::Slope(m, o, &ajustRote);
+				//坂に当たったら斜面に合わせて回転
+			//	SetRotation(ajustRote);
+			//}
+			//mSlopeFlag = false;
+
+
+
+
+		//行列の更新
+		CTransform::Update();
 		}
 		break;
 
@@ -300,6 +325,12 @@ void CPlayer::Collision()
 	//CCollisionManager::GetInstance()->Collision(&mLine4, COLLISIONRANGE);
 }
 
+//コライダの取得
+CCollider *CPlayer::GetCollider()
+{
+	return &mSphere;
+}
+
 //カーソルのX座標を取得
 float CPlayer::GetFx()
 {
@@ -311,3 +342,45 @@ float CPlayer::GetFy()
 	return mFy;
 }
 
+/*
+//プレイヤーと当たっているコライダを格納する
+void CPlayer::AddHitCollider(CCollider* o)
+{
+	CCollisionManager::GetInstance()->mpHitCollider.push_back(o);
+}
+
+//タグの確認
+CCollider CPlayer::HitColliderSerch()
+{
+	for (size_t i = 0; i < CCollisionManager::GetInstance()->mpHitCollider.size(); i++)
+	{
+		if (CCollisionManager::GetInstance()->mpHitCollider[i]->GetParent()->GetTag() == CCharacter::ETag::ESLOPE)
+		{
+			return *CCollisionManager::GetInstance()->mpHitCollider[i];
+		}
+	}
+	return *CCollisionManager::GetInstance()->mpHitCollider[0];
+}
+
+//可変長配列の削除
+void CPlayer::Delete()
+{
+	//イテレータの生成
+	std::vector<CCollider*>::iterator itr;
+	//イテレータを先頭へ
+	itr = CCollisionManager::GetInstance()->mpHitCollider.begin();
+	//最後まで繰り返し
+	while (itr != CCollisionManager::GetInstance()->mpHitCollider.end())
+	{
+		//インスタンスを削除
+		delete* itr;
+		//配列から削除
+		itr = CCollisionManager::GetInstance()->mpHitCollider.erase(itr);
+	}
+}
+
+CCollider CPlayer::GetCollider()
+{
+	return mSphere;
+}
+*/

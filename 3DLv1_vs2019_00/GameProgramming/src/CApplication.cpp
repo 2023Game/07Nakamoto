@@ -69,14 +69,18 @@ void CApplication::Start()
 
 	mXEnemy.ChangeAnimation(2, true, 200);
 
+	mpPaladin = new CPaladin();
+	mpPaladin->Position(CVector(-1.0f, 0.0f, 5.0f));
+	mpPaladin->ChangeAnimation(1, true, 60);
+
 	mFont.Load("FontG.png", 1, 4096 / 64);
 }
 
 void CApplication::Update()
 {
+	mpPaladin->Update();
 	//キャラクタークラスの更新
 	mXPlayer.Update();
-
 	//敵の更新
 	mXEnemy.Update();
 
@@ -125,6 +129,7 @@ void CApplication::Update()
 	mModelX.AnimateVertex();
 	//モデル描画
 	//mModelX.Render();
+	mpPaladin->Render();
 	mXPlayer.Render();
 	//敵描画
 	mXEnemy.Render();

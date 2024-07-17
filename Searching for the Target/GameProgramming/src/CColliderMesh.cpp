@@ -18,13 +18,14 @@ CColliderMesh::~CColliderMesh()
 }
 
 //モデルから三角コライダの生成
-void CColliderMesh::ColliderMeshSet(CCharacter* parent, CMatrix* matrix, CModel* model)
+void CColliderMesh::ColliderMeshSet(CCharacter* parent, CMatrix* matrix, CModel* model,CCollider::ETag tag)
 {
 	//モデルの三角ポリゴンで三角コライダの配列作成
 	mpColliderTriangles = new
 		CColliderTriangle[model->Triangles().size()];
 	for (size_t i = 0; i < model->Triangles().size(); i++)
 	{
+		mpColliderTriangles[i].SetTag(tag);
 		//三角コライダの設定
 		mpColliderTriangles[i].SetColliderTriangle(parent, matrix
 			, model->Triangles()[i].GetV0()
