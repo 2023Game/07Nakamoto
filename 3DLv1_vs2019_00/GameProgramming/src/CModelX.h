@@ -72,6 +72,15 @@ class CModelX{
 	friend CModelXFrame;
 	friend CAnimation;
 public:
+	/*
+	アニメーションを抜き出す
+	idx:分割したいアニメーションセットの番号
+	start:分割したいアニマえーしょんの開始時間
+	end:分割したいアニメーションの終了時間
+	name:追加するアニメーションセットの名前
+	*/
+	void CModelX::SeparateAbunatuibSet(int idx, int start, int end, char* name);
+
 	void AnimateVertex(CMatrix*);
 	//マテリアルの検索
 	CMaterial* FindMaterial(char* name);
@@ -171,6 +180,7 @@ class CAnimationSet {
 	friend CModelX;
 	
 public:
+	CAnimationSet();
 	CAnimationSet(CModelX* model);
 	~CAnimationSet();
 
@@ -201,6 +211,7 @@ class CAnimation {
 	friend CAnimationSet;
 	friend CModelX;
 public:
+	CAnimation();
 	CAnimation(CModelX* model);
 	~CAnimation();
 private:
@@ -219,9 +230,10 @@ CAnimarionKey
 class CAnimationKey {
 	friend CAnimation;
 	friend CAnimationSet;
-private:
+public:
 	//時間
 	float mTime;
+private:
 	//行列
 	CMatrix mMatrix;
 };

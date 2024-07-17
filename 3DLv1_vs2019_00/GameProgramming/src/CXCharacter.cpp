@@ -70,6 +70,10 @@ matrix:ˆÚ“®A‰ñ“]AŠg‘åk¬‚Ìs—ñ
 */
 void CXCharacter::Update(CMatrix& matrix)
 {
+	for (size_t i = 0; i < mpModel->AnimationSet().size(); ++i)
+	{
+		mpModel->AnimationSet()[i]->Weight(0.0f);
+	}
 	mpModel->AnimationSet()[mAnimationIndex]->Weight(1.0f);
 	//ÅŒã‚Ü‚ÅÄ¶‚·‚é
 	if (mAnimationFrame <= mAnimationFrameSize) {

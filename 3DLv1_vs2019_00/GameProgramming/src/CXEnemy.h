@@ -19,7 +19,9 @@ private:
 	//ƒRƒ‰ƒCƒ_‚ÌéŒ¾
 	CCollider mColShereBody;	//‘Ì
 	CCollider mColShereHead;	//“ª
-	CCollider mColShereSword;	//Œ•
+	CCollider mColShereSword0;	//Œ•
+	CCollider mColShereSword1;	//Œ•
+	CCollider mColShereSword2;	//Œ•
 };
 
 #endif // !CXENEMY_H

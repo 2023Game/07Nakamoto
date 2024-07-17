@@ -2,9 +2,11 @@
 
 //デフォルトコンストラクタ
 CXEnemy::CXEnemy()
-	: mColShereBody(this, nullptr, CVector(), 0.5f)
-	, mColShereHead(this, nullptr, CVector(0.0f, 5.0f, -3.0f), 0.5f)
-	, mColShereSword(this, nullptr, CVector(-10.0f, 10.0f, 50.0f), 0.3f, CCollider::ETag::ESWORD)
+	: mColShereBody(this, nullptr, CVector(0.5f, -1.0f, 0.0f), 1.0f)
+	, mColShereHead(this, nullptr, CVector(0.0f, 1.0f, 0.0f), 1.5f)
+	, mColShereSword0(this, nullptr, CVector(0.7f, 3.5f, -0.2f), 0.5f)
+	, mColShereSword1(this, nullptr, CVector(0.5f, 2.5f, -0.2f), 0.5f)
+	, mColShereSword2(this, nullptr, CVector(0.3f, 1.5f, -0.2f), 0.5f)
 {
 	
 }
@@ -14,11 +16,13 @@ void CXEnemy::Init(CModelX* model)
 	CXCharacter::Init(model);
 	//合成行列の設定
 	//体
-	mColShereBody.Matrix(&mpCombinedMatrix[8]);
+	mColShereBody.Matrix(&mpCombinedMatrix[1]);
 	//頭
-	mColShereHead.Matrix(&mpCombinedMatrix[11]);
+	mColShereHead.Matrix(&mpCombinedMatrix[1]);
 	//剣
-	mColShereSword.Matrix(&mpCombinedMatrix[21]);
+	mColShereSword0.Matrix(&mpCombinedMatrix[26]);
+	mColShereSword1.Matrix(&mpCombinedMatrix[26]);
+	mColShereSword2.Matrix(&mpCombinedMatrix[26]);
 }
 
 void CXEnemy::Collision(CCollider* m, CCollider* o)

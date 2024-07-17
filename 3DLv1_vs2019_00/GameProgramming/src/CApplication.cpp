@@ -43,24 +43,40 @@ void CApplication::Start()
 {
 	//3Dモデルファイルの読み込み
 	mModelX.Load(MODEL_FILE);
-	mKnight.Load(MODEL_KNIGHT);
 
 	//キャラクターにモデルを設定
 	mXPlayer.Init(&mModelX);
+	
+	//mKnight.Load("res\\knight\\knight_low.x");
+	mKnight.Load(MODEL_KNIGHT);
+	mKnight.SeparateAbunatuibSet(0, 10, 80, "walk");		// 1:移動
+	mKnight.SeparateAbunatuibSet(0, 1530, 1830, "idle1");	// 2:待機
+	mKnight.SeparateAbunatuibSet(0, 10, 80, "walk");		// 3:ダミー
+	mKnight.SeparateAbunatuibSet(0, 10, 80, "walk");		// 4:ダミー
+	mKnight.SeparateAbunatuibSet(0, 10, 80, "walk");		// 5:ダミー
+	mKnight.SeparateAbunatuibSet(0, 10, 80, "walk");		// 6:ダミー
+	mKnight.SeparateAbunatuibSet(0, 440, 520, "attack1");	// 7:Attack1
+	mKnight.SeparateAbunatuibSet(0, 520, 615, "attack2");	// 8:Attack2
+	mKnight.SeparateAbunatuibSet(0, 10, 80, "walk");		// 9:ダミー
+	mKnight.SeparateAbunatuibSet(0, 10, 80, "walk");		//10:ダミー
+	mKnight.SeparateAbunatuibSet(0, 1160, 1260, "walk");	//11:ダウン
 
 	//敵の初期化設定
 	mXEnemy.Init(&mKnight);
+
 	//敵の配置
 	mXEnemy.Position(CVector(7.0f, 0.0f, 0.0f));
 
-	mFont.Load("FontG.png", 1, 4096 / 64);
+	mXEnemy.ChangeAnimation(2, true, 200);
 
+	mFont.Load("FontG.png", 1, 4096 / 64);
 }
 
 void CApplication::Update()
 {
 	//キャラクタークラスの更新
 	mXPlayer.Update();
+
 	//敵の更新
 	mXEnemy.Update();
 
