@@ -122,17 +122,6 @@ void CPlayer::Update()
 		mPosition = mPosition - VELOCITY * mMatrixRotate;
 	}
 
-	//確認用 X軸回転(上)
-	//if (mInput.Key('K'))
-	//{
-	//	mRotation = mRotation + ROTATION_YX;
-	//}
-	//確認用 X軸回転(下)
-	//if (mInput.Key('I'))
-	//{
-	//	mRotation = mRotation - ROTATION_YX;
-	//}
-
 	//坂にいるとき重力を消したい
 	//重力
 	mPosition = mPosition - CVector(0.0f, GRAVITY, 0.0f);
@@ -234,21 +223,8 @@ void CPlayer::Collision(CCollider* m, CCollider* o)
 					//printf("修正後：%10f %10f %10f\n",
 					//	mRotation.GetX(), mRotation.GetY(), mRotation.GetZ());
 
-					//坂を滑らないようにする
-					//mPosition.Set(mPosition.GetX(), mPosition.GetY(), mPosition.GetZ() - 0.1f);
 				}
 			}
-
-			//if (mSlopeFlag == false)
-			//{
-				//回転値の修正値を格納
-			//	CVector ajustRote;
-				//斜面の角度を求める
-			//	CCollider::Slope(m, o, &ajustRote);
-				//坂に当たったら斜面に合わせて回転
-			//	SetRotation(ajustRote);
-			//}
-			//mSlopeFlag = false;
 
 		//行列の更新
 		CTransform::Update();

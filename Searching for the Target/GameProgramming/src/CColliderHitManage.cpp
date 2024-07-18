@@ -1,9 +1,5 @@
 #include "CColliderHitManager.h"
 
-//CCollisionManager CCollisionManager::*mpHitColliders = nullptr;
-
-//std::vector<CCollider*> CColliderHitManager::mpHitColliders;
-
 CColliderHitManager::CColliderHitManager()
 	:mCol(ECollider::EFLOOR)
 {
