@@ -250,9 +250,6 @@ void CPlayer::Collision(CCollider* m, CCollider* o)
 			//}
 			//mSlopeFlag = false;
 
-
-
-
 		//s—ñ‚ÌXV
 		CTransform::Update();
 		}

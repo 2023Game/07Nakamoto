@@ -15,13 +15,13 @@
 #define MODEL_TARGET "res\\target.obj", "res\\target.mtl"	//的
 #define MODEL_BULLET "res\\bullet.obj", "res\\bullet.mtl"	//弾
 
-#define MODEL_MAP "res\\map4.obj","res\\map4.mtl"		//試作マップ
+#define MODEL_MAP "res\\map4.obj","res\\map4.mtl"	//試作マップ
 
-#define MODEL_SKY "res\\sky.obj","res\\sky.mtl"				//背景仮
+#define MODEL_SKY "res\\sky.obj","res\\sky.mtl"		//背景仮
 
 #define MODEL_SLOPE "res\\slopeobj.obj","res\\slopeobj.mtl"		//坂
 
-#define MODEL_SPHERE "res\\sphere.obj" ,"res\\sphere.mtl"	//球(スイッチ)
+#define MODEL_SPHERE "res\\sphere.obj" ,"res\\sphere.mtl"		//球(スイッチ)
 
 #define MODEL_BLUECUBE "res\\movecube.obj" ,"res\\movecube.mtl"	//青色の四角形
 
@@ -95,7 +95,7 @@ void CApplication::Start()
 	//背景のモデル
 	mColliderMesh.ColliderMeshSet(nullptr, nullptr, &mBackGround);
 
-	//落ちてしまうところを補強する
+	//落ちてしまうところを補強するコライダ
 	mTriangle.SetColliderTriangle(nullptr, nullptr, CVector(-13.0f, -1.0f, 4.0f), CVector(13.0f, -1.0f, 4.0f), CVector(0.0f, -1.0f, -13.0f));
 
 	//ステージのモデル
