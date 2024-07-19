@@ -87,7 +87,7 @@ void CApplication::Start()
 		CVector(-18.5f, 0.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 
 	//坂の生成
-	mSlope.SetSlope(CVector(0.0f, 0.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f),
+	mSlope.SetSlope(CVector(0.0f, -3.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f),
 		CVector(1.0f, 1.0f, 1.0f), &mModelSlope);
 
 	//モデルから三角コライダを生成

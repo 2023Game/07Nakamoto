@@ -126,7 +126,7 @@ void CApplication::Update()
 	glMultMatrixf(mMatrix.M());
 
 	//頂点にアニメーションを適用する
-	mModelX.AnimateVertex();
+	//mModelX.AnimateVertex();
 	//モデル描画
 	//mModelX.Render();
 	mpPaladin->Render();

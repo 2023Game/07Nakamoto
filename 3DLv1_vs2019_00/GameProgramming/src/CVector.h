@@ -3,6 +3,7 @@
 #define CVECTOR_H
 
 #include "CMatrix.h"
+
 /*
 ベクトルクラス
 ベクトルデータを扱います
@@ -11,7 +12,7 @@ class CVector {
 public:
 	//正規化
 	//大きさ1のベクトルを返す
-	CVector Nomalize() const;
+	CVector Normalize() const;
 
 	//外積
 	//Cross(ベクトル)

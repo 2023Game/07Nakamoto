@@ -122,6 +122,7 @@ CVector CCollider::Slope(CCollider* p, CCollider* t, CVector* a)
 	//面の法線を、外積を正規化して求める
 	CVector TYvector = (v[1] - v[0]).Cross(v[2] - v[0]).Nomalize();
 	
+	
 	//プレイヤーのZ軸方向のベクトルを求める
 	CVector PZvector = CVector(0, 0, 1) * p->mpParent->GetMatrixRotate();
 	//プレイヤーのX軸方向のベクトルを求める
@@ -155,40 +156,9 @@ CVector CCollider::Slope(CCollider* p, CCollider* t, CVector* a)
 	printf("%10f\n", ajust.GetX());
 	*/
 
-	/*
-	float ax = 0, ay = 0, az = 0;
-	float w = 10;
-
-	if (mCopy.GetX() > a->GetX())
-		ax = a->GetX() / w;
-	else if (mCopy.GetX() < a->GetX())
-		ax = a->GetX() / w;
-	else 
-		ax = 0;
-	if (mCopy.GetY() > a->GetY())
-		ay = a->GetY() / 10;
-	else if (mCopy.GetY() < a->GetY())
-		ay = a->GetY() / 10;
-	else
-		ay = 0;
-	if (mCopy.GetZ() > a->GetZ())
-		az = a->GetZ() / 10;
-	else if (mCopy.GetZ() < a->GetZ())
-		az = a->GetZ() / 10;
-	else
-		az = 0;
-
-	mCopy = *a;
-	*/
-
 	//確認用
 	//printf("ラジアン : %10f %10f %10f\n", rx, ry, rz);
 	//printf("度数     : %10f %10f %10f\n", x, y, z);
-
-	//*a = CVector(ax, 0, 0);
-	//printf("度数     : %10f %10f %10f\n", ax, ay, az);
-	
-	//return *a;
 }
 
 

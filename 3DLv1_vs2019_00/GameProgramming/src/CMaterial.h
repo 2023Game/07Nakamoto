@@ -5,12 +5,14 @@
 
 #include "CTexture.h"
 #include "CModelX.h"
+#include "CMyShader.h"
 
 /*
 マテリアルクラス
 マテリアルのデータを扱う
 */
 class CMaterial {
+	friend CMyShader;
 public:
 	//頂点数の設定
 	//VertexNum(頂点数)

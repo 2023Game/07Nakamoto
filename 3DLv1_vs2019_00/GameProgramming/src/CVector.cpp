@@ -5,7 +5,7 @@ CVector CVector::operator*(const float& f)const {
 	return CVector(mX * f, mY * f, mZ * f);
 }
 
-CVector CVector::Nomalize() const {
+CVector CVector::Normalize() const {
 	//ベクトルの大きさで割ったベクトルを返す(長さ1のベクトル)
 	return *this * (1.0f / Length());
 }

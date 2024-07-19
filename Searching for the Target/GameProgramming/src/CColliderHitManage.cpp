@@ -66,13 +66,17 @@ CCollider *CColliderHitManager::HitColliderSerch()
 	{
 		mCol = ECollider::EFLOOR;
 	}
-	else if (s > 0 && f > 0)
+	else if (s > 0 && f > 0 && mCol == ECollider::EFLOOR)
 	{
 		mCol = ECollider::EFLOOR;
 	}
+	else if (s > 0 && f > 0 && mCol == ECollider::ESLOPE)
+	{
+		mCol = ECollider::ESLOPE;
+	}
 
 	//mColÇ™è∞Ç≈ç‚Ç…ìñÇΩÇ¡ÇΩÇÁç‚Ç…çáÇÌÇπÇÈ
-	if (mCol == ECollider::ESLOPE) 
+	if (mCol == ECollider::EFLOOR) 
 	{
 		for (size_t i = 0; i < mpHitColliders.size(); i++)
 		{
@@ -82,7 +86,7 @@ CCollider *CColliderHitManager::HitColliderSerch()
 			}
 		}
 	}
-	else if (mCol == ECollider::EFLOOR) 
+	else if (mCol == ECollider::ESLOPE) 
 	{
 		//mColÇ™ç‚Ç≈è∞Ç…ìñÇΩÇ¡ÇΩÇÁè∞Ç…çáÇÌÇπÇÈ
 		return mpHitColliders[0];

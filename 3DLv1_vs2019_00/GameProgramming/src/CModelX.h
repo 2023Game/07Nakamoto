@@ -3,6 +3,8 @@
 #include <vector>		//vectorクラスのインクルード(動的配列)
 #include "CMatrix.h"	//マトリクスクラスのインクルード
 
+#include "CMyShader.h"
+
 class CMesh;			//CMeshクラスの宣言
 class CModelX;			//CModelXクラスに宣言
 class CModelXFrame;		//CModelXFeameクラスの宣言
@@ -21,6 +23,7 @@ class CAnimationKey;	//アニメーションキークラス
 #define ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))
 
 class CMesh {
+	friend CMyShader;
 public:
 	//コンストラクタ
 	CMesh();
@@ -38,6 +41,9 @@ public:
 	//読み込み処理
 	void Init(CModelX* model);
 	void Render();
+
+	//頂点バッファの作成
+	void CreateVertexBuffer();
 private:
 	//テクスチャ座標データ
 	float* mpTextureCoords;
@@ -61,6 +67,11 @@ private:
 
 	int mVertexNum;		//頂点数
 	CVector* mpVertex;	//頂点データ
+
+	//マテリアル毎の面数
+	std::vector<int> mMaterialVertexCount;
+	//頂点バッファ識別子
+	GLuint mMyVertexBufferId;
 };
 
 /*
@@ -71,7 +82,10 @@ class CModelX{
 	friend CAnimationSet;
 	friend CModelXFrame;
 	friend CAnimation;
+	friend CMyShader;
 public:
+	//シェーダーを使った描画
+	void RenderShader(CMatrix* m);
 
 	//アニメーションセットの追加
 	void AddAnimationSet(const char* file);
@@ -124,6 +138,10 @@ public:
 	std::vector<CAnimationSet*> &AnimationSet();
 
 private:
+	//シェーダー用スキンマトリックス
+	CMatrix* mpSkinningMatrix;
+	CMyShader mShader;	//シェーダーのインスタンス
+
 	bool mLoaded;
 
 	//マテリアル配列
@@ -143,6 +161,7 @@ class CModelXFrame {
 	friend CModelX;
 	friend CAnimation;
 	friend CAnimationSet;
+	friend CMyShader;
 public:
 	const CMatrix& CombinedMatrix();
 
@@ -168,6 +187,7 @@ private:
 class CSkinWeights {
 	friend CModelX;
 	friend CMesh;
+	friend CMyShader;
 public:
 	CSkinWeights(CModelX* model);
 	~CSkinWeights();
