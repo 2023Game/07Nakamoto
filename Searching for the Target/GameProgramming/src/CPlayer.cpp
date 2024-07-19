@@ -20,9 +20,9 @@
 //デフォルトコンストラクタ
 CPlayer::CPlayer()
 	: mSphere(this, &mMatrix, CVector(0.0f, 1.0f, 0.0f), 2.0f)
-	, mLine(this, &mMatrix, CVector(0.0f, 0.0f, 1.0f), CVector(0.0f, 0.0f, -1.0f))
-	, mLine2(this, &mMatrix, CVector(0.0f, 1.0f, 0.0f), CVector(0.0f, -1.0f, 0.0f))
-	, mLine3(this, &mMatrix, CVector(1.5f, 0.0f, 0.0f), CVector(-1.5f, 0.0f, 0.0f))
+	//, mLine(this, &mMatrix, CVector(0.0f, 0.0f, 1.0f), CVector(0.0f, 0.0f, -1.0f))
+	//, mLine2(this, &mMatrix, CVector(0.0f, 1.0f, 0.0f), CVector(0.0f, -1.0f, 0.0f))
+	//, mLine3(this, &mMatrix, CVector(1.5f, 0.0f, 0.0f), CVector(-1.5f, 0.0f, 0.0f))
 	//, mLine4(this, &mMatrix, CVector(0.0f, 2.0f, 3.0f), CVector(0.0f, -2.1f, 0.0f))
 	, mBulletFlag(nullptr)
 	//, mSlopeFlag(false)
@@ -170,7 +170,11 @@ void CPlayer::Collision(CCollider* m, CCollider* o)
 			//三角形と球の衝突判定
 			if (CCollider::CollisionTriangleSphere(o, m, &adjust))
 			{
-				
+				//当たった三角コライダを可変長配列に格納
+				mCollisionManager.AddColliders(o);
+
+				//位置の更新
+				mPosition = mPosition + adjust;
 
 				/*
 				if (mInput.Key('W') || mInput.Key('A') || mInput.Key('S') || mInput.Key('D'))
@@ -187,11 +191,7 @@ void CPlayer::Collision(CCollider* m, CCollider* o)
 				//坂のタグがついているか判定
 				if (o->GetTag() == CCollider::ETag::ESLOPE || o->GetTag() == CCollider::ETag::ENULL)
 				{
-					//当たった三角コライダを可変長配列に格納
-					mCollisionManager.AddColliders(o);
-
-					//位置の更新
-					mPosition = mPosition + adjust;
+					
 
 					//mSlopeFlag = true;
 					//回転値の修正値を格納
@@ -288,16 +288,16 @@ void CPlayer::Collision()
 {
 	//コライダの優先度の変更
 	mSphere.ChangePriority();
-	mLine.ChangePriority();
-	mLine2.ChangePriority();
-	mLine3.ChangePriority();
+	//mLine.ChangePriority();
+	//mLine2.ChangePriority();
+	//mLine3.ChangePriority();
 	//mLine4.ChangePriority();
 
 	//衝突処理を実行
 	CCollisionManager::GetInstance()->Collision(&mSphere, COLLISIONRANGE);
-	CCollisionManager::GetInstance()->Collision(&mLine, COLLISIONRANGE);
-	CCollisionManager::GetInstance()->Collision(&mLine2, COLLISIONRANGE);
-	CCollisionManager::GetInstance()->Collision(&mLine3, COLLISIONRANGE);
+	//CCollisionManager::GetInstance()->Collision(&mLine, COLLISIONRANGE);
+	//CCollisionManager::GetInstance()->Collision(&mLine2, COLLISIONRANGE);
+	//CCollisionManager::GetInstance()->Collision(&mLine3, COLLISIONRANGE);
 	//CCollisionManager::GetInstance()->Collision(&mLine4, COLLISIONRANGE);
 }
 

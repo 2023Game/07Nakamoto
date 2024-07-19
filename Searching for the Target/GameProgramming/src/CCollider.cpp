@@ -70,6 +70,20 @@ void CCollider::Render()
 	glPopMatrix();
 }
 
+CVector CCollider::GetNormal(CCollider* t)
+{
+	//三角コライダの法線を求める
+	CVector v[3], sv, ev;
+	//各コライダの頂点をワールド座標へ変換
+	v[0] = t->mV[0] * *t->mpMatrix;
+	v[1] = t->mV[1] * *t->mpMatrix;
+	v[2] = t->mV[2] * *t->mpMatrix;
+	//面の法線を、外積を正規化して求める
+	CVector TYvector = (v[1] - v[0]).Cross(v[2] - v[0]).Nomalize();
+
+	return TYvector;
+}
+
 //衝突判定
 bool CCollider::Collision(CCollider* m, CCollider* o)
 {
@@ -108,8 +122,6 @@ bool CCollider::CollisionTriangleSphere(CCollider* t, CCollider* s, CVector* a)
 
 }
 
-CVector mCopy = CVector(0, 0, 0);
-
 //球と斜面の衝突処理
 CVector CCollider::Slope(CCollider* p, CCollider* t, CVector* a)
 {
@@ -121,7 +133,8 @@ CVector CCollider::Slope(CCollider* p, CCollider* t, CVector* a)
 	v[2] = t->mV[2] * *t->mpMatrix;
 	//面の法線を、外積を正規化して求める
 	CVector TYvector = (v[1] - v[0]).Cross(v[2] - v[0]).Nomalize();
-	
+
+	//printf("法線:%10f %10f %10f\n", TYvector.GetX(), TYvector.GetY(), TYvector.GetZ());
 	
 	//プレイヤーのZ軸方向のベクトルを求める
 	CVector PZvector = CVector(0, 0, 1) * p->mpParent->GetMatrixRotate();

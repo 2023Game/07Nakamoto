@@ -66,6 +66,7 @@ CCollider *CColliderHitManager::HitColliderSerch()
 	{
 		mCol = ECollider::EFLOOR;
 	}
+	/*
 	else if (s > 0 && f > 0 && mCol == ECollider::EFLOOR)
 	{
 		mCol = ECollider::EFLOOR;
@@ -74,27 +75,30 @@ CCollider *CColliderHitManager::HitColliderSerch()
 	{
 		mCol = ECollider::ESLOPE;
 	}
-
+	*/
 	//mColÇ™è∞Ç≈ç‚Ç…ìñÇΩÇ¡ÇΩÇÁç‚Ç…çáÇÌÇπÇÈ
-	if (mCol == ECollider::EFLOOR) 
-	{
+	//if (mCol == ECollider::EFLOOR)
+	//{
 		for (size_t i = 0; i < mpHitColliders.size(); i++)
 		{
 			if (mpHitColliders[i]->GetTag() == CCollider::ETag::ESLOPE)
 			{
+				//CCollider::GetNormal(mpHitColliders[i]);
 				return mpHitColliders[i];
 			}
 		}
-	}
-	else if (mCol == ECollider::ESLOPE) 
+	//}
+	if (mCol == ECollider::EFLOOR) 
 	{
+		//CCollider::GetNormal(mpHitColliders[0]);
 		//mColÇ™ç‚Ç≈è∞Ç…ìñÇΩÇ¡ÇΩÇÁè∞Ç…çáÇÌÇπÇÈ
 		return mpHitColliders[0];
 	}	
 
-	printf("%d\n", mCol);
 	return nullptr;
 }
+
+float x = 0, y = 180, z = 0;
 
 //è’ìÀîªíË
 void CColliderHitManager::HitCollision(CCollider* m, CCollider* o)
@@ -104,10 +108,29 @@ void CColliderHitManager::HitCollision(CCollider* m, CCollider* o)
 		//éŒñ ÇÃäpìxÇãÅÇﬂ
 		CCollider::Slope(m, o, &ajustRote);
 
-		printf("%10f %10f %10f\n", ajustRote.GetX(), ajustRote.GetY(), ajustRote.GetZ());
+		//printf("%10f %10f %10f\n", ajustRote.GetX(), ajustRote.GetY(), ajustRote.GetZ());
 
 		//ç‚Ç…ìñÇΩÇ¡ÇΩÇÁéŒñ Ç…çáÇÌÇπÇƒâÒì]
 		m->GetParent()->SetRotation(ajustRote);
+
+		/*
+		if (m->GetParent()->GetRotation().GetX() < ajustRote.GetX())
+			x = m->GetParent()->GetRotation().GetX() - 1;
+		else if (m->GetParent()->GetRotation().GetX() > ajustRote.GetX())
+			x = m->GetParent()->GetRotation().GetX() + 1;
+
+		if (m->GetParent()->GetRotation().GetY() < ajustRote.GetY())
+			y = m->GetParent()->GetRotation().GetY() - 1;
+		else if (m->GetParent()->GetRotation().GetY() > ajustRote.GetY()+180)
+			y = m->GetParent()->GetRotation().GetY() + 1;
+
+		if (m->GetParent()->GetRotation().GetZ() < ajustRote.GetZ())
+			z = m->GetParent()->GetRotation().GetZ() - 1;
+		else if (m->GetParent()->GetRotation().GetZ() > ajustRote.GetZ())
+			z = m->GetParent()->GetRotation().GetZ() + 1;
+
+		m->GetParent()->SetRotation(CVector(x, y, z));
+		*/
 	}
 }
 

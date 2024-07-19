@@ -56,12 +56,11 @@ public:
 	void Render();
 
 	/// <summary>
-	/// 斜面にプレイヤーを合わせる
+	/// 法線を返す
 	/// </summary>
-	/// <param name="p">プレイヤー</param>
 	/// <param name="t">三角コライダ</param>
 	/// <returns></returns>
-	static CVector Slope(CCollider* p, CCollider* t, CVector* adjust);
+	static CVector GetNormal(CCollider* t);
 
 	/// <summary>
 	/// 衝突判定
@@ -80,6 +79,16 @@ public:
 	/// <returns>true(衝突している) false(衝突していない)</returns>
 	static bool CollisionTriangleSphere(CCollider* triangle, CCollider* sphere,
 		CVector* adjust);
+
+	
+	/// <summary>
+	/// 斜面にプレイヤーを合わせる
+	/// </summary>
+	/// <param name="p">プレイヤー</param>
+	/// <param name="t">三角コライダ</param>
+	/// <param name="adjust">調整値</param>
+	/// <returns></returns>
+	static CVector Slope(CCollider* p, CCollider* t, CVector* adjust);
 
 	/// <summary>
 	/// 三角形と線分の衝突範囲
