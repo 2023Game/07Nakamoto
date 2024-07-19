@@ -111,7 +111,7 @@ void CXCharacter::Update(CMatrix& matrix)
 	}
 	mpModel->AnimationSet()[mAnimationIndex]->Weight(0.0f);
 	//頂点にアニメーションを適用する
-	mpModel->AnimateVertex();
+	//削除 mpModel->AnimateVertex();
 }
 
 /*
