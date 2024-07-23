@@ -15,11 +15,13 @@
 #define MODEL_TARGET "res\\target.obj", "res\\target.mtl"	//的
 #define MODEL_BULLET "res\\bullet.obj", "res\\bullet.mtl"	//弾
 
-#define MODEL_MAP "res\\map4.obj","res\\map4.mtl"	//試作マップ
+//#define MODEL_MAP "res\\map4.obj","res\\map4.mtl"	//試作マップ
+#define MODEL_MAP "res\\newmap3.obj","res\\newmap3.mtl"	//マップ
 
 #define MODEL_SKY "res\\sky.obj","res\\sky.mtl"		//背景仮
 
-#define MODEL_SLOPE "res\\slopeobj.obj","res\\slopeobj.mtl"		//坂
+//#define MODEL_SLOPE "res\\slopeobj.obj","res\\slopeobj.mtl"		//坂
+#define MODEL_SLOPE "res\\newslope.obj","res\\newslope.mtl"		//坂
 
 #define MODEL_SPHERE "res\\sphere.obj" ,"res\\sphere.mtl"		//球(スイッチ)
 
@@ -87,13 +89,13 @@ void CApplication::Start()
 		CVector(-18.5f, 0.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 
 	//坂の生成
-	mSlope.SetSlope(CVector(0.0f, -3.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f),
+	mSlope.SetSlope(CVector(0.0f, 0.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f),
 		CVector(1.0f, 1.0f, 1.0f), &mModelSlope);
 
 	//モデルから三角コライダを生成
 	//親インスタンスと親行列は無し
 	//背景のモデル
-	mColliderMesh.ColliderMeshSet(nullptr, nullptr, &mBackGround);
+	//mColliderMesh.ColliderMeshSet(nullptr, nullptr, &mBackGround);
 
 	//落ちてしまうところを補強するコライダ
 	mTriangle.SetColliderTriangle(nullptr, nullptr, CVector(-13.0f, -1.0f, 4.0f), CVector(13.0f, -1.0f, 4.0f), CVector(0.0f, -1.0f, -13.0f));
@@ -142,7 +144,7 @@ void CApplication::Update()
 		//背景
 		mBackGround.Render();
 
-		//試作マップの描画
+		//マップの描画
 		mModelMap.Render();
 
 		mTriangle.Render();
@@ -194,7 +196,7 @@ void CApplication::Update()
 		//背景
 		mBackGround.Render();
 
-		//試作マップの描画
+		//マップの描画
 		mModelMap.Render();
 
 		//タスクリストの削除

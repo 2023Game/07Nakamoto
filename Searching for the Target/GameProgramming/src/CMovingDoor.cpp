@@ -6,6 +6,7 @@ CModel CMovingDoor::mModelCube;
 CMovingDoor::CMovingDoor()
 	: mMove(0)
 	, mMoveDistance(0)
+	, mpSwhitch(nullptr)
 {
 
 }

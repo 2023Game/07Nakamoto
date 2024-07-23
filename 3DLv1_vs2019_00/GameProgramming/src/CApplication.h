@@ -19,10 +19,14 @@
 #include "CXPlayer.h"
 #include "CXEnemy.h"
 #include "CPaladin.h"
+#include "CActionCamera.h"
 
 class CApplication
 {
 private:
+	//CActionCamera
+	CActionCamera mActionCamera;
+
 	CPaladin* mpPaladin;
 	//キャラクタのインスタンス
 	CXCharacter mCharacter;
