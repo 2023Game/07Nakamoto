@@ -1,4 +1,5 @@
 #include "CXPlayer.h"
+#include "CActionCamera.h"
 
 CXPlayer::CXPlayer()
 	: mColShereBody(this, nullptr, CVector(), 0.5f)
@@ -11,26 +12,56 @@ void CXPlayer::Update()
 {
 	if (AnimationIndex() != 3 && AnimationIndex() != 4)
 	{
-		//時計回りに回転
-		if (mInput.Key('A'))
-		{
-			//Y軸回転値に2加算する
-			mRotation = mRotation + CVector(0.0f, 2.0f, 0.0f);
+		//カメラの前方
+		CVector cameraZ = CActionCamera::Instance()->VectorZ();
+		//カメラの左方向
+		CVector cameraX = CActionCamera::Instance()->VectorX();
+		//キャラクタの前方
+		CVector charZ = mMatrixRotate.VectorZ();
+		//XZ平面にして正規化
+		cameraZ.Y(0.0f); cameraZ = cameraZ.Normalize();
+		cameraX.X(0.0f); cameraX = cameraX.Normalize();
+		charZ.Y(0.0f);   charZ = charZ.Normalize();
+		//移動方向の設定
+		CVector move;
+		if (mInput.Key('A')) {
+			move = move + cameraX;
 		}
-		//反時計回りに回転
-		if (mInput.Key('D'))
-		{
-			//Y軸回転値に2減算する
-			mRotation = mRotation - CVector(0.0f, 2.0f, 0.0f);
+		if (mInput.Key('D')) {
+			move = move - cameraX;
 		}
-
-		//歩くモーションに切り替え、前方に進む
-		if (mInput.Key('W'))
+		if (mInput.Key('W')) {
+			move = move + cameraZ;
+		}
+		if (mInput.Key('S')) {
+			move = move - cameraZ;
+		}
+		//移動あり
+		if (move.Length() > 0.0f)
 		{
-			//歩くアニメーションに切り替える
+			//遊び
+			const float MARGIN = 0.06f;
+			//正規化
+			move = move.Normalize();
+			//自分の向きと向かせたい向きで外積
+			float cross = charZ.Cross(move).Y();
+			//自分の向きと向かせたい向きで内積
+			float dot = charZ.Dot(move);
+			//外積がプラスは左回転
+			if (cross > MARGIN) {
+				mRotation.Y(mRotation.Y() + 5.0f);
+			}
+			//外積がマイナスは左回転
+			else if (cross < MARGIN) {
+				mRotation.Y(mRotation.Y() - 5.0f);
+			}
+			//前後の向きが同じとき内積は1.0
+			else if (dot < 1.0f - MARGIN) {
+				mRotation.Y(mRotation.Y() - 5.0f);
+			}
+			//移動方向へ移動
+			mPosition = mPosition + move * 0.1;
 			ChangeAnimation(1, true, 60);
-			//前方に0.1進む
-			mPosition = mPosition + CVector(0.0f, 0.0f, 0.1f) * mMatrixRotate;
 		}
 		//待機モーション
 		else if (!mInput.Key('W'))
@@ -39,6 +70,7 @@ void CXPlayer::Update()
 			ChangeAnimation(0, true, 60);
 		}
 	}
+
 	//攻撃モーション
 	if (mInput.Key(VK_SPACE) && AnimationIndex() != 4)
 	{

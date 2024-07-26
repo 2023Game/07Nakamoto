@@ -18,6 +18,12 @@ public:
 
 	//設定メソッド(距離、X描いてン、Y回転)
 	void Set(float distance, float xaxis, float yaxis);
+
+	//カメラのX軸取得
+	CVector VectorX();
+	//カメラのZ軸取得
+	CVector VectorZ();
+
 	//カメラ更新
 	void Update();
 	//カメラ適用

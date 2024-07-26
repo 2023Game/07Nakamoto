@@ -23,6 +23,16 @@ void CActionCamera::Set(float distance, float xaxis, float yaxis)
 	spInstance = this;
 }
 
+CVector CActionCamera::VectorX()
+{
+	return CVector(-mModelView.M(0, 0), -mModelView.M(1, 0), -mModelView.M(2, 0));
+}
+
+CVector CActionCamera::VectorZ()
+{
+	return CVector(-mModelView.M(0, 2), -mModelView.M(1, 2), -mModelView.M(2, 2));
+}
+
 void CActionCamera::Update()
 {
 	if (mInput.Key('J'))

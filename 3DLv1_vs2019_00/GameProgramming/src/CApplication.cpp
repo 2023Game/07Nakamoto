@@ -93,6 +93,7 @@ void CApplication::Update()
 	//カメラ設定
 	mActionCamera.Position(mXPlayer.Position()
 								+ CVector(0.0f, 2.0f, 0.0f));
+
 	mActionCamera.Update();
 	mActionCamera.Render();
 	//モデルビュー行列の取得
