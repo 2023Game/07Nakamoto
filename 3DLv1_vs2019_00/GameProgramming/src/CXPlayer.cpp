@@ -20,7 +20,7 @@ void CXPlayer::Update()
 		CVector charZ = mMatrixRotate.VectorZ();
 		//XZ平面にして正規化
 		cameraZ.Y(0.0f); cameraZ = cameraZ.Normalize();
-		cameraX.X(0.0f); cameraX = cameraX.Normalize();
+		cameraX.Y(0.0f); cameraX = cameraX.Normalize();
 		charZ.Y(0.0f);   charZ = charZ.Normalize();
 		//移動方向の設定
 		CVector move;
@@ -52,7 +52,7 @@ void CXPlayer::Update()
 				mRotation.Y(mRotation.Y() + 5.0f);
 			}
 			//外積がマイナスは左回転
-			else if (cross < MARGIN) {
+			else if (cross < -MARGIN) {
 				mRotation.Y(mRotation.Y() - 5.0f);
 			}
 			//前後の向きが同じとき内積は1.0
