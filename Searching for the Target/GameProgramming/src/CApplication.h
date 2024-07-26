@@ -56,7 +56,11 @@ private:
 	//的のモデル
 	CModel mModelTarget;
 	//マップのモデル
-	CModel mModelMap;
+	//CModel mModelMap;
+	//床
+	CModel mFloor;
+	//オブジェクト
+	CModel mObject;
 	//背景モデル
 	CModel mBackGround;
 	//坂のモデル
@@ -64,12 +68,10 @@ private:
 	//スイッチのモデル
 	CModel mModelSwitch;
 
-	//青い四角形のモデル
-	CModel mModelCube;
-
 	//モデルからコライダを生成
 	CColliderMesh mColliderMesh;
 	CColliderMesh mColliderMesh2;
+	CColliderMesh mColliderMesh3;
 	//補強コライダ
 	CColliderTriangle mTriangle;
 	

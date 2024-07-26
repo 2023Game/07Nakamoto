@@ -25,9 +25,14 @@ public:
 	//更新処理
 	void Update();
 
+	//衝突処理
+	void Collision();
+
+	CMatrix* GetMatrix();
+
 private:
 	//コライダ
-	CColliderMesh mColliderSlope;
+	CCollider mColliderSlope;
 
 };
 

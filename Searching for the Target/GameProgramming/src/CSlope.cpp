@@ -1,4 +1,6 @@
 #include "CSlope.h"
+#include "CCollisionManager.h"
+#include "CCollider.h"
 
 //デフォルトコンストラクタ
 CSlope::CSlope()
@@ -15,7 +17,7 @@ void CSlope::SetSlope(const CVector& pos,
 	mScale = scale;
 	mpModel = model;
 
-	mColliderSlope.ColliderMeshSet(this, &mMatrix, mpModel, CCollider::ETag::ESLOPE);
+	//mColliderSlope.ColliderMeshSet(this, &mMatrix, mpModel);
 }
 
 //更新処理
@@ -24,3 +26,17 @@ void CSlope::Update()
 	//変換行列の更新
 	CTransform::Update();
 }
+
+void CSlope::Collision()
+{
+	//コライダの優先度の変更
+	mColliderSlope.ChangePriority();
+	//衝突処理の実行
+	CCollisionManager::GetInstance()->Collision(&mColliderSlope, COLLISIONRANGE);
+}
+
+CMatrix* CSlope::GetMatrix()
+{
+	return &mMatrix;
+}
+

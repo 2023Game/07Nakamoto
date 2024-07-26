@@ -113,6 +113,7 @@ void CColliderHitManager::HitCollision(CCollider* m, CCollider* o)
 		//â‚É“–‚½‚Á‚½‚çŽÎ–Ê‚É‡‚í‚¹‚Ä‰ñ“]
 		m->GetParent()->SetRotation(ajustRote);
 
+		//™X‚É‰ñ“]‚³‚¹‚é(Ž¸”s)
 		/*
 		if (m->GetParent()->GetRotation().GetX() < ajustRote.GetX())
 			x = m->GetParent()->GetRotation().GetX() - 1;
