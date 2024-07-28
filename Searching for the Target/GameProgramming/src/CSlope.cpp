@@ -17,12 +17,6 @@ void CSlope::SetSlope(const CVector& pos,
 	mScale = scale;
 	mpModel = model;
 
-	//mColliderSlope.ColliderMeshSet(this, &mMatrix, mpModel);
-}
-
-//更新処理
-void CSlope::Update()
-{
 	//変換行列の更新
 	CTransform::Update();
 }

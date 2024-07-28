@@ -165,7 +165,6 @@ void CPlayer::Collision(CCollider* m, CCollider* o)
 		//相手のコライダが三角コライダの時
 		if (o->GetType() == CCollider::EType::ETRIANGLE)
 		{
-
 			CVector adjust;	//調整値
 			//三角形と球の衝突判定
 			if (CCollider::CollisionTriangleSphere(o, m, &adjust))
@@ -230,56 +229,6 @@ void CPlayer::Collision(CCollider* m, CCollider* o)
 		CTransform::Update();
 		}
 		break;
-
-	case CCollider::EType::ELINE:	//線コライダ
-		//相手のコライダが三角コライダの時
-		if (o->GetType() == CCollider::EType::ETRIANGLE)
-		{
-			CVector adjust;	//調整用ベクトル
-			//三角形と線分の衝突判定
-			if (CCollider::CollisionTriangleLine(o, m, &adjust))
-			{
-
-				printf("HIT\n");
-
-				//当たった三角コライダを可変長配列に格納
-				mCollisionManager.AddColliders(o);
-
-				//if (m == &mLine || m == &mLine2 || m == &mLine3)
-					//位置の更新
-				//mPosition = mPosition + adjust;
-
-				//if (m == &mLine4)
-				//{
-					
-					//mRotation = mRotation - CVector(-0.1f, 0.0f, 0.0f);
-				//}
-
-				/*
-				CVector ajustRote;
-				//斜面の角度を求める
-				CCollider::Slope(m, o, &ajustRote);
-
-				printf("修正前：%10f %10f %10f\n",
-					mRotation.GetX(), mRotation.GetY(), mRotation.GetZ());
-
-				//坂に当たったら回転
-				//mRotation = mRotation + ajustRote;
-
-				//坂に当たったら斜面に合わせて回転
-				SetRotation(ajustRote);
-
-				//printf("修正値：%10f %10f %10f\n",
-				//	ajustRote.GetX(), ajustRote.GetY(), ajustRote.GetZ());
-
-				printf("修正後：%10f %10f %10f\n",
-					mRotation.GetX(), mRotation.GetY(), mRotation.GetZ());
-				*/
-			}
-			//行列の更新
-			CTransform::Update();
-		}
-		break;
 	}
 }
 
@@ -317,46 +266,3 @@ float CPlayer::GetFy()
 {
 	return mFy;
 }
-
-/*
-//プレイヤーと当たっているコライダを格納する
-void CPlayer::AddHitCollider(CCollider* o)
-{
-	CCollisionManager::GetInstance()->mpHitCollider.push_back(o);
-}
-
-//タグの確認
-CCollider CPlayer::HitColliderSerch()
-{
-	for (size_t i = 0; i < CCollisionManager::GetInstance()->mpHitCollider.size(); i++)
-	{
-		if (CCollisionManager::GetInstance()->mpHitCollider[i]->GetParent()->GetTag() == CCharacter::ETag::ESLOPE)
-		{
-			return *CCollisionManager::GetInstance()->mpHitCollider[i];
-		}
-	}
-	return *CCollisionManager::GetInstance()->mpHitCollider[0];
-}
-
-//可変長配列の削除
-void CPlayer::Delete()
-{
-	//イテレータの生成
-	std::vector<CCollider*>::iterator itr;
-	//イテレータを先頭へ
-	itr = CCollisionManager::GetInstance()->mpHitCollider.begin();
-	//最後まで繰り返し
-	while (itr != CCollisionManager::GetInstance()->mpHitCollider.end())
-	{
-		//インスタンスを削除
-		delete* itr;
-		//配列から削除
-		itr = CCollisionManager::GetInstance()->mpHitCollider.erase(itr);
-	}
-}
-
-CCollider CPlayer::GetCollider()
-{
-	return mSphere;
-}
-*/

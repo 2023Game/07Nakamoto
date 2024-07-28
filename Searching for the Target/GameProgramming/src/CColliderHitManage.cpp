@@ -105,6 +105,15 @@ void CColliderHitManager::HitCollision(CCollider* m, CCollider* o)
 {
 	if (o != nullptr)
 	{
+		/*
+		CVector adjust;	//調整値
+		//三角形と球の衝突判定
+		if (CCollider::CollisionTriangleSphere(o, m, &adjust))
+		{
+			m->GetParent()->SetPosition(m->GetParent()->GetPosition()+adjust);
+		}
+		*/
+
 		//斜面の角度を求め
 		CCollider::Slope(m, o, &ajustRote);
 

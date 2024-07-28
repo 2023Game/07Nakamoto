@@ -19,6 +19,9 @@ void CSwitch::SetSwitch(CModel* model, const CVector& pos,
 	mRotation = rot;		//回転
 	mScale = scale;			//拡縮
 
+	//行列の更新
+	CTransform::Update();
+
 }
 
 //スイッチと壁の設定

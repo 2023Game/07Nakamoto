@@ -1,4 +1,5 @@
 #include "CColliderMesh.h"
+#include "CCollider.h"
 
 //デフォルトコンストラクタ
 CColliderMesh::CColliderMesh()

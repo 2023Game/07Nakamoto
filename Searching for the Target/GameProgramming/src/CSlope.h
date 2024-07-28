@@ -22,9 +22,6 @@ public:
 	void SetSlope(const CVector& pos,
 		const CVector& rot, const CVector& scale,CModel *model);
 
-	//XVˆ—
-	void Update();
-
 	//Õ“Ëˆ—
 	void Collision();
 

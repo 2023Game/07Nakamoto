@@ -37,6 +37,9 @@ void CMovingDoor::SetMovingDoor(CSwitch* parent, const CVector& position,
 	mScale = scale;
 	mMoveDistance = 10;
 
+	//çsóÒÇÃçXêV
+	CTransform::Update();
+
 	mColliderMesh.ColliderMeshSet(this, &mMatrix, mpModel);
 }
 
