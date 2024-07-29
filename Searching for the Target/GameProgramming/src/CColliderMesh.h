@@ -11,6 +11,7 @@
 */
 class CColliderMesh
 {
+	friend CCollider;
 public:
 	//コンストラクタ
 	CColliderMesh();
@@ -23,7 +24,8 @@ public:
 	/// <param name="parent">親</param>
 	/// <param name="matrix">親行列</param>
 	/// <param name="model">モデル</param>
-	void ColliderMeshSet(CCharacter* parent, CMatrix* matrix, CModel* model);
+	void ColliderMeshSet(CCharacter* parent, CMatrix* matrix, CModel* model
+								, CCollider::ETag tag = CCollider::ETag::ENULL);
 
 private:
 	//三角コライダの配列作成

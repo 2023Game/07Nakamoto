@@ -173,7 +173,7 @@ void CPlayer::Collision(CCollider* m, CCollider* o)
 				mCollisionManager.AddColliders(o);
 
 				//à íuÇÃçXêV
-				mPosition = mPosition + adjust;
+				//mPosition = mPosition + adjust;
 
 				/*
 				if (mInput.Key('W') || mInput.Key('A') || mInput.Key('S') || mInput.Key('D'))

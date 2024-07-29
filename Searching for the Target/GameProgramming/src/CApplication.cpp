@@ -98,8 +98,8 @@ void CApplication::Start()
 	//mTriangle.SetColliderTriangle(nullptr, nullptr, CVector(-13.0f, -1.0f, 4.0f), CVector(13.0f, -1.0f, 4.0f), CVector(0.0f, -1.0f, -13.0f));
 
 	//ステージのモデル
-	mColliderMesh.ColliderMeshSet(&mSlope, mSlope.GetMatrix(), &mModelSlope);
-	mColliderMesh2.ColliderMeshSet(nullptr, nullptr, &mFloor);
+	mColliderMesh.ColliderMeshSet(&mSlope, mSlope.GetMatrix(), &mModelSlope,CCollider::ETag::ESLOPE);
+	mColliderMesh2.ColliderMeshSet(nullptr, nullptr, &mFloor,CCollider::ETag::EFLOOR);
 	mColliderMesh3.ColliderMeshSet(nullptr, nullptr, &mObject);
 	
 
