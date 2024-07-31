@@ -4,7 +4,8 @@
 CXPlayer::CXPlayer()
 	: mColShereBody(this, nullptr, CVector(), 0.5f)
 	, mColShereHead(this, nullptr, CVector(0.0f, 5.0f, -3.0f), 0.5f)
-	, mColShereSword(this, nullptr, CVector(-10.0f, 10.0f, 50.0f), 0.3f,CCollider::ETag::ESWORD)
+	, mColShereSword(this, nullptr, CVector(-10.0f, 10.0f, 50.0f), 0.3f, CCollider::ETag::ESWORD)
+	, mColBody(this, nullptr, CVector(0.0f, 25.0f, 0.0f), CVector(0.0f, 150.0f, 0.0f), 0.5f)
 {
 }
 
@@ -87,18 +88,38 @@ void CXPlayer::Update()
 	{
 		ChangeAnimation(0, true, 60);
 	}
-
 	CXCharacter::Update();
+
+	mColBody.Update();
 }
 
 void CXPlayer::Init(CModelX* model)
 {
 	CXCharacter::Init(model);
 	//‡¬s—ñ‚ÌÝ’è
+	mColBody.Matrix(&mpCombinedMatrix[1]);
 	//‘Ì
 	mColShereBody.Matrix(&mpCombinedMatrix[9]);
 	//“ª
 	mColShereHead.Matrix(&mpCombinedMatrix[12]);
 	//Œ•
 	mColShereSword.Matrix(&mpCombinedMatrix[22]);
+}
+
+void CXPlayer::Collision(CCollider* m, CCollider* o)
+{
+	switch (m->Type())
+	{
+	case CCollider::EType::ECAPSULE:
+		if (o->Type() == CCollider::EType::ECAPSULE)
+		{
+			CVector adjust;
+			if(CCollider::CollisionCapsuleCapsule(m,o,&adjust));
+			{
+				mPosition = mPosition + adjust;
+				CTransform::Update();
+			}
+		}
+		break;
+	}
 }

@@ -3,6 +3,7 @@
 
 #include "CCharacter.h"
 #include "CCollider.h"
+#include "CModel.h"
 
 class CSwitch :public CCharacter
 {
@@ -20,10 +21,6 @@ public:
 	void SetSwitch(CModel* model, const CVector& pos,
 		const CVector& rot, const CVector& scale);
 
-	void SetSwitch(CSwitch* parent, CModel* model,
-		const CVector& spos, const CVector& srot,const CVector& sscale,
-		const CVector& dpos, const CVector& drot, const CVector& dscale);
-
 	//フラグを取得
 	bool GetFlag();
 
@@ -40,7 +37,11 @@ public:
 	//衝突処理
 	void Collision();
 
+	//スイッチのモデルを取得
+	static CModel* GetModelSwitch();
 private:
+	static CModel mModelSwitch;
+
 	//スイッチのオンオフ
 	bool mFlag;
 

@@ -1,10 +1,9 @@
 #include "CSwitch.h"
 #include "CCollisionManager.h"
-#include "CMovingDoor.h"
 
 //デフォルトコンストラクタ
 CSwitch::CSwitch()
-	: mCollider(this, &mMatrix, CVector(0.0f, 1.0f, 0.0f), 1.5f)
+	: mCollider(this, &mMatrix, CVector(0.0f, 0.0f, 0.0f), 1.5f)
 	, mFlag(false)
 {
 	mCollider.SetTag(CCollider::ETag::ESWITCH);
@@ -21,21 +20,6 @@ void CSwitch::SetSwitch(CModel* model, const CVector& pos,
 
 	//行列の更新
 	CTransform::Update();
-
-}
-
-//スイッチと壁の設定
-void CSwitch::SetSwitch(CSwitch* parent, CModel* model,
-	const CVector& spos, const CVector& srot,const CVector& sscale,
-	const CVector& dpos, const CVector& drot, const CVector& dscale)
-{
-	mpModel = model;		//モデル
-	mPosition = spos;		//位置
-	mRotation = srot;		//回転
-	mScale = sscale;		//拡縮
-
-	//扉の生成
-	new CMovingDoor(parent, dpos, drot, dscale);
 
 }
 
@@ -85,3 +69,11 @@ void CSwitch::Collision()
 	CCollisionManager::GetInstance()->Collision(&mCollider, COLLISIONRANGE);
 }
 
+//static変数の定義
+CModel CSwitch::mModelSwitch;
+
+//スイッチのモデルを取得する
+CModel* CSwitch::GetModelSwitch()
+{
+	return &mModelSwitch;
+}

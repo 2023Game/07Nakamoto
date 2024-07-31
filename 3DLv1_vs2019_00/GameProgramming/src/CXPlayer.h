@@ -4,6 +4,7 @@
 #include "CXCharacter.h"
 #include "CCollider.h"
 #include "CInput.h"
+#include "CColliderCapsule.h"
 
 class CXPlayer :public CXCharacter{
 
@@ -17,7 +18,11 @@ public:
 	//‰Šúİ’è
 	void Init(CModelX* model);
 
+	//Õ“Ëˆ—
+	void Collision(CCollider* m, CCollider* o);
+
 private:
+	CColliderCapsule mColBody; //‘Ì
 	//ƒRƒ‰ƒCƒ_‚ÌéŒ¾
 	CCollider mColShereBody;	//‘Ì
 	CCollider mColShereHead;	//“ª

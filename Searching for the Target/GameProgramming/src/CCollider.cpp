@@ -12,6 +12,7 @@ CCollider::CCollider()
 	: mpParent(nullptr)
 	, mpMatrix(&mMatrix)
 	, mType(EType::ESPHERE)
+	, mTag(ETag::ENULL)
 	, mRadius(0)
 {
 	//コリジョンマネージャに追加

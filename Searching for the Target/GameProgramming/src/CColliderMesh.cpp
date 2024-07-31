@@ -37,3 +37,18 @@ void CColliderMesh::ColliderMeshSet(CCharacter* parent, CMatrix* matrix, CModel*
 		mpColliderTriangles[i].ChangePriority();
 	}
 }
+
+//static変数の定義
+CModel CColliderMesh::mFloor;
+//床のモデルを取得する
+CModel* CColliderMesh::GetModelFloor()
+{
+	return &mFloor;
+}
+//static変数の定義
+CModel CColliderMesh::mObject;
+//オブジェクトのモデルを取得する
+CModel* CColliderMesh::GetModelObject()
+{
+	return &mObject;
+}

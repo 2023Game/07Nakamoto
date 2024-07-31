@@ -3,6 +3,7 @@
 
 #include "CCharacter.h"
 #include "CCollider.h"
+#include "CModel.h"
 
 /*
 ターゲットクラス
@@ -41,7 +42,12 @@ public:
 	//衝突処理
 	void Collision();
 
+	//的のモデルを取得する
+	static CModel* GetModelTarget();
+
 private:
+	static CModel mModelTarget;
+
 	//状態
 	EState mState;
 	//コライダ

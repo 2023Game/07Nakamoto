@@ -3,6 +3,7 @@
 
 #include "CXCharacter.h"
 #include "CCollider.h"
+#include "CColliderCapsule.h"
 
 class CXEnemy :public CXCharacter
 {
@@ -15,7 +16,10 @@ public:
 
 	//衝突処理
 	void Collision(CCollider* m, CCollider* o);
+	//更新処理
+	void Update();
 private:
+	CColliderCapsule mColBody;	//体
 	//コライダの宣言
 	CCollider mColShereBody;	//体
 	CCollider mColShereHead;	//頭

@@ -34,3 +34,11 @@ CMatrix* CSlope::GetMatrix()
 	return &mMatrix;
 }
 
+//static•Ï”‚Ì’è‹`
+CModel CSlope::mModelSlope;
+
+//â‚Ìƒ‚ƒfƒ‹‚ğæ“¾‚·‚é
+CModel* CSlope::GetModelSlope()
+{
+	return &mModelSlope;
+}

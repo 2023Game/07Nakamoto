@@ -27,9 +27,15 @@ public:
 	void ColliderMeshSet(CCharacter* parent, CMatrix* matrix, CModel* model
 								, CCollider::ETag tag = CCollider::ETag::ENULL);
 
+	static CModel* GetModelFloor();
+	static CModel* GetModelObject();
+
 private:
 	//三角コライダの配列作成
 	CColliderTriangle* mpColliderTriangles;
+
+	static CModel mFloor;
+	static CModel mObject;
 };
 
 #endif // !CCOLLIDERMESH_H

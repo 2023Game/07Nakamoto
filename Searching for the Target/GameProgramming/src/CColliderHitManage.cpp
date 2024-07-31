@@ -56,7 +56,8 @@ CCollider *CColliderHitManager::HitColliderSerch()
 		}
 	}
 
-	printf("s:%2d f:%2d\n", s, f);
+	//坂と床が当たっている数の確認用
+	//printf("s:%2d f:%2d\n", s, f);
 
 	if (s > 0 && f == 0)
 	{
@@ -76,26 +77,33 @@ CCollider *CColliderHitManager::HitColliderSerch()
 		mCol = ECollider::ESLOPE;
 	}
 	*/
-	//mColが床で坂に当たったら坂に合わせる
-	//if (mCol == ECollider::EFLOOR)
-	//{
+
+	//坂のコライダーがあったら
+	if (s > 0)
+	{
 		for (size_t i = 0; i < mpHitColliders.size(); i++)
 		{
 			if (mpHitColliders[i]->GetTag() == CCollider::ETag::ESLOPE)
 			{
-				//CCollider::GetNormal(mpHitColliders[i]);
 				return mpHitColliders[i];
 			}
 		}
-	//}
-	if (mCol == ECollider::EFLOOR) 
+	}
+	//床のコライダーしか無かったら
+	else if (s == 0 && f > 0)
 	{
-		//CCollider::GetNormal(mpHitColliders[0]);
-		//mColが坂で床に当たったら床に合わせる
-		return mpHitColliders[0];
-	}	
-
-	return nullptr;
+		for (size_t i = 0; i < mpHitColliders.size(); i++)
+		{
+			if (mpHitColliders[i]->GetTag() == CCollider::ETag::EFLOOR)
+			{
+				return mpHitColliders[i];
+			}
+		}
+	}
+	
+	//両方ない場合
+	return mpHitColliders[0];
+	
 }
 
 float x = 0, y = 180, z = 0;
@@ -105,12 +113,12 @@ void CColliderHitManager::HitCollision(CCollider* m, CCollider* o)
 {
 	if (o != nullptr)
 	{
-		CVector adjust;	//調整値
+		//CVector adjust;	//調整値
 		//三角形と球の衝突判定
-		if (CCollider::CollisionTriangleSphere(o, m, &adjust))
-		{
-			m->GetParent()->SetPosition(m->GetParent()->GetPosition() + adjust);
-		}
+		//if (CCollider::CollisionTriangleSphere(o, m, &adjust))
+		//{
+		//	m->GetParent()->SetPosition(m->GetParent()->GetPosition() + adjust);
+		//}
 
 		//斜面の角度を求め
 		CCollider::Slope(m, o, &ajustRote);

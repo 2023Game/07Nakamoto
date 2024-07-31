@@ -7,6 +7,7 @@ CXEnemy::CXEnemy()
 	, mColShereSword0(this, nullptr, CVector(0.7f, 3.5f, -0.2f), 0.5f)
 	, mColShereSword1(this, nullptr, CVector(0.5f, 2.5f, -0.2f), 0.5f)
 	, mColShereSword2(this, nullptr, CVector(0.3f, 1.5f, -0.2f), 0.5f)
+	, mColBody(this, nullptr, CVector(0.0f, -1.5f, 0.0f), CVector(0.0f, 1.0f, 0.0f), 1.0f)
 {
 	
 }
@@ -15,6 +16,7 @@ void CXEnemy::Init(CModelX* model)
 {
 	CXCharacter::Init(model);
 	//合成行列の設定
+	mColBody.Matrix(&mpCombinedMatrix[1]);
 	//体
 	mColShereBody.Matrix(&mpCombinedMatrix[1]);
 	//頭
@@ -29,6 +31,19 @@ void CXEnemy::Collision(CCollider* m, CCollider* o)
 {
 	switch (m->Type())
 	{
+		
+	case CCollider::EType::ECAPSULE:
+		if (o->Type() == CCollider::EType::ECAPSULE)
+		{
+			CVector adjust;
+			if (CCollider::CollisionCapsuleCapsule(m, o, &adjust))
+			{
+				mPosition = mPosition + adjust;
+				CTransform::Update();
+				}
+			}
+		break;
+
 	case CCollider::EType::ESPHERE:
 
 		//相手のコライダータイプが球で
@@ -51,4 +66,11 @@ void CXEnemy::Collision(CCollider* m, CCollider* o)
 		}
 		break;
 	}
+}
+
+//更新処理
+void CXEnemy::Update()
+{
+	CXCharacter::Update();
+	mColBody.Update();
 }

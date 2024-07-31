@@ -1,10 +1,10 @@
-# Blender MTL File: 'Map.blend'
+# Blender MTL File: 'NewMap.blend'
 # Material Count: 1
 
-newmtl Material.003
+newmtl Material.004
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
-Kd 0.640000 0.062700 0.064624
+Kd 0.640000 0.246236 0.033030
 Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000

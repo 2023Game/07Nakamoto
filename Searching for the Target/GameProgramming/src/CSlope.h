@@ -27,7 +27,12 @@ public:
 
 	CMatrix* GetMatrix();
 
+	//坂のモデルを取得する
+	static CModel* GetModelSlope();
+
 private:
+	static CModel mModelSlope;
+
 	//コライダ
 	CCollider mColliderSlope;
 

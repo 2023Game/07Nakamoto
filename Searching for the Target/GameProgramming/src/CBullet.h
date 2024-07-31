@@ -27,6 +27,7 @@ public:
 	//Õ“Ëˆ—
 	void Collision();
 
+	//’e‚Ìƒ‚ƒfƒ‹‚ğæ“¾‚·‚é
 	static CModel* GetModelBullet();
 private:
 	static CModel mModelBullet;

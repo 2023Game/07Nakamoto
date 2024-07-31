@@ -89,3 +89,11 @@ void CTarget::Collision()
 	CCollisionManager::GetInstance()->Collision(&mCollider, COLLISIONRANGE);
 }
 
+//static•Ï”‚Ì’è‹`
+CModel CTarget::mModelTarget;
+
+//“I‚Ìƒ‚ƒfƒ‹‚ğæ“¾‚·‚é
+CModel* CTarget::GetModelTarget()
+{
+	return &mModelTarget;
+}

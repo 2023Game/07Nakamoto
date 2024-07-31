@@ -4,7 +4,6 @@
 #include "CCharacter.h"
 #include "CInput.h"
 #include "CBullet.h"
-#include "CColliderLine.h"
 #include "CModel.h"
 
 #include "CColliderHitManager.h"
@@ -51,41 +50,23 @@ public:
 	float GetFx();
 	//カーソルのY座標を取得
 	float GetFy();
-
-	/// <summary>
-	/// プレイヤーに当たっていっるコライダを格納
-	/// </summary>
-	/// <param name="o">相手のコライダ</param>
-	//void AddHitCollider(CCollider* o);
-
-	//タグの確認
-	//CCollider HitColliderSerch();
-	//可変長配列の削除
-	//void Delete();
-
-	//球コライダの取得
-	//CCollider GetCollider();
+	//プレイヤーのモデルを取得する
+	static CModel* GetModelPlayer();
 
 private:
+	static CModel mModelPlayer;
+
 	int mCursorX, mCursorY;	//マウスカーソル取得用
 	float mFx, mFy;			//カメラの移動量
 
 	CInput mInput;
 
-	//bool mSlopeFlag;
+	CCollider mSphere;	//球コライダー
 
-	//CColliderLine mLine;	//前後の線分コライダ
-	//CColliderLine mLine2;	//上下の線分コライダ
-	//CColliderLine mLine3;	//左右の線分コライダ
-
-	//CColliderLine mLine4;	//下の線分コライダ
-
-	CCollider mSphere;		//球コライダー
-
-	bool mBulletFlag;
+	bool mBulletFlag;	//弾が撃たれてるか
 
 	//重力
-	static CVector* mGravity;
+	//static CVector* mGravity;
 
 	//可変長配列のインスタンス
 	CColliderHitManager mCollisionManager;

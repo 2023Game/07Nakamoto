@@ -20,12 +20,7 @@
 //デフォルトコンストラクタ
 CPlayer::CPlayer()
 	: mSphere(this, &mMatrix, CVector(0.0f, 1.0f, 0.0f), 2.0f)
-	//, mLine(this, &mMatrix, CVector(0.0f, 0.0f, 1.0f), CVector(0.0f, 0.0f, -1.0f))
-	//, mLine2(this, &mMatrix, CVector(0.0f, 1.0f, 0.0f), CVector(0.0f, -1.0f, 0.0f))
-	//, mLine3(this, &mMatrix, CVector(1.5f, 0.0f, 0.0f), CVector(-1.5f, 0.0f, 0.0f))
-	//, mLine4(this, &mMatrix, CVector(0.0f, 2.0f, 3.0f), CVector(0.0f, -2.1f, 0.0f))
 	, mBulletFlag(nullptr)
-	//, mSlopeFlag(false)
 	, mCursorX(0)
 	, mCursorY(0)
 	, mFx(0)
@@ -38,7 +33,6 @@ CPlayer::CPlayer()
 CPlayer::CPlayer(const CVector& pos, const CVector& rot
 	, const CVector& scale)
 	: mBulletFlag(nullptr)
-	//, mSlopeFlag(false)
 	, mCursorX(0)
 	, mCursorY(0)
 	, mFx(0)
@@ -131,7 +125,7 @@ void CPlayer::Update()
 	if (mBulletFlag == false)
 	{
 		//スペース or 左クリックで弾を発射
-		if (mInput.Key(VK_SPACE) || mInput.Key(WM_LBUTTONDOWN))
+		if (mInput.Key(WM_LBUTTONDOWN))
 		{
 			CBullet* bullet = new CBullet();
 			bullet->SetModel(CBullet::GetModelBullet());
@@ -143,7 +137,7 @@ void CPlayer::Update()
 		}
 	}
 	//スペース or 左クリックが押されてないときフラグをtrueにする
-	if (!mInput.Key(VK_SPACE) && !mInput.Key(WM_LBUTTONDOWN) && mBulletFlag == true)
+	if (!mInput.Key(WM_LBUTTONDOWN) && mBulletFlag == true)
 	{
 		mBulletFlag = false;
 	}
@@ -172,57 +166,10 @@ void CPlayer::Collision(CCollider* m, CCollider* o)
 				//当たった三角コライダを可変長配列に格納
 				mCollisionManager.AddColliders(o);
 
-				//位置の更新
-				//mPosition = mPosition + adjust;
-
-				/*
-				if (mInput.Key('W') || mInput.Key('A') || mInput.Key('S') || mInput.Key('D'))
-				{
-					//回転値の修正値を格納
-					CVector ajustRote;
-					//斜面の角度を求める
-					CCollider::Slope(m, o, &ajustRote);
-					//坂に当たったら斜面に合わせて回転
-					SetRotation(ajustRote);
-				}
-				*/
-
-				//坂のタグがついているか判定
-				if (o->GetTag() == CCollider::ETag::ESLOPE || o->GetTag() == CCollider::ETag::ENULL)
-				{
-					
-
-					//mSlopeFlag = true;
-					//回転値の修正値を格納
-				//	CVector ajustRote;
-					//斜面の角度を求める
-				//	CCollider::Slope(m, o, &ajustRote);
-
-				//	printf("%10f %10f %10f\n", ajustRote.GetX(), ajustRote.GetY(), ajustRote.GetZ());
-
-
-					//if (mRotation.GetX() + ajustRote.GetX() < -1 || mRotation.GetX() + ajustRote.GetX() > 1)
-					//{
-						//確認用
-						//printf("修正前：%10f %10f %10f\n",
-						//mRotation.GetX(), mRotation.GetY(), mRotation.GetZ();
-
-					//	mRotation.Set(mRotation.GetX() + ajustRote.GetX() / 10, ajustRote.GetY(), ajustRote.GetZ());
-					//}
-					//else
-					//{
-					//坂に当たったら斜面に合わせて回転
-				//	SetRotation(ajustRote);
-					//}
-
-
-					//確認用
-					//printf("修正値：%10f %10f %10f\n",
-					//	ajustRote.GetX(), ajustRote.GetY(), ajustRote.GetZ());
-					//printf("修正後：%10f %10f %10f\n",
-					//	mRotation.GetX(), mRotation.GetY(), mRotation.GetZ());
-
-				}
+				//if (o->GetTag() == CCollider::ETag::ENULL)
+				//{
+				mPosition = mPosition + adjust;
+				//}
 			}
 
 		//行列の更新
@@ -237,17 +184,9 @@ void CPlayer::Collision()
 {
 	//コライダの優先度の変更
 	mSphere.ChangePriority();
-	//mLine.ChangePriority();
-	//mLine2.ChangePriority();
-	//mLine3.ChangePriority();
-	//mLine4.ChangePriority();
 
 	//衝突処理を実行
 	CCollisionManager::GetInstance()->Collision(&mSphere, COLLISIONRANGE);
-	//CCollisionManager::GetInstance()->Collision(&mLine, COLLISIONRANGE);
-	//CCollisionManager::GetInstance()->Collision(&mLine2, COLLISIONRANGE);
-	//CCollisionManager::GetInstance()->Collision(&mLine3, COLLISIONRANGE);
-	//CCollisionManager::GetInstance()->Collision(&mLine4, COLLISIONRANGE);
 }
 
 //コライダの取得
@@ -265,4 +204,13 @@ float CPlayer::GetFx()
 float CPlayer::GetFy()
 {
 	return mFy;
+}
+
+//static変数の定義
+CModel CPlayer::mModelPlayer;
+
+//プレイヤーのモデルを取得する
+CModel* CPlayer::GetModelPlayer()
+{
+	return &mModelPlayer;
 }
