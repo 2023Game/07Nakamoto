@@ -34,6 +34,7 @@
 void CApplication::Start()
 {
 	mState = EState::ESTART;
+	mFlag = false;
 
 	//カーソルの座標を設定する
 	//SetCursorPos(400, 300);
@@ -124,16 +125,28 @@ void CApplication::Update()
 	case CApplication::EState::ESTART:
 		//スタート画面
 		mpGame->Start();
-		//Enterキーが押されたら
-		if (mInput.Key(VK_RETURN))
+		
+		if (mFlag == false)
 		{
-			//状態をプレイ中にする
-			mState = EState::EPLAY;
+			//Enterキーが押されたら
+			if (mInput.Key(VK_RETURN))
+			{
+				//状態をプレイ中にする
+				mState = EState::EPLAY;
+
+				mFlag = true;
+			}
 		}
+
+		if (!mInput.Key(VK_RETURN))
+		{
+			mFlag = false;
+		}
+
 		break;
 
 
-
+		/*
 		//視点を求める
 		e = CVector(60.0f, 2.0f, 10.0f);
 		//注視点を求める
@@ -169,7 +182,7 @@ void CApplication::Update()
 		}
 
 		break;
-
+		*/
 	case CApplication::EState::EPLAY:
 		//ゲーム中
 		mpGame->Update();
@@ -188,7 +201,7 @@ void CApplication::Update()
 		break;
 
 
-
+		/*
 		//タスクマネージャの更新
 		CTaskManager::GetInstance()->Update();
 		//コリジョンマネージャの衝突判定
@@ -240,24 +253,37 @@ void CApplication::Update()
 			mState = EState::ECLEAR;		
 		}
 		break;
-		
+		*/
+
 	case CApplication::EState::ECLEAR:
 		//ゲームクリア画面
 		mpGame->Clear();
-		//Enterキーが押されたら
-		if (mInput.Key(VK_RETURN))
+
+		if (mFlag == false)
 		{
-			//ゲームのインスタンス削除
-			delete mpGame;
-			//ゲームのインスタンス生成
-			mpGame = new CGame();
-			//状態をスタートにする
-			mState = EState::ESTART;
+			//Enterキーが押されたら
+			if (mInput.Key(VK_RETURN))
+			{
+				//ゲームのインスタンス削除
+				delete mpGame;
+				//ゲームのインスタンス生成
+				mpGame = new CGame();
+				//状態をスタートにする
+				mState = EState::ESTART;
+
+				mFlag = true;
+			}
 		}
+
+		if (!mInput.Key(VK_RETURN))
+		{
+			mFlag = false;
+		}
+
 		break;
 
 
-
+		/*
 		//視点を求める
 	//	e = mPlayer.GetPosition() + CVector(0, 5, -8) * mPlayer.GetMatrixRotate();
 
@@ -294,20 +320,32 @@ void CApplication::Update()
 		}
 
 		break;
+		*/
 
 	case CApplication::EState::EOVER:
 		//ゲームオーバー処理
 		mpGame->Over();
-		//Enterキーが押されたら
-		if (mInput.Key(VK_RETURN))
+		if (mFlag == false)
 		{
-			//ゲームのインスタンス削除
-			delete mpGame;
-			//ゲームのインスタンス生成
-			mpGame = new CGame();
-			//状態をスタートにする
-			mState = EState::ESTART;
+			//Enterキーが押されたら
+			if (mInput.Key(VK_RETURN))
+			{
+				//ゲームのインスタンス削除
+				delete mpGame;
+				//ゲームのインスタンス生成
+				mpGame = new CGame();
+				//状態をスタートにする
+				mState = EState::ESTART;
+
+				mFlag = true;
+			}
 		}
+
+		if (!mInput.Key(VK_RETURN))
+		{
+			mFlag = false;
+		}
+		
 		break;
 
 	case CApplication::EState::ERSTART:

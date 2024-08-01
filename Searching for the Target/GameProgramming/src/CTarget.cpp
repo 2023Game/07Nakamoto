@@ -19,6 +19,14 @@ CTarget::CTarget(CModel* model, const CVector& position,
 	mRotation = rotation;	//回転の設定
 	mScale = scale;			//拡縮の設定
 	mState = state;			//状態の設定
+	sNum++;
+}
+
+//デストラクタ
+CTarget::~CTarget()
+{
+	//的の数を減らす
+	sNum--;
 }
 
 //更新処理
@@ -72,7 +80,7 @@ void CTarget::Collision(CCollider* m, CCollider* o)
 					//衝突したときは無効にする
 					mEnabled = false;
 
-					CApplication::GetUi()->AddPoint();
+					//CApplication::GetUi()->AddPoint();
 				}
 			}
 			break;
@@ -96,4 +104,17 @@ CModel CTarget::mModelTarget;
 CModel* CTarget::GetModelTarget()
 {
 	return &mModelTarget;
+}
+
+//static変数の定義
+int CTarget::sNum = 0;
+//的の数を取得する
+int CTarget::GetNum()
+{
+	return sNum;
+}
+//初期設定
+void CTarget::InitNum()
+{
+	sNum = 0;
 }

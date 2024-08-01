@@ -2,15 +2,23 @@
 #include <glut.h>
 #include "CUi.h"
 #include "CCamera.h"
+#include "CTarget.h"
 
-int CUi::mPoint = 0;
+#define TIME 5
+
+//staticの定義
+int CUi::mTime = TIME;
 
 //デフォルトコンストラクタ
 CUi::CUi()
 	: mNum(0)
-	, mTime(120)
 {
 	mFont.Load("FontWhite.png", 1, 64);
+}
+
+CUi::~CUi()
+{
+	mTime = TIME;
 }
 
 void CUi::State()
@@ -28,32 +36,24 @@ void CUi::Clear()
 	CCamera::End();	//2D描画終了
 }
 
-//時間の設定
+//制限時間の管理
 void CUi::Time()
 {
+	//60フレーム数える
 	mNum++;
 
+	//60フレームになったら
 	if (mNum == 60)
 	{
+		//時間を1秒減らす
 		mTime--;
 		mNum = 0;
 	}
 }
-//ポイントを加算
-void CUi::AddPoint()
-{
-	mPoint++;
-}
 
-void CUi::SetPoint()
+int CUi::GetTime()
 {
-	mPoint = 0;
-}
-
-//ポイントの取得
-int CUi::GetPoint()
-{
-	return mPoint;
+	return mTime;
 }
 
 //描画
@@ -66,7 +66,7 @@ void CUi::Render()
 	char buf[64];
 	char str[16];
 
-	sprintf(buf, "POINT:%01d", mPoint);
+	sprintf(buf, "TARGET:%01d", CTarget::GetNum());
 	sprintf(str, "TIME:%03d", mTime);
 
 	mFont.Draw(640, 580, 8, 16, buf);

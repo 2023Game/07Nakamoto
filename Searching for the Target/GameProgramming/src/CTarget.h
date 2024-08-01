@@ -29,6 +29,9 @@ public:
 	CTarget(CModel* model, const CVector& position,
 		const CVector& rotation, const CVector& scale, EState state);
 
+	//デストラクタ
+	~CTarget();
+
 	//更新処理
 	void Update();
 
@@ -44,15 +47,21 @@ public:
 
 	//的のモデルを取得する
 	static CModel* GetModelTarget();
+	//的の数を取得する
+	static int GetNum();
+	//初期設定
+	static void InitNum();
 
 private:
 	static CModel mModelTarget;
+	//的の数
+	static int sNum;
 
 	//状態
 	EState mState;
 	//コライダ
 	CCollider mCollider;
-
+	//移動した距離
 	int count;
 };
 

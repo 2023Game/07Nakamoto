@@ -6,34 +6,32 @@
 class CUi
 {
 public:
+	//デフォルトコンストラクタ
 	CUi();
+
+	//デストラクタ
+	~CUi();
 
 	//スタート画面
 	void State();
 	//クリア画面
 	void Clear();
 
-	//制限時間の設定
+	//制限時間の管理
 	void Time();
-	//壊した的の数を加算
-	void AddPoint();
-	//壊した的の数を初期化
-	static void SetPoint();
-	//壊した的の数を取得
-	static int GetPoint();
+	//制限時間の取得
+	static int GetTime();
 
 	//描画
 	void Render();
 
 private:
 	//時間
-	int mTime;
+	static int mTime;
+	//60フレーム数える
 	int mNum;
 
-	static int mPoint;
-
 	CFont mFont;
-	CFont mFont2;
 };
 
 #endif // !CUI_H

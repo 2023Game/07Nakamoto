@@ -38,17 +38,9 @@ void CTaskManager::AllDelete()
 	//最後まで繰り返し
 	while (itr != mpCharacters.end())
 	{
-		if ((*itr)->GetEnabled())
-		{
-			//次へ
-			itr++;
-		}
-		else
-		{
-			//falseの時、インスタンス削除
-			delete* itr;
-			itr = mpCharacters.erase(itr);
-		}
+		//インスタンス削除
+		delete* itr;
+		itr = mpCharacters.erase(itr);
 	}
 }
 

@@ -93,5 +93,7 @@ private:
 	//モデルビュー逆行列
 	static CMatrix mModelViewInverse;
 
-	static CUi* spUi;		//UIクラスのポインタ
+	static CUi* spUi;	//UIクラスのポインタ
+
+	bool mFlag;
 };
