@@ -27,8 +27,8 @@ public:
 	/// <param name="pos">位置</param>
 	/// <param name="rot">回転</param>
 	/// <param name="scale">拡縮</param>
-	CPlayer(const CVector& pos, 
-		const CVector& rot, const CVector& scale);
+	CPlayer(const CVector& pos,
+		const CVector& rot, const CVector& scale, CModel* model);
 
 	//更新処理
 	void Update();
@@ -52,8 +52,10 @@ public:
 	float GetFy();
 	//プレイヤーのモデルを取得する
 	static CModel* GetModelPlayer();
+	static CPlayer* GetInstance();
 
 private:
+	static CPlayer* mpInstance;
 	static CModel mModelPlayer;
 
 	int mCursorX, mCursorY;	//マウスカーソル取得用
@@ -64,9 +66,6 @@ private:
 	CCollider mSphere;	//球コライダー
 
 	bool mBulletFlag;	//弾が撃たれてるか
-
-	//重力
-	//static CVector* mGravity;
 
 	//可変長配列のインスタンス
 	CColliderHitManager mCollisionManager;

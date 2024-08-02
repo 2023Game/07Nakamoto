@@ -62,7 +62,7 @@ private:
 	//オブジェクト
 	CModel mObject;
 	//背景モデル
-	CModel mBackGround;
+	//CModel mBackGround;
 	//坂のモデル
 	CModel mModelSlope;
 	//スイッチのモデル
@@ -78,7 +78,7 @@ private:
 	//CColliderMesh mColliderMesh3;
 
 	//背景
-	CColliderMesh mColliderMesh4;
+	//CColliderMesh mColliderMesh4;
 
 	//補強コライダ
 	//CColliderTriangle mTriangle;

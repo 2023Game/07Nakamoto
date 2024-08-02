@@ -132,6 +132,12 @@
     <ClCompile Include="src\CColliderMesh.cpp">
       <Filter>ソース ファイル\Collider</Filter>
     </ClCompile>
+    <ClCompile Include="src\CFloor.cpp">
+      <Filter>ソース ファイル\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CObject.cpp">
+      <Filter>ソース ファイル\Character</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CSound.h">
@@ -235,6 +241,12 @@
     </ClInclude>
     <ClInclude Include="src\CUi.h">
       <Filter>ソース ファイル\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CFloor.h">
+      <Filter>ソース ファイル\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CObject.h">
+      <Filter>ソース ファイル\Character</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

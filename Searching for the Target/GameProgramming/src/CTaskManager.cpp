@@ -31,16 +31,16 @@ void CTaskManager::Delete()
 //全インスタンス削除
 void CTaskManager::AllDelete()
 {
-	//イテレータの生成
-	std::vector<CCharacter*>::iterator itr;
-	//イテレータを先頭へ
-	itr = mpCharacters.begin();
-	//最後まで繰り返し
-	while (itr != mpCharacters.end())
+	//先頭から最後まで繰り返し
+	CTask* task = mHead.mpNext;
+	while (task->mpNext)
 	{
-		//インスタンス削除
-		delete* itr;
-		itr = mpCharacters.erase(itr);
+		CTask* del = task;
+		//次へ
+		task = task->mpNext;
+		//削除
+
+		delete del;
 	}
 }
 

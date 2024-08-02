@@ -9,23 +9,22 @@ class CSlope : public CCharacter
 {
 public:
 
-	//デフォルトコンストラクタ
-	CSlope();
-
 	/// <summary>
-	/// モデルの設定
+	/// コンストラクタ
 	/// </summary>
 	/// <param name="pos">位置</param>
 	/// <param name="rot">回転</param>
 	/// <param name="scale">拡縮</param>
 	/// <param name="model">モデル</param>
-	void SetSlope(const CVector& pos,
+	CSlope(const CVector& pos,
 		const CVector& rot, const CVector& scale,CModel *model);
 
 	//衝突処理
-	void Collision();
+	//void Collision();
 
 	CMatrix* GetMatrix();
+
+	void Update();
 
 	//坂のモデルを取得する
 	static CModel* GetModelSlope();
@@ -34,7 +33,7 @@ private:
 	static CModel mModelSlope;
 
 	//コライダ
-	CCollider mColliderSlope;
+	CColliderMesh mCSlope;
 
 };
 

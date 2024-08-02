@@ -79,8 +79,6 @@ void CTarget::Collision(CCollider* m, CCollider* o)
 				{
 					//Õ“Ë‚µ‚½‚Æ‚«‚Í–³Œø‚É‚·‚é
 					mEnabled = false;
-
-					//CApplication::GetUi()->AddPoint();
 				}
 			}
 			break;

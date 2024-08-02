@@ -13,7 +13,7 @@ class CColliderMesh
 {
 	friend CCollider;
 public:
-	//コンストラクタ
+	//デフォルトコンストラクタ
 	CColliderMesh();
 	//デストラクタ
 	~CColliderMesh();

@@ -167,3 +167,5 @@ void CColliderHitManager::Delete()
 {
 	mpHitColliders.clear();
 }
+
+

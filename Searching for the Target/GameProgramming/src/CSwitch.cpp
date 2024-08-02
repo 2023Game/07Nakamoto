@@ -1,5 +1,6 @@
 #include "CSwitch.h"
 #include "CCollisionManager.h"
+#include "CMoveWall.h"
 
 //デフォルトコンストラクタ
 CSwitch::CSwitch()
@@ -10,8 +11,9 @@ CSwitch::CSwitch()
 }
 
 //スイッチの生成
-void CSwitch::SetSwitch(CModel* model, const CVector& pos,
+CSwitch::CSwitch(CModel* model, const CVector& pos,
 	const CVector& rot, const CVector& scale)
+	:CSwitch()
 {
 	mpModel = model;		//モデル
 	mPosition = pos;		//位置
@@ -21,6 +23,8 @@ void CSwitch::SetSwitch(CModel* model, const CVector& pos,
 	//行列の更新
 	CTransform::Update();
 
+	new CMoveWall(this,
+		CVector(-19.0f, 5.0f, -1.0f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 }
 
 //更新処理
@@ -52,7 +56,6 @@ void CSwitch::Collision(CCollider* m, CCollider* o)
 
 					mFlag = true;
 
-					//mEnabled = false;
 				}
 			}
 		}

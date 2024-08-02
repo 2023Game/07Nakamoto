@@ -33,6 +33,7 @@ void CColliderMesh::ColliderMeshSet(CCharacter* parent, CMatrix* matrix, CModel*
 			, model->Triangles()[i].GetV0()
 			, model->Triangles()[i].GetV1()
 			, model->Triangles()[i].GetV2());
+
 		//—Dæ“x‚Ì•ÏX
 		mpColliderTriangles[i].ChangePriority();
 	}

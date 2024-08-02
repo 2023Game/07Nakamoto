@@ -17,10 +17,8 @@
 
 #define GRAVITY (0.1f)	//重力加速度
 
-//デフォルトコンストラクタ
 CPlayer::CPlayer()
-	: mSphere(this, &mMatrix, CVector(0.0f, 1.0f, 0.0f), 2.0f)
-	, mBulletFlag(nullptr)
+	: mBulletFlag(nullptr)
 	, mCursorX(0)
 	, mCursorY(0)
 	, mFx(0)
@@ -31,15 +29,19 @@ CPlayer::CPlayer()
 
 //コンストラクタ
 CPlayer::CPlayer(const CVector& pos, const CVector& rot
-	, const CVector& scale)
-	: mBulletFlag(nullptr)
+	, const CVector& scale, CModel* model)
+	: mSphere(this, &mMatrix, CVector(0.0f, 1.0f, 0.0f), 2.0f)
+	, mBulletFlag(nullptr)
 	, mCursorX(0)
 	, mCursorY(0)
 	, mFx(0)
 	, mFy(0)
 	
 {
-	CTransform::Update(pos, rot, scale);	//行列の更新
+	mPosition = pos;
+	mRotation = rot;
+	mScale = scale;
+	mpModel = model;
 }
 
 //更新処理
@@ -208,9 +210,20 @@ float CPlayer::GetFy()
 
 //static変数の定義
 CModel CPlayer::mModelPlayer;
-
 //プレイヤーのモデルを取得する
 CModel* CPlayer::GetModelPlayer()
 {
 	return &mModelPlayer;
+}
+
+//static変数の定義
+CPlayer* CPlayer::mpInstance = nullptr;
+//インスタンスの取得
+CPlayer* CPlayer::GetInstance()
+{
+	if (mpInstance == nullptr)
+	{
+		mpInstance = new CPlayer();
+	}
+	return mpInstance;
 }

@@ -55,7 +55,7 @@ private:
 	static CTaskManager* mpInstance;
 
 	//CCharacterのポインタの可変長配列
-	std::vector<CCharacter*>mpCharacters;
+	//std::vector<CCharacter*>mpCharacters;
 };
 
 #endif // !CTASKMANAGER_H

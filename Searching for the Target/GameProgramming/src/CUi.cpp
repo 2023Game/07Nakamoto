@@ -4,7 +4,7 @@
 #include "CCamera.h"
 #include "CTarget.h"
 
-#define TIME 5
+#define TIME 120
 
 //static‚Ì’è‹`
 int CUi::mTime = TIME;

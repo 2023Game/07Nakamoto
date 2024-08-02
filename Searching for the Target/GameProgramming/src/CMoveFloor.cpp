@@ -4,18 +4,12 @@
 //static変数の定義
 CModel CMoveFloor::mModelFloor;
 
-//デフォルトコンストラクタ
-CMoveFloor::CMoveFloor()
+//動く床の設定
+CMoveFloor::CMoveFloor(const CVector& position,
+	const CVector& rotation, const CVector& scale)
 	: mMove(0)
 	, mMoveDistance(0)
-	, mCLine(this,&mMatrix, CVector(0.0f, 0.0f, 7.0f), CVector(0.0f, 0.0f, -7.0f))
-{
-	
-}
-
-//動く床の設定
-void CMoveFloor::SetMoveFloor(const CVector& position,
-	const CVector& rotation, const CVector& scale)
+	, mCLine(this, &mMatrix, CVector(0.0f, 0.0f, 7.0f), CVector(0.0f, 0.0f, -7.0f))
 {
 	mpModel = &mModelFloor;
 	mPosition = position;
@@ -24,6 +18,7 @@ void CMoveFloor::SetMoveFloor(const CVector& position,
 
 	//行列の更新
 	CTransform::Update();
+
 	//コライダーの生成
 	mColliderMesh.ColliderMeshSet(this, &mMatrix, mpModel);
 }

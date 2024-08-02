@@ -22,9 +22,11 @@
     <ClCompile Include="src\CColliderMesh.cpp" />
     <ClCompile Include="src\CColliderTriangle.cpp" />
     <ClCompile Include="src\CCollisionManager.cpp" />
+    <ClCompile Include="src\CFloor.cpp" />
     <ClCompile Include="src\CFont.cpp" />
     <ClCompile Include="src\CGame.cpp" />
     <ClCompile Include="src\CMoveWall.cpp" />
+    <ClCompile Include="src\CObject.cpp" />
     <ClCompile Include="src\CSwitch.cpp" />
     <ClCompile Include="src\CEffect.cpp" />
     <ClCompile Include="src\CInput.cpp" />
@@ -56,9 +58,11 @@
     <ClInclude Include="src\CColliderMesh.h" />
     <ClInclude Include="src\CColliderTriangle.h" />
     <ClInclude Include="src\CCollisionManager.h" />
+    <ClInclude Include="src\CFloor.h" />
     <ClInclude Include="src\CFont.h" />
     <ClInclude Include="src\CGame.h" />
     <ClInclude Include="src\CMoveWall.h" />
+    <ClInclude Include="src\CObject.h" />
     <ClInclude Include="src\CSwitch.h" />
     <ClInclude Include="src\CEffect.h" />
     <ClInclude Include="src\CInput.h" />

@@ -9,16 +9,14 @@
 class CMoveFloor :public CCharacter {
 
 public:
-	//デフォルトコンストラクタ
-	CMoveFloor();
 
 	/// <summary>
-	/// 動く床の設定
+	/// コンストラクタ
 	/// </summary>
 	/// <param name="pos">位置</param>
 	/// <param name="rot">回転</param>
 	/// <param name="scale">拡縮</param>
-	void SetMoveFloor(const CVector& position,
+	CMoveFloor(const CVector& position,
 		const CVector& rotation, const CVector& scale);
 
 	//動く床のモデルの取得

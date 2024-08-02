@@ -18,7 +18,7 @@ public:
 	/// <param name="pos">ˆÊ’u</param>
 	/// <param name="rot">‰ñ“]</param>
 	/// <param name="scale">Šgk</param>
-	void SetSwitch(CModel* model, const CVector& pos,
+	CSwitch(CModel* model, const CVector& pos,
 		const CVector& rot, const CVector& scale);
 
 	//ƒtƒ‰ƒO‚ğæ“¾
