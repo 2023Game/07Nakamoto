@@ -4,8 +4,8 @@
 CXEnemy::CXEnemy()
 	: mColShereBody(this, nullptr, CVector(0.5f, -1.0f, 0.0f), 1.0f)
 	, mColShereHead(this, nullptr, CVector(0.0f, 1.0f, 0.0f), 1.5f)
-	, mColShereSword0(this, nullptr, CVector(0.7f, 3.5f, -0.2f), 0.5f)
-	, mColShereSword1(this, nullptr, CVector(0.5f, 2.5f, -0.2f), 0.5f)
+	, mColShereSword0(this, nullptr, CVector(0.7f, 3.5f, -0.2f), 0.5f, CCollider::ETag::ESWORD)
+	, mColShereSword1(this, nullptr, CVector(0.5f, 2.5f, -0.2f), 0.5f, CCollider::ETag::ESWORD)
 	, mColShereSword2(this, nullptr, CVector(0.3f, 1.5f, -0.2f), 0.5f)
 	, mColBody(this, nullptr, CVector(0.0f, -1.5f, 0.0f), CVector(0.0f, 1.0f, 0.0f), 1.0f)
 {

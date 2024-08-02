@@ -84,7 +84,7 @@ CVector CVector::operator+=(const CVector& v)
 	return *this;
 }
 
-CVector CVector::operator*(const CMatrix& m)
+CVector CVector::operator*(const CMatrix& m)const
 {
 	//Š|‚¯ŽZ‚ÌŒ‹‰Ê‚ðCVectorŒ^‚Ì’l‚Å•Ô‚·
 	return CVector(

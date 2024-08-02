@@ -3,6 +3,29 @@
 
 #define TURN_V 1.0f //回転速度
 
+//ワールド座標をスクリーン座標へ変換する
+//WorldToScreen(スクレーン座標,ワールド座標)
+bool CActionCamera::WorldToScreen(
+	CVector* screen, const CVector& world)
+{
+	//座標変換
+	CVector modelview_pos = world * mModelView;
+	//画面外なのでリターン
+	if (modelview_pos.Z() >= 0.0f) {
+		return false;
+	}
+	//座標調整
+	CVector screen_pos = modelview_pos * mProjection;
+	screen_pos = screen_pos * (1.0f / -modelview_pos.Z());
+
+	//スクリーン変換
+	screen->X((1.0f + screen_pos.X()) * mScreenWidth * 0.5f);
+	screen->Y((1.0f + screen_pos.Y()) * mScreenHeight * 0.5f);
+	screen->Z(screen_pos.Z());
+
+	return true;
+}
+
 CActionCamera* CActionCamera::spInstance = nullptr;
 
 CActionCamera::CActionCamera()
@@ -21,6 +44,14 @@ void CActionCamera::Set(float distance, float xaxis, float yaxis)
 	Scale(CVector(00.0f, 0.0f, distance));
 	mUp = CVector(0.0f, 1.0f, 0.0f);
 	spInstance = this;
+
+	int viewport[4];
+	/* 現在のビューポートを保存しておく */
+	glGetIntegerv(GL_VIEWPORT, viewport);
+	mScreenWidth = viewport[2];	//幅を取得
+	mScreenHeight = viewport[3];	//高さを取得
+	//プロジェクション行列の取得
+	glGetFloatv(GL_PROJECTION_MATRIX, mProjection.M());
 }
 
 CVector CActionCamera::VectorX()
