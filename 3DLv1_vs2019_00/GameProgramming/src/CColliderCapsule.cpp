@@ -1,5 +1,6 @@
 #include "CColliderCapsule.h"
 
+
 CColliderCapsule::CColliderCapsule(CCharacter3* parent, CMatrix* matrix, const CVector& v0, const CVector& v1, float radius)
 {
 	Set(parent, matrix, v0, v1, radius);
@@ -61,12 +62,12 @@ void CColliderCapsule::Render()
 	center = mV[0] + line * 0.5f;
 	CVector lineXZ = line;
 	lineXZ.Y(0.0f);
-	if (lineXZ.Length() > 0.0f)
+	if (lineXZ.Length() > 0.0)
 	{
 		lineXZ = lineXZ.Normalize();
 	}
 	line = line.Normalize();
-	float lineLength = (mV[1] = mV[0]).Length();	// -mRadius * 2;
+	float lineLength = (mV[1] - mV[0]).Length();	// -mRadius * 2;
 	glTranslatef(center.X(), center.Y(), center.Z());
 
 	//rotate Y-axis
