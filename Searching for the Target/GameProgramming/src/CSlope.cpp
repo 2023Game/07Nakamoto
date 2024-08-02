@@ -19,14 +19,6 @@ CSlope::CSlope(const CVector& pos,
 
 }
 
-//void CSlope::Collision()
-//{
-//	//コライダの優先度の変更
-//	mColliderSlope.ChangePriority();
-//	//衝突処理の実行
-//	CCollisionManager::GetInstance()->Collision(&mColliderSlope, COLLISIONRANGE);
-//}
-
 CMatrix* CSlope::GetMatrix()
 {
 	return &mMatrix;

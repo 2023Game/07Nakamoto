@@ -19,9 +19,6 @@ public:
 	CSlope(const CVector& pos,
 		const CVector& rot, const CVector& scale,CModel *model);
 
-	//Õ“Ëˆ—
-	//void Collision();
-
 	CMatrix* GetMatrix();
 
 	void Update();

@@ -37,20 +37,8 @@ public:
 	static CUi* GetUi();	
 
 private:
+	//ゲーム
 	CGame* mpGame;
-
-	//プレイヤー
-//	CPlayer mPlayer;
-	//坂
-//	CSlope mSlope;
-//	CSlope mSlope2;
-
-	//スイッチ
-//	CSwitch mSwhith;
-	//動く壁
-//	CMoveWall mMoveWall;
-	//動く床
-//	CMoveFloor mMoveFloor;
 
 	//モデルクラスのインスタンス作成
 	//プレイヤーのモデル
@@ -67,21 +55,6 @@ private:
 	CModel mModelSlope;
 	//スイッチのモデル
 	CModel mModelSwitch;
-
-	//モデルからコライダを生成
-	//坂のコライダ
-	//CColliderMesh mCSlope;
-	//CColliderMesh mCSlope2;
-	//床のコライダ
-	//CColliderMesh mColliderMesh2;
-	//オブジェクトのコライダ
-	//CColliderMesh mColliderMesh3;
-
-	//背景
-	//CColliderMesh mColliderMesh4;
-
-	//補強コライダ
-	//CColliderTriangle mTriangle;
 	
 	CInput mInput;
 

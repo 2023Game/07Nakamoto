@@ -10,14 +10,9 @@ CGame::CGame()
 	//的の数の初期化
 	CTarget::InitNum();
 
+	//Uiの生成
 	mpUi = new CUi();
-
-	//プレイヤー生成
-	/*mPlayer.SetModel(CPlayer::GetModelPlayer());
-	mPlayer.SetScale(CVector(1.5f, 1.5f, 1.5f));
-	mPlayer.SetPosition(CVector(0.0f, 0.0f, -5.0f));
-	mPlayer.SetRotation(CVector(0.0f, 180.0f, 0.0f));*/
-
+	//プレイヤーの生成
 	mpPlayer = new CPlayer(CVector(0.0f, 0.0f, -5.0f), CVector(0.0f, 180.0f, 0.0f), 
 		CVector(1.5f, 1.5f, 1.5f), CPlayer::GetModelPlayer());
 
@@ -36,28 +31,23 @@ CGame::CGame()
 	//スイッチの生成
 	new CSwitch(CSwitch::GetModelSwitch(),
 		CVector(-17.0f, 10.0f, -11.0f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
-	//動く壁の生成
-	//new CMoveWall(&mSwhith,
-	//	CVector(-19.0f, 5.0f, -1.0f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 
 	//動く床
-	new CMoveFloor(CVector(31.0f, 12.0f, -35.0f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
+	new CMoveFloor(CVector(31.0f, 12.0f, -40.0f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 
 	//坂の生成
 	new CSlope(CVector(-16.5f, 5.325f, 33.0f), CVector(0.0f, 0.0f, 0.0f),
 		CVector(1.0f, 1.065f, 0.8f), CSlope::GetModelSlope());
 	new CSlope(CVector(31.0f, 4.25f, -21.25f), CVector(0.0f, 90.0f, 0.0f),
 		CVector(1.0f, 0.875f, 0.8f), CSlope::GetModelSlope());
-
 	
-	//mCSlope2.ColliderMeshSet(&mSlope2, mSlope2.GetMatrix(), CSlope::GetModelSlope(), CCollider::ETag::ESLOPE);  //坂2
 	//床
 	new CFloor(CVector(0.0f, 0.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f), CFloor::GetModelFloor());
 	//オブジェクト
 	new CObject(CVector(0.0f, 0.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f), CObject::GetModelObject());
 
+	//視点
 	CVector e, c, u;
-
 	//視点を求める
 	e = CVector(60.0f, 2.0f, 10.0f);
 	//注視点を求める
@@ -92,14 +82,13 @@ CGame::~CGame()
 		delete mpUi;
 		mpUi = nullptr;
 	}
-
 }
 
 //スタート処理
 void CGame::Start()
 {
+	//視点
 	CVector e, c, u;
-
 	//視点を求める
 	e = CVector(60.0f, 2.0f, 10.0f);
 	//注視点を求める
@@ -124,7 +113,6 @@ void CGame::Start()
 	CTaskManager::GetInstance()->Render();
 
 	mpUi->State();
-
 }
 
 //更新処理
@@ -141,8 +129,8 @@ void CGame::Update()
 	//HitManegerのリストの削除
 	CColliderHitManager::GetInstance()->Delete();
 
+	//視点
 	CVector e, c, u;
-
 	//視点を求める
 	e = mpPlayer->GetPosition() + CVector(0, 5, -8) * mpPlayer->GetMatrixRotate();
 	//注視点を求める
@@ -167,8 +155,8 @@ void CGame::Update()
 	CTaskManager::GetInstance()->Delete();
 	//タスクマネージャの描画
 	CTaskManager::GetInstance()->Render();
-	//コリジョンマネージャの描画
-	CCollisionManager::GetInstance()->Render();
+	//コリジョンマネージャの描画(コライダ確認用)
+	//CCollisionManager::GetInstance()->Render();
 	
 	mpUi->Time();
 	mpUi->Render();
@@ -178,7 +166,7 @@ void CGame::Update()
 //ゲームクリア処理
 void CGame::Clear()
 {
-
+	mpUi->Clear();
 }
 
 //ゲームクリア判定

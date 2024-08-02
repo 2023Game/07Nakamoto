@@ -1,15 +1,18 @@
 #include "CMoveFloor.h"
 #include "CCollisionManager.h"
 
+#define MOVE CVector(0.0f, 0.0f, 0.1f)
+
 //static変数の定義
 CModel CMoveFloor::mModelFloor;
 
 //動く床の設定
 CMoveFloor::CMoveFloor(const CVector& position,
 	const CVector& rotation, const CVector& scale)
-	: mMove(0)
-	, mMoveDistance(0)
-	, mCLine(this, &mMatrix, CVector(0.0f, 0.0f, 7.0f), CVector(0.0f, 0.0f, -7.0f))
+	: mMove(MOVE)
+	, mTime(0)
+	, mFlag(false)
+	, mCLine(this, &mMatrix, CVector(0.0f, 0.0f, 5.0f), CVector(0.0f, 0.0f, -5.0f))
 {
 	mpModel = &mModelFloor;
 	mPosition = position;
@@ -31,15 +34,54 @@ CModel* CMoveFloor::GetModelFloor()
 
 void CMoveFloor::Update()
 {
-	mPosition = mPosition + CVector(0.0f, 0.0f, 0.1f);
+	if (mFlag)
+	{
+		if (mTime > 0)
+		{
+			mTime--;
+		}
+		else if (mTime == 0)
+		{
+			mFlag = false;
+		}
+		
+	}
+	else if (!mFlag)
+	{
+		if (mTime <= 0)
+			mTime = 120;
 
-	//行列の更新
-	CTransform::Update();
+		mPosition = mPosition + mMove;
+
+		//行列の更新
+		CTransform::Update();
+	}
 }
 
 void CMoveFloor::Collision(CCollider* m, CCollider* o)
 {
-	
+	//自身のコライダタイプの判定
+	switch (m->GetType())
+	{
+	case CCollider::EType::ELINE: //線分コライダ
+		//相手のコライダが三角コライダの時
+		if (o->GetType() == CCollider::EType::ETRIANGLE)
+		{
+			CVector adjust;	//調整用ベクトル
+			//三角形と線分の衝突判定
+			if (CCollider::CollisionTriangleLine(o, m, &adjust))
+			{
+				//位置の更新
+				mPosition = mPosition + adjust;
+				//移動方向を反転
+				mMove = mMove * -1;
+				mFlag = true;
+				//行列の更新
+				CTransform::Update();
+			}
+		}
+		break;
+	}
 }
 
 void CMoveFloor::Collision()

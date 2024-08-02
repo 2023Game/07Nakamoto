@@ -38,10 +38,12 @@ public:
 private:
 	//モデルを格納
 	static CModel mModelFloor;
+	//折り返す時間
+	float mTime;
 	//移動距離
-	float mMoveDistance;
-	//移動した距離
-	float mMove;
+	CVector mMove;
+
+	bool mFlag;
 
 	//コライダ
 	CColliderMesh mColliderMesh;

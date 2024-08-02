@@ -32,7 +32,7 @@ void CUi::Clear()
 {
 	CCamera::Start(0, 800, 0, 600);	//2Dï`âÊäJén
 	mFont.Draw(36, 360, 18, 36, "     GAME CREAR!!");
-	//mFont.Draw(36, 300, 18, 36, "START PUSH ENTER KEY!");
+	mFont.Draw(36, 300, 18, 36, "    PUSH ENTER KEY!");
 	CCamera::End();	//2Dï`âÊèIóπ
 }
 
