@@ -20,9 +20,6 @@ public:
 	//動く壁のモデルの取得
 	static CModel* GetModelWall();
 
-	//衝突処理
-	//void Collision();
-
 private:
 	//スイッチ(親)
 	CSwitch* mpSwhitch;

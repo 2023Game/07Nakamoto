@@ -13,7 +13,7 @@ CGame::CGame()
 	//Uiの生成
 	mpUi = new CUi();
 	//プレイヤーの生成
-	mpPlayer = new CPlayer(CVector(0.0f, 0.0f, -5.0f), CVector(0.0f, 180.0f, 0.0f), 
+	mpPlayer = new CPlayer(CVector(0.0f, -0.0f, -5.0f), CVector(0.0f, 180.0f, 0.0f), 
 		CVector(1.5f, 1.5f, 1.5f), CPlayer::GetModelPlayer());
 
 	//的のコライダを生成
@@ -23,7 +23,7 @@ CGame::CGame()
 		CVector(0.0f, -90.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f), CTarget::EState::ESTAY);
 	new CTarget(CTarget::GetModelTarget(), CVector(1.5f, 10.0f, 33.0f),
 		CVector(0.0f, 180.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f), CTarget::EState::ESTAY);
-	new CTarget(CTarget::GetModelTarget(), CVector(30.0f, 40.0f, -100.0f),
+	new CTarget(CTarget::GetModelTarget(), CVector(30.0f, 20.0f, -100.0f),
 		CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f), CTarget::EState::ESTAY);
 	new CTarget(CTarget::GetModelTarget(), CVector(60.0f, 9.0f, 5.0f),
 		CVector(0.0f, -90.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f), CTarget::EState::EMOVE1);
@@ -155,8 +155,8 @@ void CGame::Update()
 	CTaskManager::GetInstance()->Delete();
 	//タスクマネージャの描画
 	CTaskManager::GetInstance()->Render();
-	//コリジョンマネージャの描画(コライダ確認用)
-	//CCollisionManager::GetInstance()->Render();
+	//コリジョンマネージャの描画
+	CCollisionManager::GetInstance()->Render();	//(コライダ確認用)
 	
 	mpUi->Time();
 	mpUi->Render();

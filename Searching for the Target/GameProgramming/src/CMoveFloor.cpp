@@ -92,3 +92,9 @@ void CMoveFloor::Collision()
 	//Õ“Ëˆ—‚ðŽÀs
 	CCollisionManager::GetInstance()->Collision(&mCLine, COLLISIONRANGE);
 }
+
+//“®‚¢‚Ä‚é—Ê‚ðŽæ“¾
+CVector CMoveFloor::GetMove()
+{
+	return mMove;
+}

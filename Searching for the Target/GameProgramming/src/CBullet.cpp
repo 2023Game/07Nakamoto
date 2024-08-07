@@ -40,9 +40,9 @@ void CBullet::Collision(CCollider* m, CCollider* o)
 		}
 		break;
 	case CCollider::EType::ETRIANGLE:	//三角コライダの時
-		CVector adjust;	//調整値
+		CVector adjust, n;	//調整値
 		//コライダのmとoが衝突しているか判定
-		if (CCollider::CollisionTriangleSphere(o, m, &adjust))
+		if (CCollider::CollisionTriangleSphere(o, m, &adjust, &n))
 		{
 			if (o->GetParent() != nullptr)
 			{

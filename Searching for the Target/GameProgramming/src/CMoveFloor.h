@@ -34,6 +34,8 @@ public:
 
 	//Õ“Ëˆ—
 	void Collision();
+	//“®‚¢‚Ä‚é—Ê‚ğæ“¾
+	CVector GetMove();
 
 private:
 	//ƒ‚ƒfƒ‹‚ğŠi”[

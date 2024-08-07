@@ -46,10 +46,6 @@ public:
 	//コライダの取得
 	CCollider *GetCollider();
 
-	//カーソルのX座標を取得
-	float GetFx();
-	//カーソルのY座標を取得
-	float GetFy();
 	//プレイヤーのモデルを取得する
 	static CModel* GetModelPlayer();
 	static CPlayer* GetInstance();
@@ -59,13 +55,13 @@ private:
 	static CModel mModelPlayer;
 
 	int mCursorX, mCursorY;	//マウスカーソル取得用
-	float mFx, mFy;			//カメラの移動量
 
 	CInput mInput;
 
 	CCollider mSphere;	//球コライダー
 
 	bool mBulletFlag;	//弾が撃たれてるか
+	bool mAir;	//空中にいるか
 
 	//可変長配列のインスタンス
 	CColliderHitManager mCollisionManager;

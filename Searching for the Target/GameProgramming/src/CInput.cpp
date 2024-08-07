@@ -18,7 +18,7 @@ void CInput::Init(GLFWwindow* w)
 	mpWindow = w;
 }
 
-//マウスカーソル座標を取得
+//ウィンドウの左上を原点としたマウスカーソル座標を取得
 void CInput::GetMousePos(int* px, int* py)
 {
 	double xpos, ypos;
@@ -26,4 +26,21 @@ void CInput::GetMousePos(int* px, int* py)
 	*px = xpos;
 	*py = ypos;
 	return;
+}
+
+//ディスプレイの左上を原点としたマウスカーソルの座標を取得
+void CInput::GetMousePosD(int* px, int* py)
+{
+	POINT point;
+	//WindowsAPI
+	GetCursorPos(&point);
+	*px = point.x;
+	*py = point.y;
+}
+
+//ディスプレイの左上を原点としたマウスカーソルの座標を設定
+void CInput::SetMousePosD(int x, int y)
+{
+	//WindowsAPI
+	SetCursorPos(x, y);
 }

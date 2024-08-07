@@ -105,7 +105,7 @@ bool CCollider::Collision(CCollider* m, CCollider* o)
 }
 
 //三角形と球の衝突判定
-bool CCollider::CollisionTriangleSphere(CCollider* t, CCollider* s, CVector* a)
+bool CCollider::CollisionTriangleSphere(CCollider* t, CCollider* s, CVector* a, CVector* n)
 {
 	CVector v[3], sv, ev;
 	//各コライダの頂点をワールド座標へ変換
@@ -114,6 +114,7 @@ bool CCollider::CollisionTriangleSphere(CCollider* t, CCollider* s, CVector* a)
 	v[2] = t->mV[2] * *t->mpMatrix;
 	//面の法線を、外積を正規化して求める
 	CVector normal = (v[1] - v[0]).Cross(v[2] - v[0]).Nomalize();
+	*n = normal;
 	//線コライダをワールド座標で作成
 	sv = s->mPosition * *s->mpMatrix + normal * s->mRadius;
 	ev = s->mPosition * *s->mpMatrix - normal * s->mRadius;

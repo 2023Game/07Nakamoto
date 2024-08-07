@@ -113,40 +113,21 @@ void CColliderHitManager::HitCollision(CCollider* m, CCollider* o)
 {
 	if (o != nullptr)
 	{
-		//CVector adjust;	//’²®’l
-		//ŽOŠpŒ`‚Æ‹…‚ÌÕ“Ë”»’è
-		//if (CCollider::CollisionTriangleSphere(o, m, &adjust))
-		//{
-		//	m->GetParent()->SetPosition(m->GetParent()->GetPosition() + adjust);
-		//}
-
 		//ŽÎ–Ê‚ÌŠp“x‚ð‹‚ß
 		CCollider::Slope(m, o, &ajustRote);
 
 		//printf("%10f %10f %10f\n", ajustRote.GetX(), ajustRote.GetY(), ajustRote.GetZ());
 
-		//â‚É“–‚½‚Á‚½‚çŽÎ–Ê‚É‡‚í‚¹‚Ä‰ñ“]
-		m->GetParent()->SetRotation(ajustRote);
-
-		//™X‚É‰ñ“]‚³‚¹‚é(Ž¸”s)
-		/*
-		if (m->GetParent()->GetRotation().GetX() < ajustRote.GetX())
-			x = m->GetParent()->GetRotation().GetX() - 1;
-		else if (m->GetParent()->GetRotation().GetX() > ajustRote.GetX())
-			x = m->GetParent()->GetRotation().GetX() + 1;
-
-		if (m->GetParent()->GetRotation().GetY() < ajustRote.GetY())
-			y = m->GetParent()->GetRotation().GetY() - 1;
-		else if (m->GetParent()->GetRotation().GetY() > ajustRote.GetY()+180)
-			y = m->GetParent()->GetRotation().GetY() + 1;
-
-		if (m->GetParent()->GetRotation().GetZ() < ajustRote.GetZ())
-			z = m->GetParent()->GetRotation().GetZ() - 1;
-		else if (m->GetParent()->GetRotation().GetZ() > ajustRote.GetZ())
-			z = m->GetParent()->GetRotation().GetZ() + 1;
-
-		m->GetParent()->SetRotation(CVector(x, y, z));
-		*/
+		switch(m->GetType())
+		case CCollider::EType::ESPHERE:
+		{
+			//ƒ^ƒO‚ªâ‚È‚çâ‚ÌŠp“x‚É‡‚í‚¹‚é
+			if (o->GetTag() == CCollider::ETag::ESLOPE)
+			{
+				//â‚É“–‚½‚Á‚½‚çŽÎ–Ê‚É‡‚í‚¹‚Ä‰ñ“]
+				m->GetParent()->SetRotation(ajustRote);
+			}
+		}
 	}
 }
 

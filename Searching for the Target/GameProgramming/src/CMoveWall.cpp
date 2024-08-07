@@ -42,12 +42,3 @@ CModel* CMoveWall::GetModelWall()
 {
 	return &mModelWall;
 }
-
-//衝突処理
-//void CMoveWall::Collision()
-//{
-//	//コライダの優先度の変更
-//	mCollider.ChangePriority();
-//	//衝突処理の実行
-//	CCollisionManager::GetInstance()->Collision(&mCollider, COLLISIONRANGE);
-//}

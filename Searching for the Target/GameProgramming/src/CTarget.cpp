@@ -11,7 +11,7 @@
 CTarget::CTarget(CModel* model, const CVector& position,
 	const CVector& rotation, const CVector& scale , EState state)
 	: count(0)
-	, mCollider(this, &mMatrix, CVector(0.0f, 0.0f, 0.0f), 0.8f)
+	, mCollider(this, &mMatrix, CVector(0.0f, 0.0f, 0.0f), 2.0f)
 {
 	mCollider.SetTag(CCollider::ETag::ETARGET);	//É^ÉO
 	mpModel = model;		//ÉÇÉfÉãÇÃê›íË

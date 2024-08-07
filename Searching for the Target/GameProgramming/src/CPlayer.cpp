@@ -13,16 +13,18 @@
 #define MOS_POS_X 400	//マウス座標のX補正
 #define MOS_POS_Y 300	//マウス座標のY補正
 
-#define AIM_POS 10		//照準の補正値
+#define MOS_POS_FSX 960	//マウス座標のX補正
+#define MOS_POS_FSY 540	//マウス座標のY補正
+
+#define AIM_POS 40		//照準の補正値
 
 #define GRAVITY (0.1f)	//重力加速度
 
 CPlayer::CPlayer()
-	: mBulletFlag(nullptr)
+	: mBulletFlag(false)
+	, mAir(false)
 	, mCursorX(0)
 	, mCursorY(0)
-	, mFx(0)
-	, mFy(0)
 {
 
 }
@@ -31,11 +33,10 @@ CPlayer::CPlayer()
 CPlayer::CPlayer(const CVector& pos, const CVector& rot
 	, const CVector& scale, CModel* model)
 	: mSphere(this, &mMatrix, CVector(0.0f, 1.0f, 0.0f), 2.0f)
-	, mBulletFlag(nullptr)
+	, mBulletFlag(false)
+	, mAir(false)
 	, mCursorX(0)
 	, mCursorY(0)
-	, mFx(0)
-	, mFy(0)
 	
 {
 	mPosition = pos;
@@ -55,42 +56,18 @@ void CPlayer::Update()
 	{
 		//マウス座標コンソールに出力
 		//printf("マウスの座標:%d, %d\n", mCursorX, mCursorY);
-	
 
-	//ゲーム画面中心からの座標へ変換する
-	mCursorX -= MOS_POS_X;
-	mCursorY = MOS_POS_Y - mCursorY;
+		//ゲーム画面中心からの座標へ変換する
+		mCursorX -= MOS_POS_FSX;
+		mCursorY = MOS_POS_FSY - mCursorY;
 
-	//プレイヤーとマウス座標の差を求める
-	mCursorX -= mPosition.GetX();
-	mCursorY -= mPosition.GetY();
+		//printf("ゲーム画面中心からの座標へ変換する:%d, %d\n", mCursorX, mCursorY);
 
-	//printf("プレイヤーとマウス座標の差:%d, %d\n", mCursorX, mCursorY);
+		//プレイヤーとマウス座標の差を求める
+		mCursorX -= mPosition.GetX();
+		mCursorY -= mPosition.GetY();
 
-	}
-
-	//X軸で移動
-	if (mCursorX < -100 && mFx > -4.0f)
-	{
-		//カメラ注視点を左へ移動
-		mFx -= 0.1f;
-	}
-	else if (mCursorX > 100 && mFx < 4.0f)
-	{
-		//カメラ注視点を右へ移動
-		mFx += 0.1f;
-	}
-
-	//Y軸で移動
-	if (mCursorY < -100 && mFy > -4.0f)
-	{
-		//カメラ注視点を下へ移動
-		mFy -= 0.1f;
-	}
-	else if (mCursorY > 100 && mFy < 4.0f)
-	{
-		//カメラ注視点を上へ移動
-		mFy += 0.1f;
+		//printf("プレイヤーとマウス座標の差:%d, %d\n", mCursorX, mCursorY);
 	}
 
 	//Dキー入力で右回転
@@ -118,9 +95,15 @@ void CPlayer::Update()
 		mPosition = mPosition - VELOCITY * mMatrixRotate;
 	}
 
-	//垂直の重力を求める
+	//空中にいるとき
 	//重力
-	mPosition = mPosition - CVector(0.0f, GRAVITY, 0.0f);
+	if (mAir)
+	{
+		mPosition = mPosition - CVector(0.0f, GRAVITY, 0.0f);
+		printf("空中\n");
+	}
+	
+	mAir = true;
 
 	//スペースかクリックで弾発射
 	//長押し入力しても弾が1発しか出ないようにする
@@ -138,7 +121,7 @@ void CPlayer::Update()
 			mBulletFlag = true;
 		}
 	}
-	//スペース or 左クリックが押されてないときフラグをtrueにする
+	//左クリックが押されてないときフラグをtrueにする
 	if (!mInput.Key(WM_LBUTTONDOWN) && mBulletFlag == true)
 	{
 		mBulletFlag = false;
@@ -151,9 +134,6 @@ void CPlayer::Update()
 //衝突処理
 void CPlayer::Collision(CCollider* m, CCollider* o)
 {
-	if (o == nullptr)
-		return;
-	
 	//自身のコライダタイプの判定
 	switch (m->GetType())
 	{
@@ -161,21 +141,23 @@ void CPlayer::Collision(CCollider* m, CCollider* o)
 		//相手のコライダが三角コライダの時
 		if (o->GetType() == CCollider::EType::ETRIANGLE)
 		{
-			CVector adjust;	//調整値
+			CVector adjust, n;	//調整値
 			//三角形と球の衝突判定
-			if (CCollider::CollisionTriangleSphere(o, m, &adjust))
+			if (CCollider::CollisionTriangleSphere(o, m, &adjust, &n))
 			{
 				//当たった三角コライダを可変長配列に格納
 				mCollisionManager.AddColliders(o);
 
-				//if (o->GetTag() == CCollider::ETag::ENULL)
-				//{
+				//めり込まない位置に戻す
 				mPosition = mPosition + adjust;
-				//}
-			}
 
-		//行列の更新
-		CTransform::Update();
+				//三角面に垂直な重力
+				mPosition = mPosition - CVector(n.GetX() / 10, n.GetY() / 10, n.GetZ() / 10);
+
+				mAir = false;
+			}
+			//行列の更新
+			CTransform::Update();
 		}
 		break;
 	}
@@ -195,17 +177,6 @@ void CPlayer::Collision()
 CCollider *CPlayer::GetCollider()
 {
 	return &mSphere;
-}
-
-//カーソルのX座標を取得
-float CPlayer::GetFx()
-{
-	return mFx;
-}
-//カーソルのY座標を取得
-float CPlayer::GetFy()
-{
-	return mFy;
 }
 
 //static変数の定義

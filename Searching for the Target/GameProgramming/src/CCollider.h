@@ -78,7 +78,7 @@ public:
 	/// <param name="adjust">調整値:衝突しない位置まで戻す値</param>
 	/// <returns>true(衝突している) false(衝突していない)</returns>
 	static bool CollisionTriangleSphere(CCollider* triangle, CCollider* sphere,
-		CVector* adjust);
+		CVector* adjust,CVector* n);
 
 	
 	/// <summary>
@@ -124,6 +124,7 @@ protected:
 	CCharacter* mpParent;	//親
 	CMatrix* mpMatrix;		//親行列
 	float mRadius;			//半径
+
 };
 
 #endif // !CCOLLIDER_H
