@@ -1,6 +1,6 @@
-﻿  CPlayer.cpp
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': マクロが再定義されました。
-C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\include\GLFW\glfw3.h(98): message : 'APIENTRY' の以前の定義を確認してください
-C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CPlayer.cpp(113,18): warning C4309: '引数': 定数値が切り捨てられました。
-C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CPlayer.cpp(125,18): warning C4309: '引数': 定数値が切り捨てられました。
+﻿  CModel.cpp
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CModel.cpp(25,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CModel.cpp(211,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CModel.cpp(273,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CModel.cpp(275,21): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
   GameProgramming.vcxproj -> C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\Debug\GameProgramming.exe

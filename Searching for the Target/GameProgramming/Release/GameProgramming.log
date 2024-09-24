@@ -1,0 +1,16 @@
+﻿  CModel.cpp
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CModel.cpp(12,1): error C2169: 'strcmp': 組み込み関数は定義できません。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CModel.cpp(26,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CModel.cpp(75,7): error C2065: 'strcmp': 定義されていない識別子です。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CModel.cpp(86,12): error C2065: 'strcmp': 定義されていない識別子です。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CModel.cpp(91,12): error C2065: 'strcmp': 定義されていない識別子です。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CModel.cpp(98,12): error C2065: 'strcmp': 定義されていない識別子です。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CModel.cpp(128,7): error C2065: 'strcmp': 定義されていない識別子です。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CModel.cpp(134,7): error C2065: 'strcmp': 定義されていない識別子です。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CModel.cpp(141,7): error C2065: 'strcmp': 定義されていない識別子です。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CModel.cpp(148,12): error C2065: 'strcmp': 定義されていない識別子です。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CModel.cpp(154,9): error C2065: 'strcmp': 定義されていない識別子です。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CModel.cpp(161,12): error C2065: 'strcmp': 定義されていない識別子です。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CModel.cpp(212,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CModel.cpp(274,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\Searching for the Target\GameProgramming\src\CModel.cpp(276,21): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
