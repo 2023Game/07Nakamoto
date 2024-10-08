@@ -41,6 +41,8 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>("Slash", "Effect\\slash.obj");
 	CResourceManager::Load<CSound>("SlashSound", "Sound\\SE\\slash.wav");
 
+	CResourceManager::Load<CModelX>("Enemy", "Character\\Player\\pico.x");
+
 	// ƒQ[ƒ€BGM‚ð“Ç‚Ýž‚Ý
 	CBGMManager::Instance()->Play(EBGMType::eGame);
 

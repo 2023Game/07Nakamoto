@@ -6,9 +6,11 @@
 CEnemy::CEnemy()
 	: CCharaBase(ETag::eEnemy, ETaskPriority::eDefault)
 {
+
 }
 
 //XVˆ—
 void CEnemy::Update()
 {
+
 }
