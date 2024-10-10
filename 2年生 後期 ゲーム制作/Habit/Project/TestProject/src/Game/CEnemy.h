@@ -29,6 +29,7 @@ private:
 
 		eTPose,		//Tポーズ
 		eIdle,		//待機
+		eAttack,	//攻撃
 
 		Num			//アニメーションの種類の数
 	};

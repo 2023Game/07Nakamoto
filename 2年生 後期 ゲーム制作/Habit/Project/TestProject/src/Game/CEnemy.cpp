@@ -6,9 +6,8 @@
 const CEnemy::AnimData CEnemy::ANIM_DATA[] =
 {
 	{ "",										true,	0.0f	},	// Tポーズ
-	//{ "Character\\Enemy\\anim\\idle.x",			true,	66.0f	},	// 待機
-	//{ "Character\\Enemy\\anim\\walk.x",			true,	66.0f	},	// 歩行
-	//{ "Character\\Enemy\\anim\\attack.x",		false,	91.0f	},	// 攻撃
+	{ "Character\\Enemy\\anim\\idle.x",			true,	122.0f	},	// 待機
+	{ "Character\\Enemy\\anim\\attack.x",		false,	91.0f	},	// 攻撃
 };
 
 // コンストラクタ
@@ -16,7 +15,7 @@ CEnemy::CEnemy()
 	: CXCharacter(ETag::eEnemy, ETaskPriority::eDefault)
 {
 	//モデルデータの取得
-	CModelX* model = CResourceManager::Get<CModelX>("CEnemy");
+	CModelX* model = CResourceManager::Get<CModelX>("Enemy");
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
