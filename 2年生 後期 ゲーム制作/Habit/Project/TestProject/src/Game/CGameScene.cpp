@@ -2,6 +2,7 @@
 #include "CSceneManager.h"
 #include "CField.h"
 #include "CPlayer.h"
+#include "CPlayer2.h"
 #include "CEnemy.h"
 #include "CGameCamera.h"
 #include "CGameCamera2.h"
@@ -37,7 +38,8 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>("FieldCube", "Field\\Object\\cube.obj");
 	CResourceManager::Load<CModel>("FieldCylinder", "Field\\Object\\cylinder.obj");
 	CResourceManager::Load<CModelX>("Player", "Character\\Player\\player.x");
-	CResourceManager::Load<CModelX>("Enemy", "Character\\Model\\anim\\vampire.x");
+	CResourceManager::Load<CModelX>("Player2", "Character\\Player2\\anim\\pico.x");
+	CResourceManager::Load<CModelX>("Enemy", "Character\\Enemy\\anim\\mutant.x");
 	CResourceManager::Load<CTexture>("Laser", "Effect\\laser.png");
 	CResourceManager::Load<CTexture>("LightningBolt", "Effect\\lightning_bolt.png");
 	CResourceManager::Load<CModel>("Slash", "Effect\\slash.obj");
@@ -51,6 +53,10 @@ void CGameScene::Load()
 
 	CPlayer* player = new CPlayer();
 	player->Scale(1.0f, 1.0f, 1.0f);
+
+	CPlayer2* pico = new CPlayer2();
+	pico->Scale(10.0f, 10.0f, 10.0f);
+	pico->Position(70.0f, 10.0f, 0.0f);
 
 	CEnemy* enemy = new CEnemy();
 	enemy->Position(100.0f, 10.0, 0.0f);

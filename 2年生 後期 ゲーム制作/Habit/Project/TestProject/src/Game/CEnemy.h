@@ -18,7 +18,7 @@ public:
 	// XVˆ—
 	void Update() override;
 	
-	//•`‰æ
+	//•`‰æˆ—
 	void Render() override;
 
 private:

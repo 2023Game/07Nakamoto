@@ -6,8 +6,9 @@
 const CEnemy::AnimData CEnemy::ANIM_DATA[] =
 {
 	{ "",										true,	0.0f	},	// Tポーズ
-	{ "Character\\Enemy\\anim\\idle.x",			true,	122.0f	},	// 待機
-	{ "Character\\Enemy\\anim\\attack.x",		false,	91.0f	},	// 攻撃
+	//{ "Character\\Player2\\anim\\idle.x",			true,	122.0f	},	// 待機
+	//{ "Character\\Model\\vampire.x",		false,	91.0f	},	// 攻撃
+
 };
 
 // コンストラクタ
