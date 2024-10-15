@@ -5,9 +5,9 @@
 // プレイヤーのアニメーションデータのテーブル
 const CPlayer2::AnimData CPlayer2::ANIM_DATA[] =
 {
-	{ "",										true,	0.0f	},	// Tポーズ
-	//{ "Character\\Enemy\\anim\\idle.x",			true,	122.0f	},	// 待機
-	//{ "Character\\Model\\vampire.x",		false,	91.0f	},	// 攻撃
+	{ "",											true,	0.0f	},	// Tポーズ
+	{ "Character\\Player2\\anim\\pico_idle.x",		true,	181.0f	},	// 待機
+	{ "Character\\Player2\\anim\\pico_walk.x",		true,	30.0f	},	// 歩行
 
 };
 
@@ -30,7 +30,7 @@ CPlayer2::CPlayer2()
 	Init(model);
 
 	// 最初は待機アニメーションを再生
-	ChangeAnimation(EAnimType::eTPose);
+	ChangeAnimation(EAnimType::eWalk);
 }
 
 CPlayer2::~CPlayer2()

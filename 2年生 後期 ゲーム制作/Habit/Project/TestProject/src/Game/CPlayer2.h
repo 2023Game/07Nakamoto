@@ -27,6 +27,7 @@ private:
 
 		eTPose,		//Tポーズ
 		eIdle,		//待機
+		eWalk,
 
 		Num
 	};
@@ -43,7 +44,6 @@ private:
 	//アニメーションデータのテーブル
 	static const AnimData ANIM_DATA[];
 };
-
 
 #endif // !CPLAYER_H
 
