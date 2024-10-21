@@ -39,12 +39,13 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>("FieldCylinder", "Field\\Object\\cylinder.obj");
 	CResourceManager::Load<CModelX>("Player", "Character\\Player\\player.x");
 	CResourceManager::Load<CModelX>("Player2", "Character\\Player2\\anim\\pico.x");
-	CResourceManager::Load<CModelX>("Enemy", "Character\\Enemy\\anim\\mutant.x");
 	CResourceManager::Load<CTexture>("Laser", "Effect\\laser.png");
 	CResourceManager::Load<CTexture>("LightningBolt", "Effect\\lightning_bolt.png");
 	CResourceManager::Load<CModel>("Slash", "Effect\\slash.obj");
 	CResourceManager::Load<CSound>("SlashSound", "Sound\\SE\\slash.wav");
 
+	//CResourceManager::Load<CModelX>("Enemy", "Character\\Enemy\\anim\\mutant.x");
+	//CResourceManager::Load<CModel>("Map1", "Map\\map1.obj");
 
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
@@ -58,8 +59,8 @@ void CGameScene::Load()
 	pico->Scale(10.0f, 10.0f, 10.0f);
 	pico->Position(70.0f, 10.0f, 0.0f);
 
-	CEnemy* enemy = new CEnemy();
-	enemy->Position(100.0f, 10.0, 0.0f);
+	//CEnemy* enemy = new CEnemy();
+	//enemy->Position(100.0f, 10.0, 0.0f);
 
 	// CGameCameraのテスト
 	//CGameCamera* mainCamera = new CGameCamera

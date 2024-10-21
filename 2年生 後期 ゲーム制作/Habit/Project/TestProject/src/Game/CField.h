@@ -21,4 +21,6 @@ private:
 	CModel* mpCylinderModel;
 
 	TexAnimData mEffectAnimData;
+	
+	CModel* mpMap1;
 };
