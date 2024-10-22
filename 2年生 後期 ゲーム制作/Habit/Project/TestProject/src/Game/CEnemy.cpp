@@ -14,6 +14,9 @@ const CEnemy::AnimData CEnemy::ANIM_DATA[] =
 // コンストラクタ
 CEnemy::CEnemy()
 	: CXCharacter(ETag::eEnemy, ETaskPriority::eDefault)
+	, mState(EState::eIdle)
+	, mStateStep(0)
+	, mElapsedTime(0.0f)
 {
 	//モデルデータの取得
 	CModelX* model = CResourceManager::Get<CModelX>("Enemy");
@@ -40,7 +43,18 @@ CEnemy::~CEnemy()
 //更新処理
 void CEnemy::Update()
 {
+	switch (mState)
+	{
+	case EState::eIdle:		UpdateIdle();
+	case EState::ePatrol:	UpdatePatrol();
+	case EState::eChase:	UpdateChase();
+	case EState::eLost:		UpdateLost();
+	case EState::eAttack:	UpdateAttack();
+	}
+
 	CXCharacter::Update();
+
+	CDebugPrint::Print("状態 : %s\n", GetStateStr(mState));
 }
 
 //描画処理
@@ -56,4 +70,50 @@ void CEnemy::ChangeAnimation(EAnimType type)
 	if (!(0 <= index && index < (int)EAnimType::Num)) return;
 	const AnimData& data = ANIM_DATA[index];
 	CXCharacter::ChangeAnimation(index, data.loop, data.framelength);
+}
+
+//状態を切り替え
+void CEnemy::ChangeState(EState state)
+{
+	if (state == mState) return;
+
+	mState = state;
+	mStateStep = 0;
+
+}
+
+//待機状態時の更新処理
+void CEnemy::UpdateIdle()
+{
+}
+
+//巡回中の更新処理
+void CEnemy::UpdatePatrol()
+{
+}
+
+//追跡時の更新処理
+void CEnemy::UpdateChase()
+{
+}
+
+//プレイヤーを見失った時の更新処理
+void CEnemy::UpdateLost()
+{
+}
+
+//攻撃時の更新処理
+void CEnemy::UpdateAttack()
+{
+}
+
+//状態の文字列を取得
+std::string CEnemy::GetStateStr(EState state) const
+{
+	switch (state)
+	{
+
+	}
+
+	return std::string();
 }

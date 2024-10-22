@@ -355,6 +355,9 @@
     <ClCompile Include="src\Game\CPlayer2.cpp">
       <Filter>ソース ファイル\Game\Character</Filter>
     </ClCompile>
+    <ClCompile Include="src\BaseSystem\Blend.cpp">
+      <Filter>ソース ファイル\BaseSystem\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -522,9 +525,6 @@
     <ClInclude Include="src\BaseSystem\CDebugTimer.h">
       <Filter>ソース ファイル\BaseSystem\Debug</Filter>
     </ClInclude>
-    <ClInclude Include="src\BaseSystem\Time.h">
-      <Filter>ソース ファイル\BaseSystem\System</Filter>
-    </ClInclude>
     <ClInclude Include="src\BaseSystem\Primitive.h">
       <Filter>ソース ファイル\BaseSystem\System</Filter>
     </ClInclude>
@@ -644,6 +644,12 @@
     </ClInclude>
     <ClInclude Include="src\Game\CPlayer2.h">
       <Filter>ソース ファイル\Game\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BaseSystem\Blend.h">
+      <Filter>ソース ファイル\BaseSystem\System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BaseSystem\Times.h">
+      <Filter>ソース ファイル\BaseSystem\System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
