@@ -38,14 +38,14 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>("FieldCube", "Field\\Object\\cube.obj");
 	CResourceManager::Load<CModel>("FieldCylinder", "Field\\Object\\cylinder.obj");
 	CResourceManager::Load<CModelX>("Player", "Character\\Player\\player.x");
-	CResourceManager::Load<CModelX>("Player2", "Character\\Player2\\anim\\pico.x");
 	CResourceManager::Load<CTexture>("Laser", "Effect\\laser.png");
 	CResourceManager::Load<CTexture>("LightningBolt", "Effect\\lightning_bolt.png");
 	CResourceManager::Load<CModel>("Slash", "Effect\\slash.obj");
 	CResourceManager::Load<CSound>("SlashSound", "Sound\\SE\\slash.wav");
 
+	CResourceManager::Load<CModelX>("Player2", "Character\\Player2\\anim\\pico.x");
 	//CResourceManager::Load<CModelX>("Enemy", "Character\\Enemy\\anim\\mutant.x");
-	//CResourceManager::Load<CModel>("Map1", "Map\\map1.obj");
+	CResourceManager::Load<CModel>("Map1", "Map\\map1.obj");
 
 	// ƒQ[ƒ€BGM‚ð“Ç‚Ýž‚Ý
 	CBGMManager::Instance()->Play(EBGMType::eGame);

@@ -30,7 +30,7 @@ CPlayer2::CPlayer2()
 	Init(model);
 
 	// 最初は待機アニメーションを再生
-	ChangeAnimation(EAnimType::eWalk);
+	ChangeAnimation(EAnimType::eIdle);
 }
 
 CPlayer2::~CPlayer2()
