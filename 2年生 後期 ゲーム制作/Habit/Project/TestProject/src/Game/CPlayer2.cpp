@@ -8,12 +8,15 @@ const CPlayer2::AnimData CPlayer2::ANIM_DATA[] =
 	{ "",											true,	0.0f	},	// Tポーズ
 	{ "Character\\Player2\\anim\\pico_idle.x",		true,	181.0f	},	// 待機
 	{ "Character\\Player2\\anim\\pico_walk.x",		true,	30.0f	},	// 歩行
+	{ "Character\\Player2\\anim\\pico_run.x",		true,	22.0f	},	// 走行
+	{ "Character\\Player2\\anim\\pico_jump.x",		true,	51.0f	},	// ジャンプ
 
 };
 
 // コンストラクタ
 CPlayer2::CPlayer2()
-	: CXCharacter(ETag::eEnemy, ETaskPriority::eDefault)
+	: CXCharacter(ETag::ePlayer, ETaskPriority::ePlayer)
+
 {
 	//モデルデータの取得
 	CModelX* model = CResourceManager::Get<CModelX>("Player2");
@@ -30,7 +33,7 @@ CPlayer2::CPlayer2()
 	Init(model);
 
 	// 最初は待機アニメーションを再生
-	ChangeAnimation(EAnimType::eIdle);
+	ChangeAnimation(EAnimType::eJump);
 }
 
 CPlayer2::~CPlayer2()

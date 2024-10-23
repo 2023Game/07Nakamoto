@@ -43,7 +43,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>("Slash", "Effect\\slash.obj");
 	CResourceManager::Load<CSound>("SlashSound", "Sound\\SE\\slash.wav");
 
-	CResourceManager::Load<CModelX>("Player2", "Character\\Player2\\anim\\pico.x");
+	CResourceManager::Load<CModelX>("Player2", "Character\\Player2\\pico.x");
 	//CResourceManager::Load<CModelX>("Enemy", "Character\\Enemy\\anim\\mutant.x");
 	CResourceManager::Load<CModel>("Map1", "Map\\map1.obj");
 
@@ -54,10 +54,11 @@ void CGameScene::Load()
 
 	CPlayer* player = new CPlayer();
 	player->Scale(1.0f, 1.0f, 1.0f);
+	player->Position(10.0f, 1.0f, 10.0f);
 
 	CPlayer2* pico = new CPlayer2();
 	pico->Scale(10.0f, 10.0f, 10.0f);
-	pico->Position(70.0f, 10.0f, 0.0f);
+	pico->Position(70.0f, 1.0f, 10.0f);
 
 	//CEnemy* enemy = new CEnemy();
 	//enemy->Position(100.0f, 10.0, 0.0f);

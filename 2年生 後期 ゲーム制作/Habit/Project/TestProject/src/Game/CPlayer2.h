@@ -27,7 +27,9 @@ private:
 
 		eTPose,		//Tポーズ
 		eIdle,		//待機
-		eWalk,
+		eWalk,		//歩行
+		eRun,		//走行
+		eJump,		//ジャンプ
 
 		Num
 	};
