@@ -30,6 +30,9 @@ private:
 		eWalk,		//歩行
 		eRun,		//走行
 		eJump,		//ジャンプ
+		eCrawl,		//這う
+		eSneak,		//しゃがみ移動
+		eCrouch_up, //しゃがんで拾う
 
 		Num
 	};

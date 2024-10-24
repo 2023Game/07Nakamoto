@@ -27,8 +27,11 @@ private:
 	{
 		None = -1,
 
-		eTPose,		//Tポーズ
 		eIdle,		//待機
+		eWalk,		//歩行
+		eRun,		//走行
+		eJump,		//ジャンプ
+		eJumpAttack,//ジャンプ攻撃
 		eAttack,	//攻撃
 
 		Num			//アニメーションの種類の数

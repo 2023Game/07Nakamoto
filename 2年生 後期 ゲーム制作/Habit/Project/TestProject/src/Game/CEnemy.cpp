@@ -5,9 +5,13 @@
 // プレイヤーのアニメーションデータのテーブル
 const CEnemy::AnimData CEnemy::ANIM_DATA[] =
 {
-	{ "",										true,	0.0f	},	// Tポーズ
-	//{ "Character\\Player2\\anim\\idle.x",			true,	122.0f	},	// 待機
-	//{ "Character\\Model\\vampire.x",		false,	91.0f	},	// 攻撃
+	{ "",														true,	122.0f	},	// 待機
+	{ "Character\\Enemy\\mutant\\anim\\mutant_walk.x",			true,	44.0f	},	// 歩行
+	{ "Character\\Enemy\\mutant\\anim\\mutant_run.x",			true,	27.0f	},	// 走行
+	{ "Character\\Enemy\\mutant\\anim\\mutant_jump.x",			true,	96.0f	},	// ジャンプ
+	{ "Character\\Enemy\\mutant\\anim\\mutant_jump_attack.x",	true,	112.0f	},	// ジャンプ攻撃
+	{ "Character\\Enemy\\mutant\\anim\\mutant_attack.x",		true,	81.0f	},	// 攻撃
+
 
 };
 
@@ -33,7 +37,7 @@ CEnemy::CEnemy()
 	Init(model);
 
 	// 最初は待機アニメーションを再生
-	ChangeAnimation(EAnimType::eTPose);
+	ChangeAnimation(EAnimType::eAttack);
 }
 
 CEnemy::~CEnemy()

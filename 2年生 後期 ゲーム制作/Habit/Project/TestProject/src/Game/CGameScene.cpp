@@ -44,7 +44,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CSound>("SlashSound", "Sound\\SE\\slash.wav");
 
 	CResourceManager::Load<CModelX>("Player2", "Character\\Player2\\pico.x");
-	//CResourceManager::Load<CModelX>("Enemy", "Character\\Enemy\\anim\\mutant.x");
+	CResourceManager::Load<CModelX>("Enemy", "Character\\Enemy\\mutant\\mutant.x");
 	CResourceManager::Load<CModel>("Map1", "Map\\map1.obj");
 
 	// ゲームBGMを読み込み
@@ -60,8 +60,9 @@ void CGameScene::Load()
 	pico->Scale(10.0f, 10.0f, 10.0f);
 	pico->Position(70.0f, 1.0f, 10.0f);
 
-	//CEnemy* enemy = new CEnemy();
-	//enemy->Position(100.0f, 10.0, 0.0f);
+	CEnemy* enemy = new CEnemy();
+	enemy->Scale(15.0f, 15.0f, 15.0f);
+	enemy->Position(100.0f, 1.0, 10.0f);
 
 	// CGameCameraのテスト
 	//CGameCamera* mainCamera = new CGameCamera
