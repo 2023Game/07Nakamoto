@@ -32,12 +32,12 @@ void CField::CreateFieldObjects()
 	mpMap1 = CResourceManager::Get<CModel>("Map1");
 
 	// ƒ}ƒbƒv‡@
-	new CMoveFloor
+	/*new CMoveFloor
 	(
 		mpMap1,
 		CVector(0.0f, 1.0f, 0.0f), CVector(10.0f, 10.0f, 10.0f),
 		CVector(0.0f, 0.0f, 0.0f), 5.0f
-	);
+	);*/
 
 	//new CMoveFloor
 	//(

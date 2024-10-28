@@ -18,6 +18,7 @@ enum class ETag
 	eSlash,	// aŒ‚
 
 	eCamera,// ƒJƒƒ‰
+	eDebug,
 
 	Num
 };

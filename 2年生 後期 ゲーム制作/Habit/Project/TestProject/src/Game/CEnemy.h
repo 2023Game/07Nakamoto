@@ -2,6 +2,11 @@
 #define CENEMY_H
 #include "CXCharacter.h"
 #include "CModel.h"
+#include "CCollider.h"
+#include "CModel.h"
+
+// 視野範囲のデバッグ表示クラスの前宣言
+class CDebugFieldOfView;
 
 /*
 エネミークラス
@@ -12,41 +17,43 @@ class CEnemy : public CXCharacter
 public:
 	// コンストラクタ
 	CEnemy();
-	//デストラクタ
+	// デストラクタ
 	~CEnemy();
+
+	void DeleteObject(CObjectBase* obj) override;
 
 	// 更新処理
 	void Update() override;
 	
-	//描画処理
+	// 描画処理
 	void Render() override;
 
 private:
-	//アニメーションの種類
+	// アニメーションの種類
 	enum class EAnimType
 	{
 		None = -1,
 
-		eIdle,		//待機
-		eWalk,		//歩行
-		eRun,		//走行
-		eJump,		//ジャンプ
-		eJumpAttack,//ジャンプ攻撃
-		eAttack,	//攻撃
+		eIdle,		// 待機
+		eWalk,		// 歩行
+		eRun,		// 走行
+		eJump,		// ジャンプ
+		eJumpAttack,// ジャンプ攻撃
+		eAttack,	// 攻撃
 
-		Num			//アニメーションの種類の数
+		Num			// アニメーションの種類の数
 	};
-	//アニメーションの切り替え
+	// アニメーションの切り替え
 	void ChangeAnimation(EAnimType type);
 
-	//アニメーションデータ
+	// アニメーションデータ
 	struct AnimData
 	{
-		std::string path;	//アニメーションデータのパス
-		bool loop;			//ループするかどうか
-		float framelength;	//アニメーションのフレーム数
+		std::string path;	// アニメーションデータのパス
+		bool loop;			// ループするかどうか
+		float framelength;	// アニメーションのフレーム数
 	};
-	//アニメーションデータのテーブル
+	// アニメーションデータのテーブル
 	static const AnimData ANIM_DATA[];
 
 	enum class EState
@@ -58,26 +65,39 @@ private:
 		eAttack,	// プレイヤー攻撃
 	};
 
-	//状態を切り替え
+	// 状態を切り替え
 	void ChangeState(EState state);
 
-	//待機状態時の更新処理
+	// プレイヤーが視野範囲内に入ったかどうか
+	bool IsFoundPlayer() const;
+
+	//指定した位置まで移動する
+	bool MoveTo(const CVector& targetPos, float speed);
+
+	// 待機状態時の更新処理
 	void UpdateIdle();
-	//巡回中の更新処理
+	// 巡回中の更新処理
 	void  UpdatePatrol();
-	//追跡時の更新処理
+	// 追跡時の更新処理
 	void UpdateChase();
-	//プレイヤーを見失った時の更新処理
+	// プレイヤーを見失った時の更新処理
 	void UpdateLost();
-	//攻撃時の更新処理
+	// 攻撃時の更新処理
 	void UpdateAttack();
 
-	//状態の文字列を取得
+	// 状態の文字列を取得
 	std::string GetStateStr(EState state) const;
+	// 状態の色を取得
+	CColor GetStateColor(EState state) const;
 
-	EState mState;	//敵の状態
-	int mStateStep;	//状態内のステップ管理用
-	float mElapsedTime;	//経過時間計測用
+	EState mState;	// 敵の状態
+	int mStateStep;	// 状態内のステップ管理用
+	float mElapsedTime;	// 経過時間計測用
 
+	float mFovAngle;	// 視野範囲の角度
+	float mFovLength;	// 視野範囲の距離
+	CDebugFieldOfView* mpFebugFov;	// 視野範囲のデバッグ表示
+
+	CVector mLostPlayerPos;	// プレイヤーを見つけた位置まで
 };
 #endif

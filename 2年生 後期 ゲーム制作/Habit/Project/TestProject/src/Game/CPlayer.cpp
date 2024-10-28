@@ -91,6 +91,8 @@ CPlayer::~CPlayer()
 		delete mpColliderLine;
 		mpColliderLine = nullptr;
 	}
+
+	spInstance = nullptr;
 }
 
 CPlayer* CPlayer::Instance()

@@ -50,6 +50,27 @@ void CPlayer2::Update()
 	CXCharacter::Update();
 }
 
+void CPlayer2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
+{
+}
+
+CVector CPlayer2::CalcMoveVec() const
+{
+	return CVector();
+}
+
+void CPlayer2::UpdateIdle()
+{
+}
+
+void CPlayer2::UpdateJumpStart()
+{
+}
+
+void CPlayer2::UpdateMove()
+{
+}
+
 //ï`âÊèàóù
 void CPlayer2::Render()
 {

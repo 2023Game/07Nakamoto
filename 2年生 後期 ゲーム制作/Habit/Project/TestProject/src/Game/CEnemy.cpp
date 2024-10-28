@@ -1,6 +1,16 @@
 #include "CEnemy.h"
 #include "CEffect.h"
+#include "CInput.h"
 #include "CCollisionManager.h"
+#include "CDebugFieldOfView.h"
+#include "CPlayer.h"
+#include "Maths.h"
+
+#define FOV_ANGLE		45.0f		// 視野範囲の角度
+#define FOV_LENGTH		100.0f		// 視野範囲の距離
+#define WALK_SPEED		10.0f		// 歩くスピード
+#define RUN_SPEED		20.0f		// 走るスピード
+#define ROTATE_SPEED	6.0f
 
 // プレイヤーのアニメーションデータのテーブル
 const CEnemy::AnimData CEnemy::ANIM_DATA[] =
@@ -21,6 +31,7 @@ CEnemy::CEnemy()
 	, mState(EState::eIdle)
 	, mStateStep(0)
 	, mElapsedTime(0.0f)
+	, mLostPlayerPos(0.0f, 0.0f, 0.0f)
 {
 	//モデルデータの取得
 	CModelX* model = CResourceManager::Get<CModelX>("Enemy");
@@ -38,36 +49,80 @@ CEnemy::CEnemy()
 
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eAttack);
+
+	// 視野範囲のデバッグ表示クラスを作成
+	
 }
 
+// デストラクタ
 CEnemy::~CEnemy()
 {
+	// 視野範囲のデバッグ表示が存在したら、一緒に削除する
+	if (mpDebugFov != nullptr)
+	{
+		mpDebugFov->SetOwner(nullptr);
+		mpDebugFov->Kill();
+	}
 }
 
-//更新処理
+void CEnemy::DeleteObject(CObjectBase* obj)
+{
+	// 削除されたオブジェクトが視野範囲のデバッグ表示であれば
+	// 自身が削除されたと
+	if (obj == mpDebugFov)
+	{
+		mpDebugFov = nullptr;
+	}
+}
+
+// 更新処理
 void CEnemy::Update()
 {
+	if (CInput::Key('U'))
+	{
+		ChangeState(EState::eChase);
+		//ChangeAnimation(EAnimType::eWalk);
+	}
+	else if (CInput::Key('L'))
+	{
+		ChangeState(EState::ePatrol);
+		//ChangeAnimation(EAnimType::eRun);
+	}
+
 	switch (mState)
 	{
-	case EState::eIdle:		UpdateIdle();
-	case EState::ePatrol:	UpdatePatrol();
-	case EState::eChase:	UpdateChase();
-	case EState::eLost:		UpdateLost();
-	case EState::eAttack:	UpdateAttack();
+	case EState::eIdle:		UpdateIdle();		break;
+	case EState::ePatrol:	UpdatePatrol();		break;
+	case EState::eChase:	UpdateChase();		break;
+	case EState::eLost:		UpdateLost();		break;
+	case EState::eAttack:	UpdateAttack();		break;
 	}
 
 	CXCharacter::Update();
 
-	CDebugPrint::Print("状態 : %s\n", GetStateStr(mState));
+	// 現在の状態に合わせて視野範囲の色を変更
+	mpDebugFov->
+
+	CDebugPrint::Print("状態 : %s\n", GetStateStr(mState).c_str());
 }
 
-//描画処理
+// 描画処理
 void CEnemy::Render()
 {
 	CXCharacter::Render();
+
+	// 見失った状態であれば、
+	if (mState == EState::eLost)
+	{
+		//プレイヤーを見失った位置にデバッグ表示
+		float rad = 2.0f;
+		CMatrix m;
+		m.Translate(mLostPlayerPos + CVector(0.0f, rad, 0.0f));
+		
+	}
 }
 
-//アニメーションの切り替え
+// アニメーションの切り替え
 void CEnemy::ChangeAnimation(EAnimType type)
 {
 	int index = (int)type;
@@ -76,48 +131,188 @@ void CEnemy::ChangeAnimation(EAnimType type)
 	CXCharacter::ChangeAnimation(index, data.loop, data.framelength);
 }
 
-//状態を切り替え
+// 状態を切り替え
 void CEnemy::ChangeState(EState state)
 {
+	// 既に同じ状態であれば、処理しない
 	if (state == mState) return;
 
 	mState = state;
 	mStateStep = 0;
+	mElapsedTime = 0.0f;
 
 }
 
-//待機状態時の更新処理
+bool CEnemy::IsFoundPlayer() const
+{
+	// プレイヤーが存在しない場合は、視野範囲外とする
+	CPlayer* player = CPlayer::Instance();
+	if (player == nullptr) return false;
+
+	// プレイヤー座標を取得
+	CVector playerPos = player->Position();
+	// 自分自身の座標を取得
+	CVector pos = Position();
+	// 自身からプレイヤーまでのベクトルを求める
+	CVector  vec = playerPos - pos;
+	vec.Y(0.0f);	//プレイヤーとの高さの差を考慮しない
+
+	// ベクトルを正規化して長さを1にする
+	CVector dir = vec.Normalized();
+	// 自身の正面方向ベクトルを取得
+	CVector forward = VectorZ();
+	// プレイヤーとまでのベクトルと
+	// 自身の正面方向ベクトルの内積を求めて角度を出す
+	float dot = CVector::Dot(dir, forward);
+	// 視野角度のラジアンを求める
+	float angleR = Math::DegreeToRadian(mFovAngle);
+	// 求めた内積と視野角度で、視野範囲内か判断する
+	if (dot < cosf(angleR))	return false;
+
+	//プレイヤーまでの距離と視野距離で、視野範囲内か判断する
+	float dist = vec.Length();
+	if (dist > mFovLength)	return false;
+
+	// TODO:プレイヤーとの間に遮蔽物がないかチェックする
+
+
+
+	//全ての条件をクリアしたので、視野範囲内である
+	return true;
+}
+
+//指定した位置まで移動する
+bool CEnemy::MoveTo(const CVector& targetPos, float speed)
+{
+	// 目的地までのベクトルを求める
+	CVector pos = Position();
+	CVector vec = targetPos - pos;
+	vec.Y(0.0f);
+	// 移動方向ベクトルを求める
+	CVector moveDir = vec.Normalized();
+
+	// 徐々に移動方向へ移動
+	CVector forwrd = CVector::Slerp
+	(
+		VectorZ(),	// 現在の正面方向
+		moveDir,	// 移動方向
+		ROTATE_SPEED * Times::DeltaTime()
+	);
+	Rotation(CQuaternion::LookRotation(moveDir));
+
+	// 今回の移動距離を求める
+	float moveDist = speed * Times::DeltaTime();
+	// 目的地までの残りの距離を求める
+	float remainDist = vec.Length();
+	// 残りの距離が移動距離より短い場合
+	if (remainDist <= moveDist)
+	{
+		// 目的地まで移動する
+		pos = CVector(targetPos.X(), pos.Y(), targetPos.Z());
+		Position(pos);
+		return true;	// 目的地に到着したので、trueを返す
+	}
+
+	// 残りの距離が移動距離より長い場合は、
+	// 移動距離分目的地へ移動する
+	pos += moveDir * moveDist;
+	Position(pos);
+
+	// 目的地には到着しなかった
+	return false;
+}
+
+
+// 待機状態時の更新処理
 void CEnemy::UpdateIdle()
 {
+	// プレイヤーが視野範囲外に入ったら、追跡にする
+	if (IsFoundPlayer())
+	{
+		ChangeState(EState::eChase);
+		return;
+	}
+
+	// 待機アニメーションを再生
+	ChangeAnimation(EAnimType::eIdle);
 }
 
-//巡回中の更新処理
+// 巡回中の更新処理
 void CEnemy::UpdatePatrol()
 {
 }
 
-//追跡時の更新処理
+// 追跡時の更新処理
 void CEnemy::UpdateChase()
 {
+	// プレイヤーが視野範囲外に出たら、見失った状態にする
+	if (!IsFoundPlayer())
+	{
+		ChangeState(EState::eLost);
+		return;
+	}
+
+	// 走るアニメーションを再生
+	ChangeAnimation(EAnimType::eRun);
+
+	// プレイヤーを追跡
+	CPlayer* player = CPlayer::Instance();
+	CVector playerPos = player->Position();
+	mLostPlayerPos = playerPos;	// プレイヤーを最後に見た座標を更新
+	if (MoveTo(playerPos, RUN_SPEED))
+	{
+	}
 }
 
-//プレイヤーを見失った時の更新処理
+// プレイヤーを見失った時の更新処理
 void CEnemy::UpdateLost()
 {
+	if (IsFoundPlayer())
+	{
+		ChangeAnimation(EAnimType::eRun);
+		return;
+	}
+
+
+	// 
+	ChangeAnimation(EAnimType::eRun);
+	// 
+	if (MoveTo(mLostPlayerPos, RUN_SPEED))
+	{
+		// 移動が終われば待機状態に
+	}
 }
 
-//攻撃時の更新処理
+// 攻撃時の更新処理
 void CEnemy::UpdateAttack()
 {
 }
 
-//状態の文字列を取得
+// 状態の文字列を取得
 std::string CEnemy::GetStateStr(EState state) const
 {
 	switch (state)
 	{
-
+	case EState::eIdle:		return "待機";
+	case EState::ePatrol:	return "巡回";
+	case EState::eChase:	return "追跡";
+	case EState::eLost:		return "見失う";
+	case EState::eAttack:	return "攻撃";
 	}
+	return "";
+	//return std::string();
+}
 
-	return std::string();
+// 状態の色を取得
+CColor CEnemy::GetStateColor(EState state) const
+{
+	switch (state)
+	{
+	case EState::eIdle:		return CColor::white;
+	case EState::ePatrol:	return CColor::green;
+	case EState::eChase:	return CColor::red;
+	case EState::eLost:		return CColor::yellow;
+	case EState::eAttack:	return CColor::magenta;
+	}
+	return CColor::white;
 }
