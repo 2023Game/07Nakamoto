@@ -18,7 +18,8 @@ enum class ETag
 	eSlash,	// 斬撃
 
 	eCamera,// カメラ
-	eDebug,
+
+	eDebug,	// デバッグ用のオブジェクト
 
 	Num
 };

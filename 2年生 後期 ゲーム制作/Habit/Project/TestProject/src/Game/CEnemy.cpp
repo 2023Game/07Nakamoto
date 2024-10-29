@@ -5,12 +5,18 @@
 #include "CDebugFieldOfView.h"
 #include "CPlayer.h"
 #include "Maths.h"
+#include "Primitive.h"
 
-#define FOV_ANGLE		45.0f		// 視野範囲の角度
-#define FOV_LENGTH		100.0f		// 視野範囲の距離
-#define WALK_SPEED		10.0f		// 歩くスピード
-#define RUN_SPEED		20.0f		// 走るスピード
-#define ROTATE_SPEED	6.0f
+#define FOV_ANGLE			45.0f	// 視野範囲の角度
+#define FOV_LENGTH			100.0f	// 視野範囲の距離
+#define WALK_SPEED			10.0f	// 歩いているときの速度
+#define RUN_SPEED			20.0f	// 走っていいるときの速度
+#define ROTATE_SPEED		6.0f	// 回転速度
+#define ATTACK_RANGE		20.0f	// 攻撃範囲
+#define ATTACK_MOVE_DIST	20.0f	// 攻撃時の移動距離
+#define ATTACK_MOVE_STAT	16.0f	// 攻撃時の移動開始フレーム
+#define ATTACK_MOVE_END		46.0f	// 攻撃時の移動終了フレーム
+#define ATTACK_WAIT_TIME	1.0f	// 攻撃終了時の待ち時間
 
 // プレイヤーのアニメーションデータのテーブル
 const CEnemy::AnimData CEnemy::ANIM_DATA[] =
@@ -30,8 +36,13 @@ CEnemy::CEnemy()
 	: CXCharacter(ETag::eEnemy, ETaskPriority::eDefault)
 	, mState(EState::eIdle)
 	, mStateStep(0)
-	, mElapsedTime(0.0f)
-	, mLostPlayerPos(0.0f, 0.0f, 0.0f)
+	, mFovAngle(FOV_ANGLE)
+	, mFovLength(FOV_LENGTH)
+	, mpDebugFov(nullptr)
+	, mLostPlayerPos(CVector::zero)
+	, mAttackStartPos(CVector::zero)
+	, mAttackEndPos(CVector::zero)
+	//, mNextPatrolIndex(-1)
 {
 	//モデルデータの取得
 	CModelX* model = CResourceManager::Get<CModelX>("Enemy");
@@ -51,7 +62,8 @@ CEnemy::CEnemy()
 	ChangeAnimation(EAnimType::eAttack);
 
 	// 視野範囲のデバッグ表示クラスを作成
-	
+	mpDebugFov = new CDebugFieldOfView(this, mFovAngle, mFovLength);
+
 }
 
 // デストラクタ
@@ -101,7 +113,7 @@ void CEnemy::Update()
 	CXCharacter::Update();
 
 	// 現在の状態に合わせて視野範囲の色を変更
-	mpDebugFov->
+	mpDebugFov->SetColor(GetStateColor(mState));
 
 	CDebugPrint::Print("状態 : %s\n", GetStateStr(mState).c_str());
 }
@@ -118,7 +130,7 @@ void CEnemy::Render()
 		float rad = 2.0f;
 		CMatrix m;
 		m.Translate(mLostPlayerPos + CVector(0.0f, rad, 0.0f));
-		
+		Primitive::DrawWireSphere(m, rad, CColor::blue);
 	}
 }
 
@@ -178,6 +190,23 @@ bool CEnemy::IsFoundPlayer() const
 
 
 	//全ての条件をクリアしたので、視野範囲内である
+	return true;
+}
+
+// プレイヤーを攻撃できるかどうか
+bool CEnemy::CanAttackPlayer() const
+{
+	// プレイヤーがいない場合は、攻撃できない
+	CPlayer* player = CPlayer::Instance();
+	if ((player == nullptr)) return false;
+
+	// プレイヤーまで
+	CVector playerPos = player->Position();
+	CVector vec = playerPos - Position();
+	vec.Y(0.0f);
+	float dist = vec.Length();
+	if (dist > ATTACK_RANGE) return false;
+
 	return true;
 }
 
@@ -252,10 +281,17 @@ void CEnemy::UpdateChase()
 		return;
 	}
 
+	// プレイヤーに攻撃できるならば、攻撃状態へ移行
+	if (CanAttackPlayer())
+	{
+		ChangeState(EState::eAttack);
+		return;
+	}
+
 	// 走るアニメーションを再生
 	ChangeAnimation(EAnimType::eRun);
 
-	// プレイヤーを追跡
+	// プレイヤーの座標へ向けて移動する
 	CPlayer* player = CPlayer::Instance();
 	CVector playerPos = player->Position();
 	mLostPlayerPos = playerPos;	// プレイヤーを最後に見た座標を更新
@@ -269,23 +305,57 @@ void CEnemy::UpdateLost()
 {
 	if (IsFoundPlayer())
 	{
-		ChangeAnimation(EAnimType::eRun);
+		ChangeState(EState::eChase);
 		return;
 	}
 
-
-	// 
+	// 走るアニメーションを再生
 	ChangeAnimation(EAnimType::eRun);
-	// 
+	// プレイヤーを見失った位置まで移動
 	if (MoveTo(mLostPlayerPos, RUN_SPEED))
 	{
-		// 移動が終われば待機状態に
+		// 移動が終われば待機状態へ移行
+		ChangeState(EState::eIdle);
 	}
 }
 
 // 攻撃時の更新処理
 void CEnemy::UpdateAttack()
 {
+	// ステップ後のにしょりうを切り替える
+	switch (mStateStep)
+	{
+		// ステップ0 : 攻撃アニメーションを再生
+		case 0:
+			ChangeAnimation(EAnimType::eAttack);
+			mStateStep++;
+			break;
+		// ステップ1 : 
+		case 1:
+		{
+			// 攻撃アニメーションが移動開始フレームを超えた
+			float frame = GetAnimationFrame();
+			if (frame >= ATTACK_MOVE_STAT)
+			{
+				// 線形補間で移動開始位置から移動終了位置まで移動する
+				float moveFrame = ATTACK_MOVE_END - ATTACK_MOVE_STAT;
+				float percent = (frame - ATTACK_MOVE_STAT) / moveFrame;
+				CVector pos = CVector::Lerp(mAttackStartPos, mAttackEndPos, percent);
+				Position(pos);
+			}
+			// 移動終了フレームまで到達した
+			else
+			{
+
+			}
+			break;
+		}
+		case 2:
+		// ステップ3 : 攻撃終了
+		case 3:
+	}
+
+	ChangeAnimation(EAnimType::eAttack);
 }
 
 // 状態の文字列を取得
@@ -300,7 +370,6 @@ std::string CEnemy::GetStateStr(EState state) const
 	case EState::eAttack:	return "攻撃";
 	}
 	return "";
-	//return std::string();
 }
 
 // 状態の色を取得

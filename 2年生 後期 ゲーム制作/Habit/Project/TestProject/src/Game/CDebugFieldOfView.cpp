@@ -4,7 +4,7 @@
 
 // コンストラクタ
 CDebugFieldOfView::CDebugFieldOfView(CObjectBase* owner, float fovAngle, float fovLength)
-	: CObjectBase(ETag::eDebug, ETaskPriority::eDebugFov)
+	: CObjectBase(ETag::eDebug, ETaskPriority::eDebugFov, 0, ETaskPauseType::eGame)
 	, mpOwner(owner)
 	, mFovAngle(fovAngle)
 	, mFovLength(fovLength)
@@ -23,11 +23,14 @@ CDebugFieldOfView::~CDebugFieldOfView()
 // 視野範囲を表示する対象を設定
 void CDebugFieldOfView::SetOwner(CObjectBase* owner)
 {
+	mpOwner = owner;
 }
 
 // 視野範囲を設定
 void CDebugFieldOfView::Set(float angle, float length)
 {
+	mFovAngle = angle;
+	mFovLength = length;
 }
 
 // 更新
@@ -44,14 +47,14 @@ void CDebugFieldOfView::Render()
 	// デプステストオフ
 	glDisable(GL_DEPTH_TEST);
 
-	// 視野範囲を半透明にする
+	// 視野範囲を強制的に半透明にする
 	mColor.A(0.5f);
 
 	// 視野範囲の扇形を描画
 	Primitive::DrawSector
 	(
 		mpOwner->Matrix(),		// 表示対象の行列
-		-mFovAngle, mFovAngle,	// -視野角度 ～ +視野角度の範囲を設定
+		-mFovAngle, mFovAngle, 	// -視野角度 ～ +視野角度の範囲を設定
 		mFovLength,				// 視野距離
 		mColor					// 扇形の色
 	);

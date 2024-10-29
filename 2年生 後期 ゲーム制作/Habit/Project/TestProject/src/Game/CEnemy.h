@@ -1,7 +1,7 @@
 #ifndef CENEMY_H
 #define CENEMY_H
 #include "CXCharacter.h"
-#include "CModel.h"
+#include "CCharaBase.h"
 #include "CCollider.h"
 #include "CModel.h"
 
@@ -70,6 +70,8 @@ private:
 
 	// プレイヤーが視野範囲内に入ったかどうか
 	bool IsFoundPlayer() const;
+	// プレイヤーを攻撃できるかどうか
+	bool CanAttackPlayer() const;
 
 	//指定した位置まで移動する
 	bool MoveTo(const CVector& targetPos, float speed);
@@ -96,8 +98,15 @@ private:
 
 	float mFovAngle;	// 視野範囲の角度
 	float mFovLength;	// 視野範囲の距離
-	CDebugFieldOfView* mpFebugFov;	// 視野範囲のデバッグ表示
+	CDebugFieldOfView* mpDebugFov;	// 視野範囲のデバッグ表示
 
 	CVector mLostPlayerPos;	// プレイヤーを見つけた位置まで
+
+	CVector mAttackStartPos;// 攻撃開始時の位置
+	CVector mAttackEndPos;	// 攻撃終了時の位置
+
+	// 巡回ポイントのリスト
+	//std::vector<CVector> mPatrolPoints;
+	//int mNextPatrolIndex;	// 次に巡回するポイント
 };
 #endif
