@@ -21,10 +21,8 @@ public:
 	~CEnemy();
 
 	void DeleteObject(CObjectBase* obj) override;
-
 	// 更新処理
 	void Update() override;
-	
 	// 描画処理
 	void Render() override;
 
@@ -71,7 +69,7 @@ private:
 	// プレイヤーが視野範囲内に入ったかどうか
 	bool IsFoundPlayer() const;
 	// プレイヤーを攻撃できるかどうか
-	bool CanAttackPlayer() const;
+	//bool CanAttackPlayer() const;
 
 	//指定した位置まで移動する
 	bool MoveTo(const CVector& targetPos, float speed);
@@ -102,8 +100,8 @@ private:
 
 	CVector mLostPlayerPos;	// プレイヤーを見つけた位置まで
 
-	CVector mAttackStartPos;// 攻撃開始時の位置
-	CVector mAttackEndPos;	// 攻撃終了時の位置
+	//CVector mAttackStartPos;// 攻撃開始時の位置
+	//CVector mAttackEndPos;	// 攻撃終了時の位置
 
 	// 巡回ポイントのリスト
 	//std::vector<CVector> mPatrolPoints;

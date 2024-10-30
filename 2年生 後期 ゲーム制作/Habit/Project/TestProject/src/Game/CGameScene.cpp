@@ -61,7 +61,7 @@ void CGameScene::Load()
 	pico->Position(70.0f, 1.0f, 10.0f);
 
 	CEnemy* enemy = new CEnemy();
-	enemy->Scale(15.0f, 15.0f, 15.0f);
+	enemy->Scale(1.0f, 1.0f, 1.0f);
 	enemy->Position(100.0f, 1.0, 10.0f);
 
 	// CGameCamera‚ÌƒeƒXƒg

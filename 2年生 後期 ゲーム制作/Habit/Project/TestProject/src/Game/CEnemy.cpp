@@ -13,6 +13,7 @@
 #define RUN_SPEED			20.0f	// 走っていいるときの速度
 #define ROTATE_SPEED		6.0f	// 回転速度
 #define ATTACK_RANGE		20.0f	// 攻撃範囲
+
 #define ATTACK_MOVE_DIST	20.0f	// 攻撃時の移動距離
 #define ATTACK_MOVE_STAT	16.0f	// 攻撃時の移動開始フレーム
 #define ATTACK_MOVE_END		46.0f	// 攻撃時の移動終了フレーム
@@ -39,9 +40,9 @@ CEnemy::CEnemy()
 	, mFovAngle(FOV_ANGLE)
 	, mFovLength(FOV_LENGTH)
 	, mpDebugFov(nullptr)
-	, mLostPlayerPos(CVector::zero)
-	, mAttackStartPos(CVector::zero)
-	, mAttackEndPos(CVector::zero)
+	//, mLostPlayerPos(CVector::zero)
+	//, mAttackStartPos(CVector::zero)
+	//, mAttackEndPos(CVector::zero)
 	//, mNextPatrolIndex(-1)
 {
 	//モデルデータの取得
@@ -59,7 +60,7 @@ CEnemy::CEnemy()
 	Init(model);
 
 	// 最初は待機アニメーションを再生
-	ChangeAnimation(EAnimType::eAttack);
+	ChangeAnimation(EAnimType::eIdle);
 
 	// 視野範囲のデバッグ表示クラスを作成
 	mpDebugFov = new CDebugFieldOfView(this, mFovAngle, mFovLength);
@@ -194,23 +195,23 @@ bool CEnemy::IsFoundPlayer() const
 }
 
 // プレイヤーを攻撃できるかどうか
-bool CEnemy::CanAttackPlayer() const
-{
-	// プレイヤーがいない場合は、攻撃できない
-	CPlayer* player = CPlayer::Instance();
-	if ((player == nullptr)) return false;
+//bool CEnemy::CanAttackPlayer() const
+//{
+//	// プレイヤーがいない場合は、攻撃できない
+//	CPlayer* player = CPlayer::Instance();
+//	if ((player == nullptr)) return false;
+//
+//	// プレイヤーまで
+//	CVector playerPos = player->Position();
+//	CVector vec = playerPos - Position();
+//	vec.Y(0.0f);
+//	float dist = vec.Length();
+//	if (dist > ATTACK_RANGE) return false;
+//
+//	return true;
+//}
 
-	// プレイヤーまで
-	CVector playerPos = player->Position();
-	CVector vec = playerPos - Position();
-	vec.Y(0.0f);
-	float dist = vec.Length();
-	if (dist > ATTACK_RANGE) return false;
-
-	return true;
-}
-
-//指定した位置まで移動する
+////指定した位置まで移動する
 bool CEnemy::MoveTo(const CVector& targetPos, float speed)
 {
 	// 目的地までのベクトルを求める
@@ -221,13 +222,13 @@ bool CEnemy::MoveTo(const CVector& targetPos, float speed)
 	CVector moveDir = vec.Normalized();
 
 	// 徐々に移動方向へ移動
-	CVector forwrd = CVector::Slerp
+	CVector forward = CVector::Slerp
 	(
 		VectorZ(),	// 現在の正面方向
 		moveDir,	// 移動方向
 		ROTATE_SPEED * Times::DeltaTime()
 	);
-	Rotation(CQuaternion::LookRotation(moveDir));
+	Rotation(CQuaternion::LookRotation(forward));
 
 	// 今回の移動距離を求める
 	float moveDist = speed * Times::DeltaTime();
@@ -281,12 +282,12 @@ void CEnemy::UpdateChase()
 		return;
 	}
 
-	// プレイヤーに攻撃できるならば、攻撃状態へ移行
-	if (CanAttackPlayer())
-	{
-		ChangeState(EState::eAttack);
-		return;
-	}
+//	// プレイヤーに攻撃できるならば、攻撃状態へ移行
+//	if (CanAttackPlayer())
+//	{
+//		ChangeState(EState::eAttack);
+//		return;
+//	}
 
 	// 走るアニメーションを再生
 	ChangeAnimation(EAnimType::eRun);
@@ -322,40 +323,42 @@ void CEnemy::UpdateLost()
 // 攻撃時の更新処理
 void CEnemy::UpdateAttack()
 {
-	// ステップ後のにしょりうを切り替える
-	switch (mStateStep)
-	{
-		// ステップ0 : 攻撃アニメーションを再生
-		case 0:
-			ChangeAnimation(EAnimType::eAttack);
-			mStateStep++;
-			break;
-		// ステップ1 : 
-		case 1:
-		{
-			// 攻撃アニメーションが移動開始フレームを超えた
-			float frame = GetAnimationFrame();
-			if (frame >= ATTACK_MOVE_STAT)
-			{
-				// 線形補間で移動開始位置から移動終了位置まで移動する
-				float moveFrame = ATTACK_MOVE_END - ATTACK_MOVE_STAT;
-				float percent = (frame - ATTACK_MOVE_STAT) / moveFrame;
-				CVector pos = CVector::Lerp(mAttackStartPos, mAttackEndPos, percent);
-				Position(pos);
-			}
-			// 移動終了フレームまで到達した
-			else
-			{
+	//// ステップ後のにしょりうを切り替える
+	//switch (mStateStep)
+	//{
+	//	// ステップ0 : 攻撃アニメーションを再生
+	//	case 0:
+	//		ChangeAnimation(EAnimType::eAttack);
+	//		mStateStep++;
+	//		break;
+	//	// ステップ1 : 
+	//	case 1:
+	//	{
+	//		// 攻撃アニメーションが移動開始フレームを超えた
+	//		float frame = GetAnimationFrame();
+	//		if (frame >= ATTACK_MOVE_STAT)
+	//		{
+	//			// 線形補間で移動開始位置から移動終了位置まで移動する
+	//			float moveFrame = ATTACK_MOVE_END - ATTACK_MOVE_STAT;
+	//			float percent = (frame - ATTACK_MOVE_STAT) / moveFrame;
+	//			CVector pos = CVector::Lerp(mAttackStartPos, mAttackEndPos, percent);
+	//			Position(pos);
+	//		}
+	//		// 移動終了フレームまで到達した
+	//		else
+	//		{
 
-			}
-			break;
-		}
-		case 2:
-		// ステップ3 : 攻撃終了
-		case 3:
-	}
+	//		}
+	//		break;
+	//	}
+	//	case 2:
+	//		break;
+	//	// ステップ3 : 攻撃終了
+	//	case 3:
+	//		break;
+	//}
 
-	ChangeAnimation(EAnimType::eAttack);
+	//ChangeAnimation(EAnimType::eAttack);
 }
 
 // 状態の文字列を取得
