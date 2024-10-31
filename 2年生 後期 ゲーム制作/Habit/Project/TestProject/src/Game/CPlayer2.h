@@ -1,6 +1,7 @@
 #ifndef CPLAYER_H
 #define CPLAYER_H
 #include "CXCharacter.h"
+#include "CColliderLine.h"
 
 /*
 プレイヤークラス
@@ -9,6 +10,9 @@
 class CPlayer2 : public CXCharacter
 {
 public:
+	// インスタンスのポインタの取得
+	static CPlayer2* Instance();
+
 	//コンストラクタ
 	CPlayer2();
 	//デストラクタ

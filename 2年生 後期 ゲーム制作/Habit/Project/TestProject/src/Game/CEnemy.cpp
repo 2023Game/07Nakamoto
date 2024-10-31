@@ -12,12 +12,14 @@
 #define WALK_SPEED			10.0f	// 歩いているときの速度
 #define RUN_SPEED			20.0f	// 走っていいるときの速度
 #define ROTATE_SPEED		6.0f	// 回転速度
-#define ATTACK_RANGE		20.0f	// 攻撃範囲
 
+#define ATTACK_RANGE		20.0f	// 攻撃範囲
 #define ATTACK_MOVE_DIST	20.0f	// 攻撃時の移動距離
 #define ATTACK_MOVE_STAT	16.0f	// 攻撃時の移動開始フレーム
-#define ATTACK_MOVE_END		46.0f	// 攻撃時の移動終了フレーム
+#define ATTACK_MOVE_END		47.0f	// 攻撃時の移動終了フレーム
 #define ATTACK_WAIT_TIME	1.0f	// 攻撃終了時の待ち時間
+#define PATROL_INTERVAL		3.0f	// 次の巡回ポイントに移動開始するまでの時間
+#define IDLE_TIME			5.0f	// 待機状態の時間
 
 // プレイヤーのアニメーションデータのテーブル
 const CEnemy::AnimData CEnemy::ANIM_DATA[] =
@@ -33,17 +35,17 @@ const CEnemy::AnimData CEnemy::ANIM_DATA[] =
 };
 
 // コンストラクタ
-CEnemy::CEnemy()
+CEnemy::CEnemy(std::vector<CVector> patrolPoints)
 	: CXCharacter(ETag::eEnemy, ETaskPriority::eDefault)
 	, mState(EState::eIdle)
 	, mStateStep(0)
 	, mFovAngle(FOV_ANGLE)
 	, mFovLength(FOV_LENGTH)
 	, mpDebugFov(nullptr)
-	//, mLostPlayerPos(CVector::zero)
-	//, mAttackStartPos(CVector::zero)
-	//, mAttackEndPos(CVector::zero)
-	//, mNextPatrolIndex(-1)
+	, mLostPlayerPos(CVector::zero)
+	, mAttackStartPos(CVector::zero)
+	, mAttackEndPos(CVector::zero)
+	, mNextPatrolIndex(-1)
 {
 	//モデルデータの取得
 	CModelX* model = CResourceManager::Get<CModelX>("Enemy");
@@ -195,23 +197,25 @@ bool CEnemy::IsFoundPlayer() const
 }
 
 // プレイヤーを攻撃できるかどうか
-//bool CEnemy::CanAttackPlayer() const
-//{
-//	// プレイヤーがいない場合は、攻撃できない
-//	CPlayer* player = CPlayer::Instance();
-//	if ((player == nullptr)) return false;
-//
-//	// プレイヤーまで
-//	CVector playerPos = player->Position();
-//	CVector vec = playerPos - Position();
-//	vec.Y(0.0f);
-//	float dist = vec.Length();
-//	if (dist > ATTACK_RANGE) return false;
-//
-//	return true;
-//}
+bool CEnemy::CanAttackPlayer() const
+{
+	// プレイヤーがいない場合は、攻撃できない
+	CPlayer* player = CPlayer::Instance();
+	if ((player == nullptr)) return false;
 
-////指定した位置まで移動する
+	// プレイヤーまでの距離が攻撃範囲外であれば、攻撃できない
+	CVector playerPos = player->Position();
+	CVector vec = playerPos - Position();
+	vec.Y(0.0f);	//高さを考慮しない
+
+	float dist = vec.Length();
+	if (dist > ATTACK_RANGE) return false;
+
+	// すべての条件をクリアしたので、攻撃できる
+	return true;
+}
+
+//指定した位置まで移動する
 bool CEnemy::MoveTo(const CVector& targetPos, float speed)
 {
 	// 目的地までのベクトルを求める
@@ -252,6 +256,44 @@ bool CEnemy::MoveTo(const CVector& targetPos, float speed)
 	return false;
 }
 
+// 次に巡回するポイントを変更する
+void CEnemy::ChangePatrolPoint()
+{
+	// 巡回ポイントが設定されていない場合は処理しない
+	int size = mPatrolPoints.size();
+	if (size == 0) return;
+
+	// 巡回会指示であれば、一番近い巡回ポイントを選択
+	if (mNextPatrolIndex == -1)
+	{
+		int nearIndex = -1;		// 一番近い巡回ポイントの番号
+		float nearDist = 0.0f;	// 一番近い巡回ポイントまでの距離
+		// 全ての巡回ポイントの距離を調べ、一番近い巡回ポイントを探す
+		for (int i = 0; i < size; i++)
+		{
+			CVector point = mPatrolPoints[i];
+			CVector vec = point - Position();
+			vec.Y(0.0f);
+			float dist = vec.Length();
+			// 一番最初の巡回ポイントもしくは、
+			// 現在一番近い巡回ポイントよりさらに近い場合は、
+			// 巡回ポイントの番号を置き換える
+			if (nearIndex < 0 || dist < nearDist)
+			{
+				nearIndex = i;
+				nearDist = dist;
+			}
+		}
+		mNextPatrolIndex = nearIndex;
+	}
+	// 巡回中だった場合、次の巡回ポイントを指定する
+	else
+	{
+		mNextPatrolIndex++;
+		if (mNextPatrolIndex >= size) mNextPatrolIndex -= size;
+	}
+}
+
 
 // 待機状態時の更新処理
 void CEnemy::UpdateIdle()
@@ -265,11 +307,52 @@ void CEnemy::UpdateIdle()
 
 	// 待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
+
+	if (mElapsedTime < IDLE_TIME)
+	{
+		mElapsedTime += Times::DeltaTime();
+	}
+	else
+	{
+		// 待機時間が経過したら、巡回状態へ移行
+		ChangeState(EState::ePatrol);
+	}
 }
 
 // 巡回中の更新処理
 void CEnemy::UpdatePatrol()
 {
+	if (IsFoundPlayer())
+	{
+		ChangeState(EState::eChase);
+		return;
+	}
+
+	ChangeAnimation(EAnimType::eWalk);
+
+	// ステップごとに処理を切り替える
+	switch (mStateStep)
+	{
+	// ステップ0 : 巡回会指示の巡回ポイントを求める
+	case 0:
+		mNextPatrolIndex = -1;
+		ChangePatrolPoint();
+		mStateStep++;
+		break;
+	// ステップ2 : 移動後の待機
+	case 2:
+		if (mElapsedTime < PATROL_INTERVAL)
+		{
+			mElapsedTime += Times::DeltaTime();
+		}
+		else
+		{
+			ChangePatrolPoint();
+			mStateStep = 1;
+			mElapsedTime = 0.0f;
+		}
+		break;
+	}
 }
 
 // 追跡時の更新処理
@@ -282,12 +365,12 @@ void CEnemy::UpdateChase()
 		return;
 	}
 
-//	// プレイヤーに攻撃できるならば、攻撃状態へ移行
-//	if (CanAttackPlayer())
-//	{
-//		ChangeState(EState::eAttack);
-//		return;
-//	}
+	// プレイヤーに攻撃できるならば、攻撃状態へ移行
+	if (CanAttackPlayer())
+	{
+		ChangeState(EState::eAttack);
+		return;
+	}
 
 	// 走るアニメーションを再生
 	ChangeAnimation(EAnimType::eRun);
@@ -323,42 +406,63 @@ void CEnemy::UpdateLost()
 // 攻撃時の更新処理
 void CEnemy::UpdateAttack()
 {
-	//// ステップ後のにしょりうを切り替える
-	//switch (mStateStep)
-	//{
-	//	// ステップ0 : 攻撃アニメーションを再生
-	//	case 0:
-	//		ChangeAnimation(EAnimType::eAttack);
-	//		mStateStep++;
-	//		break;
-	//	// ステップ1 : 
-	//	case 1:
-	//	{
-	//		// 攻撃アニメーションが移動開始フレームを超えた
-	//		float frame = GetAnimationFrame();
-	//		if (frame >= ATTACK_MOVE_STAT)
-	//		{
-	//			// 線形補間で移動開始位置から移動終了位置まで移動する
-	//			float moveFrame = ATTACK_MOVE_END - ATTACK_MOVE_STAT;
-	//			float percent = (frame - ATTACK_MOVE_STAT) / moveFrame;
-	//			CVector pos = CVector::Lerp(mAttackStartPos, mAttackEndPos, percent);
-	//			Position(pos);
-	//		}
-	//		// 移動終了フレームまで到達した
-	//		else
-	//		{
+	// ステップ後のにしょりうを切り替える
+	switch (mStateStep)
+	{
+		// ステップ0 : 攻撃アニメーションを再生
+		case 0:
+			// 攻撃開始位置と攻撃終了位置を設定
+			mAttackStartPos = Position();
+			mAttackEndPos = mAttackStartPos + VectorZ() * ATTACK_MOVE_DIST;
 
-	//		}
-	//		break;
-	//	}
-	//	case 2:
-	//		break;
-	//	// ステップ3 : 攻撃終了
-	//	case 3:
-	//		break;
-	//}
-
-	//ChangeAnimation(EAnimType::eAttack);
+			ChangeAnimation(EAnimType::eAttack);
+			mStateStep++;
+			break;
+		// ステップ1 : 攻撃時の移動処理
+		case 1:
+		{
+			// 攻撃アニメーションが移動開始フレームを超えた
+			float frame = GetAnimationFrame();
+			if (frame >= ATTACK_MOVE_STAT)
+			{
+				//移動終了フレームまで到達していない
+				if (frame < ATTACK_MOVE_END)
+				{
+					// 線形補間で移動開始位置から移動終了位置まで移動する
+					float moveFrame = ATTACK_MOVE_END - ATTACK_MOVE_STAT;
+					float percent = (frame - ATTACK_MOVE_STAT) / moveFrame;
+					CVector pos = CVector::Lerp(mAttackStartPos, mAttackEndPos, percent);
+					Position(pos);
+				}
+				// 移動終了フレームまで到達した
+				else
+				{
+					Position(mAttackEndPos);
+					mStateStep++;
+				}
+			}
+			break;
+		}
+		// ステップ2 : 攻撃アニメーションの終了待ち
+		case 2:
+			if (IsAnimationFinished())
+			{
+				mStateStep++;
+			}
+			break;
+		// ステップ3 : 攻撃終了後の待ち時間
+		case 3:
+			if (mElapsedTime < ATTACK_WAIT_TIME)
+			{
+				mElapsedTime += Times::DeltaTime();
+			}
+			else
+			{
+				// 時間が経過したら、待機状態へ移行
+				ChangeState(EState::eIdle);
+			}
+			break;
+	}
 }
 
 // 状態の文字列を取得

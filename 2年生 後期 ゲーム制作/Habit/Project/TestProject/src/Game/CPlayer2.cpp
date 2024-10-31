@@ -1,6 +1,8 @@
 #include "CPlayer2.h"
-#include "CEffect.h"
-#include "CCollisionManager.h"
+#include "CInput.h"
+
+// プレイヤーのインスタンス
+CPlayer2* CPlayer2::spInstatnce = nullptr;
 
 // プレイヤーのアニメーションデータのテーブル
 const CPlayer2::AnimData CPlayer2::ANIM_DATA[] =
@@ -17,11 +19,21 @@ const CPlayer2::AnimData CPlayer2::ANIM_DATA[] =
 	
 };
 
+#define PLAYER_HEIGHT	16.0f	//
+#define MOVE_SPEED		10.0f	// 歩く速度
+#define RUN_SPEED		20.0f	// 走る速度
+
 // コンストラクタ
 CPlayer2::CPlayer2()
 	: CXCharacter(ETag::ePlayer, ETaskPriority::ePlayer)
+	, mState(EState::eIdle)
+	, mMoveSpeedY(0.0f)
+	, mIsGrounded(false)
 
 {
+	// インスタンスの設定
+	spInstatnce = this;
+
 	//モデルデータの取得
 	CModelX* model = CResourceManager::Get<CModelX>("Player2");
 
@@ -37,12 +49,33 @@ CPlayer2::CPlayer2()
 	Init(model);
 
 	// 最初は待機アニメーションを再生
-	ChangeAnimation(EAnimType::eSneak);
+	ChangeAnimation(EAnimType::eTPose);
+
+	mpColliderLine = new CColliderLine
+	(
+		this, ELayer::eField,
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(0.0f, PLAYER_HEIGHT, 0.0f)
+	);
+	mpColliderLine->SetCollisionLayers({ ELayer::eField });
 }
 
 CPlayer2::~CPlayer2()
 {
+	if (mpColliderLine != nullptr)
+	{
+		delete mpColliderLine;
+		mpColliderLine = nullptr;
+	}
+
+	spInstatnce = nullptr;
 }
+
+CPlayer2* CPlayer2::Instance()
+{
+	return spInstatnce;
+}
+
 
 //更新処理
 void CPlayer2::Update()

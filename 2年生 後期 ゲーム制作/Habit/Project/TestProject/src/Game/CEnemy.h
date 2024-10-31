@@ -16,7 +16,7 @@ class CEnemy : public CXCharacter
 {
 public:
 	// コンストラクタ
-	CEnemy();
+	CEnemy(std::vector<CVector> patrolPoints);
 	// デストラクタ
 	~CEnemy();
 
@@ -69,10 +69,13 @@ private:
 	// プレイヤーが視野範囲内に入ったかどうか
 	bool IsFoundPlayer() const;
 	// プレイヤーを攻撃できるかどうか
-	//bool CanAttackPlayer() const;
+	bool CanAttackPlayer() const;
 
-	//指定した位置まで移動する
+	// 指定した位置まで移動する
 	bool MoveTo(const CVector& targetPos, float speed);
+
+	// 次に巡回するポイントを変更する
+	void ChangePatrolPoint();
 
 	// 待機状態時の更新処理
 	void UpdateIdle();
@@ -100,11 +103,11 @@ private:
 
 	CVector mLostPlayerPos;	// プレイヤーを見つけた位置まで
 
-	//CVector mAttackStartPos;// 攻撃開始時の位置
-	//CVector mAttackEndPos;	// 攻撃終了時の位置
+	CVector mAttackStartPos;// 攻撃開始時の位置
+	CVector mAttackEndPos;	// 攻撃終了時の位置
 
 	// 巡回ポイントのリスト
-	//std::vector<CVector> mPatrolPoints;
-	//int mNextPatrolIndex;	// 次に巡回するポイント
+	std::vector<CVector> mPatrolPoints;
+	int mNextPatrolIndex;	// 次に巡回するポイント
 };
 #endif
