@@ -108,6 +108,6 @@ private:
 
 	// 巡回ポイントのリスト
 	std::vector<CVector> mPatrolPoints;
-	int mNextPatrolIndex;	// 次に巡回するポイント
+	int mNextPatrolIndex;	// 次に巡回する番号
 };
 #endif

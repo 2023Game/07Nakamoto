@@ -19,7 +19,7 @@ const CPlayer2::AnimData CPlayer2::ANIM_DATA[] =
 	
 };
 
-#define PLAYER_HEIGHT	16.0f	//
+#define PLAYER_HEIGHT	16.0f	
 #define MOVE_SPEED		10.0f	// 歩く速度
 #define RUN_SPEED		20.0f	// 走る速度
 
@@ -29,12 +29,12 @@ CPlayer2::CPlayer2()
 	, mState(EState::eIdle)
 	, mMoveSpeedY(0.0f)
 	, mIsGrounded(false)
-
+	, mpRideObject(nullptr)
 {
 	// インスタンスの設定
 	spInstatnce = this;
 
-	//モデルデータの取得
+	// モデルデータの取得
 	CModelX* model = CResourceManager::Get<CModelX>("Player2");
 
 	// テーブル内のアニメーションデータを読み込み
@@ -49,7 +49,7 @@ CPlayer2::CPlayer2()
 	Init(model);
 
 	// 最初は待機アニメーションを再生
-	ChangeAnimation(EAnimType::eTPose);
+	ChangeAnimation(EAnimType::eIdle);
 
 	mpColliderLine = new CColliderLine
 	(
@@ -60,6 +60,7 @@ CPlayer2::CPlayer2()
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
 }
 
+// デストラクタ
 CPlayer2::~CPlayer2()
 {
 	if (mpColliderLine != nullptr)
@@ -71,20 +72,28 @@ CPlayer2::~CPlayer2()
 	spInstatnce = nullptr;
 }
 
+// インスタンスのポインタの取得
 CPlayer2* CPlayer2::Instance()
 {
 	return spInstatnce;
 }
 
-
-//更新処理
+// 更新処理
 void CPlayer2::Update()
 {
-	CXCharacter::Update();
-}
+	SetParent(mpRideObject);
+	mpRideObject = nullptr;
 
-void CPlayer2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
-{
+	// 状態に合わせて、変更処理を切り替える
+	switch (mState)
+	{
+	case EState::eIdle:
+		break;
+	
+	}
+
+	// キャラクターの更新
+	CXCharacter::Update();
 }
 
 CVector CPlayer2::CalcMoveVec() const
@@ -104,13 +113,19 @@ void CPlayer2::UpdateMove()
 {
 }
 
-//描画処理
+// 衝突判定
+void CPlayer2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
+{
+}
+
+
+// 描画処理
 void CPlayer2::Render()
 {
 	CXCharacter::Render();
 }
 
-//アニメーションの切り替え
+// アニメーションの切り替え
 void CPlayer2::ChangeAnimation(EAnimType type)
 {
 	int index = (int)type;

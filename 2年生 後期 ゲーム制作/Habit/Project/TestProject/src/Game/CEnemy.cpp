@@ -27,9 +27,9 @@ const CEnemy::AnimData CEnemy::ANIM_DATA[] =
 	{ "",														true,	122.0f	},	// 待機
 	{ "Character\\Enemy\\mutant\\anim\\mutant_walk.x",			true,	44.0f	},	// 歩行
 	{ "Character\\Enemy\\mutant\\anim\\mutant_run.x",			true,	27.0f	},	// 走行
-	{ "Character\\Enemy\\mutant\\anim\\mutant_jump.x",			true,	96.0f	},	// ジャンプ
-	{ "Character\\Enemy\\mutant\\anim\\mutant_jump_attack.x",	true,	112.0f	},	// ジャンプ攻撃
-	{ "Character\\Enemy\\mutant\\anim\\mutant_attack.x",		true,	81.0f	},	// 攻撃
+	{ "Character\\Enemy\\mutant\\anim\\mutant_jump.x",			false,	96.0f	},	// ジャンプ
+	{ "Character\\Enemy\\mutant\\anim\\mutant_jump_attack.x",	false,	112.0f	},	// ジャンプ攻撃
+	{ "Character\\Enemy\\mutant\\anim\\mutant_attack.x",		false,	81.0f	},	// 攻撃
 
 
 };
@@ -39,13 +39,15 @@ CEnemy::CEnemy(std::vector<CVector> patrolPoints)
 	: CXCharacter(ETag::eEnemy, ETaskPriority::eDefault)
 	, mState(EState::eIdle)
 	, mStateStep(0)
+	, mElapsedTime(0.0f)
 	, mFovAngle(FOV_ANGLE)
 	, mFovLength(FOV_LENGTH)
 	, mpDebugFov(nullptr)
 	, mLostPlayerPos(CVector::zero)
 	, mAttackStartPos(CVector::zero)
 	, mAttackEndPos(CVector::zero)
-	, mNextPatrolIndex(-1)
+	, mPatrolPoints(patrolPoints)
+	, mNextPatrolIndex(-1)	// -1の時に一番近いポイントに移動
 {
 	//モデルデータの取得
 	CModelX* model = CResourceManager::Get<CModelX>("Enemy");
@@ -126,6 +128,18 @@ void CEnemy::Render()
 {
 	CXCharacter::Render();
 
+	// 巡回中であれば、
+	//if (mState == EState::ePatrol)
+	//{
+	//	float rad = 1.0f;
+	//	int size = mPatrolPoints.size();
+	//	for (int i = 0; i < size; i++)
+	//	{
+	//		CMatrix m;
+	//		m.Translate(mPatrolPoints[i] + CVector(0.0f, rad * 2.0f, 0.0f));
+	//		//CColor c = i == mNextPatrolIndex ? CColor::red;
+	//	}
+	//}
 	// 見失った状態であれば、
 	if (mState == EState::eLost)
 	{
@@ -263,7 +277,7 @@ void CEnemy::ChangePatrolPoint()
 	int size = mPatrolPoints.size();
 	if (size == 0) return;
 
-	// 巡回会指示であれば、一番近い巡回ポイントを選択
+	// 巡回開始時であれば、一番近い巡回ポイントを選択
 	if (mNextPatrolIndex == -1)
 	{
 		int nearIndex = -1;		// 一番近い巡回ポイントの番号
@@ -338,6 +352,13 @@ void CEnemy::UpdatePatrol()
 		mNextPatrolIndex = -1;
 		ChangePatrolPoint();
 		mStateStep++;
+		break;
+	// ステップ1 : 巡回ポイントまで移動
+	case 1:
+		if (MoveTo(mPatrolPoints[mNextPatrolIndex], WALK_SPEED))
+		{
+			mStateStep++;
+		}
 		break;
 	// ステップ2 : 移動後の待機
 	case 2:
@@ -415,7 +436,7 @@ void CEnemy::UpdateAttack()
 			mAttackStartPos = Position();
 			mAttackEndPos = mAttackStartPos + VectorZ() * ATTACK_MOVE_DIST;
 
-			ChangeAnimation(EAnimType::eAttack);
+			ChangeAnimation(EAnimType::eJumpAttack);
 			mStateStep++;
 			break;
 		// ステップ1 : 攻撃時の移動処理

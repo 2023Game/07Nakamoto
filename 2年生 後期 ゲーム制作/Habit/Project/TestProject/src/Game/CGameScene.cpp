@@ -54,22 +54,23 @@ void CGameScene::Load()
 
 	CPlayer* player = new CPlayer();
 	player->Scale(1.0f, 1.0f, 1.0f);
-	player->Position(10.0f, 1.0f, 10.0f);
+	player->Position(-50.0f, 1.0f, 0.0f);
 
-	/*CPlayer2* pico = new CPlayer2();
+	CPlayer2* pico = new CPlayer2();
 	pico->Scale(1.0f, 1.0f, 1.0f);
-	pico->Position(70.0f, 1.0f, 10.0f);*/
+	pico->Position(70.0f, 1.0f, 10.0f);
 
 	CEnemy* enemy = new CEnemy
 	(
 		{
+			CVector(200.0f, 1.0,   0.0f),
 			CVector(100.0f, 1.0,   0.0f),
-			CVector(  0.0f, 1.0,   0.0f),
-			CVector(  0.0f, 1.0, 100.0f),
 			CVector(100.0f, 1.0, 100.0f),
+			CVector(200.0f, 1.0, 100.0f),
 		}
 	);
 	enemy->Scale(1.0f, 1.0f, 1.0f);
+	enemy->Position(CVector(200.0f, 1.0, 0.0f));
 	
 	// CGameCamera‚ÌƒeƒXƒg
 	//CGameCamera* mainCamera = new CGameCamera
