@@ -19,6 +19,7 @@
 #define ATTACK_MOVE_END		47.0f	// 攻撃時の移動終了フレーム
 #define ATTACK_WAIT_TIME	1.0f	// 攻撃終了時の待ち時間
 #define PATROL_INTERVAL		3.0f	// 次の巡回ポイントに移動開始するまでの時間
+#define PATROL_NEAR_DIST	10.0f	// 巡回開始時に選択される巡回ポイントの最短距離
 #define IDLE_TIME			5.0f	// 待機状態の時間
 
 // プレイヤーのアニメーションデータのテーブル
@@ -129,17 +130,18 @@ void CEnemy::Render()
 	CXCharacter::Render();
 
 	// 巡回中であれば、
-	//if (mState == EState::ePatrol)
-	//{
-	//	float rad = 1.0f;
-	//	int size = mPatrolPoints.size();
-	//	for (int i = 0; i < size; i++)
-	//	{
-	//		CMatrix m;
-	//		m.Translate(mPatrolPoints[i] + CVector(0.0f, rad * 2.0f, 0.0f));
-	//		//CColor c = i == mNextPatrolIndex ? CColor::red;
-	//	}
-	//}
+	if (mState == EState::ePatrol)
+	{
+		float rad = 1.0f;
+		int size = mPatrolPoints.size();
+		for (int i = 0; i < size; i++)
+		{
+			CMatrix m;
+			m.Translate(mPatrolPoints[i] + CVector(0.0f, rad * 2.0f, 0.0f));
+			CColor c = i == mNextPatrolIndex ? CColor::red : CColor::cyan;
+			Primitive::DrawWireSphere(m, rad, c);
+		}
+	}
 	// 見失った状態であれば、
 	if (mState == EState::eLost)
 	{
@@ -289,6 +291,8 @@ void CEnemy::ChangePatrolPoint()
 			CVector vec = point - Position();
 			vec.Y(0.0f);
 			float dist = vec.Length();
+			// 巡回ポイントが近すぎる場合は、スルー
+			if (dist < PATROL_NEAR_DIST) continue;
 			// 一番最初の巡回ポイントもしくは、
 			// 現在一番近い巡回ポイントよりさらに近い場合は、
 			// 巡回ポイントの番号を置き換える
@@ -355,6 +359,7 @@ void CEnemy::UpdatePatrol()
 		break;
 	// ステップ1 : 巡回ポイントまで移動
 	case 1:
+		ChangeAnimation(EAnimType::eWalk);
 		if (MoveTo(mPatrolPoints[mNextPatrolIndex], WALK_SPEED))
 		{
 			mStateStep++;
@@ -362,6 +367,7 @@ void CEnemy::UpdatePatrol()
 		break;
 	// ステップ2 : 移動後の待機
 	case 2:
+		ChangeAnimation(EAnimType::eIdle);
 		if (mElapsedTime < PATROL_INTERVAL)
 		{
 			mElapsedTime += Times::DeltaTime();
