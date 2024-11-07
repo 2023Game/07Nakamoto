@@ -7,6 +7,8 @@
 #include "Maths.h"
 #include "Primitive.h"
 
+#define ENEMY_HEIGHT		16.0f	// 敵のの高さ
+#define ENEMY_WIDTH			10.0f	// 敵のの幅
 #define FOV_ANGLE			45.0f	// 視野範囲の角度
 #define FOV_LENGTH			100.0f	// 視野範囲の距離
 #define WALK_SPEED			10.0f	// 歩いているときの速度
@@ -67,6 +69,36 @@ CEnemy::CEnemy(std::vector<CVector> patrolPoints)
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
 
+	// 縦方向のコライダー生成
+	mpColliderLine = new CColliderLine
+	(
+		this, ELayer::ePlayer,
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(0.0f, ENEMY_HEIGHT, 0.0f)
+	);
+	mpColliderLine->SetCollisionLayers({ ELayer::eField });
+
+	float width = ENEMY_WIDTH * 0.5f;
+	float posY = ENEMY_HEIGHT * 0.5f;
+
+	// 横方向（X軸）のコライダー生成
+	mpColliderLineX = new CColliderLine
+	(
+		this, ELayer::ePlayer,
+		CVector(-width, posY, 0.0f),
+		CVector(width, posY, 0.0f)
+	);
+	mpColliderLineX->SetCollisionLayers({ ELayer::eField });
+
+	// 縦方向（Z軸）のコライダー生成
+	mpColliderLineZ = new CColliderLine
+	(
+		this, ELayer::ePlayer,
+		CVector(0.0f, posY, -width),
+		CVector(0.0f, posY, width)
+	);
+	mpColliderLineZ->SetCollisionLayers({ ELayer::eField });
+
 	// 視野範囲のデバッグ表示クラスを作成
 	mpDebugFov = new CDebugFieldOfView(this, mFovAngle, mFovLength);
 
@@ -75,6 +107,11 @@ CEnemy::CEnemy(std::vector<CVector> patrolPoints)
 // デストラクタ
 CEnemy::~CEnemy()
 {
+	// コライダーを破棄
+	SAFE_DELETE(mpColliderLine);
+	SAFE_DELETE(mpColliderLineX);
+	SAFE_DELETE(mpColliderLineZ);
+
 	// 視野範囲のデバッグ表示が存在したら、一緒に削除する
 	if (mpDebugFov != nullptr)
 	{
@@ -150,6 +187,38 @@ void CEnemy::Render()
 		CMatrix m;
 		m.Translate(mLostPlayerPos + CVector(0.0f, rad, 0.0f));
 		Primitive::DrawWireSphere(m, rad, CColor::blue);
+	}
+}
+
+// 衝突処理
+void CEnemy::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
+{
+	// 縦方向の衝突処理
+	if (self == mpColliderLine)
+	{
+		if (other->Layer() == ELayer::eField)
+		{
+			// 坂道で滑らないように、押し戻しベクトルのXとZの値を0にする
+			CVector adjust = hit.adjust;
+			adjust.X(0.0f);
+			adjust.Z(0.0f);
+
+			Position(Position() + adjust * hit.weight);
+
+			
+		}
+	}
+	// 横方向（X軸とY軸）の衝突処理
+	else if (self == mpColliderLineX || self == mpColliderLineZ)
+	{
+		if (other->Layer() == ELayer::eField)
+		{
+			// 押し戻しベクトルのYの値を0にする
+			CVector adjust = hit.adjust;
+			adjust.Y(0.0f);
+			// 押し戻しベクトルの分、座標を移動
+			Position(Position() + adjust * hit.weight);
+		}
 	}
 }
 

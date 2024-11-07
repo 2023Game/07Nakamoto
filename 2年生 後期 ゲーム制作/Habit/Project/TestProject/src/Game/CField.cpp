@@ -3,6 +3,7 @@
 #include "CMoveFloor.h"
 #include "CRotateFloor.h"
 #include "CLineEffect.h"
+#include "CWall.h"
 
 CField::CField()
 	: CObjectBase(ETag::eField, ETaskPriority::eBackground)
@@ -13,6 +14,8 @@ CField::CField()
 	mpColliderMesh = new CColliderMesh(this, ELayer::eField, mpModel, true);
 
 	CreateFieldObjects();
+	// ï«Çê∂ê¨
+	CreateWalls();
 }
 
 CField::~CField()
@@ -22,6 +25,18 @@ CField::~CField()
 		delete mpColliderMesh;
 		mpColliderMesh = nullptr;
 	}
+}
+
+void CField::CreateWalls()
+{
+	// ï«á@ê∂ê¨
+	CWall* wall = new CWall
+	(
+		CVector(0.0f,  1.0f, 0.0f),
+		CVector(0.0f, 90.0f, 0.0f),
+		CVector(5.0f,  5.0f, 5.0f)
+	);
+	mWalls.push_back(wall);	// ê∂ê¨ÇµÇΩï«Çï«ÇÃÉäÉXÉgÇ…í«â¡
 }
 
 void CField::CreateFieldObjects()

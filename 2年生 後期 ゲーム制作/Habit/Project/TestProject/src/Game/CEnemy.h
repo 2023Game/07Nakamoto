@@ -26,6 +26,14 @@ public:
 	// 描画処理
 	void Render() override;
 
+	/// <summary>
+	/// 衝突処理
+	/// </summary>
+	/// <param name="self">衝突した自身のコライダー</param>
+	/// <param name="other">衝突した相手のコライダー</param>
+	/// <param name="hit">衝突した時の情報</param>
+	void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
+
 private:
 	// アニメーションの種類
 	enum class EAnimType
@@ -109,5 +117,9 @@ private:
 	// 巡回ポイントのリスト
 	std::vector<CVector> mPatrolPoints;
 	int mNextPatrolIndex;	// 次に巡回する番号
+
+	CColliderLine* mpColliderLine;	// 縦方向の線分コライダー
+	CColliderLine* mpColliderLineX;	// 横方向（X軸）の線分コライダー
+	CColliderLine* mpColliderLineZ;	// 横方向（Z軸）の線分コライダー
 };
 #endif

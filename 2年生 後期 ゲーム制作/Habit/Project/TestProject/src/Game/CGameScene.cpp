@@ -37,6 +37,8 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>("Field", "Field\\field.obj");
 	CResourceManager::Load<CModel>("FieldCube", "Field\\Object\\cube.obj");
 	CResourceManager::Load<CModel>("FieldCylinder", "Field\\Object\\cylinder.obj");
+	CResourceManager::Load<CModel>("Wall",		"Field\\Object\\Wall\\Wall.obj");
+	CResourceManager::Load<CModel>("WallCol",	"Field\\Object\\Wall\\WallCol.obj");
 	CResourceManager::Load<CModelX>("Player", "Character\\Player\\player.x");
 	CResourceManager::Load<CTexture>("Laser", "Effect\\laser.png");
 	CResourceManager::Load<CTexture>("LightningBolt", "Effect\\lightning_bolt.png");
