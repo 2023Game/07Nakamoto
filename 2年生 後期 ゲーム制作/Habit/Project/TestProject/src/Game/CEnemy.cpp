@@ -3,7 +3,7 @@
 #include "CInput.h"
 #include "CCollisionManager.h"
 #include "CDebugFieldOfView.h"
-#include "CPlayer.h"
+#include "CPlayer2.h"
 #include "Maths.h"
 #include "Primitive.h"
 
@@ -246,7 +246,7 @@ void CEnemy::ChangeState(EState state)
 bool CEnemy::IsFoundPlayer() const
 {
 	// プレイヤーが存在しない場合は、視野範囲外とする
-	CPlayer* player = CPlayer::Instance();
+	CPlayer2* player = CPlayer2::Instance();
 	if (player == nullptr) return false;
 
 	// プレイヤー座標を取得
@@ -285,7 +285,7 @@ bool CEnemy::IsFoundPlayer() const
 bool CEnemy::CanAttackPlayer() const
 {
 	// プレイヤーがいない場合は、攻撃できない
-	CPlayer* player = CPlayer::Instance();
+	CPlayer2* player = CPlayer2::Instance();
 	if ((player == nullptr)) return false;
 
 	// プレイヤーまでの距離が攻撃範囲外であれば、攻撃できない
@@ -472,7 +472,7 @@ void CEnemy::UpdateChase()
 	ChangeAnimation(EAnimType::eRun);
 
 	// プレイヤーの座標へ向けて移動する
-	CPlayer* player = CPlayer::Instance();
+	CPlayer2* player = CPlayer2::Instance();
 	CVector playerPos = player->Position();
 	mLostPlayerPos = playerPos;	// プレイヤーを最後に見た座標を更新
 	if (MoveTo(playerPos, RUN_SPEED))
@@ -502,7 +502,7 @@ void CEnemy::UpdateLost()
 // 攻撃時の更新処理
 void CEnemy::UpdateAttack()
 {
-	// ステップ後のにしょりうを切り替える
+	// ステップごとに処理を切り替える
 	switch (mStateStep)
 	{
 		// ステップ0 : 攻撃アニメーションを再生

@@ -60,7 +60,7 @@ void CGameScene::Load()
 
 	CPlayer2* pico = new CPlayer2();
 	pico->Scale(1.0f, 1.0f, 1.0f);
-	pico->Position(70.0f, 1.0f, 10.0f);
+	pico->Position(-50.0f, 1.0f, 10.0f);
 
 	CEnemy* enemy = new CEnemy
 	(
@@ -83,14 +83,14 @@ void CGameScene::Load()
 	//);
 
 	// CGameCamera2のテスト
-	CVector atPos = player->Position() + CVector(0.0f, 10.0f, 0.0f);
+	CVector atPos = pico->Position() + CVector(0.0f, 10.0f, 0.0f);
 	CGameCamera2* mainCamera = new CGameCamera2
 	(
 		atPos + CVector(0.0f, 0.0f, 40.0f),
 		atPos
 	);
 
-	mainCamera->SetFollowTargetTf(player);
+	mainCamera->SetFollowTargetTf(pico);
 
 	// ゲームメニューを作成
 	mpGameMenu = new CGameMenu();

@@ -24,6 +24,13 @@ CWall::~CWall()
 	SAFE_DELETE(mpColliderMesh);
 }
 
+//bool CWall::CollisionRay(const CVector& start, const CVector& end, CHitInfo* hit)
+//{
+//	if (mpColliderMesh = nullptr) return false;
+//
+//
+//}
+
 // XVˆ—
 void CWall::Update()
 {

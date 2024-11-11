@@ -37,6 +37,15 @@ void CField::CreateWalls()
 		CVector(5.0f,  5.0f, 5.0f)
 	);
 	mWalls.push_back(wall);	// 生成した壁を壁のリストに追加
+
+	// 壁②生成
+	CWall* wall2 = new CWall
+	(
+		CVector(-50.0f, 1.0f, -50.0f),
+		CVector(0.0f, 00.0f, 0.0f),
+		CVector(5.0f, 5.0f, 5.0f)
+	);
+	mWalls.push_back(wall);	// 生成した壁を壁のリストに追加
 }
 
 void CField::CreateFieldObjects()
@@ -136,6 +145,28 @@ void CField::CreateFieldObjects()
 	//	le->AddPoint(pos, width, width);
 	//}
 }
+
+//bool CField::CollisionRay(const CVector& start, const CVector& end, CHitInfo* hit)
+//{
+//	// 衝突情報保存用
+//	CHitInfo tHit;
+//	// 衝突したかどうかのフラグ
+//	bool isHit = false;
+//
+//	if (CCollider::CollisionRay(mpColliderMesh, start, end, &tHit))
+//	{
+//		*hit = tHit;
+//		isHit = this;
+//	}
+//
+//	// 壁との衝突判定
+//	for (CWall* wall : mWalls)
+//	{
+//		if()
+//	}
+//
+//	return false;
+//}
 
 void CField::Update()
 {

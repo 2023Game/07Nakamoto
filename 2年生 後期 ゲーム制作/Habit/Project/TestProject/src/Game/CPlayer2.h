@@ -39,7 +39,7 @@ private:
 	// 待機状態
 	void UpdateIdle();
 	// ジャンプ開始
-	void UpdateJumpStart();
+	void UpdateJump();
 
 	// 移動の更新処理
 	void UpdateMove();
@@ -83,21 +83,32 @@ private:
 		eIdle,		//待機
 		eWalk,		//歩行
 		eRun,		//走行
+		eJumpStart,	// ジャンプ開始
 		eJump,		//ジャンプ
+		eJumpEnd,	// ジャンプ終了
 		eCrawl,		//這う
 		eSneak,		//しゃがみ移動
 		eCrouch_up, //しゃがんで拾う
 	};
 
+	std::string ToString(EState state);
+	
+
 	EState mState;	// プレイヤーの状態
+	int mStateStep;	// 状態内のステップ管理用
 
 	CVector mMoveSpeed;	// 前後左右の移動速度
 	float mMoveSpeedY;	// 重力やジャンプによる上下の移動速度
 
+	CVector mJunpStartPos;// ジャンプ開始時の位置
+	CVector mJunpEndPos;	// ジャンプ終了時の位置
+
 	bool mIsGrounded;	// 接地しているかどうか
 	CVector mGroundNormal;	// 接地している地面の法線
 
-	CColliderLine* mpColliderLine;
+	CColliderLine* mpColliderLine;	// 縦方向の線分コライダー
+	CColliderLine* mpColliderLineX;	// 横方向（X軸）の線分コライダー
+	CColliderLine* mpColliderLineZ;	// 横方向（Z軸）の線分コライダー
 	CTransform* mpRideObject;
 };
 

@@ -11,7 +11,7 @@ const CPlayer2::AnimData CPlayer2::ANIM_DATA[] =
 	{ "Character\\Player2\\anim\\pico_idle.x",		true,	181.0f	},	// 待機
 	{ "Character\\Player2\\anim\\pico_walk.x",		true,	30.0f	},	// 歩行
 	{ "Character\\Player2\\anim\\pico_run.x",		true,	22.0f	},	// 走行
-	{ "Character\\Player2\\anim\\pico_jump.x",		true,	51.0f	},	// ジャンプ
+	{ "Character\\Player2\\anim\\pico_jump.x",		false,	51.0f	},	// ジャンプ
 	{ "Character\\Player2\\anim\\pico_crawl.x",		true,	55.0f	},	// 這う
 	{ "Character\\Player2\\anim\\pico_sneak.x",		true,	51.0f	},	// しゃがみ移動
 	{ "Character\\Player2\\anim\\pico_crouch_and_pick_up.x",		true,	180.0f	},	// しゃがんで拾う
@@ -19,14 +19,22 @@ const CPlayer2::AnimData CPlayer2::ANIM_DATA[] =
 	
 };
 
-#define PLAYER_HEIGHT	16.0f	
-#define MOVE_SPEED		10.0f	// 歩く速度
-#define RUN_SPEED		20.0f	// 走る速度
+#define PLAYER_HEIGHT	16.0f			// プレイヤーの高さ
+#define PLAYER_WIDTH	10.0f			// プレイヤーの幅
+#define MOVE_SPEED		0.375f * 2.0f	// 歩く速度
+#define RUN_SPEED		1.0f			// 走る速度
+
+#define JUNP_MOVE_DIST	20.0f			// ジャンプ時の移動距離
+#define JUNP_MOVE_START	15.0f			// ジャンプ時の移動開始フレーム
+#define JUNP_MOVE_END	33.0f			// ジャンプ時の移動終了フレーム
+#define JUMP_SPEED 1.5f
+#define GRAVITY 0.0625f
 
 // コンストラクタ
 CPlayer2::CPlayer2()
 	: CXCharacter(ETag::ePlayer, ETaskPriority::ePlayer)
 	, mState(EState::eIdle)
+	, mStateStep(0)
 	, mMoveSpeedY(0.0f)
 	, mIsGrounded(false)
 	, mpRideObject(nullptr)
@@ -51,18 +59,45 @@ CPlayer2::CPlayer2()
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
 
+	// 縦方向のコライダー生成
 	mpColliderLine = new CColliderLine
 	(
-		this, ELayer::eField,
+		this, ELayer::ePlayer,
 		CVector(0.0f, 0.0f, 0.0f),
 		CVector(0.0f, PLAYER_HEIGHT, 0.0f)
 	);
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
+
+	float width = PLAYER_WIDTH * 0.5f;
+	float posY = PLAYER_HEIGHT * 0.5f;
+
+	// 横方向（X軸）のコライダー生成
+	mpColliderLineX = new CColliderLine
+	(
+		this, ELayer::ePlayer,
+		CVector(-width, posY, 0.0f),
+		CVector(width, posY, 0.0f)
+	);
+	mpColliderLineX->SetCollisionLayers({ ELayer::eField });
+
+	// 縦方向（Z軸）のコライダー生成
+	mpColliderLineZ = new CColliderLine
+	(
+		this, ELayer::ePlayer,
+		CVector(0.0f, posY, -width),
+		CVector(0.0f, posY, width)
+	);
+	mpColliderLineZ->SetCollisionLayers({ ELayer::eField });
 }
 
 // デストラクタ
 CPlayer2::~CPlayer2()
 {
+	// コライダーを破棄
+	SAFE_DELETE(mpColliderLine);
+	SAFE_DELETE(mpColliderLineX);
+	SAFE_DELETE(mpColliderLineZ);
+
 	if (mpColliderLine != nullptr)
 	{
 		delete mpColliderLine;
@@ -87,35 +122,245 @@ void CPlayer2::Update()
 	// 状態に合わせて、変更処理を切り替える
 	switch (mState)
 	{
+		// 待機状態
 	case EState::eIdle:
+		UpdateIdle();
 		break;
-	
+		// ジャンプ開始
+	case EState::eJumpStart:
+		UpdateJump();
+		break;
+		// ジャンプ中
+	case EState::eJump:
+		UpdateJump();
+		break;
+		// ジャンプ終了
+	case EState::eJumpEnd:
+		UpdateJump();
+		break;
+
 	}
+
+	//待機中とジャンプ中は、移動処理を行う
+	if (mState == EState::eIdle
+		|| mState == EState::eJump)
+	{
+		UpdateMove();
+	}
+
+	mMoveSpeedY -= GRAVITY;
+	CVector moveSpeed = mMoveSpeed + CVector(0.0f, mMoveSpeedY, 0.0f);
+
+	// 移動
+	Position(Position() + moveSpeed);
+
+	// プレイヤーを移動方向へ向ける
+	CVector current = VectorZ();
+	CVector target = moveSpeed;
+	target.Y(0.0f);
+	target.Normalize();
+	CVector forward = CVector::Slerp(current, target, 0.125f);
+	Rotation(CQuaternion::LookRotation(forward));
 
 	// キャラクターの更新
 	CXCharacter::Update();
+
+	CDebugPrint::Print("Grounded:%s\n", mIsGrounded ? "true" : "false");
+	CDebugPrint::Print("State:%s\n", ToString(mState).c_str());
+
+	mIsGrounded = false;
+
+	CDebugPrint::Print("FPS:%f\n", Times::FPS());
 }
 
-CVector CPlayer2::CalcMoveVec() const
-{
-	return CVector();
-}
 
 void CPlayer2::UpdateIdle()
 {
+	// 接地していれば、
+	if (mIsGrounded)
+	{
+		// SPACEキーでジャンプ
+		if (CInput::PushKey(VK_SPACE))
+		{
+			mState = EState::eJumpStart;
+		}
+	}
 }
 
-void CPlayer2::UpdateJumpStart()
+void CPlayer2::UpdateJump()
 {
+	// ステップごとに処理を切り替える
+	switch (mStateStep)
+	{
+		// ステップ0：ジャンプアニメーションを再生
+		case 0:
+			// ジャンプ開始位置とジャンプ終了位置を設定
+			mJunpStartPos = Position();
+			mJunpEndPos = mJunpStartPos + VectorZ() * JUNP_MOVE_DIST;
+
+			ChangeAnimation(EAnimType::eJump);
+			mStateStep++;
+			break;
+		// ステップ1：ジャンプ時の移動処理
+		case 1:
+		{
+			float frame = GetAnimationFrame();
+			// ジャンプアニメーションが移動開始フレームを超えた
+			if (frame >= JUNP_MOVE_START)
+			{
+				// 線形補間で移動開始位置から移動終了位置まで移動する
+				float moveFrame = JUNP_MOVE_END - JUNP_MOVE_START;
+				float percent = (frame - JUNP_MOVE_START) / moveFrame;
+				CVector pos = CVector::Lerp(mJunpStartPos, mJunpEndPos, percent);
+			}
+			// 移動終了フレームまで到達した
+			else
+			{
+				Position(mJunpEndPos);
+				mStateStep++;
+			}
+			break;
+		}
+		// ステップ2：ジャンプ終了待ち
+		case 2:
+			if (IsAnimationFinished())
+			{
+				mState = EState::eIdle;
+				mStateStep = 0;
+			}
+			break;
+	}
 }
 
+// キーの入力情報から移動ベクトルを求める
+CVector CPlayer2::CalcMoveVec() const
+{
+	CVector move = CVector::zero;
+
+	// キーの入力ベクトルを取得
+	CVector input = CVector::zero;
+	if (CInput::Key('W'))		input.Y(-1.0f);
+	else if (CInput::Key('S'))	input.Y(1.0f);
+	if (CInput::Key('A'))		input.X(-1.0f);
+	else if (CInput::Key('D'))	input.X(1.0f);
+
+	// 入力ベクトルの長さで入力されているか判定
+	if (input.LengthSqr() > 0.0f)
+	{
+		// 上方向ベクトル(設置している場合は、地面の法線)
+		CVector up = mIsGrounded ? mGroundNormal : CVector::up;
+		// カメラの向きに合わせた移動ベクトルに変換
+		CCamera* mainCamera = CCamera::MainCamera();
+		CVector camForward = mainCamera->VectorZ();
+		camForward.Y(0.0f);
+		camForward.Normalize();
+		// カメラの正面方向ベクトルと上方向ベクトルの外積から
+		// 横方向の移動ベクトルを求める
+		CVector moveSide = CVector::Cross(up, camForward);
+		// 横方向の移動ベクトルと上方向ベクトルの外積から
+		// 正面方向の移動ベクトルを求める
+		CVector moveForward = CVector::Cross(moveSide, up);
+
+		// 求めた各方向の移動ベクトルから、
+		// 最終的なプレイヤーの移動ベクトルを求める
+		move = moveForward * input.Y() + moveSide * input.X();
+		move.Normalize();
+	}
+
+	return move;
+}
+
+// 移動の更新処理
 void CPlayer2::UpdateMove()
 {
+	mMoveSpeed = CVector::zero;
+
+	// プレイヤーの移動ベクトルを求める
+	CVector move = CalcMoveVec();
+	// 求めた移動ベクトルの長さで入力されているか判定
+	if (move.LengthSqr() > 0.0f)
+	{
+		mMoveSpeed += move * MOVE_SPEED;
+
+		// 待機状態であれば、歩行アニメーションに切り替え
+		if (mState == EState::eIdle)
+		{
+			ChangeAnimation(EAnimType::eWalk);
+		}
+	}
+	// 移動キーを入力していない
+	else
+	{
+		// 待機状態であれば、待機アニメーションに切り替え
+		if (mState == EState::eIdle)
+		{
+			ChangeAnimation(EAnimType::eIdle);
+		}
+	}
 }
 
 // 衝突判定
 void CPlayer2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
+	// 縦方向の衝突処理
+	if (self == mpColliderLine)
+	{
+		if (other->Layer() == ELayer::eField)
+		{
+			// 坂道で滑らないように、押し戻しベクトルのXとZの値を0にする
+			CVector adjust = hit.adjust;
+			adjust.X(0.0f);
+			adjust.Z(0.0f);
+
+			Position(Position() + adjust * hit.weight);
+
+			// 衝突した地面が床か天井かを内積で判定
+			CVector normal = hit.adjust.Normalized();
+			float dot = CVector::Dot(normal, CVector::up);
+			// 内積の結果がプラスであれば、床と衝突した
+			if (dot >= 0.0f)
+			{
+				// 落下などで床に上から衝突した時（下移動）のみ
+				// 上下の移動速度を0にする
+				if (mMoveSpeedY < 0.0f)
+				{
+					mMoveSpeedY = 0.0f;
+				}
+
+				// 接地した
+				mIsGrounded = true;
+				// 接地した地面の法線を記憶しておく
+				mGroundNormal = hit.adjust.Normalized();
+
+				if (other->Tag() == ETag::eRideableObject)
+				{
+					mpRideObject = other->Owner();
+				}
+			}
+			// 内積の結果がマイナスであれば、天井と衝突した
+			else
+			{
+				// ジャンプなどで天井に下から衝突した時（上移動）のみ
+				// 上下の移動速度を0にする
+				if (mMoveSpeedY > 0.0f)
+				{
+					mMoveSpeedY = 0.0f;
+				}
+			}
+		}
+	}
+	// 横方向（X軸とY軸）の衝突処理
+	else if (self == mpColliderLineX || self == mpColliderLineZ)
+	{
+		if (other->Layer() == ELayer::eField)
+		{
+			// 押し戻しベクトルのYの値を0にする
+			CVector adjust = hit.adjust;
+			adjust.Y(0.0f);
+			// 押し戻しベクトルの分、座標を移動
+			Position(Position() + adjust * hit.weight);
+		}
+	}
 }
 
 
@@ -132,4 +377,21 @@ void CPlayer2::ChangeAnimation(EAnimType type)
 	if (!(0 <= index && index < (int)EAnimType::Num)) return;
 	const AnimData& data = ANIM_DATA[index];
 	CXCharacter::ChangeAnimation(index, data.loop, data.framelength);
+}
+
+std::string CPlayer2::ToString(EState state)
+{
+	switch (mState)
+	{
+	case CPlayer2::EState::eTPose:		return "eTPose";
+	case CPlayer2::EState::eIdle:		return "eIdle";
+	case CPlayer2::EState::eWalk:		return "eWalk";
+	case CPlayer2::EState::eRun:		return "eRun";
+	case CPlayer2::EState::eJumpStart:	return "eJumpStart";
+	case CPlayer2::EState::eJump:		return "eJump";
+	case CPlayer2::EState::eJumpEnd:	return "eJumpEnd";
+	case CPlayer2::EState::eCrawl:		return "eCrawl";
+	case CPlayer2::EState::eSneak:		return "eSneak";
+	case CPlayer2::EState::eCrouch_up:	return "eSneak";
+	}
 }
