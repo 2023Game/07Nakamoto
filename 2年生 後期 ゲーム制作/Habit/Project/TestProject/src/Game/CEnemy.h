@@ -76,6 +76,8 @@ private:
 
 	// プレイヤーが視野範囲内に入ったかどうか
 	bool IsFoundPlayer() const;
+	// 現在位置からプレイヤーが見えているかどうか
+	bool IsLookPlayer() const;
 	// プレイヤーを攻撃できるかどうか
 	bool CanAttackPlayer() const;
 

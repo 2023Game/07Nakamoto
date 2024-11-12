@@ -15,12 +15,12 @@ public:
 	/// <summary>
 	/// レイと壁との衝突判定
 	/// </summary>
-	/// <param name="start"></param>
-	/// <param name="end"></param>
-	/// <param name="hit"></param>
-	/// <returns></returns>
-	//bool CollisionRay(const CVector& start, const CVector& end,
-	//	CHitInfo* hit) override;
+	/// <param name="start">レイの開始位置</param>
+	/// <param name="end">レイの終了位置</param>
+	/// <param name="hit">衝突情報返却用</param>
+	/// <returns>衝突したら、trueを返す</returns>
+	bool CollisionRay(const CVector& start, const CVector& end,
+		CHitInfo* hit) override;
 
 	// 更新処理
 	void Update() override;

@@ -4,11 +4,22 @@
 #include "CRotateFloor.h"
 #include "CLineEffect.h"
 #include "CWall.h"
+#include <assert.h>
+
+CField* CField::spInstance = nullptr;
+
+CField* CField::Instance()
+{
+	return spInstance;
+}
 
 CField::CField()
 	: CObjectBase(ETag::eField, ETaskPriority::eBackground)
 	, mEffectAnimData(1, 11, true, 11, 0.03f)
 {
+	assert(spInstance == nullptr);
+	spInstance = this;
+
 	mpModel = CResourceManager::Get<CModel>("Field");
 
 	mpColliderMesh = new CColliderMesh(this, ELayer::eField, mpModel, true);
@@ -20,6 +31,8 @@ CField::CField()
 
 CField::~CField()
 {
+	spInstance = nullptr;
+
 	if (mpColliderMesh != nullptr)
 	{
 		delete mpColliderMesh;
@@ -146,27 +159,40 @@ void CField::CreateFieldObjects()
 	//}
 }
 
-//bool CField::CollisionRay(const CVector& start, const CVector& end, CHitInfo* hit)
-//{
-//	// 衝突情報保存用
-//	CHitInfo tHit;
-//	// 衝突したかどうかのフラグ
-//	bool isHit = false;
-//
-//	if (CCollider::CollisionRay(mpColliderMesh, start, end, &tHit))
-//	{
-//		*hit = tHit;
-//		isHit = this;
-//	}
-//
-//	// 壁との衝突判定
-//	for (CWall* wall : mWalls)
-//	{
-//		if()
-//	}
-//
-//	return false;
-//}
+// レイとフィールドオブジェクトの衝突判定
+bool CField::CollisionRay(const CVector& start, const CVector& end, CHitInfo* hit)
+{
+	// 衝突情報保存用
+	CHitInfo tHit;
+	// 衝突したかどうかのフラグ
+	bool isHit = false;
+
+	// フィールドのオブジェクトとの衝突判定
+	if (CCollider::CollisionRay(mpColliderMesh, start, end, &tHit))
+	{
+		*hit = tHit;
+		isHit = this;
+	}
+
+	// 壁との衝突判定
+	for (CWall* wall : mWalls)
+	{
+		if (wall->CollisionRay(start, end, &tHit))
+		{
+			// まだほかに衝突していない場合か、
+			// 既に衝突しているコライダーより近い場合は、
+			if (!isHit || tHit.dist < hit->dist)
+			{
+				// 衝突情報を更新
+				*hit = tHit;
+				isHit = true;
+			}
+		}
+	}
+
+	return isHit;
+}
+
 
 void CField::Update()
 {

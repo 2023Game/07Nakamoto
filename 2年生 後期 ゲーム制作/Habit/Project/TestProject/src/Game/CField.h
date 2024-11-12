@@ -7,18 +7,21 @@ class CWall;
 class CField : public CObjectBase
 {
 public:
+	// フィールドのインスタンスを返す
+	static CField* Instance();
+
 	CField();
 	~CField();
 
 	/// <summary>
 	/// レイとフィールドオブジェクトの衝突判定
 	/// </summary>
-	/// <param name="start"></param>
-	/// <param name="end"></param>
-	/// <param name="hit"></param>
-	/// <returns></returns>
-	//bool CollisionRay(const CVector& start, const CVector& end,
-	//	CHitInfo* hit) override;
+	/// <param name="start">レイの開始位置</param>
+	/// <param name="end">レイの終了位置</param>
+	/// <param name="hit">衝突情報返却用</param>
+	/// <returns>衝突したら、trueを返す</returns>
+	bool CollisionRay(const CVector& start, const CVector& end,
+		CHitInfo* hit) override;
 
 	void Update();
 	void Render();
@@ -27,6 +30,9 @@ private:
 	// 壁を生成
 	void CreateWalls();
 	void CreateFieldObjects();
+
+	// フィールドのインスタンス
+	static CField* spInstance;
 
 	CModel* mpModel;
 	CColliderMesh* mpColliderMesh;

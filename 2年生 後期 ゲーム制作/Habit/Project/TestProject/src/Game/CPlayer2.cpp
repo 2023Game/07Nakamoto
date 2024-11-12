@@ -25,10 +25,10 @@ const CPlayer2::AnimData CPlayer2::ANIM_DATA[] =
 #define RUN_SPEED		1.0f			// 走る速度
 
 #define JUNP_MOVE_DIST	20.0f			// ジャンプ時の移動距離
-#define JUNP_MOVE_START	15.0f			// ジャンプ時の移動開始フレーム
+#define JUNP_MOVE_START	16.0f			// ジャンプ時の移動開始フレーム
 #define JUNP_MOVE_END	33.0f			// ジャンプ時の移動終了フレーム
-#define JUMP_SPEED 1.5f
-#define GRAVITY 0.0625f
+#define JUMP_SPEED 1.0f					// ジャンプの高さ
+#define GRAVITY 0.0625f					// 重力
 
 // コンストラクタ
 CPlayer2::CPlayer2()
@@ -194,10 +194,6 @@ void CPlayer2::UpdateJump()
 	{
 		// ステップ0：ジャンプアニメーションを再生
 		case 0:
-			// ジャンプ開始位置とジャンプ終了位置を設定
-			mJunpStartPos = Position();
-			mJunpEndPos = mJunpStartPos + VectorZ() * JUNP_MOVE_DIST;
-
 			ChangeAnimation(EAnimType::eJump);
 			mStateStep++;
 			break;
@@ -205,25 +201,27 @@ void CPlayer2::UpdateJump()
 		case 1:
 		{
 			float frame = GetAnimationFrame();
-			// ジャンプアニメーションが移動開始フレームを超えた
+			mMoveSpeed = CVector::zero;
+
 			if (frame >= JUNP_MOVE_START)
 			{
-				// 線形補間で移動開始位置から移動終了位置まで移動する
-				float moveFrame = JUNP_MOVE_END - JUNP_MOVE_START;
-				float percent = (frame - JUNP_MOVE_START) / moveFrame;
-				CVector pos = CVector::Lerp(mJunpStartPos, mJunpEndPos, percent);
-			}
-			// 移動終了フレームまで到達した
-			else
-			{
-				Position(mJunpEndPos);
+				mMoveSpeedY += JUMP_SPEED;
+				mIsGrounded = false;
+				mState = EState::eJump;
 				mStateStep++;
 			}
 			break;
 		}
 		// ステップ2：ジャンプ終了待ち
 		case 2:
-			if (IsAnimationFinished())
+		{
+				mState = EState::eJumpEnd;
+				mStateStep++;
+			break;
+		}
+		// ステップ2：ジャンプ終了待ち
+		case 3:
+			if (IsAnimationFinished() && mIsGrounded)
 			{
 				mState = EState::eIdle;
 				mStateStep = 0;
@@ -362,7 +360,6 @@ void CPlayer2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		}
 	}
 }
-
 
 // 描画処理
 void CPlayer2::Render()

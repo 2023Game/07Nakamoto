@@ -6,23 +6,25 @@
 #include "CPlayer2.h"
 #include "Maths.h"
 #include "Primitive.h"
+#include "CField.h"
 
-#define ENEMY_HEIGHT		16.0f	// 敵のの高さ
-#define ENEMY_WIDTH			10.0f	// 敵のの幅
-#define FOV_ANGLE			45.0f	// 視野範囲の角度
+#define ENEMY_HEIGHT		 16.0f	// 敵のの高さ
+#define ENEMY_WIDTH			 10.0f	// 敵のの幅
+#define FOV_ANGLE			 45.0f	// 視野範囲の角度
 #define FOV_LENGTH			100.0f	// 視野範囲の距離
-#define WALK_SPEED			10.0f	// 歩いているときの速度
-#define RUN_SPEED			20.0f	// 走っていいるときの速度
-#define ROTATE_SPEED		6.0f	// 回転速度
+#define EYE_HEIGHT			 10.0f	// 視点の高さ
+#define WALK_SPEED			 10.0f	// 歩いているときの速度
+#define RUN_SPEED			 20.0f	// 走っていいるときの速度
+#define ROTATE_SPEED		 6.0f	// 回転速度
 
-#define ATTACK_RANGE		20.0f	// 攻撃範囲
-#define ATTACK_MOVE_DIST	20.0f	// 攻撃時の移動距離
-#define ATTACK_MOVE_STAT	16.0f	// 攻撃時の移動開始フレーム
-#define ATTACK_MOVE_END		47.0f	// 攻撃時の移動終了フレーム
-#define ATTACK_WAIT_TIME	1.0f	// 攻撃終了時の待ち時間
-#define PATROL_INTERVAL		3.0f	// 次の巡回ポイントに移動開始するまでの時間
-#define PATROL_NEAR_DIST	10.0f	// 巡回開始時に選択される巡回ポイントの最短距離
-#define IDLE_TIME			5.0f	// 待機状態の時間
+#define ATTACK_RANGE		 20.0f	// 攻撃範囲
+#define ATTACK_MOVE_DIST	 20.0f	// 攻撃時の移動距離
+#define ATTACK_MOVE_STAT	 16.0f	// 攻撃時の移動開始フレーム
+#define ATTACK_MOVE_END		 47.0f	// 攻撃時の移動終了フレーム
+#define ATTACK_WAIT_TIME	  1.0f	// 攻撃終了時の待ち時間
+#define PATROL_INTERVAL		  3.0f	// 次の巡回ポイントに移動開始するまでの時間
+#define PATROL_NEAR_DIST	 10.0f	// 巡回開始時に選択される巡回ポイントの最短距離
+#define IDLE_TIME			  5.0f	// 待機状態の時間
 
 // プレイヤーのアニメーションデータのテーブル
 const CEnemy::AnimData CEnemy::ANIM_DATA[] =
@@ -188,6 +190,39 @@ void CEnemy::Render()
 		m.Translate(mLostPlayerPos + CVector(0.0f, rad, 0.0f));
 		Primitive::DrawWireSphere(m, rad, CColor::blue);
 	}
+
+	CPlayer2* player = CPlayer2::Instance();
+	CField* field = CField::Instance();
+	if (player != nullptr && field != nullptr)
+	{
+		CVector offsetPos = CVector(0.0f, EYE_HEIGHT, 0.0f);
+		CVector playerPos = player->Position() + offsetPos;
+		CVector selfPos = Position() + offsetPos;
+
+		//プレイヤーとの間に遮蔽物が存在する場合
+		CHitInfo hit;
+		if (field->CollisionRay(selfPos, playerPos, &hit))
+		{
+			// 衝突した位置まで赤線を描画
+			Primitive::DrawLine
+			(
+				selfPos, hit.cross,
+				CColor::red,
+				2.0f
+			);
+		}
+		// 遮蔽物が存在しなかった場合
+		else
+		{
+			// プレイヤーの位置まで緑線を描画
+			Primitive::DrawLine
+			(
+				selfPos, playerPos,
+				CColor::green,
+				2.0f
+			);
+		}
+	}
 }
 
 // 衝突処理
@@ -257,6 +292,7 @@ bool CEnemy::IsFoundPlayer() const
 	CVector  vec = playerPos - pos;
 	vec.Y(0.0f);	//プレイヤーとの高さの差を考慮しない
 
+	// ① 視野角度内か求める
 	// ベクトルを正規化して長さを1にする
 	CVector dir = vec.Normalized();
 	// 自身の正面方向ベクトルを取得
@@ -269,15 +305,39 @@ bool CEnemy::IsFoundPlayer() const
 	// 求めた内積と視野角度で、視野範囲内か判断する
 	if (dot < cosf(angleR))	return false;
 
+	// ② 視野距離内か求める
 	//プレイヤーまでの距離と視野距離で、視野範囲内か判断する
 	float dist = vec.Length();
 	if (dist > mFovLength)	return false;
 
-	// TODO:プレイヤーとの間に遮蔽物がないかチェックする
-
-
+	// プレイヤーとの間に遮蔽物がないかチェックする
+	if (!IsLookPlayer()) return false;
 
 	//全ての条件をクリアしたので、視野範囲内である
+	return true;
+}
+
+// 現在位置からプレイヤーが見えているかどうか
+bool CEnemy::IsLookPlayer() const
+{
+	// プレイヤーが存在しない場合は、見えない
+	CPlayer2* player = CPlayer2::Instance();
+	if (player == nullptr) return false;
+	// フィールドが存在しない場合は、遮蔽物がないので見える
+	CField* field = CField::Instance();
+	if (field == nullptr) return true;
+
+	CVector offsetPos = CVector(0.0f, EYE_HEIGHT, 0.0f);
+	// プレイヤーの座標を取得
+	CVector playerPos = player->Position() + offsetPos;
+	// 自分自身の座標を取得
+	CVector selfPos = Position() + offsetPos;
+
+	CHitInfo hit;
+	//フィールドとレイ判定を行い、遮蔽物が存在した場合は、プレイヤーが見えない
+	if (field->CollisionRay(selfPos, playerPos, &hit)) return false;
+
+	// プレイヤーとの間に遮蔽物がないので、プレイヤーが見えている
 	return true;
 }
 
