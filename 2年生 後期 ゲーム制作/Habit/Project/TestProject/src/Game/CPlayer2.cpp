@@ -11,7 +11,7 @@ const CPlayer2::AnimData CPlayer2::ANIM_DATA[] =
 	{ "Character\\Player2\\anim\\pico_idle.x",		true,	181.0f	},	// 待機
 	{ "Character\\Player2\\anim\\pico_walk.x",		true,	30.0f	},	// 歩行
 	{ "Character\\Player2\\anim\\pico_run.x",		true,	22.0f	},	// 走行
-	{ "Character\\Player2\\anim\\pico_jump.x",		false,	51.0f	},	// ジャンプ
+	{ "Character\\Player2\\anim\\pico_jump2.x",		false,	51.0f	},	// ジャンプ
 	{ "Character\\Player2\\anim\\pico_crawl.x",		true,	55.0f	},	// 這う
 	{ "Character\\Player2\\anim\\pico_sneak.x",		true,	51.0f	},	// しゃがみ移動
 	{ "Character\\Player2\\anim\\pico_crouch_and_pick_up.x",		true,	180.0f	},	// しゃがんで拾う

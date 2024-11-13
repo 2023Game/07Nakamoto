@@ -7,6 +7,8 @@
 #include "Maths.h"
 #include "Primitive.h"
 #include "CField.h"
+#include "CNavNode.h"
+#include "CNavManager.h"
 
 #define ENEMY_HEIGHT		 16.0f	// 敵のの高さ
 #define ENEMY_WIDTH			 10.0f	// 敵のの幅
@@ -103,7 +105,10 @@ CEnemy::CEnemy(std::vector<CVector> patrolPoints)
 
 	// 視野範囲のデバッグ表示クラスを作成
 	mpDebugFov = new CDebugFieldOfView(this, mFovAngle, mFovLength);
-
+	
+	// 経路探索用のノードを作成
+	mpNavNode = new CNavNode(Position(), true);
+	mpNavNode->SetColor(CColor::blue);
 }
 
 // デストラクタ
@@ -119,6 +124,13 @@ CEnemy::~CEnemy()
 	{
 		mpDebugFov->SetOwner(nullptr);
 		mpDebugFov->Kill();
+	}
+
+	// 経路探索用のノードを破棄
+	CNavManager* navMgr = CNavManager::Instance();
+	if (navMgr != nullptr)
+	{
+		SAFE_DELETE(mpNavNode);
 	}
 }
 
@@ -156,6 +168,12 @@ void CEnemy::Update()
 	}
 
 	CXCharacter::Update();
+
+	// 経路探索用のノードが存在すれば、座標を更新
+	if (mpNavNode != nullptr)
+	{
+		mpNavNode->SetPos(Position());
+	}
 
 	// 現在の状態に合わせて視野範囲の色を変更
 	mpDebugFov->SetColor(GetStateColor(mState));

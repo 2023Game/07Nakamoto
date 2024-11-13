@@ -30,6 +30,8 @@ private:
 	// 壁を生成
 	void CreateWalls();
 	void CreateFieldObjects();
+	// 経路探索用のノードを作成
+	void CreateNavNodes();
 
 	// フィールドのインスタンス
 	static CField* spInstance;

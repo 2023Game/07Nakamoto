@@ -5,6 +5,9 @@
 #include "CLineEffect.h"
 #include "CWall.h"
 #include <assert.h>
+#include "CNavManager.h"
+#include "CNavNode.h"
+
 
 CField* CField::spInstance = nullptr;
 
@@ -24,9 +27,11 @@ CField::CField()
 
 	mpColliderMesh = new CColliderMesh(this, ELayer::eField, mpModel, true);
 
-	CreateFieldObjects();
 	// 壁を生成
 	CreateWalls();
+	CreateFieldObjects();
+	// 経路探索用のノードを作成
+	CreateNavNodes();
 }
 
 CField::~CField()
@@ -157,6 +162,25 @@ void CField::CreateFieldObjects()
 	//	CVector pos = CVector::Lerp(startPos, endPos, alpha);
 	//	le->AddPoint(pos, width, width);
 	//}
+}
+
+void CField::CreateNavNodes()
+{
+	CNavManager* navMgr = CNavManager::Instance();
+	if (navMgr != nullptr)
+	{
+		// 壁①の周りの経路探索ノード
+		new CNavNode(CVector( 10.0f, 0.0f,  35.0f));
+		new CNavNode(CVector(-10.0f, 0.0f,  35.0f));
+		new CNavNode(CVector(-10.0f, 0.0f, -35.0f));
+		new CNavNode(CVector( 10.0f, 0.0f, -35.0f));
+
+		// 壁②の周りの経路探索ノード
+		new CNavNode(CVector(-15.0f, 0.0f, -40.0f));
+		new CNavNode(CVector(-15.0f, 0.0f, -60.0f));
+		new CNavNode(CVector(-85.0f, 0.0f, -60.0f));
+		new CNavNode(CVector(-85.0f, 0.0f, -40.0f));
+	}
 }
 
 // レイとフィールドオブジェクトの衝突判定

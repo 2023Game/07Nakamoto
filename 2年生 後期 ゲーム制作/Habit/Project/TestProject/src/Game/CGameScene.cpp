@@ -10,6 +10,7 @@
 #include "CGameMenu.h"
 #include "CBGMManager.h"
 #include "CLineEffect.h"
+#include "CNavManager.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -51,6 +52,9 @@ void CGameScene::Load()
 
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
+
+	// 経路探索管理クラスを作成
+	new CNavManager();
 
 	new CField();
 
