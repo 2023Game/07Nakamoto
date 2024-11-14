@@ -31,10 +31,28 @@ public:
 	/// <returns>接続したノードの数</returns>
 	int FindConnectNavNodes(CNavNode* node, float distance);
 
+	/// <summary>
+	/// 指定した開始ノードから目的地ノードまでの最短経路を求める
+	/// </summary>
+	/// <param name="start">開始ノード</param>
+	/// <param name="goal">目的地ノード</param>
+	/// <param name="route">最短経路返却用</param>
+	/// <returns>経路が繋がっている場合は、trueを返す</returns>
+	bool Navigate(CNavNode* start, CNavNode* goal, std::vector<CNavNode*>& route);
+
 	// 全てのノードと経路を描画
 	void Render() override;
 
 private:
+	// 最短経路計算用のデータをリセット
+	void ResetCalcData();
+	/// <summary>
+	/// 指定したノードから次のノードへの移動コストを計算
+	/// </summary>
+	/// <param name="node">移動コストを計算する開始ノード</param>
+	/// <param name="goal">目的地のノード</param>
+	void CalcNextMoveCost(CNavNode* node, CNavNode* goal);
+
 	// 経路管理クラスのインスタンスへのポインタ
 	static CNavManager* spInstance;
 
@@ -43,4 +61,6 @@ private:
 
 	// 経路探索のデバッグ表示を行うかどうか
 	bool mIsRender;
+	// 最後に計算した最短経路のデバッグ表示用
+	std::vector<CNavNode*> mLastCalcRoute;
 };

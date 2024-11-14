@@ -1,5 +1,7 @@
 #include "CPlayer2.h"
 #include "CInput.h"
+#include "CNavNode.h"
+#include "CNavManager.h"
 
 // プレイヤーのインスタンス
 CPlayer2* CPlayer2::spInstatnce = nullptr;
@@ -88,6 +90,10 @@ CPlayer2::CPlayer2()
 		CVector(0.0f, posY, width)
 	);
 	mpColliderLineZ->SetCollisionLayers({ ELayer::eField });
+
+	// 経路探索用のノードを作成
+	mpNavNode = new CNavNode(Position(), true);
+	mpNavNode->SetColor(CColor::red);
 }
 
 // デストラクタ
@@ -164,6 +170,12 @@ void CPlayer2::Update()
 
 	// キャラクターの更新
 	CXCharacter::Update();
+
+	// 経路探索用のノードが存在すれば、座標を更新
+	if (mpNavNode != nullptr)
+	{
+		mpNavNode->SetPos(Position());
+	}
 
 	CDebugPrint::Print("Grounded:%s\n", mIsGrounded ? "true" : "false");
 	CDebugPrint::Print("State:%s\n", ToString(mState).c_str());

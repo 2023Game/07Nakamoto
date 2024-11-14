@@ -55,6 +55,7 @@ CEnemy::CEnemy(std::vector<CVector> patrolPoints)
 	, mAttackEndPos(CVector::zero)
 	, mPatrolPoints(patrolPoints)
 	, mNextPatrolIndex(-1)	// -1の時に一番近いポイントに移動
+	, mNextMoveIndex(0)
 {
 	//モデルデータの取得
 	CModelX* model = CResourceManager::Get<CModelX>("Enemy");
@@ -532,28 +533,42 @@ void CEnemy::UpdatePatrol()
 // 追跡時の更新処理
 void CEnemy::UpdateChase()
 {
-	// プレイヤーが視野範囲外に出たら、見失った状態にする
-	if (!IsFoundPlayer())
-	{
-		ChangeState(EState::eLost);
-		return;
-	}
+	//// プレイヤーが視野範囲外に出たら、見失った状態にする
+	//if (!IsFoundPlayer())
+	//{
+	//	ChangeState(EState::eLost);
+	//	return;
+	//}
 
-	// プレイヤーに攻撃できるならば、攻撃状態へ移行
-	if (CanAttackPlayer())
-	{
-		ChangeState(EState::eAttack);
-		return;
-	}
+	//// プレイヤーに攻撃できるならば、攻撃状態へ移行
+	//if (CanAttackPlayer())
+	//{
+	//	ChangeState(EState::eAttack);
+	//	return;
+	//}
 
 	// 走るアニメーションを再生
 	ChangeAnimation(EAnimType::eRun);
 
 	// プレイヤーの座標へ向けて移動する
 	CPlayer2* player = CPlayer2::Instance();
-	CVector playerPos = player->Position();
-	mLostPlayerPos = playerPos;	// プレイヤーを最後に見た座標を更新
-	if (MoveTo(playerPos, RUN_SPEED))
+	CVector targetPos = player->Position();
+	mLostPlayerPos = targetPos;	// プレイヤーを最後に見た座標を更新
+
+	CNavManager* navMgr = CNavManager::Instance();
+	if (navMgr != nullptr)
+	{
+		// 自身のノードからプレイヤーのノードまでの最短経路を求める
+		CNavNode* playerNode = player->GetNavNode();
+		if (navMgr->Navigate(mpNavNode, playerNode, mMoveRoute))
+		{
+			// 自身のノードからプレイヤーのノードまで繋がっていたら、
+			// 移動する位置を次のノードの位置に設定
+			targetPos = mMoveRoute[1]->GetPos();
+		}
+	}
+
+	if (MoveTo(targetPos, RUN_SPEED))
 	{
 	}
 }
