@@ -58,9 +58,9 @@ void CGameScene::Load()
 
 	new CField();
 
-	CPlayer* player = new CPlayer();
-	player->Scale(1.0f, 1.0f, 1.0f);
-	player->Position(-50.0f, 1.0f, 0.0f);
+	//CPlayer* player = new CPlayer();
+	//player->Scale(1.0f, 1.0f, 1.0f);
+	//player->Position(-50.0f, 1.0f, 0.0f);
 
 	CPlayer2* pico = new CPlayer2();
 	pico->Scale(1.0f, 1.0f, 1.0f);
@@ -69,10 +69,10 @@ void CGameScene::Load()
 	CEnemy* enemy = new CEnemy
 	(
 		{
-			CVector(200.0f, 1.0,   0.0f),
 			CVector(100.0f, 1.0,   0.0f),
+			CVector(  0.0f, 1.0,   0.0f),
+			CVector(  0.0f, 1.0, 100.0f),
 			CVector(100.0f, 1.0, 100.0f),
-			CVector(200.0f, 1.0, 100.0f),
 		}
 	);
 	enemy->Scale(1.0f, 1.0f, 1.0f);

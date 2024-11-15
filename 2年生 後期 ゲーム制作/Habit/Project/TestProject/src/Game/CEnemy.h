@@ -112,18 +112,18 @@ private:
 	float mFovLength;	// 視野範囲の距離
 	CDebugFieldOfView* mpDebugFov;	// 視野範囲のデバッグ表示
 
-	CVector mLostPlayerPos;	// プレイヤーを見つけた位置まで
+	CNavNode* mpLostPlayerNode;	// プレイヤーを見失った位置のノード
 
 	CVector mAttackStartPos;// 攻撃開始時の位置
 	CVector mAttackEndPos;	// 攻撃終了時の位置
 
 	// 巡回ポイントのリスト
-	std::vector<CVector> mPatrolPoints;
+	std::vector<CNavNode*> mPatrolPoints;
 	int mNextPatrolIndex;	// 次に巡回する番号
 
-	CColliderLine* mpColliderLine;	// 縦方向の線分コライダー
-	CColliderLine* mpColliderLineX;	// 横方向（X軸）の線分コライダー
-	CColliderLine* mpColliderLineZ;	// 横方向（Z軸）の線分コライダー
+	//CColliderLine* mpColliderLine;	// 縦方向の線分コライダー
+	//CColliderLine* mpColliderLineX;	// 横方向（X軸）の線分コライダー
+	//CColliderLine* mpColliderLineZ;	// 横方向（Z軸）の線分コライダー
 
 	std::vector<CNavNode*> mMoveRoute;	//求めた最短経路記憶用
 	int mNextMoveIndex;					// 次に移動するノードのインデックス値
