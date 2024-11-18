@@ -8,7 +8,7 @@ CWall::CWall(const CVector& pos, const CVector& angle, const CVector& size)
 
 	// 壁のコライダーを作成
 	CModel* colModel = CResourceManager::Get<CModel>("WallCol");
-	mpColliderMesh = new CColliderMesh(this, ELayer::eField, colModel, true);
+	mpColliderMesh = new CColliderMesh(this, ELayer::eWall, colModel, true);
 
 	// 位置と向きとサイズを設定
 	Position(pos);
