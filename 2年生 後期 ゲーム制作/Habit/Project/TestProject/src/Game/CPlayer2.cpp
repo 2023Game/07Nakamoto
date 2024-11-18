@@ -11,9 +11,12 @@ const CPlayer2::AnimData CPlayer2::ANIM_DATA[] =
 {
 	{ "",											true,	0.0f	},	// Tポーズ
 	{ "Character\\Player2\\anim\\pico_idle.x",		true,	181.0f	},	// 待機
-	{ "Character\\Player2\\anim\\pico_walk.x",		true,	30.0f	},	// 歩行
+	{ "Character\\Player2\\anim\\pico_walk_s.x",	true,	60.0f	},	// 歩行
 	{ "Character\\Player2\\anim\\pico_run.x",		true,	22.0f	},	// 走行
-	{ "Character\\Player2\\anim\\pico_jump.x",		false,	51.0f	},	// ジャンプ
+	{ "Character\\Player2\\anim\\pico_jump_start.x",false,	25.0f	},	// ジャンプ開始
+	{ "Character\\Player2\\anim\\pico_jumping.x",	false,	 1.0f	},	// ジャンプ中
+	{ "Character\\Player2\\anim\\pico_jump_end.x",	false,	26.0f	},	// ジャン終了プ
+
 	{ "Character\\Player2\\anim\\pico_crawl.x",		true,	55.0f	},	// 這う
 	{ "Character\\Player2\\anim\\pico_sneak.x",		true,	51.0f	},	// しゃがみ移動
 	{ "Character\\Player2\\anim\\pico_crouch_and_pick_up.x",		true,	180.0f	},	// しゃがんで拾う
@@ -25,6 +28,10 @@ const CPlayer2::AnimData CPlayer2::ANIM_DATA[] =
 #define PLAYER_WIDTH	10.0f			// プレイヤーの幅
 #define MOVE_SPEED		0.375f * 2.0f	// 歩く速度
 #define RUN_SPEED		1.0f			// 走る速度
+
+#define PLAYER_HEIGHT_CCOL1	12.0f			// プレイヤーの高さ
+#define PLAYER_HEIGHT_CCOL2	2.0f			// プレイヤーの高さ
+#define PLAYER_WIDTH_CCOL	2.5f			// プレイヤーの幅
 
 #define JUNP_MOVE_DIST	20.0f			// ジャンプ時の移動距離
 #define JUNP_MOVE_START	16.0f			// ジャンプ時の移動開始フレーム
@@ -61,35 +68,45 @@ CPlayer2::CPlayer2()
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
 
-	// 縦方向のコライダー生成
-	mpColliderLine = new CColliderLine
+	//// 縦方向のコライダー生成
+	//mpColliderLine = new CColliderLine
+	//(
+	//	this, ELayer::ePlayer,
+	//	CVector(0.0f, 0.0f, 0.0f),
+	//	CVector(0.0f, PLAYER_HEIGHT, 0.0f)
+	//);
+	//mpColliderLine->SetCollisionLayers({ ELayer::eField });
+
+	//float width = PLAYER_WIDTH * 0.5f;
+	//float posY = PLAYER_HEIGHT * 0.5f;
+
+	//// 横方向（X軸）のコライダー生成
+	//mpColliderLineX = new CColliderLine
+	//(
+	//	this, ELayer::ePlayer,
+	//	CVector(-width, posY, 0.0f),
+	//	CVector( width, posY, 0.0f)
+	//);
+	//mpColliderLineX->SetCollisionLayers({ ELayer::eField });
+
+	//// 縦方向（Z軸）のコライダー生成
+	//mpColliderLineZ = new CColliderLine
+	//(
+	//	this, ELayer::ePlayer,
+	//	CVector(0.0f, posY, -width),
+	//	CVector(0.0f, posY,  width)
+	//);
+	//mpColliderLineZ->SetCollisionLayers({ ELayer::eField });
+
+	// カプセルコライダ―生成
+	mpColliderCapsule = new CColliderCapsule
 	(
 		this, ELayer::ePlayer,
-		CVector(0.0f, 0.0f, 0.0f),
-		CVector(0.0f, PLAYER_HEIGHT, 0.0f)
+		CVector(0.0f, PLAYER_HEIGHT_CCOL2, 0.0f),
+		CVector(0.0f, PLAYER_HEIGHT_CCOL1, 0.0f),
+		PLAYER_WIDTH_CCOL
 	);
-	mpColliderLine->SetCollisionLayers({ ELayer::eField });
-
-	float width = PLAYER_WIDTH * 0.5f;
-	float posY = PLAYER_HEIGHT * 0.5f;
-
-	// 横方向（X軸）のコライダー生成
-	mpColliderLineX = new CColliderLine
-	(
-		this, ELayer::ePlayer,
-		CVector(-width, posY, 0.0f),
-		CVector( width, posY, 0.0f)
-	);
-	mpColliderLineX->SetCollisionLayers({ ELayer::eField });
-
-	// 縦方向（Z軸）のコライダー生成
-	mpColliderLineZ = new CColliderLine
-	(
-		this, ELayer::ePlayer,
-		CVector(0.0f, posY, -width),
-		CVector(0.0f, posY,  width)
-	);
-	mpColliderLineZ->SetCollisionLayers({ ELayer::eField });
+	mpColliderCapsule->SetCollisionLayers({ ELayer::eField });
 
 	// 経路探索用のノードを作成
 	mpNavNode = new CNavNode(Position(), true);
@@ -100,9 +117,10 @@ CPlayer2::CPlayer2()
 CPlayer2::~CPlayer2()
 {
 	// コライダーを破棄
-	SAFE_DELETE(mpColliderLine);
-	SAFE_DELETE(mpColliderLineX);
-	SAFE_DELETE(mpColliderLineZ);
+	//SAFE_DELETE(mpColliderLine);
+	//SAFE_DELETE(mpColliderLineX);
+	//SAFE_DELETE(mpColliderLineZ);
+	SAFE_DELETE(mpColliderCapsule);
 
 	spInstatnce = nullptr;
 }
@@ -138,7 +156,6 @@ void CPlayer2::Update()
 	case EState::eJumpEnd:
 		UpdateJump();
 		break;
-
 	}
 
 	//待機中とジャンプ中は、移動処理を行う
@@ -198,9 +215,9 @@ void CPlayer2::UpdateJump()
 	// ステップごとに処理を切り替える
 	switch (mStateStep)
 	{
-		// ステップ0：ジャンプアニメーションを再生
+		// ステップ0：ジャンプ開始アニメーションを再生
 		case 0:
-			ChangeAnimation(EAnimType::eJump);
+			ChangeAnimation(EAnimType::eJumpStart);
 			mStateStep++;
 			break;
 		// ステップ1：ジャンプ時の移動処理
@@ -218,16 +235,30 @@ void CPlayer2::UpdateJump()
 			}
 			break;
 		}
-		// ステップ2：ジャンプ終了待ち
+		// ステップ2：ジャンプ開始アニメーションの終了待ち
 		case 2:
 		{
-				mState = EState::eJumpEnd;
+			if (IsAnimationFinished())
+			{
+				ChangeAnimation(EAnimType::eJumping);
 				mStateStep++;
+			}
 			break;
 		}
-		// ステップ2：ジャンプ終了待ち
+		// ステップ2：着地待ち
 		case 3:
-			if (IsAnimationFinished() && mIsGrounded)
+			if (mIsGrounded)
+			{
+				mMoveSpeed.X(0.0f);
+				mMoveSpeed.Z(0.0f);
+				ChangeAnimation(EAnimType::eJumpEnd);
+				mState = EState::eJumpEnd;
+				mStateStep++;
+			}
+			break;
+		// ステップ４：ジャンプ終了待ち 
+		case 4:
+			if (IsAnimationFinished())
 			{
 				mState = EState::eIdle;
 				mStateStep = 0;
@@ -235,7 +266,6 @@ void CPlayer2::UpdateJump()
 			break;
 	}
 }
-
 // キーの入力情報から移動ベクトルを求める
 CVector CPlayer2::CalcMoveVec() const
 {
@@ -306,61 +336,72 @@ void CPlayer2::UpdateMove()
 // 衝突判定
 void CPlayer2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
-	// 縦方向の衝突処理
-	if (self == mpColliderLine)
-	{
-		if (other->Layer() == ELayer::eField)
-		{
-			// 坂道で滑らないように、押し戻しベクトルのXとZの値を0にする
-			CVector adjust = hit.adjust;
-			adjust.X(0.0f);
-			adjust.Z(0.0f);
+	//// 縦方向の衝突処理
+	//if (self == mpColliderLine)
+	//{
+	//	if (other->Layer() == ELayer::eField)
+	//	{
+	//		// 坂道で滑らないように、押し戻しベクトルのXとZの値を0にする
+	//		CVector adjust = hit.adjust;
+	//		adjust.X(0.0f);
+	//		adjust.Z(0.0f);
 
-			Position(Position() + adjust * hit.weight);
+	//		Position(Position() + adjust * hit.weight);
 
-			// 衝突した地面が床か天井かを内積で判定
-			CVector normal = hit.adjust.Normalized();
-			float dot = CVector::Dot(normal, CVector::up);
-			// 内積の結果がプラスであれば、床と衝突した
-			if (dot >= 0.0f)
-			{
-				// 落下などで床に上から衝突した時（下移動）のみ
-				// 上下の移動速度を0にする
-				if (mMoveSpeedY < 0.0f)
-				{
-					mMoveSpeedY = 0.0f;
-				}
+	//		// 衝突した地面が床か天井かを内積で判定
+	//		CVector normal = hit.adjust.Normalized();
+	//		float dot = CVector::Dot(normal, CVector::up);
+	//		// 内積の結果がプラスであれば、床と衝突した
+	//		if (dot >= 0.0f)
+	//		{
+	//			// 落下などで床に上から衝突した時（下移動）のみ
+	//			// 上下の移動速度を0にする
+	//			if (mMoveSpeedY < 0.0f)
+	//			{
+	//				mMoveSpeedY = 0.0f;
+	//			}
 
-				// 接地した
-				mIsGrounded = true;
-				// 接地した地面の法線を記憶しておく
-				mGroundNormal = hit.adjust.Normalized();
+	//			// 接地した
+	//			mIsGrounded = true;
+	//			// 接地した地面の法線を記憶しておく
+	//			mGroundNormal = hit.adjust.Normalized();
 
-				if (other->Tag() == ETag::eRideableObject)
-				{
-					mpRideObject = other->Owner();
-				}
-			}
-			// 内積の結果がマイナスであれば、天井と衝突した
-			else
-			{
-				// ジャンプなどで天井に下から衝突した時（上移動）のみ
-				// 上下の移動速度を0にする
-				if (mMoveSpeedY > 0.0f)
-				{
-					mMoveSpeedY = 0.0f;
-				}
-			}
-		}
-	}
-	// 横方向（X軸とY軸）の衝突処理
-	else if (self == mpColliderLineX || self == mpColliderLineZ)
+	//			if (other->Tag() == ETag::eRideableObject)
+	//			{
+	//				mpRideObject = other->Owner();
+	//			}
+	//		}
+	//		// 内積の結果がマイナスであれば、天井と衝突した
+	//		else
+	//		{
+	//			// ジャンプなどで天井に下から衝突した時（上移動）のみ
+	//			// 上下の移動速度を0にする
+	//			if (mMoveSpeedY > 0.0f)
+	//			{
+	//				mMoveSpeedY = 0.0f;
+	//			}
+	//		}
+	//	}
+	//}
+	//// 横方向（X軸とY軸）の衝突処理
+	//else if (self == mpColliderLineX || self == mpColliderLineZ)
+	//{
+	//	if (other->Layer() == ELayer::eField)
+	//	{
+	//		// 押し戻しベクトルのYの値を0にする
+	//		CVector adjust = hit.adjust;
+	//		adjust.Y(0.0f);
+	//		// 押し戻しベクトルの分、座標を移動
+	//		Position(Position() + adjust * hit.weight);
+	//	}
+	//}
+	if (self == mpColliderCapsule)
 	{
 		if (other->Layer() == ELayer::eField)
 		{
 			// 押し戻しベクトルのYの値を0にする
 			CVector adjust = hit.adjust;
-			adjust.Y(0.0f);
+			//adjust.Y(0.0f);
 			// 押し戻しベクトルの分、座標を移動
 			Position(Position() + adjust * hit.weight);
 		}

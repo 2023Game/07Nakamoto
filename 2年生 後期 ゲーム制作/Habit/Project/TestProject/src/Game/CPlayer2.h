@@ -2,6 +2,7 @@
 #define CPLAYER_H
 #include "CXCharacter.h"
 #include "CColliderLine.h"
+#include "CColliderCapsule.h"
 
 /*
 プレイヤークラス
@@ -49,14 +50,17 @@ private:
 	{
 		None = -1,
 
-		eTPose,		//Tポーズ
-		eIdle,		//待機
-		eWalk,		//歩行
-		eRun,		//走行
-		eJump,		//ジャンプ
-		eCrawl,		//這う
-		eSneak,		//しゃがみ移動
-		eCrouch_up, //しゃがんで拾う
+		eTPose,		// Tポーズ
+		eIdle,		// 待機
+		eWalk,		// 歩行
+		eRun,		// 走行
+		eJumpStart,	// ジャンプ開始
+		eJumping,	// ジャンプ中
+		eJumpEnd,	// ジャンプ終了
+
+		eCrawl,		// 這う
+		eSneak,		// しゃがみ移動
+		eCrouch_up, // しゃがんで拾う
 
 		Num
 	};
@@ -92,7 +96,6 @@ private:
 	};
 
 	std::string ToString(EState state);
-	
 
 	EState mState;	// プレイヤーの状態
 	int mStateStep;	// 状態内のステップ管理用
@@ -106,9 +109,12 @@ private:
 	bool mIsGrounded;	// 接地しているかどうか
 	CVector mGroundNormal;	// 接地している地面の法線
 
-	CColliderLine* mpColliderLine;	// 縦方向の線分コライダー
-	CColliderLine* mpColliderLineX;	// 横方向（X軸）の線分コライダー
-	CColliderLine* mpColliderLineZ;	// 横方向（Z軸）の線分コライダー
+	//CColliderLine* mpColliderLine;	// 縦方向の線分コライダー
+	//CColliderLine* mpColliderLineX;	// 横方向（X軸）の線分コライダー
+	//CColliderLine* mpColliderLineZ;	// 横方向（Z軸）の線分コライダー
+
+	CColliderCapsule* mpColliderCapsule;	//カプセルコライダー
+
 	CTransform* mpRideObject;
 };
 

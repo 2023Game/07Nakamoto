@@ -64,7 +64,7 @@ void CGameScene::Load()
 
 	CPlayer2* pico = new CPlayer2();
 	pico->Scale(1.0f, 1.0f, 1.0f);
-	pico->Position(-50.0f, 1.0f, 10.0f);
+	pico->Position(-50.0f, 20.0f, 10.0f);
 
 	CEnemy* enemy = new CEnemy
 	(
