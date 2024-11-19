@@ -11,6 +11,7 @@
 #include "CBGMManager.h"
 #include "CLineEffect.h"
 #include "CNavManager.h"
+#include "CEnemy2.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -48,7 +49,12 @@ void CGameScene::Load()
 
 	CResourceManager::Load<CModelX>("Player2", "Character\\Player2\\pico.x");
 	CResourceManager::Load<CModelX>("Enemy", "Character\\Enemy\\mutant\\mutant.x");
+	CResourceManager::Load<CModelX>("Enemy2", "Character\\Enemy\\warrok\\warrok.x");
 	CResourceManager::Load<CModel>("Map1", "Map\\map1.obj");
+
+	CResourceManager::Load<CModel>("Map2", "Map\\map2.obj");
+	CResourceManager::Load<CModel>("Floor2", "Map\\floor2.obj");
+
 
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
@@ -77,6 +83,18 @@ void CGameScene::Load()
 	);
 	enemy->Scale(1.0f, 1.0f, 1.0f);
 	enemy->Position(CVector(200.0f, 1.0, 0.0f));
+
+	//CEnemy2* enemy2 = new CEnemy2
+	//(
+	//	{
+	//		CVector(100.0f, 1.0,   50.0f),
+	//		CVector(0.0f, 1.0,   50.0f),
+	//		CVector(0.0f, 1.0, 150.0f),
+	//		CVector(100.0f, 1.0, 150.0f),
+	//	}
+	//);
+	//enemy2->Scale(1.0f, 1.0f, 1.0f);
+	//enemy2->Position(CVector(200.0f, 1.0, 0.0f));
 	
 	// CGameCameraのテスト
 	//CGameCamera* mainCamera = new CGameCamera

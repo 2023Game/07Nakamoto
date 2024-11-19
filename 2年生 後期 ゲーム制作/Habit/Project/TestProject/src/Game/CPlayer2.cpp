@@ -12,7 +12,7 @@ const CPlayer2::AnimData CPlayer2::ANIM_DATA[] =
 	{ "",											true,	0.0f	},	// Tポーズ
 	{ "Character\\Player2\\anim\\pico_idle.x",		true,	181.0f	},	// 待機
 	{ "Character\\Player2\\anim\\pico_walk_s.x",	true,	60.0f	},	// 歩行
-	{ "Character\\Player2\\anim\\pico_run.x",		true,	22.0f	},	// 走行
+	{ "Character\\Player2\\anim\\pico_running.x",	true,	44.0f	},	// 走行
 	{ "Character\\Player2\\anim\\pico_jump_start.x",false,	25.0f	},	// ジャンプ開始
 	{ "Character\\Player2\\anim\\pico_jumping.x",	false,	 1.0f	},	// ジャンプ中
 	{ "Character\\Player2\\anim\\pico_jump_end.x",	false,	26.0f	},	// ジャン終了プ
@@ -20,18 +20,15 @@ const CPlayer2::AnimData CPlayer2::ANIM_DATA[] =
 	{ "Character\\Player2\\anim\\pico_crawl.x",		true,	55.0f	},	// 這う
 	{ "Character\\Player2\\anim\\pico_sneak.x",		true,	51.0f	},	// しゃがみ移動
 	{ "Character\\Player2\\anim\\pico_crouch_and_pick_up.x",		true,	180.0f	},	// しゃがんで拾う
-
 	
 };
 
-#define PLAYER_HEIGHT	16.0f			// プレイヤーの高さ
-#define PLAYER_WIDTH	10.0f			// プレイヤーの幅
+#define PLAYER_HEIGHT_CCOL1	12.0f		// プレイヤーの高さ
+#define PLAYER_HEIGHT_CCOL2	2.0f		// プレイヤーの高さ
+#define PLAYER_WIDTH_CCOL	2.5f		// プレイヤーの幅
+
 #define MOVE_SPEED		0.375f * 2.0f	// 歩く速度
 #define RUN_SPEED		1.0f			// 走る速度
-
-#define PLAYER_HEIGHT_CCOL1	12.0f			// プレイヤーの高さ
-#define PLAYER_HEIGHT_CCOL2	2.0f			// プレイヤーの高さ
-#define PLAYER_WIDTH_CCOL	2.5f			// プレイヤーの幅
 
 #define JUNP_MOVE_DIST	20.0f			// ジャンプ時の移動距離
 #define JUNP_MOVE_START	16.0f			// ジャンプ時の移動開始フレーム
@@ -232,6 +229,7 @@ void CPlayer2::UpdateJump()
 			break;
 	}
 }
+
 // キーの入力情報から移動ベクトルを求める
 CVector CPlayer2::CalcMoveVec() const
 {
@@ -280,21 +278,28 @@ void CPlayer2::UpdateMove()
 	// 求めた移動ベクトルの長さで入力されているか判定
 	if (move.LengthSqr() > 0.0f)
 	{
-		mMoveSpeed += move * MOVE_SPEED;
-
-		// 待機状態であれば、歩行アニメーションに切り替え
+		if (CInput::Key(VK_SHIFT))
+		{
+			mMoveSpeed += move * RUN_SPEED;
+		}
+		else
+		{
+			mMoveSpeed += move * MOVE_SPEED;
+		}
+		
+		// 待機状態であれば、
 		if (mState == EState::eIdle)
 		{
-			//if (CInput::Key(VK_SHIFT))
-			//{
-			//	mMoveSpeed += move * RUN_SPEED;
-			//	ChangeAnimation(EAnimType::eRun);
-			//}
-			//else
-			//{
+			if (CInput::Key(VK_SHIFT))
+			{
+				// 走行アニメーションに切り替える
+				ChangeAnimation(EAnimType::eRun);
+			}
+			else
+			{
+				// 歩行アニメーションに切り替え
 				ChangeAnimation(EAnimType::eWalk);
-				//mMoveSpeed += move * MOVE_SPEED;
-			//}
+			}
 		}
 	}
 	// 移動キーを入力していない
@@ -316,9 +321,7 @@ void CPlayer2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		// フィールドと天井の当たり判定処理
 		if (other->Layer() == ELayer::eField)
 		{
-			// 押し戻しベクトルのYの値を0にする
 			CVector adjust = hit.adjust;
-			//adjust.Y(0.0f);
 			// 押し戻しベクトルの分、座標を移動
 			Position(Position() + adjust * hit.weight);
 

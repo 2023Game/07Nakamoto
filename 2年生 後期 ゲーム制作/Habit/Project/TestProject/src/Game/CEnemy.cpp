@@ -10,8 +10,8 @@
 #include "CNavNode.h"
 #include "CNavManager.h"
 
-#define ENEMY_HEIGHT		 16.0f	// 敵のの高さ
-#define ENEMY_WIDTH			 10.0f	// 敵のの幅
+#define ENEMY_HEIGHT		 16.0f	// 敵の高さ
+#define ENEMY_WIDTH			 10.0f	// 敵の幅
 #define FOV_ANGLE			 45.0f	// 視野範囲の角度
 #define FOV_LENGTH			100.0f	// 視野範囲の距離
 #define EYE_HEIGHT			 10.0f	// 視点の高さ
@@ -28,7 +28,7 @@
 #define PATROL_NEAR_DIST	 10.0f	// 巡回開始時に選択される巡回ポイントの最短距離
 #define IDLE_TIME			  5.0f	// 待機状態の時間
 
-// プレイヤーのアニメーションデータのテーブル
+// エネミーのアニメーションデータのテーブル
 const CEnemy::AnimData CEnemy::ANIM_DATA[] =
 {
 	{ "",														true,	122.0f	},	// 待機
@@ -38,8 +38,13 @@ const CEnemy::AnimData CEnemy::ANIM_DATA[] =
 	{ "Character\\Enemy\\mutant\\anim\\mutant_jump_attack.x",	false,	112.0f	},	// ジャンプ攻撃
 	{ "Character\\Enemy\\mutant\\anim\\mutant_attack.x",		false,	81.0f	},	// 攻撃
 
-
 };
+
+//// エネミー2のアニメーションデータのテーブル
+//const CEnemy::AnimData CEnemy::ANIM_DATA2[] =
+//{
+//	{ "",														true, 60.0f },	//待機							
+//};
 
 // コンストラクタ
 CEnemy::CEnemy(std::vector<CVector> patrolPoints)
@@ -72,36 +77,6 @@ CEnemy::CEnemy(std::vector<CVector> patrolPoints)
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
 
-	//// 縦方向のコライダー生成
-	//mpColliderLine = new CColliderLine
-	//(
-	//	this, ELayer::ePlayer,
-	//	CVector(0.0f, 0.0f, 0.0f),
-	//	CVector(0.0f, ENEMY_HEIGHT, 0.0f)
-	//);
-	//mpColliderLine->SetCollisionLayers({ ELayer::eField });
-
-	//float width = ENEMY_WIDTH * 0.5f;
-	//float posY = ENEMY_HEIGHT * 0.5f;
-
-	//// 横方向（X軸）のコライダー生成
-	//mpColliderLineX = new CColliderLine
-	//(
-	//	this, ELayer::ePlayer,
-	//	CVector(-width, posY, 0.0f),
-	//	CVector(width, posY, 0.0f)
-	//);
-	//mpColliderLineX->SetCollisionLayers({ ELayer::eField });
-
-	//// 縦方向（Z軸）のコライダー生成
-	//mpColliderLineZ = new CColliderLine
-	//(
-	//	this, ELayer::ePlayer,
-	//	CVector(0.0f, posY, -width),
-	//	CVector(0.0f, posY, width)
-	//);
-	//mpColliderLineZ->SetCollisionLayers({ ELayer::eField });
-
 	// 視野範囲のデバッグ表示クラスを作成
 	mpDebugFov = new CDebugFieldOfView(this, mFovAngle, mFovLength);
 	
@@ -123,11 +98,6 @@ CEnemy::CEnemy(std::vector<CVector> patrolPoints)
 // デストラクタ
 CEnemy::~CEnemy()
 {
-	//// コライダーを破棄
-	//SAFE_DELETE(mpColliderLine);
-	//SAFE_DELETE(mpColliderLineX);
-	//SAFE_DELETE(mpColliderLineZ);
-
 	// 視野範囲のデバッグ表示が存在したら、一緒に削除する
 	if (mpDebugFov != nullptr)
 	{
@@ -157,7 +127,7 @@ CEnemy::~CEnemy()
 void CEnemy::DeleteObject(CObjectBase* obj)
 {
 	// 削除されたオブジェクトが視野範囲のデバッグ表示であれば
-	// 自身が削除されたと
+	// 自身が削除された
 	if (obj == mpDebugFov)
 	{
 		mpDebugFov = nullptr;
@@ -167,16 +137,16 @@ void CEnemy::DeleteObject(CObjectBase* obj)
 // 更新処理
 void CEnemy::Update()
 {
-	if (CInput::Key('U'))
-	{
-		ChangeState(EState::eChase);
-		//ChangeAnimation(EAnimType::eWalk);
-	}
-	else if (CInput::Key('L'))
-	{
-		ChangeState(EState::ePatrol);
-		//ChangeAnimation(EAnimType::eRun);
-	}
+	//if (CInput::Key('U'))
+	//{
+	//	ChangeState(EState::eChase);
+	//	//ChangeAnimation(EAnimType::eWalk);
+	//}
+	//else if (CInput::Key('L'))
+	//{
+	//	ChangeState(EState::ePatrol);
+	//	//ChangeAnimation(EAnimType::eRun);
+	//}
 
 	switch (mState)
 	{
@@ -496,7 +466,6 @@ void CEnemy::ChangePatrolPoint()
 		}
 	}
 }
-
 
 // 待機状態時の更新処理
 void CEnemy::UpdateIdle()

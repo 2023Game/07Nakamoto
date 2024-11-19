@@ -62,6 +62,7 @@ private:
 	};
 	// アニメーションデータのテーブル
 	static const AnimData ANIM_DATA[];
+	static const AnimData ANIM_DATA2[];
 
 	enum class EState
 	{
@@ -120,10 +121,6 @@ private:
 	// 巡回ポイントのリスト
 	std::vector<CNavNode*> mPatrolPoints;
 	int mNextPatrolIndex;	// 次に巡回する番号
-
-	//CColliderLine* mpColliderLine;	// 縦方向の線分コライダー
-	//CColliderLine* mpColliderLineX;	// 横方向（X軸）の線分コライダー
-	//CColliderLine* mpColliderLineZ;	// 横方向（Z軸）の線分コライダー
 
 	std::vector<CNavNode*> mMoveRoute;	//求めた最短経路記憶用
 	int mNextMoveIndex;					// 次に移動するノードのインデックス値
