@@ -84,17 +84,17 @@ void CGameScene::Load()
 	enemy->Scale(1.0f, 1.0f, 1.0f);
 	enemy->Position(CVector(200.0f, 1.0, 0.0f));
 
-	//CEnemy2* enemy2 = new CEnemy2
-	//(
-	//	{
-	//		CVector(100.0f, 1.0,   50.0f),
-	//		CVector(0.0f, 1.0,   50.0f),
-	//		CVector(0.0f, 1.0, 150.0f),
-	//		CVector(100.0f, 1.0, 150.0f),
-	//	}
-	//);
-	//enemy2->Scale(1.0f, 1.0f, 1.0f);
-	//enemy2->Position(CVector(200.0f, 1.0, 0.0f));
+	CEnemy2* enemy2 = new CEnemy2
+	(
+		{
+			CVector(250.0f, 1.0, 150.0f),
+			CVector(150.0f, 1.0, 150.0f),
+			CVector(150.0f, 1.0, 250.0f),
+			CVector(250.0f, 1.0, 250.0f),
+		}
+	);
+	enemy2->Scale(1.0f, 1.0f, 1.0f);
+	enemy2->Position(CVector(200.0f, 1.0, 200.0f));
 	
 	// CGameCamera‚ÌƒeƒXƒg
 	//CGameCamera* mainCamera = new CGameCamera

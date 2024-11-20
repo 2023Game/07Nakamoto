@@ -16,6 +16,7 @@ enum class ETag
 	eBullet,// ’eŠÛ
 	eFlame,	// ‰Š
 	eSlash,	// aŒ‚
+	eTrap,	// ã©
 
 	eCamera,// ƒJƒƒ‰
 

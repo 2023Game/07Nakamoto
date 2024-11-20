@@ -9,6 +9,7 @@
 #include "CField.h"
 #include "CNavNode.h"
 #include "CNavManager.h"
+#include "CTrap.h"
 
 #define ENEMY_HEIGHT		 16.0f	// 敵の高さ
 #define ENEMY_WIDTH			 10.0f	// 敵の幅
@@ -39,12 +40,6 @@ const CEnemy::AnimData CEnemy::ANIM_DATA[] =
 	{ "Character\\Enemy\\mutant\\anim\\mutant_attack.x",		false,	81.0f	},	// 攻撃
 
 };
-
-//// エネミー2のアニメーションデータのテーブル
-//const CEnemy::AnimData CEnemy::ANIM_DATA2[] =
-//{
-//	{ "",														true, 60.0f },	//待機							
-//};
 
 // コンストラクタ
 CEnemy::CEnemy(std::vector<CVector> patrolPoints)
@@ -137,17 +132,6 @@ void CEnemy::DeleteObject(CObjectBase* obj)
 // 更新処理
 void CEnemy::Update()
 {
-	//if (CInput::Key('U'))
-	//{
-	//	ChangeState(EState::eChase);
-	//	//ChangeAnimation(EAnimType::eWalk);
-	//}
-	//else if (CInput::Key('L'))
-	//{
-	//	ChangeState(EState::ePatrol);
-	//	//ChangeAnimation(EAnimType::eRun);
-	//}
-
 	switch (mState)
 	{
 	case EState::eIdle:		UpdateIdle();		break;
@@ -284,6 +268,7 @@ void CEnemy::ChangeState(EState state)
 
 }
 
+// プレイヤーが視野範囲内に入ったかどうか
 bool CEnemy::IsFoundPlayer() const
 {
 	// プレイヤーが存在しない場合は、視野範囲外とする
@@ -470,7 +455,7 @@ void CEnemy::ChangePatrolPoint()
 // 待機状態時の更新処理
 void CEnemy::UpdateIdle()
 {
-	// プレイヤーが視野範囲外に入ったら、追跡にする
+	// プレイヤーが視野範囲内に入ったら、追跡にする
 	if (IsFoundPlayer())
 	{
 		ChangeState(EState::eChase);
@@ -635,6 +620,8 @@ void CEnemy::UpdateLost()
 				{
 					// 移動が終われば待機状態へ移行
 					ChangeState(EState::eIdle);
+
+					//CTrap trap = new trap(this, mPostion);
 				}
 			}
 			break;

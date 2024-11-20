@@ -83,16 +83,16 @@ private:
 	// プレイヤーの状態
 	enum class EState
 	{
-		eTPose,		//Tポーズ
-		eIdle,		//待機
-		eWalk,		//歩行
-		eRun,		//走行
+		eTPose,		// Tポーズ
+		eIdle,		// 待機
+		eWalk,		// 歩行
+		eRun,		// 走行
 		eJumpStart,	// ジャンプ開始
-		eJump,		//ジャンプ
+		eJump,		// ジャンプ
 		eJumpEnd,	// ジャンプ終了
-		eCrawl,		//這う
-		eSneak,		//しゃがみ移動
-		eCrouch_up, //しゃがんで拾う
+		eCrawl,		// 這う
+		eSneak,		// しゃがみ移動
+		eCrouch_up, // しゃがんで拾う
 	};
 
 	std::string ToString(EState state);

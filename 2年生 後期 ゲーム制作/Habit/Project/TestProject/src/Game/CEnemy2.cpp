@@ -9,8 +9,8 @@
 #include "CNavNode.h"
 #include "CNavManager.h"
 
-#define ENEMY_HEIGHT		 16.0f	// 敵の高さ
-#define ENEMY_WIDTH			 10.0f	// 敵の幅
+//#define ENEMY_HEIGHT		 16.0f	// 敵の高さ
+//#define ENEMY_WIDTH			 10.0f	// 敵の幅
 #define FOV_ANGLE			 45.0f	// 視野範囲の角度
 #define FOV_LENGTH			100.0f	// 視野範囲の距離
 #define EYE_HEIGHT			 10.0f	// 視点の高さ
@@ -19,9 +19,9 @@
 #define ROTATE_SPEED		 6.0f	// 回転速度
 
 #define ATTACK_RANGE		 20.0f	// 攻撃範囲
-#define ATTACK_MOVE_DIST	 20.0f	// 攻撃時の移動距離
-#define ATTACK_MOVE_STAT	 16.0f	// 攻撃時の移動開始フレーム
-#define ATTACK_MOVE_END		 47.0f	// 攻撃時の移動終了フレーム
+//#define ATTACK_MOVE_DIST	 20.0f	// 攻撃時の移動距離
+//#define ATTACK_MOVE_STAT	 16.0f	// 攻撃時の移動開始フレーム
+//#define ATTACK_MOVE_END		 47.0f	// 攻撃時の移動終了フレーム
 #define ATTACK_WAIT_TIME	  1.0f	// 攻撃終了時の待ち時間
 #define PATROL_INTERVAL		  3.0f	// 次の巡回ポイントに移動開始するまでの時間
 #define PATROL_NEAR_DIST	 10.0f	// 巡回開始時に選択される巡回ポイントの最短距離
@@ -30,7 +30,11 @@
 // エネミー2のアニメーションデータのテーブル
 const CEnemy2::AnimData CEnemy2::ANIM_DATA[] =
 {
-	{ "",											true, 60.0f },	//待機							
+	{ "",													true,	60.0f   },	// 待機		
+	{ "Character\\Enemy\\warrok\\anim\\warrok_walk.x",		true,	44.0f	},	// 歩行
+	{ "Character\\Enemy\\warrok\\anim\\warrok_run.x",		true,	27.0f	},	// 走行
+	{ "Character\\Enemy\\warrok\\anim\\warrok_attack.x",	false,	81.0f	},	// 攻撃
+
 };
 
 // コンストラクタ
@@ -439,7 +443,7 @@ void CEnemy2::UpdateIdle()
 	else
 	{
 		// 待機時間が経過したら、巡回状態へ移行
-		//ChangeState(EState::ePatrol);
+		ChangeState(EState::ePatrol);
 	}
 }
 
@@ -600,58 +604,29 @@ void CEnemy2::UpdateAttack()
 	switch (mStateStep)
 	{
 		// ステップ0 : 攻撃アニメーションを再生
-	case 0:
-		// 攻撃開始位置と攻撃終了位置を設定
-		mAttackStartPos = Position();
-		mAttackEndPos = mAttackStartPos + VectorZ() * ATTACK_MOVE_DIST;
-
-		ChangeAnimation(EAnimType::eJumpAttack);
-		mStateStep++;
-		break;
-		// ステップ1 : 攻撃時の移動処理
-	case 1:
-	{
-		// 攻撃アニメーションが移動開始フレームを超えた
-		float frame = GetAnimationFrame();
-		if (frame >= ATTACK_MOVE_STAT)
-		{
-			//移動終了フレームまで到達していない
-			if (frame < ATTACK_MOVE_END)
+		case 0:
+			ChangeAnimation(EAnimType::eAttack);
+			mStateStep++;
+			break;
+		// ステップ1 : 攻撃アニメーションの終了待ち
+		case 1:
+			if (IsAnimationFinished())
 			{
-				// 線形補間で移動開始位置から移動終了位置まで移動する
-				float moveFrame = ATTACK_MOVE_END - ATTACK_MOVE_STAT;
-				float percent = (frame - ATTACK_MOVE_STAT) / moveFrame;
-				CVector pos = CVector::Lerp(mAttackStartPos, mAttackEndPos, percent);
-				Position(pos);
-			}
-			// 移動終了フレームまで到達した
-			else
-			{
-				Position(mAttackEndPos);
 				mStateStep++;
 			}
-		}
-		break;
-	}
-	// ステップ2 : 攻撃アニメーションの終了待ち
-	case 2:
-		if (IsAnimationFinished())
-		{
-			mStateStep++;
-		}
-		break;
-		// ステップ3 : 攻撃終了後の待ち時間
-	case 3:
-		if (mElapsedTime < ATTACK_WAIT_TIME)
-		{
-			mElapsedTime += Times::DeltaTime();
-		}
-		else
-		{
-			// 時間が経過したら、待機状態へ移行
-			ChangeState(EState::eIdle);
-		}
-		break;
+			break;
+		// ステップ2 : 攻撃終了後の待ち時間
+		case 2:
+			if (mElapsedTime < ATTACK_WAIT_TIME)
+			{
+				mElapsedTime += Times::DeltaTime();
+			}
+			else
+			{
+				// 時間が経過したら、待機状態へ移行
+				ChangeState(EState::eIdle);
+			}
+			break;
 	}
 }
 

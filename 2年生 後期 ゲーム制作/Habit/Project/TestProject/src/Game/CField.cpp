@@ -65,6 +65,15 @@ void CField::CreateWalls()
 		CVector(5.0f, 5.0f, 5.0f)
 	);
 	mWalls.push_back(wall);	// 生成した壁を壁のリストに追加
+
+	// 壁③生成
+	wall = new CWall
+	(
+		CVector(250.0f, 1.0f, 200.0f),
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(5.0f, 5.0f, 5.0f)
+	);
+	mWalls.push_back(wall);	// 生成した壁を壁のリストに追加
 }
 
 void CField::CreateFieldObjects()
@@ -181,6 +190,13 @@ void CField::CreateNavNodes()
 		new CNavNode(CVector(-15.0f, 0.0f, -60.0f));
 		new CNavNode(CVector(-85.0f, 0.0f, -60.0f));
 		new CNavNode(CVector(-85.0f, 0.0f, -40.0f));
+
+		// 壁③の周りの経路探索ノード
+		new CNavNode(CVector(285.0f, 1.0f, 190.0f));
+		new CNavNode(CVector(285.0f, 0.0f, 210.0f));
+		new CNavNode(CVector(215.0f, 0.0f, 210.0f));
+		new CNavNode(CVector(215.0f, 0.0f, 190.0f));
+		
 	}
 }
 

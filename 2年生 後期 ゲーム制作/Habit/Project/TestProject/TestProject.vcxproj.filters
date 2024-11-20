@@ -379,6 +379,9 @@
     <ClCompile Include="src\Game\CEnemy2.cpp">
       <Filter>ソース ファイル\Game\Character</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CTrap.cpp">
+      <Filter>ソース ファイル\Game\Effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -686,6 +689,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CEnemy2.h">
       <Filter>ソース ファイル\Game\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CTrap.h">
+      <Filter>ソース ファイル\Game\Effect</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
