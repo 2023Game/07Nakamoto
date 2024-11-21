@@ -3,6 +3,7 @@
 #include "CColliderMesh.h"
 
 class CWall;
+class CWall2;
 
 class CField : public CObjectBase
 {
@@ -47,7 +48,8 @@ private:
 	// 壁のオブジェクトのリスト
 	std::list<CWall*> mWalls;
 
-
-
-	CModel* mpMap1;
+	// 床
+	CModel* mpMap;
+	// 壁
+	CWall2* mpFloor;
 };

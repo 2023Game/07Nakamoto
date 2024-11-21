@@ -2,9 +2,8 @@
 #include "Primitive.h"
 
 // コンストラクタ
-CTrap::CTrap(CObjectBase* owner, const CVector& pos)
+CTrap::CTrap(const CVector& pos)
 	: CObjectBase(ETag::eSlash, ETaskPriority::eEffect, 0, ETaskPauseType::eGame)
-	, mpOwner(owner)
 	, mPosition(pos)
 	, mColor(1.0f, 0.0f, 0.0f, 1.0f)
 {

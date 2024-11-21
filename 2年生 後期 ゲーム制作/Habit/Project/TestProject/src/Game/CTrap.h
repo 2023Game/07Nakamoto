@@ -10,7 +10,7 @@ public:
 	/// </summary>
 	/// <param name="pwner">罠を生成したオブジェクト</param>
 	/// <param name="pos">生成位置</param>
-	CTrap(CObjectBase* owner, const CVector& pos);
+	CTrap(const CVector& pos);
 	// デストラクタ
 	~CTrap();
 
@@ -23,7 +23,6 @@ public:
 	void Render() override;
 
 private:
-	CObjectBase* mpOwner;	// このエフェクトの持ち主
 	CVector mPosition;
 	CColor mColor;
 };

@@ -9,6 +9,8 @@
 class CDebugFieldOfView;
 class CNavNode;
 
+class CTrap;
+
 /*
 エネミークラス
 キャラクタクラスを継承
@@ -124,5 +126,7 @@ private:
 
 	std::vector<CNavNode*> mMoveRoute;	//求めた最短経路記憶用
 	int mNextMoveIndex;					// 次に移動するノードのインデックス値
+
+	CTrap* mpTrap;
 };
 #endif

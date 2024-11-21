@@ -8,6 +8,7 @@
 #include "CNavManager.h"
 #include "CNavNode.h"
 
+#include "CWall2.h"
 
 CField* CField::spInstance = nullptr;
 
@@ -74,6 +75,13 @@ void CField::CreateWalls()
 		CVector(5.0f, 5.0f, 5.0f)
 	);
 	mWalls.push_back(wall);	// 生成した壁を壁のリストに追加
+
+	CWall2* wall2 = new CWall2
+	(
+		CVector(0.0f, 10.0f, 0.0f),
+		CVector(0.0f,  0.0f, 0.0f),
+		CVector(1.0f,  1.0f, 1.0f)
+	);
 }
 
 void CField::CreateFieldObjects()
@@ -81,15 +89,15 @@ void CField::CreateFieldObjects()
 	mpCubeModel = CResourceManager::Get<CModel>("FieldCube");
 	mpCylinderModel = CResourceManager::Get<CModel>("FieldCylinder");
 
-	mpMap1 = CResourceManager::Get<CModel>("Map1");
+	mpMap = CResourceManager::Get<CModel>("Map_mini_floor");
 
 	// マップ①
-	/*new CMoveFloor
+	new CMoveFloor
 	(
-		mpMap1,
-		CVector(0.0f, 1.0f, 0.0f), CVector(10.0f, 10.0f, 10.0f),
+		mpMap,
+		CVector(0.0f, 100.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f),
 		CVector(0.0f, 0.0f, 0.0f), 5.0f
-	);*/
+	);
 
 	//new CMoveFloor
 	//(

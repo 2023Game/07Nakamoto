@@ -382,6 +382,9 @@
     <ClCompile Include="src\Game\CTrap.cpp">
       <Filter>ソース ファイル\Game\Effect</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CWall2.cpp">
+      <Filter>ソース ファイル\Game\Field</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -692,6 +695,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CTrap.h">
       <Filter>ソース ファイル\Game\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CWall2.h">
+      <Filter>ソース ファイル\Game\Field</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

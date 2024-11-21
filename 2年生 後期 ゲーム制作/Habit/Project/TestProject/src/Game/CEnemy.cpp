@@ -473,6 +473,10 @@ void CEnemy::UpdateIdle()
 	{
 		// 待機時間が経過したら、巡回状態へ移行
 		ChangeState(EState::ePatrol);
+
+		// 罠を設置
+		mpTrap = new CTrap(Position());
+
 	}
 }
 
@@ -620,8 +624,6 @@ void CEnemy::UpdateLost()
 				{
 					// 移動が終われば待機状態へ移行
 					ChangeState(EState::eIdle);
-
-					//CTrap trap = new trap(this, mPostion);
 				}
 			}
 			break;

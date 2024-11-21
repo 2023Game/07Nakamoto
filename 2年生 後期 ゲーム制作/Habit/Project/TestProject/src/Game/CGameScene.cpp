@@ -52,8 +52,8 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>("Enemy2", "Character\\Enemy\\warrok\\warrok.x");
 	CResourceManager::Load<CModel>("Map1", "Map\\map1.obj");
 
-	CResourceManager::Load<CModel>("Map2", "Map\\map2.obj");
-	CResourceManager::Load<CModel>("Floor2", "Map\\floor2.obj");
+	CResourceManager::Load<CModel>("Map_mini", "Map\\map_mini.obj");
+	CResourceManager::Load<CModel>("Map_mini_floor", "Map\\map_mini_floor.obj");
 
 
 	// ƒQ[ƒ€BGM‚ğ“Ç‚İ‚İ
