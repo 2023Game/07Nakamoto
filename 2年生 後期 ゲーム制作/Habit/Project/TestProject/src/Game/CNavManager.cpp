@@ -5,6 +5,8 @@
 #include "Primitive.h"
 #include <assert.h>
 
+#include "CField2.h"
+
 CNavManager* CNavManager::spInstance = nullptr;
 
 // 経路管理クラスのインスタンスを取得
@@ -49,7 +51,7 @@ void CNavManager::RemoveNode(CNavNode* node)
 	mNodes.remove(node);
 }
 
-///	指定したノードに接続できるノードを検索して設定
+// 指定したノードに接続できるノードを検索して設定
 int CNavManager::FindConnectNavNodes(CNavNode* node, float distance)
 {
 	// 現在の接続先の情報を全てクリアしておく
@@ -71,7 +73,7 @@ int CNavManager::FindConnectNavNodes(CNavNode* node, float distance)
 		CVector start = node->GetOffsetPos();
 		CVector end = findNode->GetOffsetPos();
 		CHitInfo hit;
-		if (CField::Instance()->CollisionRay(start, end, &hit))
+		if (CField2::Instance()->CollisionRay(start, end, &hit))
 		{
 			// 何かにヒットした場合は、遮蔽物があるので接続できない
 			continue;

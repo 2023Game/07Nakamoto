@@ -6,7 +6,7 @@
 #include "CPlayer2.h"
 #include "Maths.h"
 #include "Primitive.h"
-#include "CField.h"
+#include "CField2.h"
 #include "CNavNode.h"
 #include "CNavManager.h"
 #include "CTrap.h"
@@ -184,7 +184,7 @@ void CEnemy::Render()
 	}
 
 	CPlayer2* player = CPlayer2::Instance();
-	CField* field = CField::Instance();
+	CField2* field = CField2::Instance();
 	if (player != nullptr && field != nullptr)
 	{
 		CVector offsetPos = CVector(0.0f, EYE_HEIGHT, 0.0f);
@@ -315,7 +315,7 @@ bool CEnemy::IsLookPlayer() const
 	CPlayer2* player = CPlayer2::Instance();
 	if (player == nullptr) return false;
 	// フィールドが存在しない場合は、遮蔽物がないので見える
-	CField* field = CField::Instance();
+	CField2* field = CField2::Instance();
 	if (field == nullptr) return true;
 
 	CVector offsetPos = CVector(0.0f, EYE_HEIGHT, 0.0f);

@@ -76,12 +76,12 @@ void CField::CreateWalls()
 	);
 	mWalls.push_back(wall);	// 生成した壁を壁のリストに追加
 
-	CWall2* wall2 = new CWall2
-	(
-		CVector(0.0f, 10.0f, 0.0f),
-		CVector(0.0f,  0.0f, 0.0f),
-		CVector(1.0f,  1.0f, 1.0f)
-	);
+	//CWall2* wall2 = new CWall2
+	//(
+	//	CVector(0.0f, 10.0f, 0.0f),
+	//	CVector(0.0f,  0.0f, 0.0f),
+	//	CVector(1.0f,  1.0f, 1.0f)
+	//);
 }
 
 void CField::CreateFieldObjects()
@@ -89,15 +89,15 @@ void CField::CreateFieldObjects()
 	mpCubeModel = CResourceManager::Get<CModel>("FieldCube");
 	mpCylinderModel = CResourceManager::Get<CModel>("FieldCylinder");
 
-	mpMap = CResourceManager::Get<CModel>("Map_mini");
+	//mpMap = CResourceManager::Get<CModel>("Map_mini");
 
-	// マップ①
-	new CMoveFloor
-	(
-		mpMap,
-		CVector(0.0f, 1.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f),
-		CVector(0.0f, 0.0f, 0.0f), 5.0f
-	);
+	//// マップ①
+	//new CMoveFloor
+	//(
+	//	mpMap,
+	//	CVector(0.0f, 1.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f),
+	//	CVector(0.0f, 0.0f, 0.0f), 5.0f
+	//);
 
 	//new CMoveFloor
 	//(
@@ -200,7 +200,7 @@ void CField::CreateNavNodes()
 		new CNavNode(CVector(-85.0f, 0.0f, -40.0f));
 
 		// 壁③の周りの経路探索ノード
-		new CNavNode(CVector(285.0f, 1.0f, 190.0f));
+		new CNavNode(CVector(285.0f, 0.0f, 190.0f));
 		new CNavNode(CVector(285.0f, 0.0f, 210.0f));
 		new CNavNode(CVector(215.0f, 0.0f, 210.0f));
 		new CNavNode(CVector(215.0f, 0.0f, 190.0f));

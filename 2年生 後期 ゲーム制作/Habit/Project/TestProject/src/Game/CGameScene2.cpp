@@ -44,8 +44,10 @@ void CGameScene2::Load()
 	CResourceManager::Load<CModelX>("Player2", "Character\\Player2\\pico.x");
 	CResourceManager::Load<CModelX>("Enemy", "Character\\Enemy\\mutant\\mutant.x");
 	CResourceManager::Load<CModelX>("Enemy2", "Character\\Enemy\\warrok\\warrok.x");
+
 	CResourceManager::Load<CModel>("Map_mini", "Map\\map_mini.obj");
 	CResourceManager::Load<CModel>("Map_mini_floor", "Map\\map_mini_floor.obj");
+	CResourceManager::Load<CModel>("Map_mini_Col", "Map\\map_mini_col.obj");
 
 	// ƒQ[ƒ€BGM‚ð“Ç‚Ýž‚Ý
 	CBGMManager::Instance()->Play(EBGMType::eGame);
@@ -58,32 +60,32 @@ void CGameScene2::Load()
 	// ƒvƒŒƒCƒ„[¶¬
 	CPlayer2* pico = new CPlayer2();
 	pico->Scale(1.0f, 1.0f, 1.0f);
-	pico->Position(15.0f, 1.0f, -15.0f);
+	pico->Position(10.0f, 10.0f, 10.0f);
 
 	// “G‡@¶¬
 	CEnemy* enemy = new CEnemy
 	(
 		{
-			CVector(120.0f, 1.0, -90.0f),
-			CVector(190.0f, 1.0, -90.0f),
-			CVector(190.0f, 1.0, -170.0f),
-			CVector(120.0f, 1.0, -170.0f),
+			CVector(70.0f, 1.0, 10.0f),
+			CVector(180.0f, 1.0, 10.0f),
+			CVector(180.0f, 1.0, 100.0f),
+			CVector(80.0f, 1.0, 100.0f),
 		}
 	);
 	enemy->Scale(1.0f, 1.0f, 1.0f);
-	enemy->Position(CVector(120.0f, 1.0, -90.0f));
-	// “G‡A¶¬
-	CEnemy2* enemy2 = new CEnemy2
-	(
-		{
-			CVector(190.0f, 1.0,  -30.0f),
-			CVector(265.0f, 1.0,  -30.0f),
-			CVector(265.0f, 1.0, -110.0f),
-			CVector(185.0f, 1.0, -110.0f),
-		}
-	);
-	enemy2->Scale(1.0f, 1.0f, 1.0f);
-	enemy2->Position(CVector(190.0f, 1.0, -30.0f));
+	enemy->Position(CVector(70.0f, 1.0, 10.0f));
+	//// “G‡A¶¬
+	//CEnemy2* enemy2 = new CEnemy2
+	//(
+	//	{
+	//		CVector(190.0f, 1.0,  -30.0f),
+	//		CVector(265.0f, 1.0,  -30.0f),
+	//		CVector(265.0f, 1.0, -110.0f),
+	//		CVector(185.0f, 1.0, -110.0f),
+	//	}
+	//);
+	//enemy2->Scale(1.0f, 1.0f, 1.0f);
+	//enemy2->Position(CVector(190.0f, 1.0, -30.0f));
 
 	// CGameCamera2‚ÌƒeƒXƒg
 	CVector atPos = pico->Position() + CVector(0.0f, 10.0f, 0.0f);

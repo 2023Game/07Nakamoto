@@ -45,9 +45,6 @@ private:
 
 	//TexAnimData mEffectAnimData;
 
-	// 床
-	CModel* mpMap;
-	// 壁
-	CWall2* mpFloor;
-
+	// 壁のオブジェクトのリスト
+	std::list<CWall2*> mWalls;
 };

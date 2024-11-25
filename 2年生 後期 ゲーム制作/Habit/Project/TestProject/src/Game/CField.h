@@ -49,7 +49,7 @@ private:
 	std::list<CWall*> mWalls;
 
 	// è∞
-	CModel* mpMap;
+	//CModel* mpMap;
 	// ï«
-	CWall2* mpFloor;
+	//CWall2* mpFloor;
 };

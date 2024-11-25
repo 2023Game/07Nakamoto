@@ -13,6 +13,7 @@ CField2* CField2::Instance()
 	return spInstance;
 }
 
+// コンストラクタ
 CField2::CField2()
 	: CObjectBase(ETag::eField, ETaskPriority::eBackground)
 {
@@ -30,6 +31,7 @@ CField2::CField2()
 	CreateNavNodes();
 }
 
+// デストラクタ
 CField2::~CField2()
 {
 	spInstance = nullptr;
@@ -41,6 +43,7 @@ CField2::~CField2()
 	}
 }
 
+// 更新
 void CField2::Update()
 {
 }
@@ -60,21 +63,21 @@ bool CField2::CollisionRay(const CVector& start, const CVector& end, CHitInfo* h
 		isHit = this;
 	}
 
-	//// 壁との衝突判定
-	//for (CWall2* wall : mWalls)
-	//{
-	//	if (wall->CollisionRay(start, end, &tHit))
-	//	{
-	//		// まだほかに衝突していない場合か、
-	//		// 既に衝突しているコライダーより近い場合は、
-	//		if (!isHit || tHit.dist < hit->dist)
-	//		{
-	//			// 衝突情報を更新
-	//			*hit = tHit;
-	//			isHit = true;
-	//		}
-	//	}
-	//}
+	// 壁との衝突判定
+	for (CWall2* wall : mWalls)
+	{
+		if (wall->CollisionRay(start, end, &tHit))
+		{
+			// まだほかに衝突していない場合か、
+			// 既に衝突しているコライダーより近い場合は、
+			if (!isHit || tHit.dist < hit->dist)
+			{
+				// 衝突情報を更新
+				*hit = tHit;
+				isHit = true;
+			}
+		}
+	}
 
 	return isHit;
 
@@ -83,15 +86,14 @@ bool CField2::CollisionRay(const CVector& start, const CVector& end, CHitInfo* h
 // 壁を生成
 void CField2::CreateWalls()
 {
-	mpMap = CResourceManager::Get<CModel>("Map_mini");
-
 	// マップ①
-	new CMoveFloor
+	CWall2* wall = new CWall2
 	(
-		mpMap,
-		CVector(0.0f, 1.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f),
-		CVector(0.0f, 0.0f, 0.0f), 5.0f
+		CVector(0.0f, 0.0f, 0.0f), 
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(1.0f, 1.0f, 1.0f)
 	);
+	mWalls.push_back(wall);
 }
 
 // オブジェクトの生成
@@ -100,8 +102,47 @@ void CField2::CreateFieldObjects()
 }
 
 void CField2::CreateNavNodes()
-{
-	
+{	
+	CNavManager* navMgr = CNavManager::Instance();
+	if (navMgr != nullptr)
+	{
+		// 壁①の周りの経路探索ノード
+		new CNavNode(CVector(25.0f, 0.0f, 25.0f));
+		new CNavNode(CVector(70.0f, 0.0f, 25.0f));
+		new CNavNode(CVector(70.0f, 0.0f, 90.0f));
+		new CNavNode(CVector(25.0f, 0.0f, 90.0f));
+
+		// 壁②の周りの経路探索ノード
+		new CNavNode(CVector( 85.0f, 0.0f, 15.0f));
+		new CNavNode(CVector(175.0f, 0.0f, 15.0f));
+		new CNavNode(CVector(175.0f, 0.0f, 80.0f));
+		new CNavNode(CVector( 85.0f, 0.0f, 80.0f));
+
+		// 壁③の周りの経路探索ノード
+		new CNavNode(CVector(185.0f, 0.0f, 45.0f));
+		new CNavNode(CVector(250.0f, 0.0f, 45.0f));
+		new CNavNode(CVector(250.0f, 0.0f, 100.0f));
+		new CNavNode(CVector(185.0f, 0.0f, 100.0f));
+
+		// 壁④の周りの経路探索ノード
+		new CNavNode(CVector(15.0f, 0.0f, 105.0f));
+		new CNavNode(CVector(95.0f, 0.0f, 105.0f));
+		new CNavNode(CVector(95.0f, 0.0f, 165.0f));
+		new CNavNode(CVector(50.0f, 0.0f, 165.0f));
+		new CNavNode(CVector(15.0f, 0.0f, 165.0f));
+
+		// 壁⑤の周りの経路探索ノード
+		new CNavNode(CVector(115.0f, 0.0f, 105.0f));
+		new CNavNode(CVector(185.0f, 0.0f, 105.0f));
+		new CNavNode(CVector(185.0f, 0.0f, 160.0f));
+		new CNavNode(CVector(115.0f, 0.0f, 160.0f));
+
+		// 壁⑥の周りの経路探索ノード
+		new CNavNode(CVector(195.0f, 0.0f, 115.0f));
+		new CNavNode(CVector(265.0f, 0.0f, 115.0f));
+		new CNavNode(CVector(265.0f, 0.0f, 180.0f));
+		new CNavNode(CVector(195.0f, 0.0f, 180.0f));
+	}
 }
 
 void CField2::Render()

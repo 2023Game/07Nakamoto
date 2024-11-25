@@ -7,8 +7,8 @@ CWall2::CWall2(const CVector& pos, const CVector& angle, const CVector& size)
 	mpModel = CResourceManager::Get<CModel>("Map_mini");
 
 	// 壁のコライダーを作成
-	//CModel* colModel = CResourceManager::Get<CModel>("WallCol");
-	//mpColliderMesh = new CColliderMesh(this, ELayer::eWall, colModel, true);
+	CModel* colModel = CResourceManager::Get<CModel>("Map_mini_Col");
+	mpColliderMesh = new CColliderMesh(this, ELayer::eWall, colModel, true);
 
 	// 位置と向きとサイズを設定
 	Position(pos);
@@ -21,7 +21,7 @@ CWall2::CWall2(const CVector& pos, const CVector& angle, const CVector& size)
 CWall2::~CWall2()
 {
 	// コライダーを削除
-	//SAFE_DELETE(mpColliderMesh);
+	SAFE_DELETE(mpColliderMesh);
 }
 
 // レイと壁との衝突判定
