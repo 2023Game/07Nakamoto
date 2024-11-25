@@ -1,6 +1,7 @@
 #pragma once
 #include "CObjectBase.h"
 #include "CColliderMesh.h"
+#include "CSceneManager.h"
 
 class CWall;
 class CWall2;
@@ -47,6 +48,8 @@ private:
 
 	// 壁のオブジェクトのリスト
 	std::list<CWall*> mWalls;
+
+	CSceneBase* mpScene;
 
 	// 床
 	//CModel* mpMap;
