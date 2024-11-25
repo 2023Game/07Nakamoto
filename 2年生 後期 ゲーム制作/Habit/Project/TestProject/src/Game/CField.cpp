@@ -89,13 +89,13 @@ void CField::CreateFieldObjects()
 	mpCubeModel = CResourceManager::Get<CModel>("FieldCube");
 	mpCylinderModel = CResourceManager::Get<CModel>("FieldCylinder");
 
-	mpMap = CResourceManager::Get<CModel>("Map_mini_floor");
+	mpMap = CResourceManager::Get<CModel>("Map_mini");
 
 	// ƒ}ƒbƒv‡@
 	new CMoveFloor
 	(
 		mpMap,
-		CVector(0.0f, 100.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f),
+		CVector(0.0f, 1.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f),
 		CVector(0.0f, 0.0f, 0.0f), 5.0f
 	);
 

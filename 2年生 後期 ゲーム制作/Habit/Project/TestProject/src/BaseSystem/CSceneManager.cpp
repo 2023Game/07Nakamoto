@@ -2,6 +2,7 @@
 #include "CFade.h"
 #include "CTitleScene.h"
 #include "CGameScene.h"
+#include "CGameScene2.h"
 
 #include "Test/CBootMenuScene.h"
 #include "Test/CCollisionTestScene.h"
@@ -108,6 +109,9 @@ void CSceneManager::ChangeNextScene()
 		case EScene::eTitle:	mpScene = new CTitleScene();	break;
 		//ゲームシーン
 		case EScene::eGame:		mpScene = new CGameScene();		break;
+
+		//ゲームシーン2
+		case EScene::eGame2:	mpScene = new CGameScene2();	break;
 
 		//起動時メニュー
 		case EScene::eBootMenu:	mpScene = new CBootMenuScene();	break;

@@ -385,6 +385,12 @@
     <ClCompile Include="src\Game\CWall2.cpp">
       <Filter>ソース ファイル\Game\Field</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CGameScene2.cpp">
+      <Filter>ソース ファイル\Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CField2.cpp">
+      <Filter>ソース ファイル\Game\Field</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -697,6 +703,12 @@
       <Filter>ソース ファイル\Game\Effect</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CWall2.h">
+      <Filter>ソース ファイル\Game\Field</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CGameScene2.h">
+      <Filter>ソース ファイル\Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CField2.h">
       <Filter>ソース ファイル\Game\Field</Filter>
     </ClInclude>
   </ItemGroup>
