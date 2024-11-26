@@ -95,6 +95,10 @@ private:
 		eCrouch_up, // しゃがんで拾う
 	};
 
+	int mHp;	// 体力
+	int mSt;	// スタミナ
+	//int mSan;	// 正気度
+
 	std::string ToString(EState state);
 
 	EState mState;	// プレイヤーの状態
@@ -111,7 +115,7 @@ private:
 
 	CColliderCapsule* mpColliderCapsule;	//カプセルコライダー
 
-	CTransform* mpRideObject;
+	CTransform* mpRideObject;	// 乗ることの出来るオブジェクトか
 };
 
 #endif // !CPLAYER_H

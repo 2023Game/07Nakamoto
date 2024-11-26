@@ -1,6 +1,6 @@
 #include "CGameScene2.h"
 #include "CSceneManager.h"
-#include "CField2.h"
+#include "CField.h"
 #include "CPlayer2.h"
 #include "CEnemy.h"
 #include "CEnemy2.h"
@@ -34,20 +34,15 @@ void CGameScene2::Load()
 
 	//ここでゲーム中に必要な
 	//リソースの読み込みやクラスの生成を行う
-
-	CResourceManager::Load<CModel>("Field", "Field\\field.obj");
-	CResourceManager::Load<CModel>("FieldCube", "Field\\Object\\cube.obj");
-	CResourceManager::Load<CModel>("FieldCylinder", "Field\\Object\\cylinder.obj");
-	CResourceManager::Load<CModel>("Wall", "Field\\Object\\Wall\\Wall.obj");
-	CResourceManager::Load<CModel>("WallCol", "Field\\Object\\Wall\\WallCol.obj");
+	CResourceManager::Load<CModel>("Map_mini", "Map\\map_mini.obj");
+	CResourceManager::Load<CModel>("Map_mini_floor", "Map\\map_mini_floor.obj");
+	CResourceManager::Load<CModel>("Map_mini_Col", "Map\\map_mini_col.obj");
 
 	CResourceManager::Load<CModelX>("Player2", "Character\\Player2\\pico.x");
 	CResourceManager::Load<CModelX>("Enemy", "Character\\Enemy\\mutant\\mutant.x");
 	CResourceManager::Load<CModelX>("Enemy2", "Character\\Enemy\\warrok\\warrok.x");
 
-	CResourceManager::Load<CModel>("Map_mini", "Map\\map_mini.obj");
-	CResourceManager::Load<CModel>("Map_mini_floor", "Map\\map_mini_floor.obj");
-	CResourceManager::Load<CModel>("Map_mini_Col", "Map\\map_mini_col.obj");
+	CResourceManager::Load<CTexture>("spider_web", "weapon\\spider_web.png");
 
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
@@ -55,7 +50,7 @@ void CGameScene2::Load()
 	// 経路探索管理クラスを作成
 	new CNavManager();
 	// フィールド作成
-	new CField2();
+	new CField();
 
 	// プレイヤー生成
 	CPlayer2* pico = new CPlayer2();
@@ -74,18 +69,18 @@ void CGameScene2::Load()
 	);
 	enemy->Scale(1.0f, 1.0f, 1.0f);
 	enemy->Position(CVector(70.0f, 1.0, 10.0f));
-	//// 敵②生成
-	//CEnemy2* enemy2 = new CEnemy2
-	//(
-	//	{
-	//		CVector(190.0f, 1.0,  -30.0f),
-	//		CVector(265.0f, 1.0,  -30.0f),
-	//		CVector(265.0f, 1.0, -110.0f),
-	//		CVector(185.0f, 1.0, -110.0f),
-	//	}
-	//);
-	//enemy2->Scale(1.0f, 1.0f, 1.0f);
-	//enemy2->Position(CVector(190.0f, 1.0, -30.0f));
+	// 敵②生成
+	CEnemy2* enemy2 = new CEnemy2
+	(
+		{
+			CVector(195.0f, 0.0f, 115.0f),
+			CVector(265.0f, 0.0f, 115.0f),
+			CVector(265.0f, 0.0f, 180.0f),
+			CVector(195.0f, 0.0f, 180.0f),
+		}
+	);
+	enemy2->Scale(1.0f, 1.0f, 1.0f);
+	enemy2->Position(CVector(195.0f, 0.0f, 115.0f));
 
 	// CGameCamera2のテスト
 	CVector atPos = pico->Position() + CVector(0.0f, 10.0f, 0.0f);

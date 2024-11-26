@@ -73,7 +73,7 @@ int CNavManager::FindConnectNavNodes(CNavNode* node, float distance)
 		CVector start = node->GetOffsetPos();
 		CVector end = findNode->GetOffsetPos();
 		CHitInfo hit;
-		if (CField2::Instance()->CollisionRay(start, end, &hit))
+		if (CField::Instance()->CollisionRay(start, end, &hit))
 		{
 			// ‰½‚©‚Éƒqƒbƒg‚µ‚½ê‡‚ÍAÕ•Á•¨‚ª‚ ‚é‚Ì‚ÅÚ‘±‚Å‚«‚È‚¢
 			continue;

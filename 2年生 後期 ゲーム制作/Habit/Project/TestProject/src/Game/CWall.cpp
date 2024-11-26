@@ -1,14 +1,37 @@
 #include "CWall.h"
+#include "CSceneManager.h"
 
 // コンストラクタ
 CWall::CWall(const CVector& pos, const CVector& angle, const CVector& size)
 {
-	// 壁のモデルデータ取得
-	mpModel = CResourceManager::Get<CModel>("Wall");
+	// 現在のシーンを取得
+	mScene = CSceneManager::Instance()->GetCurrentScene();
+	switch (mScene)
+	{
+	// ゲームシーン１
+	case EScene::eGame:
+		{
+			// 壁のモデルデータ取得
+			mpModel = CResourceManager::Get<CModel>("Wall");
 
-	// 壁のコライダーを作成
-	CModel* colModel = CResourceManager::Get<CModel>("WallCol");
-	mpColliderMesh = new CColliderMesh(this, ELayer::eWall, colModel, true);
+			// 壁のコライダーを作成
+			CModel* colModel = CResourceManager::Get<CModel>("WallCol");
+			mpColliderMesh = new CColliderMesh(this, ELayer::eWall, colModel, true);
+
+			break;
+		}
+	// ゲームシーン2
+	case EScene::eGame2:
+		{
+			// 壁のモデルデータ取得
+			mpModel = CResourceManager::Get<CModel>("Map_mini");
+
+			// 壁のコライダーを作成
+			CModel* colModel = CResourceManager::Get<CModel>("Map_mini_Col");
+			mpColliderMesh = new CColliderMesh(this, ELayer::eWall, colModel, true);
+			break;
+		}
+	}
 
 	// 位置と向きとサイズを設定
 	Position(pos);

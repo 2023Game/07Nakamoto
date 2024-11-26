@@ -30,4 +30,6 @@ public:
 private:
 	CModel* mpModel;	// 壁のモデルデータ
 	CColliderMesh* mpColliderMesh;	// 壁のコリジョンデータ
+
+	EScene mScene;
 };

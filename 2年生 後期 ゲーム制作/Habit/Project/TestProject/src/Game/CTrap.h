@@ -1,5 +1,6 @@
 #pragma once
 #include "CObjectBase.h"
+#include "CTexture.h"
 
 // 敵が設置する罠
 class CTrap : public CObjectBase
@@ -25,4 +26,10 @@ public:
 private:
 	CVector mPosition;
 	CColor mColor;
+
+protected:
+	// 持ち主
+	CObjectBase* mpOwner;
+	// 蜘蛛の巣のテクスチャ
+	CTexture* mpTexture;
 };

@@ -33,8 +33,8 @@ const CPlayer2::AnimData CPlayer2::ANIM_DATA[] =
 #define JUNP_MOVE_DIST	20.0f			// ジャンプ時の移動距離
 #define JUNP_MOVE_START	16.0f			// ジャンプ時の移動開始フレーム
 #define JUNP_MOVE_END	33.0f			// ジャンプ時の移動終了フレーム
-#define JUMP_SPEED 1.0f					// ジャンプの高さ
-#define GRAVITY 0.0625f					// 重力
+#define JUMP_SPEED		1.0f			// ジャンプの高さ
+#define GRAVITY			0.0625f			// 重力
 
 // コンストラクタ
 CPlayer2::CPlayer2()
@@ -44,6 +44,8 @@ CPlayer2::CPlayer2()
 	, mMoveSpeedY(0.0f)
 	, mIsGrounded(false)
 	, mpRideObject(nullptr)
+	, mHp(100)
+	, mSt(100)
 {
 	// インスタンスの設定
 	spInstatnce = this;
@@ -159,7 +161,7 @@ void CPlayer2::Update()
 	CDebugPrint::Print("FPS:%f\n", Times::FPS());
 }
 
-
+// 待機処理
 void CPlayer2::UpdateIdle()
 {
 	// 接地していれば、
@@ -173,6 +175,7 @@ void CPlayer2::UpdateIdle()
 	}
 }
 
+// ジャンプ処理
 void CPlayer2::UpdateJump()
 {
 	// ステップごとに処理を切り替える
@@ -280,11 +283,22 @@ void CPlayer2::UpdateMove()
 	{
 		if (CInput::Key(VK_SHIFT))
 		{
-			mMoveSpeed += move * RUN_SPEED;
+			// スタミナがあれば、
+			if (mSt > 0)
+			{
+				mMoveSpeed += move * RUN_SPEED;
+				mSt--;
+			}
+			// スタミナがない状態で走ったら、
+			else
+			{
+
+			}
 		}
 		else
 		{
 			mMoveSpeed += move * MOVE_SPEED;
+			mSt++;
 		}
 		
 		// 待機状態であれば、
@@ -386,6 +400,7 @@ void CPlayer2::ChangeAnimation(EAnimType type)
 	CXCharacter::ChangeAnimation(index, data.loop, data.framelength);
 }
 
+// 今の状態を画面に表示
 std::string CPlayer2::ToString(EState state)
 {
 	switch (mState)

@@ -50,11 +50,6 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>("Player2", "Character\\Player2\\pico.x");
 	CResourceManager::Load<CModelX>("Enemy", "Character\\Enemy\\mutant\\mutant.x");
 	CResourceManager::Load<CModelX>("Enemy2", "Character\\Enemy\\warrok\\warrok.x");
-	CResourceManager::Load<CModel>("Map1", "Map\\map1.obj");
-
-	CResourceManager::Load<CModel>("Map_mini", "Map\\map_mini.obj");
-	CResourceManager::Load<CModel>("Map_mini_floor", "Map\\map_mini_floor.obj");
-
 
 	// ƒQ[ƒ€BGM‚ð“Ç‚Ýž‚Ý
 	CBGMManager::Instance()->Play(EBGMType::eGame);

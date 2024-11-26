@@ -7,8 +7,7 @@
 #include <assert.h>
 #include "CNavManager.h"
 #include "CNavNode.h"
-
-#include "CWall2.h"
+#include "CSceneManager.h"
 
 CField* CField::spInstance = nullptr;
 
@@ -24,8 +23,22 @@ CField::CField()
 	assert(spInstance == nullptr);
 	spInstance = this;
 
-	mpModel = CResourceManager::Get<CModel>("Field");
-
+	// シーンタイプの取得
+	mScene = CSceneManager::Instance()->GetCurrentScene();
+	switch (mScene)
+	{
+		// ステージ１
+		case EScene::eGame:
+			// 床のモデルデータを取得
+			mpModel = CResourceManager::Get<CModel>("Field");
+			break;
+		// ステージ２
+		case EScene::eGame2:
+			// 床のモデルデータを取得
+			mpModel = CResourceManager::Get<CModel>("Map_mini_floor");
+			break;
+	}
+	// 床のコライダーを生成
 	mpColliderMesh = new CColliderMesh(this, ELayer::eField, mpModel, true);
 
 	// 壁を生成
@@ -49,45 +62,72 @@ CField::~CField()
 // 壁を生成
 void CField::CreateWalls()
 {
-	// 壁①生成
-	CWall* wall = new CWall
-	(
-		CVector(20.0f,  1.0f, 0.0f),
-		CVector(0.0f, 90.0f, 0.0f),
-		CVector(5.0f,  5.0f, 5.0f)
-	);
-	mWalls.push_back(wall);	// 生成した壁を壁のリストに追加
+	switch (mScene)
+	{
+		// ステージ１
+		case EScene::eGame:
+		{
+			// 壁①生成
+			CWall* wall = new CWall
+			(
+				CVector(20.0f, 1.0f, 0.0f),
+				CVector(0.0f, 90.0f, 0.0f),
+				CVector(5.0f, 5.0f, 5.0f)
+			);
+			mWalls.push_back(wall);	// 生成した壁を壁のリストに追加
 
-	// 壁②生成
-	wall = new CWall
-	(
-		CVector(-50.0f, 1.0f, -50.0f),
-		CVector(0.0f, 0.0f, 0.0f),
-		CVector(5.0f, 5.0f, 5.0f)
-	);
-	mWalls.push_back(wall);	// 生成した壁を壁のリストに追加
+			// 壁②生成
+			wall = new CWall
+			(
+				CVector(-50.0f, 1.0f, -50.0f),
+				CVector(0.0f, 0.0f, 0.0f),
+				CVector(5.0f, 5.0f, 5.0f)
+			);
+			mWalls.push_back(wall);	// 生成した壁を壁のリストに追加
 
-	// 壁③生成
-	wall = new CWall
-	(
-		CVector(250.0f, 1.0f, 200.0f),
-		CVector(0.0f, 0.0f, 0.0f),
-		CVector(5.0f, 5.0f, 5.0f)
-	);
-	mWalls.push_back(wall);	// 生成した壁を壁のリストに追加
+			// 壁③生成
+			wall = new CWall
+			(
+				CVector(250.0f, 1.0f, 200.0f),
+				CVector(0.0f, 0.0f, 0.0f),
+				CVector(5.0f, 5.0f, 5.0f)
+			);
+			mWalls.push_back(wall);	// 生成した壁を壁のリストに追加
 
-	//CWall2* wall2 = new CWall2
-	//(
-	//	CVector(0.0f, 10.0f, 0.0f),
-	//	CVector(0.0f,  0.0f, 0.0f),
-	//	CVector(1.0f,  1.0f, 1.0f)
-	//);
+			break;
+		}
+		// ステージ２
+		case EScene::eGame2:
+		{
+			// 壁の生成
+			CWall* wall = new CWall
+			(
+				CVector(0.0f, 0.0f, 0.0f),
+				CVector(0.0f, 0.0f, 0.0f),
+				CVector(1.0f, 1.0f, 1.0f)
+			);
+			mWalls.push_back(wall);	// 生成した壁を壁のリストに追加
+
+			break;
+		}
+	}	
 }
 
 void CField::CreateFieldObjects()
 {
-	mpCubeModel = CResourceManager::Get<CModel>("FieldCube");
-	mpCylinderModel = CResourceManager::Get<CModel>("FieldCylinder");
+	switch (mScene)
+	{
+		// ステージ１
+		case EScene::eGame:
+			mpCubeModel = CResourceManager::Get<CModel>("FieldCube");
+			mpCylinderModel = CResourceManager::Get<CModel>("FieldCylinder");
+			break;
+
+		// ステージ２
+		case EScene::eGame2:
+
+			break;
+	}
 
 	//mpMap = CResourceManager::Get<CModel>("Map_mini");
 
@@ -185,26 +225,75 @@ void CField::CreateFieldObjects()
 void CField::CreateNavNodes()
 {
 	CNavManager* navMgr = CNavManager::Instance();
-	if (navMgr != nullptr)
+
+	switch (mScene)
 	{
-		// 壁①の周りの経路探索ノード
-		new CNavNode(CVector( 30.0f, 0.0f,  35.0f));
-		new CNavNode(CVector( 10.0f, 0.0f,  35.0f));
-		new CNavNode(CVector( 10.0f, 0.0f, -35.0f));
-		new CNavNode(CVector( 30.0f, 0.0f, -35.0f));
+		// ステージ１
+		case EScene::eGame:
+			if (navMgr != nullptr)
+			{
+				// 壁①の周りの経路探索ノード
+				new CNavNode(CVector(30.0f, 0.0f, 35.0f));
+				new CNavNode(CVector(10.0f, 0.0f, 35.0f));
+				new CNavNode(CVector(10.0f, 0.0f, -35.0f));
+				new CNavNode(CVector(30.0f, 0.0f, -35.0f));
 
-		// 壁②の周りの経路探索ノード
-		new CNavNode(CVector(-15.0f, 0.0f, -40.0f));
-		new CNavNode(CVector(-15.0f, 0.0f, -60.0f));
-		new CNavNode(CVector(-85.0f, 0.0f, -60.0f));
-		new CNavNode(CVector(-85.0f, 0.0f, -40.0f));
+				// 壁②の周りの経路探索ノード
+				new CNavNode(CVector(-15.0f, 0.0f, -40.0f));
+				new CNavNode(CVector(-15.0f, 0.0f, -60.0f));
+				new CNavNode(CVector(-85.0f, 0.0f, -60.0f));
+				new CNavNode(CVector(-85.0f, 0.0f, -40.0f));
 
-		// 壁③の周りの経路探索ノード
-		new CNavNode(CVector(285.0f, 0.0f, 190.0f));
-		new CNavNode(CVector(285.0f, 0.0f, 210.0f));
-		new CNavNode(CVector(215.0f, 0.0f, 210.0f));
-		new CNavNode(CVector(215.0f, 0.0f, 190.0f));
-		
+				// 壁③の周りの経路探索ノード
+				new CNavNode(CVector(285.0f, 0.0f, 190.0f));
+				new CNavNode(CVector(285.0f, 0.0f, 210.0f));
+				new CNavNode(CVector(215.0f, 0.0f, 210.0f));
+				new CNavNode(CVector(215.0f, 0.0f, 190.0f));
+			}
+			break;
+
+		// ステージ２
+		case EScene::eGame2:
+			if (navMgr != nullptr)
+			{
+				// 壁①の周りの経路探索ノード
+				new CNavNode(CVector(25.0f, 0.0f, 25.0f));
+				new CNavNode(CVector(70.0f, 0.0f, 25.0f));
+				new CNavNode(CVector(70.0f, 0.0f, 90.0f));
+				new CNavNode(CVector(25.0f, 0.0f, 90.0f));
+
+				// 壁②の周りの経路探索ノード
+				new CNavNode(CVector(85.0f, 0.0f, 15.0f));
+				new CNavNode(CVector(175.0f, 0.0f, 15.0f));
+				new CNavNode(CVector(175.0f, 0.0f, 80.0f));
+				new CNavNode(CVector(85.0f, 0.0f, 80.0f));
+
+				// 壁③の周りの経路探索ノード
+				new CNavNode(CVector(185.0f, 0.0f, 45.0f));
+				new CNavNode(CVector(250.0f, 0.0f, 45.0f));
+				new CNavNode(CVector(250.0f, 0.0f, 100.0f));
+				new CNavNode(CVector(185.0f, 0.0f, 100.0f));
+
+				// 壁④の周りの経路探索ノード
+				new CNavNode(CVector(15.0f, 0.0f, 105.0f));
+				new CNavNode(CVector(95.0f, 0.0f, 105.0f));
+				new CNavNode(CVector(95.0f, 0.0f, 165.0f));
+				new CNavNode(CVector(50.0f, 0.0f, 165.0f));
+				new CNavNode(CVector(15.0f, 0.0f, 165.0f));
+
+				// 壁⑤の周りの経路探索ノード
+				new CNavNode(CVector(115.0f, 0.0f, 105.0f));
+				new CNavNode(CVector(185.0f, 0.0f, 105.0f));
+				new CNavNode(CVector(185.0f, 0.0f, 160.0f));
+				new CNavNode(CVector(115.0f, 0.0f, 160.0f));
+
+				// 壁⑥の周りの経路探索ノード
+				new CNavNode(CVector(195.0f, 0.0f, 115.0f));
+				new CNavNode(CVector(265.0f, 0.0f, 115.0f));
+				new CNavNode(CVector(265.0f, 0.0f, 180.0f));
+				new CNavNode(CVector(195.0f, 0.0f, 180.0f));
+			}
+			break;
 	}
 }
 
@@ -241,7 +330,6 @@ bool CField::CollisionRay(const CVector& start, const CVector& end, CHitInfo* hi
 
 	return isHit;
 }
-
 
 void CField::Update()
 {
