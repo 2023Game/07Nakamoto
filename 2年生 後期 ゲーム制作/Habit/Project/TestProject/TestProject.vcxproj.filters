@@ -388,6 +388,9 @@
     <ClCompile Include="src\Game\CTrap.cpp">
       <Filter>ソース ファイル\Game\Weapon</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CTorch.cpp">
+      <Filter>ソース ファイル\BaseSystem\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -704,6 +707,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CTrap.h">
       <Filter>ソース ファイル\Game\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CTorch.h">
+      <Filter>ソース ファイル\BaseSystem\Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

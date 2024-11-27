@@ -1,5 +1,6 @@
 #include "CTrap.h"
 #include "Primitive.h"
+#include "CImage.h"
 
 // コンストラクタ
 CTrap::CTrap(const CVector& pos)

@@ -430,7 +430,7 @@ void CEnemy::ChangePatrolPoint()
 		mNextPatrolIndex++;
 		if (mNextPatrolIndex >= size) mNextPatrolIndex -= size;
 	}
-
+	// ŽŸ‚É„‰ñ‚·‚éƒ|ƒCƒ“ƒ^‚ªŒˆ‚Ü‚Á‚½ê‡
 	if (mNextPatrolIndex >= 0)
 	{
 		CNavManager* navMgr = CNavManager::Instance();

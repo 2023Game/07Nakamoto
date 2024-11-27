@@ -95,6 +95,7 @@
     <ClCompile Include="src\Game\CSlash.cpp" />
     <ClCompile Include="src\Game\CTitleScene.cpp" />
     <ClCompile Include="src\Game\CTitleUI.cpp" />
+    <ClCompile Include="src\Game\CTorch.cpp" />
     <ClCompile Include="src\Game\CTrap.cpp" />
     <ClCompile Include="src\Game\CWall.cpp" />
     <ClCompile Include="src\Game\CXCharacter.cpp" />
@@ -203,6 +204,7 @@
     <ClInclude Include="src\Game\CSlash.h" />
     <ClInclude Include="src\Game\CTitleUI.h" />
     <ClInclude Include="src\Game\CTitleScene.h" />
+    <ClInclude Include="src\Game\CTorch.h" />
     <ClInclude Include="src\Game\CTrap.h" />
     <ClInclude Include="src\Game\CWall.h" />
     <ClInclude Include="src\Game\CXCharacter.h" />
