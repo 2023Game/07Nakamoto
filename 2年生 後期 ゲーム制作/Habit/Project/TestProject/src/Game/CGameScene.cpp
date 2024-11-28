@@ -12,6 +12,7 @@
 #include "CLineEffect.h"
 #include "CNavManager.h"
 #include "CEnemy2.h"
+#include "CTorch.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -90,6 +91,9 @@ void CGameScene::Load()
 	);
 	enemy2->Scale(1.0f, 1.0f, 1.0f);
 	enemy2->Position(CVector(200.0f, 1.0, 200.0f));
+
+	CTorch* torch = new CTorch(CVector(0.0f, 0.0f, 0.0f), 
+		CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 5.0f, 1.0f));
 	
 	// CGameCameraのテスト
 	//CGameCamera* mainCamera = new CGameCamera

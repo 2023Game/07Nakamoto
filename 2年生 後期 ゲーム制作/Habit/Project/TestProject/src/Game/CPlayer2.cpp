@@ -16,6 +16,7 @@ const CPlayer2::AnimData CPlayer2::ANIM_DATA[] =
 	{ "Character\\Player2\\anim\\pico_jump_start.x",false,	25.0f	},	// ジャンプ開始
 	{ "Character\\Player2\\anim\\pico_jumping.x",	false,	 1.0f	},	// ジャンプ中
 	{ "Character\\Player2\\anim\\pico_jump_end.x",	false,	26.0f	},	// ジャン終了プ
+	{ "Character\\Player2\\anim\\pico_fall.x",		false,	77.0f	},	// 転倒
 
 	{ "Character\\Player2\\anim\\pico_crawl.x",		true,	55.0f	},	// 這う
 	{ "Character\\Player2\\anim\\pico_sneak.x",		true,	51.0f	},	// しゃがみ移動
@@ -111,7 +112,7 @@ void CPlayer2::Update()
 			break;
 		// ジャンプ開始
 		case EState::eJumpStart:
-			UpdateJump();
+			UpdateJumpStart();
 			break;
 		// ジャンプ中
 		case EState::eJump:
@@ -119,7 +120,11 @@ void CPlayer2::Update()
 			break;
 		// ジャンプ終了
 		case EState::eJumpEnd:
-			UpdateJump();
+			UpdateJumpEnd();
+			break;
+		// 転倒
+		case EState::eFall:
+			UpdateFall();
 			break;
 	}
 
@@ -129,7 +134,6 @@ void CPlayer2::Update()
 	{
 		UpdateMove();
 	}
-
 	mMoveSpeedY -= GRAVITY;
 	CVector moveSpeed = mMoveSpeed + CVector(0.0f, mMoveSpeedY, 0.0f);
 
@@ -175,61 +179,76 @@ void CPlayer2::UpdateIdle()
 	}
 }
 
+void CPlayer2::UpdateJumpStart()
+{
+	ChangeAnimation(EAnimType::eJumpStart);
+	float frame = GetAnimationFrame();
+	mMoveSpeed = CVector::zero;
+
+	if (frame >= JUNP_MOVE_START)
+	{
+		mMoveSpeedY += JUMP_SPEED;
+		mIsGrounded = false;
+		mState = EState::eJump;
+	}
+}
+
 // ジャンプ処理
 void CPlayer2::UpdateJump()
 {
-	// ステップごとに処理を切り替える
-	switch (mStateStep)
+	ChangeAnimation(EAnimType::eJumping);
+	if (mIsGrounded)
 	{
-		// ステップ0：ジャンプ開始アニメーションを再生
-		case 0:
-			ChangeAnimation(EAnimType::eJumpStart);
-			mStateStep++;
-			break;
-		// ステップ1：ジャンプ時の移動処理
-		case 1:
-		{
-			float frame = GetAnimationFrame();
-			mMoveSpeed = CVector::zero;
+		mState = EState::eJumpEnd;
+	}
+}
 
-			if (frame >= JUNP_MOVE_START)
-			{
-				mMoveSpeedY += JUMP_SPEED;
-				mIsGrounded = false;
-				mState = EState::eJump;
-				mStateStep++;
-			}
-			break;
-		}
-		// ステップ2：ジャンプ開始アニメーションの終了待ち
-		case 2:
+void CPlayer2::UpdateJumpEnd()
+{
+	if (mIsGrounded)
+	{
+		mMoveSpeed.X(0.0f);
+		mMoveSpeed.Z(0.0f);
+		ChangeAnimation(EAnimType::eJumpEnd);
+		
+		if (IsAnimationFinished())
 		{
-			if (IsAnimationFinished())
-			{
-				ChangeAnimation(EAnimType::eJumping);
-				mStateStep++;
-			}
-			break;
+			mState = EState::eIdle;
 		}
-		// ステップ2：着地待ち
-		case 3:
-			if (mIsGrounded)
-			{
-				mMoveSpeed.X(0.0f);
-				mMoveSpeed.Z(0.0f);
-				ChangeAnimation(EAnimType::eJumpEnd);
-				mState = EState::eJumpEnd;
-				mStateStep++;
-			}
-			break;
-		// ステップ４：ジャンプ終了待ち 
-		case 4:
-			if (IsAnimationFinished())
-			{
-				mState = EState::eIdle;
-				mStateStep = 0;
-			}
-			break;
+	}
+}
+
+void CPlayer2::UpdateFall()
+{
+	//// ステップごとに処理を切り替える
+	//switch (mStateStep)
+	//{
+	//	// ステップ0：転倒アニメーションを再生
+	//	case 0:
+	//		ChangeAnimation(EAnimType::eCrouch_up);
+	//		break;
+	//	// ステップ1：ジャンプ時の移動処理
+	//	case 1:
+	//		break;
+	//	// ステップ2：ジャンプ開始アニメーションの終了待ち
+	//	case 2:
+	//		if (IsAnimationFinished())
+	//		{
+	//			ChangeAnimation(EAnimType::eIdle);
+	//			mState = EState::eIdle;
+	//		}
+	//		break;
+	//}
+
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
+	ChangeAnimation(EAnimType::eFall);
+	
+	if (IsAnimationFinished())
+	{
+		//ChangeAnimation(EAnimType::eIdle);
+		mState = EState::eIdle;
+		mSt++;
 	}
 }
 
@@ -281,38 +300,31 @@ void CPlayer2::UpdateMove()
 	// 求めた移動ベクトルの長さで入力されているか判定
 	if (move.LengthSqr() > 0.0f)
 	{
-		if (CInput::Key(VK_SHIFT))
-		{
-			// スタミナがあれば、
-			if (mSt > 0)
-			{
-				mMoveSpeed += move * RUN_SPEED;
-				mSt--;
-			}
-			// スタミナがない状態で走ったら、
-			else
-			{
-
-			}
-		}
-		else
-		{
-			mMoveSpeed += move * MOVE_SPEED;
-			mSt++;
-		}
-		
 		// 待機状態であれば、
 		if (mState == EState::eIdle)
 		{
 			if (CInput::Key(VK_SHIFT))
 			{
-				// 走行アニメーションに切り替える
-				ChangeAnimation(EAnimType::eRun);
+				// スタミナがあれば、
+				if (mSt > 0)
+				{
+					// 走行アニメーションに切り替える
+					ChangeAnimation(EAnimType::eRun);
+
+					mMoveSpeed += move * RUN_SPEED;
+					mSt--;
+				}
 			}
 			else
 			{
 				// 歩行アニメーションに切り替え
 				ChangeAnimation(EAnimType::eWalk);
+
+				mMoveSpeed += move * MOVE_SPEED;
+				if (mSt < 100)
+				{
+					mSt++;
+				}
 			}
 		}
 	}
@@ -324,6 +336,11 @@ void CPlayer2::UpdateMove()
 		{
 			ChangeAnimation(EAnimType::eIdle);
 		}
+	}
+
+	if (mSt == 0)
+	{
+		mState = EState::eFall;
 	}
 }
 
@@ -412,6 +429,7 @@ std::string CPlayer2::ToString(EState state)
 	case CPlayer2::EState::eJumpStart:	return "eJumpStart";
 	case CPlayer2::EState::eJump:		return "eJump";
 	case CPlayer2::EState::eJumpEnd:	return "eJumpEnd";
+	case CPlayer2::EState::eFall:		return "eFall";
 	case CPlayer2::EState::eCrawl:		return "eCrawl";
 	case CPlayer2::EState::eSneak:		return "eSneak";
 	case CPlayer2::EState::eCrouch_up:	return "eSneak";
