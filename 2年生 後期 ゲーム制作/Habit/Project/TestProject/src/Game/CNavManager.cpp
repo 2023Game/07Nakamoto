@@ -104,6 +104,9 @@ void CNavManager::CalcNextMoveCost(CNavNode* node, CNavNode* goal)
 	// 接続している全てのノードへの移動コストを求める
 	for (CNavConnectData& connect : node->mConnectData)
 	{
+		// 接続先のノードが無効であれば、スルー
+		if (!connect.node->IsEnabel()) continue;
+
 		// 接続しているノードが目的地専用ノードの場合は、
 		// 今回の経路探索の目的地ノード以外は経由しないため、スルー
 		if (connect.node->mIsDestNode && connect.node != goal) continue;
@@ -132,6 +135,8 @@ bool CNavManager::Navigate(CNavNode* start, CNavNode* goal, std::vector<CNavNode
 {
 	// 開始ノードまたは目的地ノードが空だった場合は、経路探索不可
 	if (start == nullptr || goal == nullptr)return false;
+	// 開始ノードまたは目的地ノードが無効だった場合は、経路探索不可
+	if (!start->IsEnabel() || !goal->IsEnabel()) return false;
 
 	// 全てのノードの最短経路計算用のデータをクリア
 	ResetCalcData();

@@ -9,7 +9,8 @@
 
 // コンストラクタ
 CNavNode::CNavNode(const CVector& pos, bool isDestNode)
-	: mIsDestNode(isDestNode)
+	: mIsEnable(true)
+	, mIsDestNode(isDestNode)
 	, mPosition(pos)
 	, mCalcMoveCost(-1.0f)
 	, mpCalcFromNode(nullptr)
@@ -36,6 +37,18 @@ CNavNode::~CNavNode()
 	{
 		navMgr->RemoveNode(this);
 	}
+}
+
+// 有効状態を設定
+void CNavNode::SetEnable(bool enable)
+{
+	mIsEnable = enable;
+}
+
+// 現在有効かどうか
+bool CNavNode::IsEnabel() const
+{
+	return mIsEnable;
 }
 
 // 最短経路計算用のデータをリセット
@@ -127,9 +140,15 @@ void CNavNode::SetColor(const CColor& color)
 // ノードを描画（デバッグ用）
 void CNavNode::Render()
 {
+	// ノードが有効状態出なければ、描画しない
+	if (!mIsEnable) return;
+
 	// 接続先のノードまでのラインを描画
 	for (CNavConnectData& connect : mConnectData)
 	{
+		// 接続先のノードが無効であれば、スルー
+		if (!connect.node->IsEnabel()) continue;
+
 		Primitive::DrawLine
 		(
 			GetOffsetPos(),
@@ -139,9 +158,12 @@ void CNavNode::Render()
 		);
 	}
 
-	// ノード座標に球を描画
-	CMatrix m;
-	m.Translate(GetOffsetPos());
-	Primitive::DrawWireSphere(m, 1.0f, mColor);
+	// ノード座標に四角形を描画
+	Primitive::DrawWireBox
+	(
+		GetOffsetPos(),
+		CVector::one,
+		mColor
+	);
 }
 

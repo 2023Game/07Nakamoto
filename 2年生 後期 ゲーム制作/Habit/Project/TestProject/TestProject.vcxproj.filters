@@ -389,7 +389,7 @@
       <Filter>ソース ファイル\Game\Weapon</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CTorch.cpp">
-      <Filter>ソース ファイル\BaseSystem\Object</Filter>
+      <Filter>ソース ファイル\Game\Field</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -709,7 +709,7 @@
       <Filter>ソース ファイル\Game\Weapon</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CTorch.h">
-      <Filter>ソース ファイル\BaseSystem\Object</Filter>
+      <Filter>ソース ファイル\Game\Field</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

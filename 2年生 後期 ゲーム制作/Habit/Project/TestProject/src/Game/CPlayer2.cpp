@@ -163,6 +163,8 @@ void CPlayer2::Update()
 	mIsGrounded = false;
 
 	CDebugPrint::Print("FPS:%f\n", Times::FPS());
+
+	CDebugPrint::Print("ST:%d\n", mSt);
 }
 
 // 待機処理
@@ -179,6 +181,7 @@ void CPlayer2::UpdateIdle()
 	}
 }
 
+// ジャンプ開始
 void CPlayer2::UpdateJumpStart()
 {
 	ChangeAnimation(EAnimType::eJumpStart);
@@ -193,7 +196,7 @@ void CPlayer2::UpdateJumpStart()
 	}
 }
 
-// ジャンプ処理
+// ジャンプ中
 void CPlayer2::UpdateJump()
 {
 	ChangeAnimation(EAnimType::eJumping);
@@ -203,6 +206,7 @@ void CPlayer2::UpdateJump()
 	}
 }
 
+// ジャンプ終了
 void CPlayer2::UpdateJumpEnd()
 {
 	if (mIsGrounded)
@@ -218,37 +222,18 @@ void CPlayer2::UpdateJumpEnd()
 	}
 }
 
+// 転倒処理
 void CPlayer2::UpdateFall()
 {
-	//// ステップごとに処理を切り替える
-	//switch (mStateStep)
-	//{
-	//	// ステップ0：転倒アニメーションを再生
-	//	case 0:
-	//		ChangeAnimation(EAnimType::eCrouch_up);
-	//		break;
-	//	// ステップ1：ジャンプ時の移動処理
-	//	case 1:
-	//		break;
-	//	// ステップ2：ジャンプ開始アニメーションの終了待ち
-	//	case 2:
-	//		if (IsAnimationFinished())
-	//		{
-	//			ChangeAnimation(EAnimType::eIdle);
-	//			mState = EState::eIdle;
-	//		}
-	//		break;
-	//}
-
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eFall);
+
+	mSt++;
 	
 	if (IsAnimationFinished())
 	{
-		//ChangeAnimation(EAnimType::eIdle);
-		mState = EState::eIdle;
-		mSt++;
+		mState = EState::eIdle;	
 	}
 }
 
@@ -314,6 +299,10 @@ void CPlayer2::UpdateMove()
 					mMoveSpeed += move * RUN_SPEED;
 					mSt--;
 				}
+				else
+				{
+					mState = EState::eFall;
+				}
 			}
 			else
 			{
@@ -327,6 +316,10 @@ void CPlayer2::UpdateMove()
 				}
 			}
 		}
+		else if (mState == EState::eJump)
+		{
+			mMoveSpeed += move * RUN_SPEED;
+		}
 	}
 	// 移動キーを入力していない
 	else
@@ -335,12 +328,12 @@ void CPlayer2::UpdateMove()
 		if (mState == EState::eIdle)
 		{
 			ChangeAnimation(EAnimType::eIdle);
-		}
-	}
 
-	if (mSt == 0)
-	{
-		mState = EState::eFall;
+			if (mSt < 100)
+			{
+				mSt++;
+			}
+		}
 	}
 }
 

@@ -52,6 +52,8 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>("Enemy", "Character\\Enemy\\mutant\\mutant.x");
 	CResourceManager::Load<CModelX>("Enemy2", "Character\\Enemy\\warrok\\warrok.x");
 
+	CResourceManager::Load<CModel>("Torch", "Object\\Torch.obj");
+
 	// ƒQ[ƒ€BGM‚ğ“Ç‚İ‚İ
 	CBGMManager::Instance()->Play(EBGMType::eGame);
 
@@ -68,6 +70,7 @@ void CGameScene::Load()
 	pico->Scale(1.0f, 1.0f, 1.0f);
 	pico->Position(-50.0f, 1.0f, 10.0f);
 
+	// “G‡@¶¬
 	//CEnemy* enemy = new CEnemy
 	//(
 	//	{
@@ -79,7 +82,7 @@ void CGameScene::Load()
 	//);
 	//enemy->Scale(1.0f, 1.0f, 1.0f);
 	//enemy->Position(CVector(200.0f, 1.0, 0.0f));
-
+	// “G‡A¶¬
 	CEnemy2* enemy2 = new CEnemy2
 	(
 		{

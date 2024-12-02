@@ -25,6 +25,11 @@ public:
 	// デストラクタ
 	~CNavNode();
 
+	// 有効状態を設定
+	void SetEnable(bool enable);
+	// 現在有効かどうか
+	bool IsEnabel() const;
+
 	// ノードの座標を取得
 	const CVector& GetPos() const;
 	// 遮蔽物チェックや表示用に、少し上に上げたノードの座標を返す
@@ -47,6 +52,9 @@ public:
 private:
 	// 最短経路計算用のデータをリセット
 	void ResetCalcData();
+
+	// ノードが有効かどうか
+	bool mIsEnable;
 
 	// 経路探索時に経由できない目的地専用のノードかどうか
 	bool mIsDestNode;

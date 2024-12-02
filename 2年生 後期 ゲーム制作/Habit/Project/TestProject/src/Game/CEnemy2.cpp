@@ -77,6 +77,7 @@ CEnemy2::CEnemy2(std::vector<CVector> patrolPoints)
 
 	// プレイヤーを見失った位置のノードを作成
 	mpLostPlayerNode = new CNavNode(CVector::zero, true);
+	mpLostPlayerNode->SetEnable(false);
 
 	// 巡回ポイントに経路探索用のノードを配置
 	for (CVector point : patrolPoints)
@@ -512,8 +513,9 @@ void CEnemy2::UpdateChase()
 	// プレイヤーが見えなくなったら、見失った状態にする
 	if (!IsLookPlayer())
 	{
-		// 見失った位置にのーそを配置
+		// 見失った位置にノードを配置
 		mpLostPlayerNode->SetPos(targetPos);
+		mpLostPlayerNode->SetEnable(true);
 		ChangeState(EState::eLost);
 		return;
 	}
@@ -580,6 +582,7 @@ void CEnemy2::UpdateLost()
 		{
 			// 経路がつながっていなければ、待機状態へ戻す
 			ChangeState(EState::eIdle);
+			mpLostPlayerNode->SetEnable(false);
 		}
 		break;
 	case 1:
@@ -591,6 +594,7 @@ void CEnemy2::UpdateLost()
 			{
 				// 移動が終われば待機状態へ移行
 				ChangeState(EState::eIdle);
+				mpLostPlayerNode->SetEnable(false);
 			}
 		}
 		break;
