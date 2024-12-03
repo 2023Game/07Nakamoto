@@ -73,6 +73,7 @@
     <ClCompile Include="src\Game\CApplication.cpp" />
     <ClCompile Include="src\Game\CBullet.cpp" />
     <ClCompile Include="src\Game\CDebugFieldOfView.cpp" />
+    <ClCompile Include="src\Game\CDoor.cpp" />
     <ClCompile Include="src\Game\CEnemy.cpp" />
     <ClCompile Include="src\Game\CEnemy2.cpp" />
     <ClCompile Include="src\Game\CField.cpp" />
@@ -90,12 +91,14 @@
     <ClCompile Include="src\Game\CNavNode.cpp" />
     <ClCompile Include="src\Game\CPlayer.cpp" />
     <ClCompile Include="src\Game\CPlayer2.cpp" />
+    <ClCompile Include="src\Game\CPushButton.cpp" />
+    <ClCompile Include="src\Game\CPushButtonManager.cpp" />
     <ClCompile Include="src\Game\CRideabeObject.cpp" />
     <ClCompile Include="src\Game\CRotateFloor.cpp" />
     <ClCompile Include="src\Game\CSlash.cpp" />
     <ClCompile Include="src\Game\CTitleScene.cpp" />
     <ClCompile Include="src\Game\CTitleUI.cpp" />
-    <ClCompile Include="src\Game\CTorch.cpp" />
+    <ClCompile Include="src\Game\CTouch.cpp" />
     <ClCompile Include="src\Game\CTrap.cpp" />
     <ClCompile Include="src\Game\CWall.cpp" />
     <ClCompile Include="src\Game\CXCharacter.cpp" />
@@ -182,6 +185,7 @@
     <ClInclude Include="src\Game\CApplication.h" />
     <ClInclude Include="src\Game\CBullet.h" />
     <ClInclude Include="src\Game\CDebugFieldOfView.h" />
+    <ClInclude Include="src\Game\CDoor.h" />
     <ClInclude Include="src\Game\CEnemy.h" />
     <ClInclude Include="src\Game\CEnemy2.h" />
     <ClInclude Include="src\Game\CField.h" />
@@ -199,12 +203,14 @@
     <ClInclude Include="src\Game\CNavNode.h" />
     <ClInclude Include="src\Game\CPlayer.h" />
     <ClInclude Include="src\Game\CPlayer2.h" />
+    <ClInclude Include="src\Game\CPushButton.h" />
+    <ClInclude Include="src\Game\CPushButtonManager.h" />
     <ClInclude Include="src\Game\CRideableObject.h" />
     <ClInclude Include="src\Game\CRotateFloor.h" />
     <ClInclude Include="src\Game\CSlash.h" />
     <ClInclude Include="src\Game\CTitleUI.h" />
     <ClInclude Include="src\Game\CTitleScene.h" />
-    <ClInclude Include="src\Game\CTorch.h" />
+    <ClInclude Include="src\Game\CTouch.h" />
     <ClInclude Include="src\Game\CTrap.h" />
     <ClInclude Include="src\Game\CWall.h" />
     <ClInclude Include="src\Game\CXCharacter.h" />

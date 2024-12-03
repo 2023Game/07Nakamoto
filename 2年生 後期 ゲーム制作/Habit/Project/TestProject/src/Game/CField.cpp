@@ -36,6 +36,7 @@ CField::CField()
 		case EScene::eGame2:
 			// 床のモデルデータを取得
 			mpModel = CResourceManager::Get<CModel>("Map_mini_floor");
+
 			break;
 	}
 	// 床のコライダーを生成
@@ -125,6 +126,15 @@ void CField::CreateFieldObjects()
 
 		// ステージ２
 		case EScene::eGame2:
+
+			mpDoor = CResourceManager::Get<CModel>("Map_mini_door");
+
+			new CMoveFloor
+			(
+				mpDoor,
+				CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f),
+				CVector(0.0f, 0.0f, 0.0f), 0.5f
+			);
 
 			break;
 	}

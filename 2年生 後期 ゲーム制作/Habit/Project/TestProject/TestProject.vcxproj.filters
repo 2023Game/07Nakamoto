@@ -95,6 +95,9 @@
     <Filter Include="ソース ファイル\Game\Navigation">
       <UniqueIdentifier>{203a5fd8-7965-46d6-bff5-bbb16181d200}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\TaskManager">
+      <UniqueIdentifier>{49e49985-7283-472d-89e9-717446ee8db2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -388,8 +391,17 @@
     <ClCompile Include="src\Game\CTrap.cpp">
       <Filter>ソース ファイル\Game\Weapon</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CTorch.cpp">
-      <Filter>ソース ファイル\Game\Field</Filter>
+    <ClCompile Include="src\Game\CTouch.cpp">
+      <Filter>ソース ファイル\Game\Field\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPushButton.cpp">
+      <Filter>ソース ファイル\Game\Field\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CDoor.cpp">
+      <Filter>ソース ファイル\Game\Field\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPushButtonManager.cpp">
+      <Filter>ソース ファイル\Game\TaskManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -708,8 +720,17 @@
     <ClInclude Include="src\Game\CTrap.h">
       <Filter>ソース ファイル\Game\Weapon</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CTorch.h">
-      <Filter>ソース ファイル\Game\Field</Filter>
+    <ClInclude Include="src\Game\CTouch.h">
+      <Filter>ソース ファイル\Game\Field\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPushButton.h">
+      <Filter>ソース ファイル\Game\Field\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CDoor.h">
+      <Filter>ソース ファイル\Game\Field\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPushButtonManager.h">
+      <Filter>ソース ファイル\Game\TaskManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

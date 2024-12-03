@@ -34,15 +34,16 @@ void CGameScene2::Load()
 
 	//ここでゲーム中に必要な
 	//リソースの読み込みやクラスの生成を行う
-	CResourceManager::Load<CModel>("Map_mini", "Map\\map_mini.obj");
+	CResourceManager::Load<CModel>("Map_mini", "Map\\map_mini1.obj");
 	CResourceManager::Load<CModel>("Map_mini_floor", "Map\\map_mini_floor.obj");
-	CResourceManager::Load<CModel>("Map_mini_Col", "Map\\map_mini_col.obj");
+	CResourceManager::Load<CModel>("Map_mini_Col", "Map\\map_mini1_col.obj");
+	CResourceManager::Load<CModel>("Map_mini_door", "Map\\map_mini1_door.obj");
 
 	CResourceManager::Load<CModelX>("Player2", "Character\\Player2\\pico.x");
 	CResourceManager::Load<CModelX>("Enemy", "Character\\Enemy\\mutant\\mutant.x");
 	CResourceManager::Load<CModelX>("Enemy2", "Character\\Enemy\\warrok\\warrok.x");
 
-	CResourceManager::Load<CTexture>("spider_web", "weapon\\spider_web.png");
+	//CResourceManager::Load<CTexture>("spider_web", "weapon\\spider_web.png");
 
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);

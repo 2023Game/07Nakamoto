@@ -4,6 +4,7 @@
 
 class CWall;
 class CWall2;
+class CTorch;
 
 class CField : public CObjectBase
 {
@@ -36,6 +37,8 @@ private:
 
 	// フィールドのインスタンス
 	static CField* spInstance;
+
+	CModel* mpDoor;
 
 	CModel* mpModel;
 	CColliderMesh* mpColliderMesh;

@@ -1,10 +1,10 @@
-#include "CTorch.h"
+#include "CTouch.h"
 
 // コンストラクタ
-CTorch::CTorch(const CVector& pos, const CVector& angle, const CVector& size)
+CTouch::CTouch(const CVector& pos, const CVector& angle, const CVector& size)
 {
 	// 壁のモデルデータ取得(変更予定)
-	mpModel = CResourceManager::Get<CModel>("Torch");
+	mpModel = CResourceManager::Get<CModel>("Touch");
 
 	// 位置と向きとサイズを設定
 	Position(pos);
@@ -13,17 +13,17 @@ CTorch::CTorch(const CVector& pos, const CVector& angle, const CVector& size)
 }
 
 // デストラクタ
-CTorch::~CTorch()
+CTouch::~CTouch()
 {
 }
 
 // 更新処理
-void CTorch::Update()
+void CTouch::Update()
 {
 }
 
 // 描画処理
-void CTorch::Render()
+void CTouch::Render()
 {
 	mpModel->Render(Matrix());
 }

@@ -12,7 +12,7 @@
 #include "CLineEffect.h"
 #include "CNavManager.h"
 #include "CEnemy2.h"
-#include "CTorch.h"
+#include "CTouch.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -52,7 +52,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>("Enemy", "Character\\Enemy\\mutant\\mutant.x");
 	CResourceManager::Load<CModelX>("Enemy2", "Character\\Enemy\\warrok\\warrok.x");
 
-	CResourceManager::Load<CModel>("Torch", "Object\\Torch.obj");
+	CResourceManager::Load<CModel>("Touch", "Object\\Touch.obj");
 
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
@@ -95,9 +95,11 @@ void CGameScene::Load()
 	enemy2->Scale(1.0f, 1.0f, 1.0f);
 	enemy2->Position(CVector(200.0f, 1.0, 200.0f));
 
-	CTorch* torch = new CTorch(CVector(0.0f, 0.0f, 0.0f), 
-		CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 5.0f, 1.0f));
-	
+
+	// 松明(仮)の描画の確認	削除予定
+	CTouch* touch = new CTouch(CVector(0.0f, 0.0f, 0.0f), 
+		CVector(0.0f, 0.0f, 0.0f), CVector(0.3f, 0.3f, 0.3f));
+
 	// CGameCameraのテスト
 	//CGameCamera* mainCamera = new CGameCamera
 	//(

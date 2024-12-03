@@ -2,7 +2,7 @@
 #include "CObjectBase.h"
 #include "CModel.h"
 
-class CTorch : public CObjectBase
+class CTouch : public CObjectBase
 {
 public:
 	/// <summary>
@@ -11,10 +11,10 @@ public:
 	/// <param name="pos">位置</param>
 	/// <param name="angle">回転</param>
 	/// <param name="size">大きさ</param>
-	CTorch(const CVector& pos, const CVector& angle, const CVector& size);
+	CTouch(const CVector& pos, const CVector& angle, const CVector& size);
 
 	// デストラクタ
-	~CTorch();
+	~CTouch();
 
 	// 更新処理
 	void Update() override;
