@@ -91,8 +91,8 @@
     <ClCompile Include="src\Game\CNavNode.cpp" />
     <ClCompile Include="src\Game\CPlayer.cpp" />
     <ClCompile Include="src\Game\CPlayer2.cpp" />
-    <ClCompile Include="src\Game\CPushButton.cpp" />
-    <ClCompile Include="src\Game\CPushButtonManager.cpp" />
+    <ClCompile Include="src\Game\CPushSwitch.cpp" />
+    <ClCompile Include="src\Game\CPushSwitchManager.cpp" />
     <ClCompile Include="src\Game\CRideabeObject.cpp" />
     <ClCompile Include="src\Game\CRotateFloor.cpp" />
     <ClCompile Include="src\Game\CSlash.cpp" />
@@ -203,8 +203,8 @@
     <ClInclude Include="src\Game\CNavNode.h" />
     <ClInclude Include="src\Game\CPlayer.h" />
     <ClInclude Include="src\Game\CPlayer2.h" />
-    <ClInclude Include="src\Game\CPushButton.h" />
-    <ClInclude Include="src\Game\CPushButtonManager.h" />
+    <ClInclude Include="src\Game\CPushSwitch.h" />
+    <ClInclude Include="src\Game\CPushSwitchManager.h" />
     <ClInclude Include="src\Game\CRideableObject.h" />
     <ClInclude Include="src\Game\CRotateFloor.h" />
     <ClInclude Include="src\Game\CSlash.h" />

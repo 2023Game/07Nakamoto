@@ -12,7 +12,11 @@
 #include "CLineEffect.h"
 #include "CNavManager.h"
 #include "CEnemy2.h"
+
 #include "CTouch.h"
+#include "CPushSwitch.h"
+#include "CPushSwitchManager.h"
+#include "CDoor.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -52,6 +56,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>("Enemy", "Character\\Enemy\\mutant\\mutant.x");
 	CResourceManager::Load<CModelX>("Enemy2", "Character\\Enemy\\warrok\\warrok.x");
 
+	CResourceManager::Load<CModel>("Switch", "Object\\Switch.obj");
 	CResourceManager::Load<CModel>("Touch", "Object\\Touch.obj");
 
 	// ゲームBGMを読み込み
@@ -99,6 +104,13 @@ void CGameScene::Load()
 	// 松明(仮)の描画の確認	削除予定
 	CTouch* touch = new CTouch(CVector(0.0f, 0.0f, 0.0f), 
 		CVector(0.0f, 0.0f, 0.0f), CVector(0.3f, 0.3f, 0.3f));
+
+	// スイッチを生成
+	CPushSwitch* push_switch = new CPushSwitch(CVector(-30.0f, 0.0f, 0.0f),
+		CVector(0.0f, 0.0f, 0.0f), CVector(1.0f,1.0f,1.0f));
+
+	// 扉を生成
+	//CDoor(CPushSwitchManager::Instance()->)
 
 	// CGameCameraのテスト
 	//CGameCamera* mainCamera = new CGameCamera

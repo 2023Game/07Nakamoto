@@ -3,10 +3,10 @@
 // コンストラクタ
 CDoor::CDoor(CObjectBase* owner, const CVector& pos, const CVector& angle, const CVector& size)
 {
-	// ボタンのモデルデータ取得
+	// スイッチのモデルデータ取得
 	mpModel = CResourceManager::Get<CModel>("Wall");
 
-	// ボタンのコライダーを取得
+	// スイッチのコライダーを取得
 	CModel* colModel = CResourceManager::Get<CModel>("WallCol");
 	mpColliderMesh = new CColliderMesh(this, ELayer::eWall, colModel, true);
 

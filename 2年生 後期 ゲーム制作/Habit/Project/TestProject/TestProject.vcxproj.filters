@@ -394,13 +394,13 @@
     <ClCompile Include="src\Game\CTouch.cpp">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CPushButton.cpp">
+    <ClCompile Include="src\Game\CPushSwitch.cpp">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CDoor.cpp">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CPushButtonManager.cpp">
+    <ClCompile Include="src\Game\CPushSwitchManager.cpp">
       <Filter>ソース ファイル\Game\TaskManager</Filter>
     </ClCompile>
   </ItemGroup>
@@ -723,13 +723,13 @@
     <ClInclude Include="src\Game\CTouch.h">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CPushButton.h">
+    <ClInclude Include="src\Game\CPushSwitch.h">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CDoor.h">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CPushButtonManager.h">
+    <ClInclude Include="src\Game\CPushSwitchManager.h">
       <Filter>ソース ファイル\Game\TaskManager</Filter>
     </ClInclude>
   </ItemGroup>
