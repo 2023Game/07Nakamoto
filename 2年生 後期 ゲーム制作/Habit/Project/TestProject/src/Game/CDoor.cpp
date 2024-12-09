@@ -1,12 +1,14 @@
 #include "CDoor.h"
+#include "CPushSwitchManager.h"
 
 // コンストラクタ
-CDoor::CDoor(CObjectBase* owner, const CVector& pos, const CVector& angle, const CVector& size)
+CDoor::CDoor(const CVector& pos, const CVector& angle, const CVector& size)
+	//: mpOwner(nullptr)
 {
-	// スイッチのモデルデータ取得
+	// 扉のモデルデータ取得(今は壁を設定している)
 	mpModel = CResourceManager::Get<CModel>("Wall");
 
-	// スイッチのコライダーを取得
+	// 扉のコライダーを取得(今は壁のコライダーを設定している)
 	CModel* colModel = CResourceManager::Get<CModel>("WallCol");
 	mpColliderMesh = new CColliderMesh(this, ELayer::eWall, colModel, true);
 
@@ -23,9 +25,16 @@ CDoor::~CDoor()
 	SAFE_DELETE(mpColliderMesh);
 }
 
+// 接続するスイッチを設定する
+void CDoor::SetSwitch(size_t index)
+{
+	//mpOwner = CPushSwitchManager::Instance()->GetPushSwitch(index);
+}
+
 // 更新処理
 void CDoor::Update()
 {
+	//if(mpOwner->)
 }
 
 // 描画処理

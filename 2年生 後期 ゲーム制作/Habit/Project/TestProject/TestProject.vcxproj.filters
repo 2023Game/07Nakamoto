@@ -95,7 +95,7 @@
     <Filter Include="ソース ファイル\Game\Navigation">
       <UniqueIdentifier>{203a5fd8-7965-46d6-bff5-bbb16181d200}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Game\TaskManager">
+    <Filter Include="ソース ファイル\Game\Manager">
       <UniqueIdentifier>{49e49985-7283-472d-89e9-717446ee8db2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -401,7 +401,7 @@
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CPushSwitchManager.cpp">
-      <Filter>ソース ファイル\Game\TaskManager</Filter>
+      <Filter>ソース ファイル\Game\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -730,7 +730,7 @@
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CPushSwitchManager.h">
-      <Filter>ソース ファイル\Game\TaskManager</Filter>
+      <Filter>ソース ファイル\Game\Manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

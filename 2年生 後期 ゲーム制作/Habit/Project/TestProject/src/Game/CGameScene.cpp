@@ -57,7 +57,6 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>("Enemy2", "Character\\Enemy\\warrok\\warrok.x");
 
 	CResourceManager::Load<CModel>("Switch", "Object\\Switch.obj");
-	CResourceManager::Load<CModel>("SwitchCol", "Object\\SwitchCol.obj");
 	CResourceManager::Load<CModel>("Touch", "Object\\Touch.obj");
 
 	// ゲームBGMを読み込み
@@ -65,6 +64,8 @@ void CGameScene::Load()
 
 	// 経路探索管理クラスを作成
 	new CNavManager();
+
+	new CPushSwitchManager();
 
 	new CField();
 
@@ -109,6 +110,11 @@ void CGameScene::Load()
 	// スイッチを生成
 	CPushSwitch* push_switch = new CPushSwitch(CVector(-30.0f, 0.0f, 0.0f),
 		CVector(0.0f, 0.0f, 0.0f), CVector(1.0f,1.0f,1.0f));
+
+	// スイッチを生成
+	CPushSwitch* push_switch2 = new CPushSwitch(CVector(-50.0f, 0.0f, 0.0f),
+		CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
+
 
 	// 扉を生成
 	//CDoor(CPushSwitchManager::Instance()->)

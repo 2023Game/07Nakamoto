@@ -402,6 +402,7 @@ void CPlayer2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		{
 			// 押し戻しベクトルのYの値を0にする
 			CVector adjust = hit.adjust;
+
 			// 押し戻しベクトルの分、座標を移動
 			Position(Position() + adjust * hit.weight);
 		}

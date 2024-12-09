@@ -18,6 +18,13 @@ public:
 	~CPushSwitchManager();
 
 	/// <summary>
+	/// スイッチリストのスイッチを取得
+	/// </summary>
+	/// <param name="i">取得したいスイッチの番号</param>
+	/// <returns></returns>
+	CPushSwitch* GetPushSwitch(size_t index) const;
+
+	/// <summary>
 	/// 指定したスイッチをリストに追加
 	/// </summary>
 	/// <param name="pushswitch">追加するスイッチ</param>
@@ -27,7 +34,6 @@ public:
 	/// </summary>
 	/// <param name="pushswitch">取り除くスイッチ</param>
 	void RemoveSwitch(CPushSwitch* pushswitch);
-
 
 private:
 	// スイッチ管理クラスのインスタンスへのポインタ

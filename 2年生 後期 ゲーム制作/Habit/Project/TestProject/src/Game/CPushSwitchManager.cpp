@@ -36,6 +36,15 @@ CPushSwitchManager::~CPushSwitchManager()
 	}
 }
 
+CPushSwitch* CPushSwitchManager::GetPushSwitch(size_t index) const
+{
+	if (index >= mPushSwitchList.size())
+	{
+		return nullptr;
+	}
+	return mPushSwitchList[index];
+}
+
 // 指定したスイッチをリストに追加
 void CPushSwitchManager::AddSwitch(CPushSwitch* pushswitch)
 {

@@ -1,7 +1,8 @@
 #pragma once
 #include "CObjectBase.h"
 #include "CModel.h"
-#include "CColliderMesh.h"
+
+class CCollider;
 
 // スイッチのクラス
 class CPushSwitch : public CObjectBase
@@ -12,7 +13,13 @@ public:
 	// デストラクタ
 	~CPushSwitch();
 
-
+	/// <summary>
+	/// 衝突処理
+	/// </summary>
+	/// <param name="self">衝突した自身のコライダー</param>
+	/// <param name="other">衝突した相手のコライダー</param>
+	/// <param name="hit">衝突した時の情報</param>
+	void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
 	
 	// スイッチが押されたかどうか
 	bool IsOnSwtch();
@@ -25,7 +32,7 @@ public:
 
 private:
 	CModel* mpModel;	// スイッチのモデルデータ
-	CColliderMesh* mpColliderMesh;	// スイッチのコリジョンデータ
+	CCollider* mpCollider;	// スイッチのコリジョンデータ
 
 	bool mSwitch;	// スイッチがオンかオフか
 	int mNumber;	// 番号

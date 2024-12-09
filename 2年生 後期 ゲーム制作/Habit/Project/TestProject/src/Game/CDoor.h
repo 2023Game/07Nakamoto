@@ -8,9 +8,12 @@ class CDoor : public CObjectBase
 {
 public:
 	// コンストラクタ
-	CDoor(CObjectBase* owner, const CVector& pos, const CVector& angle, const CVector& size);
+	CDoor(const CVector& pos, const CVector& angle, const CVector& size);
 	// デストラクタ
 	~CDoor();
+
+	// 接続するスイッチを設定
+	void SetSwitch(size_t index);
 
 	// 更新処理
 	void Update() override;
@@ -20,5 +23,7 @@ public:
 private:
 	CModel* mpModel;	// 扉のモデルデータ
 	CColliderMesh* mpColliderMesh;	// 扉のコリジョンデータ
+
+	//CPushSwitch* mpOwner;
 
 };

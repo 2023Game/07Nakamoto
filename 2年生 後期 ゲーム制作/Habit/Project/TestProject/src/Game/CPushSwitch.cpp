@@ -3,6 +3,7 @@
 #include "Primitive.h"
 #include "CPlayer2.h"
 #include "Maths.h"
+#include "CColliderSphere.h"
 
 // コンストラクタ
 CPushSwitch::CPushSwitch(const CVector& pos, const CVector& angle, const CVector& size)
@@ -20,9 +21,15 @@ CPushSwitch::CPushSwitch(const CVector& pos, const CVector& angle, const CVector
 	mpModel = CResourceManager::Get<CModel>("Switch");
 
 	// スイッチのコライダーを取得
-	CModel* colModel = CResourceManager::Get<CModel>("SwitchCol");
+	//CModel* colModel = CResourceManager::Get<CModel>("SwitchCol");
 	// スイッチのコライダー生成
-	mpColliderMesh = new CColliderMesh(this, ELayer::eSwitch, colModel, true);
+	mpCollider = new CColliderSphere
+	(
+		this, ELayer::eSwitch,
+		4.0f, true
+	);
+	mpCollider->Position(0.0f, 2.0f, 0.0f);
+	mpCollider->SetCollisionLayers({ ELayer::ePlayer });
 
 	// 位置と向きとサイズを設定
 	Position(pos);
@@ -36,9 +43,13 @@ CPushSwitch::CPushSwitch(const CVector& pos, const CVector& angle, const CVector
 CPushSwitch::~CPushSwitch()
 {
 	// コライダーを削除
-	SAFE_DELETE(mpColliderMesh);
+	SAFE_DELETE(mpCollider);
 }
 
+
+void CPushSwitch::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
+{
+}
 
 // スイッチの状態がオンかオフか
 bool CPushSwitch::IsOnSwtch()
