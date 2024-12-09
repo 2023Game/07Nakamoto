@@ -1,6 +1,8 @@
 #include "CPushSwitch.h"
 #include "CPushSwitchManager.h"
 #include "Primitive.h"
+#include "CPlayer2.h"
+#include "Maths.h"
 
 // コンストラクタ
 CPushSwitch::CPushSwitch(const CVector& pos, const CVector& angle, const CVector& size)
@@ -18,15 +20,15 @@ CPushSwitch::CPushSwitch(const CVector& pos, const CVector& angle, const CVector
 	mpModel = CResourceManager::Get<CModel>("Switch");
 
 	// スイッチのコライダーを取得
-	CModel* colModel = CResourceManager::Get<CModel>("Switch");
-	mpColliderMesh = new CColliderMesh(this, ELayer::eWall, colModel, true);
+	CModel* colModel = CResourceManager::Get<CModel>("SwitchCol");
+	// スイッチのコライダー生成
+	mpColliderMesh = new CColliderMesh(this, ELayer::eSwitch, colModel, true);
 
 	// 位置と向きとサイズを設定
 	Position(pos);
 	Rotation(angle);
 	Scale(size);
 
-	// 管理クラスのリストの数を番号にしようかな
 	mNumber = mNum;
 }
 
@@ -37,11 +39,6 @@ CPushSwitch::~CPushSwitch()
 	SAFE_DELETE(mpColliderMesh);
 }
 
-// TODO：プレイヤーがスイッチを押せる範囲に入っているかどうか
-//bool CPushSwitch::IsRangePlayer() const
-//{
-//	return false;
-//}
 
 // スイッチの状態がオンかオフか
 bool CPushSwitch::IsOnSwtch()

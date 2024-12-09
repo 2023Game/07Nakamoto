@@ -76,7 +76,12 @@ CPlayer2::CPlayer2()
 		CVector(0.0f, PLAYER_HEIGHT_CCOL1, 0.0f),
 		PLAYER_WIDTH_CCOL
 	);
-	mpColliderCapsule->SetCollisionLayers({ ELayer::eField, ELayer::eWall});
+	mpColliderCapsule->SetCollisionLayers
+	(
+		{ ELayer::eField,
+		  ELayer::eWall,
+		  ELayer::eSwitch}
+	);
 
 	// 経路探索用のノードを作成
 	mpNavNode = new CNavNode(Position(), true);
@@ -389,6 +394,14 @@ void CPlayer2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			// 押し戻しベクトルのYの値を0にする
 			CVector adjust = hit.adjust;
 			adjust.Y(0.0f);
+			// 押し戻しベクトルの分、座標を移動
+			Position(Position() + adjust * hit.weight);
+		}
+		// スイッチとの当たり判定処理
+		else if (other->Layer() == ELayer::eSwitch)
+		{
+			// 押し戻しベクトルのYの値を0にする
+			CVector adjust = hit.adjust;
 			// 押し戻しベクトルの分、座標を移動
 			Position(Position() + adjust * hit.weight);
 		}

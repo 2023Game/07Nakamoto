@@ -1,7 +1,6 @@
 #ifndef CPLAYER_H
 #define CPLAYER_H
 #include "CXCharacter.h"
-#include "CColliderLine.h"
 #include "CColliderCapsule.h"
 
 /*

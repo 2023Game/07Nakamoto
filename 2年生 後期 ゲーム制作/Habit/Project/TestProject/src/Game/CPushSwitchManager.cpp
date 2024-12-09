@@ -13,6 +13,7 @@ CPushSwitchManager* CPushSwitchManager::Instance()
 
 // コンストラクタ
 CPushSwitchManager::CPushSwitchManager()
+	: CTask(ETaskPriority::eDefault, 0, ETaskPauseType::eGame)
 {
 	assert(spInstance == nullptr);
 	spInstance = this;

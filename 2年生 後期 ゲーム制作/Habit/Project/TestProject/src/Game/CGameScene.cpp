@@ -57,6 +57,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>("Enemy2", "Character\\Enemy\\warrok\\warrok.x");
 
 	CResourceManager::Load<CModel>("Switch", "Object\\Switch.obj");
+	CResourceManager::Load<CModel>("SwitchCol", "Object\\SwitchCol.obj");
 	CResourceManager::Load<CModel>("Touch", "Object\\Touch.obj");
 
 	// ÉQÅ[ÉÄBGMÇì«Ç›çûÇ›

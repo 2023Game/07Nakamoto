@@ -12,8 +12,7 @@ public:
 	// デストラクタ
 	~CPushSwitch();
 
-	// プレイヤーがスイッチを押せる範囲に入ったかどうか
-	//bool IsRangePlayer() const;
+
 	
 	// スイッチが押されたかどうか
 	bool IsOnSwtch();
@@ -28,7 +27,8 @@ private:
 	CModel* mpModel;	// スイッチのモデルデータ
 	CColliderMesh* mpColliderMesh;	// スイッチのコリジョンデータ
 
-	bool mSwitch;	//スイッチがオンかオフか
+	bool mSwitch;	// スイッチがオンかオフか
 	int mNumber;	// 番号
 	int mNum;		// 何個作られたか
+
 };
