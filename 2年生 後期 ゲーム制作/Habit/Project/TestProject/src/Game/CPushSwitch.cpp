@@ -1,5 +1,5 @@
 #include "CPushSwitch.h"
-#include "CPushSwitchManager.h"
+//#include "CPushSwitchManager.h"
 #include "Primitive.h"
 #include "CPlayer2.h"
 #include "Maths.h"
@@ -11,11 +11,11 @@ CPushSwitch::CPushSwitch(const CVector& pos, const CVector& angle, const CVector
 	, mNum(1)
 {
 	// 管理クラスのリストに自身を追加
-	CPushSwitchManager* pushMgr = CPushSwitchManager::Instance();
-	if (pushMgr != nullptr)
-	{
-		pushMgr->AddSwitch(this);
-	}
+	//CPushSwitchManager* pushMgr = CPushSwitchManager::Instance();
+	//if (pushMgr != nullptr)
+	//{
+	//	pushMgr->AddSwitch(this);
+	//}
 
 	// スイッチのモデルデータ取得
 	mpModel = CResourceManager::Get<CModel>("Switch");
@@ -25,18 +25,21 @@ CPushSwitch::CPushSwitch(const CVector& pos, const CVector& angle, const CVector
 	// スイッチのコライダー生成
 	mpCollider = new CColliderSphere
 	(
-		this, ELayer::eSwitch,
+		this, ELayer::eInteractObj,
 		4.0f, true
 	);
 	mpCollider->Position(0.0f, 2.0f, 0.0f);
-	mpCollider->SetCollisionLayers({ ELayer::ePlayer });
+	mpCollider->SetCollisionTags({ ETag::ePlayer });
+	mpCollider->SetCollisionLayers({ ELayer::ePlayer, ELayer::eInteractSearch });
 
 	// 位置と向きとサイズを設定
 	Position(pos);
 	Rotation(angle);
 	Scale(size);
 
-	mNumber = mNum;
+	//mNumber = mNum;
+
+	mInteractStr = "オンにする";
 }
 
 // デストラクタ
@@ -58,9 +61,16 @@ bool CPushSwitch::IsOnSwtch()
 }
 
 // 番号を取得
-int CPushSwitch::GetNumber()
+//int CPushSwitch::GetNumber()
+//{
+//	return mNumber;
+//}
+
+// 調べる
+void CPushSwitch::Interact()
 {
-	return mNumber;
+	mSwitch = !mSwitch;
+	mInteractStr = mSwitch ? "オンにする" : "オフにする";
 }
 
 // 描画処理

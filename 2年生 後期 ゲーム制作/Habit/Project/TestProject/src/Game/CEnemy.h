@@ -2,7 +2,7 @@
 #define CENEMY_H
 #include "CXCharacter.h"
 #include "CCharaBase.h"
-#include "CCollider.h"
+#include "CColliderCapsule.h"
 #include "CModel.h"
 
 // 視野範囲のデバッグ表示クラスの前宣言
@@ -126,6 +126,8 @@ private:
 
 	std::vector<CNavNode*> mMoveRoute;	//求めた最短経路記憶用
 	int mNextMoveIndex;					// 次に移動するノードのインデックス値
+
+	CColliderCapsule* mpColliderCapsule;	//カプセルコライダー
 
 	CTrap* mpTrap;
 };

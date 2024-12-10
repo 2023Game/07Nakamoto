@@ -17,6 +17,7 @@
 #include "CPushSwitch.h"
 #include "CPushSwitchManager.h"
 #include "CDoor.h"
+#include "CSwitchDoor.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -65,7 +66,7 @@ void CGameScene::Load()
 	// 経路探索管理クラスを作成
 	new CNavManager();
 
-	new CPushSwitchManager();
+	//new CPushSwitchManager();
 
 	new CField();
 
@@ -110,14 +111,48 @@ void CGameScene::Load()
 	// スイッチを生成
 	CPushSwitch* push_switch = new CPushSwitch(CVector(-30.0f, 0.0f, 0.0f),
 		CVector(0.0f, 0.0f, 0.0f), CVector(1.0f,1.0f,1.0f));
+#if _DEBUG
+	push_switch->SetDebugName("Switch1");
+#endif
 
 	// スイッチを生成
 	CPushSwitch* push_switch2 = new CPushSwitch(CVector(-50.0f, 0.0f, 0.0f),
 		CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
+#if _DEBUG
+	push_switch2->SetDebugName("Switch2");
+#endif
 
+	// スイッチで開く扉①を作成
+	CSwitchDoor* door = new CSwitchDoor
+	(
+		CVector(-50.0f, 0.0f, -50.0f),
+		CVector( 0.0f,  0.0f,   0.0f),
+		CVector( 2.0f,  5.0f,   2.0f)
+	);
+	door->SetAnimPos
+	(
+		CVector(-30.0f, 0.0f, -50.0f),	// 扉を開いた時の座標
+		CVector(-50.0f, 0.0f, -50.0f)	// 扉を閉じた時の座標
+	);
+	door->AddSwitch(push_switch);		// 押したら開くスイッチを追加
 
-	// 扉を生成
-	//CDoor(CPushSwitchManager::Instance()->)
+	// スイッチで開く扉②を作成
+	CSwitchDoor* door2 = new CSwitchDoor
+	(
+		CVector(-120.0f, 0.0f, -50.0f),
+		CVector(   0.0f, 0.0f,   0.0f),
+		CVector(   2.0f, 5.0f,   2.0f)
+	);
+	door->SetAnimPos
+	(
+		CVector(100.0f, 0.0f, -50.0f),	// 扉を開いた時の座標
+		CVector(120.0f, 0.0f, -50.0f)	// 扉を閉じた時の座標
+	);
+	door2->AddSwitch(push_switch);		// 押したら開くスイッチを追加
+	door2->AddSwitch(push_switch2);		// 押したら開くスイッチを追加
+
+	// 続きは45:45から
+
 
 	// CGameCameraのテスト
 	//CGameCamera* mainCamera = new CGameCamera

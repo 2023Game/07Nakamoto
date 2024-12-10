@@ -1,11 +1,12 @@
 #pragma once
 #include "CObjectBase.h"
 #include "CModel.h"
+#include "CInteractObject.h"
 
 class CCollider;
 
 // スイッチのクラス
-class CPushSwitch : public CObjectBase
+class CPushSwitch : public CInteractObject
 {
 public:
 	// コンストラクタ
@@ -25,7 +26,10 @@ public:
 	bool IsOnSwtch();
 
 	// 番号の取得
-	int GetNumber();
+	//int GetNumber();
+
+	// 調べる
+	void Interact() override;
 
 	// 描画処理
 	void Render() override;

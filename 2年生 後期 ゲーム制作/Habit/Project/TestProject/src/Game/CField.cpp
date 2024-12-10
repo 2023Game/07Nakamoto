@@ -71,7 +71,7 @@ void CField::CreateWalls()
 			// ï«á@ê∂ê¨
 			CWall* wall = new CWall
 			(
-				CVector(20.0f, 1.0f, 0.0f),
+				CVector(20.0f, 0.0f, 0.0f),
 				CVector(0.0f, 90.0f, 0.0f),
 				CVector(5.0f, 5.0f, 5.0f)
 			);
@@ -80,7 +80,7 @@ void CField::CreateWalls()
 			// ï«áAê∂ê¨
 			wall = new CWall
 			(
-				CVector(-50.0f, 1.0f, -50.0f),
+				CVector(-50.0f, 0.0f, -50.0f),
 				CVector(0.0f, 0.0f, 0.0f),
 				CVector(5.0f, 5.0f, 5.0f)
 			);
@@ -89,7 +89,7 @@ void CField::CreateWalls()
 			// ï«áBê∂ê¨
 			wall = new CWall
 			(
-				CVector(250.0f, 1.0f, 200.0f),
+				CVector(250.0f, 0.0f, 200.0f),
 				CVector(0.0f, 0.0f, 0.0f),
 				CVector(5.0f, 5.0f, 5.0f)
 			);

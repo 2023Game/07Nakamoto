@@ -95,8 +95,11 @@
     <Filter Include="ソース ファイル\Game\Navigation">
       <UniqueIdentifier>{203a5fd8-7965-46d6-bff5-bbb16181d200}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Game\Manager">
-      <UniqueIdentifier>{49e49985-7283-472d-89e9-717446ee8db2}</UniqueIdentifier>
+    <Filter Include="ソース ファイル\Game\Field\Object\InteractObject">
+      <UniqueIdentifier>{5a80edd2-e5bc-4050-a09f-5b06537f2da9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Field\Object\Gimmick">
+      <UniqueIdentifier>{0fdfe9a9-c72a-4f7b-9e15-98cc2eb818b3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -394,14 +397,17 @@
     <ClCompile Include="src\Game\CTouch.cpp">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CPushSwitch.cpp">
-      <Filter>ソース ファイル\Game\Field\Object</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CDoor.cpp">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CPushSwitchManager.cpp">
-      <Filter>ソース ファイル\Game\Manager</Filter>
+    <ClCompile Include="src\Game\CInteractObject.cpp">
+      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPushSwitch.cpp">
+      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CSwitchDoor.cpp">
+      <Filter>ソース ファイル\Game\Field\Object\Gimmick</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -723,14 +729,17 @@
     <ClInclude Include="src\Game\CTouch.h">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CPushSwitch.h">
-      <Filter>ソース ファイル\Game\Field\Object</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\CDoor.h">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CPushSwitchManager.h">
-      <Filter>ソース ファイル\Game\Manager</Filter>
+    <ClInclude Include="src\Game\CInteractObject.h">
+      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPushSwitch.h">
+      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CSwitchDoor.h">
+      <Filter>ソース ファイル\Game\Field\Object\Gimmick</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

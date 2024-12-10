@@ -24,9 +24,9 @@ const CPlayer2::AnimData CPlayer2::ANIM_DATA[] =
 	
 };
 
-#define PLAYER_HEIGHT_CCOL1	12.0f		// プレイヤーの高さ
-#define PLAYER_HEIGHT_CCOL2	2.0f		// プレイヤーの高さ
-#define PLAYER_WIDTH_CCOL	2.5f		// プレイヤーの幅
+#define PLAYER_HEIGHT_CCOL1	12.0f		// カプセルコライダーの上の高さ
+#define PLAYER_HEIGHT_CCOL2	2.0f		// カプセルコライダーの下の高さ
+#define PLAYER_WIDTH_CCOL	2.5f		// カプセルコライダーの幅
 
 #define MOVE_SPEED		0.375f * 2.0f	// 歩く速度
 #define RUN_SPEED		1.0f			// 走る速度
@@ -80,6 +80,7 @@ CPlayer2::CPlayer2()
 	(
 		{ ELayer::eField,
 		  ELayer::eWall,
+		  ELayer::eEnemy,
 		  ELayer::eSwitch}
 	);
 
@@ -398,14 +399,25 @@ void CPlayer2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			Position(Position() + adjust * hit.weight);
 		}
 		// スイッチとの当たり判定処理
-		else if (other->Layer() == ELayer::eSwitch)
+		else if (other->Layer() == ELayer::eSwitch || other->Layer() == ELayer::eEnemy)
 		{
-			// 押し戻しベクトルのYの値を0にする
+			// 押し戻しベクトル
 			CVector adjust = hit.adjust;
 
 			// 押し戻しベクトルの分、座標を移動
 			Position(Position() + adjust * hit.weight);
 		}
+
+		//// 敵との当たり判定処理
+		//if (other->Layer() == ELayer::eEnemy)
+		//{
+		//	// 押し戻しベクトル
+		//	CVector adjust = hit.adjust;
+
+		//	// 押し戻しベクトルの分、座標を移動
+		//	Position(Position() + adjust * hit.weight);
+		//}
+
 	}
 }
 

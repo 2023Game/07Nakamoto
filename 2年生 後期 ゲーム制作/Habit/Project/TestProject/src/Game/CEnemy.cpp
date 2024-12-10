@@ -20,6 +20,10 @@
 #define RUN_SPEED			 20.0f	// 走っていいるときの速度
 #define ROTATE_SPEED		 6.0f	// 回転速度
 
+#define ENEMY_HEIGHT_CCOL1	12.0f		// カプセルコライダーの上の高さ
+#define ENEMY_HEIGHT_CCOL2	2.0f		// カプセルコライダーの下の高さ
+#define ENEMY_WIDTH_CCOL	2.5f		// カプセルコライダーの幅
+
 #define ATTACK_RANGE		 20.0f	// 攻撃範囲
 #define ATTACK_MOVE_DIST	 20.0f	// 攻撃時の移動距離
 #define ATTACK_MOVE_STAT	 16.0f	// 攻撃時の移動開始フレーム
@@ -71,6 +75,22 @@ CEnemy::CEnemy(std::vector<CVector> patrolPoints)
 
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
+
+	// カプセルコライダ―生成
+	mpColliderCapsule = new CColliderCapsule
+	(
+		this, ELayer::eEnemy,
+		CVector(0.0f, ENEMY_HEIGHT_CCOL2, 0.0f),
+		CVector(0.0f, ENEMY_HEIGHT_CCOL1, 0.0f),
+		ENEMY_WIDTH_CCOL
+	);
+	mpColliderCapsule->SetCollisionLayers
+	(
+		{ ELayer::eField,
+		  ELayer::eWall,
+		  ELayer::ePlayer,
+		  ELayer::eSwitch }
+	);
 
 	// 視野範囲のデバッグ表示クラスを作成
 	mpDebugFov = new CDebugFieldOfView(this, mFovAngle, mFovLength);
