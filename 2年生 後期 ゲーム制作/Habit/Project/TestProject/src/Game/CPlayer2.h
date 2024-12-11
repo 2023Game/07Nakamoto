@@ -3,6 +3,9 @@
 #include "CXCharacter.h"
 #include "CColliderCapsule.h"
 
+class CInteractObject;
+class CDebugFieldOfView;
+
 /*
 プレイヤークラス
 キャラクタクラスを継承
@@ -125,6 +128,16 @@ private:
 	CColliderCapsule* mpColliderCapsule;	//カプセルコライダー
 
 	CTransform* mpRideObject;	// 乗ることの出来るオブジェクトか
+
+	// 一番近くにある調べられるオブジェクトを取得
+	CInteractObject* GetNearInteractObj() const;
+	// 近くにある調べられるオブジェクトのリスト
+	std::list<CInteractObject*> mNearInteractObjs;
+	CCollider* mpSearchCol;	// 調べるオブジェクトを探知するコライダ―
+
+	float mFovAngle;	// 視野範囲の角度
+	CDebugFieldOfView* mpDebugFov;	// 視野範囲のデバッグ表示
+
 };
 
 #endif // !CPLAYER_H

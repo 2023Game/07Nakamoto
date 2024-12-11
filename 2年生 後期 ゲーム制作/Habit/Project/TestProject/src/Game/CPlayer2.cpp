@@ -2,6 +2,11 @@
 #include "CInput.h"
 #include "CNavNode.h"
 #include "CNavManager.h"
+#include "CColliderSphere.h"
+#include "CInteractObject.h"
+#include "Maths.h"
+
+#include "CDebugFieldOfView.h"
 
 // プレイヤーのインスタンス
 CPlayer2* CPlayer2::spInstatnce = nullptr;
@@ -25,17 +30,21 @@ const CPlayer2::AnimData CPlayer2::ANIM_DATA[] =
 };
 
 #define PLAYER_HEIGHT_CCOL1	12.0f		// カプセルコライダーの上の高さ
-#define PLAYER_HEIGHT_CCOL2	2.0f		// カプセルコライダーの下の高さ
-#define PLAYER_WIDTH_CCOL	2.5f		// カプセルコライダーの幅
+#define PLAYER_HEIGHT_CCOL2	 2.0f		// カプセルコライダーの下の高さ
+#define PLAYER_WIDTH_CCOL	 2.5f		// カプセルコライダーの幅
 
-#define MOVE_SPEED		0.375f * 2.0f	// 歩く速度
-#define RUN_SPEED		1.0f			// 走る速度
+#define MOVE_SPEED		  0.375f * 2.0f	// 歩く速度
+#define RUN_SPEED		  1.0f			// 走る速度
 
-#define JUNP_MOVE_DIST	20.0f			// ジャンプ時の移動距離
-#define JUNP_MOVE_START	16.0f			// ジャンプ時の移動開始フレーム
-#define JUNP_MOVE_END	33.0f			// ジャンプ時の移動終了フレーム
-#define JUMP_SPEED		1.0f			// ジャンプの高さ
-#define GRAVITY			0.0625f			// 重力
+#define JUNP_MOVE_DIST	 20.0f			// ジャンプ時の移動距離
+#define JUNP_MOVE_START  16.0f			// ジャンプ時の移動開始フレーム
+#define JUNP_MOVE_END	 33.0f			// ジャンプ時の移動終了フレーム
+#define JUMP_SPEED		  1.0f			// ジャンプの高さ
+#define GRAVITY			  0.0625f		// 重力
+
+#define SEARCH_RADIUS	 10.0f			// 調べるオブジェクトを探知する範囲の半径
+#define FOV_ANGLE		 60.0f			// 視野範囲の角度
+#define FOV_LENGTH		 10.0f			// 視野範囲の距離
 
 // コンストラクタ
 CPlayer2::CPlayer2()
@@ -47,6 +56,9 @@ CPlayer2::CPlayer2()
 	, mpRideObject(nullptr)
 	, mHp(100)
 	, mSt(100)
+	, mpSearchCol(nullptr)
+	, mFovAngle(FOV_ANGLE)
+	, mpDebugFov(nullptr)
 {
 	// インスタンスの設定
 	spInstatnce = this;
@@ -81,18 +93,39 @@ CPlayer2::CPlayer2()
 		{ ELayer::eField,
 		  ELayer::eWall,
 		  ELayer::eEnemy,
-		  ELayer::eSwitch}
+		  ELayer::eInteractObj}
 	);
+
+	// 視野範囲のデバッグ表示クラスを作成
+	mpDebugFov = new CDebugFieldOfView(this, mFovAngle, FOV_LENGTH);
 
 	// 経路探索用のノードを作成
 	mpNavNode = new CNavNode(Position(), true);
 	mpNavNode->SetColor(CColor::red);
+
+	// 調べるオブジェクトを探知するコライダーを作成
+	mpSearchCol = new CColliderSphere
+	(
+		this, ELayer::eInteractSearch,
+		SEARCH_RADIUS
+	);
+	// 調べるオブジェクトのみ衝突するように設定
+	mpSearchCol->SetCollisionTags({ ETag::eInteractObject });
+	mpSearchCol->SetCollisionLayers({ ELayer::eInteractObj });
 }
 
 // デストラクタ
 CPlayer2::~CPlayer2()
 {
+	// 視野範囲のデバッグ表示が存在したら、一緒に削除する
+	if (mpDebugFov != nullptr)
+	{
+		mpDebugFov->SetOwner(nullptr);
+		mpDebugFov->Kill();
+	}
+
 	SAFE_DELETE(mpColliderCapsule);
+	SAFE_DELETE(mpSearchCol);
 
 	spInstatnce = nullptr;
 }
@@ -171,6 +204,9 @@ void CPlayer2::Update()
 	CDebugPrint::Print("FPS:%f\n", Times::FPS());
 
 	CDebugPrint::Print("ST:%d\n", mSt);
+
+	// 調べるオブジェクトのリストをクリア
+	mNearInteractObjs.clear();
 }
 
 // 待機処理
@@ -183,6 +219,29 @@ void CPlayer2::UpdateIdle()
 		if (CInput::PushKey(VK_SPACE))
 		{
 			mState = EState::eJumpStart;
+		}
+		else
+		{
+			// 近くの調べるオブジェクトを取得
+			CInteractObject* obj = GetNearInteractObj();
+			if (obj != nullptr)
+			{
+#if _DEBUG
+				// 探知範囲内に入ったオブジェクトの名前を表示
+				CDebugPrint::Print
+				(
+					"%s:%s\n",
+					obj->GetDebugName().c_str(),
+					obj->GetInteractStr().c_str()
+				);
+#endif
+
+				// [E]キーを押したら、近くの調べるオブジェクトを調べる
+				if (CInput::PushKey('E'))
+				{
+					obj->Interact();
+				}
+			}
 		}
 	}
 }
@@ -346,6 +405,7 @@ void CPlayer2::UpdateMove()
 // 衝突判定
 void CPlayer2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
+	// プレイヤーの体の当たり判定
 	if (self == mpColliderCapsule)
 	{
 		// フィールドと天井の当たり判定処理
@@ -399,7 +459,7 @@ void CPlayer2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			Position(Position() + adjust * hit.weight);
 		}
 		// スイッチとの当たり判定処理
-		else if (other->Layer() == ELayer::eSwitch || other->Layer() == ELayer::eEnemy)
+		else if (other->Layer() == ELayer::eInteractObj || other->Layer() == ELayer::eEnemy)
 		{
 			// 押し戻しベクトル
 			CVector adjust = hit.adjust;
@@ -418,6 +478,26 @@ void CPlayer2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		//	Position(Position() + adjust * hit.weight);
 		//}
 
+	}
+	// 調べるオブジェクトの探知コライダーとの当たり判定
+	else if (self == mpSearchCol)
+	{
+		CInteractObject* obj = dynamic_cast<CInteractObject*>(other->Owner());
+		if (obj != nullptr)
+		{
+			// 衝突した調べるオブジェクトをリストに追加
+			mNearInteractObjs.push_back(obj);
+
+//#if _DEBUG
+//			// 探知範囲内に入ったオブジェクトの名前を表示
+//			CDebugPrint::Print
+//			(
+//				"%s:%s\n",
+//				obj->GetDebugName().c_str(),
+//				obj->GetInteractStr().c_str()
+//			);
+//#endif
+		}
 	}
 }
 
@@ -453,4 +533,48 @@ std::string CPlayer2::ToString(EState state)
 	case CPlayer2::EState::eSneak:		return "eSneak";
 	case CPlayer2::EState::eCrouch_up:	return "eSneak";
 	}
+}
+
+CInteractObject* CPlayer2::GetNearInteractObj() const
+{
+	// 一番近くの調べるオブジェクトのポインタ格納用
+	CInteractObject* nearObj = nullptr;
+	float nearDist = 0.0f;	// 現在一番近くにある調べるオブジェクトまでの距離
+	CVector pos = Position();	// プレイヤーの座標を取得
+	// 探知範囲内の調べるオブジェクトを順番に調べる
+	for (CInteractObject* obj : mNearInteractObjs)
+	{
+
+		// 現在調べられない状態であれば、スルー
+		if (!obj->CanInteract()) continue;
+
+		// オブジェクトの座標を取得
+		CVector objPos = obj->Position();
+		// プレイヤーからオブジェクトまでのベクトルを求める
+		CVector vec = objPos - pos;
+		vec.Y(0.0f);	// オブジェクトとの高さの差を考慮しない
+
+		// ベクトルを正規化して長さを1にする
+		CVector dir = vec.Normalized();
+		// 自身の正面方向ベクトルを取得
+		CVector forward = VectorZ();
+		// プレイヤーとまでのベクトルと
+		// 自身の正面方向ベクトルの内積を求めて角度を出す
+		float dot = CVector::Dot(dir, forward);
+		// 視野角度のラジアンを求める
+		float angleR = Math::DegreeToRadian(mFovAngle);
+		// 求めた内積と視野角度で、視野範囲内か判断する
+		if (dot < cosf(angleR)) continue;
+
+		float dist = (obj->Position() - pos).LengthSqr();
+		// 一番最初の調べるオブジェクトか、
+		// 求めた距離が現在の一番近いオブジェクトよりも近い場合は、
+		if (nearObj == nullptr || dist < nearDist)
+		{
+			// 一番近いオブジェクトを更新
+			nearObj = obj;
+			nearDist = dist;
+		}
+	}
+	return nearObj;
 }

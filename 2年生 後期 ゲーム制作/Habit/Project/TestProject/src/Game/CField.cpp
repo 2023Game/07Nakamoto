@@ -80,7 +80,23 @@ void CField::CreateWalls()
 			// 壁②生成
 			wall = new CWall
 			(
-				CVector(-50.0f, 0.0f, -50.0f),
+				CVector(-85.0f, 0.0f, -50.0f),
+				CVector(0.0f, 0.0f, 0.0f),
+				CVector(5.0f, 5.0f, 5.0f)
+			);
+			mWalls.push_back(wall);	// 生成した壁を壁のリストに追加
+
+			wall = new CWall
+			(
+				CVector(-15.0f, 0.0f, -50.0f),
+				CVector(0.0f, 0.0f, 0.0f),
+				CVector(5.0f, 5.0f, 5.0f)
+			);
+			mWalls.push_back(wall);	// 生成した壁を壁のリストに追加
+
+			wall = new CWall
+			(
+				CVector(-155.0f, 0.0f, -50.0f),
 				CVector(0.0f, 0.0f, 0.0f),
 				CVector(5.0f, 5.0f, 5.0f)
 			);

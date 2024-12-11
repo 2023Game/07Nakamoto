@@ -397,9 +397,6 @@
     <ClCompile Include="src\Game\CTouch.cpp">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CDoor.cpp">
-      <Filter>ソース ファイル\Game\Field\Object</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CInteractObject.cpp">
       <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
     </ClCompile>
@@ -727,9 +724,6 @@
       <Filter>ソース ファイル\Game\Weapon</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CTouch.h">
-      <Filter>ソース ファイル\Game\Field\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CDoor.h">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CInteractObject.h">

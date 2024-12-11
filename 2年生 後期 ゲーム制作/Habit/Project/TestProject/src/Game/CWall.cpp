@@ -64,5 +64,6 @@ void CWall::Update()
 // •`‰æˆ—
 void CWall::Render()
 {
+	mpModel->SetColor(mColor);
 	mpModel->Render(Matrix());
 }

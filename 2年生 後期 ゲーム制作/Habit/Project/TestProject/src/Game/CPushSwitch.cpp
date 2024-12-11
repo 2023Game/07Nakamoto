@@ -1,5 +1,4 @@
 #include "CPushSwitch.h"
-//#include "CPushSwitchManager.h"
 #include "Primitive.h"
 #include "CPlayer2.h"
 #include "Maths.h"
@@ -10,18 +9,9 @@ CPushSwitch::CPushSwitch(const CVector& pos, const CVector& angle, const CVector
 	: mSwitch(false)
 	, mNum(1)
 {
-	// 管理クラスのリストに自身を追加
-	//CPushSwitchManager* pushMgr = CPushSwitchManager::Instance();
-	//if (pushMgr != nullptr)
-	//{
-	//	pushMgr->AddSwitch(this);
-	//}
-
 	// スイッチのモデルデータ取得
 	mpModel = CResourceManager::Get<CModel>("Switch");
 
-	// スイッチのコライダーを取得
-	//CModel* colModel = CResourceManager::Get<CModel>("SwitchCol");
 	// スイッチのコライダー生成
 	mpCollider = new CColliderSphere
 	(
@@ -37,8 +27,6 @@ CPushSwitch::CPushSwitch(const CVector& pos, const CVector& angle, const CVector
 	Rotation(angle);
 	Scale(size);
 
-	//mNumber = mNum;
-
 	mInteractStr = "オンにする";
 }
 
@@ -49,22 +37,11 @@ CPushSwitch::~CPushSwitch()
 	SAFE_DELETE(mpCollider);
 }
 
-
-void CPushSwitch::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
-{
-}
-
 // スイッチの状態がオンかオフか
 bool CPushSwitch::IsOnSwtch()
 {
 	return mSwitch;
 }
-
-// 番号を取得
-//int CPushSwitch::GetNumber()
-//{
-//	return mNumber;
-//}
 
 // 調べる
 void CPushSwitch::Interact()

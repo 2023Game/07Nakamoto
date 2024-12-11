@@ -143,16 +143,13 @@ void CGameScene::Load()
 		CVector(   0.0f, 0.0f,   0.0f),
 		CVector(   2.0f, 5.0f,   2.0f)
 	);
-	door->SetAnimPos
+	door2->SetAnimPos
 	(
-		CVector(100.0f, 0.0f, -50.0f),	// 扉を開いた時の座標
-		CVector(120.0f, 0.0f, -50.0f)	// 扉を閉じた時の座標
+		CVector(-100.0f, 0.0f, -50.0f),	// 扉を開いた時の座標
+		CVector(-120.0f, 0.0f, -50.0f)	// 扉を閉じた時の座標
 	);
 	door2->AddSwitch(push_switch);		// 押したら開くスイッチを追加
 	door2->AddSwitch(push_switch2);		// 押したら開くスイッチを追加
-
-	// 続きは45:45から
-
 
 	// CGameCameraのテスト
 	//CGameCamera* mainCamera = new CGameCamera

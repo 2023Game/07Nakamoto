@@ -1,7 +1,7 @@
 #include "CInteractObject.h"
 
 // コンストラクタ
-CInteractObject::CInteractObject(ETaskPriority prio, int sortOrder = 0, ETaskPauseType pause)
+CInteractObject::CInteractObject(ETaskPriority prio, int sortOrder, ETaskPauseType pause)
 	: CObjectBase(ETag::eInteractObject, prio, sortOrder, pause)
 	, mInteractStr("調べる")
 #if _DEBUG
@@ -24,18 +24,19 @@ bool CInteractObject::CanInteract() const
 // 調べる内容のテキストを返す 
 std::string CInteractObject::GetInteractStr() const
 {
-	return std::string();
+	return mInteractStr;
 }
 
 #if _DEBUG
 // デバッグ表示用の名前を取得
 std::string CInteractObject::GetDebugName() const
 {
-	return mInteractStr;
+	return mDebugName;
 }
 
 // デバッグ表示用のm名前を設定
 void CInteractObject::SetDebugName(std::string name)
 {
+	mDebugName = name;
 }
 #endif

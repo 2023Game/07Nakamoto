@@ -85,7 +85,7 @@ CEnemy2::CEnemy2(std::vector<CVector> patrolPoints)
 		{	ELayer::eField,
 			ELayer::eWall,
 			ELayer::ePlayer,
-			ELayer::eSwitch	}
+			ELayer::eInteractObj}
 	);
 
 	// 視野範囲のデバッグ表示クラスを作成

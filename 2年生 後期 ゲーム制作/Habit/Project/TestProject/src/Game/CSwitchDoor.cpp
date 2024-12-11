@@ -21,6 +21,8 @@ CSwitchDoor::CSwitchDoor(const CVector& pos, const CVector& angle, const CVector
 	Position(pos);
 	Rotation(angle);
 	Scale(size);
+	// 赤色を設定
+	mColor = CColor::red;
 }
 
 // デストラクタ
@@ -105,7 +107,7 @@ void CSwitchDoor::Update()
 			mIsOpened = true;
 			mIsPlaying = true;
 		}
-		else if (isSwitchOn && mIsOpened)
+		else if (!isSwitchOn && mIsOpened)
 		{
 			mIsOpened = false;
 			mIsPlaying = true;
@@ -116,6 +118,7 @@ void CSwitchDoor::Update()
 // 描画処理
 void CSwitchDoor::Render()
 {
+	mpModel->SetColor(mColor);
 	mpModel->Render(Matrix());
 }
 
