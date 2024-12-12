@@ -33,6 +33,9 @@ public:
 	/// <param name="other">衝突した相手のコライダー</param>
 	/// <param name="hit">衝突した時の情報</param>
 	void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
+
+	float AttackDameg();
+
 private:
 	// アニメーションの種類
 	enum class EAnimType
@@ -121,5 +124,6 @@ private:
 	int mNextMoveIndex;					// 次に移動するノードのインデックス値
 
 	CColliderCapsule* mpColliderCapsule;	//カプセルコライダー
+	CColliderSphere* mpAttackCollider;		// 攻撃時のコライダー
 
 };

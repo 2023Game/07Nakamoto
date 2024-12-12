@@ -47,9 +47,10 @@ private:
 	void UpdateJump();
 	// ジャンプ終了
 	void UpdateJumpEnd();
-
 	// 転倒処理
 	void UpdateFall();
+	// 死亡処理
+	void UpdateDeath();
 
 	// 移動の更新処理
 	void UpdateMove();
@@ -67,6 +68,7 @@ private:
 		eJumping,	// ジャンプ中
 		eJumpEnd,	// ジャンプ終了
 		eFall,		// 転倒
+		eDeath,		// 死亡
 
 		eCrawl,		// 這う
 		eSneak,		// しゃがみ移動
@@ -101,6 +103,7 @@ private:
 		eJump,		// ジャンプ
 		eJumpEnd,	// ジャンプ終了
 		eFall,		// 転倒
+		eDeath,		// 死亡
 
 		eCrawl,		// 這う
 		eSneak,		// しゃがみ移動

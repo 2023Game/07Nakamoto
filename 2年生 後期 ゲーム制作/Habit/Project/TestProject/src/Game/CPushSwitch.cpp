@@ -47,7 +47,7 @@ bool CPushSwitch::IsOnSwtch()
 void CPushSwitch::Interact()
 {
 	mSwitch = !mSwitch;
-	mInteractStr = mSwitch ? "オンにする" : "オフにする";
+	mInteractStr = mSwitch ? "オフにする" : "オンにする";
 }
 
 // 描画処理

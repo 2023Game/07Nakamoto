@@ -14,17 +14,18 @@ CPlayer2* CPlayer2::spInstatnce = nullptr;
 // プレイヤーのアニメーションデータのテーブル
 const CPlayer2::AnimData CPlayer2::ANIM_DATA[] =
 {
-	{ "",											true,	0.0f	},	// Tポーズ
+	{ "",											true,	  0.0f	},	// Tポーズ
 	{ "Character\\Player2\\anim\\pico_idle.x",		true,	181.0f	},	// 待機
-	{ "Character\\Player2\\anim\\pico_walk_s.x",	true,	60.0f	},	// 歩行
-	{ "Character\\Player2\\anim\\pico_running.x",	true,	44.0f	},	// 走行
-	{ "Character\\Player2\\anim\\pico_jump_start.x",false,	25.0f	},	// ジャンプ開始
-	{ "Character\\Player2\\anim\\pico_jumping.x",	false,	 1.0f	},	// ジャンプ中
-	{ "Character\\Player2\\anim\\pico_jump_end.x",	false,	26.0f	},	// ジャン終了プ
-	{ "Character\\Player2\\anim\\pico_fall.x",		false,	77.0f	},	// 転倒
+	{ "Character\\Player2\\anim\\pico_walk_s.x",	true,	 60.0f	},	// 歩行
+	{ "Character\\Player2\\anim\\pico_running.x",	true,	 44.0f	},	// 走行
+	{ "Character\\Player2\\anim\\pico_jump_start.x",false,	 25.0f	},	// ジャンプ開始
+	{ "Character\\Player2\\anim\\pico_jumping.x",	false,	  1.0f	},	// ジャンプ中
+	{ "Character\\Player2\\anim\\pico_jump_end.x",	false,	 26.0f	},	// ジャン終了プ
+	{ "Character\\Player2\\anim\\pico_fall.x",		false,	 77.0f	},	// 転倒
+	{ "Character\\Player2\\anim\\pico_death.x",		false,	109.0f	},	// 死亡
 
-	{ "Character\\Player2\\anim\\pico_crawl.x",		true,	55.0f	},	// 這う
-	{ "Character\\Player2\\anim\\pico_sneak.x",		true,	51.0f	},	// しゃがみ移動
+	{ "Character\\Player2\\anim\\pico_crawl.x",		true,	 55.0f	},	// 這う
+	{ "Character\\Player2\\anim\\pico_sneak.x",		true,	 51.0f	},	// しゃがみ移動
 	{ "Character\\Player2\\anim\\pico_crouch_and_pick_up.x",		true,	180.0f	},	// しゃがんで拾う
 	
 };
@@ -117,12 +118,12 @@ CPlayer2::CPlayer2()
 // デストラクタ
 CPlayer2::~CPlayer2()
 {
-	// 視野範囲のデバッグ表示が存在したら、一緒に削除する
-	if (mpDebugFov != nullptr)
-	{
-		mpDebugFov->SetOwner(nullptr);
-		mpDebugFov->Kill();
-	}
+	//// 視野範囲のデバッグ表示が存在したら、一緒に削除する
+	//if (mpDebugFov != nullptr)
+	//{
+	//	mpDebugFov->SetOwner(nullptr);
+	//	mpDebugFov->Kill();
+	//}
 
 	SAFE_DELETE(mpColliderCapsule);
 	SAFE_DELETE(mpSearchCol);
@@ -165,6 +166,11 @@ void CPlayer2::Update()
 		case EState::eFall:
 			UpdateFall();
 			break;
+		// 死亡
+		case EState::eDeath:
+			UpdateDeath();
+			break;
+			
 	}
 
 	//待機中とジャンプ中は、移動処理を行う
@@ -202,7 +208,7 @@ void CPlayer2::Update()
 	mIsGrounded = false;
 
 	CDebugPrint::Print("FPS:%f\n", Times::FPS());
-
+	CDebugPrint::Print("HP:%d\n", mHp);
 	CDebugPrint::Print("ST:%d\n", mSt);
 
 	// 調べるオブジェクトのリストをクリア
@@ -299,6 +305,21 @@ void CPlayer2::UpdateFall()
 	if (IsAnimationFinished())
 	{
 		mState = EState::eIdle;	
+	}
+}
+
+void CPlayer2::UpdateDeath()
+{
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
+	// 死亡アニメーションを設定
+	ChangeAnimation(EAnimType::eDeath);
+
+
+	// タイトルに戻るなどに変更する
+	if (CInput::Key('R') && IsAnimationFinished())
+	{
+		mState = EState::eIdle;
 	}
 }
 
@@ -400,6 +421,12 @@ void CPlayer2::UpdateMove()
 			}
 		}
 	}
+
+	// [K]キーを押したら死亡する（HPが0以下になったらに変更する）
+	//if (CInput::Key('K'))
+	//{
+	//	mState = EState::eDeath;
+	//}
 }
 
 // 衝突判定
@@ -459,6 +486,7 @@ void CPlayer2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			Position(Position() + adjust * hit.weight);
 		}
 		// スイッチとの当たり判定処理
+		// 敵との当たり判定処理
 		else if (other->Layer() == ELayer::eInteractObj || other->Layer() == ELayer::eEnemy)
 		{
 			// 押し戻しベクトル
@@ -467,7 +495,11 @@ void CPlayer2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			// 押し戻しベクトルの分、座標を移動
 			Position(Position() + adjust * hit.weight);
 		}
+		// 敵の攻撃に当たった時の処理
+		else if (other->Tag() == ETag::eEnemy && other->Layer() == ELayer::eAttackCol)
+		{
 
+		}
 		//// 敵との当たり判定処理
 		//if (other->Layer() == ELayer::eEnemy)
 		//{
@@ -487,16 +519,6 @@ void CPlayer2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		{
 			// 衝突した調べるオブジェクトをリストに追加
 			mNearInteractObjs.push_back(obj);
-
-//#if _DEBUG
-//			// 探知範囲内に入ったオブジェクトの名前を表示
-//			CDebugPrint::Print
-//			(
-//				"%s:%s\n",
-//				obj->GetDebugName().c_str(),
-//				obj->GetInteractStr().c_str()
-//			);
-//#endif
 		}
 	}
 }
@@ -529,6 +551,8 @@ std::string CPlayer2::ToString(EState state)
 	case CPlayer2::EState::eJump:		return "eJump";
 	case CPlayer2::EState::eJumpEnd:	return "eJumpEnd";
 	case CPlayer2::EState::eFall:		return "eFall";
+	case CPlayer2::EState::eDeath:		return "eDeath";
+
 	case CPlayer2::EState::eCrawl:		return "eCrawl";
 	case CPlayer2::EState::eSneak:		return "eSneak";
 	case CPlayer2::EState::eCrouch_up:	return "eSneak";
