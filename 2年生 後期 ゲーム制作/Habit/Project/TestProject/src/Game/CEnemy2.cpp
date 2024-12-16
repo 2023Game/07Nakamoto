@@ -8,6 +8,7 @@
 #include "CField.h"
 #include "CNavNode.h"
 #include "CNavManager.h"
+#include "CColliderSphere.h"
 
 #define FOV_ANGLE			 45.0f	// 視野範囲の角度
 #define FOV_LENGTH			100.0f	// 視野範囲の距離
@@ -86,6 +87,13 @@ CEnemy2::CEnemy2(std::vector<CVector> patrolPoints)
 			ELayer::ePlayer,
 			ELayer::eInteractObj}
 	);
+
+	mpAttackCollider = new CColliderSphere
+	(
+		this, ELayer::eAttackCol,
+		5.0f,true
+	);
+	mpAttackCollider->Position(15.0f, 5.0f, 0.0f);
 
 	// 視野範囲のデバッグ表示クラスを作成
 	mpDebugFov = new CDebugFieldOfView(this, mFovAngle, mFovLength);

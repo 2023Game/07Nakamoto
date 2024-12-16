@@ -423,10 +423,10 @@ void CPlayer2::UpdateMove()
 	}
 
 	// [K]キーを押したら死亡する（HPが0以下になったらに変更する）
-	//if (CInput::Key('K'))
-	//{
-	//	mState = EState::eDeath;
-	//}
+	if (CInput::Key('K'))
+	{
+		mState = EState::eDeath;
+	}
 }
 
 // 衝突判定

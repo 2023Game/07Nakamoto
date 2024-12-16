@@ -124,6 +124,6 @@ private:
 	int mNextMoveIndex;					// 次に移動するノードのインデックス値
 
 	CColliderCapsule* mpColliderCapsule;	//カプセルコライダー
-	CColliderSphere* mpAttackCollider;		// 攻撃時のコライダー
+	CCollider* mpAttackCollider;		// 攻撃時のコライダー
 
 };
