@@ -8,7 +8,6 @@
 #include "CField.h"
 #include "CNavNode.h"
 #include "CNavManager.h"
-#include "CColliderSphere.h"
 
 #define FOV_ANGLE			 45.0f	// 視野範囲の角度
 #define FOV_LENGTH			100.0f	// 視野範囲の距離
@@ -26,6 +25,7 @@
 
 #define ATTACK_JUDGE_START	39.0f	// 攻撃判定開始フレーム
 #define ATTACK_JUDGE_END	46.0f	// 攻撃判定終了フレーム
+#define ATTACK_DAMAGE		30		// 攻撃のダメージ
 
 #define PATROL_INTERVAL		  3.0f	// 次の巡回ポイントに移動開始するまでの時間
 #define PATROL_NEAR_DIST	 10.0f	// 巡回開始時に選択される巡回ポイントの最短距離
@@ -50,10 +50,11 @@ CEnemy2::CEnemy2(std::vector<CVector> patrolPoints)
 	, mFovAngle(FOV_ANGLE)
 	, mFovLength(FOV_LENGTH)
 	, mpDebugFov(nullptr)
-	, mAttackStartPos(CVector::zero)
-	, mAttackEndPos(CVector::zero)
+	//, mAttackStartPos(CVector::zero)
+	//, mAttackEndPos(CVector::zero)
 	, mNextPatrolIndex(-1)	// -1の時に一番近いポイントに移動
 	, mNextMoveIndex(0)
+	, mAttackHit(false)
 {
 	//モデルデータの取得
 	CModelX* model = CResourceManager::Get<CModelX>("Enemy2");
@@ -88,12 +89,22 @@ CEnemy2::CEnemy2(std::vector<CVector> patrolPoints)
 			ELayer::eInteractObj}
 	);
 
+	// 攻撃用の球コライダ―を作成
 	mpAttackCollider = new CColliderSphere
 	(
 		this, ELayer::eAttackCol,
-		5.0f,true
+		30.0f,true
 	);
-	mpAttackCollider->Position(15.0f, 5.0f, 0.0f);
+	mpAttackCollider->SetCollisionTags({ ETag::ePlayer });
+	mpAttackCollider->SetCollisionLayers({ ELayer::ePlayer });
+
+	// 左手のボーンの行列を取得
+	CModelXFrame* frame = mpModel->FinedFrame("Armature_mixamorig_LeftHand");
+	const CMatrix& mtx = frame->CombinedMatrix();
+	// 攻撃用のコライダーを左手の行列に設定
+	mpAttackCollider->SetAttachMtx(&mtx);
+	// 攻撃用コライダーを最初はオフにしておく
+	mpAttackCollider->SetEnable(false);
 
 	// 視野範囲のデバッグ表示クラスを作成
 	mpDebugFov = new CDebugFieldOfView(this, mFovAngle, mFovLength);
@@ -117,6 +128,9 @@ CEnemy2::CEnemy2(std::vector<CVector> patrolPoints)
 // デストラクタ
 CEnemy2::~CEnemy2()
 {
+	SAFE_DELETE(mpColliderCapsule);
+	SAFE_DELETE(mpAttackCollider);
+
 	// 視野範囲のデバッグ表示が存在したら、一緒に削除する
 	if (mpDebugFov != nullptr)
 	{
@@ -166,6 +180,7 @@ void CEnemy2::Update()
 	}
 
 	CXCharacter::Update();
+	mpAttackCollider->Update();
 
 	// 経路探索用のノードが存在すれば、座標を更新
 	if (mpNavNode != nullptr)
@@ -239,12 +254,26 @@ void CEnemy2::Render()
 			);
 		}
 	}
-
 }
 
 // 衝突処理
 void CEnemy2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
+	// まだ攻撃が当たっていなければ
+	if (mAttackHit != true)
+	{
+		// 攻撃用コライダー
+		if (self == mpAttackCollider)
+		{
+			// プレイヤーとの当たり判定処理
+			if (other->Layer() == ELayer::ePlayer)
+			{
+				mAttackHit = true;
+				CPlayer2* player = CPlayer2::Instance();
+				player->TakeDamege(ATTACK_DAMAGE);
+			}
+		}
+	}
 }
 
 float CEnemy2::AttackDameg()
@@ -278,6 +307,9 @@ bool CEnemy2::IsFoundPlayer() const
 	// プレイヤーが存在しない場合は、視野範囲外とする
 	CPlayer2* player = CPlayer2::Instance();
 	if (player == nullptr) return false;
+
+	// プレイヤーが死亡状態の場合も、範囲外とする
+	if (player->GetState() == 8) return false;
 
 	// プレイヤー座標を取得
 	CVector playerPos = player->Position();
@@ -639,26 +671,37 @@ void CEnemy2::UpdateAttack()
 	// ステップごとに処理を切り替える
 	switch (mStateStep)
 	{
-		// ステップ0 : 攻撃アニメーションを再生
+		// ステップ０：攻撃アニメーションを再生
 		case 0:
 			ChangeAnimation(EAnimType::eAttack);
 			mStateStep++;
 			break;
-		// ステップ1 : 攻撃アニメーションの終了待ち
+		// ステップ１: 攻撃用コライダーを有効にする
 		case 1:
-			if (GetAnimationFrame() >= ATTACK_RANGE)
+			if (GetAnimationFrame() >= ATTACK_JUDGE_START)
 			{
-				//mpAttackCollider = new 
-			}
-
-
-			if (IsAnimationFinished())
-			{
+				mpAttackCollider->SetEnable(true);
 				mStateStep++;
 			}
 			break;
-		// ステップ2 : 攻撃終了後の待ち時間
+		// ステップ２： 攻撃用コライダーを無効にする
 		case 2:
+			if (GetAnimationFrame() >= ATTACK_JUDGE_END)
+			{
+				mpAttackCollider->SetEnable(false);
+				mStateStep++;
+			}
+			break;
+		// ステップ３ : 攻撃アニメーションの終了待ち
+		case 3:
+			if (IsAnimationFinished())
+			{
+				mStateStep++;
+				mAttackHit = false;
+			}
+			break;
+		// ステップ４ : 攻撃終了後の待ち時間
+		case 4:
 			if (mElapsedTime < ATTACK_WAIT_TIME)
 			{
 				mElapsedTime += Times::DeltaTime();

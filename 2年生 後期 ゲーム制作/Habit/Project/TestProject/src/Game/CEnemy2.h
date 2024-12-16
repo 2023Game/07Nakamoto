@@ -3,6 +3,7 @@
 #include "CCharaBase.h"
 #include "CColliderCapsule.h"
 #include "CModel.h"
+#include "CColliderSphere.h"
 
 // 視野範囲のデバッグ表示クラスの前宣言
 class CDebugFieldOfView;
@@ -113,8 +114,8 @@ private:
 
 	CNavNode* mpLostPlayerNode;	// プレイヤーを見失った位置のノード
 
-	CVector mAttackStartPos;// 攻撃開始時の位置
-	CVector mAttackEndPos;	// 攻撃終了時の位置
+	//CVector mAttackStartPos;// 攻撃開始時の位置
+	//CVector mAttackEndPos;	// 攻撃終了時の位置
 
 	// 巡回ポイントのリスト
 	std::vector<CNavNode*> mPatrolPoints;
@@ -124,6 +125,7 @@ private:
 	int mNextMoveIndex;					// 次に移動するノードのインデックス値
 
 	CColliderCapsule* mpColliderCapsule;	//カプセルコライダー
-	CCollider* mpAttackCollider;		// 攻撃時のコライダー
+	CColliderSphere* mpAttackCollider;		// 攻撃時のコライダー
 
+	bool mAttackHit;	// 攻撃が当たったかどうか
 };

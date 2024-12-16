@@ -181,7 +181,7 @@ CMatrix CCollider::Matrix() const
 	{
 		// ‚»‚Ìs—ñ‚É•‘®‚·‚é
 		CMatrix sm;
-		sm.Scale(100.0f, 100.0f, 100.0f);
+		//sm.Scale(100.0f, 100.0f, 100.0f);
 		m = sm * mAttachMtx * m;
 	}
 	// ‚¿å‚ªİ’è‚³‚ê‚Ä‚¢‚ê‚Î

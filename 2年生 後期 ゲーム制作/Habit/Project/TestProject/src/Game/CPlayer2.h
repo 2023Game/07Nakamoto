@@ -21,8 +21,14 @@ public:
 	//デストラクタ
 	~CPlayer2();
 
+	// オブジェクト削除を伝える
+	void DeleteObject(CObjectBase* obj) override;
+
 	//更新処理
 	void Update() override;
+
+	// ステータスを整数にして取得する
+	int GetState();
 
 	/// <summary>
 	/// 衝突処理
@@ -31,6 +37,9 @@ public:
 	/// <param name="other">衝突した相手のコライダー</param>
 	/// <param name="hit">衝突した時の情報</param>
 	void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
+
+	// ダメージ処理
+	void TakeDamege(int damage);
 
 	//描画処理
 	void Render() override;

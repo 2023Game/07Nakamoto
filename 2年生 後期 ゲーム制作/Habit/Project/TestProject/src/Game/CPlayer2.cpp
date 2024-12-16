@@ -94,7 +94,8 @@ CPlayer2::CPlayer2()
 		{ ELayer::eField,
 		  ELayer::eWall,
 		  ELayer::eEnemy,
-		  ELayer::eInteractObj}
+		  ELayer::eInteractObj,
+		  ELayer::eAttackCol}
 	);
 
 	// 視野範囲のデバッグ表示クラスを作成
@@ -118,17 +119,28 @@ CPlayer2::CPlayer2()
 // デストラクタ
 CPlayer2::~CPlayer2()
 {
-	//// 視野範囲のデバッグ表示が存在したら、一緒に削除する
-	//if (mpDebugFov != nullptr)
-	//{
-	//	mpDebugFov->SetOwner(nullptr);
-	//	mpDebugFov->Kill();
-	//}
+	// 視野範囲のデバッグ表示が存在したら、一緒に削除する
+	if (mpDebugFov != nullptr)
+	{
+		mpDebugFov->SetOwner(nullptr);
+		mpDebugFov->Kill();
+	}
 
 	SAFE_DELETE(mpColliderCapsule);
 	SAFE_DELETE(mpSearchCol);
 
 	spInstatnce = nullptr;
+}
+
+// オブジェクト削除を伝える
+void CPlayer2::DeleteObject(CObjectBase* obj)
+{
+	// 削除されたのが視や表示用のクラスであれば、
+	// ポインタを空にする
+	if (obj == mpDebugFov)
+	{
+		mpDebugFov = nullptr;
+	}
 }
 
 // インスタンスのポインタの取得
@@ -140,6 +152,11 @@ CPlayer2* CPlayer2::Instance()
 // 更新処理
 void CPlayer2::Update()
 {
+	if (mHp <= 0)
+	{
+		mState = EState::eDeath;
+	}
+
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
 
@@ -213,6 +230,12 @@ void CPlayer2::Update()
 
 	// 調べるオブジェクトのリストをクリア
 	mNearInteractObjs.clear();
+}
+
+// ステータスを整数にして取得する
+int CPlayer2::GetState()
+{
+	return static_cast<int>(mState);
 }
 
 // 待機処理
@@ -315,11 +338,11 @@ void CPlayer2::UpdateDeath()
 	// 死亡アニメーションを設定
 	ChangeAnimation(EAnimType::eDeath);
 
-
-	// タイトルに戻るなどに変更する
+	// TODO:タイトルに戻るなどに変更する
 	if (CInput::Key('R') && IsAnimationFinished())
 	{
 		mState = EState::eIdle;
+		mHp = 100;
 	}
 }
 
@@ -495,21 +518,6 @@ void CPlayer2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			// 押し戻しベクトルの分、座標を移動
 			Position(Position() + adjust * hit.weight);
 		}
-		// 敵の攻撃に当たった時の処理
-		else if (other->Tag() == ETag::eEnemy && other->Layer() == ELayer::eAttackCol)
-		{
-
-		}
-		//// 敵との当たり判定処理
-		//if (other->Layer() == ELayer::eEnemy)
-		//{
-		//	// 押し戻しベクトル
-		//	CVector adjust = hit.adjust;
-
-		//	// 押し戻しベクトルの分、座標を移動
-		//	Position(Position() + adjust * hit.weight);
-		//}
-
 	}
 	// 調べるオブジェクトの探知コライダーとの当たり判定
 	else if (self == mpSearchCol)
@@ -521,6 +529,12 @@ void CPlayer2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			mNearInteractObjs.push_back(obj);
 		}
 	}
+}
+
+// ダメージ処理
+void CPlayer2::TakeDamege(int damage)
+{
+	mHp -= damage;
 }
 
 // 描画処理
