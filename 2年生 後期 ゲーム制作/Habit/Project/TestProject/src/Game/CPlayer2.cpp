@@ -238,6 +238,12 @@ int CPlayer2::GetState()
 	return static_cast<int>(mState);
 }
 
+// c‚èHP‚Ìæ“¾
+int CPlayer2::GetHp()
+{
+	return mHp;
+}
+
 // ‘Ò‹@ˆ—
 void CPlayer2::UpdateIdle()
 {

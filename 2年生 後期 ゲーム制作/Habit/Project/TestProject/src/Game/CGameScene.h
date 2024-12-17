@@ -3,6 +3,8 @@
 class CGameMenu;
 class CSound;
 
+class CHpUI;
+
 //タイトルシーン
 class CGameScene :public CSceneBase
 {
@@ -18,4 +20,5 @@ public:
 
 private:
 	CGameMenu* mpGameMenu;
+	CHpUI* mpHp;
 };

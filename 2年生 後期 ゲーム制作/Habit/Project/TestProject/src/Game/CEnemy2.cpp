@@ -93,7 +93,7 @@ CEnemy2::CEnemy2(std::vector<CVector> patrolPoints)
 	mpAttackCollider = new CColliderSphere
 	(
 		this, ELayer::eAttackCol,
-		30.0f,true
+		40.0f,true
 	);
 	mpAttackCollider->SetCollisionTags({ ETag::ePlayer });
 	mpAttackCollider->SetCollisionLayers({ ELayer::ePlayer });

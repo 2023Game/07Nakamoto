@@ -19,6 +19,8 @@
 #include "CDoor.h"
 #include "CSwitchDoor.h"
 
+#include "CHpUI.h"
+
 //コンストラクタ
 CGameScene::CGameScene()
 	: CSceneBase(EScene::eGame)
@@ -171,6 +173,10 @@ void CGameScene::Load()
 
 	// ゲームメニューを作成
 	mpGameMenu = new CGameMenu();
+
+	// HPのUIを作成
+	mpHp = new CHpUI();
+	AddTask(mpHp);
 }
 
 //シーンの更新処理

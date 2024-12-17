@@ -388,7 +388,7 @@
     <ClCompile Include="src\Game\CGameScene2.cpp">
       <Filter>ソース ファイル\Game\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CGameUI.cpp">
+    <ClCompile Include="src\Game\CHpUI.cpp">
       <Filter>ソース ファイル\Game\UI</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CTrap.cpp">
@@ -717,7 +717,7 @@
     <ClInclude Include="src\Game\CGameScene2.h">
       <Filter>ソース ファイル\Game\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CGameUI.h">
+    <ClInclude Include="src\Game\CHpUI.h">
       <Filter>ソース ファイル\Game\UI</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CTrap.h">
