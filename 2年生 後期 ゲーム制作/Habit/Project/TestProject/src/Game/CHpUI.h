@@ -1,11 +1,10 @@
 #pragma once
-#include "CTask.h"
 #include "CTexture.h"
 #include "CUIBase.h"
 
 class CImage;
 
-class CHpUI : public CTask
+class CHpUI : public CUIBase
 {
 public:
 	// コントラクタ
@@ -13,8 +12,10 @@ public:
 	// デストラクタ
 	~CHpUI();
 
-	//表示座標を設定（CVector2版）
-	void SetPos(const CVector2& pos);
+	// 最大値を設定
+	void SetMaxPoint(int point);
+	// 現在値を設定
+	void SetCurPoint(int point);
 
 	// 更新
 	void Update() override;
@@ -22,7 +23,15 @@ public:
 	void Render() override;
 
 private:
-	CImage* mpBlueBae;
+	// 現在のポイントをゲージに反映
+	void ApplyPoint();
+
+	CImage* mpBlueBar;
 	CImage* mpRedBar;
+	CVector2 mBaseBarSize;
+
+	int mMaxPoint;	// 最大値
+	int mCurPoint;	// 現在値
+	float mPercent;	// ポイント残量の割合
 
 };

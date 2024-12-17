@@ -5,6 +5,7 @@
 #include "CColliderSphere.h"
 #include "CInteractObject.h"
 #include "Maths.h"
+#include "CHpUI.h"
 
 #include "CDebugFieldOfView.h"
 
@@ -55,7 +56,8 @@ CPlayer2::CPlayer2()
 	, mMoveSpeedY(0.0f)
 	, mIsGrounded(false)
 	, mpRideObject(nullptr)
-	, mHp(100)
+	, mMaxHp(100)
+	, mHp(mMaxHp)
 	, mSt(100)
 	, mpSearchCol(nullptr)
 	, mFovAngle(FOV_ANGLE)
@@ -114,6 +116,11 @@ CPlayer2::CPlayer2()
 	// 調べるオブジェクトのみ衝突するように設定
 	mpSearchCol->SetCollisionTags({ ETag::eInteractObject });
 	mpSearchCol->SetCollisionLayers({ ELayer::eInteractObj });
+
+	// HPゲージ作成
+	mpHpUI = new CHpUI();
+	mpHpUI->SetMaxPoint(mMaxHp);
+	mpHpUI->SetCurPoint(mHp);
 }
 
 // デストラクタ
@@ -230,6 +237,11 @@ void CPlayer2::Update()
 
 	// 調べるオブジェクトのリストをクリア
 	mNearInteractObjs.clear();
+
+	// HPゲージの更新
+	mpHpUI->SetMaxPoint(mMaxHp);
+	mpHpUI->SetCurPoint(mHp);
+
 }
 
 // ステータスを整数にして取得する

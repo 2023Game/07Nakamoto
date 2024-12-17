@@ -4,6 +4,7 @@
 #include "CColliderCapsule.h"
 
 class CInteractObject;
+class CHpUI;
 class CDebugFieldOfView;
 
 /*
@@ -122,6 +123,7 @@ private:
 		eCrouch_up, // しゃがんで拾う
 	};
 
+	int mMaxHp;	// 体力の最大値
 	int mHp;	// 体力
 	int mSt;	// スタミナ
 	//int mSan;	// 正気度
@@ -151,6 +153,9 @@ private:
 	CCollider* mpSearchCol;	// 調べるオブジェクトを探知するコライダ―
 
 	float mFovAngle;	// 視野範囲の角度
+
+	CHpUI* mpHpUI;	// HPゲージ
+
 	CDebugFieldOfView* mpDebugFov;	// 視野範囲のデバッグ表示
 
 };
