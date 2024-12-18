@@ -50,8 +50,6 @@ CEnemy2::CEnemy2(std::vector<CVector> patrolPoints)
 	, mFovAngle(FOV_ANGLE)
 	, mFovLength(FOV_LENGTH)
 	, mpDebugFov(nullptr)
-	//, mAttackStartPos(CVector::zero)
-	//, mAttackEndPos(CVector::zero)
 	, mNextPatrolIndex(-1)	// -1の時に一番近いポイントに移動
 	, mNextMoveIndex(0)
 	, mAttackHit(false)
@@ -93,18 +91,32 @@ CEnemy2::CEnemy2(std::vector<CVector> patrolPoints)
 	mpAttackCollider = new CColliderSphere
 	(
 		this, ELayer::eAttackCol,
-		40.0f,true
+		20.0f, true
 	);
 	mpAttackCollider->SetCollisionTags({ ETag::ePlayer });
 	mpAttackCollider->SetCollisionLayers({ ELayer::ePlayer });
-
-	// 左手のボーンの行列を取得
-	CModelXFrame* frame = mpModel->FinedFrame("Armature_mixamorig_LeftHand");
-	const CMatrix& mtx = frame->CombinedMatrix();
-	// 攻撃用のコライダーを左手の行列に設定
-	mpAttackCollider->SetAttachMtx(&mtx);
+	mpAttackCollider->Position(0.0f, 0.0f, 20.0f);
+	//mpAttackCollider->SetAttachMtx()
 	// 攻撃用コライダーを最初はオフにしておく
 	mpAttackCollider->SetEnable(false);
+
+
+	//// 攻撃用の球コライダ―を作成
+	//mpAttackCollider = new CColliderSphere
+	//(
+	//	this, ELayer::eAttackCol,
+	//	40.0f,true
+	//);
+	//mpAttackCollider->SetCollisionTags({ ETag::ePlayer });
+	//mpAttackCollider->SetCollisionLayers({ ELayer::ePlayer });
+
+	//// 左手のボーンの行列を取得
+	//CModelXFrame* frame = mpModel->FinedFrame("Armature_mixamorig_LeftHand");
+	//const CMatrix& mtx = frame->CombinedMatrix();
+	//// 攻撃用のコライダーを左手の行列に設定
+	//mpAttackCollider->SetAttachMtx(&mtx);
+	//// 攻撃用コライダーを最初はオフにしておく
+	//mpAttackCollider->SetEnable(false);
 
 	// 視野範囲のデバッグ表示クラスを作成
 	mpDebugFov = new CDebugFieldOfView(this, mFovAngle, mFovLength);
@@ -282,12 +294,12 @@ float CEnemy2::AttackDameg()
 }
 
 // アニメーションの切り替え
-void CEnemy2::ChangeAnimation(EAnimType type)
+void CEnemy2::ChangeAnimation(EAnimType type, bool restart)
 {
 	int index = (int)type;
 	if (!(0 <= index && index < (int)EAnimType::Num)) return;
 	const AnimData& data = ANIM_DATA[index];
-	CXCharacter::ChangeAnimation(index, data.loop, data.framelength);
+	CXCharacter::ChangeAnimation(index, data.loop, data.framelength, restart);
 }
 
 // 状態を切り替え
@@ -673,7 +685,7 @@ void CEnemy2::UpdateAttack()
 	{
 		// ステップ０：攻撃アニメーションを再生
 		case 0:
-			ChangeAnimation(EAnimType::eAttack);
+			ChangeAnimation(EAnimType::eAttack, true);
 			mStateStep++;
 			break;
 		// ステップ１: 攻撃用コライダーを有効にする

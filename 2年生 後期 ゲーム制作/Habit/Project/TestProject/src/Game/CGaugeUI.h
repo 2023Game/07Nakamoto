@@ -4,13 +4,13 @@
 
 class CImage;
 
-class CHpUI : public CUIBase
+class CGaugeUI : public CUIBase
 {
 public:
 	// コントラクタ
-	CHpUI();
+	CGaugeUI();
 	// デストラクタ
-	~CHpUI();
+	~CGaugeUI();
 
 	// 最大値を設定
 	void SetMaxPoint(int point);
@@ -26,7 +26,7 @@ private:
 	// 現在のポイントをゲージに反映
 	void ApplyPoint();
 
-	CImage* mpBlueBar;
+	CImage* mpHpBar;
 	CImage* mpRedBar;
 	CVector2 mBaseBarSize;
 

@@ -4,7 +4,7 @@
 #include "CColliderCapsule.h"
 
 class CInteractObject;
-class CHpUI;
+class CGaugeUI;
 class CDebugFieldOfView;
 
 /*
@@ -154,7 +154,7 @@ private:
 
 	float mFovAngle;	// 視野範囲の角度
 
-	CHpUI* mpHpUI;	// HPゲージ
+	CGaugeUI* mpHpUI;	// HPゲージ
 
 	CDebugFieldOfView* mpDebugFov;	// 視野範囲のデバッグ表示
 

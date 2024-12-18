@@ -5,7 +5,7 @@
 #include "CColliderSphere.h"
 #include "CInteractObject.h"
 #include "Maths.h"
-#include "CHpUI.h"
+#include "CGaugeUI.h"
 
 #include "CDebugFieldOfView.h"
 
@@ -118,7 +118,7 @@ CPlayer2::CPlayer2()
 	mpSearchCol->SetCollisionLayers({ ELayer::eInteractObj });
 
 	// HPƒQ[ƒWì¬
-	mpHpUI = new CHpUI();
+	mpHpUI = new CGaugeUI();
 	mpHpUI->SetMaxPoint(mMaxHp);
 	mpHpUI->SetCurPoint(mHp);
 }

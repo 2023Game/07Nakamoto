@@ -51,7 +51,7 @@ private:
 		Num			// アニメーションの種類の数
 	};
 	// アニメーションの切り替え
-	void ChangeAnimation(EAnimType type);
+	void ChangeAnimation(EAnimType type, bool trstart = false);
 
 	// アニメーションデータ
 	struct AnimData
