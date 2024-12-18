@@ -2,7 +2,7 @@
 #include "CSceneManager.h"
 #include "CField.h"
 #include "CPlayer2.h"
-#include "CEnemy.h"
+#include "CEnemy1.h"
 #include "CEnemy2.h"
 #include "CGameCamera.h"
 #include "CGameCamera2.h"
@@ -59,7 +59,7 @@ void CGameScene2::Load()
 	pico->Position(10.0f, 10.0f, 10.0f);
 
 	// ìGá@ê∂ê¨
-	CEnemy* enemy = new CEnemy
+	CEnemy1* enemy = new CEnemy1
 	(
 		{
 			CVector(70.0f, 1.0, 10.0f),

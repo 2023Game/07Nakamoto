@@ -1,15 +1,10 @@
 #ifndef CENEMY_H
 #define CENEMY_H
 #include "CXCharacter.h"
-#include "CCharaBase.h"
-#include "CColliderCapsule.h"
+#include "CCollider.h"
 #include "CModel.h"
 
-// 視野範囲のデバッグ表示クラスの前宣言
-class CDebugFieldOfView;
-class CNavNode;
-
-class CTrap;
+class CGaugeUI3D;
 
 /*
 エネミークラス
@@ -18,16 +13,22 @@ class CTrap;
 class CEnemy : public CXCharacter
 {
 public:
-	// コンストラクタ
-	CEnemy(std::vector<CVector> patrolPoints);
-	// デストラクタ
-	~CEnemy();
+	// アニメーションデータ
+	struct AnimData
+	{
+		std::string path;	// アニメーションデータのパス
+		bool loop;			// ループするかどうか
+		float frameLength;	// アニメーションのフレーム数
+		float speed;		// アニメーションの再生速度（1.0で等倍）
+	};
 
+	// コンストラクタ
+	CEnemy();
+	// デストラクタ
+	virtual ~CEnemy();
+
+	// オブジェクト削除を伝える関数
 	void DeleteObject(CObjectBase* obj) override;
-	// 更新処理
-	void Update() override;
-	// 描画処理
-	void Render() override;
 
 	/// <summary>
 	/// 衝突処理
@@ -37,98 +38,39 @@ public:
 	/// <param name="hit">衝突した時の情報</param>
 	void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
 
-private:
-	// アニメーションの種類
-	enum class EAnimType
-	{
-		None = -1,
+	// 更新
+	void Update() override;
+	// 描画
+	void Render() override;
 
-		eIdle,		// 待機
-		eWalk,		// 歩行
-		eRun,		// 走行
-		eJump,		// ジャンプ
-		eJumpAttack,// ジャンプ攻撃
-		eAttack,	// 攻撃
+protected:
+	// 敵の初期化
+	void InitEnemy(std::string path, const std::vector<AnimData>* pAnimData);
 
-		Num			// アニメーションの種類の数
-	};
-	// アニメーションの切り替え
-	void ChangeAnimation(EAnimType type);
+	// 状態切り替え
+	virtual void ChangeState(int state);
 
-	// アニメーションデータ
-	struct AnimData
-	{
-		std::string path;	// アニメーションデータのパス
-		bool loop;			// ループするかどうか
-		float framelength;	// アニメーションのフレーム数
-	};
+	// アニメーション切り替え
+	void ChangeAnimation(int type, bool restart = false);
+
+
+	int mState;				// 状態
+	int mStateStep;			// 状態内のステップ管理用
+	float mElapsedTime;		// 経過時間計測用
+
 	// アニメーションデータのテーブル
-	static const AnimData ANIM_DATA[];
-	static const AnimData ANIM_DATA2[];
+	const std::vector<AnimData>* mpAnimData;
 
-	enum class EState
-	{
-		eIdle,		// 待機
-		ePatrol,	// 巡回中
-		eChase,		// プレイヤーを追いかける
-		eLost,		// プレイヤーを見失う
-		eAttack,	// プレイヤー攻撃
-	};
+	CVector mMoveSpeed;		// 前後左右の移動速度
+	float mMoveSpeedY;		// 重力やジャンプによる上下の移動速度
 
-	// 状態を切り替え
-	void ChangeState(EState state);
+	bool mIsGrounded;		// 接地しているかどうか
+	CVector mGroundNormal;	// 接地している地面の法線
 
-	// プレイヤーが視野範囲内に入ったかどうか
-	bool IsFoundPlayer() const;
-	// 現在位置からプレイヤーが見えているかどうか
-	bool IsLookPlayer() const;
-	// プレイヤーを攻撃できるかどうか
-	bool CanAttackPlayer() const;
+	CCollider* mpBodyCol;	// 本体のコライダー
 
-	// 指定した位置まで移動する
-	bool MoveTo(const CVector& targetPos, float speed);
-
-	// 次に巡回するポイントを変更する
-	void ChangePatrolPoint();
-
-	// 待機状態時の更新処理
-	void UpdateIdle();
-	// 巡回中の更新処理
-	void  UpdatePatrol();
-	// 追跡時の更新処理
-	void UpdateChase();
-	// プレイヤーを見失った時の更新処理
-	void UpdateLost();
-	// 攻撃時の更新処理
-	void UpdateAttack();
-
-	// 状態の文字列を取得
-	std::string GetStateStr(EState state) const;
-	// 状態の色を取得
-	CColor GetStateColor(EState state) const;
-
-	EState mState;	// 敵の状態
-	int mStateStep;	// 状態内のステップ管理用
-	float mElapsedTime;	// 経過時間計測用
-
-	float mFovAngle;	// 視野範囲の角度
-	float mFovLength;	// 視野範囲の距離
-	CDebugFieldOfView* mpDebugFov;	// 視野範囲のデバッグ表示
-
-	CNavNode* mpLostPlayerNode;	// プレイヤーを見失った位置のノード
-
-	CVector mAttackStartPos;// 攻撃開始時の位置
-	CVector mAttackEndPos;	// 攻撃終了時の位置
-
-	// 巡回ポイントのリスト
-	std::vector<CNavNode*> mPatrolPoints;
-	int mNextPatrolIndex;	// 次に巡回する番号
-
-	std::vector<CNavNode*> mMoveRoute;	//求めた最短経路記憶用
-	int mNextMoveIndex;					// 次に移動するノードのインデックス値
-
-	CColliderCapsule* mpColliderCapsule;	//カプセルコライダー
-
-	CTrap* mpTrap;
+	CGaugeUI3D* mpHpGauge;	// HPゲージ
+	CVector mGaugeOffsetPos;// ゲージのオフセット座標
 };
+
 #endif

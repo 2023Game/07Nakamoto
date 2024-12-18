@@ -104,6 +104,9 @@
     <Filter Include="ソース ファイル\Game\UI\Game">
       <UniqueIdentifier>{7233c458-759b-4711-b479-c35b5571e52c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Character\Enamy">
+      <UniqueIdentifier>{3a27c1f9-500d-46d7-bd5e-5fe707bbf455}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -170,9 +173,6 @@
       <Filter>ソース ファイル\Game</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CPlayer.cpp">
-      <Filter>ソース ファイル\Game\Character</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CEnemy.cpp">
       <Filter>ソース ファイル\Game\Character</Filter>
     </ClCompile>
     <ClCompile Include="src\BaseSystem\CEffect.cpp">
@@ -385,9 +385,6 @@
     <ClCompile Include="src\Game\CNavManager.cpp">
       <Filter>ソース ファイル\Game\Navigation</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CEnemy2.cpp">
-      <Filter>ソース ファイル\Game\Character</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CGameScene2.cpp">
       <Filter>ソース ファイル\Game\Scene</Filter>
     </ClCompile>
@@ -408,6 +405,33 @@
     </ClCompile>
     <ClCompile Include="src\Game\CGaugeUI.cpp">
       <Filter>ソース ファイル\Game\UI\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BaseSystem\CImage3D.cpp">
+      <Filter>ソース ファイル\BaseSystem\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CCactus.cpp">
+      <Filter>ソース ファイル\Game\Character\Enamy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CCactusNeedle.cpp">
+      <Filter>ソース ファイル\Game\Character\Enamy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CEnemy.cpp">
+      <Filter>ソース ファイル\Game\Character\Enamy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CEnemy1.cpp">
+      <Filter>ソース ファイル\Game\Character\Enamy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CEnemy2.cpp">
+      <Filter>ソース ファイル\Game\Character\Enamy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CGaugeUI3D.cpp">
+      <Filter>ソース ファイル\Game\UI\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CSword.cpp">
+      <Filter>ソース ファイル\Game\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CWeapon.cpp">
+      <Filter>ソース ファイル\Game\Weapon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -478,9 +502,6 @@
       <Filter>ソース ファイル\Game</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CPlayer.h">
-      <Filter>ソース ファイル\Game\Character</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CEnemy.h">
       <Filter>ソース ファイル\Game\Character</Filter>
     </ClInclude>
     <ClInclude Include="src\BaseSystem\CEffect.h">
@@ -714,9 +735,6 @@
     <ClInclude Include="src\Game\CNavManager.h">
       <Filter>ソース ファイル\Game\Navigation</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CEnemy2.h">
-      <Filter>ソース ファイル\Game\Character</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\CGameScene2.h">
       <Filter>ソース ファイル\Game\Scene</Filter>
     </ClInclude>
@@ -737,6 +755,33 @@
     </ClInclude>
     <ClInclude Include="src\Game\CGaugeUI.h">
       <Filter>ソース ファイル\Game\UI\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BaseSystem\CImage3D.h">
+      <Filter>ソース ファイル\BaseSystem\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CCactus.h">
+      <Filter>ソース ファイル\Game\Character\Enamy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CCactusNeedle.h">
+      <Filter>ソース ファイル\Game\Character\Enamy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CEnemy.h">
+      <Filter>ソース ファイル\Game\Character\Enamy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CEnemy1.h">
+      <Filter>ソース ファイル\Game\Character\Enamy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CEnemy2.h">
+      <Filter>ソース ファイル\Game\Character\Enamy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CGaugeUI3D.h">
+      <Filter>ソース ファイル\Game\UI\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CSword.h">
+      <Filter>ソース ファイル\Game\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CWeapon.h">
+      <Filter>ソース ファイル\Game\Weapon</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

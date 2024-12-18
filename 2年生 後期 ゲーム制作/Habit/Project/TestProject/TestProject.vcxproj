@@ -38,6 +38,7 @@
     <ClCompile Include="src\BaseSystem\CFont.cpp" />
     <ClCompile Include="src\BaseSystem\CCharaBase.cpp" />
     <ClCompile Include="src\BaseSystem\CGamePause.cpp" />
+    <ClCompile Include="src\BaseSystem\CImage3D.cpp" />
     <ClCompile Include="src\BaseSystem\CInput.cpp" />
     <ClCompile Include="src\BaseSystem\CLineEffect.cpp" />
     <ClCompile Include="src\BaseSystem\CMaterial.cpp" />
@@ -72,8 +73,11 @@
     <ClCompile Include="src\BaseSystem\System.cpp" />
     <ClCompile Include="src\Game\CApplication.cpp" />
     <ClCompile Include="src\Game\CBullet.cpp" />
+    <ClCompile Include="src\Game\CCactus.cpp" />
+    <ClCompile Include="src\Game\CCactusNeedle.cpp" />
     <ClCompile Include="src\Game\CDebugFieldOfView.cpp" />
     <ClCompile Include="src\Game\CEnemy.cpp" />
+    <ClCompile Include="src\Game\CEnemy1.cpp" />
     <ClCompile Include="src\Game\CEnemy2.cpp" />
     <ClCompile Include="src\Game\CField.cpp" />
     <ClCompile Include="src\Game\CFlame.cpp" />
@@ -84,6 +88,7 @@
     <ClCompile Include="src\Game\CGameScene.cpp" />
     <ClCompile Include="src\Game\CGameScene2.cpp" />
     <ClCompile Include="src\Game\CGaugeUI.cpp" />
+    <ClCompile Include="src\Game\CGaugeUI3D.cpp" />
     <ClCompile Include="src\Game\CImage.cpp" />
     <ClCompile Include="src\Game\CInteractObject.cpp" />
     <ClCompile Include="src\Game\CMoveFloor.cpp" />
@@ -96,11 +101,13 @@
     <ClCompile Include="src\Game\CRotateFloor.cpp" />
     <ClCompile Include="src\Game\CSlash.cpp" />
     <ClCompile Include="src\Game\CSwitchDoor.cpp" />
+    <ClCompile Include="src\Game\CSword.cpp" />
     <ClCompile Include="src\Game\CTitleScene.cpp" />
     <ClCompile Include="src\Game\CTitleUI.cpp" />
     <ClCompile Include="src\Game\CTouch.cpp" />
     <ClCompile Include="src\Game\CTrap.cpp" />
     <ClCompile Include="src\Game\CWall.cpp" />
+    <ClCompile Include="src\Game\CWeapon.cpp" />
     <ClCompile Include="src\Game\CXCharacter.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Test\CBootMenuScene.cpp" />
@@ -141,6 +148,7 @@
     <ClInclude Include="src\BaseSystem\CFont.h" />
     <ClInclude Include="src\BaseSystem\CCharaBase.h" />
     <ClInclude Include="src\BaseSystem\CGamePause.h" />
+    <ClInclude Include="src\BaseSystem\CImage3D.h" />
     <ClInclude Include="src\BaseSystem\CInput.h" />
     <ClInclude Include="src\BaseSystem\CLineEffect.h" />
     <ClInclude Include="src\BaseSystem\CMaterial.h" />
@@ -184,8 +192,11 @@
     <ClInclude Include="src\Define.h" />
     <ClInclude Include="src\Game\CApplication.h" />
     <ClInclude Include="src\Game\CBullet.h" />
+    <ClInclude Include="src\Game\CCactus.h" />
+    <ClInclude Include="src\Game\CCactusNeedle.h" />
     <ClInclude Include="src\Game\CDebugFieldOfView.h" />
     <ClInclude Include="src\Game\CEnemy.h" />
+    <ClInclude Include="src\Game\CEnemy1.h" />
     <ClInclude Include="src\Game\CEnemy2.h" />
     <ClInclude Include="src\Game\CField.h" />
     <ClInclude Include="src\Game\CFlame.h" />
@@ -196,6 +207,7 @@
     <ClInclude Include="src\Game\CGameScene.h" />
     <ClInclude Include="src\Game\CGameScene2.h" />
     <ClInclude Include="src\Game\CGaugeUI.h" />
+    <ClInclude Include="src\Game\CGaugeUI3D.h" />
     <ClInclude Include="src\Game\CImage.h" />
     <ClInclude Include="src\Game\CInteractObject.h" />
     <ClInclude Include="src\Game\CMoveFloor.h" />
@@ -208,11 +220,13 @@
     <ClInclude Include="src\Game\CRotateFloor.h" />
     <ClInclude Include="src\Game\CSlash.h" />
     <ClInclude Include="src\Game\CSwitchDoor.h" />
+    <ClInclude Include="src\Game\CSword.h" />
     <ClInclude Include="src\Game\CTitleUI.h" />
     <ClInclude Include="src\Game\CTitleScene.h" />
     <ClInclude Include="src\Game\CTouch.h" />
     <ClInclude Include="src\Game\CTrap.h" />
     <ClInclude Include="src\Game\CWall.h" />
+    <ClInclude Include="src\Game\CWeapon.h" />
     <ClInclude Include="src\Game\CXCharacter.h" />
     <ClInclude Include="src\Test\CBootMenuScene.h" />
     <ClInclude Include="src\Test\CColBase.h" />
