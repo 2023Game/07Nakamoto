@@ -1,5 +1,5 @@
-#ifndef CENEMY_H
-#define CENEMY_H
+#ifndef CENEMY1_H
+#define CENEMY1_H
 #include "CXCharacter.h"
 #include "CCharaBase.h"
 #include "CColliderCapsule.h"

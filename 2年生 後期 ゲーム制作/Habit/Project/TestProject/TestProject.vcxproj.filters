@@ -765,9 +765,6 @@
     <ClInclude Include="src\Game\CCactusNeedle.h">
       <Filter>ソース ファイル\Game\Character\Enamy</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CEnemy.h">
-      <Filter>ソース ファイル\Game\Character\Enamy</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\CEnemy1.h">
       <Filter>ソース ファイル\Game\Character\Enamy</Filter>
     </ClInclude>
@@ -782,6 +779,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CWeapon.h">
       <Filter>ソース ファイル\Game\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CEnemy.h">
+      <Filter>ソース ファイル\Game\Character\Enamy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

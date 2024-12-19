@@ -11,8 +11,9 @@
 #include "CBGMManager.h"
 #include "CLineEffect.h"
 #include "CNavManager.h"
-#include "CEnemy2.h"
+#include "CCactus.h"
 
+#include "CEnemy2.h"
 #include "CTouch.h"
 #include "CPushSwitch.h"
 #include "CPushSwitchManager.h"
@@ -48,10 +49,14 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>("Wall",		"Field\\Object\\Wall\\Wall.obj");
 	CResourceManager::Load<CModel>("WallCol",	"Field\\Object\\Wall\\WallCol.obj");
 	CResourceManager::Load<CModelX>("Player", "Character\\Player\\player.x");
+	CResourceManager::Load<CModelX>("Cactus", "Character\\Enemy\\Cactus\\cactus.x");
+	CResourceManager::Load<CModel>("CactusNeedle", "Character\\Enemy\\Cactus\\needle.obj");
 	CResourceManager::Load<CTexture>("Laser", "Effect\\laser.png");
 	CResourceManager::Load<CTexture>("LightningBolt", "Effect\\lightning_bolt.png");
 	CResourceManager::Load<CModel>("Slash", "Effect\\slash.obj");
 	CResourceManager::Load<CSound>("SlashSound", "Sound\\SE\\slash.wav");
+	CResourceManager::Load<CModel>("Sword", "Weapon\\Sword\\sword.obj");
+	CResourceManager::Load<CModel>("Shield", "Weapon\\Shield\\shield.obj");
 
 	CResourceManager::Load<CModelX>("Player2", "Character\\Player2\\pico.x");
 	CResourceManager::Load<CModelX>("Enemy", "Character\\Enemy\\mutant\\mutant.x");
@@ -69,6 +74,10 @@ void CGameScene::Load()
 	//new CPushSwitchManager();
 
 	new CField();
+
+	// ƒTƒ{ƒeƒ“‚Ì“G‚ðì¬
+	CCactus* cactus = new CCactus();
+	cactus->Position(0.0f, 0.0f, -100.0f);
 
 	//CPlayer* player = new CPlayer();
 	//player->Scale(1.0f, 1.0f, 1.0f);

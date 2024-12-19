@@ -11,9 +11,12 @@ enum class ETaskPriority
 	eNavigation,// 経路探索関連のデバッグ表示
 	eDefault,	// デフォルト
 	ePlayer,	// プレイヤー
+	eEnemy,		// 敵
+	eWeapon,	// 武器
 
 	eEffect,	// エフェクト
 	eBillboard,	// ビルボードイメージ
+	eUI3D,		// 3D空間に配置するUI
 
 	eCamera,	// カメラ
 

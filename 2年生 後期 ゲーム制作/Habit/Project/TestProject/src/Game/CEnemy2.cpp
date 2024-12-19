@@ -91,19 +91,15 @@ CEnemy2::CEnemy2(std::vector<CVector> patrolPoints)
 	mpAttackCollider = new CColliderSphere
 	(
 		this, ELayer::eAttackCol,
-		20.0f, true
+		10.0f, true
 	);
 	mpAttackCollider->SetCollisionTags({ ETag::ePlayer });
 	mpAttackCollider->SetCollisionLayers({ ELayer::ePlayer });
-	mpAttackCollider->Position(0.0f, 0.0f, 20.0f);
-	//CModelXFrame* frame = mpModel->FinedFrame("Armature_mixamorig_LeftHand");
-	//const CMatrix& mtx = frame->CombinedMatrix();
-	//// 攻撃用のコライダーを左手の行列に設定
-	//mpAttackCollider->SetAttachMtx(&mtx);
+	mpAttackCollider->Position(0.0f, 5.0f, 10.0f);
 	// 攻撃用コライダーを最初はオフにしておく
 	mpAttackCollider->SetEnable(false);
 
-
+	//腕にコライダーを付けるとき
 	//// 攻撃用の球コライダ―を作成
 	//mpAttackCollider = new CColliderSphere
 	//(

@@ -19,6 +19,8 @@ enum class ETag
 	eSlash,	// 斬撃
 	eTrap,	// 罠
 
+	eUI,	// UI
+
 	eCamera,// カメラ
 
 	eDebug,	// デバッグ用のオブジェクト

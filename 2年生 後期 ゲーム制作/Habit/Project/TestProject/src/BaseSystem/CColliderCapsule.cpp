@@ -48,15 +48,11 @@ void CColliderCapsule::Render()
 {
 	// DIFFUSE赤色設定
 	CColor col = CColor::red;
-	if (!IsEnable()) col = CColor::gray;
-
-	CMatrix m = Matrix();
-	CVector s = mV[0] * m;
-	CVector e = mV[1] * m;
-	Primitive::DrawWireCapsule
-	(
-		s, e, mRadius, col
-	);
+	if (!IsEnable() ||
+		(Owner() != nullptr && !Owner()->IsEnableCol()))
+	{
+		col = CColor::gray;
+	}
 }
 
 // コライダーの情報を更新
