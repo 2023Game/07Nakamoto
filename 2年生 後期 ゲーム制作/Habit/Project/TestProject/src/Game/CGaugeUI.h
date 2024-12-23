@@ -26,10 +26,10 @@ private:
 	// 現在のポイントをゲージに反映
 	void ApplyPoint();
 
-	CImage* mpHpBar;
-	CImage* mpRedBar;
-	CVector2 mBaseBarSize;
+	CImage* mpWhiteImag;	// ゲージのイメージ
+	CImage* mpGaugeImag;	// 白イメージ
 
+	CVector2 mBaseBarSize;	// ゲージのイメージサイズ
 	int mMaxPoint;	// 最大値
 	int mCurPoint;	// 現在値
 	float mPercent;	// ポイント残量の割合

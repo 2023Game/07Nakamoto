@@ -5,17 +5,18 @@
 
 CGaugeUI::CGaugeUI()
 	: CUIBase(ETaskPriority::eUI, 0, ETaskPauseType::eGame)
-	, mpHpBar(nullptr)
-	, mpRedBar(nullptr)
+	, mpWhiteImag(nullptr)
+	, mpGaugeImag(nullptr)
 	, mBaseBarSize(0.0f, 0.0f)
 	, mMaxPoint(100)
 	, mCurPoint(mMaxPoint)
 	, mPercent(1.0f)
 {
-	SetPos(WINDOW_WIDTH * 0.5f, WINDOW_HEIGHT * 0.5);
+	// 中央の座標
+	//SetPos(WINDOW_WIDTH * 0.5f, WINDOW_HEIGHT * 0.5);
 
 	// ダメージゲージを生成
-	mpRedBar = new CImage
+	mpGaugeImag = new CImage
 	(
 		"UI\\hp_redbar.png",
 		ETaskPriority::eUI,
@@ -24,10 +25,10 @@ CGaugeUI::CGaugeUI()
 		false,
 		false
 	);
-	mBaseBarSize = mpRedBar->GetSize();
+	mBaseBarSize = mpGaugeImag->GetSize();
 
 	// HPゲージを生成
-	mpHpBar = new CImage
+	mpWhiteImag = new CImage
 	(
 		"UI\\white.png",
 		ETaskPriority::eUI,
@@ -37,13 +38,13 @@ CGaugeUI::CGaugeUI()
 		false
 	);
 	CVector2 center = CVector2(-mBaseBarSize.X() * 0.5f, 0.0f);
-	mpHpBar->SetCenter(center);
+	mpWhiteImag->SetCenter(center);
 }
 
 CGaugeUI::~CGaugeUI()
 {
-	SAFE_DELETE(mpRedBar);
-	SAFE_DELETE(mpHpBar);
+	SAFE_DELETE(mpGaugeImag);
+	SAFE_DELETE(mpWhiteImag);
 }
 
 // 最大値を設定
@@ -88,23 +89,23 @@ void CGaugeUI::Render()
 	CVector2 pos = mPosition;
 
 	// ゲージの描画
-	mpRedBar->SetPos(pos);
-	mpRedBar->Render();
+	mpGaugeImag->SetPos(pos);
+	mpGaugeImag->Render();
 	
 	// バーの座標を設定
 	CVector2 barPos = mPosition;
 	barPos.X(barPos.X() - mBaseBarSize.X() * 0.5f);
-	mpHpBar->SetPos(barPos);
+	mpWhiteImag->SetPos(barPos);
 	// ポイント残量の割合に合わせて、バーサイズを変更
 	CVector2 barSize = mBaseBarSize;
 	barSize.X(barSize.X() * mPercent);
-	mpHpBar->SetSize(barSize);
+	mpWhiteImag->SetSize(barSize);
 	// バーの色を設定
 	CColor barColor = CColor::green;
 	if (mPercent <= 0.2f) barColor = CColor(1.0f, 0.5f, 0.0f, 1.0f);
 	else if (mPercent <= 0.5f) barColor = CColor::yellow;
-	mpHpBar->SetColor(barColor);
+	mpWhiteImag->SetColor(barColor);
 	// バーの描画
-	mpHpBar->Render();
+	mpWhiteImag->Render();
 }
 

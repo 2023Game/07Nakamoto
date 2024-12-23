@@ -118,9 +118,15 @@ CPlayer2::CPlayer2()
 	mpSearchCol->SetCollisionLayers({ ELayer::eInteractObj });
 
 	// HPゲージ作成
-	mpHpUI = new CGaugeUI();
-	mpHpUI->SetMaxPoint(mMaxHp);
-	mpHpUI->SetCurPoint(mHp);
+	mpHpGauge = new CGaugeUI();
+	mpHpGauge->SetMaxPoint(mMaxHp);
+	mpHpGauge->SetCurPoint(mHp);
+	mpHpGauge->SetPos(0.0f, 0.0f);
+
+	mpStGauge = new CGaugeUI();
+	mpStGauge->SetMaxPoint(mMaxSt);
+	mpStGauge->SetCurPoint(mSt);
+	mpStGauge->SetPos(10.0f, 30.0f);
 }
 
 // デストラクタ
@@ -239,8 +245,8 @@ void CPlayer2::Update()
 	mNearInteractObjs.clear();
 
 	// HPゲージの更新
-	mpHpUI->SetMaxPoint(mMaxHp);
-	mpHpUI->SetCurPoint(mHp);
+	mpHpGauge->SetMaxPoint(mMaxHp);
+	mpHpGauge->SetCurPoint(mHp);
 
 }
 
@@ -463,11 +469,8 @@ void CPlayer2::UpdateMove()
 		}
 	}
 
-	// [K]キーを押したら死亡する（HPが0以下になったらに変更する）
-	if (CInput::Key('K'))
-	{
-		mState = EState::eDeath;
-	}
+	mpStGauge->SetMaxPoint(mMaxSt);
+	mpStGauge->SetCurPoint(mSt);
 }
 
 // 衝突判定

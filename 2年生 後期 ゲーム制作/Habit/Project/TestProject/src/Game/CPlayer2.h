@@ -155,8 +155,8 @@ private:
 
 	float mFovAngle;	// 視野範囲の角度
 
-	CGaugeUI* mpHpUI;	// HPゲージ
-	CGaugeUI* mpStUI;	// スタミナゲージ
+	CGaugeUI* mpHpGauge;	// HPゲージ
+	CGaugeUI* mpStGauge;	// スタミナゲージ
 
 	CDebugFieldOfView* mpDebugFov;	// 視野範囲のデバッグ表示
 
