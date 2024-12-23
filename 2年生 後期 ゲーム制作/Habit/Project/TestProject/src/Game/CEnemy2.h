@@ -1,9 +1,7 @@
 #pragma once
-#include "CXCharacter.h"
-#include "CCharaBase.h"
-#include "CColliderCapsule.h"
-#include "CModel.h"
-#include "CColliderSphere.h"
+#include "CEnemy.h"
+#include "CCollider.h"
+
 
 // 視野範囲のデバッグ表示クラスの前宣言
 class CDebugFieldOfView;
@@ -13,14 +11,15 @@ class CNavNode;
 エネミー2クラス
 キャラクタクラスを継承
 */
-class CEnemy2 : public CXCharacter
+class CEnemy2 : public CEnemy
 {
 public:
 	// コンストラクタ
 	CEnemy2(std::vector<CVector> patrolPoints);
 	// デストラクタ
-	~CEnemy2();
+	~CEnemy2() override;
 
+	// オブジェクト削除を伝える関数
 	void DeleteObject(CObjectBase* obj) override;
 	// 更新処理
 	void Update() override;
@@ -34,8 +33,6 @@ public:
 	/// <param name="other">衝突した相手のコライダー</param>
 	/// <param name="hit">衝突した時の情報</param>
 	void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
-
-	float AttackDameg();
 
 private:
 	// アニメーションの種類
@@ -53,13 +50,6 @@ private:
 	// アニメーションの切り替え
 	void ChangeAnimation(EAnimType type, bool trstart = false);
 
-	// アニメーションデータ
-	struct AnimData
-	{
-		std::string path;	// アニメーションデータのパス
-		bool loop;			// ループするかどうか
-		float framelength;	// アニメーションのフレーム数
-	};
 	// アニメーションデータのテーブル
 	static const AnimData ANIM_DATA[];
 
@@ -124,8 +114,8 @@ private:
 	std::vector<CNavNode*> mMoveRoute;	//求めた最短経路記憶用
 	int mNextMoveIndex;					// 次に移動するノードのインデックス値
 
-	CColliderCapsule* mpColliderCapsule;	//カプセルコライダー
-	CColliderSphere* mpAttackCollider;		// 攻撃時のコライダー
+	CCollider* mpColliderCapsule;	//カプセルコライダー
+	CCollider* mpAttackCollider;	// 攻撃時のコライダー
 
 	bool mAttackHit;	// 攻撃が当たったかどうか
 };

@@ -6,6 +6,8 @@
 #include "CInteractObject.h"
 #include "Maths.h"
 #include "CGaugeUI.h"
+#include "CHpGauge.h"
+#include "CStGauge.h"
 
 #include "CDebugFieldOfView.h"
 
@@ -58,7 +60,8 @@ CPlayer2::CPlayer2()
 	, mpRideObject(nullptr)
 	, mMaxHp(100)
 	, mHp(mMaxHp)
-	, mSt(100)
+	, mMaxSt(100)
+	, mSt(mMaxSt)
 	, mpSearchCol(nullptr)
 	, mFovAngle(FOV_ANGLE)
 	, mpDebugFov(nullptr)
@@ -118,15 +121,15 @@ CPlayer2::CPlayer2()
 	mpSearchCol->SetCollisionLayers({ ELayer::eInteractObj });
 
 	// HPゲージ作成
-	mpHpGauge = new CGaugeUI();
+	mpHpGauge = new CHpGauge();
 	mpHpGauge->SetMaxPoint(mMaxHp);
 	mpHpGauge->SetCurPoint(mHp);
 	mpHpGauge->SetPos(0.0f, 0.0f);
 
-	mpStGauge = new CGaugeUI();
+	mpStGauge = new CStGauge();
 	mpStGauge->SetMaxPoint(mMaxSt);
 	mpStGauge->SetCurPoint(mSt);
-	mpStGauge->SetPos(10.0f, 30.0f);
+	mpStGauge->SetPos(10.0f, 40.0f);
 }
 
 // デストラクタ

@@ -10,7 +10,7 @@ public:
 	// コントラクタ
 	CGaugeUI();
 	// デストラクタ
-	~CGaugeUI();
+	virtual ~CGaugeUI();
 
 	// 最大値を設定
 	void SetMaxPoint(int point);
@@ -22,9 +22,12 @@ public:
 	// 描画
 	void Render() override;
 
-private:
+protected:
 	// 現在のポイントをゲージに反映
 	void ApplyPoint();
+
+	// バーの
+	virtual CColor CalcBarColor() const;
 
 	CImage* mpWhiteImag;	// ゲージのイメージ
 	CImage* mpGaugeImag;	// 白イメージ

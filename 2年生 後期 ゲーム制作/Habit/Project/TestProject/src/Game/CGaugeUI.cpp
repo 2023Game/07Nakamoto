@@ -77,6 +77,11 @@ void CGaugeUI::ApplyPoint()
 	}
 }
 
+CColor CGaugeUI::CalcBarColor() const
+{
+	return CColor::white;
+}
+
 // 更新
 void CGaugeUI::Update()
 {
@@ -101,9 +106,7 @@ void CGaugeUI::Render()
 	barSize.X(barSize.X() * mPercent);
 	mpWhiteImag->SetSize(barSize);
 	// バーの色を設定
-	CColor barColor = CColor::green;
-	if (mPercent <= 0.2f) barColor = CColor(1.0f, 0.5f, 0.0f, 1.0f);
-	else if (mPercent <= 0.5f) barColor = CColor::yellow;
+	CColor barColor = CalcBarColor();
 	mpWhiteImag->SetColor(barColor);
 	// バーの描画
 	mpWhiteImag->Render();

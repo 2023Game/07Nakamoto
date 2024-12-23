@@ -1,6 +1,7 @@
 #include "CEnemy2.h"
 #include "CInput.h"
-#include "CCollisionManager.h"
+#include "CColliderCapsule.h"
+#include "CColliderSphere.h"
 #include "CDebugFieldOfView.h"
 #include "CPlayer2.h"
 #include "Maths.h"
@@ -43,8 +44,7 @@ const CEnemy2::AnimData CEnemy2::ANIM_DATA[] =
 
 // コンストラクタ
 CEnemy2::CEnemy2(std::vector<CVector> patrolPoints)
-	: CXCharacter(ETag::eEnemy, ETaskPriority::eDefault)
-	, mState(EState::eIdle)
+	: mState(EState::eIdle)
 	, mStateStep(0)
 	, mElapsedTime(0.0f)
 	, mFovAngle(FOV_ANGLE)
@@ -287,18 +287,13 @@ void CEnemy2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 	}
 }
 
-float CEnemy2::AttackDameg()
-{
-	return 0.0f;
-}
-
 // アニメーションの切り替え
 void CEnemy2::ChangeAnimation(EAnimType type, bool restart)
 {
 	int index = (int)type;
 	if (!(0 <= index && index < (int)EAnimType::Num)) return;
 	const AnimData& data = ANIM_DATA[index];
-	CXCharacter::ChangeAnimation(index, data.loop, data.framelength, restart);
+	CXCharacter::ChangeAnimation(index, data.loop, data.frameLength, restart);
 }
 
 // 状態を切り替え

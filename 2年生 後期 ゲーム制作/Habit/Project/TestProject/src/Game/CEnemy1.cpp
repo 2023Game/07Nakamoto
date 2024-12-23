@@ -1,14 +1,17 @@
 #include "CEnemy1.h"
-#include "CEffect.h"
-#include "CInput.h"
-#include "CCollisionManager.h"
-#include "CDebugFieldOfView.h"
+#include "CColliderCapsule.h"
+#include "CColliderSphere.h"
 #include "CPlayer2.h"
 #include "Maths.h"
+
 #include "Primitive.h"
 #include "CField.h"
 #include "CNavNode.h"
 #include "CNavManager.h"
+#include "CDebugFieldOfView.h"
+
+//#include "CEffect.h"
+//#include "CInput.h"
 #include "CTrap.h"
 
 #define ENEMY_HEIGHT		 16.0f	// 敵の高さ
@@ -47,8 +50,7 @@ const CEnemy1::AnimData CEnemy1::ANIM_DATA[] =
 
 // コンストラクタ
 CEnemy1::CEnemy1(std::vector<CVector> patrolPoints)
-	: CXCharacter(ETag::eEnemy, ETaskPriority::eDefault)
-	, mState(EState::eIdle)
+	: mState(EState::eIdle)
 	, mStateStep(0)
 	, mElapsedTime(0.0f)
 	, mFovAngle(FOV_ANGLE)
@@ -58,6 +60,7 @@ CEnemy1::CEnemy1(std::vector<CVector> patrolPoints)
 	, mAttackEndPos(CVector::zero)
 	, mNextPatrolIndex(-1)	// -1の時に一番近いポイントに移動
 	, mNextMoveIndex(0)
+	, mpAttackCollider(nullptr)
 {
 	//モデルデータの取得
 	CModelX* model = CResourceManager::Get<CModelX>("Enemy");
@@ -91,6 +94,17 @@ CEnemy1::CEnemy1(std::vector<CVector> patrolPoints)
 		  ELayer::ePlayer,
 		  ELayer::eInteractObj }
 	);
+
+	// 攻撃用の球コライダ―を作成
+	mpAttackCollider = new CColliderSphere
+	(
+		this, ELayer::eAttackCol,
+		10.0f, true
+	);
+	mpAttackCollider->SetCollisionTags({ ETag::ePlayer });
+	mpAttackCollider->SetCollisionLayers({ ELayer::ePlayer });
+	// 攻撃用コライダーを最初はオフにしておく
+	mpAttackCollider->SetEnable(false);
 
 	// 視野範囲のデバッグ表示クラスを作成
 	mpDebugFov = new CDebugFieldOfView(this, mFovAngle, mFovLength);
@@ -274,7 +288,7 @@ void CEnemy1::ChangeAnimation(EAnimType type)
 	int index = (int)type;
 	if (!(0 <= index && index < (int)EAnimType::Num)) return;
 	const AnimData& data = ANIM_DATA[index];
-	CXCharacter::ChangeAnimation(index, data.loop, data.framelength);
+	CXCharacter::ChangeAnimation(index, data.loop, data.frameLength);
 }
 
 // 状態を切り替え
@@ -688,6 +702,7 @@ void CEnemy1::UpdateAttack()
 				// 移動終了フレームまで到達した
 				else
 				{
+					mpAttackCollider->SetEnable(true);
 					Position(mAttackEndPos);
 					mStateStep++;
 				}
@@ -698,6 +713,7 @@ void CEnemy1::UpdateAttack()
 		case 2:
 			if (IsAnimationFinished())
 			{
+				mpAttackCollider->SetEnable(false);
 				mStateStep++;
 			}
 			break;

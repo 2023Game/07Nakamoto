@@ -1,9 +1,6 @@
 #ifndef CENEMY1_H
 #define CENEMY1_H
-#include "CXCharacter.h"
-#include "CCharaBase.h"
-#include "CColliderCapsule.h"
-#include "CModel.h"
+#include "CEnemy.h"
 
 // 視野範囲のデバッグ表示クラスの前宣言
 class CDebugFieldOfView;
@@ -15,14 +12,15 @@ class CTrap;
 エネミークラス
 キャラクタクラスを継承
 */
-class CEnemy1 : public CXCharacter
+class CEnemy1 : public CEnemy
 {
 public:
 	// コンストラクタ
 	CEnemy1(std::vector<CVector> patrolPoints);
 	// デストラクタ
-	~CEnemy1();
+	~CEnemy1() override;
 
+	// オブジェクト削除を伝える関数
 	void DeleteObject(CObjectBase* obj) override;
 	// 更新処理
 	void Update() override;
@@ -55,16 +53,8 @@ private:
 	// アニメーションの切り替え
 	void ChangeAnimation(EAnimType type);
 
-	// アニメーションデータ
-	struct AnimData
-	{
-		std::string path;	// アニメーションデータのパス
-		bool loop;			// ループするかどうか
-		float framelength;	// アニメーションのフレーム数
-	};
 	// アニメーションデータのテーブル
 	static const AnimData ANIM_DATA[];
-	static const AnimData ANIM_DATA2[];
 
 	enum class EState
 	{
@@ -127,7 +117,8 @@ private:
 	std::vector<CNavNode*> mMoveRoute;	//求めた最短経路記憶用
 	int mNextMoveIndex;					// 次に移動するノードのインデックス値
 
-	CColliderCapsule* mpColliderCapsule;	//カプセルコライダー
+	CCollider* mpColliderCapsule;	// 体のカプセルコライダー
+	CCollider* mpAttackCollider;		// 攻撃時の球コライダ―
 
 	CTrap* mpTrap;
 };

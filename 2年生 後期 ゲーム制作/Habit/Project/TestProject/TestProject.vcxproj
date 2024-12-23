@@ -89,6 +89,7 @@
     <ClCompile Include="src\Game\CGameScene2.cpp" />
     <ClCompile Include="src\Game\CGaugeUI.cpp" />
     <ClCompile Include="src\Game\CGaugeUI3D.cpp" />
+    <ClCompile Include="src\Game\CHpGauge.cpp" />
     <ClCompile Include="src\Game\CImage.cpp" />
     <ClCompile Include="src\Game\CInteractObject.cpp" />
     <ClCompile Include="src\Game\CMoveFloor.cpp" />
@@ -100,6 +101,7 @@
     <ClCompile Include="src\Game\CRideabeObject.cpp" />
     <ClCompile Include="src\Game\CRotateFloor.cpp" />
     <ClCompile Include="src\Game\CSlash.cpp" />
+    <ClCompile Include="src\Game\CStGauge.cpp" />
     <ClCompile Include="src\Game\CSwitchDoor.cpp" />
     <ClCompile Include="src\Game\CSword.cpp" />
     <ClCompile Include="src\Game\CTitleScene.cpp" />
@@ -208,6 +210,7 @@
     <ClInclude Include="src\Game\CGameScene2.h" />
     <ClInclude Include="src\Game\CGaugeUI.h" />
     <ClInclude Include="src\Game\CGaugeUI3D.h" />
+    <ClInclude Include="src\Game\CHpGauge.h" />
     <ClInclude Include="src\Game\CImage.h" />
     <ClInclude Include="src\Game\CInteractObject.h" />
     <ClInclude Include="src\Game\CMoveFloor.h" />
@@ -219,6 +222,7 @@
     <ClInclude Include="src\Game\CRideableObject.h" />
     <ClInclude Include="src\Game\CRotateFloor.h" />
     <ClInclude Include="src\Game\CSlash.h" />
+    <ClInclude Include="src\Game\CStGauge.h" />
     <ClInclude Include="src\Game\CSwitchDoor.h" />
     <ClInclude Include="src\Game\CSword.h" />
     <ClInclude Include="src\Game\CTitleUI.h" />
