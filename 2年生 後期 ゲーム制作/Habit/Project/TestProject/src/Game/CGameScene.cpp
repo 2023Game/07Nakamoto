@@ -12,13 +12,12 @@
 #include "CLineEffect.h"
 #include "CNavManager.h"
 #include "CCactus.h"
-
 #include "CEnemy2.h"
-#include "CTouch.h"
 #include "CPushSwitch.h"
 #include "CPushSwitchManager.h"
-#include "CDoor.h"
 #include "CSwitchDoor.h"
+
+#include "CTouch.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -64,6 +63,8 @@ void CGameScene::Load()
 
 	CResourceManager::Load<CModel>("Switch", "Object\\Switch.obj");
 	CResourceManager::Load<CModel>("Touch", "Object\\Touch.obj");
+
+	CResourceManager::Load<CModel>("Obj", "Object\\mm.obj");
 
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
@@ -114,8 +115,8 @@ void CGameScene::Load()
 
 
 	// 松明(仮)の描画の確認	削除予定
-	CTouch* touch = new CTouch(CVector(0.0f, 0.0f, 0.0f), 
-		CVector(0.0f, 0.0f, 0.0f), CVector(0.3f, 0.3f, 0.3f));
+	CTouch* touch = new CTouch(CVector(0.0f, 5.0f, 0.0f), 
+		CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0, 1.0f));
 
 	// スイッチを生成
 	CPushSwitch* push_switch = new CPushSwitch(CVector(-30.0f, 0.0f, 0.0f),

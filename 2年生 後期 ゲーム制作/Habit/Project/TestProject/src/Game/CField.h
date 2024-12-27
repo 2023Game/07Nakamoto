@@ -5,6 +5,7 @@
 class CWall;
 class CWall2;
 class CTorch;
+class CSwitchDoor;
 
 class CField : public CObjectBase
 {
@@ -50,6 +51,8 @@ private:
 
 	// 壁のオブジェクトのリスト
 	std::list<CWall*> mWalls;
+	// ドアのオブジェクトリスト
+	std::list<CSwitchDoor*> mSwitchDoors;
 
 	// シーンタイプの格納
 	EScene mScene;

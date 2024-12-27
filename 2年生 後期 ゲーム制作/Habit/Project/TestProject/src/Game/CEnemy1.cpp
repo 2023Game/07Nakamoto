@@ -50,7 +50,8 @@ const CEnemy1::AnimData CEnemy1::ANIM_DATA[] =
 
 // コンストラクタ
 CEnemy1::CEnemy1(std::vector<CVector> patrolPoints)
-	: mState(EState::eIdle)
+	: CXCharacter(ETag::eEnemy, ETaskPriority::eDefault)
+	, mState(EState::eIdle)
 	, mStateStep(0)
 	, mElapsedTime(0.0f)
 	, mFovAngle(FOV_ANGLE)
@@ -288,7 +289,7 @@ void CEnemy1::ChangeAnimation(EAnimType type)
 	int index = (int)type;
 	if (!(0 <= index && index < (int)EAnimType::Num)) return;
 	const AnimData& data = ANIM_DATA[index];
-	CXCharacter::ChangeAnimation(index, data.loop, data.frameLength);
+	CXCharacter::ChangeAnimation(index, data.loop, data.framelength);
 }
 
 // 状態を切り替え

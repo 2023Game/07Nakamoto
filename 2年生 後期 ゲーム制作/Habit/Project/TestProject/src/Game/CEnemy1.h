@@ -1,6 +1,8 @@
 #ifndef CENEMY1_H
 #define CENEMY1_H
-#include "CEnemy.h"
+#include "CXCharacter.h"
+#include "CCollider.h"
+#include "CModel.h"
 
 // 視野範囲のデバッグ表示クラスの前宣言
 class CDebugFieldOfView;
@@ -12,13 +14,13 @@ class CTrap;
 エネミークラス
 キャラクタクラスを継承
 */
-class CEnemy1 : public CEnemy
+class CEnemy1 : public CXCharacter
 {
 public:
 	// コンストラクタ
 	CEnemy1(std::vector<CVector> patrolPoints);
 	// デストラクタ
-	~CEnemy1() override;
+	~CEnemy1();
 
 	// オブジェクト削除を伝える関数
 	void DeleteObject(CObjectBase* obj) override;
@@ -52,6 +54,14 @@ private:
 	};
 	// アニメーションの切り替え
 	void ChangeAnimation(EAnimType type);
+
+	// アニメーションデータ
+	struct AnimData
+	{
+		std::string path;	// アニメーションデータのパス
+		bool loop;			// ループするかどうか
+		float framelength;	// アニメーションのフレーム数
+	};
 
 	// アニメーションデータのテーブル
 	static const AnimData ANIM_DATA[];

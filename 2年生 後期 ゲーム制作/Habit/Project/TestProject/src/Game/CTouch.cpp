@@ -4,7 +4,7 @@
 CTouch::CTouch(const CVector& pos, const CVector& angle, const CVector& size)
 {
 	// 壁のモデルデータ取得(変更予定)
-	mpModel = CResourceManager::Get<CModel>("Touch");
+	mpModel = CResourceManager::Get<CModel>("Obj");
 
 	// 位置と向きとサイズを設定
 	Position(pos);

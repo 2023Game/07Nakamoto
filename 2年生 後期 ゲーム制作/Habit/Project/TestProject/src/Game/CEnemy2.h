@@ -1,7 +1,7 @@
 #pragma once
-#include "CEnemy.h"
+#include "CXCharacter.h"
 #include "CCollider.h"
-
+#include "CModel.h"
 
 // 視野範囲のデバッグ表示クラスの前宣言
 class CDebugFieldOfView;
@@ -11,7 +11,7 @@ class CNavNode;
 エネミー2クラス
 キャラクタクラスを継承
 */
-class CEnemy2 : public CEnemy
+class CEnemy2 : public CXCharacter
 {
 public:
 	// コンストラクタ
@@ -49,6 +49,14 @@ private:
 	};
 	// アニメーションの切り替え
 	void ChangeAnimation(EAnimType type, bool trstart = false);
+
+	// アニメーションデータ
+	struct AnimData
+	{
+		std::string path;	// アニメーションデータのパス
+		bool loop;			// ループするかどうか
+		float framelength;	// アニメーションのフレーム数
+	};
 
 	// アニメーションデータのテーブル
 	static const AnimData ANIM_DATA[];
