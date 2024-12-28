@@ -72,8 +72,6 @@ void CGameScene::Load()
 	// 経路探索管理クラスを作成
 	new CNavManager();
 
-	//new CPushSwitchManager();
-
 	new CField();
 
 	// サボテンの敵を作成
@@ -115,8 +113,8 @@ void CGameScene::Load()
 
 
 	// 松明(仮)の描画の確認	削除予定
-	CTouch* touch = new CTouch(CVector(0.0f, 5.0f, 0.0f), 
-		CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0, 1.0f));
+	CTouch* touch = new CTouch(CVector(0.0f, 0.0f, 0.0f), 
+		CVector(0.0f, 0.0f, 0.0f), CVector(0.3f, 0.3f, 0.3f));
 
 	// スイッチを生成
 	CPushSwitch* push_switch = new CPushSwitch(CVector(-30.0f, 0.0f, 0.0f),
