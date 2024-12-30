@@ -31,6 +31,17 @@ CWall::CWall(const CVector& pos, const CVector& angle, const CVector& size)
 			mpColliderMesh = new CColliderMesh(this, ELayer::eWall, colModel, true);
 			break;
 		}
+	// ゲームシーン2
+	case EScene::eGame3:
+		{
+			// 壁のモデルデータ取得
+			mpModel = CResourceManager::Get<CModel>("Wall");
+
+			// 壁のコライダーを作成
+			CModel* colModel = CResourceManager::Get<CModel>("Wall");
+			mpColliderMesh = new CColliderMesh(this, ELayer::eWall, colModel, true);
+			break;
+		}
 	}
 
 	// 位置と向きとサイズを設定

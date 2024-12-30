@@ -31,9 +31,6 @@ public:
 	// ステータスを整数にして取得する
 	int GetState();
 
-	// 残りHPの取得
-	int GetHp();
-
 	/// <summary>
 	/// 衝突処理
 	/// </summary>

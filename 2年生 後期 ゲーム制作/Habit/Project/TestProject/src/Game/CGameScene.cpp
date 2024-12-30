@@ -194,7 +194,7 @@ void CGameScene::Update()
 
 	if (CInput::PushKey('H'))
 	{
-		CSceneManager::Instance()->LoadScene(EScene::eTitle);
+		CSceneManager::Instance()->LoadScene(EScene::eGameOver);
 	}
 
 	// ゲームメニューを開いてなければ、[Ｍ]キーでメニューを開く
@@ -205,4 +205,5 @@ void CGameScene::Update()
 			mpGameMenu->Open();
 		}
 	}
+
 }

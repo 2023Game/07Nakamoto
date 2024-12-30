@@ -89,6 +89,7 @@
     <ClCompile Include="src\Game\CGameOverScene.cpp" />
     <ClCompile Include="src\Game\CGameScene.cpp" />
     <ClCompile Include="src\Game\CGameScene2.cpp" />
+    <ClCompile Include="src\Game\CGameScene3.cpp" />
     <ClCompile Include="src\Game\CGaugeUI.cpp" />
     <ClCompile Include="src\Game\CGaugeUI3D.cpp" />
     <ClCompile Include="src\Game\CHpGauge.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="src\Game\CGameOverScene.h" />
     <ClInclude Include="src\Game\CGameScene.h" />
     <ClInclude Include="src\Game\CGameScene2.h" />
+    <ClInclude Include="src\Game\CGameScene3.h" />
     <ClInclude Include="src\Game\CGaugeUI.h" />
     <ClInclude Include="src\Game\CGaugeUI3D.h" />
     <ClInclude Include="src\Game\CHpGauge.h" />

@@ -110,6 +110,9 @@
     <Filter Include="ソース ファイル\Game\UI\GameOver">
       <UniqueIdentifier>{baee2a0e-bb50-4598-a3f9-7d5b5c2537c0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\UI\GameClear">
+      <UniqueIdentifier>{bca41d97-b14c-4a5f-bf5b-061617949d08}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -453,6 +456,9 @@
     </ClCompile>
     <ClCompile Include="src\Game\CGameOverUI.cpp">
       <Filter>ソース ファイル\Game\UI\GameOver</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CGameScene3.cpp">
+      <Filter>ソース ファイル\Game\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -821,6 +827,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CGameOverUI.h">
       <Filter>ソース ファイル\Game\UI\GameOver</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CGameScene3.h">
+      <Filter>ソース ファイル\Game\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

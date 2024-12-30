@@ -27,16 +27,20 @@ CField::CField()
 	mScene = CSceneManager::Instance()->GetCurrentScene();
 	switch (mScene)
 	{
-		// ステージ１
+		// テストステージ
 		case EScene::eGame:
 			// 床のモデルデータを取得
 			mpModel = CResourceManager::Get<CModel>("Field");
 			break;
-		// ステージ２
+		// ステージ1
 		case EScene::eGame2:
 			// 床のモデルデータを取得
 			mpModel = CResourceManager::Get<CModel>("Map_mini_floor");
-
+			break;
+		// ステージ2
+		case EScene::eGame3:
+			// 床のモデルデータを取得
+			mpModel = CResourceManager::Get<CModel>("Field");
 			break;
 	}
 	// 床のコライダーを生成
@@ -115,6 +119,20 @@ void CField::CreateWalls()
 		}
 		// ステージ２
 		case EScene::eGame2:
+		{
+			// 壁の生成
+			CWall* wall = new CWall
+			(
+				CVector(0.0f, 0.0f, 0.0f),
+				CVector(0.0f, 0.0f, 0.0f),
+				CVector(1.0f, 1.0f, 1.0f)
+			);
+			mWalls.push_back(wall);	// 生成した壁を壁のリストに追加
+
+			break;
+		}
+		// ステージ3
+		case EScene::eGame3:
 		{
 			// 壁の生成
 			CWall* wall = new CWall

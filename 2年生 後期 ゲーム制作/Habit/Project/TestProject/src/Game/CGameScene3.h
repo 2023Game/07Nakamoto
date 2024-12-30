@@ -3,16 +3,14 @@
 class CGameMenu;
 class CSound;
 
-class CHpUI;
-
 //タイトルシーン
-class CGameScene :public CSceneBase
+class CGameScene3 :public CSceneBase
 {
 public:
 	//コンストラクタ
-	CGameScene();
+	CGameScene3();
 	//デストラクタ
-	~CGameScene();
+	~CGameScene3();
 	//シーン読み込み
 	void Load();
 	//シーンの更新処理

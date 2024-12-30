@@ -3,11 +3,13 @@
 #include "CTitleScene.h"
 #include "CGameScene.h"
 #include "CGameScene2.h"
+#include "CGameScene3.h"
 
 #include "Test/CBootMenuScene.h"
 #include "Test/CCollisionTestScene.h"
 
 #include "CGameOverScene.h"
+#include "CGameClearScene.h"
 
 // シーンマネージャのインスタンス
 CSceneManager* CSceneManager::mpInstance = nullptr;
@@ -108,12 +110,18 @@ void CSceneManager::ChangeNextScene()
 	switch (mNextScene)
 	{
 		//タイトルシーン
-		case EScene::eTitle:	mpScene = new CGameOverScene();	break;
+		case EScene::eTitle:	mpScene = new CTitleScene();	break;
 		//ゲームシーン
 		case EScene::eGame:		mpScene = new CGameScene();		break;
-
 		//ゲームシーン2
 		case EScene::eGame2:	mpScene = new CGameScene2();	break;
+		//ゲームシーン3
+		case EScene::eGame3:	mpScene = new CGameScene3();	break;
+
+		// ゲームオーバーシーン
+		case EScene::eGameOver:	mpScene = new CGameOverScene();	break;
+		// ゲームクリアシーン
+		case EScene::eClear :	mpScene = new CGameClearScrene();	break;
 
 		//起動時メニュー
 		case EScene::eBootMenu:	mpScene = new CBootMenuScene();	break;

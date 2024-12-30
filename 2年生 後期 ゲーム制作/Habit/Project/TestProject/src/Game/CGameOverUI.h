@@ -28,8 +28,6 @@ public:
 private:
 	// 待機状態
 	void UpdateIdle();
-	// メニュー選択
-	void UpdateSelect();
 	// フェードアウト
 	void UpdateFadeOut();
 

@@ -8,6 +8,7 @@
 #include "CGaugeUI.h"
 #include "CHpGauge.h"
 #include "CStGauge.h"
+#include "CSceneManager.h"
 
 #include "CDebugFieldOfView.h"
 
@@ -262,12 +263,6 @@ int CPlayer2::GetState()
 	return static_cast<int>(mState);
 }
 
-// 残りHPの取得
-int CPlayer2::GetHp()
-{
-	return mHp;
-}
-
 // 待機処理
 void CPlayer2::UpdateIdle()
 {
@@ -368,11 +363,11 @@ void CPlayer2::UpdateDeath()
 	// 死亡アニメーションを設定
 	ChangeAnimation(EAnimType::eDeath);
 
-	// TODO:タイトルに戻るなどに変更する
-	if (CInput::Key('R') && IsAnimationFinished())
+	// アニメーションが終了したら、
+	if (IsAnimationFinished())
 	{
-		mState = EState::eIdle;
-		mHp = 100;
+		// ゲームオーバーシーンを読み込む
+		CSceneManager::Instance()->LoadScene(EScene::eGameOver);
 	}
 }
 
