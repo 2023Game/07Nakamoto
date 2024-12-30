@@ -1,35 +1,50 @@
 #include "CTrap.h"
-#include "Primitive.h"
-#include "CImage.h"
+#include "CColliderMesh.h"
+#include "CCharaBase.h"
 
-// コンストラクタ
-CTrap::CTrap(const CVector& pos)
-	: CObjectBase(ETag::eSlash, ETaskPriority::eEffect, 0, ETaskPauseType::eGame)
-	, mPosition(pos)
-	, mColor(1.0f, 0.0f, 0.0f, 1.0f)
-	, mpOwner(nullptr)
+CTrap::CTrap()
+	: CObjectBase(ETag::eEnemy, ETaskPriority::eWeapon, 0, ETaskPauseType::eGame)
+	, mpModel(nullptr)
+	, mpCollider(nullptr)
 {
-	mpTexture = CResourceManager::Get<CTexture>("spider_web");
+	// モデルデータの取得
+	mpModel = CResourceManager::Get<CModel>("Spider_Web");
+
+	// コライダーを作成
+	mpCollider = new CColliderMesh
+	(
+		this, ELayer::eAttackCol,
+		mpModel, true
+	);
+	// プレイヤーと衝突するように設定
+	mpCollider->SetCollisionTags({ ETag::ePlayer });
+	mpCollider->SetCollisionLayers({ ELayer::ePlayer });
+
 }
 
 // デストラクタ
 CTrap::~CTrap()
 {
-	// 持ち主が存在する場合は、
-	if (mpOwner != nullptr)
+	// コライダーを削除
+	SAFE_DELETE(mpCollider);
+}
+
+void CTrap::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
+{
+	// プレイヤーに衝突した
+	if (other->Layer() == ELayer::ePlayer)
 	{
-		// 持ち主に自分が削除されたことを伝える
-		mpOwner->DeleteObject(this);
+		// プレイヤーにダメージを与える
+		CCharaBase* chara = dynamic_cast<CCharaBase*>(other->Owner());
+		if (chara != nullptr)
+		{
+			chara->TakeDamage(10, this);
+			// プレイヤーに当たったら、自身を削除
+			Kill();
+		}
 	}
 }
 
-// 罠を設置する座標を返す
-CVector CTrap::GetOffsetPos() const
-{
-	return CVector(mPosition);
-}
-
-// 更新
 void CTrap::Update()
 {
 }
@@ -37,7 +52,5 @@ void CTrap::Update()
 // 描画
 void CTrap::Render()
 {
-	CMatrix m;
-	m.Translate(GetOffsetPos());
-	Primitive::DrawSphere(m, 2.0f, mColor);
+	mpModel->Render(Matrix());
 }

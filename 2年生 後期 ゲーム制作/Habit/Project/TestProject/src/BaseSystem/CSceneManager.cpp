@@ -7,6 +7,8 @@
 #include "Test/CBootMenuScene.h"
 #include "Test/CCollisionTestScene.h"
 
+#include "CGameOverScene.h"
+
 // シーンマネージャのインスタンス
 CSceneManager* CSceneManager::mpInstance = nullptr;
 
@@ -106,7 +108,7 @@ void CSceneManager::ChangeNextScene()
 	switch (mNextScene)
 	{
 		//タイトルシーン
-		case EScene::eTitle:	mpScene = new CTitleScene();	break;
+		case EScene::eTitle:	mpScene = new CGameOverScene();	break;
 		//ゲームシーン
 		case EScene::eGame:		mpScene = new CGameScene();		break;
 

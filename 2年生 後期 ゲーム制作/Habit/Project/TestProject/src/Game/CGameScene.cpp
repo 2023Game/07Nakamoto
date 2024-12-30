@@ -60,10 +60,11 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>("Player2", "Character\\Player2\\pico.x");
 	CResourceManager::Load<CModelX>("Enemy", "Character\\Enemy\\mutant\\mutant.x");
 	CResourceManager::Load<CModelX>("Enemy2", "Character\\Enemy\\warrok\\warrok.x");
-
 	CResourceManager::Load<CModel>("Switch", "Object\\Switch.obj");
-	CResourceManager::Load<CModel>("Touch", "Object\\Touch.obj");
 
+	CResourceManager::Load<CModel>("Spider_Web", "Character\\Enemy\\trap\\spider_web.obj");
+
+	CResourceManager::Load<CModel>("Touch", "Object\\Touch.obj");
 	CResourceManager::Load<CModel>("Obj", "Object\\mm.obj");
 
 	// ÉQÅ[ÉÄBGMÇì«Ç›çûÇ›

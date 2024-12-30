@@ -1,22 +1,18 @@
 #pragma once
 #include "CObjectBase.h"
-#include "CTexture.h"
+#include "CModel.h"
 
 // 敵が設置する罠
 class CTrap : public CObjectBase
 {
 public:
-	/// <summary>
-	/// コンストラクタ
-	/// </summary>
-	/// <param name="pwner">罠を生成したオブジェクト</param>
-	/// <param name="pos">生成位置</param>
-	CTrap(const CVector& pos);
+	// コンストラクタ
+	CTrap();
 	// デストラクタ
 	~CTrap();
 
-	// 遮蔽物チェックや表示用に、少し上に上げたノードの座標を返す
-	CVector GetOffsetPos() const;
+	// 衝突処理
+	void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
 
 	// 更新
 	void Update() override;
@@ -24,12 +20,6 @@ public:
 	void Render() override;
 
 private:
-	CVector mPosition;
-	CColor mColor;
-
-protected:
-	// 持ち主
-	CObjectBase* mpOwner;
-	// 蜘蛛の巣のテクスチャ
-	CTexture* mpTexture;
+	CModel* mpModel;		// 罠のモデルデータ
+	CCollider* mpCollider;	// 罠のコライダー
 };

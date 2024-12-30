@@ -107,6 +107,9 @@
     <Filter Include="ソース ファイル\Game\Character\Enamy">
       <UniqueIdentifier>{3a27c1f9-500d-46d7-bd5e-5fe707bbf455}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\UI\GameOver">
+      <UniqueIdentifier>{baee2a0e-bb50-4598-a3f9-7d5b5c2537c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -388,9 +391,6 @@
     <ClCompile Include="src\Game\CGameScene2.cpp">
       <Filter>ソース ファイル\Game\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CTrap.cpp">
-      <Filter>ソース ファイル\Game\Weapon</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CTouch.cpp">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClCompile>
@@ -447,6 +447,12 @@
     </ClCompile>
     <ClCompile Include="src\Game\CGameClearScene.cpp">
       <Filter>ソース ファイル\Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CTrap.cpp">
+      <Filter>ソース ファイル\Game\Character\Enamy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CGameOverUI.cpp">
+      <Filter>ソース ファイル\Game\UI\GameOver</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -753,9 +759,6 @@
     <ClInclude Include="src\Game\CGameScene2.h">
       <Filter>ソース ファイル\Game\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CTrap.h">
-      <Filter>ソース ファイル\Game\Weapon</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\CTouch.h">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClInclude>
@@ -812,6 +815,12 @@
     </ClInclude>
     <ClInclude Include="src\Game\CGameClearScene.h">
       <Filter>ソース ファイル\Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CTrap.h">
+      <Filter>ソース ファイル\Game\Character\Enamy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CGameOverUI.h">
+      <Filter>ソース ファイル\Game\UI\GameOver</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

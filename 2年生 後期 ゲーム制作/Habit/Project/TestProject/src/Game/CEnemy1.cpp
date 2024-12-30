@@ -129,6 +129,9 @@ CEnemy1::CEnemy1(std::vector<CVector> patrolPoints)
 // デストラクタ
 CEnemy1::~CEnemy1()
 {
+	SAFE_DELETE(mpColliderCapsule);
+	SAFE_DELETE(mpAttackCollider);
+
 	// 視野範囲のデバッグ表示が存在したら、一緒に削除する
 	if (mpDebugFov != nullptr)
 	{
@@ -510,8 +513,12 @@ void CEnemy1::UpdateIdle()
 		// 待機時間が経過したら、巡回状態へ移行
 		ChangeState(EState::ePatrol);
 
-		// 罠を設置
-		mpTrap = new CTrap(Position());
+		// 罠を生成
+		CVector pos = Position();
+
+		CTrap* trap = new CTrap();
+		trap->Position(pos);
+
 
 	}
 }

@@ -58,14 +58,17 @@ CPlayer2::CPlayer2()
 	, mMoveSpeedY(0.0f)
 	, mIsGrounded(false)
 	, mpRideObject(nullptr)
-	, mMaxHp(100)
-	, mHp(mMaxHp)
+	//, mMaxHp(100)
+	//, mHp(mMaxHp)
 	, mMaxSt(100)
 	, mSt(mMaxSt)
 	, mpSearchCol(nullptr)
 	, mFovAngle(FOV_ANGLE)
 	, mpDebugFov(nullptr)
 {
+	mMaxHp = 100;
+	mHp = mMaxHp;
+
 	// インスタンスの設定
 	spInstatnce = this;
 

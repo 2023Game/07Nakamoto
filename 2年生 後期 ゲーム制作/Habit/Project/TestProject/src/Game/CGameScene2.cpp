@@ -43,7 +43,7 @@ void CGameScene2::Load()
 	CResourceManager::Load<CModelX>("Enemy", "Character\\Enemy\\mutant\\mutant.x");
 	CResourceManager::Load<CModelX>("Enemy2", "Character\\Enemy\\warrok\\warrok.x");
 
-	//CResourceManager::Load<CTexture>("spider_web", "weapon\\spider_web.png");
+	CResourceManager::Load<CModel>("Spider_Web", "Character\\Enemy\\trap\\spider_web.obj");
 
 	// ƒQ[ƒ€BGM‚ð“Ç‚Ýž‚Ý
 	CBGMManager::Instance()->Play(EBGMType::eGame);
