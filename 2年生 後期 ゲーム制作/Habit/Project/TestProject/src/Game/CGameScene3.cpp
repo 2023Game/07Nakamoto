@@ -14,7 +14,7 @@
 
 // コンストラクタ
 CGameScene3::CGameScene3()
-	: CSceneBase(EScene::eGame)
+	: CSceneBase(EScene::eGame3)
 	, mpGameMenu(nullptr)
 {
 }
@@ -36,8 +36,7 @@ void CGameScene3::Load()
 	//リソースの読み込みやクラスの生成を行う
 	CResourceManager::Load<CModel>("Field",			"Field\\stage1\\floor.obj");
 	CResourceManager::Load<CModel>("Goal",			"Field\\stage1\\goal.obj");
-	CResourceManager::Load<CModel>("Outer_Wall",	"Field\\stage1\\outer_wall.obj");
-	CResourceManager::Load<CModel>("Wall",			"Field\\stage1\\wall.obj");
+	CResourceManager::Load<CModel>("Wall",			"Field\\stage1\\wall1.obj");
 	CResourceManager::Load<CModel>("Gimmick_Wall",	"Field\\stage1\\gimmick_wall.obj");
 
 	CResourceManager::Load<CModelX>("Player2", "Character\\Player2\\pico.x");
@@ -47,14 +46,14 @@ void CGameScene3::Load()
 	CBGMManager::Instance()->Play(EBGMType::eGame);
 
 	// 経路探索管理クラスを作成
-	new CNavManager();
+	//new CNavManager();
 	// フィールド作成
 	new CField();
 
 	// プレイヤー生成
 	CPlayer2* pico = new CPlayer2();
 	pico->Scale(1.0f, 1.0f, 1.0f);
-	//pico->Position(0.0f, 0.0f, 0.0f);
+	pico->Position(0.0f, 0.0f, 0.0f);
 
 	//// 敵①生成
 	//CEnemy2* enemy2 = new CEnemy2

@@ -72,7 +72,7 @@ void CGameScene::Load()
 
 	// 経路探索管理クラスを作成
 	new CNavManager();
-
+	// フィールド作成
 	new CField();
 
 	// サボテンの敵を作成

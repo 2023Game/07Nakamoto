@@ -38,7 +38,7 @@ CWall::CWall(const CVector& pos, const CVector& angle, const CVector& size)
 			mpModel = CResourceManager::Get<CModel>("Wall");
 
 			// 壁のコライダーを作成
-			CModel* colModel = CResourceManager::Get<CModel>("Wall");
+			CModel* colModel = mpModel;
 			mpColliderMesh = new CColliderMesh(this, ELayer::eWall, colModel, true);
 			break;
 		}

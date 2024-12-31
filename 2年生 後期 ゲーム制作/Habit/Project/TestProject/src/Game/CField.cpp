@@ -171,6 +171,8 @@ void CField::CreateFieldObjects()
 			);
 
 			break;
+		case EScene::eGame3:
+			break;
 	}
 
 	//mpMap = CResourceManager::Get<CModel>("Map_mini");
@@ -337,6 +339,9 @@ void CField::CreateNavNodes()
 				new CNavNode(CVector(265.0f, 0.0f, 180.0f));
 				new CNavNode(CVector(195.0f, 0.0f, 180.0f));
 			}
+			break;
+		// ステージ２
+		case EScene::eGame3:
 			break;
 	}
 }
