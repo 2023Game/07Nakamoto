@@ -19,6 +19,7 @@ enum class ETag
 	eSlash,	// 斬撃
 	eTrap,	// 罠
 
+	eClear,	// クリアエリア
 	eUI,	// UI
 
 	eCamera,// カメラ

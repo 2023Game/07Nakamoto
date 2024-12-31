@@ -42,7 +42,7 @@ void CGameOverScene::Update()
 		// コンティニューならば、シーンを読み込む
 		if (mpGameOverUI->IsContinue())
 		{
-			CSceneManager::Instance()->LoadScene(EScene::eGame);
+			CSceneManager::Instance()->LoadScene(EScene::eGame3);
 		}
 		// ゲーム終了ならば、アプリを閉じる
 		else if (mpGameOverUI->IsExitGame())

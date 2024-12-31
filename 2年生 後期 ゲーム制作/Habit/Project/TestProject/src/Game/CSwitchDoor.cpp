@@ -1,6 +1,6 @@
 #include "CSwitchDoor.h"
 #include "CPushSwitch.h"
-
+#include "CSceneManager.h"
 
 // コンストラクタ
 CSwitchDoor::CSwitchDoor(const CVector& pos, const CVector& angle, const CVector& size)
@@ -10,19 +10,41 @@ CSwitchDoor::CSwitchDoor(const CVector& pos, const CVector& angle, const CVector
 	, mIsPlaying(false)
 	
 {
-	// 扉のモデルデータ取得(今は壁を設定している)
-	mpModel = CResourceManager::Get<CModel>("Wall");
+	// 現在のシーンを取得
+	mScene = CSceneManager::Instance()->GetCurrentScene();
+	switch (mScene)
+	{
+	case EScene::eGame:
+		{
+			// 扉のモデルデータ取得(今は壁を設定している)
+			mpModel = CResourceManager::Get<CModel>("Wall");
 
-	// 扉のコライダーを取得(今は壁のコライダーを設定している)
-	CModel* colModel = CResourceManager::Get<CModel>("WallCol");
-	mpColliderMesh = new CColliderMesh(this, ELayer::eWall, colModel, true);
+			// 扉のコライダーを取得(今は壁のコライダーを設定している)
+			CModel* colModel = CResourceManager::Get<CModel>("WallCol");
+			mpColliderMesh = new CColliderMesh(this, ELayer::eWall, colModel, true);
 
+			// 赤色を設定
+			mColor = CColor::red;
+
+			break;
+		}
+	case EScene::eGame3:
+		{
+			// 扉のモデルデータ取得(今は壁を設定している)
+			mpModel = CResourceManager::Get<CModel>("Gimmick_Wall");
+
+			// 扉のコライダーを取得(今は壁のコライダーを設定している)
+			CModel* colModel = CResourceManager::Get<CModel>("Gimmick_Wall");
+			mpColliderMesh = new CColliderMesh(this, ELayer::eWall, colModel, true);
+
+			break;
+		}
+	}
+	
 	// 位置と向きとサイズを設定
 	Position(pos);
 	Rotation(angle);
 	Scale(size);
-	// 赤色を設定
-	mColor = CColor::red;
 }
 
 // デストラクタ

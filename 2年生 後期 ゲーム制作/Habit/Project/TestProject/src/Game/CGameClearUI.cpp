@@ -1,4 +1,4 @@
-#include "CGameOverUI.h"
+#include "CGameClearUI.h"
 #include "CFont.h"
 #include "CText.h"
 #include "CImage.h"
@@ -18,17 +18,17 @@
 #define OPENED_WAIT_TIME 0.5f
 
 // コンストラクタ
-CGameOverUI::CGameOverUI()
+CGameClearUI::CGameClearUI()
 	: CTask(ETaskPriority::eUI, 0, ETaskPauseType::eDefault)
 	, mState(EState::eIdle)
 	, mStateStep(0)
 	, mElapsedTime(0.0f)
 	, mIsEnd(false)
 {
-	// ゲームオーバー画面の背景イメージを生成
-	mpGameOverBg = new CImage
+	// ゲームクリア画面の背景イメージを生成
+	mpGameClearBg = new CImage
 	(
-		"UI\\gameover.png",
+		"UI\\clear.png",
 		ETaskPriority::eUI,
 		0,
 		ETaskPauseType::eDefault,
@@ -47,7 +47,7 @@ CGameOverUI::CGameOverUI()
 	// ボタンの画像を読み込み
 	btn1->LoadButtonImage("UI\\title_start0.png", "UI\\title_start1.png");
 	// ボタンクリック時に呼び出されるコールバック関数を設定
-	btn1->SetOnClickFunc(std::bind(&CGameOverUI::OnClickStart, this));
+	btn1->SetOnClickFunc(std::bind(&CGameClearUI::OnClickStart, this));
 	// ボタンは最初は無効化して、スケール値を0にしておく
 	btn1->SetEnable(false);
 	//btn1->SetScale(0.0f);
@@ -56,9 +56,9 @@ CGameOverUI::CGameOverUI()
 }
 
 // デストラクタ
-CGameOverUI::~CGameOverUI()
+CGameClearUI::~CGameClearUI()
 {
-	SAFE_DELETE(mpGameOverBg);
+	SAFE_DELETE(mpGameClearBg);
 
 	int size = mButtons.size();
 	for (int i = 0; i < size; i++)
@@ -70,42 +70,42 @@ CGameOverUI::~CGameOverUI()
 	mButtons.clear();
 }
 
-// ゲームオーバー画面終了か
-bool CGameOverUI::IsEnd() const
+// ゲームクリア画面終了か
+bool CGameClearUI::IsEnd() const
 {
 	return mIsEnd;
 }
 
 // コンティニューするか
-bool CGameOverUI::IsContinue() const
+bool CGameClearUI::IsContinue() const
 {
 	// 選択項目が1つ目ならば、リトライ
 	return mSelectIndex == 0;
 }
 
 // ゲームを終了するか
-bool CGameOverUI::IsExitGame() const
+bool CGameClearUI::IsExitGame() const
 {
 	// 選択項目が2つ目ならば、ゲーム終了
 	return mSelectIndex == 1;
 }
 
 // 更新処理
-void CGameOverUI::Update()
+void CGameClearUI::Update()
 {
 	switch (mState)
 	{
 		// 待機状態
-		case EState::eIdle:
-			UpdateIdle();
-			break;
+	case EState::eIdle:
+		UpdateIdle();
+		break;
 		// フェードアウト
-		case EState::eFadeOut:
-			UpdateFadeOut();
-			break;
+	case EState::eFadeOut:
+		UpdateFadeOut();
+		break;
 	}
 
-	mpGameOverBg->Update();
+	mpGameClearBg->Update();
 	for (CButton* btn : mButtons)
 	{
 		btn->Update();
@@ -113,10 +113,10 @@ void CGameOverUI::Update()
 }
 
 // 描画処理
-void CGameOverUI::Render()
+void CGameClearUI::Render()
 {
 	// 背景描画
-	mpGameOverBg->Render();
+	mpGameClearBg->Render();
 	// メニューボタンを表示
 	for (CButton* btn : mButtons)
 	{
@@ -125,7 +125,7 @@ void CGameOverUI::Render()
 }
 
 // 待機状態
-void CGameOverUI::UpdateIdle()
+void CGameClearUI::UpdateIdle()
 {
 	switch (mStateStep)
 	{
@@ -172,12 +172,12 @@ void CGameOverUI::UpdateIdle()
 }
 
 // フェードアウト
-void CGameOverUI::UpdateFadeOut()
+void CGameClearUI::UpdateFadeOut()
 {
 }
 
 // 状態切り替え
-void CGameOverUI::ChangeState(EState state)
+void CGameClearUI::ChangeState(EState state)
 {
 	if (state == mState) return;
 	mState = state;
@@ -186,7 +186,7 @@ void CGameOverUI::ChangeState(EState state)
 }
 
 // [START]クリック時のコールバック関数
-void CGameOverUI::OnClickStart()
+void CGameClearUI::OnClickStart()
 {
 	if (mIsEnd) return;
 
@@ -195,7 +195,7 @@ void CGameOverUI::OnClickStart()
 }
 
 // [QUIT]クリック時のコールバック関数
-void CGameOverUI::OnClickQuit()
+void CGameClearUI::OnClickQuit()
 {
 	if (mIsEnd) return;
 

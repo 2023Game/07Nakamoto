@@ -460,6 +460,12 @@
     <ClCompile Include="src\Game\CGameScene3.cpp">
       <Filter>ソース ファイル\Game\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CClearArea.cpp">
+      <Filter>ソース ファイル\Game\Field\Object\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CGameClearUI.cpp">
+      <Filter>ソース ファイル\Game\UI\GameClear</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -830,6 +836,12 @@
     </ClInclude>
     <ClInclude Include="src\Game\CGameScene3.h">
       <Filter>ソース ファイル\Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CClearArea.h">
+      <Filter>ソース ファイル\Game\Field\Object\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CGameClearUI.h">
+      <Filter>ソース ファイル\Game\UI\GameClear</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

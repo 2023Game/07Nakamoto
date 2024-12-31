@@ -13,8 +13,8 @@
 #define FOV_ANGLE			 45.0f	// 視野範囲の角度
 #define FOV_LENGTH			100.0f	// 視野範囲の距離
 #define EYE_HEIGHT			 10.0f	// 視点の高さ
-#define WALK_SPEED			 10.0f	// 歩いているときの速度
-#define RUN_SPEED			 20.0f	// 走っていいるときの速度
+#define WALK_SPEED			 50.0f	// 歩いているときの速度
+#define RUN_SPEED			 80.0f	// 走っていいるときの速度
 #define ROTATE_SPEED		 6.0f	// 回転速度
 
 #define ENEMY_HEIGHT_CCOL1	24.0f	// カプセルコライダーの上の高さ
@@ -26,7 +26,7 @@
 
 #define ATTACK_JUDGE_START	39.0f	// 攻撃判定開始フレーム
 #define ATTACK_JUDGE_END	46.0f	// 攻撃判定終了フレーム
-#define ATTACK_DAMAGE		30		// 攻撃のダメージ
+#define ATTACK_DAMAGE		50		// 攻撃のダメージ
 
 #define PATROL_INTERVAL		  3.0f	// 次の巡回ポイントに移動開始するまでの時間
 #define PATROL_NEAR_DIST	 10.0f	// 巡回開始時に選択される巡回ポイントの最短距離
