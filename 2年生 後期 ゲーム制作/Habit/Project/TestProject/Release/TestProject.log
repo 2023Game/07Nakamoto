@@ -1,0 +1,3 @@
+﻿  main.cpp
+LINK : fatal error C1047: オブジェクトまたはライブラリ ファイル 'lib\ftgl_static.lib' は、'Release\BGMData.obj' などの他のオブジェクトとは異なるバージョンのコンパイラで作成されています。同じコンパイラを使用してすべてのオブジェクトとライブラリをリビルドします
+LINK : fatal error LNK1257: コードの生成に失敗しました。

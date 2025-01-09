@@ -120,7 +120,7 @@ void CGameOverUI::Render()
 	// メニューボタンを表示
 	for (CButton* btn : mButtons)
 	{
-		btn->Update();
+		btn->Render();
 	}
 }
 
