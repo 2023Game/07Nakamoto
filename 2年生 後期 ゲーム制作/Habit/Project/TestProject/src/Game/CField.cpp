@@ -344,16 +344,16 @@ void CField::CreateNavNodes()
 		case EScene::eGame3:
 			if (navMgr != nullptr)
 			{
-				//// ï«á@ÇÃé¸ÇËÇÃåoòHíTçıÉmÅ[Éh
-				//new CNavNode(CVector(110.0f, 0.0f, 80.0f));
-				//new CNavNode(CVector(0.0f, 0.0f, 80.0f));
-				//new CNavNode(CVector(-90.0f, 0.0f, 80.0f));
-				//new CNavNode(CVector(-90.0f, 0.0f, 10.0f));
-				//new CNavNode(CVector(0.0f, 0.0f, 10.0f));
-				//new CNavNode(CVector(110.0f, 0.0f, 10.0f));
+				// ï«á@ÇÃé¸ÇËÇÃåoòHíTçıÉmÅ[Éh
+				new CNavNode(CVector(110.0f, 0.0f, 80.0f));
+				new CNavNode(CVector(0.0f, 0.0f, 80.0f));
+				new CNavNode(CVector(-90.0f, 0.0f, 80.0f));
+				new CNavNode(CVector(-90.0f, 0.0f, 10.0f));
+				new CNavNode(CVector(0.0f, 0.0f, 10.0f));
+				new CNavNode(CVector(110.0f, 0.0f, 10.0f));
 
-				//new CNavNode(CVector(-180.0f, 0.0f, 0.0f));
-				//new CNavNode(CVector(-180.0f, 0.0f, 100.0f));
+				new CNavNode(CVector(-180.0f, 0.0f, 0.0f));
+				new CNavNode(CVector(-180.0f, 0.0f, 100.0f));
 
 			}
 			break;
