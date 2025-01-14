@@ -61,20 +61,20 @@ void CGameScene3::Load()
 	pico->Position(0.0f, 0.0f, 0.0f);
 
 	// “G‡@¶¬
-	//CEnemy2* enemy1 = new CEnemy2
-	//(
-	//	{
-	//		CVector(110.0f, 0.0f, 100.0f),
-	//		CVector(-80.0f, 0.0f, 100.0f),
-	//		CVector(-90.0f, 0.0f, 0.0f),
-	//		CVector(-180.0f, 0.0f, 0.0f),
-	//		CVector(-180.0f, 0.0f, 100.0f),
-	//		CVector(-180.0f, 0.0f, 0.0f),
-	//		CVector(120.0f,0.0f,0.0f)
-	//	}
-	//);
-	//enemy1->Scale(1.0f, 1.0f, 1.0f);
-	//enemy1->Position(CVector(0.0f, 0.0, 100.0f));
+	CEnemy2* enemy1 = new CEnemy2
+	(
+		{
+			CVector(110.0f, 0.0f, 100.0f),
+			CVector(-80.0f, 0.0f, 100.0f),
+			CVector(-90.0f, 0.0f, 0.0f),
+			CVector(-180.0f, 0.0f, 0.0f),
+			CVector(-180.0f, 0.0f, 100.0f),
+			CVector(-180.0f, 0.0f, 0.0f),
+			CVector(120.0f,0.0f,0.0f)
+		}
+	);
+	enemy1->Scale(1.0f, 1.0f, 1.0f);
+	enemy1->Position(CVector(0.0f, 0.0, 100.0f));
 
 	// “G‡A¶¬
 	CEnemy2* enemy2 = new CEnemy2
