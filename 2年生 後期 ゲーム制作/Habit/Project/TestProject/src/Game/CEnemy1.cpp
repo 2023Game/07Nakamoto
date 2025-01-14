@@ -182,12 +182,6 @@ void CEnemy1::Update()
 
 	CXCharacter::Update();
 
-	// 経路探索用のノードが存在すれば、座標を更新
-	if (mpNavNode != nullptr)
-	{
-		mpNavNode->SetPos(Position());
-	}
-
 	// 現在の状態に合わせて視野範囲の色を変更
 	mpDebugFov->SetColor(GetStateColor(mState));
 
@@ -206,10 +200,13 @@ void CEnemy1::Render()
 		int size = mPatrolPoints.size();
 		for (int i = 0; i < size; i++)
 		{
-			CMatrix m;
-			m.Translate(mPatrolPoints[i]->GetPos() + CVector(0.0f, rad * 2.0f, 0.0f));
 			CColor c = i == mNextPatrolIndex ? CColor::red : CColor::cyan;
-			Primitive::DrawWireSphere(m, rad, c);
+			Primitive::DrawBox
+			(
+				mPatrolPoints[i]->GetPos() + CVector(0.0f, rad * 2.0f, 0.0f),
+				CVector::one * rad,
+				c
+			);
 		}
 	}
 	// 見失った状態であれば、
@@ -217,9 +214,12 @@ void CEnemy1::Render()
 	{
 		//プレイヤーを見失った位置にデバッグ表示
 		float rad = 2.0f;
-		CMatrix m;
-		m.Translate(mpLostPlayerNode->GetPos() + CVector(0.0f, rad, 0.0f));
-		Primitive::DrawWireSphere(m, rad, CColor::blue);
+		Primitive::DrawBox
+		(
+			mpLostPlayerNode->GetPos() + CVector(0.0f, rad, 0.0f),
+			CVector::one * rad,
+			CColor::blue
+		);
 	}
 
 	CPlayer2* player = CPlayer2::Instance();
@@ -475,6 +475,9 @@ void CEnemy1::ChangePatrolPoint()
 		CNavManager* navMgr = CNavManager::Instance();
 		if (navMgr != nullptr)
 		{
+			// 経路探索用のノード座標を更新
+			mpNavNode->SetPos(Position());
+
 			// 巡回ポイントの経路探索ノードの位置を設定しなおすことで、
 			// 各ノードへの接続情報を更新
 			for (CNavNode* node : mPatrolPoints)
@@ -609,6 +612,9 @@ void CEnemy1::UpdateChase()
 	CNavManager* navMgr = CNavManager::Instance();
 	if (navMgr != nullptr)
 	{
+		// 経路探索用のノード座標を更新
+		mpNavNode->SetPos(Position());
+
 		// 自身のノードからプレイヤーのノードまでの最短経路を求める
 		CNavNode* playerNode = player->GetNavNode();
 		if (navMgr->Navigate(mpNavNode, playerNode, mMoveRoute))
@@ -647,6 +653,9 @@ void CEnemy1::UpdateLost()
 	{
 		// ステップ0：見失った位置までの最短経路を求める
 		case 0:
+			// 経路探索用のノード座標を更新
+			mpNavNode->SetPos(Position());
+
 			if (navMgr->Navigate(mpNavNode, mpLostPlayerNode, mMoveRoute))
 			{
 				// 見失った位置まで経路が繋がっていたら、次のステップへ

@@ -103,6 +103,7 @@
     <ClCompile Include="src\Game\CNavNode.cpp" />
     <ClCompile Include="src\Game\CPlayer.cpp" />
     <ClCompile Include="src\Game\CPlayer2.cpp" />
+    <ClCompile Include="src\Game\CPlayer3.cpp" />
     <ClCompile Include="src\Game\CPushSwitch.cpp" />
     <ClCompile Include="src\Game\CRideabeObject.cpp" />
     <ClCompile Include="src\Game\CRotateFloor.cpp" />
@@ -231,6 +232,7 @@
     <ClInclude Include="src\Game\CNavNode.h" />
     <ClInclude Include="src\Game\CPlayer.h" />
     <ClInclude Include="src\Game\CPlayer2.h" />
+    <ClInclude Include="src\Game\CPlayer3.h" />
     <ClInclude Include="src\Game\CPushSwitch.h" />
     <ClInclude Include="src\Game\CRideableObject.h" />
     <ClInclude Include="src\Game\CRotateFloor.h" />

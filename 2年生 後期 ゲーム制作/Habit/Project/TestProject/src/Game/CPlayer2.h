@@ -120,8 +120,6 @@ private:
 		eCrouch_up, // しゃがんで拾う
 	};
 
-	//int mMaxHp;	// 体力の最大値
-	//int mHp;	// 体力
 	int mMaxSt;	// スタミナの最大値
 	int mSt;	// スタミナ
 	//int mSan;	// 正気度

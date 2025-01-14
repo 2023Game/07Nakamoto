@@ -18,6 +18,7 @@
 #include "CSwitchDoor.h"
 
 #include "CTouch.h"
+#include "CPlayer3.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -67,6 +68,10 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>("Touch", "Object\\Touch.obj");
 	CResourceManager::Load<CModel>("Obj", "Object\\mm.obj");
 
+	// 表示できるか試し中
+	CResourceManager::Load<CModelX>("Player3", "Character\\Player3\\Acquire.x");
+	CResourceManager::Load<CModelX>("Ghost", "Character\\Enemy\\ghost\\ghost.x");
+
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
 
@@ -85,16 +90,20 @@ void CGameScene::Load()
 
 	CPlayer2* pico = new CPlayer2();
 	pico->Scale(1.0f, 1.0f, 1.0f);
-	pico->Position(-50.0f, 1.0f, 10.0f);
+	pico->Position(-50.0f, 0.0f, 10.0f);
+
+	CPlayer3* player3 = new CPlayer3();
+	player3->Scale(10.0f, 10.0f, 10.0f);
+	player3->Position(-50.0f, 0.0f, -10.0f);
 
 	// 敵①生成
 	CEnemy1* enemy = new CEnemy1
 	(
 		{
-			CVector(100.0f, 1.0,   0.0f),
-			CVector(  0.0f, 1.0,   0.0f),
-			CVector(  0.0f, 1.0, 100.0f),
-			CVector(100.0f, 1.0, 100.0f),
+			CVector(100.0f, 0.0f,   0.0f),
+			CVector(  0.0f, 0.0f,   0.0f),
+			CVector(  0.0f, 0.0f, 100.0f),
+			CVector(100.0f, 0.0f, 100.0f),
 		}
 	);
 	enemy->Scale(1.0f, 1.0f, 1.0f);
@@ -103,14 +112,14 @@ void CGameScene::Load()
 	CEnemy2* enemy2 = new CEnemy2
 	(
 		{
-			CVector(250.0f, 1.0, 150.0f),
-			CVector(150.0f, 1.0, 150.0f),
-			CVector(150.0f, 1.0, 250.0f),
-			CVector(250.0f, 1.0, 250.0f),
+			CVector(250.0f, 0.0f, 150.0f),
+			CVector(150.0f, 0.0f, 150.0f),
+			CVector(150.0f, 0.0f, 250.0f),
+			CVector(250.0f, 0.0f, 250.0f),
 		}
 	);
 	enemy2->Scale(1.0f, 1.0f, 1.0f);
-	enemy2->Position(CVector(200.0f, 1.0, 200.0f));
+	enemy2->Position(CVector(200.0f, 0.0, 200.0f));
 
 
 	// 松明(仮)の描画の確認	削除予定

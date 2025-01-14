@@ -466,6 +466,9 @@
     <ClCompile Include="src\Game\CGameClearUI.cpp">
       <Filter>ソース ファイル\Game\UI\GameClear</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CPlayer3.cpp">
+      <Filter>ソース ファイル\Game\Character</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -842,6 +845,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CGameClearUI.h">
       <Filter>ソース ファイル\Game\UI\GameClear</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPlayer3.h">
+      <Filter>ソース ファイル\Game\Character</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
