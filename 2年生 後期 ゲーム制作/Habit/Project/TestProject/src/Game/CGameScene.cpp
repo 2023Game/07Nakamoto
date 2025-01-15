@@ -93,7 +93,7 @@ void CGameScene::Load()
 	pico->Position(-50.0f, 0.0f, 10.0f);
 
 	CPlayer3* player3 = new CPlayer3();
-	player3->Scale(10.0f, 10.0f, 10.0f);
+	player3->Scale(1.0f, 1.0f, 1.0f);
 	player3->Position(-50.0f, 0.0f, -10.0f);
 
 	// ìGá@ê∂ê¨
