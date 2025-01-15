@@ -156,6 +156,13 @@ void CField::CreateFieldObjects()
 		case EScene::eGame:
 			mpCubeModel = CResourceManager::Get<CModel>("FieldCube");
 			mpCylinderModel = CResourceManager::Get<CModel>("FieldCylinder");
+
+			//new CMoveFloor
+			//(
+			//	mpCubeModel,
+			//	CVector(0.0f, 10.0f, -50.0f), CVector(1.0f, 1.0f, 1.0f),
+			//	CVector(50.0f, 0.0f, 0.0f), 10.0f
+			//);
 			break;
 
 		// ステージ２

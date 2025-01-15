@@ -7,7 +7,8 @@
 #include "CGameCamera.h"
 #include "CGameCamera2.h"
 #include "CInput.h"
-#include "CGameMenu.h"
+//#include "CGameMenu.h"
+#include "CInventory.h"
 #include "CBGMManager.h"
 #include "CLineEffect.h"
 #include "CNavManager.h"
@@ -231,7 +232,7 @@ void CGameScene3::Load()
 	mainCamera->SetFollowTargetTf(pico);
 
 	// ゲームメニューを作成
-	mpGameMenu = new CGameMenu();
+	mpGameMenu = new CInventory();
 }
 
 // シーン更新処理

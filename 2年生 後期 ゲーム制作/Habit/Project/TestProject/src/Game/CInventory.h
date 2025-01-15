@@ -16,7 +16,7 @@ public:
 	// 閉じる
 	void Close();
 	// インベントリが開いているかどうか
-	bool IsOpend() const;
+	bool IsOpened() const;
 
 	// 決める
 	void Decide(int select);
@@ -28,7 +28,7 @@ public:
 
 private:
 	CImage* mpBackground;
-	std::vector<CInventory*> mMenuItems;
+	std::vector<CImage*> mMenuItems;
 	CImage* mpSelectFrame;
 	int mSelectIndex;
 	bool mIsOpened;

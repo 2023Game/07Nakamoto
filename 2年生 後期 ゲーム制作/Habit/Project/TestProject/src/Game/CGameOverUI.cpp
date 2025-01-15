@@ -39,20 +39,38 @@ CGameOverUI::CGameOverUI()
 	// [START]ボタンを生成
 	CExpandButton* btn1 = new CExpandButton
 	(
-		CVector2(WINDOW_WIDTH * 0.5f, 450.0f),
+		CVector2(WINDOW_WIDTH * 0.3f, 450.0f),
 		CVector2(181.0f, 47.0f),
 		ETaskPriority::eUI, 0, ETaskPauseType::eGame,
 		false, false
 	);
 	// ボタンの画像を読み込み
-	btn1->LoadButtonImage("UI\\title_start0.png", "UI\\title_start1.png");
+	btn1->LoadButtonImage("UI\\retry0.png", "UI\\retry1.png");
 	// ボタンクリック時に呼び出されるコールバック関数を設定
 	btn1->SetOnClickFunc(std::bind(&CGameOverUI::OnClickStart, this));
 	// ボタンは最初は無効化して、スケール値を0にしておく
 	btn1->SetEnable(false);
-	//btn1->SetScale(0.0f);
+	btn1->SetScale(0.0f);
 	// ボタンリストに追加
 	mButtons.push_back(btn1);
+
+	// [QUIT]ボタンを生成
+	CExpandButton* btn2 = new CExpandButton
+	(
+		CVector2(WINDOW_WIDTH * 0.65f, 450.0f),
+		CVector2(181.0f, 47.0f),
+		ETaskPriority::eUI, 0, ETaskPauseType::eGame,
+		false, false
+	);
+	// ボタンの画像を読み込み
+	btn2->LoadButtonImage("UI/quit0.png", "UI/quit1.png");
+	// ボタンクリック時に呼び出されるコールバック関数を設定
+	btn2->SetOnClickFunc(std::bind(&CGameOverUI::OnClickQuit, this));
+	// ボタンは最初は無効化して、スケール値を0にしておく
+	btn2->SetEnable(false);
+	btn1->SetScale(0.0f);
+	// ボタンリストに追加
+	mButtons.push_back(btn2);
 }
 
 // デストラクタ
@@ -185,7 +203,7 @@ void CGameOverUI::ChangeState(EState state)
 	mElapsedTime = 0.0f;
 }
 
-// [START]クリック時のコールバック関数
+// [RETRY]クリック時のコールバック関数
 void CGameOverUI::OnClickStart()
 {
 	if (mIsEnd) return;

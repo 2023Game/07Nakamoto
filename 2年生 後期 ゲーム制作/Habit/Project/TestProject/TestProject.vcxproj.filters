@@ -241,9 +241,6 @@
     <ClCompile Include="src\Game\CImage.cpp">
       <Filter>ソース ファイル\BaseSystem\UI</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CMoveFloor.cpp">
-      <Filter>ソース ファイル\Game\Field\Object</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CRideabeObject.cpp">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClCompile>
@@ -469,6 +466,9 @@
     <ClCompile Include="src\Game\CPlayer3.cpp">
       <Filter>ソース ファイル\Game\Character</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CMoveFloor.cpp">
+      <Filter>ソース ファイル\Game\Field\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -617,9 +617,6 @@
     </ClInclude>
     <ClInclude Include="src\Game\CImage.h">
       <Filter>ソース ファイル\BaseSystem\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CMoveFloor.h">
-      <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CRideableObject.h">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
@@ -848,6 +845,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CPlayer3.h">
       <Filter>ソース ファイル\Game\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CMoveFloor.h">
+      <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

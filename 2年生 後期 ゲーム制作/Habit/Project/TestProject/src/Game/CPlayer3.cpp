@@ -30,7 +30,7 @@ CPlayer3::CPlayer3()
 	spInstatnce = this;
 
 	// モデルデータ取得
-	CModelX* model = CResourceManager::Get<CModelX>("Ghost");
+	CModelX* model = CResourceManager::Get<CModelX>("Player3");
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
