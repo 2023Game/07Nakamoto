@@ -18,7 +18,7 @@ CPlayer3* CPlayer3::spInstatnce = nullptr;
 // プレイヤーのアニメーションデータのテーブル
 const CPlayer3::AnimData CPlayer3::ANIM_DATA[] =
 {
-	{ "",											true,	  0.0f	},	// Tポーズ
+	{ "",											true,	  59.0f	},	// Tポーズ
 };
 
 // コンストラクタ
@@ -30,7 +30,7 @@ CPlayer3::CPlayer3()
 	spInstatnce = this;
 
 	// モデルデータ取得
-	CModelX* model = CResourceManager::Get<CModelX>("Player3");
+	CModelX* model = CResourceManager::Get<CModelX>("Ghost");
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);

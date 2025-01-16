@@ -113,6 +113,9 @@
     <Filter Include="ソース ファイル\Game\UI\GameClear">
       <UniqueIdentifier>{bca41d97-b14c-4a5f-bf5b-061617949d08}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Field\Object\item">
+      <UniqueIdentifier>{8f8ec00f-4d7c-44cf-8ddf-dffdfba97fd4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -468,6 +471,9 @@
     </ClCompile>
     <ClCompile Include="src\Game\CMoveFloor.cpp">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CChoco.cpp">
+      <Filter>ソース ファイル\Game\Field\Object\item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -848,6 +854,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CMoveFloor.h">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CChoco.h">
+      <Filter>ソース ファイル\Game\Field\Object\item</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -6,10 +6,11 @@ enum class ELayer
 {
 	eNone = -1,
 	eTest,
-	eField,
-	eWall,
-	ePlayer,
-	eEnemy,
+	eField,			// フィールド
+	eWall,			// 壁
+	ePlayer,		// プレイヤー
+	eEnemy,			// 敵
+	eItem,			// アイテム
 	eInteractObj,	// 調べるオブジェクト
 	eInteractSearch,// 調べるオブジェクト探知用
 

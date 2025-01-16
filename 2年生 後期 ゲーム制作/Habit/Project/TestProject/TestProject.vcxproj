@@ -75,6 +75,7 @@
     <ClCompile Include="src\Game\CBullet.cpp" />
     <ClCompile Include="src\Game\CCactus.cpp" />
     <ClCompile Include="src\Game\CCactusNeedle.cpp" />
+    <ClCompile Include="src\Game\CChoco.cpp" />
     <ClCompile Include="src\Game\CClearArea.cpp" />
     <ClCompile Include="src\Game\CDebugFieldOfView.cpp" />
     <ClCompile Include="src\Game\CEnemy.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="src\Game\CBullet.h" />
     <ClInclude Include="src\Game\CCactus.h" />
     <ClInclude Include="src\Game\CCactusNeedle.h" />
+    <ClInclude Include="src\Game\CChoco.h" />
     <ClInclude Include="src\Game\CClearArea.h" />
     <ClInclude Include="src\Game\CDebugFieldOfView.h" />
     <ClInclude Include="src\Game\CEnemy.h" />

@@ -19,6 +19,7 @@
 
 #include "CTouch.h"
 #include "CPlayer3.h"
+#include "CChoco.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -71,6 +72,7 @@ void CGameScene::Load()
 	// 表示できるか試し中
 	CResourceManager::Load<CModelX>("Player3", "Character\\Player3\\Acquire.x");
 	CResourceManager::Load<CModelX>("Ghost", "Character\\Enemy\\ghost\\ghost.x");
+	CResourceManager::Load<CModel>("Choco", "Item\\chocolate.obj");
 
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
@@ -121,10 +123,13 @@ void CGameScene::Load()
 	enemy2->Scale(1.0f, 1.0f, 1.0f);
 	enemy2->Position(CVector(200.0f, 0.0, 200.0f));
 
-
 	// 松明(仮)の描画の確認	削除予定
 	CTouch* touch = new CTouch(CVector(0.0f, 0.0f, 0.0f), 
 		CVector(0.0f, 0.0f, 0.0f), CVector(0.3f, 0.3f, 0.3f));
+
+	// チョコを生成
+	CChoco* choco = new CChoco();
+	choco->Position(20.0f, 0.0f, 0.0f);
 
 	// スイッチを生成
 	CPushSwitch* push_switch = new CPushSwitch(CVector(-30.0f, 0.0f, 0.0f),

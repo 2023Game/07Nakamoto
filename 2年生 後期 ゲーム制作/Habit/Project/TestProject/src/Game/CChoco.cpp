@@ -1,9 +1,10 @@
-#include "CTrap.h"
+#include "CChoco.h"
 #include "CColliderMesh.h"
 #include "CCharaBase.h"
 
-CTrap::CTrap()
-	: CObjectBase(ETag::eEnemy, ETaskPriority::eWeapon, 0, ETaskPauseType::eGame)
+// コンストラクタ
+CChoco::CChoco()
+	:CObjectBase(ETag::eItem, ETaskPriority::eItem, 0, ETaskPauseType::eGame)
 	, mpModel(nullptr)
 	, mpCollider(nullptr)
 {
@@ -13,9 +14,10 @@ CTrap::CTrap()
 	// コライダーを作成
 	mpCollider = new CColliderMesh
 	(
-		this, ELayer::eAttackCol,
-		mpModel, true
+		this, ELayer::eItem,
+		mpModel,true
 	);
+	
 	// プレイヤーと衝突するように設定
 	mpCollider->SetCollisionTags({ ETag::ePlayer });
 	mpCollider->SetCollisionLayers({ ELayer::ePlayer });
@@ -23,34 +25,30 @@ CTrap::CTrap()
 }
 
 // デストラクタ
-CTrap::~CTrap()
+CChoco::~CChoco()
 {
 	// コライダーを削除
 	SAFE_DELETE(mpCollider);
 }
 
-void CTrap::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
+// 衝突処理
+void CChoco::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	// プレイヤーに衝突した
 	if (other->Layer() == ELayer::ePlayer)
 	{
-		// プレイヤーにダメージを与える
-		CCharaBase* chara = dynamic_cast<CCharaBase*>(other->Owner());
-		if (chara != nullptr)
-		{
-			chara->TakeDamage(10, this);
-			// プレイヤーに当たったら、自身を削除
-			Kill();
-		}
+		// プレイヤーに当たったら、自身を削除
+		Kill();
 	}
 }
 
-void CTrap::Update()
+// 更新処理
+void CChoco::Update()
 {
 }
 
-// 描画
-void CTrap::Render()
+// 描画処理
+void CChoco::Render()
 {
 	mpModel->Render(Matrix());
 }

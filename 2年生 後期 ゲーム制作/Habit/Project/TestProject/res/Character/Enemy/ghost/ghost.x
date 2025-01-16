@@ -6966,7 +6966,7 @@ Frame Root {
                62.745098;
                1.000000; 1.000000; 1.000000;;
                0.000000; 0.000000; 0.000000;;
-              TextureFilename {"Kid Ghost_blinn1_BaseColor.png";}
+              TextureFilename {"KidGhost_blinn1_BaseColor.png";}
             }
           } // End of Kid_ghost_v1_Ghost_Kid_S1 material list
           XSkinMeshHeader {
