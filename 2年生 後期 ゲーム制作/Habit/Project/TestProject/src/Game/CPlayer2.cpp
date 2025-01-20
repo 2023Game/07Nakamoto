@@ -102,7 +102,8 @@ CPlayer2::CPlayer2()
 		  ELayer::eWall,
 		  ELayer::eEnemy,
 		  ELayer::eInteractObj,
-		  ELayer::eAttackCol}
+		  ELayer::eAttackCol,
+		  ELayer::eItem }
 	);
 
 	// 視野範囲のデバッグ表示クラスを作成

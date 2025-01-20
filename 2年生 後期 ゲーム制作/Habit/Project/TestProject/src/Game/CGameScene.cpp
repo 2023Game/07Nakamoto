@@ -129,7 +129,7 @@ void CGameScene::Load()
 
 	// チョコを生成
 	CChoco* choco = new CChoco();
-	choco->Position(20.0f, 0.0f, 0.0f);
+	choco->Position(0.0f, 10.0f, 20.0f);
 
 	// スイッチを生成
 	CPushSwitch* push_switch = new CPushSwitch(CVector(-30.0f, 0.0f, 0.0f),
@@ -194,7 +194,6 @@ void CGameScene::Load()
 
 	// ゲームメニューを作成
 	mpGameMenu = new CGameMenu();
-
 }
 
 //シーンの更新処理

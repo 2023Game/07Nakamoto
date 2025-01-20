@@ -20,7 +20,7 @@
 // コンストラクタ
 CGameScene3::CGameScene3()
 	: CSceneBase(EScene::eGame3)
-	, mpGameMenu(nullptr)
+	, mpInventory(nullptr)
 {
 }
 
@@ -232,7 +232,7 @@ void CGameScene3::Load()
 	mainCamera->SetFollowTargetTf(pico);
 
 	// ゲームメニューを作成
-	mpGameMenu = new CInventory();
+	mpInventory = new CInventory();
 }
 
 // シーン更新処理
@@ -244,11 +244,11 @@ void CGameScene3::Update()
 	}
 
 	// ゲームメニューを開いてなければ、[Ｍ]キーでメニューを開く
-	if (!mpGameMenu->IsOpened())
+	if (!mpInventory->IsOpened())
 	{
 		if (CInput::PushKey('M'))
 		{
-			mpGameMenu->Open();
+			mpInventory->Open();
 		}
 	}
 }

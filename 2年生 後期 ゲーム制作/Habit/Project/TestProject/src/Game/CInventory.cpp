@@ -2,8 +2,15 @@
 #include "CInput.h"
 #include "CTaskManager.h"
 #include "CBGMManager.h"
+#include "CPlayer2.h"
 
 #define INVENTORY_ALPHA 0.75f	// アルファ値
+#define MENU_ALPHA 0.75f
+
+#define INVENTORY_WIDTH 918.5f	// インベントリのX座標
+#define INVENTORY_HEIGHT 360.0f	// インベントリのY座標
+#define ITEM_WIDTH 755.0f		// アイテムを格納するX座標
+#define ITEM_HEIGHT 295.0f		// アイテムを格納するY座標
 
 // コンストラクタ
 CInventory::CInventory()
@@ -11,6 +18,7 @@ CInventory::CInventory()
 	, mSelectIndex(0)
 	, mIsOpened(false)
 {
+	// インベントリの背景
 	mpBackground = new CImage
 	(
 		"UI\\menu_back.png",
@@ -21,31 +29,61 @@ CInventory::CInventory()
 	mpBackground->SetPos(CVector2(WINDOW_WIDTH, WINDOW_HEIGHT) * 0.5f);
 	mpBackground->SetColor(1.0f, 1.0f, 1.0f, INVENTORY_ALPHA);
 
-	int menuItemCount = 3;
-	float spaceY = (float)WINDOW_HEIGHT / (menuItemCount + 1);
-	for (int i = 0; i < menuItemCount; i++)
-	{
-		CImage* item = new CImage
-		(
-			"UI/menu_item.png",
-			ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
-			false, false
-		);
-		item->SetCenter(item->GetSize() * 0.5f);
-		float posX = (1280.0f - 1024.0f + item->GetSize().X()) * 0.5f + 100.0f;
-		item->SetPos(posX, spaceY * (i + 1));
-		item->SetColor(1.0f, 1.0f, 1.0f, INVENTORY_ALPHA);
-		mMenuItems.push_back(item);
-	}
-
-	mpSelectFrame = new CImage
+	// インベントリの枠
+	mpInventoryFrame = new CImage
 	(
 		"UI\\inventory2.png",
 		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
 		false, false
 	);
+	mpInventoryFrame->SetCenter(mpInventoryFrame->GetSize() * 0.5f);
+	mpInventoryFrame->SetPos(CVector2(INVENTORY_WIDTH, INVENTORY_HEIGHT));
+
+	// 閉じるボタン
+	mpBackMenu = new CImage
+	(
+		"UI\\menu_item.png" ,
+		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
+		false, false
+	);
+	mpBackMenu->SetCenter(mpBackMenu->GetSize() * 0.5f);
+	mpBackMenu->SetPos(CVector2(WINDOW_WIDTH * 0.7f, WINDOW_HEIGHT * 0.8f));
+	mpBackMenu->SetColor(1.0f, 1.0f, 1.0f, MENU_ALPHA);
+
+	// 選択されているボタンを強調する枠
+	mpSelectFrame = new CImage
+	(
+		"UI/menu_item_select.png",
+		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
+		false, false
+	);
 	mpSelectFrame->SetCenter(mpSelectFrame->GetSize() * 0.5f);
-	mpSelectFrame->SetColor(1.0f, 0.5f, 0.0f, INVENTORY_ALPHA);
+	mpSelectFrame->SetColor(1.0f, 0.5f, 0.0f, MENU_ALPHA);
+
+	// チョコ
+	int ItemCount = 3;
+	for (int i = 0; i < ItemCount; i++)
+	{
+		CImage* choco = new CImage
+		(
+			"Item\\choco.png",
+			ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
+			false, false
+		);
+
+		choco->SetCenter(choco->GetSize() * 0.5f);
+
+		int w = i % 6;
+		int h = i / 6;
+		float x = ITEM_WIDTH + 5 * (w + 1) + 30 * w;
+		float y = ITEM_HEIGHT + 5 * (h + 1) + 30 * h;
+
+		choco->SetPos(x, y * (i + 1));
+		mItemList.push_back(choco);
+
+		//mpChoco->SetPos(ITEM_WIDTH, ITEM_HEIGHT);
+	}
+	
 
 	SetEnable(false);
 	SetShow(false);
@@ -54,6 +92,12 @@ CInventory::CInventory()
 // デストラクタ
 CInventory::~CInventory()
 {
+	SAFE_DELETE(mpBackground);
+	SAFE_DELETE(mpInventoryFrame);
+	SAFE_DELETE(mpBackMenu);
+	SAFE_DELETE(mpSelectFrame);
+
+
 }
 
 // 開く
@@ -95,44 +139,28 @@ void CInventory::Decide(int select)
 	}
 }
 
+void CInventory::AddItem()
+{
+}
+
 // 更新
 void CInventory::Update()
 {
-	int itemCount = mMenuItems.size();
-	if (CInput::PushKey(VK_UP))
-	{
-		mSelectIndex = (mSelectIndex + itemCount - 1) % itemCount;
-	}
-	else if (CInput::PushKey(VK_DOWN))
-	{
-		mSelectIndex = (mSelectIndex + 1) % itemCount;
-	}
-	else if (CInput::PushKey(VK_RETURN))
-	{
-		Decide(mSelectIndex);
-	}
-
 	mpBackground->Update();
-	for (CImage* item : mMenuItems)
-	{
-		item->Update();
-	}
+	mpInventoryFrame->Update();
+	mpBackMenu->Update();
 	mpSelectFrame->Update();
+	mpChoco->Update();
 }
 
 // 描画
 void CInventory::Render()
 {
 	mpBackground->Render();
-	for (int i = 0; i < mMenuItems.size(); i++)
-	{
-		CImage* item = mMenuItems[i];
-		item->Render();
+	mpInventoryFrame->Render();
+	mpBackMenu->Render();
 
-		if (i == mSelectIndex)
-		{
-			mpSelectFrame->SetPos(item->GetPos());
-			mpSelectFrame->Render();
-		}
-	}
+	mpSelectFrame->SetPos(mpBackMenu->GetPos());
+	mpSelectFrame->Render();
+	mpChoco->Render();
 }

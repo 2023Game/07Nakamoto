@@ -18,5 +18,5 @@ public:
 	void Update();
 
 private:
-	CInventory* mpGameMenu;
+	CInventory* mpInventory;
 };

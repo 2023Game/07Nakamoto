@@ -52,6 +52,18 @@ CGameMenu::CGameMenu()
 
 CGameMenu::~CGameMenu()
 {
+	SAFE_DELETE(mpBackground);
+	SAFE_DELETE(mpSelectFrame);
+
+	int size = mMenuItems.size();
+	for (int i = 0; i < size; i++)
+	{
+		CImage* item = mMenuItems[i];
+		mMenuItems[i] = nullptr;
+		SAFE_DELETE(item);
+	}
+	mMenuItems.clear();
+
 }
 
 void CGameMenu::Open()
