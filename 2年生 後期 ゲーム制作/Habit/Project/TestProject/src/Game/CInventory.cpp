@@ -5,7 +5,6 @@
 #include "CPlayer2.h"
 
 #define INVENTORY_ALPHA 0.75f	// アルファ値
-#define MENU_ALPHA 0.75f
 
 #define INVENTORY_WIDTH 918.5f	// インベントリのX座標
 #define INVENTORY_HEIGHT 360.0f	// インベントリのY座標
@@ -52,7 +51,7 @@ CInventory::CInventory()
 	);
 	mpBackMenu->SetCenter(mpBackMenu->GetSize() * 0.5f);
 	mpBackMenu->SetPos(CVector2(WINDOW_WIDTH * 0.7f, WINDOW_HEIGHT * 0.8f));
-	mpBackMenu->SetColor(1.0f, 1.0f, 1.0f, MENU_ALPHA);
+	mpBackMenu->SetColor(1.0f, 1.0f, 1.0f, INVENTORY_ALPHA);
 
 	// 選択されているボタンを強調する枠
 	mpSelectFrame = new CImage
@@ -62,7 +61,7 @@ CInventory::CInventory()
 		false, false
 	);
 	mpSelectFrame->SetCenter(mpSelectFrame->GetSize() * 0.5f);
-	mpSelectFrame->SetColor(1.0f, 0.5f, 0.0f, MENU_ALPHA);
+	mpSelectFrame->SetColor(1.0f, 0.5f, 0.0f, INVENTORY_ALPHA);
 
 	// チョコ
 	int ItemCount = 8;
@@ -113,21 +112,32 @@ CInventory::~CInventory()
 // 開く
 void CInventory::Open()
 {
+	if (mIsOpened) return;
+
+	// マウスカーソルを表示
 	CInput::ShowCursor(true);
+
 	SetEnable(true);
 	SetShow(true);
 	mSelectIndex = 0;
 	CBGMManager::Instance()->Play(EBGMType::eMenu, false);
 	CTaskManager::Instance()->Pause(PAUSE_MENU_OPEN);
+	mIsOpened = true;
 }
 
 // 閉じる
 void CInventory::Close()
 {
+	if (!mIsOpened) return;
+
+	// マウスカーソルを非表示
+	CInput::ShowCursor(false);
+
 	SetEnable(false);
 	SetShow(false);
 	CBGMManager::Instance()->Play(EBGMType::eGame, false);
 	CTaskManager::Instance()->UnPause(PAUSE_MENU_OPEN);
+	mIsOpened = false;
 }
 
 // インベントリが開いているかどうか

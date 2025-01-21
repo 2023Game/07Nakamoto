@@ -218,5 +218,11 @@ void CGameScene::Update()
 			mpInventory->Open();
 		}
 	}
-
+	else
+	{
+		if (CInput::PushKey('M'))
+		{
+			mpInventory->Close();
+		}
+	}
 }
