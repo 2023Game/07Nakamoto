@@ -7,7 +7,8 @@
 #include "CGameCamera.h"
 #include "CGameCamera2.h"
 #include "CInput.h"
-#include "CGameMenu.h"
+//#include "CGameMenu.h"
+#include "CInventory.h"
 #include "CBGMManager.h"
 #include "CLineEffect.h"
 #include "CNavManager.h"
@@ -24,7 +25,7 @@
 //コンストラクタ
 CGameScene::CGameScene()
 	: CSceneBase(EScene::eGame)
-	, mpGameMenu(nullptr)
+	, mpInventory(nullptr)
 {
 }
 
@@ -69,10 +70,9 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>("Touch", "Object\\Touch.obj");
 	CResourceManager::Load<CModel>("Obj", "Object\\mm.obj");
 
-	// 表示できるか試し中
 	CResourceManager::Load<CModelX>("Player3", "Character\\Player3\\Acquire.x");
 	CResourceManager::Load<CModelX>("Ghost", "Character\\Enemy\\ghost\\ghost.x");
-	CResourceManager::Load<CModel>("Choco", "Item\\chocolate.obj");
+	CResourceManager::Load<CModel>("Choco", "Item\\choco\\chocolate.obj");
 
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
@@ -193,7 +193,7 @@ void CGameScene::Load()
 	mainCamera->SetFollowTargetTf(pico);
 
 	// ゲームメニューを作成
-	mpGameMenu = new CGameMenu();
+	mpInventory = new CInventory();
 }
 
 //シーンの更新処理
@@ -211,11 +211,11 @@ void CGameScene::Update()
 	}
 
 	// ゲームメニューを開いてなければ、[Ｍ]キーでメニューを開く
-	if (!mpGameMenu->IsOpened())
+	if (!mpInventory->IsOpened())
 	{
 		if (CInput::PushKey('M'))
 		{
-			mpGameMenu->Open();
+			mpInventory->Open();
 		}
 	}
 

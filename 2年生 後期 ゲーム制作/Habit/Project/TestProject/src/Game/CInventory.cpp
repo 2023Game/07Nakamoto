@@ -9,8 +9,12 @@
 
 #define INVENTORY_WIDTH 918.5f	// インベントリのX座標
 #define INVENTORY_HEIGHT 360.0f	// インベントリのY座標
-#define ITEM_WIDTH 755.0f		// アイテムを格納するX座標
-#define ITEM_HEIGHT 295.0f		// アイテムを格納するY座標
+#define INVENTORY_SIDE 6		// インベントリの横の格納数
+#define INVENTORY_FRAME 5		// インベントリの枠の幅
+
+#define ITEM_WIDTH 750.0f		// アイテムを格納するX座標
+#define ITEM_HEIGHT 290.0f		// アイテムを格納するY座標
+#define ITEM_INTERVAL 60		// アイテムの間隔
 
 // コンストラクタ
 CInventory::CInventory()
@@ -61,27 +65,26 @@ CInventory::CInventory()
 	mpSelectFrame->SetColor(1.0f, 0.5f, 0.0f, MENU_ALPHA);
 
 	// チョコ
-	int ItemCount = 3;
+	int ItemCount = 8;
 	for (int i = 0; i < ItemCount; i++)
 	{
 		CImage* choco = new CImage
 		(
-			"Item\\choco.png",
+			"Item\\choco\\choco.png",
 			ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
 			false, false
 		);
 
 		choco->SetCenter(choco->GetSize() * 0.5f);
 
-		int w = i % 6;
-		int h = i / 6;
-		float x = ITEM_WIDTH + 5 * (w + 1) + 30 * w;
-		float y = ITEM_HEIGHT + 5 * (h + 1) + 30 * h;
+		int w = i % INVENTORY_SIDE;
+		int h = i / INVENTORY_SIDE;
+		float x = ITEM_WIDTH + INVENTORY_FRAME * (w + 1) + ITEM_INTERVAL * w;
+		float y = ITEM_HEIGHT + INVENTORY_FRAME * (h + 1) + ITEM_INTERVAL * h;
 
-		choco->SetPos(x, y * (i + 1));
+		choco->SetPos(x, y);
 		mItemList.push_back(choco);
 
-		//mpChoco->SetPos(ITEM_WIDTH, ITEM_HEIGHT);
 	}
 	
 
@@ -97,12 +100,20 @@ CInventory::~CInventory()
 	SAFE_DELETE(mpBackMenu);
 	SAFE_DELETE(mpSelectFrame);
 
-
+	int size = mItemList.size();
+	for (int i = 0; i < size; i++)
+	{
+		CImage* item = mItemList[i];
+		mItemList[i] = nullptr;
+		SAFE_DELETE(item);
+	}
+	mItemList.clear();
 }
 
 // 開く
 void CInventory::Open()
 {
+	CInput::ShowCursor(true);
 	SetEnable(true);
 	SetShow(true);
 	mSelectIndex = 0;
@@ -150,7 +161,11 @@ void CInventory::Update()
 	mpInventoryFrame->Update();
 	mpBackMenu->Update();
 	mpSelectFrame->Update();
-	mpChoco->Update();
+
+	for (CImage* item : mItemList)
+	{
+		item->Update();
+	}
 }
 
 // 描画
@@ -162,5 +177,10 @@ void CInventory::Render()
 
 	mpSelectFrame->SetPos(mpBackMenu->GetPos());
 	mpSelectFrame->Render();
-	mpChoco->Render();
+
+	for (int i = 0; i < mItemList.size(); i++)
+	{
+		CImage* item = mItemList[i];
+		item->Render();
+	}
 }

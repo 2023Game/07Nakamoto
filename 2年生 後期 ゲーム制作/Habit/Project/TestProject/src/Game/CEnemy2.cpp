@@ -44,8 +44,7 @@ const CEnemy2::AnimData CEnemy2::ANIM_DATA[] =
 
 // コンストラクタ
 CEnemy2::CEnemy2(std::vector<CVector> patrolPoints)
-	: CXCharacter(ETag::eEnemy, ETaskPriority::eDefault)
-	, mState(EState::eIdle)
+	: mState(EState::eIdle)
 	, mStateStep(0)
 	, mElapsedTime(0.0f)
 	, mFovAngle(FOV_ANGLE)
@@ -271,19 +270,21 @@ void CEnemy2::Render()
 // 衝突処理
 void CEnemy2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
-	// まだ攻撃が当たっていなければ
-	if (mAttackHit != true)
+	// ベースの衝突処理を呼び出す
+	CEnemy::Collision(self, other, hit);
+
+	// 攻撃コライダーがヒットした
+	if (self == mpAttackCollider)
 	{
-		// 攻撃用コライダー
-		if (self == mpAttackCollider)
+		// ヒットしたのがキャラクターかつ、
+		// まだ攻撃がヒットしていないキャラクターであれば
+		CCharaBase* chara = dynamic_cast<CCharaBase*>(other->Owner());
+		if (chara != nullptr && !IsAttackHitObj(chara))
 		{
-			// プレイヤーとの当たり判定処理
-			if (other->Layer() == ELayer::ePlayer)
-			{
-				mAttackHit = true;
-				CPlayer2* player = CPlayer2::Instance();
-				player->TakeDamege(ATTACK_DAMAGE);
-			}
+			// ダメージを与える
+			chara->TakeDamage(ATTACK_DAMAGE, this);
+			// 攻撃ヒット済みリストに登録
+			AddAttackHitObj(chara);
 		}
 	}
 }
@@ -684,11 +685,16 @@ void CEnemy2::UpdateLost()
 // 攻撃時の更新処理
 void CEnemy2::UpdateAttack()
 {
+	
+
 	// ステップごとに処理を切り替える
 	switch (mStateStep)
 	{
 		// ステップ０：攻撃アニメーションを再生
 		case 0:
+			// ベースクラスの攻撃開始処理を呼び出し
+			CEnemy::AttackStart();
+
 			ChangeAnimation(EAnimType::eAttack, true);
 			mStateStep++;
 			break;

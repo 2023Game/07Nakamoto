@@ -40,7 +40,10 @@ public:
 	void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
 
 	// ダメージ処理
-	void TakeDamege(int damage);
+	void TakeDamage(int damage, CObjectBase* causer) override;
+
+	// 足が遅くなる値
+	void TakeSlow(float slow, int time);
 
 	//描画処理
 	void Render() override;
@@ -123,6 +126,9 @@ private:
 	int mMaxSt;	// スタミナの最大値
 	int mSt;	// スタミナ
 	//int mSan;	// 正気度
+
+	float mSlowSpeed;	// 足が遅くなる値
+	int mSlowTime;	// 足が遅くなる時間
 
 	std::string ToString(EState state);
 

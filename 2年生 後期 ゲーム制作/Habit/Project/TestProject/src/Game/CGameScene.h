@@ -2,7 +2,7 @@
 #include "CSceneBase.h"
 class CGameMenu;
 class CSound;
-
+class CInventory;
 class CHpUI;
 
 //タイトルシーン
@@ -19,5 +19,5 @@ public:
 	void Update();
 
 private:
-	CGameMenu* mpGameMenu;
+	CInventory* mpInventory;
 };

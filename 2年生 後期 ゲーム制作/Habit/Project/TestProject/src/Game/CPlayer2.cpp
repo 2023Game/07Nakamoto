@@ -38,7 +38,7 @@ const CPlayer2::AnimData CPlayer2::ANIM_DATA[] =
 #define PLAYER_HEIGHT_CCOL2	 2.0f		// カプセルコライダーの下の高さ
 #define PLAYER_WIDTH_CCOL	 2.5f		// カプセルコライダーの幅
 
-#define MOVE_SPEED		  0.375f * 2.0f	// 歩く速度
+#define MOVE_SPEED		  0.75			// 歩く速度
 #define RUN_SPEED		  1.0f			// 走る速度
 
 #define JUNP_MOVE_DIST	 20.0f			// ジャンプ時の移動距離
@@ -64,6 +64,8 @@ CPlayer2::CPlayer2()
 	, mpSearchCol(nullptr)
 	, mFovAngle(FOV_ANGLE)
 	, mpDebugFov(nullptr)
+	, mSlowSpeed(1.0f)
+	, mSlowTime(0)
 {
 	mMaxHp = 100;
 	mHp = mMaxHp;
@@ -215,11 +217,23 @@ void CPlayer2::Update()
 	{
 		UpdateMove();
 	}
+	// 重力
 	mMoveSpeedY -= GRAVITY;
 	CVector moveSpeed = mMoveSpeed + CVector(0.0f, mMoveSpeedY, 0.0f);
 
 	// 移動
-	Position(Position() + moveSpeed);
+	Position(Position() + moveSpeed * mSlowSpeed);
+
+	// 足が遅くなっている場合
+	if (mSlowSpeed != 1.0f)
+	{
+		if (mSlowTime == 0)
+		{
+			mSlowSpeed = 1.0f;
+		}
+
+		mSlowTime--;
+	}
 
 	// プレイヤーを移動方向へ向ける
 	CVector current = VectorZ();
@@ -552,10 +566,23 @@ void CPlayer2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 	}
 }
 
-// ダメージ処理
-void CPlayer2::TakeDamege(int damage)
+void CPlayer2::TakeDamage(int damage, CObjectBase* causer)
 {
-	mHp -= damage;
+	// ベースクラスのダメージ処理を呼び出す
+	CXCharacter::TakeDamage(damage, causer);
+
+	// 死亡していなければ、
+	if (!IsDeath())
+	{
+	}
+}
+
+
+// 足が遅くなる処理
+void CPlayer2::TakeSlow(float slow, int time)
+{
+	mSlowSpeed = slow;
+	mSlowTime = time;
 }
 
 // 描画処理

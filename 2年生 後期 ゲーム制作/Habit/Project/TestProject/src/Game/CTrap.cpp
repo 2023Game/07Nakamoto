@@ -8,7 +8,7 @@ CTrap::CTrap()
 	, mpCollider(nullptr)
 {
 	// モデルデータの取得
-	mpModel = CResourceManager::Get<CModel>("Choco");
+	mpModel = CResourceManager::Get<CModel>("Spider_Web");
 
 	// コライダーを作成
 	mpCollider = new CColliderMesh

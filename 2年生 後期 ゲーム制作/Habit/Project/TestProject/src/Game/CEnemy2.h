@@ -1,7 +1,5 @@
 #pragma once
-#include "CXCharacter.h"
-#include "CCollider.h"
-#include "CModel.h"
+#include "CEnemy.h"
 
 // 視野範囲のデバッグ表示クラスの前宣言
 class CDebugFieldOfView;
@@ -11,7 +9,7 @@ class CNavNode;
 エネミー2クラス
 キャラクタクラスを継承
 */
-class CEnemy2 : public CXCharacter
+class CEnemy2 : public CEnemy
 {
 public:
 	// コンストラクタ
