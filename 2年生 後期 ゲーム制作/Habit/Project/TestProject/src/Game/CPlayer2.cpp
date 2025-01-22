@@ -560,8 +560,12 @@ void CPlayer2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		CInteractObject* obj = dynamic_cast<CInteractObject*>(other->Owner());
 		if (obj != nullptr)
 		{
-			// 衝突した調べるオブジェクトをリストに追加
-			mNearInteractObjs.push_back(obj);
+			// 調べるオブジェクトの削除フラグが立っていなかったら
+			if (!obj->IsKill())
+			{
+				// 衝突した調べるオブジェクトをリストに追加
+				mNearInteractObjs.push_back(obj);
+			}
 		}
 	}
 }

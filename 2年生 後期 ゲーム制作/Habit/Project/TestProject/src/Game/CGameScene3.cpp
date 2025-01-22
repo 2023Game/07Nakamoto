@@ -16,6 +16,7 @@
 #include "CPushSwitchManager.h"
 #include "CSwitchDoor.h"
 #include "CClearArea.h"
+#include "ItemData.h"
 
 // コンストラクタ
 CGameScene3::CGameScene3()
@@ -27,6 +28,13 @@ CGameScene3::CGameScene3()
 // デストラクタ
 CGameScene3::~CGameScene3()
 {
+	// 次に読み込まれるシーンがゲームシーンでなければ、
+	// アイテムのリソースを全て破棄する
+	CSceneManager* sceneMgr = CSceneManager::Instance();
+	if (sceneMgr != nullptr && !sceneMgr->IsNextGameScene())
+	{
+		Item::DeleteItemResources();
+	}
 }
 
 // シーン読み込み
@@ -47,6 +55,9 @@ void CGameScene3::Load()
 	CResourceManager::Load<CModel>("Goal", "Object\\clear_area.obj");
 	CResourceManager::Load<CModelX>("Player2", "Character\\Player2\\pico.x");
 	CResourceManager::Load<CModelX>("Enemy2", "Character\\Enemy\\warrok\\warrok.x");
+
+	// アイテムのリソースを全読み込む
+	Item::LoadItemResources();
 
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);

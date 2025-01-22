@@ -147,6 +147,15 @@ EScene CSceneManager::GetCurrentScene() const
 	return mpScene->GetSceneType();
 }
 
+// 次に読み込まれるシーンがゲームシーンかどうか
+bool CSceneManager::IsNextGameScene() const
+{
+	return mNextScene == EScene::eGame
+		|| mNextScene == EScene::eGame2
+		|| mNextScene == EScene::eGame3
+		|| mNextScene == EScene::eGameOver;
+}
+
 // シーン読み込み状態での更新処理
 void CSceneManager::UpdateLoading()
 {

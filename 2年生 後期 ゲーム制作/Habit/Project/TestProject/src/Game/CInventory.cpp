@@ -8,19 +8,36 @@
 
 #define INVENTORY_WIDTH 918.5f	// インベントリのX座標
 #define INVENTORY_HEIGHT 360.0f	// インベントリのY座標
-#define INVENTORY_SIDE 6		// インベントリの横の格納数
-#define INVENTORY_FRAME 5		// インベントリの枠の幅
 
 #define ITEM_WIDTH 750.0f		// アイテムを格納するX座標
 #define ITEM_HEIGHT 290.0f		// アイテムを格納するY座標
 #define ITEM_INTERVAL 60		// アイテムの間隔
 
+#define SLOT_FRAME 5		// アイテムスロットの枠の幅
+#define SLOT_COLUMN 6		// アイテムスロットの列数
+#define SLOT_ROW 3			// アイテムスロットの行数
+// アイテムスロット数
+#define SLOT_COUNT (SLOT_COLUMN * SLOT_ROW)
+
+CInventory* CInventory::spInstance = nullptr;
+
+// インスタンスを取得
+CInventory* CInventory::instance()
+{
+	return nullptr;
+}
+
 // コンストラクタ
 CInventory::CInventory()
 	: CTask(ETaskPriority::eUI, 0, ETaskPauseType::eMenu)
+	, mItemSlots(SLOT_COUNT)
 	, mSelectIndex(0)
 	, mIsOpened(false)
 {
+	spInstance = this;
+
+	int slotCount = // 2:17:23から
+
 	// インベントリの背景
 	mpBackground = new CImage
 	(
@@ -63,7 +80,7 @@ CInventory::CInventory()
 	mpSelectFrame->SetCenter(mpSelectFrame->GetSize() * 0.5f);
 	mpSelectFrame->SetColor(1.0f, 0.5f, 0.0f, INVENTORY_ALPHA);
 
-	// チョコ
+	// チョコ インベントリに入る処理
 	int ItemCount = 8;
 	for (int i = 0; i < ItemCount; i++)
 	{
@@ -76,13 +93,13 @@ CInventory::CInventory()
 
 		choco->SetCenter(choco->GetSize() * 0.5f);
 
-		int w = i % INVENTORY_SIDE;
-		int h = i / INVENTORY_SIDE;
-		float x = ITEM_WIDTH + INVENTORY_FRAME * (w + 1) + ITEM_INTERVAL * w;
-		float y = ITEM_HEIGHT + INVENTORY_FRAME * (h + 1) + ITEM_INTERVAL * h;
+		int w = i % SLOT_COLUMN;
+		int h = i / SLOT_COLUMN;
+		float x = ITEM_WIDTH + SLOT_FRAME * (w + 1) + ITEM_INTERVAL * w;
+		float y = ITEM_HEIGHT + SLOT_FRAME * (h + 1) + ITEM_INTERVAL * h;
 
 		choco->SetPos(x, y);
-		mItemList.push_back(choco);
+		mItemSlots.push_back(choco);
 
 	}
 	
@@ -94,6 +111,11 @@ CInventory::CInventory()
 // デストラクタ
 CInventory::~CInventory()
 {
+	if (spInstance == this)
+	{
+		spInstance = nullptr;
+	}
+
 	SAFE_DELETE(mpBackground);
 	SAFE_DELETE(mpInventoryFrame);
 	SAFE_DELETE(mpBackMenu);
@@ -160,8 +182,9 @@ void CInventory::Decide(int select)
 	}
 }
 
-void CInventory::AddItem()
+void CInventory::AddItem(ItemType type, int count)
 {
+
 }
 
 // 更新

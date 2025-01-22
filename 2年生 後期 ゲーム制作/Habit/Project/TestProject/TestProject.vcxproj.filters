@@ -113,8 +113,11 @@
     <Filter Include="ソース ファイル\Game\UI\GameClear">
       <UniqueIdentifier>{bca41d97-b14c-4a5f-bf5b-061617949d08}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Game\Field\Object\item">
+    <Filter Include="ソース ファイル\Game\item">
       <UniqueIdentifier>{8f8ec00f-4d7c-44cf-8ddf-dffdfba97fd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\item\Object">
+      <UniqueIdentifier>{0784c235-4ad5-4db8-8cb8-f6785ab8002b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -472,8 +475,14 @@
     <ClCompile Include="src\Game\CMoveFloor.cpp">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\ItemData.cpp">
+      <Filter>ソース ファイル\Game\item\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CItemObj.cpp">
+      <Filter>ソース ファイル\Game\item\Object</Filter>
+    </ClCompile>
     <ClCompile Include="src\Game\CChoco.cpp">
-      <Filter>ソース ファイル\Game\Field\Object\item</Filter>
+      <Filter>ソース ファイル\Game\item\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -855,8 +864,14 @@
     <ClInclude Include="src\Game\CMoveFloor.h">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClInclude>
+    <ClInclude Include="src\Game\ItemData.h">
+      <Filter>ソース ファイル\Game\item\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CItemObj.h">
+      <Filter>ソース ファイル\Game\item\Object</Filter>
+    </ClInclude>
     <ClInclude Include="src\Game\CChoco.h">
-      <Filter>ソース ファイル\Game\Field\Object\item</Filter>
+      <Filter>ソース ファイル\Game\item\Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

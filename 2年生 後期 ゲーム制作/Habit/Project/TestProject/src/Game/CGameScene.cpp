@@ -20,6 +20,8 @@
 
 #include "CTouch.h"
 #include "CPlayer3.h"
+
+#include "ItemData.h"
 #include "CChoco.h"
 
 //コンストラクタ
@@ -32,6 +34,13 @@ CGameScene::CGameScene()
 //デストラクタ
 CGameScene::~CGameScene()
 {
+	// 次に読み込まれるシーンがゲームシーンでなければ、
+	// アイテムのリソースを全て破棄する
+	CSceneManager* sceneMgr = CSceneManager::Instance();
+	if (sceneMgr != nullptr && !sceneMgr->IsNextGameScene())
+	{
+		Item::DeleteItemResources();
+	}
 }
 
 //シーン読み込み
@@ -72,7 +81,9 @@ void CGameScene::Load()
 
 	CResourceManager::Load<CModelX>("Player3", "Character\\Player3\\Acquire.x");
 	CResourceManager::Load<CModelX>("Ghost", "Character\\Enemy\\ghost\\ghost.x");
-	CResourceManager::Load<CModel>("Choco", "Item\\choco\\chocolate.obj");
+
+	// アイテムのリソースを全読み込む
+	Item::LoadItemResources();
 
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);

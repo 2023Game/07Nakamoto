@@ -3,6 +3,7 @@
 #include "CGameScene.h"
 #include "CCamera.h"
 #include "CGameOverUI.h"
+#include "ItemData.h"
 
 //コンストラクタ
 CGameOverScene::CGameOverScene()
@@ -13,6 +14,13 @@ CGameOverScene::CGameOverScene()
 //デストラクタ
 CGameOverScene::~CGameOverScene()
 {
+	// 次に読み込まれるシーンがゲームシーンでなければ、
+	// アイテムのリソースを全て破棄する
+	CSceneManager* sceneMgr = CSceneManager::Instance();
+	if (sceneMgr != nullptr && !sceneMgr->IsNextGameScene())
+	{
+		Item::DeleteItemResources();
+	}
 }
 
 //シーン読み込み

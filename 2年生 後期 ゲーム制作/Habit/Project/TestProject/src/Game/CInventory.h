@@ -2,12 +2,14 @@
 #include "CTask.h"
 #include "CImage.h"
 #include <vector>
-
-class CPlayer2;
+#include "ItemData.h"
 
 class CInventory : public CTask
 {
 public:
+	// インスタンスを取得
+	static CInventory* instance();
+
 	// コンストラクタ
 	CInventory();
 	// デストラクタ
@@ -23,7 +25,7 @@ public:
 	// 決める
 	void Decide(int select);
 	// アイテムを追加する
-	void AddItem();
+	void AddItem(ItemType type, int count);
 
 	// 更新
 	void Update() override;
@@ -31,13 +33,28 @@ public:
 	void Render() override;
 
 private:
+	static CInventory* spInstance;
+
 	CImage* mpBackground;
 	CImage* mpInventoryFrame;
 	CImage* mpBackMenu;
 	CImage* mpSelectFrame;
-	CImage* mpChoco;
 
-	std::vector<CImage*> mItemList;
+	// アイテムスロットのデータ
+	struct SlotData
+	{
+		// そのスロットに入っているアイテムのデータ
+		const ItemData* data;
+		int count;		// 入っているアイテムの個数
+		CImage* icon;	// アイコンのイメージ
+		SlotData()
+			: data(nullptr)
+			,count(0)
+			, icon(nullptr)
+		{}
+	};
+	// アイテムスロットのリスト
+	std::vector<SlotData*> mItemSlots;
 
 	int mSelectIndex;
 	bool mIsOpened;

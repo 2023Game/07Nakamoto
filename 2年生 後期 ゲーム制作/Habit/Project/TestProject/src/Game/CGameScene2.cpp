@@ -11,6 +11,7 @@
 #include "CBGMManager.h"
 #include "CLineEffect.h"
 #include "CNavManager.h"
+#include "ItemData.h"
 
 //コンストラクタ
 CGameScene2::CGameScene2()
@@ -22,6 +23,13 @@ CGameScene2::CGameScene2()
 //デストラクタ
 CGameScene2::~CGameScene2()
 {
+	// 次に読み込まれるシーンがゲームシーンでなければ、
+	// アイテムのリソースを全て破棄する
+	CSceneManager* sceneMgr = CSceneManager::Instance();
+	if (sceneMgr != nullptr && !sceneMgr->IsNextGameScene())
+	{
+		Item::DeleteItemResources();
+	}
 }
 
 //シーン読み込み
@@ -44,6 +52,9 @@ void CGameScene2::Load()
 	CResourceManager::Load<CModelX>("Enemy2", "Character\\Enemy\\warrok\\warrok.x");
 
 	CResourceManager::Load<CModel>("Spider_Web", "Character\\Enemy\\trap\\spider_web.obj");
+
+	// アイテムのリソースを全読み込む
+	Item::LoadItemResources();
 
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);

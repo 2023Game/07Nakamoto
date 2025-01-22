@@ -40,6 +40,9 @@ public:
 	/// <returns>シーンの種類（eNoneの場合はシーンが読み込まれていない）</returns>
 	EScene GetCurrentScene() const;
 
+	// 次に読み込まれるシーンがゲームシーンかどうか
+	bool IsNextGameScene() const;
+
 	// 更新
 	void Update();
 
