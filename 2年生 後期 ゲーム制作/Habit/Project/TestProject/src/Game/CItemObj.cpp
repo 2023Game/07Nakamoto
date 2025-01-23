@@ -1,15 +1,17 @@
 #include "CItemObj.h"
 #include "CColliderSphere.h"
+#include "CInventory.h"
 
 // コンストラクタ
 CItemObj::CItemObj(ItemType type)
 	: CInteractObject(ETaskPriority::eItem,0,ETaskPauseType::eGame)
+	, mItemTyope(type)
 	, mpItemData(nullptr)
 	, mpModel(nullptr)
 	, mpCollider(nullptr)
 {
 	// 指定されたアイテムの種類からアイテムデータを取得
-	bool success = Item::GetItemData(type, &mpItemData);
+	bool success = Item::GetItemData(mItemTyope, &mpItemData);
 	// アイテムデータが存在しなかったら、自身を削除
 	if (!success)
 	{
@@ -61,7 +63,8 @@ bool CItemObj::CanInteract() const
 // 調べる
 void CItemObj::Interact()
 {
-	// TODO : インベントリに追加
+	//インベントリに追加
+	CInventory::Instance()->AddItem(mItemTyope, 1);
 
 	Kill();
 

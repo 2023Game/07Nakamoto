@@ -12,6 +12,7 @@
 #include "CLineEffect.h"
 #include "CNavManager.h"
 #include "ItemData.h"
+#include "CInventory.h"
 
 //コンストラクタ
 CGameScene2::CGameScene2()
@@ -105,7 +106,7 @@ void CGameScene2::Load()
 	mainCamera->SetFollowTargetTf(pico);
 
 	// ゲームメニューを作成
-	mpGameMenu = new CGameMenu();
+	new CGameMenu();
 
 }
 
@@ -118,11 +119,12 @@ void CGameScene2::Update()
 	}
 
 	// ゲームメニューを開いてなければ、[Ｍ]キーでメニューを開く
-	if (!mpGameMenu->IsOpened())
+	CInventory* inv = CInventory::Instance();
+	if (!inv->IsOpened())
 	{
 		if (CInput::PushKey('M'))
 		{
-			mpGameMenu->Open();
+			inv->Open();
 		}
 	}
 

@@ -13,6 +13,8 @@ CGameCamera2::CGameCamera2(const CVector& eye, const CVector& center, bool isMai
 	, mFollowDefaultEyeVec(CVector::forward)
 	, mRotateAngle(CVector::zero)
 {
+	// ゲームポーズ中は停止するように設定
+	SetPauseType(ETaskPauseType::eGame);
 }
 
 // デストラクタ

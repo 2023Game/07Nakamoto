@@ -18,5 +18,4 @@ public:
 	void Update();
 
 private:
-	CInventory* mpInventory;
 };

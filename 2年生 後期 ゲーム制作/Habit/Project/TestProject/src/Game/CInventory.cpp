@@ -22,9 +22,9 @@
 CInventory* CInventory::spInstance = nullptr;
 
 // インスタンスを取得
-CInventory* CInventory::instance()
+CInventory* CInventory::Instance()
 {
-	return nullptr;
+	return spInstance;
 }
 
 // コンストラクタ
@@ -36,7 +36,17 @@ CInventory::CInventory()
 {
 	spInstance = this;
 
-	int slotCount = // 2:17:23から
+	// 各アイテムスロットのアイテムアイコン表示用のイメージを作成
+	int slotCount = SLOT_COUNT;
+	for (int i = 0; i < slotCount; i++)
+	{
+		SlotData& slot = mItemSlots[i];
+		slot.icon = new CImage
+		(
+			"", ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
+			false, false
+		);
+	}
 
 	// インベントリの背景
 	mpBackground = new CImage
@@ -81,27 +91,27 @@ CInventory::CInventory()
 	mpSelectFrame->SetColor(1.0f, 0.5f, 0.0f, INVENTORY_ALPHA);
 
 	// チョコ インベントリに入る処理
-	int ItemCount = 8;
-	for (int i = 0; i < ItemCount; i++)
-	{
-		CImage* choco = new CImage
-		(
-			"Item\\choco\\choco.png",
-			ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
-			false, false
-		);
+	//int ItemCount = 8;
+	//for (int i = 0; i < ItemCount; i++)
+	//{
+	//	CImage* choco = new CImage
+	//	(
+	//		"Item\\choco\\choco.png",
+	//		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
+	//		false, false
+	//	);
 
-		choco->SetCenter(choco->GetSize() * 0.5f);
+	//	choco->SetCenter(choco->GetSize() * 0.5f);
 
-		int w = i % SLOT_COLUMN;
-		int h = i / SLOT_COLUMN;
-		float x = ITEM_WIDTH + SLOT_FRAME * (w + 1) + ITEM_INTERVAL * w;
-		float y = ITEM_HEIGHT + SLOT_FRAME * (h + 1) + ITEM_INTERVAL * h;
+	//	int w = i % SLOT_COLUMN;
+	//	int h = i / SLOT_COLUMN;
+	//	float x = ITEM_WIDTH + SLOT_FRAME * (w + 1) + ITEM_INTERVAL * w;
+	//	float y = ITEM_HEIGHT + SLOT_FRAME * (h + 1) + ITEM_INTERVAL * h;
 
-		choco->SetPos(x, y);
-		mItemSlots.push_back(choco);
+	//	choco->SetPos(x, y);
+	//	mItemSlots.push_back(choco);
 
-	}
+	//}
 	
 
 	SetEnable(false);
@@ -121,14 +131,19 @@ CInventory::~CInventory()
 	SAFE_DELETE(mpBackMenu);
 	SAFE_DELETE(mpSelectFrame);
 
-	int size = mItemList.size();
-	for (int i = 0; i < size; i++)
+	for (SlotData& slot : mItemSlots)
 	{
-		CImage* item = mItemList[i];
-		mItemList[i] = nullptr;
-		SAFE_DELETE(item);
+		SAFE_DELETE(slot.icon);
 	}
-	mItemList.clear();
+
+	//int size = mItemList.size();
+	//for (int i = 0; i < size; i++)
+	//{
+	//	CImage* item = mItemList[i];
+	//	mItemList[i] = nullptr;
+	//	SAFE_DELETE(item);
+	//}
+	//mItemList.clear();
 }
 
 // 開く
@@ -144,6 +159,7 @@ void CInventory::Open()
 	mSelectIndex = 0;
 	CBGMManager::Instance()->Play(EBGMType::eMenu, false);
 	CTaskManager::Instance()->Pause(PAUSE_MENU_OPEN);
+
 	mIsOpened = true;
 }
 
@@ -159,6 +175,7 @@ void CInventory::Close()
 	SetShow(false);
 	CBGMManager::Instance()->Play(EBGMType::eGame, false);
 	CTaskManager::Instance()->UnPause(PAUSE_MENU_OPEN);
+
 	mIsOpened = false;
 }
 
@@ -182,6 +199,7 @@ void CInventory::Decide(int select)
 	}
 }
 
+// アイテムを追加する
 void CInventory::AddItem(ItemType type, int count)
 {
 
@@ -195,10 +213,17 @@ void CInventory::Update()
 	mpBackMenu->Update();
 	mpSelectFrame->Update();
 
-	for (CImage* item : mItemList)
+	// アイテムスロットのイメージの更新
+	for (SlotData& slot : mItemSlots)
 	{
-		item->Update();
+		slot.icon->Update();
 	}
+
+
+	//for (CImage* item : mItemList)
+	//{
+	//	item->Update();
+	//}
 }
 
 // 描画
@@ -211,9 +236,17 @@ void CInventory::Render()
 	mpSelectFrame->SetPos(mpBackMenu->GetPos());
 	mpSelectFrame->Render();
 
-	for (int i = 0; i < mItemList.size(); i++)
+	// アイテムスロットを描画
+	for (SlotData& slot : mItemSlots)
 	{
-		CImage* item = mItemList[i];
-		item->Render();
+		// 空のスロットは描画しない
+		if (slot.data = nullptr) return;
+
+		slot.icon->Render();
 	}
+	//for (int i = 0; i < mItemList.size(); i++)
+	//{
+	//	CImage* item = mItemList[i];
+	//	item->Render();
+	//}
 }

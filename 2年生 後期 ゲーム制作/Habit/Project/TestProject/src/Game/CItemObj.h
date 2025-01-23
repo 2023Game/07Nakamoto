@@ -28,6 +28,7 @@ protected:
 	// コライダー作成(継承先で上書き可)
 	virtual void CreateCollider();
 
+	ItemType mItemTyope;	// アイテムの種類
 	const ItemData* mpItemData;	// アイテムデータのポインタ
 	CModel* mpModel;		// アイテムのモデルデータ
 	CCollider* mpCollider;	// アイテムのコライダー

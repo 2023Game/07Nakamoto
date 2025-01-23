@@ -484,6 +484,9 @@
     <ClCompile Include="src\Game\CChoco.cpp">
       <Filter>ソース ファイル\Game\item\Object</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CGameBase.cpp">
+      <Filter>ソース ファイル\Game\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -872,6 +875,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CChoco.h">
       <Filter>ソース ファイル\Game\item\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CGameBase.h">
+      <Filter>ソース ファイル\Game\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

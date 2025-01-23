@@ -8,7 +8,7 @@ class CInventory : public CTask
 {
 public:
 	// インスタンスを取得
-	static CInventory* instance();
+	static CInventory* Instance();
 
 	// コンストラクタ
 	CInventory();
@@ -54,7 +54,7 @@ private:
 		{}
 	};
 	// アイテムスロットのリスト
-	std::vector<SlotData*> mItemSlots;
+	std::vector<SlotData> mItemSlots;
 
 	int mSelectIndex;
 	bool mIsOpened;

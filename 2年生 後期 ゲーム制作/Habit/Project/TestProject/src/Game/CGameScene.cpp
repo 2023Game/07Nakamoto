@@ -204,7 +204,7 @@ void CGameScene::Load()
 	mainCamera->SetFollowTargetTf(pico);
 
 	// ゲームメニューを作成
-	mpInventory = new CInventory();
+	new CInventory();
 }
 
 //シーンの更新処理
@@ -222,18 +222,16 @@ void CGameScene::Update()
 	}
 
 	// ゲームメニューを開いてなければ、[Ｍ]キーでメニューを開く
-	if (!mpInventory->IsOpened())
+	CInventory* inv = CInventory::Instance();
+	if (CInput::PushKey(VK_TAB))
 	{
-		if (CInput::PushKey('M'))
+		if (!inv->IsOpened())
 		{
-			mpInventory->Open();
+			inv->Open();
 		}
-	}
-	else
-	{
-		if (CInput::PushKey('M'))
+		else
 		{
-			mpInventory->Close();
+			inv->Close();
 		}
 	}
 }
