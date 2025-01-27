@@ -113,19 +113,5 @@ void CGameScene2::Load()
 //シーンの更新処理
 void CGameScene2::Update()
 {
-	if (CInput::PushKey('H'))
-	{
-		CSceneManager::Instance()->LoadScene(EScene::eTitle);
-	}
-
-	// ゲームメニューを開いてなければ、[Ｍ]キーでメニューを開く
-	CInventory* inv = CInventory::Instance();
-	if (!inv->IsOpened())
-	{
-		if (CInput::PushKey('M'))
-		{
-			inv->Open();
-		}
-	}
 
 }

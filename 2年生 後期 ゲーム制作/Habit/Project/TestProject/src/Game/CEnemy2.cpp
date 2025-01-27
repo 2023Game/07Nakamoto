@@ -32,6 +32,8 @@
 #define PATROL_NEAR_DIST	 10.0f	// 巡回開始時に選択される巡回ポイントの最短距離
 #define IDLE_TIME			  5.0f	// 待機状態の時間
 
+#define GAUGE_OFFSET_Y 15.0f
+
 // エネミー2のアニメーションデータのテーブル
 const CEnemy2::AnimData CEnemy2::ANIM_DATA[] =
 {
@@ -44,7 +46,8 @@ const CEnemy2::AnimData CEnemy2::ANIM_DATA[] =
 
 // コンストラクタ
 CEnemy2::CEnemy2(std::vector<CVector> patrolPoints)
-	: mState(EState::eIdle)
+	: CXCharacter(ETag::eEnemy, ETaskPriority::eDefault)
+	, mState(EState::eIdle)
 	, mStateStep(0)
 	, mElapsedTime(0.0f)
 	, mFovAngle(FOV_ANGLE)
@@ -68,6 +71,7 @@ CEnemy2::CEnemy2(std::vector<CVector> patrolPoints)
 	// CXCharacterの初期化
 	Init(model);
 
+
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
 
@@ -79,6 +83,7 @@ CEnemy2::CEnemy2(std::vector<CVector> patrolPoints)
 		CVector(0.0f, ENEMY_HEIGHT_CCOL1, 0.0f),
 		ENEMY_WIDTH_CCOL
 	);
+	mpColliderCapsule->SetCollisionTags({ ETag::eField, ETag::ePlayer });
 	mpColliderCapsule->SetCollisionLayers
 	(
 		{	ELayer::eField,
@@ -86,7 +91,7 @@ CEnemy2::CEnemy2(std::vector<CVector> patrolPoints)
 			ELayer::ePlayer,
 			ELayer::eInteractObj}
 	);
-
+	
 	// 攻撃用の球コライダ―を作成
 	mpAttackCollider = new CColliderSphere
 	(
@@ -271,7 +276,7 @@ void CEnemy2::Render()
 void CEnemy2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	// ベースの衝突処理を呼び出す
-	CEnemy::Collision(self, other, hit);
+	//CEnemy::Collision(self, other, hit);
 
 	// 攻撃コライダーがヒットした
 	if (self == mpAttackCollider)
@@ -693,7 +698,7 @@ void CEnemy2::UpdateAttack()
 		// ステップ０：攻撃アニメーションを再生
 		case 0:
 			// ベースクラスの攻撃開始処理を呼び出し
-			CEnemy::AttackStart();
+			//CEnemy::AttackStart();
 
 			ChangeAnimation(EAnimType::eAttack, true);
 			mStateStep++;

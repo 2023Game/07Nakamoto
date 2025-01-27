@@ -484,7 +484,7 @@
     <ClCompile Include="src\Game\CChoco.cpp">
       <Filter>ソース ファイル\Game\item\Object</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CGameBase.cpp">
+    <ClCompile Include="src\Game\CGameSceneBase.cpp">
       <Filter>ソース ファイル\Game\Scene</Filter>
     </ClCompile>
   </ItemGroup>
@@ -876,7 +876,7 @@
     <ClInclude Include="src\Game\CChoco.h">
       <Filter>ソース ファイル\Game\item\Object</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CGameBase.h">
+    <ClInclude Include="src\Game\CGameSceneBase.h">
       <Filter>ソース ファイル\Game\Scene</Filter>
     </ClInclude>
   </ItemGroup>

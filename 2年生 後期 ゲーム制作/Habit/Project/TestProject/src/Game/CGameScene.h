@@ -1,12 +1,12 @@
 #pragma once
-#include "CSceneBase.h"
+#include "CGameSceneBase.h"
 class CGameMenu;
 class CSound;
 class CInventory;
 class CHpUI;
 
 //タイトルシーン
-class CGameScene :public CSceneBase
+class CGameScene :public CGameSceneBase
 {
 public:
 	//コンストラクタ

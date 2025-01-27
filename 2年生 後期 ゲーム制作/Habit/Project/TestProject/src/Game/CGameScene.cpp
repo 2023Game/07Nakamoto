@@ -23,11 +23,12 @@
 
 #include "ItemData.h"
 #include "CChoco.h"
+//#include "CGameBase.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
-	: CSceneBase(EScene::eGame)
-	, mpInventory(nullptr)
+	: CGameSceneBase(EScene::eGame)
+	//, mpInventory(nullptr)
 {
 }
 
@@ -35,7 +36,7 @@ CGameScene::CGameScene()
 CGameScene::~CGameScene()
 {
 	// 次に読み込まれるシーンがゲームシーンでなければ、
-	// アイテムのリソースを全て破棄する
+	//アイテムのリソースを全て破棄する
 	CSceneManager* sceneMgr = CSceneManager::Instance();
 	if (sceneMgr != nullptr && !sceneMgr->IsNextGameScene())
 	{
@@ -53,7 +54,6 @@ void CGameScene::Load()
 
 	//ここでゲーム中に必要な
 	//リソースの読み込みやクラスの生成を行う
-
 	CResourceManager::Load<CModel>("Field", "Field\\field.obj");
 	CResourceManager::Load<CModel>("FieldCube", "Field\\Object\\cube.obj");
 	CResourceManager::Load<CModel>("FieldCylinder", "Field\\Object\\cylinder.obj");
@@ -83,15 +83,16 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>("Ghost", "Character\\Enemy\\ghost\\ghost.x");
 
 	// アイテムのリソースを全読み込む
-	Item::LoadItemResources();
+	//Item::LoadItemResources();
+	CGameSceneBase::Load();
 
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
 
 	// 経路探索管理クラスを作成
-	new CNavManager();
+	//new CNavManager();
 	// フィールド作成
-	new CField();
+	//new CField();
 
 	// サボテンの敵を作成
 	CCactus* cactus = new CCactus();
@@ -204,34 +205,37 @@ void CGameScene::Load()
 	mainCamera->SetFollowTargetTf(pico);
 
 	// ゲームメニューを作成
-	new CInventory();
+	//new CInventory();
+
 }
 
 //シーンの更新処理
 void CGameScene::Update()
 {
+	CGameSceneBase::Update();
+
 	// BGM再生中でなければ、BGMを再生
 	//if (!mpGameBGM->IsPlaying())
 	//{
 	//	mpGameBGM->PlayLoop(-1, 1.0f, false, 1.0f);
 	//}
 
-	if (CInput::PushKey('H'))
-	{
-		CSceneManager::Instance()->LoadScene(EScene::eGameOver);
-	}
+	//if (CInput::PushKey('H'))
+	//{
+	//	CSceneManager::Instance()->LoadScene(EScene::eGameOver);
+	//}
 
 	// ゲームメニューを開いてなければ、[Ｍ]キーでメニューを開く
-	CInventory* inv = CInventory::Instance();
-	if (CInput::PushKey(VK_TAB))
-	{
-		if (!inv->IsOpened())
-		{
-			inv->Open();
-		}
-		else
-		{
-			inv->Close();
-		}
-	}
+	//CInventory* inv = CInventory::Instance();
+	//if (CInput::PushKey(VK_TAB))
+	//{
+	//	if (!inv->IsOpened())
+	//	{
+	//		inv->Open();
+	//	}
+	//	else
+	//	{
+	//		inv->Close();
+	//	}
+	//}
 }
