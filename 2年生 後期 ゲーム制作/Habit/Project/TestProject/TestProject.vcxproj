@@ -77,6 +77,7 @@
     <ClCompile Include="src\Game\CCactusNeedle.cpp" />
     <ClCompile Include="src\Game\CChoco.cpp" />
     <ClCompile Include="src\Game\CClearArea.cpp" />
+    <ClCompile Include="src\Game\CCookie.cpp" />
     <ClCompile Include="src\Game\CDebugFieldOfView.cpp" />
     <ClCompile Include="src\Game\CEnemy.cpp" />
     <ClCompile Include="src\Game\CEnemy1.cpp" />
@@ -112,6 +113,7 @@
     <ClCompile Include="src\Game\CRotateFloor.cpp" />
     <ClCompile Include="src\Game\CSlash.cpp" />
     <ClCompile Include="src\Game\CStGauge.cpp" />
+    <ClCompile Include="src\Game\CStone.cpp" />
     <ClCompile Include="src\Game\CSwitchDoor.cpp" />
     <ClCompile Include="src\Game\CSword.cpp" />
     <ClCompile Include="src\Game\CTitleScene.cpp" />
@@ -210,6 +212,7 @@
     <ClInclude Include="src\Game\CCactusNeedle.h" />
     <ClInclude Include="src\Game\CChoco.h" />
     <ClInclude Include="src\Game\CClearArea.h" />
+    <ClInclude Include="src\Game\CCookie.h" />
     <ClInclude Include="src\Game\CDebugFieldOfView.h" />
     <ClInclude Include="src\Game\CEnemy.h" />
     <ClInclude Include="src\Game\CEnemy1.h" />
@@ -245,6 +248,7 @@
     <ClInclude Include="src\Game\CRotateFloor.h" />
     <ClInclude Include="src\Game\CSlash.h" />
     <ClInclude Include="src\Game\CStGauge.h" />
+    <ClInclude Include="src\Game\CStone.h" />
     <ClInclude Include="src\Game\CSwitchDoor.h" />
     <ClInclude Include="src\Game\CSword.h" />
     <ClInclude Include="src\Game\CTitleUI.h" />

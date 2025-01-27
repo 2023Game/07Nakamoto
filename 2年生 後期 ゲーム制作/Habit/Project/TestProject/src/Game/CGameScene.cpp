@@ -23,6 +23,8 @@
 
 #include "ItemData.h"
 #include "CChoco.h"
+#include "CCookie.h"
+#include "CStone.h"
 //#include "CGameBase.h"
 
 //コンストラクタ
@@ -142,6 +144,26 @@ void CGameScene::Load()
 	// チョコを生成
 	CChoco* choco = new CChoco();
 	choco->Position(0.0f, 10.0f, 20.0f);
+
+	choco = new CChoco();
+	choco->Position(-100.0f, 10.0f, 20.0f);
+	choco = new CChoco();
+	choco->Position(-100.0f, 10.0f, 70.0f);
+	choco = new CChoco();
+	choco->Position(-100.0f, 10.0f, 120.0f);
+	choco = new CChoco();
+	choco->Position(-100.0f, 10.0f, 170.0f);
+	choco = new CChoco();
+	choco->Position(-100.0f, 10.0f, 220.0f);
+
+	CCookie* cookie = new CCookie();
+	cookie->Position(-150.0f, 10.0f, 20.0f);
+	cookie = new CCookie();
+	cookie->Position(-150.0f, 10.0f, 70.0f);
+	CStone* stone = new CStone();
+	stone->Position(-200.0f, 10.0f, 20.0f);
+	stone = new CStone();
+	stone->Position(-200.0f, 10.0f, 20.0f);
 
 	// スイッチを生成
 	CPushSwitch* push_switch = new CPushSwitch(CVector(-30.0f, 0.0f, 0.0f),

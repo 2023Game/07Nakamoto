@@ -11,6 +11,8 @@ namespace Item
 		{
 			ItemType::Choco,
 			{
+				ItemType::Choco,
+				3,
 				"チョコレート",
 				"説明文",
 				"Item\\Choco\\choco.png",
@@ -21,18 +23,36 @@ namespace Item
 			}
 		},
 		// クッキー
-		//{
-		//	ItemType::Cookie,
-		//	{
-		//		"クッキー",
-		//		"説明文",
-		//		"Item\\Cookie\\cookie.png",
-		//		"Item\\Cookie\\cookie.obj",
-		//		ItemEffectType::RecoveryHP,
-		//		100,
-		//		0
-		//	}
-		//},
+		{
+			ItemType::Cookie,
+			{
+				ItemType::Cookie,
+				5,
+				"クッキー",
+				"説明文",
+				"Item\\Cookie\\cookie.png",
+				"Item\\Cookie\\cookie.obj",
+				ItemEffectType::RecoveryHP,
+				50,
+				0
+			}
+		},
+			// 小石
+			{
+				ItemType::Stone,
+				{
+					ItemType::Stone,
+					1,
+					"小石",
+					"説明文＿小石",
+					"Item\\Stone\\stone.png",
+					"Item\\Stone\\stone.obj",
+					ItemEffectType::Throw,
+					0,
+					0
+				}
+			},
+
 	};
 
 	// アイコンのリソースを既に読み込んでいるかどうか

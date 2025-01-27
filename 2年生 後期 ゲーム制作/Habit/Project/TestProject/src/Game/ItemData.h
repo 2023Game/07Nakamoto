@@ -29,6 +29,9 @@ enum class ItemEffectType
 
 struct ItemData
 {
+	ItemType type;			// アイテムの種類
+	int slotLimit;			// アイテムスロットに入る上限
+
 	std::string name;		// アイテム名
 	std::string desc;		// アイテムの説明文
 

@@ -202,7 +202,97 @@ void CInventory::Decide(int select)
 // アイテムを追加する
 void CInventory::AddItem(ItemType type, int count)
 {
-	Item::GetItemData(type,)
+	// アイテムデータを取得できなかったら、追加できない
+	const ItemData* itemData = nullptr;
+	bool success = Item::GetItemData(type, &itemData);
+	if (!success) return;
+
+	// 追加するアイテムの残り個数
+	int remain = count;
+
+	// ■既にアイテムが入っているスロットにアイテムを追加する
+	// アイテムスロットの中身を確認して、
+	// 同じ種類のアイテムが入っているアイテムスロットを探す
+	for (SlotData& slot : mItemSlots)
+	{
+		// 空のアイテムスロットであれば、次のアイテムスロットを調べる
+		if (slot.data == nullptr) continue;
+		// アイテムスロットに入っているアイテムの種類と
+		// 追加するアイテムの種類が一致しなければ、次のアイテムスロットを調べる
+		if (slot.data->type != type) continue;
+
+		// アイテムの種類が一致するアイテムスロットが見つかった
+		
+		//　追加後のアイテム個数を算出
+		int sum = slot.count + remain;
+
+		// 追加後のアイテム個数が上限を超える場合は、
+		if (sum > slot.data->slotLimit)
+		{
+			// 溢れたアイテム個数を計算
+			remain = sum - slot.data->slotLimit;
+			// 設定するアイテム個数を上限数に設定
+			sum = slot.data->slotLimit;
+		}
+		// 上限を超えなかった場合は、残り個数を0にする
+		else
+		{
+			remain = 0;
+		}
+		// 見つかったアイテムスロットのアイテム数を設定
+		slot.count = sum;
+
+		// 残り個数が0であれば、処理を終える
+		if (remain == 0)
+		{
+			break;
+		}
+	}
+
+	// ■空のスロットにアイテムを追加する
+	// まだ追加するアイテムが残っていた場合
+	if (remain > 0)
+	{
+		// アイテムスロットのリストの先頭から空のスロットを探して、
+		// 見つかった空のアイテムスロットにアイテムを入れる
+		for (SlotData& slot : mItemSlots)
+		{
+			// 既にアイテムが入っているスロットはスルー
+			if (slot.data != nullptr) continue;
+
+			// 見つかった空のリストに。追加するアイテムのデータを設定
+			slot.data = itemData;
+
+			// 追加するアイテムの個数が上限を超えていたら、次のスロットに残す
+			int itemCount = remain;
+			if (itemCount > slot.data->slotLimit)
+			{
+				remain = itemCount - slot.data->slotLimit;
+				itemCount = slot.data->slotLimit;
+			}
+			else
+			{
+				remain = 0;
+			}
+			slot.count = itemCount;
+
+			// 追加するアイテムの個数が残ってなければ、追加処理終了
+			if (remain == 0)
+			{
+				break;
+			}
+		}
+	}
+
+	// まだ追加するアイテムが残っていた場合
+	// アイテムスロットがいっぱいの場合
+	if (remain > 0)
+	{
+		// TODO：インベントリに追加できなかったアイテムはドロップする
+			
+		// 一旦削除しておく
+		remain = 0;
+	}	
 }
 
 // 更新
@@ -218,12 +308,6 @@ void CInventory::Update()
 	{
 		slot.icon->Update();
 	}
-
-
-	//for (CImage* item : mItemList)
-	//{
-	//	item->Update();
-	//}
 }
 
 // 描画
@@ -240,13 +324,8 @@ void CInventory::Render()
 	for (SlotData& slot : mItemSlots)
 	{
 		// 空のスロットは描画しない
-		if (slot.data = nullptr) return;
+		if (slot.data == nullptr) return;
 
 		slot.icon->Render();
 	}
-	//for (int i = 0; i < mItemList.size(); i++)
-	//{
-	//	CImage* item = mItemList[i];
-	//	item->Render();
-	//}
 }

@@ -475,9 +475,6 @@
     <ClCompile Include="src\Game\CMoveFloor.cpp">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\ItemData.cpp">
-      <Filter>ソース ファイル\Game\item\Object</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CItemObj.cpp">
       <Filter>ソース ファイル\Game\item\Object</Filter>
     </ClCompile>
@@ -486,6 +483,15 @@
     </ClCompile>
     <ClCompile Include="src\Game\CGameSceneBase.cpp">
       <Filter>ソース ファイル\Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\ItemData.cpp">
+      <Filter>ソース ファイル\Game\item</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CStone.cpp">
+      <Filter>ソース ファイル\Game\item\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CCookie.cpp">
+      <Filter>ソース ファイル\Game\item\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -867,9 +873,6 @@
     <ClInclude Include="src\Game\CMoveFloor.h">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\ItemData.h">
-      <Filter>ソース ファイル\Game\item\Object</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\CItemObj.h">
       <Filter>ソース ファイル\Game\item\Object</Filter>
     </ClInclude>
@@ -878,6 +881,15 @@
     </ClInclude>
     <ClInclude Include="src\Game\CGameSceneBase.h">
       <Filter>ソース ファイル\Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\ItemData.h">
+      <Filter>ソース ファイル\Game\item</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CStone.h">
+      <Filter>ソース ファイル\Game\item\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CCookie.h">
+      <Filter>ソース ファイル\Game\item\Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
