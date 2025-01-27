@@ -202,7 +202,7 @@ void CInventory::Decide(int select)
 // アイテムを追加する
 void CInventory::AddItem(ItemType type, int count)
 {
-
+	Item::GetItemData(type,)
 }
 
 // 更新

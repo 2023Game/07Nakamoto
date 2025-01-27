@@ -38,7 +38,7 @@ namespace Item
 	// アイコンのリソースを既に読み込んでいるかどうか
 	bool loadedItemResources = false;
 
-	// アイテムの巣類を指定して、アイテムのデータを取得
+	// アイテムの種類を指定して、アイテムのデータを取得
 	bool GetItemData(ItemType type, const ItemData** data)
 	{
 		// テーブルから指定された種類のアイテムデータを探す

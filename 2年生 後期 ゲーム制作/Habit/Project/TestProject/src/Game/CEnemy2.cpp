@@ -690,15 +690,13 @@ void CEnemy2::UpdateLost()
 // 攻撃時の更新処理
 void CEnemy2::UpdateAttack()
 {
-	
-
 	// ステップごとに処理を切り替える
 	switch (mStateStep)
 	{
 		// ステップ０：攻撃アニメーションを再生
 		case 0:
 			// ベースクラスの攻撃開始処理を呼び出し
-			//CEnemy::AttackStart();
+			CXCharacter::AttackStart();
 
 			ChangeAnimation(EAnimType::eAttack, true);
 			mStateStep++;
