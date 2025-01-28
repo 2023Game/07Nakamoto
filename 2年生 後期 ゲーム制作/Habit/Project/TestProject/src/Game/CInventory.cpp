@@ -31,6 +31,7 @@ CInventory* CInventory::Instance()
 CInventory::CInventory()
 	: CTask(ETaskPriority::eUI, 0, ETaskPauseType::eMenu)
 	, mItemSlots(SLOT_COUNT)
+	//, mpItemData(nullptr)
 	, mSelectIndex(0)
 	, mIsOpened(false)
 {
@@ -90,28 +91,6 @@ CInventory::CInventory()
 	mpSelectFrame->SetCenter(mpSelectFrame->GetSize() * 0.5f);
 	mpSelectFrame->SetColor(1.0f, 0.5f, 0.0f, INVENTORY_ALPHA);
 
-	// チョコ インベントリに入る処理
-	//int ItemCount = 8;
-	//for (int i = 0; i < ItemCount; i++)
-	//{
-	//	CImage* choco = new CImage
-	//	(
-	//		"Item\\choco\\choco.png",
-	//		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
-	//		false, false
-	//	);
-
-	//	choco->SetCenter(choco->GetSize() * 0.5f);
-
-	//	int w = i % SLOT_COLUMN;
-	//	int h = i / SLOT_COLUMN;
-	//	float x = ITEM_WIDTH + SLOT_FRAME * (w + 1) + ITEM_INTERVAL * w;
-	//	float y = ITEM_HEIGHT + SLOT_FRAME * (h + 1) + ITEM_INTERVAL * h;
-
-	//	choco->SetPos(x, y);
-	//	mItemSlots.push_back(choco);
-
-	//}
 	
 
 	SetEnable(false);
@@ -135,15 +114,6 @@ CInventory::~CInventory()
 	{
 		SAFE_DELETE(slot.icon);
 	}
-
-	//int size = mItemList.size();
-	//for (int i = 0; i < size; i++)
-	//{
-	//	CImage* item = mItemList[i];
-	//	mItemList[i] = nullptr;
-	//	SAFE_DELETE(item);
-	//}
-	//mItemList.clear();
 }
 
 // 開く
@@ -153,6 +123,49 @@ void CInventory::Open()
 
 	// マウスカーソルを表示
 	CInput::ShowCursor(true);
+
+	// チョコ インベントリに入る処理
+	//int ItemCount = 8;
+	//for (int i = 0; i < ItemCount; i++)
+	//{
+	//	CImage* choco = new CImage
+	//	(
+	//		"Item\\choco\\choco.png",
+	//		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
+	//		false, false
+	//	);
+
+	//	choco->SetCenter(choco->GetSize() * 0.5f);
+
+	//	int w = i % SLOT_COLUMN;
+	//	int h = i / SLOT_COLUMN;
+	//	float x = ITEM_WIDTH + SLOT_FRAME * (w + 1) + ITEM_INTERVAL * w;
+	//	float y = ITEM_HEIGHT + SLOT_FRAME * (h + 1) + ITEM_INTERVAL * h;
+
+	//	choco->SetPos(x, y);
+	//	mItemSlots.push_back(choco);
+	//}
+	int i = 0;
+	// インベントリの中身を表示
+	for (SlotData& slot : mItemSlots)
+	{
+		if (slot.data != nullptr)
+		{
+			slot.icon->Load(slot.data->iconPath.c_str());
+		}
+
+		slot.icon->SetCenter(slot.icon->GetSize() * 0.5f);
+
+		int w = i % SLOT_COLUMN;
+		int h = i / SLOT_COLUMN;
+		float x = ITEM_WIDTH + SLOT_FRAME * (w + 1) + ITEM_INTERVAL * w;
+		float y = ITEM_HEIGHT + SLOT_FRAME * (h + 1) + ITEM_INTERVAL * h;
+
+		slot.icon->SetPos(x, y);
+			
+		i++;
+	}
+
 
 	SetEnable(true);
 	SetShow(true);

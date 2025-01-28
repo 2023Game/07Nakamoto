@@ -39,6 +39,7 @@ private:
 	CImage* mpInventoryFrame;
 	CImage* mpBackMenu;
 	CImage* mpSelectFrame;
+	CImage* mpTexture;
 
 	// アイテムスロットのデータ
 	struct SlotData
@@ -49,13 +50,16 @@ private:
 		CImage* icon;	// アイコンのイメージ
 		SlotData()
 			: data(nullptr)
-			,count(0)
+			, count(0)
 			, icon(nullptr)
 		{}
 	};
 	// アイテムスロットのリスト
 	std::vector<SlotData> mItemSlots;
 
+	//ItemType mItemTyope;	// アイテムの種類
+	//const ItemData* mpItemData;	// アイテムデータのポインタ
+	// CTexture* mpTexture;	//表示するイメージのテクスチャ
 	int mSelectIndex;
 	bool mIsOpened;
 };
