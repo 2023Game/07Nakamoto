@@ -163,7 +163,7 @@ void CGameScene::Load()
 	CStone* stone = new CStone();
 	stone->Position(-200.0f, 10.0f, 20.0f);
 	stone = new CStone();
-	stone->Position(-200.0f, 10.0f, 20.0f);
+	stone->Position(-200.0f, 10.0f, 70.0f);
 
 	// スイッチを生成
 	CPushSwitch* push_switch = new CPushSwitch(CVector(-30.0f, 0.0f, 0.0f),

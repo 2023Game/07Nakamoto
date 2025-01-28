@@ -4,6 +4,9 @@
 #include <vector>
 #include "ItemData.h"
 
+class CItemSlotUI;
+class CExpandButton;
+
 class CInventory : public CTask
 {
 public:
@@ -39,7 +42,6 @@ private:
 	CImage* mpInventoryFrame;
 	CImage* mpBackMenu;
 	CImage* mpSelectFrame;
-	CImage* mpTexture;
 
 	// アイテムスロットのデータ
 	struct SlotData
@@ -47,19 +49,19 @@ private:
 		// そのスロットに入っているアイテムのデータ
 		const ItemData* data;
 		int count;		// 入っているアイテムの個数
-		CImage* icon;	// アイコンのイメージ
+		CItemSlotUI* slotUI;	// アイテムスロットのUI
 		SlotData()
 			: data(nullptr)
 			, count(0)
-			, icon(nullptr)
+			, slotUI(nullptr)
 		{}
 	};
 	// アイテムスロットのリスト
 	std::vector<SlotData> mItemSlots;
 
-	//ItemType mItemTyope;	// アイテムの種類
-	//const ItemData* mpItemData;	// アイテムデータのポインタ
-	// CTexture* mpTexture;	//表示するイメージのテクスチャ
 	int mSelectIndex;
 	bool mIsOpened;
+
+	// ボタンのリスト
+	std::vector< CExpandButton*> mSlotButtons;
 };

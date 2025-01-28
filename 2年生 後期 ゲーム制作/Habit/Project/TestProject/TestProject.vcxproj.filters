@@ -119,6 +119,9 @@
     <Filter Include="ソース ファイル\Game\item\Object">
       <UniqueIdentifier>{0784c235-4ad5-4db8-8cb8-f6785ab8002b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\item\UI">
+      <UniqueIdentifier>{8f209305-a90b-4117-b889-b68c3f0c1c73}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -492,6 +495,9 @@
     </ClCompile>
     <ClCompile Include="src\Game\CCookie.cpp">
       <Filter>ソース ファイル\Game\item\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CItemSlotUI.cpp">
+      <Filter>ソース ファイル\Game\item\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -890,6 +896,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CCookie.h">
       <Filter>ソース ファイル\Game\item\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CItemSlotUI.h">
+      <Filter>ソース ファイル\Game\item\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

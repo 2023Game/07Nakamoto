@@ -92,7 +92,7 @@ namespace Item
 			if (!GetItemData(type, &data)) continue;
 
 			// アイテムのアイコン画像とモデルデータを読み込む
-			CResourceManager::Load<CModel>(data->iconPath, data->iconPath, true);
+			CResourceManager::Load<CTexture>(data->iconPath, data->iconPath, true);
 			CResourceManager::Load<CModel>(data->modelPath, data->modelPath, true);
 		}
 

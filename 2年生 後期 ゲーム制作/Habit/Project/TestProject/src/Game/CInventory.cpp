@@ -3,6 +3,8 @@
 #include "CTaskManager.h"
 #include "CBGMManager.h"
 #include "CPlayer2.h"
+#include "CItemSlotUI.h"
+#include "CExpandButton.h"
 
 #define INVENTORY_ALPHA 0.75f	// アルファ値
 
@@ -31,6 +33,7 @@ CInventory* CInventory::Instance()
 CInventory::CInventory()
 	: CTask(ETaskPriority::eUI, 0, ETaskPauseType::eMenu)
 	, mItemSlots(SLOT_COUNT)
+	, mSlotButtons(SLOT_COLUMN)
 	//, mpItemData(nullptr)
 	, mSelectIndex(0)
 	, mIsOpened(false)
@@ -42,11 +45,7 @@ CInventory::CInventory()
 	for (int i = 0; i < slotCount; i++)
 	{
 		SlotData& slot = mItemSlots[i];
-		slot.icon = new CImage
-		(
-			"", ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
-			false, false
-		);
+		slot.slotUI = new CItemSlotUI();
 	}
 
 	// インベントリの背景
@@ -91,8 +90,6 @@ CInventory::CInventory()
 	mpSelectFrame->SetCenter(mpSelectFrame->GetSize() * 0.5f);
 	mpSelectFrame->SetColor(1.0f, 0.5f, 0.0f, INVENTORY_ALPHA);
 
-	
-
 	SetEnable(false);
 	SetShow(false);
 }
@@ -112,7 +109,7 @@ CInventory::~CInventory()
 
 	for (SlotData& slot : mItemSlots)
 	{
-		SAFE_DELETE(slot.icon);
+		SAFE_DELETE(slot.slotUI);
 	}
 }
 
@@ -124,52 +121,28 @@ void CInventory::Open()
 	// マウスカーソルを表示
 	CInput::ShowCursor(true);
 
-	// チョコ インベントリに入る処理
-	//int ItemCount = 8;
-	//for (int i = 0; i < ItemCount; i++)
-	//{
-	//	CImage* choco = new CImage
-	//	(
-	//		"Item\\choco\\choco.png",
-	//		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
-	//		false, false
-	//	);
-
-	//	choco->SetCenter(choco->GetSize() * 0.5f);
-
-	//	int w = i % SLOT_COLUMN;
-	//	int h = i / SLOT_COLUMN;
-	//	float x = ITEM_WIDTH + SLOT_FRAME * (w + 1) + ITEM_INTERVAL * w;
-	//	float y = ITEM_HEIGHT + SLOT_FRAME * (h + 1) + ITEM_INTERVAL * h;
-
-	//	choco->SetPos(x, y);
-	//	mItemSlots.push_back(choco);
-	//}
-	int i = 0;
-	// インベントリの中身を表示
-	for (SlotData& slot : mItemSlots)
+	int size= mItemSlots.size();
+	// アイテムスロットの位置の設定
+	for (int i = 0; i < size; i++)
 	{
+		SlotData& slot = mItemSlots[i];
+
 		if (slot.data != nullptr)
 		{
-			slot.icon->Load(slot.data->iconPath.c_str());
+			slot.slotUI->SetItemSloto(slot.data, slot.count);
 		}
-
-		slot.icon->SetCenter(slot.icon->GetSize() * 0.5f);
 
 		int w = i % SLOT_COLUMN;
 		int h = i / SLOT_COLUMN;
 		float x = ITEM_WIDTH + SLOT_FRAME * (w + 1) + ITEM_INTERVAL * w;
 		float y = ITEM_HEIGHT + SLOT_FRAME * (h + 1) + ITEM_INTERVAL * h;
 
-		slot.icon->SetPos(x, y);
-			
-		i++;
+		slot.slotUI->SetPos(x, y);
 	}
-
 
 	SetEnable(true);
 	SetShow(true);
-	mSelectIndex = 0;
+	//mSelectIndex = 0;
 	CBGMManager::Instance()->Play(EBGMType::eMenu, false);
 	CTaskManager::Instance()->Pause(PAUSE_MENU_OPEN);
 
@@ -201,15 +174,15 @@ bool CInventory::IsOpened() const
 // 決める
 void CInventory::Decide(int select)
 {
-	switch (select)
-	{
-	case 0:
-	case 1:
-		break;
-	case 2:
-		Close();
-		break;
-	}
+	//switch (select)
+	//{
+	//case 0:
+	//case 1:
+	//	break;
+	//case 2:
+	//	Close();
+	//	break;
+	//}
 }
 
 // アイテムを追加する
@@ -319,7 +292,7 @@ void CInventory::Update()
 	// アイテムスロットのイメージの更新
 	for (SlotData& slot : mItemSlots)
 	{
-		slot.icon->Update();
+		slot.slotUI->Update();
 	}
 }
 
@@ -339,6 +312,6 @@ void CInventory::Render()
 		// 空のスロットは描画しない
 		if (slot.data == nullptr) return;
 
-		slot.icon->Render();
+		slot.slotUI->Render();
 	}
 }
