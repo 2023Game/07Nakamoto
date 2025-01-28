@@ -58,6 +58,8 @@ void CItemSlotUI::SetItemSloto(const ItemData* data, int count)
 // XV
 void CItemSlotUI::Update()
 {
+	CUIBase::Update();
+
 	mpIcon->SetPos(mPosition);
 	mpCountText->SetPos(mPosition + COUNT_TEXT_POS);
 
