@@ -63,5 +63,5 @@ private:
 	bool mIsOpened;
 
 	// ボタンのリスト
-	std::vector< CExpandButton*> mSlotButtons;
+	std::vector<CExpandButton*> mSlotButtons;
 };
