@@ -34,8 +34,6 @@ CInventory::CInventory()
 	: CTask(ETaskPriority::eUI, 0, ETaskPauseType::eMenu)
 	, mItemSlots(SLOT_COUNT)
 	, mSlotButtons(SLOT_COLUMN)
-	//, mpItemData(nullptr)
-	, mSelectIndex(0)
 	, mIsOpened(false)
 {
 	spInstance = this;
@@ -142,7 +140,6 @@ void CInventory::Open()
 
 	SetEnable(true);
 	SetShow(true);
-	//mSelectIndex = 0;
 	CBGMManager::Instance()->Play(EBGMType::eMenu, false);
 	CTaskManager::Instance()->Pause(PAUSE_MENU_OPEN);
 

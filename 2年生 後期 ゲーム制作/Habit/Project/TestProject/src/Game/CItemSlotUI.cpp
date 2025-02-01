@@ -13,6 +13,7 @@ CItemSlotUI::CItemSlotUI()
 	, mpItemData(nullptr)
 	, mpIcon(nullptr)
 	, mpCountText(nullptr)
+	, mpItemName(nullptr)
 {
 	mpIcon = new CImage
 	(
@@ -69,7 +70,7 @@ void CItemSlotUI::SetItemSloto(const ItemData* data, int count)
 
 	SetSize(size);
 	SetCenter(size * 0.5);
-	
+	mpIcon->SetPos(mPosition);
 }
 
 void CItemSlotUI::OnPointerEnter(const CVector2& pos)
@@ -82,10 +83,13 @@ void CItemSlotUI::OnPointerExit(const CVector2& pos)
 
 void CItemSlotUI::OnPointerDown(const CVector2& pos)
 {
+	
 }
 
 void CItemSlotUI::OnPointerUp(const CVector2& pos)
 {
+	mpItemName = nullptr;
+
 }
 
 void CItemSlotUI::OnMove(const CVector2& move)
@@ -93,40 +97,52 @@ void CItemSlotUI::OnMove(const CVector2& move)
 	if (mpItemData == nullptr) return;
 	CDebugPrint::Print("Move:%s: %.2f, %.2f\n", mpItemData->name.c_str(), move.X(), move.Y());
 
-	//mpIcon->SetPos(mpIcon->GetPos() + move);
+	// アイテムアイコンの移動
+	mpIcon->SetPos(mpIcon->GetPos() + move);
+	mpCountText->SetPos(mpIcon->GetPos() + COUNT_TEXT_POS);
+	//printf("%.2f, %.2f\n", mpIcon->GetPos().X(), mpIcon->GetPos().Y());
 }
 
 // 更新
 void CItemSlotUI::Update()
 {
 	CUIBase::Update();
-
-	mpIcon->SetPos(mPosition);
-	mpCountText->SetPos(mPosition + COUNT_TEXT_POS);
-
+	
 	mpIcon->Update();
 	mpCountText->Update();
 
 	if (mpItemData != nullptr)
 	{
-		// アイコンの上にカーソルがあるか
-		if (mIsEnter)
-		{
-			CDebugPrint::Print("Enter:%s\n", mpItemData->name.c_str());
-		}
-
 		// アイコンの上でクリックしているか
 		if (mIsTouch)
 		{
 			CDebugPrint::Print("Touch:%s\n", mpItemData->name.c_str());
+
 			if (mpIcon->GetSize() == CVector2(SLOT_SIZE, SLOT_SIZE))
 			{
+				// アイテムをドラッグ中のアイテムを少し大きくする
 				mpIcon->SetSize(mpIcon->GetSize() * 1.1f);
 			}
+			mpItemName = mpItemData->name.c_str();
 		}
 		else
 		{
+			// アイテムを元の位置に戻す
 			mpIcon->SetSize(SLOT_SIZE, SLOT_SIZE);
+			mpIcon->SetPos(mPosition);
+			mpCountText->SetPos(mPosition + COUNT_TEXT_POS);
+
+		}
+
+		if (mpItemName)
+		{
+			// アイコンの上にカーソルがあるか
+			if (mIsEnter && mpItemName != mpItemData->name.c_str())
+			{
+				CDebugPrint::Print("Enter:%s\n", mpItemData->name.c_str());
+
+			}
+
 		}
 	}
 }

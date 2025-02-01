@@ -59,7 +59,6 @@ private:
 	// アイテムスロットのリスト
 	std::vector<SlotData> mItemSlots;
 
-	int mSelectIndex;
 	bool mIsOpened;
 
 	// ボタンのリスト
