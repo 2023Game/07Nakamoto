@@ -16,7 +16,7 @@
 
 //コンストラクタ
 CGameScene2::CGameScene2()
-	: CSceneBase(EScene::eGame2)
+	: CSceneBase(EScene::eNone)
 	, mpGameMenu(nullptr)
 {
 }

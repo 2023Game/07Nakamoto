@@ -29,7 +29,7 @@
 
 //コンストラクタ
 CGameScene::CGameScene()
-	: CGameSceneBase(EScene::eGame)
+	: CGameSceneBase(EScene::eTestGame)
 	//, mpInventory(nullptr)
 {
 }

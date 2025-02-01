@@ -28,20 +28,21 @@ CField::CField()
 	switch (mScene)
 	{
 		// テストステージ
-		case EScene::eGame:
+		case EScene::eTestGame:
 			// 床のモデルデータを取得
 			mpModel = CResourceManager::Get<CModel>("Field");
-			break;
-		// ステージ1
-		case EScene::eGame2:
-			// 床のモデルデータを取得
-			mpModel = CResourceManager::Get<CModel>("Map_mini_floor");
 			break;
 		// ステージ2
-		case EScene::eGame3:
+		case EScene::eGame1:
 			// 床のモデルデータを取得
 			mpModel = CResourceManager::Get<CModel>("Field");
 			break;
+			// ステージ1
+		//case EScene::eGame2:
+		//	// 床のモデルデータを取得
+		//	mpModel = CResourceManager::Get<CModel>("Map_mini_floor");
+		//	break;
+
 	}
 	// 床のコライダーを生成
 	mpColliderMesh = new CColliderMesh(this, ELayer::eField, mpModel, true);
@@ -70,7 +71,7 @@ void CField::CreateWalls()
 	switch (mScene)
 	{
 		// ステージ１
-		case EScene::eGame:
+		case EScene::eTestGame:
 		{
 			// 壁①生成
 			CWall* wall = new CWall
@@ -117,22 +118,22 @@ void CField::CreateWalls()
 
 			break;
 		}
-		// ステージ２
-		case EScene::eGame2:
-		{
-			// 壁の生成
-			CWall* wall = new CWall
-			(
-				CVector(0.0f, 0.0f, 0.0f),
-				CVector(0.0f, 0.0f, 0.0f),
-				CVector(1.0f, 1.0f, 1.0f)
-			);
-			mWalls.push_back(wall);	// 生成した壁を壁のリストに追加
+		//// ステージ２
+		//case EScene::eGame2:
+		//{
+		//	// 壁の生成
+		//	CWall* wall = new CWall
+		//	(
+		//		CVector(0.0f, 0.0f, 0.0f),
+		//		CVector(0.0f, 0.0f, 0.0f),
+		//		CVector(1.0f, 1.0f, 1.0f)
+		//	);
+		//	mWalls.push_back(wall);	// 生成した壁を壁のリストに追加
 
-			break;
-		}
+		//	break;
+		//}
 		// ステージ3
-		case EScene::eGame3:
+		case EScene::eGame1:
 		{
 			// 壁の生成
 			CWall* wall = new CWall
@@ -153,7 +154,7 @@ void CField::CreateFieldObjects()
 	switch (mScene)
 	{
 		// ステージ１
-		case EScene::eGame:
+		case EScene::eTestGame:
 			mpCubeModel = CResourceManager::Get<CModel>("FieldCube");
 			mpCylinderModel = CResourceManager::Get<CModel>("FieldCylinder");
 
@@ -166,19 +167,19 @@ void CField::CreateFieldObjects()
 			break;
 
 		// ステージ２
-		case EScene::eGame2:
+		//case EScene::eGame2:
 
-			mpDoor = CResourceManager::Get<CModel>("Map_mini_door");
+		//	mpDoor = CResourceManager::Get<CModel>("Map_mini_door");
 
-			new CMoveFloor
-			(
-				mpDoor,
-				CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f),
-				CVector(0.0f, 0.0f, 0.0f), 0.5f
-			);
+		//	new CMoveFloor
+		//	(
+		//		mpDoor,
+		//		CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f),
+		//		CVector(0.0f, 0.0f, 0.0f), 0.5f
+		//	);
 
-			break;
-		case EScene::eGame3:
+		//	break;
+		case EScene::eGame1:
 			break;
 	}
 
@@ -280,7 +281,7 @@ void CField::CreateNavNodes()
 	switch (mScene)
 	{
 		// ステージ１
-		case EScene::eGame:
+		case EScene::eTestGame:
 			if (navMgr != nullptr)
 			{
 				// 壁①の周りの経路探索ノード
@@ -304,49 +305,49 @@ void CField::CreateNavNodes()
 			break;
 
 		// ステージ２
-		case EScene::eGame2:
-			if (navMgr != nullptr)
-			{
-				// 壁①の周りの経路探索ノード
-				new CNavNode(CVector(25.0f, 0.0f, 25.0f));
-				new CNavNode(CVector(70.0f, 0.0f, 25.0f));
-				new CNavNode(CVector(70.0f, 0.0f, 90.0f));
-				new CNavNode(CVector(25.0f, 0.0f, 90.0f));
+		//case EScene::eGame2:
+		//	if (navMgr != nullptr)
+		//	{
+		//		// 壁①の周りの経路探索ノード
+		//		new CNavNode(CVector(25.0f, 0.0f, 25.0f));
+		//		new CNavNode(CVector(70.0f, 0.0f, 25.0f));
+		//		new CNavNode(CVector(70.0f, 0.0f, 90.0f));
+		//		new CNavNode(CVector(25.0f, 0.0f, 90.0f));
 
-				// 壁②の周りの経路探索ノード
-				new CNavNode(CVector(85.0f, 0.0f, 15.0f));
-				new CNavNode(CVector(175.0f, 0.0f, 15.0f));
-				new CNavNode(CVector(175.0f, 0.0f, 80.0f));
-				new CNavNode(CVector(85.0f, 0.0f, 80.0f));
+		//		// 壁②の周りの経路探索ノード
+		//		new CNavNode(CVector(85.0f, 0.0f, 15.0f));
+		//		new CNavNode(CVector(175.0f, 0.0f, 15.0f));
+		//		new CNavNode(CVector(175.0f, 0.0f, 80.0f));
+		//		new CNavNode(CVector(85.0f, 0.0f, 80.0f));
 
-				// 壁③の周りの経路探索ノード
-				new CNavNode(CVector(185.0f, 0.0f, 45.0f));
-				new CNavNode(CVector(250.0f, 0.0f, 45.0f));
-				new CNavNode(CVector(250.0f, 0.0f, 100.0f));
-				new CNavNode(CVector(185.0f, 0.0f, 100.0f));
+		//		// 壁③の周りの経路探索ノード
+		//		new CNavNode(CVector(185.0f, 0.0f, 45.0f));
+		//		new CNavNode(CVector(250.0f, 0.0f, 45.0f));
+		//		new CNavNode(CVector(250.0f, 0.0f, 100.0f));
+		//		new CNavNode(CVector(185.0f, 0.0f, 100.0f));
 
-				// 壁④の周りの経路探索ノード
-				new CNavNode(CVector(15.0f, 0.0f, 105.0f));
-				new CNavNode(CVector(95.0f, 0.0f, 105.0f));
-				new CNavNode(CVector(95.0f, 0.0f, 165.0f));
-				new CNavNode(CVector(50.0f, 0.0f, 165.0f));
-				new CNavNode(CVector(15.0f, 0.0f, 165.0f));
+		//		// 壁④の周りの経路探索ノード
+		//		new CNavNode(CVector(15.0f, 0.0f, 105.0f));
+		//		new CNavNode(CVector(95.0f, 0.0f, 105.0f));
+		//		new CNavNode(CVector(95.0f, 0.0f, 165.0f));
+		//		new CNavNode(CVector(50.0f, 0.0f, 165.0f));
+		//		new CNavNode(CVector(15.0f, 0.0f, 165.0f));
 
-				// 壁⑤の周りの経路探索ノード
-				new CNavNode(CVector(115.0f, 0.0f, 105.0f));
-				new CNavNode(CVector(185.0f, 0.0f, 105.0f));
-				new CNavNode(CVector(185.0f, 0.0f, 160.0f));
-				new CNavNode(CVector(115.0f, 0.0f, 160.0f));
+		//		// 壁⑤の周りの経路探索ノード
+		//		new CNavNode(CVector(115.0f, 0.0f, 105.0f));
+		//		new CNavNode(CVector(185.0f, 0.0f, 105.0f));
+		//		new CNavNode(CVector(185.0f, 0.0f, 160.0f));
+		//		new CNavNode(CVector(115.0f, 0.0f, 160.0f));
 
-				// 壁⑥の周りの経路探索ノード
-				new CNavNode(CVector(195.0f, 0.0f, 115.0f));
-				new CNavNode(CVector(265.0f, 0.0f, 115.0f));
-				new CNavNode(CVector(265.0f, 0.0f, 180.0f));
-				new CNavNode(CVector(195.0f, 0.0f, 180.0f));
-			}
-			break;
+		//		// 壁⑥の周りの経路探索ノード
+		//		new CNavNode(CVector(195.0f, 0.0f, 115.0f));
+		//		new CNavNode(CVector(265.0f, 0.0f, 115.0f));
+		//		new CNavNode(CVector(265.0f, 0.0f, 180.0f));
+		//		new CNavNode(CVector(195.0f, 0.0f, 180.0f));
+		//	}
+		//	break;
 		// ステージ２
-		case EScene::eGame3:
+		case EScene::eGame1:
 			if (navMgr != nullptr)
 			{
 				// 壁①の周りの経路探索ノード
@@ -359,6 +360,25 @@ void CField::CreateNavNodes()
 
 				new CNavNode(CVector(-180.0f, 0.0f, 0.0f));
 				new CNavNode(CVector(-180.0f, 0.0f, 100.0f));
+
+				new CNavNode(CVector(80.0f, 0.0f, 150.0f));
+
+				new CNavNode(CVector(100.0f, 0.0f, 190.0f));
+				new CNavNode(CVector(100.0f, 0.0f, 260.0f));
+				new CNavNode(CVector(-30.0f, 0.0f, 260.0f));
+				new CNavNode(CVector(-30.0f, 0.0f, 190.0f));
+
+				new CNavNode(CVector(-100.0f, 0.0f, 270.0f));
+				new CNavNode(CVector(-100.0f, 0.0f, 320.0f));
+
+				new CNavNode(CVector(-180.0f, 0.0f, 320.0f));
+				new CNavNode(CVector(-180.0f, 0.0f, 450.0f));
+				new CNavNode(CVector(0.0f, 0.0f, 450.0f));
+				new CNavNode(CVector(0.0f, 0.0f, 370.0f));
+				new CNavNode(CVector(-20.0f, 0.0f, 330.0f));
+
+				new CNavNode(CVector(90.0f, 0.0f, 450.0f));
+				new CNavNode(CVector(180.0f, 0.0f, 450.0f));
 
 			}
 			break;

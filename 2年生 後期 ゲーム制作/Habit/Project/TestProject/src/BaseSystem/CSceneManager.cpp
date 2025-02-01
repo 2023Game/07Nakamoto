@@ -112,11 +112,11 @@ void CSceneManager::ChangeNextScene()
 		//タイトルシーン
 		case EScene::eTitle:	mpScene = new CTitleScene();	break;
 		//ゲームシーン
-		case EScene::eGame:		mpScene = new CGameScene();		break;
+		case EScene::eTestGame:		mpScene = new CGameScene();		break;
+		//ゲームシーン1
+		case EScene::eGame1:	mpScene = new CGameScene3();	break;
 		//ゲームシーン2
-		case EScene::eGame2:	mpScene = new CGameScene2();	break;
-		//ゲームシーン3
-		case EScene::eGame3:	mpScene = new CGameScene3();	break;
+		//case EScene::eGame3:	mpScene = new CGameScene3();	break;
 
 		// ゲームオーバーシーン
 		case EScene::eGameOver:	mpScene = new CGameOverScene();	break;
@@ -150,9 +150,9 @@ EScene CSceneManager::GetCurrentScene() const
 // 次に読み込まれるシーンがゲームシーンかどうか
 bool CSceneManager::IsNextGameScene() const
 {
-	return mNextScene == EScene::eGame
-		|| mNextScene == EScene::eGame2
-		|| mNextScene == EScene::eGame3
+	return mNextScene == EScene::eTestGame
+		|| mNextScene == EScene::eGame1
+		//|| mNextScene == EScene::eGame
 		|| mNextScene == EScene::eGameOver;
 }
 

@@ -13,7 +13,6 @@ CItemSlotUI::CItemSlotUI()
 	, mpItemData(nullptr)
 	, mpIcon(nullptr)
 	, mpCountText(nullptr)
-	, mpItemName(nullptr)
 {
 	mpIcon = new CImage
 	(
@@ -88,7 +87,6 @@ void CItemSlotUI::OnPointerDown(const CVector2& pos)
 
 void CItemSlotUI::OnPointerUp(const CVector2& pos)
 {
-	mpItemName = nullptr;
 
 }
 
@@ -113,7 +111,7 @@ void CItemSlotUI::Update()
 
 	if (mpItemData != nullptr)
 	{
-		// アイコンの上でクリックしているか
+		// アイコンの上で長押ししている場合
 		if (mIsTouch)
 		{
 			CDebugPrint::Print("Touch:%s\n", mpItemData->name.c_str());
@@ -123,8 +121,8 @@ void CItemSlotUI::Update()
 				// アイテムをドラッグ中のアイテムを少し大きくする
 				mpIcon->SetSize(mpIcon->GetSize() * 1.1f);
 			}
-			mpItemName = mpItemData->name.c_str();
 		}
+		// クリックを離した場合
 		else
 		{
 			// アイテムを元の位置に戻す
@@ -134,14 +132,10 @@ void CItemSlotUI::Update()
 
 		}
 
-		if (mpItemName)
+		// アイテムアイコンの上にカーソルがある場合
+		if (mIsEnter)
 		{
-			// アイコンの上にカーソルがあるか
-			if (mIsEnter && mpItemName != mpItemData->name.c_str())
-			{
-				CDebugPrint::Print("Enter:%s\n", mpItemData->name.c_str());
-
-			}
+			CDebugPrint::Print("Enter:%s\n", mpItemData->name.c_str());
 
 		}
 	}

@@ -6,9 +6,8 @@ enum class EScene
 	eNone,	//どのシーンにも所属していない
 
 	eTitle,	//タイトルシーン
-	eGame,	//ゲームシーン
-	eGame2,	// ゲームシーン2
-	eGame3,	// ゲームシーン3
+	eTestGame,	//ゲームシーン
+	eGame1,	// ゲームシーン1
 
 	eGameOver,	// ゲームオーバーシーン
 	eClear,		// クリアシーン

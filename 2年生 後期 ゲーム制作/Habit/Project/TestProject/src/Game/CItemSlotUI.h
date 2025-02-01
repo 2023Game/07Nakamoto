@@ -34,5 +34,5 @@ private:
 	CText* mpCountText;	// アイテムの個数表示用のテキスト
 	CVector2 mCursor_pos;	// カーソルの位置
 
-	const char *mpItemName;	// クリックしたアイテムの名前を記憶する用
+	//const char *mpItemName;	// クリックしたアイテムの名前を記憶する用
 };

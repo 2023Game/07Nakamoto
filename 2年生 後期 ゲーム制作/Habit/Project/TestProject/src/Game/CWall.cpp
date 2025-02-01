@@ -8,8 +8,8 @@ CWall::CWall(const CVector& pos, const CVector& angle, const CVector& size)
 	mScene = CSceneManager::Instance()->GetCurrentScene();
 	switch (mScene)
 	{
-	// ゲームシーン１
-	case EScene::eGame:
+	// テストゲームシーン
+	case EScene::eTestGame:
 		{
 			// 壁のモデルデータ取得
 			mpModel = CResourceManager::Get<CModel>("Wall");
@@ -21,18 +21,18 @@ CWall::CWall(const CVector& pos, const CVector& angle, const CVector& size)
 			break;
 		}
 	// ゲームシーン2
-	case EScene::eGame2:
-		{
-			// 壁のモデルデータ取得
-			mpModel = CResourceManager::Get<CModel>("Map_mini");
+	//case EScene::eGame2:
+	//	{
+	//		// 壁のモデルデータ取得
+	//		mpModel = CResourceManager::Get<CModel>("Map_mini");
 
-			// 壁のコライダーを作成
-			CModel* colModel = CResourceManager::Get<CModel>("Map_mini_Col");
-			mpColliderMesh = new CColliderMesh(this, ELayer::eWall, colModel, true);
-			break;
-		}
-	// ゲームシーン2
-	case EScene::eGame3:
+	//		// 壁のコライダーを作成
+	//		CModel* colModel = CResourceManager::Get<CModel>("Map_mini_Col");
+	//		mpColliderMesh = new CColliderMesh(this, ELayer::eWall, colModel, true);
+	//		break;
+	//	}
+	// ゲームシーン1
+	case EScene::eGame1:
 		{
 			// 壁のモデルデータ取得
 			mpModel = CResourceManager::Get<CModel>("Wall");

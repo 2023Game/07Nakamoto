@@ -14,7 +14,7 @@ CSwitchDoor::CSwitchDoor(const CVector& pos, const CVector& angle, const CVector
 	mScene = CSceneManager::Instance()->GetCurrentScene();
 	switch (mScene)
 	{
-	case EScene::eGame:
+	case EScene::eTestGame:
 		{
 			// 扉のモデルデータ取得(今は壁を設定している)
 			mpModel = CResourceManager::Get<CModel>("Wall");
@@ -28,7 +28,7 @@ CSwitchDoor::CSwitchDoor(const CVector& pos, const CVector& angle, const CVector
 
 			break;
 		}
-	case EScene::eGame3:
+	case EScene::eGame1:
 		{
 			// 扉のモデルデータ取得(今は壁を設定している)
 			mpModel = CResourceManager::Get<CModel>("Gimmick_Wall");

@@ -20,7 +20,7 @@
 
 // ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 CGameScene3::CGameScene3()
-	: CSceneBase(EScene::eGame3)
+	: CSceneBase(EScene::eGame1)
 {
 }
 
@@ -71,55 +71,43 @@ void CGameScene3::Load()
 	pico->Scale(1.0f, 1.0f, 1.0f);
 	pico->Position(0.0f, 0.0f, 0.0f);
 
-	// “G‡@¶¬
-	CEnemy2* enemy1 = new CEnemy2
-	(
-		{
-			CVector(110.0f, 0.0f, 100.0f),
-			CVector(-80.0f, 0.0f, 100.0f),
-			CVector(-90.0f, 0.0f, 0.0f),
-			CVector(-180.0f, 0.0f, 0.0f),
-			CVector(-180.0f, 0.0f, 100.0f),
-			CVector(-180.0f, 0.0f, 0.0f),
-			CVector(120.0f,0.0f,0.0f)
-		}
-	);
-	enemy1->Scale(1.0f, 1.0f, 1.0f);
-	enemy1->Position(CVector(0.0f, 0.0, 100.0f));
+	//// “G‡@¶¬
+	//CEnemy2* enemy1 = new CEnemy2
+	//(
+	//	{
+	//		CVector(110.0f, 0.0f, 30.0f),
+	//		CVector(110.0f, 0.0f, 90.0f),
+	//		CVector(-90.0f, 0.0f, 90.0f),
+	//		CVector(-90.0f, 0.0f, 30.0f),
+	//		CVector(-90.0f, 0.0f, 90.0f),
+	//		CVector(110.0f, 0.0f, 90.0f),
+	//	}
+	//);
+	//enemy1->Scale(1.0f, 1.0f, 1.0f);
+	//enemy1->Position(CVector(0.0f, 0.0, 110.0f));
 
-	// “G‡A¶¬
-	CEnemy2* enemy2 = new CEnemy2
-	(
-		{
-			CVector(-30.0f, 0.0f, 190.0f),
-			CVector(-30.0f, 0.0f, 260.0f),
-			CVector(-120.0f, 0.0f, 320.0f),
-			CVector(-180.0f, 0.0f, 320.0f),
-			CVector(-180.0f, 0.0f, 450.0f),
-			CVector(0.0f, 0.0f, 450.0f),
-			CVector(0.0f, 0.0f, 350.0f),
-			CVector(-100.0f, 0.0f, 310.0f),
-			CVector(-100.0f, 0.0f, 280.0f),
-			CVector(-40.0f, 0.0f, 270.0f),
-			CVector(90.0f, 0.0f, 280.0f),
-			CVector(90.0f, 0.0f, 440.0f),
-			CVector(100.0f, 0.0f, 190.0f),
-		}
-	);
-	enemy2->Scale(1.0f, 1.0f, 1.0f);
-	enemy2->Position(CVector(70.0f, 0.0, 190.0f));
+	//// “G‡A¶¬
+	//CEnemy2* enemy2 = new CEnemy2
+	//(
+	//	{
+	//		CVector(100.0f, 0.0f, 190.0f),
+	//		CVector(100.0f, 0.0f, 260.0f),
+	//		CVector(-40.0f, 0.0f, 260.0f),
+	//		CVector(-40.0f, 0.0f, 190.0f),
+	//	}
+	//);
+	//enemy2->Scale(1.0f, 1.0f, 1.0f);
+	//enemy2->Position(CVector(-40.0f, 0.0, 190.0f));
 
 	//// “G‡B¶¬
 	//CEnemy2* enemy3 = new CEnemy2
 	//(
 	//	{
-	//		CVector(110.0f, 0.0f, 100.0f),
-	//		CVector(-80.0f, 0.0f, 100.0f),
-	//		CVector(-90.0f, 0.0f, 0.0f),
-	//		CVector(-180.0f, 0.0f, 0.0f),
-	//		CVector(-180.0f, 0.0f, 100.0f),
-	//		CVector(-180.0f, 0.0f, 0.0f),
-	//		CVector(120.0f,0.0f,0.0f)
+	//		CVector(-40.0f, 0.0f, 320.0f),
+	//		CVector(0.0f, 0.0f, 390.0f),
+	//		CVector(0.0f, 0.0f, 450.0f),
+	//		CVector(-170.0f, 0.0f, 450.0f),
+	//		CVector(-170.0f, 0.0f, 320.0f),
 	//	}
 	//);
 	//enemy3->Scale(1.0f, 1.0f, 1.0f);
