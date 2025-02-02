@@ -21,7 +21,7 @@
 #define ENEMY_HEIGHT_CCOL2	2.0f	// カプセルコライダーの下の高さ
 #define ENEMY_WIDTH_CCOL	5.0f	// カプセルコライダーの幅
 
-#define ATTACK_RANGE		 20.0f	// 攻撃範囲
+#define ATTACK_RANGE		 15.0f	// 攻撃範囲
 #define ATTACK_WAIT_TIME	  1.0f	// 攻撃終了時の待ち時間
 
 #define ATTACK_JUDGE_START	39.0f	// 攻撃判定開始フレーム

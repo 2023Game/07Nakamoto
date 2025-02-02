@@ -13,6 +13,7 @@ CItemSlotUI::CItemSlotUI()
 	, mpItemData(nullptr)
 	, mpIcon(nullptr)
 	, mpCountText(nullptr)
+	, mpItemAddress(nullptr)
 {
 	mpIcon = new CImage
 	(
@@ -82,12 +83,10 @@ void CItemSlotUI::OnPointerExit(const CVector2& pos)
 
 void CItemSlotUI::OnPointerDown(const CVector2& pos)
 {
-	
 }
 
 void CItemSlotUI::OnPointerUp(const CVector2& pos)
 {
-
 }
 
 void CItemSlotUI::OnMove(const CVector2& move)
@@ -115,6 +114,8 @@ void CItemSlotUI::Update()
 		if (mIsTouch)
 		{
 			CDebugPrint::Print("Touch:%s\n", mpItemData->name.c_str());
+			mpItemAddress = mpItemData;
+			CDebugPrint::Print("Touch:%p\n", mpItemData);
 
 			if (mpIcon->GetSize() == CVector2(SLOT_SIZE, SLOT_SIZE))
 			{
@@ -129,13 +130,16 @@ void CItemSlotUI::Update()
 			mpIcon->SetSize(SLOT_SIZE, SLOT_SIZE);
 			mpIcon->SetPos(mPosition);
 			mpCountText->SetPos(mPosition + COUNT_TEXT_POS);
-
 		}
 
 		// アイテムアイコンの上にカーソルがある場合
 		if (mIsEnter)
 		{
 			CDebugPrint::Print("Enter:%s\n", mpItemData->name.c_str());
+			CDebugPrint::Print("Enter:%p\n", mpItemData);
+		}
+		else
+		{
 
 		}
 	}

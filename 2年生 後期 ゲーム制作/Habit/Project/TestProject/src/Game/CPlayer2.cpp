@@ -38,8 +38,8 @@ const CPlayer2::AnimData CPlayer2::ANIM_DATA[] =
 #define PLAYER_HEIGHT_CCOL2	 2.0f		// カプセルコライダーの下の高さ
 #define PLAYER_WIDTH_CCOL	 2.5f		// カプセルコライダーの幅
 
-#define MOVE_SPEED		  0.75			// 歩く速度
-#define RUN_SPEED		  1.0f			// 走る速度
+#define MOVE_SPEED		  0.5f			// 歩く速度
+#define RUN_SPEED		  0.75f			// 走る速度
 
 #define JUNP_MOVE_DIST	 20.0f			// ジャンプ時の移動距離
 #define JUNP_MOVE_START  16.0f			// ジャンプ時の移動開始フレーム
