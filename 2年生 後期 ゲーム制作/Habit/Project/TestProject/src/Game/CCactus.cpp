@@ -52,6 +52,9 @@ CCactus::CCactus()
 	, mpAttack1Col(nullptr)
 	, mShotNeedleCount(0)
 {
+	// HPゲージを作成
+	CreateGauge(this, mMaxHp, mHp);
+
 	// ゲージのオフセット位置を設定
 	mGaugeOffsetPos = CVector(0.0f, GAUGE_OFFSET_Y, 0.0f);
 

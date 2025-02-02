@@ -20,7 +20,7 @@
 
 // コンストラクタ
 CGameScene3::CGameScene3()
-	: CSceneBase(EScene::eGame1)
+	: CGameSceneBase(EScene::eGame1)
 {
 }
 
@@ -55,63 +55,58 @@ void CGameScene3::Load()
 	CResourceManager::Load<CModelX>("Player2", "Character\\Player2\\pico.x");
 	CResourceManager::Load<CModelX>("Enemy2", "Character\\Enemy\\warrok\\warrok.x");
 
-	// アイテムのリソースを全読み込む
-	Item::LoadItemResources();
+	//シーン読み込み
+	CGameSceneBase::Load();
 
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
-
-	// 経路探索管理クラスを作成
-	new CNavManager();
-	// フィールド作成
-	new CField();
 
 	// プレイヤー生成
 	CPlayer2* pico = new CPlayer2();
 	pico->Scale(1.0f, 1.0f, 1.0f);
 	pico->Position(0.0f, 0.0f, 0.0f);
 
-	//// 敵①生成
-	//CEnemy2* enemy1 = new CEnemy2
-	//(
-	//	{
-	//		CVector(110.0f, 0.0f, 30.0f),
-	//		CVector(110.0f, 0.0f, 90.0f),
-	//		CVector(-90.0f, 0.0f, 90.0f),
-	//		CVector(-90.0f, 0.0f, 30.0f),
-	//		CVector(-90.0f, 0.0f, 90.0f),
-	//		CVector(110.0f, 0.0f, 90.0f),
-	//	}
-	//);
-	//enemy1->Scale(1.0f, 1.0f, 1.0f);
-	//enemy1->Position(CVector(0.0f, 0.0, 110.0f));
+	// 敵①生成
+	CEnemy2* enemy1 = new CEnemy2
+	(
+		{
+			CVector(110.0f, 0.0f, 30.0f),
+			CVector(110.0f, 0.0f, 90.0f),
+			CVector(-90.0f, 0.0f, 90.0f),
+			CVector(-90.0f, 0.0f, 30.0f),
+			CVector(-90.0f, 0.0f, 90.0f),
+			CVector(110.0f, 0.0f, 90.0f),
+		}
+	);
+	enemy1->Scale(1.0f, 1.0f, 1.0f);
+	enemy1->Position(CVector(0.0f, 0.0, 110.0f));
 
-	//// 敵②生成
-	//CEnemy2* enemy2 = new CEnemy2
-	//(
-	//	{
-	//		CVector(100.0f, 0.0f, 190.0f),
-	//		CVector(100.0f, 0.0f, 260.0f),
-	//		CVector(-40.0f, 0.0f, 260.0f),
-	//		CVector(-40.0f, 0.0f, 190.0f),
-	//	}
-	//);
-	//enemy2->Scale(1.0f, 1.0f, 1.0f);
-	//enemy2->Position(CVector(-40.0f, 0.0, 190.0f));
+	// 敵②生成
+	CEnemy2* enemy2 = new CEnemy2
+	(
+		{
+			CVector(100.0f, 0.0f, 190.0f),
+			CVector(100.0f, 0.0f, 260.0f),
+			CVector(-40.0f, 0.0f, 260.0f),
+			CVector(-40.0f, 0.0f, 190.0f),
+		}
+	);
+	enemy2->Scale(1.0f, 1.0f, 1.0f);
+	enemy2->Position(CVector(-40.0f, 0.0, 190.0f));
 
-	//// 敵③生成
-	//CEnemy2* enemy3 = new CEnemy2
-	//(
-	//	{
-	//		CVector(-40.0f, 0.0f, 320.0f),
-	//		CVector(0.0f, 0.0f, 390.0f),
-	//		CVector(0.0f, 0.0f, 450.0f),
-	//		CVector(-170.0f, 0.0f, 450.0f),
-	//		CVector(-170.0f, 0.0f, 320.0f),
-	//	}
-	//);
-	//enemy3->Scale(1.0f, 1.0f, 1.0f);
-	//enemy3->Position(CVector(0.0f, 0.0, 100.0f));
+	// 敵③生成
+	CEnemy2* enemy3 = new CEnemy2
+	(
+		{
+			CVector(-40.0f, 0.0f, 320.0f),
+			CVector(0.0f, 0.0f, 390.0f),
+			CVector(0.0f, 0.0f, 450.0f),
+			CVector(-170.0f, 0.0f, 450.0f),
+			CVector(-170.0f, 0.0f, 320.0f),
+		}
+	);
+	enemy3->Scale(1.0f, 1.0f, 1.0f);
+	enemy3->Position(CVector(0.0f, 0.0, 100.0f));
 
 	// スイッチを生成
 	CPushSwitch* push_switch = new CPushSwitch(CVector(-93.0f, 0.0f, 163.0f),
@@ -228,26 +223,15 @@ void CGameScene3::Load()
 	);
 
 	mainCamera->SetFollowTargetTf(pico);
-
-	// ゲームメニューを作成
-	new CInventory();
 }
 
 // シーン更新処理
 void CGameScene3::Update()
 {
+	CGameSceneBase::Update();
+
 	if (CInput::PushKey('H'))
 	{
 		CSceneManager::Instance()->LoadScene(EScene::eTitle);
-	}
-
-	// ゲームメニューを開いてなければ、[Ｍ]キーでメニューを開く
-	CInventory* inv = CInventory::Instance();
-	if (!inv->IsOpened())
-	{
-		if (CInput::PushKey('M'))
-		{
-			inv->Open();
-		}
 	}
 }

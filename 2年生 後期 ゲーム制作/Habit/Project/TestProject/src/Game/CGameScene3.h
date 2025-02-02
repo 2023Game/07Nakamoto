@@ -1,10 +1,8 @@
 #pragma once
-#include "CSceneBase.h"
-class CInventory;
-class CSound;
+#include "CGameSceneBase.h"
 
 //タイトルシーン
-class CGameScene3 :public CSceneBase
+class CGameScene3 :public CGameSceneBase
 {
 public:
 	//コンストラクタ

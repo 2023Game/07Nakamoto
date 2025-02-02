@@ -1,9 +1,5 @@
 #pragma once
 #include "CGameSceneBase.h"
-class CGameMenu;
-class CSound;
-class CInventory;
-class CHpUI;
 
 //タイトルシーン
 class CGameScene :public CGameSceneBase
@@ -19,5 +15,4 @@ public:
 	void Update();
 
 private:
-	CInventory* mpInventory;
 };

@@ -20,17 +20,17 @@
 
 #include "CTouch.h"
 #include "CPlayer3.h"
+#include "CGhost.h"
 
 #include "ItemData.h"
 #include "CChoco.h"
 #include "CCookie.h"
 #include "CStone.h"
-//#include "CGameBase.h"
+
 
 //コンストラクタ
 CGameScene::CGameScene()
 	: CGameSceneBase(EScene::eTestGame)
-	//, mpInventory(nullptr)
 {
 }
 
@@ -82,23 +82,21 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>("Obj", "Object\\mm.obj");
 
 	CResourceManager::Load<CModelX>("Player3", "Character\\Player3\\Acquire.x");
-	CResourceManager::Load<CModelX>("Ghost", "Character\\Enemy\\ghost\\ghost.x");
+	CResourceManager::Load<CModelX>("Ghost", "Character\\Enemy\\Ghost\\ghost.x");
 
-	// アイテムのリソースを全読み込む
-	//Item::LoadItemResources();
+	//シーン読み込み
 	CGameSceneBase::Load();
 
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
 
-	// 経路探索管理クラスを作成
-	//new CNavManager();
-	// フィールド作成
-	//new CField();
-
 	// サボテンの敵を作成
 	CCactus* cactus = new CCactus();
 	cactus->Position(0.0f, 0.0f, -100.0f);
+
+	// 幽霊の敵を作成
+	CGhost* ghost = new CGhost();
+	ghost->Position(-50.0f, 0.0f, -100.0f);
 
 	//CPlayer* player = new CPlayer();
 	//player->Scale(1.0f, 1.0f, 1.0f);
@@ -108,9 +106,9 @@ void CGameScene::Load()
 	pico->Scale(1.0f, 1.0f, 1.0f);
 	pico->Position(-50.0f, 0.0f, 10.0f);
 
-	CPlayer3* player3 = new CPlayer3();
-	player3->Scale(1.0f, 1.0f, 1.0f);
-	player3->Position(-50.0f, 0.0f, -10.0f);
+	//CPlayer3* player3 = new CPlayer3();
+	//player3->Scale(1.0f, 1.0f, 1.0f);
+	//player3->Position(-50.0f, 0.0f, -10.0f);
 
 	// 敵①生成
 	CEnemy1* enemy = new CEnemy1
@@ -225,10 +223,6 @@ void CGameScene::Load()
 	);
 
 	mainCamera->SetFollowTargetTf(pico);
-
-	// ゲームメニューを作成
-	//new CInventory();
-
 }
 
 //シーンの更新処理

@@ -53,6 +53,14 @@ void CColliderCapsule::Render()
 	{
 		col = CColor::gray;
 	}
+
+	CMatrix m = Matrix();
+	CVector s = mV[0] * m;
+	CVector e = mV[1] * m;
+	Primitive::DrawWireCapsule
+	(
+		s, e, mRadius, col
+	);
 }
 
 // コライダーの情報を更新

@@ -19,10 +19,6 @@ CEnemy::CEnemy()
 	, mpBodyCol(nullptr)
 	, mpHpGauge(nullptr)
 {
-	// HPゲージを作成
-	mpHpGauge = new CGaugeUI3D(this);
-	mpHpGauge->SetMaxPoint(mMaxHp);
-	mpHpGauge->SetCurrPoint(mHp);
 }
 
 // デストラクタ
@@ -70,6 +66,15 @@ void CEnemy::InitEnemy(std::string path, const std::vector<AnimData>* pAnimData)
 
 	// CXCharacterの初期化
 	Init(model);
+}
+
+// HPゲージを作成
+void CEnemy::CreateGauge(CObjectBase* owner, int maxHp, int hp)
+{
+	//// HPゲージを作成
+	mpHpGauge = new CGaugeUI3D(this);
+	mpHpGauge->SetMaxPoint(mMaxHp);
+	mpHpGauge->SetCurrPoint(mHp);
 }
 
 // 衝突処理
@@ -172,10 +177,13 @@ void CEnemy::Update()
 
 	mIsGrounded = false;
 
-	// HPゲージを更新
-	mpHpGauge->Position(Position() + mGaugeOffsetPos);
-	mpHpGauge->SetMaxPoint(mMaxHp);
-	mpHpGauge->SetCurrPoint(mHp);
+	if (mpHpGauge)
+	{
+		// HPゲージを更新
+		mpHpGauge->Position(Position() + mGaugeOffsetPos);
+		mpHpGauge->SetMaxPoint(mMaxHp);
+		mpHpGauge->SetCurrPoint(mHp);
+	}
 }
 
 // 描画

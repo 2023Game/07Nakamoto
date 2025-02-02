@@ -47,6 +47,9 @@ protected:
 	// “G‚Ì‰Šú‰»
 	void InitEnemy(std::string path, const std::vector<AnimData>* pAnimData);
 
+	// HPƒQ[ƒW‚ğì¬
+	void CreateGauge(CObjectBase* owner, int maxHp, int hp);
+
 	// ó‘ÔØ‚è‘Ö‚¦
 	virtual void ChangeState(int state);
 

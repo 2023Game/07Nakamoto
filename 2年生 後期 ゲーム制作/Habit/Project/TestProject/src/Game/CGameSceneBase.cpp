@@ -49,10 +49,10 @@ void CGameSceneBase::Update()
 	//	mpGameBGM->PlayLoop(-1, 1.0f, false, 1.0f);
 	//}
 
-	if (CInput::PushKey('H'))
-	{
-		CSceneManager::Instance()->LoadScene(EScene::eGameOver);
-	}
+	//if (CInput::PushKey('H'))
+	//{
+	//	CSceneManager::Instance()->LoadScene(EScene::eGameOver);
+	//}
 
 	// ゲームメニューを開いてなければ、[Ｍ]キーでメニューを開く
 	CInventory* inv = CInventory::Instance();
