@@ -38,8 +38,8 @@ const CPlayer2::AnimData CPlayer2::ANIM_DATA[] =
 #define PLAYER_HEIGHT_CCOL2	 2.0f		// カプセルコライダーの下の高さ
 #define PLAYER_WIDTH_CCOL	 2.5f		// カプセルコライダーの幅
 
-#define MOVE_SPEED		  0.5f			// 歩く速度
-#define RUN_SPEED		  0.75f			// 走る速度
+#define MOVE_SPEED		  0.75			// 歩く速度
+#define RUN_SPEED		  1.0f			// 走る速度
 
 #define JUNP_MOVE_DIST	 20.0f			// ジャンプ時の移動距離
 #define JUNP_MOVE_START  16.0f			// ジャンプ時の移動開始フレーム
@@ -108,8 +108,10 @@ CPlayer2::CPlayer2()
 		  ELayer::eItem }
 	);
 
+#if _DEBUG
 	// 視野範囲のデバッグ表示クラスを作成
 	mpDebugFov = new CDebugFieldOfView(this, mFovAngle, FOV_LENGTH);
+#endif
 
 	// 経路探索用のノードを作成
 	mpNavNode = new CNavNode(Position(), true);
@@ -252,14 +254,18 @@ void CPlayer2::Update()
 		mpNavNode->SetPos(Position());
 	}
 
+#if _DEBUG
 	CDebugPrint::Print("Grounded:%s\n", mIsGrounded ? "true" : "false");
 	CDebugPrint::Print("State:%s\n", ToString(mState).c_str());
+#endif
 
 	mIsGrounded = false;
 
+#if _DEBUG
 	CDebugPrint::Print("FPS:%f\n", Times::FPS());
 	CDebugPrint::Print("HP:%d\n", mHp);
 	CDebugPrint::Print("ST:%d\n", mSt);
+#endif
 
 	// 調べるオブジェクトのリストをクリア
 	mNearInteractObjs.clear();

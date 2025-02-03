@@ -13,7 +13,6 @@ CItemSlotUI::CItemSlotUI()
 	, mpItemData(nullptr)
 	, mpIcon(nullptr)
 	, mpCountText(nullptr)
-	, mpItemAddress(nullptr)
 {
 	mpIcon = new CImage
 	(
@@ -83,16 +82,20 @@ void CItemSlotUI::OnPointerExit(const CVector2& pos)
 
 void CItemSlotUI::OnPointerDown(const CVector2& pos)
 {
+	
 }
 
 void CItemSlotUI::OnPointerUp(const CVector2& pos)
 {
+
 }
 
 void CItemSlotUI::OnMove(const CVector2& move)
 {
 	if (mpItemData == nullptr) return;
+#if _DEBUG
 	CDebugPrint::Print("Move:%s: %.2f, %.2f\n", mpItemData->name.c_str(), move.X(), move.Y());
+#endif
 
 	// アイテムアイコンの移動
 	mpIcon->SetPos(mpIcon->GetPos() + move);
@@ -113,9 +116,14 @@ void CItemSlotUI::Update()
 		// アイコンの上で長押ししている場合
 		if (mIsTouch)
 		{
+#if _DEBUG
 			CDebugPrint::Print("Touch:%s\n", mpItemData->name.c_str());
+<<<<<<< HEAD
 			mpItemAddress = mpItemData;
 			CDebugPrint::Print("Touch:%p\n", mpItemData);
+#endif
+=======
+>>>>>>> parent of 965797f (CEnemy2繧辰Warrok縺ｫ螟画峩縲，Warrok縺ｯCEnemy繧堤ｶ呎価縺吶ｋ繧医≧縺ｫ菫ｮ豁｣)
 
 			if (mpIcon->GetSize() == CVector2(SLOT_SIZE, SLOT_SIZE))
 			{
@@ -130,16 +138,22 @@ void CItemSlotUI::Update()
 			mpIcon->SetSize(SLOT_SIZE, SLOT_SIZE);
 			mpIcon->SetPos(mPosition);
 			mpCountText->SetPos(mPosition + COUNT_TEXT_POS);
+
 		}
 
 		// アイテムアイコンの上にカーソルがある場合
 		if (mIsEnter)
 		{
+#if _DEBUG
 			CDebugPrint::Print("Enter:%s\n", mpItemData->name.c_str());
+<<<<<<< HEAD
 			CDebugPrint::Print("Enter:%p\n", mpItemData);
+#endif
 		}
 		else
 		{
+=======
+>>>>>>> parent of 965797f (CEnemy2繧辰Warrok縺ｫ螟画峩縲，Warrok縺ｯCEnemy繧堤ｶ呎価縺吶ｋ繧医≧縺ｫ菫ｮ豁｣)
 
 		}
 	}

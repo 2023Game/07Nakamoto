@@ -59,6 +59,9 @@ CTitleUI::CTitleUI()
 		false
 	);
 
+	// 背景画像の大きさをフルスクリーンに変更
+	// mpTitleBg->SetSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+
 	// 「CLICK TO START」のテキストを生成
 	mpStartText = new CText
 	(

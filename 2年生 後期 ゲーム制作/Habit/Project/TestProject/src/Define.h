@@ -5,6 +5,9 @@
 #define WINDOW_WIDTH 1280		//ウィンドウの幅
 #define WINDOW_HEIGHT 720		//ウィンドウの高さ
 
+//#define WINDOW_WIDTH 1920		//ウィンドウの幅
+//#define WINDOW_HEIGHT 1080		//ウィンドウの高さ
+
 #define CAMERA_FOVY 60.0f		//カメラの画角
 #define CAMERA_ZNEAR 1.0f		//カメラの描画最短距離
 #define CAMERA_ZFAR 1000.0f		//カメラの描画最長距離

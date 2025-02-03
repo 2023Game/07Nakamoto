@@ -15,6 +15,8 @@ CBootMenuScene::CBootMenuScene()
 		{ "タイトル画面", EScene::eTitle },
 		{ "テストステージ", EScene::eTestGame },
 		{ "ステージ1", EScene::eGame1 },
+		{ "クリアシーン", EScene::eClear },
+		{ "ゲームオーバーシーン", EScene::eGameOver },
 		{ "", EScene::eNone },
 		{ "■デバッグ", EScene::eNone },
 		{ "衝突判定テスト", EScene::eColTest },

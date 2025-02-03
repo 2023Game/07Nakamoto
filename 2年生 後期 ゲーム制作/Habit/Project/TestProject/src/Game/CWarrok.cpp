@@ -12,7 +12,7 @@
 #include "CNavManager.h"
 
 #define BODY_HEIGHT 24.0f	// カプセルコライダーの上の高さ
-#define BODY_WIDTH	2.0f	// カプセルコライダーの幅
+#define BODY_WIDTH	5.0f	// カプセルコライダーの幅
 #define BODY_RADIUS 5.0f	// カプセルコライダーの半径
 
 #define WALK_SPEED		50.0f	// 歩く速度
@@ -21,9 +21,10 @@
 
 #define LOOKAT_SPEED 90.0f	// 相手の方へ向く速さ
 #define ATTACK_RANGE 15.0f	// 攻撃をする範囲
+#define ATTACK_WAIT_TIME	  1.0f	// 攻撃終了時の待ち時間
 
 #define ATTACK_COL_RADIUS 10.0f	// 攻撃コライダーの半径
-#define ATTACK_COL_POS CVector(0.0f, 5.0f, 10.0f)	// 攻撃コライダーの位置
+#define ATTACK_COL_POS CVector(0.0f, 5.0f, 8.0f)	// 攻撃コライダーの位置
 #define ATTACK_POWER 50		// 攻撃力
 #define ATTACK_START_FRAME 39.0f	// 攻撃判定開始フレーム
 #define ATTACK_END_FRAME 46.0f		// 攻撃判定終了フレーム
@@ -74,7 +75,7 @@ CWarrok::CWarrok(std::vector<CVector> patrolPoints)
 		this, ELayer::eEnemy,
 		CVector(0.0f, BODY_WIDTH, 0.0f),
 		CVector(0.0f, BODY_HEIGHT, 0.0f),
-		BODY_RADIUS
+		BODY_RADIUS, true
 	);
 	// フィールドと、プレイヤーの攻撃コライダーとヒットするように設定
 	mpBodyCol->SetCollisionTags({ ETag::eField, ETag::ePlayer });
@@ -100,8 +101,10 @@ CWarrok::CWarrok(std::vector<CVector> patrolPoints)
 	// 攻撃コライダーを最初はオフにしておく
 	mpAttack1Col->SetEnable(false);
 
+#if _DEBUG
 	// 視野範囲のデバッグ表示クラスを作成
 	mpDebugFov = new CDebugFieldOfView(this, mFovAngle, mFovLength);
+#endif
 
 	// 経路探索用のノードを作成
 	mpNavNode = new CNavNode(Position(), true);
@@ -117,7 +120,6 @@ CWarrok::CWarrok(std::vector<CVector> patrolPoints)
 		CNavNode* node = new CNavNode(point, true);
 		mPatrolPoints.push_back(node);
 	}
-
 }
 
 // デストラクタ
@@ -288,7 +290,6 @@ void CWarrok::ChangeState(int state)
 	{
 		AttackEnd();
 	}
-
 	// 状態切り替え
 	CEnemy::ChangeState(state);
 }
@@ -706,6 +707,18 @@ void CWarrok::UpdateAttack1()
 			ChangeState((int)EState::eIdle);
 		}
 		break;
+		// ステップ４ : 攻撃終了後の待ち時間
+	case 4:
+		if (mElapsedTime < ATTACK_WAIT_TIME)
+		{
+			mElapsedTime += Times::DeltaTime();
+		}
+		else
+		{
+			// 時間が経過したら、待機状態へ移行
+			ChangeState((int)EState::eIdle);
+		}
+		break;
 	}
 
 }
@@ -752,10 +765,12 @@ void CWarrok::Update()
 	// 敵のベースクラスの更新
 	CEnemy::Update();
 
+#if _DEBUG
 	// 現在の状態に合わせて視野範囲の色を変更
 	mpDebugFov->SetColor(GetStateColor((EState)mState));
 
 	CDebugPrint::Print("状態 : %s\n", GetStateStr((EState)mState).c_str());
+#endif
 }
 
 // 描画
@@ -763,6 +778,7 @@ void CWarrok::Render()
 {
 	CEnemy::Render();
 
+#if _DEBUG
 	// 巡回中であれば、
 	if (mState == (int)EState::ePatrol)
 	{
@@ -824,6 +840,7 @@ void CWarrok::Render()
 			);
 		}
 	}
+#endif
 }
 
 // 状態の文字列を取得

@@ -28,7 +28,4 @@ private:
 	CCollider* mpCollider;	// スイッチのコリジョンデータ
 
 	bool mSwitch;	// スイッチがオンかオフか
-	int mNumber;	// 番号
-	int mNum;		// 何個作られたか
-
 };

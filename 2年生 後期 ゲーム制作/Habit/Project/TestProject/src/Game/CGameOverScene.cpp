@@ -4,6 +4,7 @@
 #include "CCamera.h"
 #include "CGameOverUI.h"
 #include "ItemData.h"
+#include "CBGMManager.h"
 
 //コンストラクタ
 CGameOverScene::CGameOverScene()
@@ -30,6 +31,10 @@ void CGameOverScene::Load()
 	CInput::ShowCursor(true);
 	// 背景色設定
 	System::SetClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+	// ゲームBGMを読み込み
+	CBGMManager::Instance()->Play(EBGMType::eGame);
+
 
 	CCamera* mainCamera = new CCamera
 	(

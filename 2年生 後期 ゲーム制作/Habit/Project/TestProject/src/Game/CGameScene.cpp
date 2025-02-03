@@ -26,7 +26,7 @@
 #include "CChoco.h"
 #include "CCookie.h"
 #include "CStone.h"
-#include "CWarrok.h"
+
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -74,7 +74,8 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>("Player2", "Character\\Player2\\pico.x");
 	CResourceManager::Load<CModelX>("Enemy", "Character\\Enemy\\mutant\\mutant.x");
 	CResourceManager::Load<CModelX>("Enemy2", "Character\\Enemy\\warrok\\warrok.x");
-	CResourceManager::Load<CModel>("Switch", "Object\\Switch.obj");
+	CResourceManager::Load<CModel>("Switch_OFF", "Object\\Switch\\switch_Off.obj");
+	CResourceManager::Load<CModel>("Switch_ON", "Object\\Switch\\switch_On.obj");
 
 	CResourceManager::Load<CModel>("Spider_Web", "Character\\Enemy\\trap\\spider_web.obj");
 
@@ -83,7 +84,6 @@ void CGameScene::Load()
 
 	CResourceManager::Load<CModelX>("Player3", "Character\\Player3\\Acquire.x");
 	CResourceManager::Load<CModelX>("Ghost", "Character\\Enemy\\Ghost\\ghost.x");
-	CResourceManager::Load<CModelX>("Warrok", "Character\\Enemy\\warrok2\\warrok.x");
 
 	//シーン読み込み
 	CGameSceneBase::Load();
@@ -112,7 +112,7 @@ void CGameScene::Load()
 	//player3->Position(-50.0f, 0.0f, -10.0f);
 
 	// 敵①生成
-	CWarrok* enemy = new CWarrok
+	CEnemy1* enemy = new CEnemy1
 	(
 		{
 			CVector(100.0f, 0.0f,   0.0f),

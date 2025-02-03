@@ -7,7 +7,6 @@
 // コンストラクタ
 CPushSwitch::CPushSwitch(const CVector& pos, const CVector& angle, const CVector& size)
 	: mSwitch(false)
-	, mNum(1)
 {
 	// スイッチのモデルデータ取得
 	mpModel = CResourceManager::Get<CModel>("Switch");
@@ -53,5 +52,15 @@ void CPushSwitch::Interact()
 // 描画処理
 void CPushSwitch::Render()
 {
+	if (mSwitch)
+	{
+		// スイッチのモデルデータ取得
+		mpModel = CResourceManager::Get<CModel>("Switch_ON");
+	}
+	else
+	{
+		// スイッチのモデルデータ取得
+		mpModel = CResourceManager::Get<CModel>("Switch_OFF");
+	}
 	mpModel->Render(Matrix());
 }

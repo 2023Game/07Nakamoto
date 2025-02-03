@@ -19,8 +19,8 @@ CGameClearScrene::~CGameClearScrene()
 //シーン読み込み
 void CGameClearScrene::Load()
 {
-	// TODO:消えない BGMの削除
-	CBGMManager::ClearInstance();
+	// タイトルBGMを再生
+	CBGMManager::Instance()->Play(EBGMType::eTitle);
 
 	// タイトル画面はカーソル表示
 	CInput::ShowCursor(true);
@@ -46,7 +46,7 @@ void CGameClearScrene::Update()
 		// コンティニューならば、シーンを読み込む
 		if (mpGameClearUI->IsContinue())
 		{
-			CSceneManager::Instance()->LoadScene(EScene::eBootMenu);
+			CSceneManager::Instance()->LoadScene(EScene::eTitle);
 		}
 		// ゲーム終了ならば、アプリを閉じる
 		else if (mpGameClearUI->IsExitGame())

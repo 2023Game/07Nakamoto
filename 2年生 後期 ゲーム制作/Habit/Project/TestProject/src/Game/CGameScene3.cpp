@@ -4,6 +4,7 @@
 #include "CPlayer2.h"
 #include "CEnemy1.h"
 #include "CEnemy2.h"
+#include "CWarrok.h"
 #include "CGameCamera.h"
 #include "CGameCamera2.h"
 #include "CInput.h"
@@ -50,10 +51,12 @@ void CGameScene3::Load()
 	CResourceManager::Load<CModel>("Wall", "Field\\stage1\\wall.obj");
 	CResourceManager::Load<CModel>("Wall_Col", "Field\\stage1\\wall_col.obj");
 	CResourceManager::Load<CModel>("Gimmick_Wall", "Field\\stage1\\gimmick_wall.obj");
-	CResourceManager::Load<CModel>("Switch", "Object\\Switch.obj");
+	CResourceManager::Load<CModel>("Switch_OFF", "Object\\Switch\\switch_Off.obj");
+	CResourceManager::Load<CModel>("Switch_ON", "Object\\Switch\\switch_On.obj");
 	CResourceManager::Load<CModel>("Goal", "Object\\clear_area.obj");
 	CResourceManager::Load<CModelX>("Player2", "Character\\Player2\\pico.x");
 	CResourceManager::Load<CModelX>("Enemy2", "Character\\Enemy\\warrok\\warrok.x");
+	CResourceManager::Load<CModelX>("Warrok", "Character\\Enemy\\warrok2\\warrok.x");
 
 	//ÉVÅ[Éìì«Ç›çûÇ›
 	CGameSceneBase::Load();
@@ -66,8 +69,8 @@ void CGameScene3::Load()
 	pico->Scale(1.0f, 1.0f, 1.0f);
 	pico->Position(0.0f, 0.0f, 0.0f);
 
-	// ìGá@ê∂ê¨
-	CEnemy2* enemy1 = new CEnemy2
+	// ÉEÉHÅ[ÉçÉbÉNÇÃìGá@ê∂ê¨
+	CWarrok* enemy1 = new CWarrok
 	(
 		{
 			CVector(110.0f, 0.0f, 30.0f),
@@ -81,8 +84,8 @@ void CGameScene3::Load()
 	enemy1->Scale(1.0f, 1.0f, 1.0f);
 	enemy1->Position(CVector(0.0f, 0.0, 110.0f));
 
-	// ìGáAê∂ê¨
-	CEnemy2* enemy2 = new CEnemy2
+	// ÉEÉHÅ[ÉçÉbÉNÇÃìGáAê∂ê¨
+	CWarrok* enemy2 = new CWarrok
 	(
 		{
 			CVector(100.0f, 0.0f, 190.0f),
@@ -94,8 +97,8 @@ void CGameScene3::Load()
 	enemy2->Scale(1.0f, 1.0f, 1.0f);
 	enemy2->Position(CVector(-40.0f, 0.0, 190.0f));
 
-	// ìGáBê∂ê¨
-	CEnemy2* enemy3 = new CEnemy2
+	// ÉEÉHÅ[ÉçÉbÉNÇÃìGáBê∂ê¨
+	CWarrok* enemy3 = new CWarrok
 	(
 		{
 			CVector(-40.0f, 0.0f, 320.0f),

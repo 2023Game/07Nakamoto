@@ -172,6 +172,7 @@ bool CNavManager::Navigate(CNavNode* start, CNavNode* goal, std::vector<CNavNode
 // ‘S‚Ä‚Ìƒm[ƒh‚ÆŒo˜H‚ð•`‰æ
 void CNavManager::Render()
 {
+#if _DEBUG
 	// [SPACE]ƒL[‚ÅŒo˜H’Tõƒm[ƒh‚Ì•`‰æƒ‚[ƒh‚ðØ‚è‘Ö‚¦
 	if (CInput::PushKey('N'))
 	{
@@ -197,5 +198,6 @@ void CNavManager::Render()
 		Primitive::DrawLine(start, end, CColor::cyan, 4.0f);
 	}
 	glEnable(GL_DEPTH_TEST);
+#endif
 }
 

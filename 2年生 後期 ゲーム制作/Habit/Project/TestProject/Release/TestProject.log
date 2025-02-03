@@ -1,3 +1,43 @@
-﻿  main.cpp
-LINK : fatal error C1047: オブジェクトまたはライブラリ ファイル 'lib\ftgl_static.lib' は、'Release\BGMData.obj' などの他のオブジェクトとは異なるバージョンのコンパイラで作成されています。同じコンパイラを使用してすべてのオブジェクトとライブラリをリビルドします
-LINK : fatal error LNK1257: コードの生成に失敗しました。
+﻿  CTitleUI.cpp
+  コード生成しています。
+  Previous IPDB and IOBJ mismatch, fall back to full compilation.
+  All 4355 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  コード生成が終了しました。
+ftgl_static.lib(FTPixmapFont.obj) : warning LNK4099: PDB 'ftgl_static.pdb' が 'ftgl_static.lib(FTPixmapFont.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\ftgl_static.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(FTSimpleLayout.obj) : warning LNK4099: PDB 'ftgl_static.pdb' が 'ftgl_static.lib(FTSimpleLayout.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\ftgl_static.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(FTFont.obj) : warning LNK4099: PDB 'ftgl_static.pdb' が 'ftgl_static.lib(FTFont.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\ftgl_static.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(FTPixmapGlyph.obj) : warning LNK4099: PDB 'ftgl_static.pdb' が 'ftgl_static.lib(FTPixmapGlyph.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\ftgl_static.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(FTLayout.obj) : warning LNK4099: PDB 'ftgl_static.pdb' が 'ftgl_static.lib(FTLayout.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\ftgl_static.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(FTFace.obj) : warning LNK4099: PDB 'ftgl_static.pdb' が 'ftgl_static.lib(FTFace.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\ftgl_static.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(FTSize.obj) : warning LNK4099: PDB 'ftgl_static.pdb' が 'ftgl_static.lib(FTSize.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\ftgl_static.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(FTGlyphContainer.obj) : warning LNK4099: PDB 'ftgl_static.pdb' が 'ftgl_static.lib(FTGlyphContainer.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\ftgl_static.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(FTGlyph.obj) : warning LNK4099: PDB 'ftgl_static.pdb' が 'ftgl_static.lib(FTGlyph.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\ftgl_static.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(FTLibrary.obj) : warning LNK4099: PDB 'ftgl_static.pdb' が 'ftgl_static.lib(FTLibrary.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\ftgl_static.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(FTCharmap.obj) : warning LNK4099: PDB 'ftgl_static.pdb' が 'ftgl_static.lib(FTCharmap.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\ftgl_static.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(ftsystem.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(ftsystem.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(ftdebug.obj) : warning LNK4099: PDB '' が 'ftgl_static.lib(ftdebug.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(winfnt.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(winfnt.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(type42.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(type42.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(type1.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(type1.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(truetype.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(truetype.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(svg.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(svg.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(sdf.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(sdf.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(smooth.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(smooth.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(sfnt.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(sfnt.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(raster.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(raster.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(psmodule.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(psmodule.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(pshinter.obj) : warning LNK4099: PDB '' が 'ftgl_static.lib(pshinter.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(psaux.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(psaux.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(pfr.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(pfr.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(pcf.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(pcf.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(ftlzw.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(ftlzw.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(ftgzip.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(ftgzip.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(type1cid.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(type1cid.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(cff.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(cff.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(bdf.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(bdf.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(ftmm.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(ftmm.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(ftinit.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(ftinit.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(ftbitmap.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(ftbitmap.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(ftbase.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(ftbase.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(autofit.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(autofit.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+  TestProject.vcxproj -> C:\Users\dogpo\Desktop\2023Game\07Nakamoto\2年生 後期 ゲーム制作\Habit\Project\Release\BaseProject.exe

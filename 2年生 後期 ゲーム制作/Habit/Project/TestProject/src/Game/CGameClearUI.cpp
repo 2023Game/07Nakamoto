@@ -45,7 +45,7 @@ CGameClearUI::CGameClearUI()
 		false, false
 	);
 	// ボタンの画像を読み込み
-	btn1->LoadButtonImage("UI\\title_start0.png", "UI\\title_start1.png");
+	btn1->LoadButtonImage("UI\\title_quit0.png", "UI\\title_quit1.png");
 	// ボタンクリック時に呼び出されるコールバック関数を設定
 	btn1->SetOnClickFunc(std::bind(&CGameClearUI::OnClickStart, this));
 	// ボタンは最初は無効化して、スケール値を0にしておく
@@ -120,7 +120,7 @@ void CGameClearUI::Render()
 	// メニューボタンを表示
 	for (CButton* btn : mButtons)
 	{
-		btn->Update();
+		btn->Render();
 	}
 }
 
