@@ -118,12 +118,9 @@ void CItemSlotUI::Update()
 		{
 #if _DEBUG
 			CDebugPrint::Print("Touch:%s\n", mpItemData->name.c_str());
-<<<<<<< HEAD
-			mpItemAddress = mpItemData;
+			//mpItemAddress = mpItemData;
 			CDebugPrint::Print("Touch:%p\n", mpItemData);
 #endif
-=======
->>>>>>> parent of 965797f (CEnemy2をCWarrokに変更、CWarrokはCEnemyを継承するように修正)
 
 			if (mpIcon->GetSize() == CVector2(SLOT_SIZE, SLOT_SIZE))
 			{
@@ -146,14 +143,11 @@ void CItemSlotUI::Update()
 		{
 #if _DEBUG
 			CDebugPrint::Print("Enter:%s\n", mpItemData->name.c_str());
-<<<<<<< HEAD
 			CDebugPrint::Print("Enter:%p\n", mpItemData);
 #endif
 		}
 		else
 		{
-=======
->>>>>>> parent of 965797f (CEnemy2をCWarrokに変更、CWarrokはCEnemyを継承するように修正)
 
 		}
 	}

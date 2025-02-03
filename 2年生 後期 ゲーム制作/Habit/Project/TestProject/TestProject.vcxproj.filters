@@ -502,6 +502,9 @@
     <ClCompile Include="src\Game\CGhost.cpp">
       <Filter>ソース ファイル\Game\Character\Enamy</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CWarrok.cpp">
+      <Filter>ソース ファイル\Game\Character\Enamy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -904,6 +907,9 @@
       <Filter>ソース ファイル\Game\item\UI</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CGhost.h">
+      <Filter>ソース ファイル\Game\Character\Enamy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CWarrok.h">
       <Filter>ソース ファイル\Game\Character\Enamy</Filter>
     </ClInclude>
   </ItemGroup>

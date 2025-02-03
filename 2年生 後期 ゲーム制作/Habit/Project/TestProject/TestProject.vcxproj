@@ -123,6 +123,7 @@
     <ClCompile Include="src\Game\CTouch.cpp" />
     <ClCompile Include="src\Game\CTrap.cpp" />
     <ClCompile Include="src\Game\CWall.cpp" />
+    <ClCompile Include="src\Game\CWarrok.cpp" />
     <ClCompile Include="src\Game\CWeapon.cpp" />
     <ClCompile Include="src\Game\CXCharacter.cpp" />
     <ClCompile Include="src\Game\CGameOverUI.cpp" />
@@ -260,6 +261,7 @@
     <ClInclude Include="src\Game\CTouch.h" />
     <ClInclude Include="src\Game\CTrap.h" />
     <ClInclude Include="src\Game\CWall.h" />
+    <ClInclude Include="src\Game\CWarrok.h" />
     <ClInclude Include="src\Game\CWeapon.h" />
     <ClInclude Include="src\Game\CXCharacter.h" />
     <ClInclude Include="src\Game\CGameOverUI.h" />
@@ -285,7 +287,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
