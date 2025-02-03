@@ -7,7 +7,7 @@ class CItemSlotUI : public CUIBase
 {
 public:
 	// コンストラクタ
-	CItemSlotUI();
+	CItemSlotUI(int slotIdx);
 	// デストラクタ
 	~CItemSlotUI();
 
@@ -29,6 +29,7 @@ public:
 	// 描画
 	void Render() override;
 private:
+	int mSlotIndex;		// 何番目のアイテムスロットか
 	const ItemData* mpItemData;
 	CImage* mpIcon;		// アイテムアイコンのイメージ
 	CText* mpCountText;	// アイテムの個数表示用のテキスト

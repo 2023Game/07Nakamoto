@@ -7,6 +7,7 @@
 class CItemSlotUI;
 class CExpandButton;
 
+// インベントリのクラス
 class CInventory : public CTask
 {
 public:
@@ -29,6 +30,15 @@ public:
 	void Decide(int select);
 	// アイテムを追加する
 	void AddItem(ItemType type, int count);
+
+	// カーソルがスロットに重なった
+	void EnterItemSlot(int index);
+	// カーソルがアイテムスロットから離れた
+	void ExitItemSlot(int index);
+	// アイテムスロットを掴んだ
+	void GrabItemSlot(int index);
+	// 掴んでいるアイテムスロットを離した
+	void ReleaseItemSlot(int index);
 
 	// 更新
 	void Update() override;
@@ -63,4 +73,7 @@ private:
 
 	// ボタンのリスト
 	std::vector<CExpandButton*> mSlotButtons;
+
+	int mEnterSlotIndex;		// カーソルが重なっているアイテムの番号
+	int mGrabSlotIndex;			// 現在掴んでいるアイテムの番号
 };

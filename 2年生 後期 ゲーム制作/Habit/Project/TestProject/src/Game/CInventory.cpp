@@ -35,6 +35,8 @@ CInventory::CInventory()
 	, mItemSlots(SLOT_COUNT)
 	, mSlotButtons(SLOT_COLUMN)
 	, mIsOpened(false)
+	, mEnterSlotIndex(-1)
+	, mGrabSlotIndex(-1)
 {
 	spInstance = this;
 
@@ -43,7 +45,7 @@ CInventory::CInventory()
 	for (int i = 0; i < slotCount; i++)
 	{
 		SlotData& slot = mItemSlots[i];
-		slot.slotUI = new CItemSlotUI();
+		slot.slotUI = new CItemSlotUI(i);
 	}
 
 	// インベントリの背景
@@ -128,6 +130,10 @@ void CInventory::Open()
 		if (slot.data != nullptr)
 		{
 			slot.slotUI->SetItemSloto(slot.data, slot.count);
+		}
+		else
+		{
+			slot.slotUI->SetItemSloto(nullptr, -1);
 		}
 
 		int w = i % SLOT_COLUMN;
@@ -278,6 +284,66 @@ void CInventory::AddItem(ItemType type, int count)
 	}	
 }
 
+// カーソルがスロットに重なった
+void CInventory::EnterItemSlot(int index)
+{
+	// カーソルが重なっているアイテムスロットの番号を更新
+	mEnterSlotIndex = index;
+}
+
+// カーソルがアイテムスロットから離れた
+void CInventory::ExitItemSlot(int index)
+{
+	// カーソルが重なっているアイテムスロットの番号と一致すれば、
+	// 重なっていない状態へ戻す
+	if (mEnterSlotIndex == index)
+	{
+		mEnterSlotIndex = -1;
+	}
+}
+
+// アイテムスロットを掴んだ
+void CInventory::GrabItemSlot(int index)
+{
+	mGrabSlotIndex = index;
+}
+
+// 掴んでいるアイテムスロットを離した
+void CInventory::ReleaseItemSlot(int index)
+{
+	// 離されたアイテムスロットと掴んでいるアイテムスロットが違う場合は、処理しない
+	if (mGrabSlotIndex != index) return;
+	// 何のアイテムも掴んでなければ、処理しない
+	if (mGrabSlotIndex == -1) return;
+	// カーソルがどのアイテムスロットにも重なっていない場合は、処理しない
+	if (mEnterSlotIndex == -1) return;
+	// 掴んでいたアイテムスロットと
+	// カーソルが重なっているアイテムスロットが同じであれば、処理しない
+	if (mGrabSlotIndex == mEnterSlotIndex) return;
+
+	SlotData& grabData = mItemSlots[mGrabSlotIndex];
+	SlotData& enterData = mItemSlots[mEnterSlotIndex];
+
+	// 掴んでいるアイテムのスロットの情報を保持しておく
+	const ItemData* tmpData = grabData.data;
+	int tmpCount = grabData.count;
+
+	// 掴んでいたアイテムスロットに、
+	// カーソルが重なっていたアイテムスロットのデータを入れる
+	grabData.data = enterData.data;
+	grabData.count = enterData.count;
+	grabData.slotUI->SetItemSloto(grabData.data, grabData.count);
+
+	// カーソルが重なっていたアイテムスロットには、
+	// 掴んでいたアイテムスロットのデータを入れる
+	enterData.data = tmpData;
+	enterData.count = tmpCount;
+	enterData.slotUI->SetItemSloto(enterData.data, enterData.count);
+
+	// 掴んでいた状態を解除
+	mGrabSlotIndex = -1;
+}
+
 // 更新
 void CInventory::Update()
 {
@@ -304,11 +370,26 @@ void CInventory::Render()
 	mpSelectFrame->Render();
 
 	// アイテムスロットを描画
-	for (SlotData& slot : mItemSlots)
+	int count = mItemSlots.size();
+	for (int i = 0; i < count; i++)
 	{
+		SlotData & slot = mItemSlots[i];
 		// 空のスロットは描画しない
-		if (slot.data == nullptr) return;
+		if (slot.data == nullptr) continue;
+		// 現在掴んでいるアイテムスロットはこのタイミングでは描画しない
+		if (i == mGrabSlotIndex) continue;
 
 		slot.slotUI->Render();
+	}
+
+	// アイテムスロットを掴んでいる場合
+	if (mGrabSlotIndex >= 0)
+	{
+		// 空スロットでなければ、このタイミングで描画
+		SlotData& slot = mItemSlots[mGrabSlotIndex];
+		if (slot.data != nullptr)
+		{
+			slot.slotUI->Render();
+		}
 	}
 }

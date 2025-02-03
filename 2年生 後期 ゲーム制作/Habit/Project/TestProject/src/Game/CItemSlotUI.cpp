@@ -1,15 +1,17 @@
 #include "CItemSlotUI.h"
 #include "CImage.h"
 #include "CText.h"
+#include "CInventory.h"
 
 #define COUNT_TEXT_POS CVector2(15.0f, 0.0f)
 #define SLOT_SIZE 60.0f
 
 // コンストラクタ
-CItemSlotUI::CItemSlotUI()
+CItemSlotUI::CItemSlotUI(int slotIdx)
 	: CUIBase(ETaskPriority::eUI, 0,
 		ETaskPauseType::eMenu,
 		false, false)
+	, mSlotIndex(slotIdx)
 	, mpItemData(nullptr)
 	, mpIcon(nullptr)
 	, mpCountText(nullptr)
@@ -74,20 +76,32 @@ void CItemSlotUI::SetItemSloto(const ItemData* data, int count)
 
 void CItemSlotUI::OnPointerEnter(const CVector2& pos)
 {
+	// インベントリにカーソルが重なったことを伝える
+	CInventory::Instance()->EnterItemSlot(mSlotIndex);
 }
 
 void CItemSlotUI::OnPointerExit(const CVector2& pos)
 {
+	// インベントリにカーソルが離れたことを伝える
+	CInventory::Instance()->ExitItemSlot(mSlotIndex);
 }
 
 void CItemSlotUI::OnPointerDown(const CVector2& pos)
 {
-	
+	// 空スロットの場合は掴めない
+	if (mpItemData == nullptr) return;
+
+	// インベントリにアイテムスロットが掴まれたことを伝える
+	CInventory::Instance()->GrabItemSlot(mSlotIndex);
 }
 
 void CItemSlotUI::OnPointerUp(const CVector2& pos)
 {
+	// 空スロットの場合は離せない
+	if (mpItemData == nullptr) return;
 
+	// インベントリにアイテムスロットが離されたことを伝える
+	CInventory::Instance()->ReleaseItemSlot(mSlotIndex);
 }
 
 void CItemSlotUI::OnMove(const CVector2& move)
