@@ -7,6 +7,7 @@ enum class ELayer
 	eNone = -1,
 	eTest,
 	eField,			// フィールド
+	eGround,
 	eWall,			// 壁
 	ePlayer,		// プレイヤー
 	eEnemy,			// 敵
