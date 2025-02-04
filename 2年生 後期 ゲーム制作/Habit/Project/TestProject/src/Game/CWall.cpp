@@ -3,6 +3,9 @@
 
 // コンストラクタ
 CWall::CWall(const CVector& pos, const CVector& angle, const CVector& size)
+	: mpModel(nullptr)
+	, mpColliderMesh(nullptr)
+	, mScene(EScene::eNone)
 {
 	// 現在のシーンを取得
 	mScene = CSceneManager::Instance()->GetCurrentScene();
@@ -49,6 +52,11 @@ CWall::CWall(const CVector& pos, const CVector& angle, const CVector& size)
 	Rotation(angle);
 	Scale(size);
 
+	// コライダーが生成されていたら、コライダーの情報を更新
+	if (mpColliderMesh != nullptr)
+	{
+		mpColliderMesh->Update();
+	}
 }
 
 // デストラクタ
