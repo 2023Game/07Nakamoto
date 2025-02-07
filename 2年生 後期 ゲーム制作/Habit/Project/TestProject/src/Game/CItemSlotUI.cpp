@@ -15,6 +15,7 @@ CItemSlotUI::CItemSlotUI(int slotIdx)
 	, mpItemData(nullptr)
 	, mpIcon(nullptr)
 	, mpCountText(nullptr)
+	, mpSlotHighlight(nullptr)
 {
 	mpIcon = new CImage
 	(
@@ -35,6 +36,15 @@ CItemSlotUI::CItemSlotUI(int slotIdx)
 	mpCountText->SetEnableOutline(true);
 	mpCountText->SetOutlineColor(CColor::white);
 
+	mpSlotHighlight = new CImage
+	(
+		"UI\\white.png",
+		ETaskPriority::eUI, 0,
+		ETaskPauseType::eMenu,
+		false, false
+	);
+
+	mpSlotHighlight->SetColor(CColor::yellow);
 }
 
 // デストラクタ
@@ -74,18 +84,21 @@ void CItemSlotUI::SetItemSloto(const ItemData* data, int count)
 	mpIcon->SetPos(mPosition);
 }
 
+// カーソルが重なった時
 void CItemSlotUI::OnPointerEnter(const CVector2& pos)
 {
 	// インベントリにカーソルが重なったことを伝える
 	CInventory::Instance()->EnterItemSlot(mSlotIndex);
 }
 
+// カーソルが離れた時
 void CItemSlotUI::OnPointerExit(const CVector2& pos)
 {
 	// インベントリにカーソルが離れたことを伝える
 	CInventory::Instance()->ExitItemSlot(mSlotIndex);
 }
 
+// クリックされた時
 void CItemSlotUI::OnPointerDown(const CVector2& pos)
 {
 	// 空スロットの場合は掴めない
@@ -95,6 +108,7 @@ void CItemSlotUI::OnPointerDown(const CVector2& pos)
 	CInventory::Instance()->GrabItemSlot(mSlotIndex);
 }
 
+// クリックを離したとき
 void CItemSlotUI::OnPointerUp(const CVector2& pos)
 {
 	// 空スロットの場合は離せない
@@ -104,6 +118,7 @@ void CItemSlotUI::OnPointerUp(const CVector2& pos)
 	CInventory::Instance()->ReleaseItemSlot(mSlotIndex);
 }
 
+// ドラック&ドロップの移動距離
 void CItemSlotUI::OnMove(const CVector2& move)
 {
 	if (mpItemData == nullptr) return;
