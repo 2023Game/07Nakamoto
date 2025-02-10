@@ -34,6 +34,4 @@ private:
 	CImage* mpIcon;		// アイテムアイコンのイメージ
 	CText* mpCountText;	// アイテムの個数表示用のテキスト
 	CVector2 mCursor_pos;	// カーソルの位置
-
-	CImage* mpSlotHighlight;	// カーソルが重なっているアイテムスロットを強調表示する
 };

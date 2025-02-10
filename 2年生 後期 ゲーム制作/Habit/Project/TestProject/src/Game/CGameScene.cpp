@@ -84,6 +84,7 @@ void CGameScene::Load()
 
 	CResourceManager::Load<CModelX>("Player3", "Character\\Player3\\Acquire.x");
 	CResourceManager::Load<CModelX>("Ghost", "Character\\Enemy\\Ghost\\ghost.x");
+	CResourceManager::Load<CModel>("Tourou", "Object\\Lantern\\stone_lantern.obj");
 
 	//シーン読み込み
 	CGameSceneBase::Load();
@@ -138,7 +139,7 @@ void CGameScene::Load()
 
 	// 松明(仮)の描画の確認	削除予定
 	CTouch* touch = new CTouch(CVector(0.0f, 0.0f, 0.0f), 
-		CVector(0.0f, 0.0f, 0.0f), CVector(0.3f, 0.3f, 0.3f));
+		CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 
 	// チョコを生成
 	CChoco* choco = new CChoco();

@@ -13,7 +13,7 @@
 
 #define ITEM_WIDTH 750.0f		// アイテムを格納するX座標
 #define ITEM_HEIGHT 290.0f		// アイテムを格納するY座標
-#define ITEM_INTERVAL 60		// アイテムの間隔
+#define ITEMSLOT_SIZE 60.0f		// アイテムのサイズ
 
 #define SLOT_FRAME 5		// アイテムスロットの枠の幅
 #define SLOT_COLUMN 6		// アイテムスロットの列数
@@ -37,6 +37,7 @@ CInventory::CInventory()
 	, mIsOpened(false)
 	, mEnterSlotIndex(-1)
 	, mGrabSlotIndex(-1)
+	, mpSlotHighlight(nullptr)
 {
 	spInstance = this;
 
@@ -90,6 +91,20 @@ CInventory::CInventory()
 	mpSelectFrame->SetCenter(mpSelectFrame->GetSize() * 0.5f);
 	mpSelectFrame->SetColor(1.0f, 0.5f, 0.0f, INVENTORY_ALPHA);
 
+	// カーソルが重なっているアイテムスロットを強調表示する
+	mpSlotHighlight = new CImage
+	(
+		"UI\\white.png",
+		ETaskPriority::eUI, 0,
+		ETaskPauseType::eMenu,
+		false, false
+	);
+	mpSlotHighlight->SetSize(ITEMSLOT_SIZE, ITEMSLOT_SIZE);
+	mpSlotHighlight->SetCenter(mpSlotHighlight->GetSize() * 0.5f);
+	mpSlotHighlight->SetColor(CColor::yellow);
+	mpSlotHighlight->SetAlpha(0.5f);
+	mpSlotHighlight->SetEnable(false);
+
 	SetEnable(false);
 	SetShow(false);
 }
@@ -121,7 +136,7 @@ void CInventory::Open()
 	// マウスカーソルを表示
 	CInput::ShowCursor(true);
 
-	int size= mItemSlots.size();
+	int size = mItemSlots.size();
 	// アイテムスロットの位置の設定
 	for (int i = 0; i < size; i++)
 	{
@@ -138,8 +153,8 @@ void CInventory::Open()
 
 		int w = i % SLOT_COLUMN;
 		int h = i / SLOT_COLUMN;
-		float x = ITEM_WIDTH + SLOT_FRAME * (w + 1) + ITEM_INTERVAL * w;
-		float y = ITEM_HEIGHT + SLOT_FRAME * (h + 1) + ITEM_INTERVAL * h;
+		float x = ITEM_WIDTH + SLOT_FRAME * (w + 1) + ITEMSLOT_SIZE * w;
+		float y = ITEM_HEIGHT + SLOT_FRAME * (h + 1) + ITEMSLOT_SIZE * h;
 
 		slot.slotUI->SetPos(x, y);
 	}
@@ -289,6 +304,9 @@ void CInventory::EnterItemSlot(int index)
 {
 	// カーソルが重なっているアイテムスロットの番号を更新
 	mEnterSlotIndex = index;
+
+	mpSlotHighlight->SetPos(mItemSlots[mEnterSlotIndex].slotUI->GetPos());
+	mpSlotHighlight->SetEnable(true);
 }
 
 // カーソルがアイテムスロットから離れた
@@ -299,6 +317,7 @@ void CInventory::ExitItemSlot(int index)
 	if (mEnterSlotIndex == index)
 	{
 		mEnterSlotIndex = -1;
+		mpSlotHighlight->SetEnable(false);
 	}
 }
 
@@ -351,6 +370,7 @@ void CInventory::Update()
 	mpInventoryFrame->Update();
 	mpBackMenu->Update();
 	mpSelectFrame->Update();
+	mpSlotHighlight->Update();
 
 	// アイテムスロットのイメージの更新
 	for (SlotData& slot : mItemSlots)
@@ -368,6 +388,10 @@ void CInventory::Render()
 
 	mpSelectFrame->SetPos(mpBackMenu->GetPos());
 	mpSelectFrame->Render();
+	if (mpSlotHighlight->IsEnable())
+	{
+		mpSlotHighlight->Render();
+	}
 
 	// アイテムスロットを描画
 	int count = mItemSlots.size();

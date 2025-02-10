@@ -15,8 +15,8 @@ CItemSlotUI::CItemSlotUI(int slotIdx)
 	, mpItemData(nullptr)
 	, mpIcon(nullptr)
 	, mpCountText(nullptr)
-	, mpSlotHighlight(nullptr)
 {
+	// アイテムのアイコン生成
 	mpIcon = new CImage
 	(
 		"", ETaskPriority::eUI, 0,
@@ -24,6 +24,7 @@ CItemSlotUI::CItemSlotUI(int slotIdx)
 		false, false
 	);
 
+	// アイテムの個数のテキスト生成
 	mpCountText = new CText
 	(
 		nullptr, 24,
@@ -35,16 +36,6 @@ CItemSlotUI::CItemSlotUI(int slotIdx)
 	);
 	mpCountText->SetEnableOutline(true);
 	mpCountText->SetOutlineColor(CColor::white);
-
-	mpSlotHighlight = new CImage
-	(
-		"UI\\white.png",
-		ETaskPriority::eUI, 0,
-		ETaskPauseType::eMenu,
-		false, false
-	);
-
-	mpSlotHighlight->SetColor(CColor::yellow);
 }
 
 // デストラクタ
@@ -129,7 +120,6 @@ void CItemSlotUI::OnMove(const CVector2& move)
 	// アイテムアイコンの移動
 	mpIcon->SetPos(mpIcon->GetPos() + move);
 	mpCountText->SetPos(mpIcon->GetPos() + COUNT_TEXT_POS);
-	//printf("%.2f, %.2f\n", mpIcon->GetPos().X(), mpIcon->GetPos().Y());
 }
 
 // 更新
@@ -147,7 +137,6 @@ void CItemSlotUI::Update()
 		{
 #if _DEBUG
 			CDebugPrint::Print("Touch:%s\n", mpItemData->name.c_str());
-			//mpItemAddress = mpItemData;
 			CDebugPrint::Print("Touch:%p\n", mpItemData);
 #endif
 
@@ -164,7 +153,6 @@ void CItemSlotUI::Update()
 			mpIcon->SetSize(SLOT_SIZE, SLOT_SIZE);
 			mpIcon->SetPos(mPosition);
 			mpCountText->SetPos(mPosition + COUNT_TEXT_POS);
-
 		}
 
 		// アイテムアイコンの上にカーソルがある場合
@@ -188,4 +176,5 @@ void CItemSlotUI::Render()
 	if (mpItemData == nullptr) return;
 	mpIcon->Render();
 	mpCountText->Render();
+	
 }
