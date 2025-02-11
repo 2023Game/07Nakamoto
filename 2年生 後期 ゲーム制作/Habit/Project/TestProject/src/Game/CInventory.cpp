@@ -121,6 +121,7 @@ CInventory::~CInventory()
 	SAFE_DELETE(mpInventoryFrame);
 	SAFE_DELETE(mpBackMenu);
 	SAFE_DELETE(mpSelectFrame);
+	SAFE_DELETE(mpSlotHighlight);
 
 	for (SlotData& slot : mItemSlots)
 	{

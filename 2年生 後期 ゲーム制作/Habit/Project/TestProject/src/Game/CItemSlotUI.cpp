@@ -2,6 +2,8 @@
 #include "CImage.h"
 #include "CText.h"
 #include "CInventory.h"
+#include "CInput.h"
+#include "CItemMenu.h"
 
 #define COUNT_TEXT_POS CVector2(15.0f, 0.0f)
 #define SLOT_SIZE 60.0f
@@ -36,6 +38,8 @@ CItemSlotUI::CItemSlotUI(int slotIdx)
 	);
 	mpCountText->SetEnableOutline(true);
 	mpCountText->SetOutlineColor(CColor::white);
+
+	mpItemMenu = new CItemMenu();
 }
 
 // デストラクタ
@@ -162,6 +166,12 @@ void CItemSlotUI::Update()
 			CDebugPrint::Print("Enter:%s\n", mpItemData->name.c_str());
 			CDebugPrint::Print("Enter:%p\n", mpItemData);
 #endif
+			// 右クリックを押したら
+			if (CInput::PushKey(VK_RBUTTON))
+			{
+				// メニューを表示
+
+			}
 		}
 		else
 		{

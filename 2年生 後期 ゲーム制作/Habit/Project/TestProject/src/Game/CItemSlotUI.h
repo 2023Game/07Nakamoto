@@ -3,6 +3,8 @@
 #include "CImage.h"
 #include "ItemData.h"
 
+class CItemMenu;
+
 class CItemSlotUI : public CUIBase
 {
 public:
@@ -34,4 +36,5 @@ private:
 	CImage* mpIcon;		// アイテムアイコンのイメージ
 	CText* mpCountText;	// アイテムの個数表示用のテキスト
 	CVector2 mCursor_pos;	// カーソルの位置
+	CItemMenu* mpItemMenu;	// アイテムメニュー
 };

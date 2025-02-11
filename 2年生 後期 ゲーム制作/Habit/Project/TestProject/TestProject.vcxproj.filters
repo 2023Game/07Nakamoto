@@ -505,6 +505,9 @@
     <ClCompile Include="src\Game\CWarrok.cpp">
       <Filter>ソース ファイル\Game\Character\Enamy</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CItemMenu.cpp">
+      <Filter>ソース ファイル\Game\item\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -911,6 +914,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CWarrok.h">
       <Filter>ソース ファイル\Game\Character\Enamy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CItemMenu.h">
+      <Filter>ソース ファイル\Game\item\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
