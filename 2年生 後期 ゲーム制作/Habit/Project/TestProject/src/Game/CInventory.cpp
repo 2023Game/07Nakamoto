@@ -6,6 +6,8 @@
 #include "CItemSlotUI.h"
 #include "CExpandButton.h"
 
+#include "CItemMenu.h"
+
 #define INVENTORY_ALPHA 0.75f	// アルファ値
 
 #define INVENTORY_WIDTH 918.5f	// インベントリのX座標
@@ -105,6 +107,18 @@ CInventory::CInventory()
 	mpSlotHighlight->SetAlpha(0.5f);
 	mpSlotHighlight->SetEnable(false);
 
+	// 選択したアイテムのメニュー覧
+	mpItemMenu = new CImage
+	(
+		"UI\\white.png",
+		ETaskPriority::eUI, 0,
+		ETaskPauseType::eMenu,
+		false, false
+	);
+	mpItemMenu->SetSize(ITEMSLOT_SIZE, ITEMSLOT_SIZE);
+	mpItemMenu->SetAlpha(0.5f);
+	mpItemMenu->SetEnable(false);
+
 	SetEnable(false);
 	SetShow(false);
 }
@@ -122,6 +136,7 @@ CInventory::~CInventory()
 	SAFE_DELETE(mpBackMenu);
 	SAFE_DELETE(mpSelectFrame);
 	SAFE_DELETE(mpSlotHighlight);
+	SAFE_DELETE(mpItemMenu);
 
 	for (SlotData& slot : mItemSlots)
 	{
@@ -308,6 +323,12 @@ void CInventory::EnterItemSlot(int index)
 
 	mpSlotHighlight->SetPos(mItemSlots[mEnterSlotIndex].slotUI->GetPos());
 	mpSlotHighlight->SetEnable(true);
+
+	if (CInput::Key(VK_RBUTTON))
+	{
+		mpItemMenu->SetEnable(true);
+		mpItemMenu->SetPos(mItemSlots[mEnterSlotIndex].slotUI->GetPos() + CVector2(5.0f,0.0f));
+	}
 }
 
 // カーソルがアイテムスロットから離れた
@@ -372,12 +393,20 @@ void CInventory::Update()
 	mpBackMenu->Update();
 	mpSelectFrame->Update();
 	mpSlotHighlight->Update();
+	mpItemMenu->Update();
 
 	// アイテムスロットのイメージの更新
 	for (SlotData& slot : mItemSlots)
 	{
 		slot.slotUI->Update();
 	}
+
+	if (CInput::Key(VK_RBUTTON))
+	{
+		mpItemMenu->SetEnable(true);
+		mpItemMenu->SetPos(mItemSlots[mEnterSlotIndex].slotUI->GetPos() + CVector2(5.0f, 0.0f));
+	}
+
 }
 
 // 描画
@@ -389,10 +418,16 @@ void CInventory::Render()
 
 	mpSelectFrame->SetPos(mpBackMenu->GetPos());
 	mpSelectFrame->Render();
+
 	if (mpSlotHighlight->IsEnable())
 	{
 		mpSlotHighlight->Render();
 	}
+
+	//if (mpItemMenu->IsEnable())
+	//{
+	//	mpItemMenu->Render();
+	//}
 
 	// アイテムスロットを描画
 	int count = mItemSlots.size();

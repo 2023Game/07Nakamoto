@@ -1,10 +1,12 @@
 #pragma once
 #include "CUIBase.h"
+#include "CTask.h"
 
 class CText;
+class CImage;
 
 // アイテム選択中のメニュー
-class CItemMenu
+class CItemMenu : public CUIBase
 {
 public:
 	// インスタンスを取得
@@ -30,6 +32,7 @@ public:
 private:
 	static CItemMenu* spInstance;
 
+	CImage* mpBack;	// 文字の描画の背景
 	CText* mpText;	// 文字列描画用
 
 	// 内容の種類

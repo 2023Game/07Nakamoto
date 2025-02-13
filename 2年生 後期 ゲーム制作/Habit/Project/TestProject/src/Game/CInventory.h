@@ -53,6 +53,7 @@ private:
 	CImage* mpBackMenu;
 	CImage* mpSelectFrame;
 	CImage* mpSlotHighlight;	// カーソルが重なっているアイテムスロットを強調表示する
+	CImage* mpItemMenu;			// アイテム選択のメニュー覧
 
 	// アイテムスロットのデータ
 	struct SlotData
