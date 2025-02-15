@@ -40,6 +40,8 @@ CInventory::CInventory()
 	, mEnterSlotIndex(-1)
 	, mGrabSlotIndex(-1)
 	, mpSlotHighlight(nullptr)
+	, mpItemMenu(nullptr)
+	, mpMenu(nullptr)
 {
 	spInstance = this;
 
@@ -108,16 +110,7 @@ CInventory::CInventory()
 	mpSlotHighlight->SetEnable(false);
 
 	// 選択したアイテムのメニュー覧
-	mpItemMenu = new CImage
-	(
-		"UI\\white.png",
-		ETaskPriority::eUI, 0,
-		ETaskPauseType::eMenu,
-		false, false
-	);
-	mpItemMenu->SetSize(ITEMSLOT_SIZE, ITEMSLOT_SIZE);
-	mpItemMenu->SetAlpha(0.5f);
-	mpItemMenu->SetEnable(false);
+	mpItemMenu = new CItemMenu();
 
 	SetEnable(false);
 	SetShow(false);
@@ -323,12 +316,6 @@ void CInventory::EnterItemSlot(int index)
 
 	mpSlotHighlight->SetPos(mItemSlots[mEnterSlotIndex].slotUI->GetPos());
 	mpSlotHighlight->SetEnable(true);
-
-	if (CInput::Key(VK_RBUTTON))
-	{
-		mpItemMenu->SetEnable(true);
-		mpItemMenu->SetPos(mItemSlots[mEnterSlotIndex].slotUI->GetPos() + CVector2(5.0f,0.0f));
-	}
 }
 
 // カーソルがアイテムスロットから離れた
@@ -341,6 +328,8 @@ void CInventory::ExitItemSlot(int index)
 		mEnterSlotIndex = -1;
 		mpSlotHighlight->SetEnable(false);
 	}
+
+	mpItemMenu->SetEnable(false);
 }
 
 // アイテムスロットを掴んだ
@@ -393,7 +382,6 @@ void CInventory::Update()
 	mpBackMenu->Update();
 	mpSelectFrame->Update();
 	mpSlotHighlight->Update();
-	mpItemMenu->Update();
 
 	// アイテムスロットのイメージの更新
 	for (SlotData& slot : mItemSlots)
@@ -401,10 +389,11 @@ void CInventory::Update()
 		slot.slotUI->Update();
 	}
 
-	if (CInput::Key(VK_RBUTTON))
+	if (CInput::Key(VK_RBUTTON) && mEnterSlotIndex != -1)
 	{
 		mpItemMenu->SetEnable(true);
 		mpItemMenu->SetPos(mItemSlots[mEnterSlotIndex].slotUI->GetPos() + CVector2(5.0f, 0.0f));
+		mpItemMenu->Update();
 	}
 
 }
@@ -424,11 +413,6 @@ void CInventory::Render()
 		mpSlotHighlight->Render();
 	}
 
-	//if (mpItemMenu->IsEnable())
-	//{
-	//	mpItemMenu->Render();
-	//}
-
 	// アイテムスロットを描画
 	int count = mItemSlots.size();
 	for (int i = 0; i < count; i++)
@@ -440,6 +424,11 @@ void CInventory::Render()
 		if (i == mGrabSlotIndex) continue;
 
 		slot.slotUI->Render();
+	}
+
+	if (mpItemMenu->IsEnable())
+	{
+		mpItemMenu->Render();
 	}
 
 	// アイテムスロットを掴んでいる場合

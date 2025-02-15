@@ -4,6 +4,7 @@
 #include "CInventory.h"
 #include "CInput.h"
 #include "CItemMenu.h"
+#include "CItemMenu.h"
 
 #define COUNT_TEXT_POS CVector2(15.0f, 0.0f)
 #define SLOT_SIZE 60.0f
@@ -96,6 +97,13 @@ void CItemSlotUI::OnPointerExit(const CVector2& pos)
 // クリックされた時
 void CItemSlotUI::OnPointerDown(const CVector2& pos)
 {
+	CItemMenu* menu = CItemMenu::Instance();
+
+	//if (menu->IsEnable())
+	//{
+	//	menu->SetEnable(false);
+	//}
+
 	// 空スロットの場合は掴めない
 	if (mpItemData == nullptr) return;
 

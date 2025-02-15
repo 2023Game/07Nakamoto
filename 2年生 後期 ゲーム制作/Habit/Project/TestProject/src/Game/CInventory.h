@@ -6,6 +6,7 @@
 
 class CItemSlotUI;
 class CExpandButton;
+class CItemMenu;
 
 // インベントリのクラス
 class CInventory : public CTask
@@ -53,8 +54,9 @@ private:
 	CImage* mpBackMenu;
 	CImage* mpSelectFrame;
 	CImage* mpSlotHighlight;	// カーソルが重なっているアイテムスロットを強調表示する
-	CImage* mpItemMenu;			// アイテム選択のメニュー覧
+	CItemMenu* mpItemMenu;			// アイテム選択のメニュー覧
 
+	CImage* mpMenu;
 	// アイテムスロットのデータ
 	struct SlotData
 	{
