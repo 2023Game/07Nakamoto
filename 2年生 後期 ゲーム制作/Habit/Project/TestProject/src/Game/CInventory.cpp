@@ -198,20 +198,6 @@ bool CInventory::IsOpened() const
 	return mIsOpened;
 }
 
-// 決める
-void CInventory::Decide(int select)
-{
-	//switch (select)
-	//{
-	//case 0:
-	//case 1:
-	//	break;
-	//case 2:
-	//	Close();
-	//	break;
-	//}
-}
-
 // アイテムを追加する
 void CInventory::AddItem(ItemType type, int count)
 {
@@ -328,8 +314,6 @@ void CInventory::ExitItemSlot(int index)
 		mEnterSlotIndex = -1;
 		mpSlotHighlight->SetEnable(false);
 	}
-
-	mpItemMenu->SetEnable(false);
 }
 
 // アイテムスロットを掴んだ
@@ -389,13 +373,14 @@ void CInventory::Update()
 		slot.slotUI->Update();
 	}
 
+	// アイテムアイコンの上で右クリックしたら
 	if (CInput::Key(VK_RBUTTON) && mEnterSlotIndex != -1)
 	{
 		mpItemMenu->SetEnable(true);
-		mpItemMenu->SetPos(mItemSlots[mEnterSlotIndex].slotUI->GetPos() + CVector2(5.0f, 0.0f));
-		mpItemMenu->Update();
-	}
+		mpItemMenu->SetPos(mItemSlots[mEnterSlotIndex].slotUI->GetPos());
+	}	
 
+	mpItemMenu->Update();
 }
 
 // 描画

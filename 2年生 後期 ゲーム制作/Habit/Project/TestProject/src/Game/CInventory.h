@@ -27,8 +27,6 @@ public:
 	// インベントリが開いているかどうか
 	bool IsOpened() const;
 
-	// 決める
-	void Decide(int select);
 	// アイテムを追加する
 	void AddItem(ItemType type, int count);
 

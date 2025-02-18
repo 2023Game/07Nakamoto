@@ -18,6 +18,11 @@ public:
 	// デストラクタ
 	~CItemMenu();
 
+	// アイテムを使うか
+	bool IsUse() const;
+	// アイテムメニューを閉じるか
+	bool IsClose() const;
+
 	// 更新
 	void Update();
 	// 描画
@@ -28,8 +33,6 @@ private:
 
 	// 待機状態
 	void UpdateIdle();
-	// メニューを開く
-	void UpdateOpen();
 	// メニュー選択
 	void UpdateSelect();
 
@@ -49,7 +52,7 @@ private:
 	// [Use]クリック時のコールバック関数
 	void OnClickUse();
 	// [Back]クリック時のコールバック関数
-	void OnClickBack();
+	void OnClickClose();
 
 	EState mState;	// 現在の状態
 	int mStateStep;	// 状態内でのステップ管理用
@@ -58,6 +61,8 @@ private:
 	CText* mpText;	// 文字列描画用
 
 	bool mIsOpened; // アイテムメニューが開いているか
+	bool mDecision;	// 決定フラグ
+	int mSelectIndex; // /現在選択されている項目
 
 	std::vector<CExpandButton*> mButtons;	// ボタン格納用
 
