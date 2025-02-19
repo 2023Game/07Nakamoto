@@ -299,9 +299,6 @@ void CInventory::EnterItemSlot(int index)
 {
 	// カーソルが重なっているアイテムスロットの番号を更新
 	mEnterSlotIndex = index;
-
-	mpSlotHighlight->SetPos(mItemSlots[mEnterSlotIndex].slotUI->GetPos());
-	mpSlotHighlight->SetEnable(true);
 }
 
 // カーソルがアイテムスロットから離れた
@@ -312,7 +309,6 @@ void CInventory::ExitItemSlot(int index)
 	if (mEnterSlotIndex == index)
 	{
 		mEnterSlotIndex = -1;
-		mpSlotHighlight->SetEnable(false);
 	}
 }
 
@@ -361,6 +357,11 @@ void CInventory::ReleaseItemSlot(int index)
 // 更新
 void CInventory::Update()
 {
+	if (mpItemMenu->IsShow())
+	{
+
+	}
+
 	mpBackground->Update();
 	mpInventoryFrame->Update();
 	mpBackMenu->Update();
@@ -373,14 +374,49 @@ void CInventory::Update()
 		slot.slotUI->Update();
 	}
 
-	// アイテムアイコンの上で右クリックしたら
-	if (CInput::Key(VK_RBUTTON) && mEnterSlotIndex != -1)
+	if (mEnterSlotIndex != -1)
 	{
-		mpItemMenu->SetEnable(true);
-		mpItemMenu->SetPos(mItemSlots[mEnterSlotIndex].slotUI->GetPos());
-	}	
+		// アイテムアイコンの上で右クリックしたら
+		if (CInput::Key(VK_RBUTTON) && !mpItemMenu->IsShow())
+		{
+			SlotData& itemData = mItemSlots[mEnterSlotIndex];
 
-	mpItemMenu->Update();
+			// アイテムアイコンがある場合
+			if (itemData.data != nullptr)
+			{
+				// アイテムメニューを表示する
+				mpItemMenu->Open();
+				mpItemMenu->SetPos(mItemSlots[mEnterSlotIndex].slotUI->GetPos());
+			}
+		}
+		else
+		{
+			mpSlotHighlight->SetPos(mItemSlots[mEnterSlotIndex].slotUI->GetPos());
+			mpSlotHighlight->SetEnable(true);
+		}
+		
+	}
+	else if(mEnterSlotIndex == -1)
+	{
+		mpSlotHighlight->SetEnable(false);
+	}
+
+	// アイテムメニューが表示されているか
+	if (mpItemMenu->IsShow())
+	{
+		mpItemMenu->Update();
+
+		// 「使う」を押した場合
+		if (mpItemMenu->IsUse())
+		{
+			mpItemMenu->Close();
+		}
+		// 「閉じる」を押した場合
+		else if (mpItemMenu->IsClose())
+		{
+			mpItemMenu->Close();
+		}
+	}
 }
 
 // 描画
@@ -411,11 +447,6 @@ void CInventory::Render()
 		slot.slotUI->Render();
 	}
 
-	if (mpItemMenu->IsEnable())
-	{
-		mpItemMenu->Render();
-	}
-
 	// アイテムスロットを掴んでいる場合
 	if (mGrabSlotIndex >= 0)
 	{
@@ -426,4 +457,10 @@ void CInventory::Render()
 			slot.slotUI->Render();
 		}
 	}
+
+	if (mpItemMenu->IsEnable())
+	{
+		mpItemMenu->Render();
+	}
+
 }

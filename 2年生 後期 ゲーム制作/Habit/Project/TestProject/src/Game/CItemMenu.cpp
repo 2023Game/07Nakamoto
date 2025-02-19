@@ -25,6 +25,7 @@ CItemMenu::CItemMenu()
 	, mpText(nullptr)
 	, mIsOpened(false)
 	, mDecision(false)
+	, mSelectIndex(-1)
 {
 	spInstance = this;
 
@@ -39,7 +40,7 @@ CItemMenu::CItemMenu()
 	// ボタンの画像を読み込み
 	btn1->LoadButtonImage("UI\\ItemMenu\\use1.png", "UI\\ItemMenu\\use2.png");
 	// ボタンクリック時に呼び出されるコールバック関数を設定
-	//btn1->SetOnClickFunc(std::bind(&CGameClearUI::OnClickStart, this));
+	btn1->SetOnClickFunc(std::bind(&CItemMenu::OnClickUse, this));
 	// ボタンリストに追加
 	mButtons.push_back(btn1);
 
@@ -54,11 +55,12 @@ CItemMenu::CItemMenu()
 	// ボタンの画像を読み込み
 	btn2->LoadButtonImage("UI\\ItemMenu\\close1.png", "UI\\ItemMenu\\close2.png");
 	// ボタンクリック時に呼び出されるコールバック関数を設定
-	//btn1->SetOnClickFunc(std::bind(&CGameClearUI::OnClickStart, this));
+	btn2->SetOnClickFunc(std::bind(&CItemMenu::OnClickClose, this));
 	// ボタンリストに追加
 	mButtons.push_back(btn2);
 
 	SetEnable(false);
+	SetShow(false);
 }
 
 // デストラクタ
@@ -77,6 +79,26 @@ CItemMenu::~CItemMenu()
 		SAFE_DELETE(btn);
 	}
 	mButtons.clear();
+}
+
+// 表示する
+void CItemMenu::Open()
+{
+	SetEnable(true);
+	SetShow(true);
+	mSelectIndex = -1;
+	mDecision = false;
+
+}
+
+// 閉じる
+void CItemMenu::Close()
+{
+	SetEnable(false);
+	SetShow(false);
+	mSelectIndex = -1;
+	mDecision = false;
+
 }
 
 // アイテムを使うか
@@ -129,14 +151,14 @@ void CItemMenu::Render()
 // 待機状態
 void CItemMenu::UpdateIdle()
 {
-		// ボタンの位置の設定
-		int size = mButtons.size();
-		for (int i = 0; i < size; i++)
-		{
-			CButton* btn = mButtons[i];
-			btn->SetPos(mPosition + BACK_ADJUST_POS + CVector2(0.0f, 30.0f * i));
-		}
-		ChangeState(EState::eSelect);
+	// ボタンの位置の設定
+	int size = mButtons.size();
+	for (int i = 0; i < size; i++)
+	{
+		CButton* btn = mButtons[i];
+		btn->SetPos(mPosition + BACK_ADJUST_POS + CVector2(0.0f, 30.0f * i));
+	}
+	ChangeState(EState::eSelect);
 }
 
 // メニュー選択

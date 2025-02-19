@@ -18,6 +18,11 @@ public:
 	// デストラクタ
 	~CItemMenu();
 
+	// 表示する
+	void Open();
+	// 閉じる
+	void Close();
+
 	// アイテムを使うか
 	bool IsUse() const;
 	// アイテムメニューを閉じるか
