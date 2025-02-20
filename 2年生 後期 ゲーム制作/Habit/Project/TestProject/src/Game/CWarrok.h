@@ -3,6 +3,7 @@
 
 // 視野範囲のデバッグ表示クラスの前宣言
 class CDebugFieldOfView;
+
 class CNavNode;
 
 // ウォーロックの敵クラス

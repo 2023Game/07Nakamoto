@@ -421,6 +421,7 @@ bool CWarrok::MoveTo(const CVector& targetPos, float speed)
 	return false;
 }
 
+// 次に巡回するポイントを変更する
 void CWarrok::ChangePatrolPoint()
 {
 	// 巡回ポイントが設定されていない場合は処理しない

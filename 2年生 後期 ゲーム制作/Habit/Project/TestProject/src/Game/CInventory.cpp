@@ -381,14 +381,14 @@ void CInventory::Update()
 		// uŽg‚¤v‚ð‰Ÿ‚µ‚½ê‡
 		if (mpItemMenu->IsUse())
 		{
-			CPlayer2* player = CPlayer2::Instance();
+			//CPlayer2* player = CPlayer2::Instance();
 
-			player->UseItem(mItemSlots[mEnterSlotIndex].data);
-			mItemSlots[mEnterSlotIndex].count--;
-			if (mItemSlots[mEnterSlotIndex].count == 0)
-			{
-				SAFE_DELETE(mItemSlots[mEnterSlotIndex].slotUI);
-			}
+			//player->UseItem(mItemSlots[mEnterSlotIndex].data);
+			//mItemSlots[mEnterSlotIndex].count--;
+			//if (mItemSlots[mEnterSlotIndex].count == 0)
+			//{
+			//	SAFE_DELETE(mItemSlots[mEnterSlotIndex].slotUI);
+			//}
 
 			mpItemMenu->Close();
 		}

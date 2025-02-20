@@ -577,6 +577,7 @@ void CPlayer2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 	}
 }
 
+// ダメージ処理
 void CPlayer2::TakeDamage(int damage, CObjectBase* causer)
 {
 	// ベースクラスのダメージ処理を呼び出す
@@ -588,22 +589,23 @@ void CPlayer2::TakeDamage(int damage, CObjectBase* causer)
 	}
 }
 
-void CPlayer2::UseItem(const ItemData* item)
-{
-	if (item->effectType == ItemEffectType::RecoveryHP)
-	{
-		mHp = mHp + item->recovery;
-
-		if (mHp > mMaxHp)
-		{
-			mHp = mMaxHp;
-		}
-	}
-	else if (item->effectType == ItemEffectType::Throw)
-	{
-
-	}
-}
+// アイテムの効果を使う
+//void CPlayer2::UseItem(const ItemData* item)
+//{
+//	if (item->effectType == ItemEffectType::RecoveryHP)
+//	{
+//		mHp = mHp + item->recovery;
+//
+//		if (mHp > mMaxHp)
+//		{
+//			mHp = mMaxHp;
+//		}
+//	}
+//	else if (item->effectType == ItemEffectType::Throw)
+//	{
+//
+//	}
+//}
 
 
 // 足が遅くなる処理

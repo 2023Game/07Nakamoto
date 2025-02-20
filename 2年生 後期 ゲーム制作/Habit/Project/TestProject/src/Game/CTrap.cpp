@@ -1,6 +1,7 @@
 #include "CTrap.h"
 #include "CColliderMesh.h"
 #include "CCharaBase.h"
+#include "CPlayer2.h"
 
 CTrap::CTrap()
 	: CObjectBase(ETag::eEnemy, ETaskPriority::eWeapon, 0, ETaskPauseType::eGame)
@@ -35,10 +36,10 @@ void CTrap::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 	if (other->Layer() == ELayer::ePlayer)
 	{
 		// プレイヤーにダメージを与える
-		CCharaBase* chara = dynamic_cast<CCharaBase*>(other->Owner());
+		CPlayer2* chara = dynamic_cast<CPlayer2*>(other->Owner());
 		if (chara != nullptr)
 		{
-			chara->TakeDamage(10, this);
+			chara->TakeSlow(0.5f, 10);
 			// プレイヤーに当たったら、自身を削除
 			Kill();
 		}

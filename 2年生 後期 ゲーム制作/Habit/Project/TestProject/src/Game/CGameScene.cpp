@@ -13,7 +13,10 @@
 #include "CLineEffect.h"
 #include "CNavManager.h"
 #include "CCactus.h"
+
 #include "CEnemy2.h"
+#include "CWarrok.h"
+
 #include "CPushSwitch.h"
 #include "CPushSwitchManager.h"
 #include "CSwitchDoor.h"
@@ -86,6 +89,8 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>("Ghost", "Character\\Enemy\\Ghost\\ghost.x");
 	CResourceManager::Load<CModel>("Tourou", "Object\\Lantern\\stone_lantern.obj");
 
+	CResourceManager::Load<CModelX>("Warrok", "Character\\Enemy\\warrok2\\warrok.x");
+
 	//ƒV[ƒ““Ç‚İ‚İ
 	CGameSceneBase::Load();
 
@@ -95,10 +100,6 @@ void CGameScene::Load()
 	// ƒTƒ{ƒeƒ“‚Ì“G‚ğì¬
 	CCactus* cactus = new CCactus();
 	cactus->Position(0.0f, 0.0f, -100.0f);
-
-	// —H—ì‚Ì“G‚ğì¬
-	CGhost* ghost = new CGhost();
-	ghost->Position(-50.0f, 0.0f, -100.0f);
 
 	//CPlayer* player = new CPlayer();
 	//player->Scale(1.0f, 1.0f, 1.0f);
@@ -125,7 +126,7 @@ void CGameScene::Load()
 	enemy->Scale(1.0f, 1.0f, 1.0f);
 	enemy->Position(CVector(200.0f, 1.0, 0.0f));
 	// “G‡A¶¬
-	CEnemy2* enemy2 = new CEnemy2
+	CWarrok* enemy2 = new CWarrok
 	(
 		{
 			CVector(250.0f, 0.0f, 150.0f),
@@ -136,6 +137,18 @@ void CGameScene::Load()
 	);
 	enemy2->Scale(1.0f, 1.0f, 1.0f);
 	enemy2->Position(CVector(200.0f, 0.0, 200.0f));
+
+	// —H—ì‚Ì“G‚ğì¬
+	CGhost* ghost = new CGhost(
+		{
+			CVector(-50.0f, 0.0f, -100.0f),
+			CVector(0.0f, 0.0f, -150.0f),
+			CVector(50.0f, 0.0f, -100.0f),
+		}
+	);
+	ghost->Scale(1.0f, 1.0f, 1.0f);
+	ghost->Position(-50.0f, 0.0f, -100.0f);
+
 
 	// ¼–¾(‰¼)‚Ì•`‰æ‚ÌŠm”F	íœ—\’è
 	CTouch* touch = new CTouch(CVector(0.0f, 0.0f, 0.0f), 
