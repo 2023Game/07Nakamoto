@@ -6,6 +6,7 @@
 class CInteractObject;
 class CGaugeUI;
 class CDebugFieldOfView;
+class SlotData;
 
 /*
 プレイヤークラス
@@ -41,6 +42,9 @@ public:
 
 	// ダメージ処理
 	void TakeDamage(int damage, CObjectBase* causer) override;
+
+	// アイテムの効果を使う
+	void UseItem(const ItemData* item);
 
 	// 足が遅くなる値
 	void TakeSlow(float slow, int time);

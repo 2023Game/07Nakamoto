@@ -9,7 +9,7 @@
 #include "CHpGauge.h"
 #include "CStGauge.h"
 #include "CSceneManager.h"
-
+#include "ItemData.h"
 #include "CDebugFieldOfView.h"
 
 // プレイヤーのインスタンス
@@ -34,22 +34,23 @@ const CPlayer2::AnimData CPlayer2::ANIM_DATA[] =
 	
 };
 
-#define PLAYER_HEIGHT_CCOL1	12.0f		// カプセルコライダーの上の高さ
-#define PLAYER_HEIGHT_CCOL2	 2.0f		// カプセルコライダーの下の高さ
-#define PLAYER_WIDTH_CCOL	 2.5f		// カプセルコライダーの幅
+#define PLAYER_HEIGHT_CCOL1	12.0f	// カプセルコライダーの上の高さ
+#define PLAYER_HEIGHT_CCOL2	 2.0f	// カプセルコライダーの下の高さ
+#define PLAYER_WIDTH_CCOL	 2.5f	// カプセルコライダーの幅
 
-#define MOVE_SPEED		  0.75			// 歩く速度
-#define RUN_SPEED		  1.0f			// 走る速度
+#define PLAYER_HP	100		// プレイヤーのHP
+#define MOVE_SPEED	0.75	// 歩く速度
+#define RUN_SPEED	1.0f	// 走る速度
 
-#define JUNP_MOVE_DIST	 20.0f			// ジャンプ時の移動距離
-#define JUNP_MOVE_START  16.0f			// ジャンプ時の移動開始フレーム
-#define JUNP_MOVE_END	 33.0f			// ジャンプ時の移動終了フレーム
-#define JUMP_SPEED		  1.0f			// ジャンプの高さ
-#define GRAVITY			  0.0625f		// 重力
+#define JUNP_MOVE_DIST	 20.0f		// ジャンプ時の移動距離
+#define JUNP_MOVE_START  16.0f		// ジャンプ時の移動開始フレーム
+#define JUNP_MOVE_END	 33.0f		// ジャンプ時の移動終了フレーム
+#define JUMP_SPEED		  1.0f		// ジャンプの高さ
+#define GRAVITY			  0.0625f	// 重力
 
-#define SEARCH_RADIUS	 10.0f			// 調べるオブジェクトを探知する範囲の半径
-#define FOV_ANGLE		 60.0f			// 視野範囲の角度
-#define FOV_LENGTH		 10.0f			// 視野範囲の距離
+#define SEARCH_RADIUS	 10.0f		// 調べるオブジェクトを探知する範囲の半径
+#define FOV_ANGLE		 60.0f		// 視野範囲の角度
+#define FOV_LENGTH		 10.0f		// 視野範囲の距離
 
 // コンストラクタ
 CPlayer2::CPlayer2()
@@ -67,7 +68,7 @@ CPlayer2::CPlayer2()
 	, mSlowSpeed(1.0f)
 	, mSlowTime(0)
 {
-	mMaxHp = 100;
+	mMaxHp = PLAYER_HP;
 	mHp = mMaxHp;
 
 	// インスタンスの設定
@@ -584,6 +585,23 @@ void CPlayer2::TakeDamage(int damage, CObjectBase* causer)
 	// 死亡していなければ、
 	if (!IsDeath())
 	{
+	}
+}
+
+void CPlayer2::UseItem(const ItemData* item)
+{
+	if (item->effectType == ItemEffectType::RecoveryHP)
+	{
+		mHp = mHp + item->recovery;
+
+		if (mHp > mMaxHp)
+		{
+			mHp = mMaxHp;
+		}
+	}
+	else if (item->effectType == ItemEffectType::Throw)
+	{
+
 	}
 }
 

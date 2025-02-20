@@ -74,27 +74,6 @@ CInventory::CInventory()
 	mpInventoryFrame->SetCenter(mpInventoryFrame->GetSize() * 0.5f);
 	mpInventoryFrame->SetPos(CVector2(INVENTORY_WIDTH, INVENTORY_HEIGHT));
 
-	// 閉じるボタン
-	mpBackMenu = new CImage
-	(
-		"UI\\menu_item.png" ,
-		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
-		false, false
-	);
-	mpBackMenu->SetCenter(mpBackMenu->GetSize() * 0.5f);
-	mpBackMenu->SetPos(CVector2(WINDOW_WIDTH * 0.7f, WINDOW_HEIGHT * 0.8f));
-	mpBackMenu->SetColor(1.0f, 1.0f, 1.0f, INVENTORY_ALPHA);
-
-	// 選択されているボタンを強調する枠
-	mpSelectFrame = new CImage
-	(
-		"UI/menu_item_select.png",
-		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
-		false, false
-	);
-	mpSelectFrame->SetCenter(mpSelectFrame->GetSize() * 0.5f);
-	mpSelectFrame->SetColor(1.0f, 0.5f, 0.0f, INVENTORY_ALPHA);
-
 	// カーソルが重なっているアイテムスロットを強調表示する
 	mpSlotHighlight = new CImage
 	(
@@ -126,8 +105,6 @@ CInventory::~CInventory()
 
 	SAFE_DELETE(mpBackground);
 	SAFE_DELETE(mpInventoryFrame);
-	SAFE_DELETE(mpBackMenu);
-	SAFE_DELETE(mpSelectFrame);
 	SAFE_DELETE(mpSlotHighlight);
 	SAFE_DELETE(mpItemMenu);
 
@@ -357,58 +334,62 @@ void CInventory::ReleaseItemSlot(int index)
 // 更新
 void CInventory::Update()
 {
-	if (mpItemMenu->IsShow())
+	// アイテムメニューが表示されていない場合
+	if (!mpItemMenu->IsShow())
 	{
+		mpBackground->Update();
+		mpInventoryFrame->Update();
 
-	}
-
-	mpBackground->Update();
-	mpInventoryFrame->Update();
-	mpBackMenu->Update();
-	mpSelectFrame->Update();
-	mpSlotHighlight->Update();
-
-	// アイテムスロットのイメージの更新
-	for (SlotData& slot : mItemSlots)
-	{
-		slot.slotUI->Update();
-	}
-
-	if (mEnterSlotIndex != -1)
-	{
-		// アイテムアイコンの上で右クリックしたら
-		if (CInput::Key(VK_RBUTTON) && !mpItemMenu->IsShow())
+		// アイテムスロットのイメージの更新
+		for (SlotData& slot : mItemSlots)
 		{
-			SlotData& itemData = mItemSlots[mEnterSlotIndex];
+			slot.slotUI->Update();
+		}
 
-			// アイテムアイコンがある場合
-			if (itemData.data != nullptr)
+		if (mEnterSlotIndex != -1)
+		{
+			// アイテムアイコンの上で右クリックしたら
+			if (CInput::Key(VK_RBUTTON) && !mpItemMenu->IsShow())
 			{
-				// アイテムメニューを表示する
-				mpItemMenu->Open();
-				mpItemMenu->SetPos(mItemSlots[mEnterSlotIndex].slotUI->GetPos());
+				SlotData& itemData = mItemSlots[mEnterSlotIndex];
+
+				// アイテムアイコンがある場合
+				if (itemData.data != nullptr)
+				{
+					mpItemMenu->SetPos(mItemSlots[mEnterSlotIndex].slotUI->GetPos());
+					// アイテムメニューを表示する
+					mpItemMenu->Open();
+				}
+			}
+			else
+			{
+				mpSlotHighlight->SetPos(mItemSlots[mEnterSlotIndex].slotUI->GetPos());
+				mpSlotHighlight->SetEnable(true);
+				mpSlotHighlight->Update();
 			}
 		}
-		else
+		else if (mEnterSlotIndex == -1)
 		{
-			mpSlotHighlight->SetPos(mItemSlots[mEnterSlotIndex].slotUI->GetPos());
-			mpSlotHighlight->SetEnable(true);
+			mpSlotHighlight->SetEnable(false);
 		}
-		
 	}
-	else if(mEnterSlotIndex == -1)
-	{
-		mpSlotHighlight->SetEnable(false);
-	}
-
-	// アイテムメニューが表示されているか
-	if (mpItemMenu->IsShow())
+	// アイテムメニューが表示されていなければ
+	else
 	{
 		mpItemMenu->Update();
 
 		// 「使う」を押した場合
 		if (mpItemMenu->IsUse())
 		{
+			CPlayer2* player = CPlayer2::Instance();
+
+			player->UseItem(mItemSlots[mEnterSlotIndex].data);
+			mItemSlots[mEnterSlotIndex].count--;
+			if (mItemSlots[mEnterSlotIndex].count == 0)
+			{
+				SAFE_DELETE(mItemSlots[mEnterSlotIndex].slotUI);
+			}
+
 			mpItemMenu->Close();
 		}
 		// 「閉じる」を押した場合
@@ -424,10 +405,6 @@ void CInventory::Render()
 {
 	mpBackground->Render();
 	mpInventoryFrame->Render();
-	mpBackMenu->Render();
-
-	mpSelectFrame->SetPos(mpBackMenu->GetPos());
-	mpSelectFrame->Render();
 
 	if (mpSlotHighlight->IsEnable())
 	{
@@ -458,8 +435,10 @@ void CInventory::Render()
 		}
 	}
 
+	// アイテムメニューが有効なら
 	if (mpItemMenu->IsEnable())
 	{
+		// 描画する
 		mpItemMenu->Render();
 	}
 

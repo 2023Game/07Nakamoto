@@ -158,7 +158,7 @@ void CItemMenu::UpdateIdle()
 		CButton* btn = mButtons[i];
 		btn->SetPos(mPosition + BACK_ADJUST_POS + CVector2(0.0f, 30.0f * i));
 	}
-	ChangeState(EState::eSelect);
+	//ChangeState(EState::eSelect);
 }
 
 // ƒƒjƒ…[‘I‘ğ
