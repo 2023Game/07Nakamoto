@@ -230,12 +230,12 @@ void CPlayer2::Update()
 	// 足が遅くなっている場合
 	if (mSlowSpeed != 1.0f)
 	{
-		if (mSlowTime == 0)
+		if (mSlowTime < 0)
 		{
 			mSlowSpeed = 1.0f;
 		}
 
-		mSlowTime--;
+		mSlowTime -= Times::DeltaTime();
 	}
 
 	// プレイヤーを移動方向へ向ける
@@ -589,23 +589,43 @@ void CPlayer2::TakeDamage(int damage, CObjectBase* causer)
 	}
 }
 
+// 指定したアイテムを使用できるかどうか
+bool CPlayer2::CanUseItem(const ItemData* item)
+{
+	switch (item->effectType)
+	{
+		// HP回復アイテムは、現在のHPが減っている時は使用可
+		case ItemEffectType::RecoveryHP:
+			return mHp < mMaxHp;
+		
+		case ItemEffectType::Throw:
+			return true;
+
+	}
+
+	return false;
+}
+
 // アイテムの効果を使う
-//void CPlayer2::UseItem(const ItemData* item)
-//{
-//	if (item->effectType == ItemEffectType::RecoveryHP)
-//	{
-//		mHp = mHp + item->recovery;
-//
-//		if (mHp > mMaxHp)
-//		{
-//			mHp = mMaxHp;
-//		}
-//	}
-//	else if (item->effectType == ItemEffectType::Throw)
-//	{
-//
-//	}
-//}
+void CPlayer2::UseItem(const ItemData* item)
+{
+	switch (item->effectType)
+	{
+		// 回復アイテムの場合
+		case ItemEffectType::RecoveryHP:
+			mHp = mHp + item->recovery;
+
+			if (mHp > mMaxHp)
+			{
+				mHp = mMaxHp;
+			}
+			break;
+		// 投擲アイテムの場合
+		case ItemEffectType::Throw:
+
+			break;
+	}
+}
 
 
 // 足が遅くなる処理

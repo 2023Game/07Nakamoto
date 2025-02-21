@@ -3,9 +3,9 @@
 #include "CText.h"
 #include "CItemSlotUI.h"
 #include "CInventory.h"
-#include "CExpandButton.h"
+#include "CButton.h"
 
-#define BACK_ADJUST_POS CVector2(60.0f,0.0f)	//背景の調整位置
+#define BACK_ADJUST_POS CVector2(30.0f,-30.0f)	//背景の調整位置
 
 CItemMenu* CItemMenu::spInstance = nullptr;
 
@@ -30,7 +30,7 @@ CItemMenu::CItemMenu()
 	spInstance = this;
 
 	// 使うボタンを生成
-	CExpandButton* btn1 = new CExpandButton
+	CButton* btn1 = new CButton
 	(
 		CVector2(0.0f, 0.0f),
 		CVector2(60.0f, 30.0f), 
@@ -45,7 +45,7 @@ CItemMenu::CItemMenu()
 	mButtons.push_back(btn1);
 
 	// 戻るボタンを生成
-	CExpandButton* btn2 = new CExpandButton
+	CButton* btn2 = new CButton
 	(
 		CVector2(0.0f, 0.0f),
 		CVector2(60.0f, 30.0f),

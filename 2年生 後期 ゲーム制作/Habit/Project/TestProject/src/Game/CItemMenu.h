@@ -4,7 +4,7 @@
 
 class CText;
 class CImage;
-class CExpandButton;
+class CButton;
 
 // アイテム選択中のメニュー
 class CItemMenu : public CUIBase
@@ -69,6 +69,6 @@ private:
 	bool mDecision;	// 決定フラグ
 	int mSelectIndex; // /現在選択されている項目
 
-	std::vector<CExpandButton*> mButtons;	// ボタン格納用
+	std::vector<CButton*> mButtons;	// ボタン格納用
 
 };

@@ -348,22 +348,23 @@ void CInventory::Update()
 
 		if (mEnterSlotIndex != -1)
 		{
+			SlotData& itemData = mItemSlots[mEnterSlotIndex];
+
 			// アイテムアイコンの上で右クリックしたら
 			if (CInput::Key(VK_RBUTTON) && !mpItemMenu->IsShow())
 			{
-				SlotData& itemData = mItemSlots[mEnterSlotIndex];
-
 				// アイテムアイコンがある場合
 				if (itemData.data != nullptr)
 				{
-					mpItemMenu->SetPos(mItemSlots[mEnterSlotIndex].slotUI->GetPos());
+					mpItemMenu->SetPos(itemData.slotUI->GetPos());
 					// アイテムメニューを表示する
 					mpItemMenu->Open();
+					mpItemMenu->Update();
 				}
 			}
 			else
 			{
-				mpSlotHighlight->SetPos(mItemSlots[mEnterSlotIndex].slotUI->GetPos());
+				mpSlotHighlight->SetPos(itemData.slotUI->GetPos());
 				mpSlotHighlight->SetEnable(true);
 				mpSlotHighlight->Update();
 			}
@@ -381,16 +382,34 @@ void CInventory::Update()
 		// 「使う」を押した場合
 		if (mpItemMenu->IsUse())
 		{
-			//CPlayer2* player = CPlayer2::Instance();
+			CPlayer2* player = CPlayer2::Instance();
+			SlotData& slot = mItemSlots[mEnterSlotIndex];
 
-			//player->UseItem(mItemSlots[mEnterSlotIndex].data);
-			//mItemSlots[mEnterSlotIndex].count--;
-			//if (mItemSlots[mEnterSlotIndex].count == 0)
-			//{
-			//	SAFE_DELETE(mItemSlots[mEnterSlotIndex].slotUI);
-			//}
+			// アイテムが使用できるかどうか
+			if (player->CanUseItem(slot.data))
+			{
+				// アイテムを使用する前に、アイテムメニューとインベントリを閉じる
+				mpItemMenu->Close();
+				Close();
 
-			mpItemMenu->Close();
+				// アイテムを使用
+				player->UseItem(slot.data);
+				// 使用したアイテムの個数を減らす
+				slot.count--;
+				// アイテムが無くなれば、アイテムスロットを空にする
+				if (slot.count == 0)
+				{
+					slot.data = nullptr;
+				}
+				// アイテムスロットの情報をUIに反映
+				slot.slotUI->SetItemSloto(slot.data, slot.count);
+			}
+			// アイテムが使用できなかった場合
+			else
+			{
+				// TODO:アイテムが使用できなかった理由を画面に表示
+				mpItemMenu->Close();
+			}
 		}
 		// 「閉じる」を押した場合
 		else if (mpItemMenu->IsClose())

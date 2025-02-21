@@ -72,7 +72,6 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>("Slash", "Effect\\slash.obj");
 	CResourceManager::Load<CSound>("SlashSound", "Sound\\SE\\slash.wav");
 	CResourceManager::Load<CModel>("Sword", "Weapon\\Sword\\sword.obj");
-	CResourceManager::Load<CModel>("Shield", "Weapon\\Shield\\shield.obj");
 
 	CResourceManager::Load<CModelX>("Player2", "Character\\Player2\\pico.x");
 	CResourceManager::Load<CModelX>("Enemy", "Character\\Enemy\\mutant\\mutant.x");
@@ -83,7 +82,6 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>("Spider_Web", "Character\\Enemy\\trap\\spider_web.obj");
 
 	CResourceManager::Load<CModel>("Touch", "Object\\Touch.obj");
-	CResourceManager::Load<CModel>("Obj", "Object\\mm.obj");
 
 	CResourceManager::Load<CModelX>("Player3", "Character\\Player3\\Acquire.x");
 	CResourceManager::Load<CModelX>("Ghost", "Character\\Enemy\\Ghost\\ghost.x");

@@ -39,7 +39,7 @@ void CTrap::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		CPlayer2* chara = dynamic_cast<CPlayer2*>(other->Owner());
 		if (chara != nullptr)
 		{
-			chara->TakeSlow(0.5f, 10);
+			chara->TakeSlow(0.5f, 5);
 			// プレイヤーに当たったら、自身を削除
 			Kill();
 		}

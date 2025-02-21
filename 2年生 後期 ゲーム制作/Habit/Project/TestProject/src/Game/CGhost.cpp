@@ -37,6 +37,7 @@ CGhost::CGhost(std::vector<CVector> patrolPoints)
 	//, mpDebugFov(nullptr)
 	, mNextPatrolIndex(-1)	// -1‚Ì‚Éˆê”Ô‹ß‚¢ƒ|ƒCƒ“ƒg‚ÉˆÚ“®
 	, mNextMoveIndex(0)
+	, mTrap(false)
 {
 	// “G‚ğ‰Šú‰»
 	InitEnemy("Ghost", &ANIM_DATA);
