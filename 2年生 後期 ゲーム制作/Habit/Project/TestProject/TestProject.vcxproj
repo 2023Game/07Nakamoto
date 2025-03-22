@@ -101,6 +101,7 @@
     <ClCompile Include="src\Game\CHpGauge.cpp" />
     <ClCompile Include="src\Game\CImage.cpp" />
     <ClCompile Include="src\Game\CInteractObject.cpp" />
+    <ClCompile Include="src\Game\CInteractUI.cpp" />
     <ClCompile Include="src\Game\CInventory.cpp" />
     <ClCompile Include="src\Game\CItemMenu.cpp" />
     <ClCompile Include="src\Game\CItemObj.cpp" />
@@ -240,6 +241,7 @@
     <ClInclude Include="src\Game\CHpGauge.h" />
     <ClInclude Include="src\Game\CImage.h" />
     <ClInclude Include="src\Game\CInteractObject.h" />
+    <ClInclude Include="src\Game\CInteractUI.h" />
     <ClInclude Include="src\Game\CInventory.h" />
     <ClInclude Include="src\Game\CItemMenu.h" />
     <ClInclude Include="src\Game\CItemObj.h" />

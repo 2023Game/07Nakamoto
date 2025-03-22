@@ -508,6 +508,9 @@
     <ClCompile Include="src\Game\CItemMenu.cpp">
       <Filter>ソース ファイル\Game\item\UI</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CInteractUI.cpp">
+      <Filter>ソース ファイル\Game\UI\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -917,6 +920,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CItemMenu.h">
       <Filter>ソース ファイル\Game\item\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CInteractUI.h">
+      <Filter>ソース ファイル\Game\UI\Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

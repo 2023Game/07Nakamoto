@@ -3,6 +3,10 @@
 #include "CPlayer2.h"
 #include "Maths.h"
 #include "CColliderSphere.h"
+#include "CBillBoard.h"
+#include "CInteractUI.h"
+
+#define POSITION CVector(0.0f,15.0f,0.0f)
 
 // コンストラクタ
 CPushSwitch::CPushSwitch(const CVector& pos, const CVector& angle, const CVector& size)
@@ -27,6 +31,11 @@ CPushSwitch::CPushSwitch(const CVector& pos, const CVector& angle, const CVector
 	Scale(size);
 
 	mInteractStr = "オンにする";
+
+	// インタラクトボタンの表示
+	mpInteractUI = new CInteractUI(this);
+	mpInteractUI->Position(Position() + POSITION);
+
 }
 
 // デストラクタ
@@ -34,6 +43,7 @@ CPushSwitch::~CPushSwitch()
 {
 	// コライダーを削除
 	SAFE_DELETE(mpCollider);
+	SAFE_DELETE(mpInteractUI);
 }
 
 // スイッチの状態がオンかオフか
@@ -62,5 +72,7 @@ void CPushSwitch::Render()
 		// スイッチのモデルデータ取得
 		mpModel = CResourceManager::Get<CModel>("Switch_OFF");
 	}
+
+	mpInteractUI->Render();
 	mpModel->Render(Matrix());
 }

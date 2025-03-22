@@ -4,6 +4,8 @@
 #include "CInteractObject.h"
 
 class CCollider;
+class CBillBoard;
+class CInteractUI;
 
 // スイッチのクラス
 class CPushSwitch : public CInteractObject
@@ -26,6 +28,7 @@ public:
 private:
 	CModel* mpModel;	// スイッチのモデルデータ
 	CCollider* mpCollider;	// スイッチのコリジョンデータ
+	CInteractUI* mpInteractUI;	// インタラクトボタンのイメージ
 
 	bool mSwitch;	// スイッチがオンかオフか
 };

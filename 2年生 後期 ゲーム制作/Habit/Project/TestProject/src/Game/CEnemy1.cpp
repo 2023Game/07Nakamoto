@@ -23,9 +23,9 @@
 #define RUN_SPEED			 20.0f	// 走っていいるときの速度
 #define ROTATE_SPEED		 6.0f	// 回転速度
 
-#define ENEMY_HEIGHT_CCOL1	12.0f		// カプセルコライダーの上の高さ
-#define ENEMY_HEIGHT_CCOL2	2.0f		// カプセルコライダーの下の高さ
-#define ENEMY_WIDTH_CCOL	2.5f		// カプセルコライダーの幅
+#define ENEMY_HEIGHT_CCOL1	12.0f	// カプセルコライダーの上の高さ
+#define ENEMY_HEIGHT_CCOL2	2.0f	// カプセルコライダーの下の高さ
+#define ENEMY_WIDTH_CCOL	2.5f	// カプセルコライダーの幅
 
 #define ATTACK_RANGE		 20.0f	// 攻撃範囲
 #define ATTACK_MOVE_DIST	 20.0f	// 攻撃時の移動距離
