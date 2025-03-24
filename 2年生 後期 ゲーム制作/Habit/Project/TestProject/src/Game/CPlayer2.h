@@ -135,6 +135,8 @@ private:
 
 	float mSlowSpeed;	// ‘«‚ª’x‚­‚È‚é’l
 	int mSlowTime;	// ‘«‚ª’x‚­‚È‚éŽžŠÔ
+	bool mIsSlow;		// ‘«‚ª’x‚­‚È‚Á‚Ä‚¢‚é‚©‚Ç‚¤‚©
+	float mElapsedSlowTime;	// ‘«‚ª’x‚­‚È‚Á‚Ä‚¢‚éŒo‰ßŽžŠÔ
 
 	std::string ToString(EState state);
 

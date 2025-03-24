@@ -70,6 +70,7 @@ protected:
 	bool mIsGrounded;		// 接地しているかどうか
 	CVector mGroundNormal;	// 接地している地面の法線
 
+	bool mIsTrap;			// 自分の位置に罠が設置されているか
 	CCollider* mpBodyCol;	// 本体のコライダー
 
 	CGaugeUI3D* mpHpGauge;	// HPゲージ

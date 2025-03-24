@@ -18,6 +18,7 @@
 #include "CSwitchDoor.h"
 #include "CClearArea.h"
 #include "ItemData.h"
+#include "CGhost.h"
 
 // コンストラクタ
 CGameScene3::CGameScene3()
@@ -58,6 +59,9 @@ void CGameScene3::Load()
 	CResourceManager::Load<CModelX>("Enemy2", "Character\\Enemy\\warrok\\warrok.x");
 	CResourceManager::Load<CModelX>("Warrok", "Character\\Enemy\\warrok2\\warrok.x");
 
+	CResourceManager::Load<CModelX>("Ghost", "Character\\Enemy\\Ghost\\ghost.x");
+	CResourceManager::Load<CModel>("Spider_Web", "Character\\Enemy\\trap\\spider_web.obj");
+
 	//シーン読み込み
 	CGameSceneBase::Load();
 
@@ -84,18 +88,18 @@ void CGameScene3::Load()
 	enemy1->Scale(1.0f, 1.0f, 1.0f);
 	enemy1->Position(CVector(0.0f, 0.0, 110.0f));
 
-	// ウォーロックの敵②生成
-	CWarrok* enemy2 = new CWarrok
-	(
-		{
-			CVector(100.0f, 0.0f, 190.0f),
-			CVector(100.0f, 0.0f, 260.0f),
-			CVector(-40.0f, 0.0f, 260.0f),
-			CVector(-40.0f, 0.0f, 190.0f),
-		}
-	);
-	enemy2->Scale(1.0f, 1.0f, 1.0f);
-	enemy2->Position(CVector(-40.0f, 0.0, 190.0f));
+	//// ウォーロックの敵②生成
+	//CWarrok* enemy2 = new CWarrok
+	//(
+	//	{
+	//		CVector(100.0f, 0.0f, 190.0f),
+	//		CVector(100.0f, 0.0f, 260.0f),
+	//		CVector(-40.0f, 0.0f, 260.0f),
+	//		CVector(-40.0f, 0.0f, 190.0f),
+	//	}
+	//);
+	//enemy2->Scale(1.0f, 1.0f, 1.0f);
+	//enemy2->Position(CVector(-40.0f, 0.0, 190.0f));
 
 	// ウォーロックの敵③生成
 	CWarrok* enemy3 = new CWarrok
@@ -110,6 +114,18 @@ void CGameScene3::Load()
 	);
 	enemy3->Scale(1.0f, 1.0f, 1.0f);
 	enemy3->Position(CVector(0.0f, 0.0, 100.0f));
+
+	CGhost* gohost = new CGhost
+	(
+		{
+			CVector(100.0f, 0.0f, 190.0f),
+			CVector(100.0f, 0.0f, 260.0f),
+			CVector(-40.0f, 0.0f, 260.0f),
+			CVector(-40.0f, 0.0f, 190.0f),
+		}
+	);
+	gohost->Scale(1.0f, 1.0f, 1.0f);
+	gohost->Position(CVector(-40.0f, 0.0, 190.0f));
 
 	// スイッチを生成
 	CPushSwitch* push_switch = new CPushSwitch(CVector(-93.0f, 0.0f, 163.0f),

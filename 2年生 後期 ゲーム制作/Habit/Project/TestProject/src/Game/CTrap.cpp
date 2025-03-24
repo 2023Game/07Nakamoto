@@ -3,8 +3,11 @@
 #include "CCharaBase.h"
 #include "CPlayer2.h"
 
+#define SLOW 0.5f
+#define TIME 3
+
 CTrap::CTrap()
-	: CObjectBase(ETag::eEnemy, ETaskPriority::eWeapon, 0, ETaskPauseType::eGame)
+	: CObjectBase(ETag::eTrap, ETaskPriority::eWeapon, 0, ETaskPauseType::eGame)
 	, mpModel(nullptr)
 	, mpCollider(nullptr)
 {
@@ -14,12 +17,12 @@ CTrap::CTrap()
 	// コライダーを作成
 	mpCollider = new CColliderMesh
 	(
-		this, ELayer::eAttackCol,
+		this, ELayer::eTrap,
 		mpModel, true
 	);
 	// プレイヤーと衝突するように設定
-	mpCollider->SetCollisionTags({ ETag::ePlayer });
-	mpCollider->SetCollisionLayers({ ELayer::ePlayer });
+	mpCollider->SetCollisionTags({ ETag::ePlayer , ETag::eEnemy});
+	mpCollider->SetCollisionLayers({ ELayer::ePlayer , ELayer::eEnemy});
 
 }
 
@@ -39,7 +42,7 @@ void CTrap::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		CPlayer2* chara = dynamic_cast<CPlayer2*>(other->Owner());
 		if (chara != nullptr)
 		{
-			chara->TakeSlow(0.5f, 5);
+			chara->TakeSlow(SLOW, TIME);
 			// プレイヤーに当たったら、自身を削除
 			Kill();
 		}

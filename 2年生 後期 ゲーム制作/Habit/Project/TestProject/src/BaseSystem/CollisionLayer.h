@@ -14,6 +14,7 @@ enum class ELayer
 	eItem,			// アイテム
 	eInteractObj,	// 調べるオブジェクト
 	eInteractSearch,// 調べるオブジェクト探知用
+	eTrap,			// 罠
 
 	eAttackCol,
 };

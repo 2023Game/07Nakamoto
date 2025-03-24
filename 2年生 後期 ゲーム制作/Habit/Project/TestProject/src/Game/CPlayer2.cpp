@@ -67,6 +67,8 @@ CPlayer2::CPlayer2()
 	, mpDebugFov(nullptr)
 	, mSlowSpeed(1.0f)
 	, mSlowTime(0)
+	, mIsSlow(false)
+	, mElapsedSlowTime(0.0f)
 {
 	mMaxHp = PLAYER_HP;
 	mHp = mMaxHp;
@@ -106,7 +108,8 @@ CPlayer2::CPlayer2()
 		  ELayer::eEnemy,
 		  ELayer::eInteractObj,
 		  ELayer::eAttackCol,
-		  ELayer::eItem }
+		  ELayer::eItem,
+		  ELayer::eTrap}
 	);
 
 #if _DEBUG
@@ -224,18 +227,27 @@ void CPlayer2::Update()
 	mMoveSpeedY -= GRAVITY;
 	CVector moveSpeed = mMoveSpeed + CVector(0.0f, mMoveSpeedY, 0.0f);
 
-	// 移動
-	Position(Position() + moveSpeed * mSlowSpeed);
-
 	// 足が遅くなっている場合
-	if (mSlowSpeed != 1.0f)
+	if (mIsSlow)
 	{
-		if (mSlowTime < 0)
-		{
-			mSlowSpeed = 1.0f;
-		}
+		// 移動
+		Position(Position() + moveSpeed * mSlowSpeed);
 
-		mSlowTime -= Times::DeltaTime();
+		mElapsedSlowTime += Times::DeltaTime();
+
+		if (mElapsedSlowTime > mSlowTime)
+		{
+			mSlowSpeed = 0.0f;
+			mSlowTime = 0;
+			mElapsedSlowTime = 0.0f;
+			mIsSlow = false;
+		}
+	}
+	// 足の速度が通常時
+	else
+	{
+		// 移動
+		Position(Position() + moveSpeed);
 	}
 
 	// プレイヤーを移動方向へ向ける
@@ -633,6 +645,7 @@ void CPlayer2::TakeSlow(float slow, int time)
 {
 	mSlowSpeed = slow;
 	mSlowTime = time;
+	mIsSlow = true;
 }
 
 // 描画処理

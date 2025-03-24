@@ -53,9 +53,9 @@ CGhost::CGhost(std::vector<CVector> patrolPoints)
 		CVector(0.0f, BODY_HEIGHT - BODY_RADIUS, 0.0f),
 		BODY_RADIUS
 	);
-	// フィールドと、プレイヤーの攻撃コライダーとヒットするように設定
-	mpBodyCol->SetCollisionTags({ ETag::eField, ETag::ePlayer });
-	mpBodyCol->SetCollisionLayers({ ELayer::eField, ELayer::ePlayer, ELayer::eAttackCol });
+	// 当たるコライダーの設定
+	mpBodyCol->SetCollisionTags({ ETag::eField, ETag::ePlayer , ETag::eTrap});
+	mpBodyCol->SetCollisionLayers({ ELayer::eField, ELayer::ePlayer, ELayer::eTrap });
 
 //#if _DEBUG
 //	// 視野範囲のデバッグ表示クラスを作成
@@ -125,6 +125,17 @@ void CGhost::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 	// ベースの衝突処理を呼び出す
 	CEnemy::Collision(self, other, hit);
 
+	if (self == mpBodyCol)
+	{
+		if (other->Layer() == ELayer::eTrap)
+		{
+			mIsTrap = true;
+		}
+		else if (other->Layer() != ELayer::eTrap)
+		{
+			mIsTrap = false;
+		}
+	}
 }
 
 // オブジェクト削除を伝える関数
@@ -422,9 +433,12 @@ void CGhost::UpdateePatrol()
 			mStateStep = 1;
 			mElapsedTime = 0.0f;
 
-			// 罠を生成
-			CTrap* trap = new CTrap();
-			trap->Position(Position() + CVector(0.0f,1.0f,0.0f));
+			if (!mIsTrap)
+			{
+				// 罠を生成
+				CTrap* trap = new CTrap();
+				trap->Position(Position() + CVector(0.0f, 1.0f, 0.0f));
+			}
 		}
 		break;
 	}
