@@ -19,6 +19,11 @@ public:
 	// 調べる
 	void Interact() override;
 
+	// 調べる内容のテキスト画像のパスを返す
+	std::string GetInteractTextPath() const override;
+	// 調べるUIを表示する座標を返す
+	virtual CVector GetInteractUIPos() const override;
+
 	// 更新処理
 	void Update() override;
 	// 描画処理

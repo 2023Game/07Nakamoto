@@ -2,6 +2,8 @@
 #include "CColliderSphere.h"
 #include "CInventory.h"
 
+#define INTERACT_TEXT_PATH "UI\\Interact\\pickup.png"
+
 // コンストラクタ
 CItemObj::CItemObj(ItemType type)
 	: CInteractObject(ETaskPriority::eItem,0,ETaskPauseType::eGame)
@@ -10,6 +12,9 @@ CItemObj::CItemObj(ItemType type)
 	, mpModel(nullptr)
 	, mpCollider(nullptr)
 {
+	// 調べるテキストの画像を読み込む
+	CResourceManager::Load<CTexture>(INTERACT_TEXT_PATH, INTERACT_TEXT_PATH);
+
 	// 指定されたアイテムの種類からアイテムデータを取得
 	bool success = Item::GetItemData(mItemTyope, &mpItemData);
 	// アイテムデータが存在しなかったら、自身を削除
@@ -68,6 +73,18 @@ void CItemObj::Interact()
 
 	Kill();
 
+}
+
+// 調べる内容のテキスト画像のパスを返す
+std::string CItemObj::GetInteractTextPath() const
+{
+	return INTERACT_TEXT_PATH;
+}
+
+// 調べるUIを表示する座標を返す
+CVector CItemObj::GetInteractUIPos() const
+{
+	return Position() + CVector(0.0f, 5.0f, 0.0f);
 }
 
 // 更新処理

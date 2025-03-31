@@ -11,6 +11,7 @@
 #include "CSceneManager.h"
 #include "ItemData.h"
 #include "CDebugFieldOfView.h"
+#include "CGameUI.h"
 
 // プレイヤーのインスタンス
 CPlayer2* CPlayer2::spInstatnce = nullptr;
@@ -181,7 +182,7 @@ void CPlayer2::Update()
 {
 	if (mHp <= 0)
 	{
-		mState = EState::eDeath;
+		ChangeState(EState::eDeath);
 	}
 
 	SetParent(mpRideObject);
@@ -304,7 +305,7 @@ void CPlayer2::UpdateIdle()
 		// SPACEキーでジャンプ
 		if (CInput::PushKey(VK_SPACE))
 		{
-			mState = EState::eJumpStart;
+			ChangeState(EState::eJumpStart);
 		}
 		else
 		{
@@ -322,11 +323,20 @@ void CPlayer2::UpdateIdle()
 				);
 #endif
 
+				// 調べられるオブジェクトの上に調べるUIを表示
+				CGameUI::Instance()->ShowInteractUI(obj);
+
 				// [E]キーを押したら、近くの調べるオブジェクトを調べる
 				if (CInput::PushKey('E'))
 				{
 					obj->Interact();
 				}
+			}
+			// 近くに調べるオブジェクトがなかった
+			else
+			{
+				// 調べるUIを非表示にする
+				CGameUI::Instance()->HideInteractUI();
 			}
 		}
 	}
@@ -343,7 +353,7 @@ void CPlayer2::UpdateJumpStart()
 	{
 		mMoveSpeedY += JUMP_SPEED;
 		mIsGrounded = false;
-		mState = EState::eJump;
+		ChangeState(EState::eJump);
 	}
 }
 
@@ -353,7 +363,7 @@ void CPlayer2::UpdateJump()
 	ChangeAnimation(EAnimType::eJumping);
 	if (mIsGrounded)
 	{
-		mState = EState::eJumpEnd;
+		ChangeState(EState::eJumpEnd);
 	}
 }
 
@@ -368,7 +378,7 @@ void CPlayer2::UpdateJumpEnd()
 		
 		if (IsAnimationFinished())
 		{
-			mState = EState::eIdle;
+			ChangeState(EState::eIdle);
 		}
 	}
 }
@@ -384,7 +394,7 @@ void CPlayer2::UpdateFall()
 	
 	if (IsAnimationFinished())
 	{
-		mState = EState::eIdle;	
+		ChangeState(EState::eIdle);	
 	}
 }
 
@@ -467,7 +477,7 @@ void CPlayer2::UpdateMove()
 				}
 				else
 				{
-					mState = EState::eFall;
+					ChangeState(EState::eFall);
 				}
 			}
 			else
@@ -661,6 +671,17 @@ void CPlayer2::ChangeAnimation(EAnimType type)
 	if (!(0 <= index && index < (int)EAnimType::Num)) return;
 	const AnimData& data = ANIM_DATA[index];
 	CXCharacter::ChangeAnimation(index, data.loop, data.framelength);
+}
+
+// 状態を切り替え
+void CPlayer2::ChangeState(EState state)
+{
+	if (mState == state) return;
+	mState = state;
+	mStateStep = 0;
+
+	// 状態が切り替わったら、表示していた調べるUIを非表示にする
+	CGameUI::Instance()->HideInteractUI();
 }
 
 // 今の状態を画面に表示

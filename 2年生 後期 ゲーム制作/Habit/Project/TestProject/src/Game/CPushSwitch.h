@@ -5,7 +5,6 @@
 
 class CCollider;
 class CBillBoard;
-class CInteractUI;
 
 // スイッチのクラス
 class CPushSwitch : public CInteractObject
@@ -22,13 +21,17 @@ public:
 	// 調べる
 	void Interact() override;
 
+	// 調べる内容のテキスト画像のパスを返す
+	std::string GetInteractTextPath() const override;
+	// 調べるUIを表示する座標を返す
+	virtual CVector GetInteractUIPos() const override;
+
 	// 描画処理
 	void Render() override;
 
 private:
 	CModel* mpModel;	// スイッチのモデルデータ
 	CCollider* mpCollider;	// スイッチのコリジョンデータ
-	CInteractUI* mpInteractUI;	// インタラクトボタンのイメージ
 
 	bool mSwitch;	// スイッチがオンかオフか
 };

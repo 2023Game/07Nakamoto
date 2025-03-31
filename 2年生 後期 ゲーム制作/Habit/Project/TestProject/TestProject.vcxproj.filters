@@ -511,6 +511,12 @@
     <ClCompile Include="src\Game\CInteractUI.cpp">
       <Filter>ソース ファイル\Game\UI\Game</Filter>
     </ClCompile>
+    <ClCompile Include="src\BaseSystem\CFontData.cpp">
+      <Filter>ソース ファイル\BaseSystem\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CGameUI.cpp">
+      <Filter>ソース ファイル\Game\UI\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -922,6 +928,12 @@
       <Filter>ソース ファイル\Game\item\UI</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CInteractUI.h">
+      <Filter>ソース ファイル\Game\UI\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BaseSystem\CFontData.h">
+      <Filter>ソース ファイル\BaseSystem\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CGameUI.h">
       <Filter>ソース ファイル\Game\UI\Game</Filter>
     </ClInclude>
   </ItemGroup>

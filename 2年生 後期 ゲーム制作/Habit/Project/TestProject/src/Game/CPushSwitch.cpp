@@ -4,14 +4,19 @@
 #include "Maths.h"
 #include "CColliderSphere.h"
 #include "CBillBoard.h"
-#include "CInteractUI.h"
 
+#define INTERACT_TEXT_PATH_ON "UI\\Interact\\on.png"
+#define INTERACT_TEXT_PATH_OFF "UI\\Interact\\off.png"
 #define POSITION CVector(0.0f,15.0f,0.0f)
 
 // コンストラクタ
 CPushSwitch::CPushSwitch(const CVector& pos, const CVector& angle, const CVector& size)
 	: mSwitch(false)
 {
+	// 調べるテキストの画像を読み込む
+	CResourceManager::Load<CTexture>(INTERACT_TEXT_PATH_ON, INTERACT_TEXT_PATH_ON);
+	CResourceManager::Load<CTexture>(INTERACT_TEXT_PATH_OFF, INTERACT_TEXT_PATH_OFF);
+
 	// スイッチのモデルデータ取得
 	mpModel = CResourceManager::Get<CModel>("Switch");
 
@@ -31,11 +36,6 @@ CPushSwitch::CPushSwitch(const CVector& pos, const CVector& angle, const CVector
 	Scale(size);
 
 	mInteractStr = "オンにする";
-
-	// インタラクトボタンの表示
-	mpInteractUI = new CInteractUI(this);
-	mpInteractUI->Position(Position() + POSITION);
-
 }
 
 // デストラクタ
@@ -43,7 +43,6 @@ CPushSwitch::~CPushSwitch()
 {
 	// コライダーを削除
 	SAFE_DELETE(mpCollider);
-	SAFE_DELETE(mpInteractUI);
 }
 
 // スイッチの状態がオンかオフか
@@ -57,6 +56,18 @@ void CPushSwitch::Interact()
 {
 	mSwitch = !mSwitch;
 	mInteractStr = mSwitch ? "オフにする" : "オンにする";
+}
+
+// 調べる内容のテキスト画像のパスを返す
+std::string CPushSwitch::GetInteractTextPath() const
+{
+	return mSwitch ? INTERACT_TEXT_PATH_OFF : INTERACT_TEXT_PATH_ON;
+}
+
+// 調べるUIを表示する座標を返す
+CVector CPushSwitch::GetInteractUIPos() const
+{
+	return Position() + CVector(0.0f, 10.0f, 0.0f);
 }
 
 // 描画処理
@@ -73,6 +84,5 @@ void CPushSwitch::Render()
 		mpModel = CResourceManager::Get<CModel>("Switch_OFF");
 	}
 
-	mpInteractUI->Render();
 	mpModel->Render(Matrix());
 }

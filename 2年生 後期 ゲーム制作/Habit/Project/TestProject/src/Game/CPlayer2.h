@@ -128,6 +128,8 @@ private:
 		eSneak,		// しゃがみ移動
 		eCrouch_up, // しゃがんで拾う
 	};
+	// 状態を切り替え
+	void ChangeState(EState state);
 
 	int mMaxSt;	// スタミナの最大値
 	int mSt;	// スタミナ

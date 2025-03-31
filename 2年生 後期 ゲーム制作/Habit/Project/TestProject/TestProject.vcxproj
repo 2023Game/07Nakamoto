@@ -37,6 +37,7 @@
     <ClCompile Include="src\BaseSystem\CFade.cpp" />
     <ClCompile Include="src\BaseSystem\CFont.cpp" />
     <ClCompile Include="src\BaseSystem\CCharaBase.cpp" />
+    <ClCompile Include="src\BaseSystem\CFontData.cpp" />
     <ClCompile Include="src\BaseSystem\CGamePause.cpp" />
     <ClCompile Include="src\BaseSystem\CImage3D.cpp" />
     <ClCompile Include="src\BaseSystem\CInput.cpp" />
@@ -82,6 +83,7 @@
     <ClCompile Include="src\Game\CEnemy.cpp" />
     <ClCompile Include="src\Game\CEnemy1.cpp" />
     <ClCompile Include="src\Game\CEnemy2.cpp" />
+    <ClCompile Include="src\Game\CGameUI.cpp" />
     <ClCompile Include="src\Game\CGhost.cpp" />
     <ClCompile Include="src\Game\CField.cpp" />
     <ClCompile Include="src\Game\CFlame.cpp" />
@@ -168,6 +170,7 @@
     <ClInclude Include="src\BaseSystem\CFade.h" />
     <ClInclude Include="src\BaseSystem\CFont.h" />
     <ClInclude Include="src\BaseSystem\CCharaBase.h" />
+    <ClInclude Include="src\BaseSystem\CFontData.h" />
     <ClInclude Include="src\BaseSystem\CGamePause.h" />
     <ClInclude Include="src\BaseSystem\CImage3D.h" />
     <ClInclude Include="src\BaseSystem\CInput.h" />
@@ -222,6 +225,7 @@
     <ClInclude Include="src\Game\CEnemy.h" />
     <ClInclude Include="src\Game\CEnemy1.h" />
     <ClInclude Include="src\Game\CEnemy2.h" />
+    <ClInclude Include="src\Game\CGameUI.h" />
     <ClInclude Include="src\Game\CGhost.h" />
     <ClInclude Include="src\Game\CField.h" />
     <ClInclude Include="src\Game\CFlame.h" />

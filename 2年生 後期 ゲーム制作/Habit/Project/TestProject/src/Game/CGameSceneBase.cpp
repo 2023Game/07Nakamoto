@@ -6,7 +6,7 @@
 #include "ItemData.h"
 #include "CSceneManager.h"
 #include "CInventory.h"
-
+#include "CGameUI.h"
 
 CGameSceneBase::CGameSceneBase(EScene scene)
 	: CSceneBase(scene)
@@ -18,13 +18,15 @@ CGameSceneBase::CGameSceneBase(EScene scene)
 CGameSceneBase::~CGameSceneBase()
 {
 	// 次に読み込まれるシーンがゲームシーンでなければ、
-	// アイテムのリソースを全て破棄する
 	CSceneManager* sceneMgr = CSceneManager::Instance();
 	if (sceneMgr != nullptr && !sceneMgr->IsNextGameScene())
 	{
+		// アイテムのリソースを全て破棄する
 		Item::DeleteItemResources();
-	}
 
+		// ゲームUIを破棄する
+		CGameUI::ClearInstance();
+	}
 }
 
 //シーン読み込み
@@ -38,6 +40,9 @@ void CGameSceneBase::Load()
 	new CField();
 	// ゲームメニューを作成
 	new CInventory();
+
+	// ゲームUIを作成
+	new CGameUI();
 }
 
 // 更新処理

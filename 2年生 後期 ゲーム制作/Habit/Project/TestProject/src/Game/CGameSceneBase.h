@@ -10,7 +10,7 @@ public:
 	// コンストラクタ
 	CGameSceneBase(EScene scene);
 	// デストラクタ
-	~CGameSceneBase();
+	virtual ~CGameSceneBase();
 	//シーン読み込み
 	void Load();
 	// 更新処理

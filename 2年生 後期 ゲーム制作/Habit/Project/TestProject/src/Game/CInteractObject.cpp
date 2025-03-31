@@ -1,5 +1,7 @@
 #include "CInteractObject.h"
 
+#define DEFAULT_TEXT_PATH "UI\\Interact\\interact.png"
+
 // コンストラクタ
 CInteractObject::CInteractObject(ETaskPriority prio, int sortOrder, ETaskPauseType pause)
 	: CObjectBase(ETag::eInteractObject, prio, sortOrder, pause)
@@ -25,6 +27,18 @@ bool CInteractObject::CanInteract() const
 std::string CInteractObject::GetInteractStr() const
 {
 	return mInteractStr;
+}
+
+// 調べる内容のテキスト画像のパスを返す
+std::string CInteractObject::GetInteractTextPath() const
+{
+	return DEFAULT_TEXT_PATH;
+}
+
+// 調べるUIを表示する座標を返す
+CVector CInteractObject::GetInteractUIPos() const
+{
+	return Position() + CVector(0.0f, 10.0f, 0.0f);
 }
 
 #if _DEBUG

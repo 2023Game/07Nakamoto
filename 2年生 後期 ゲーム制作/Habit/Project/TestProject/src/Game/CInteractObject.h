@@ -19,6 +19,10 @@ public:
 
 	// 調べる内容のテキストを返す 
 	std::string GetInteractStr() const;
+	// 調べる内容のテキスト画像のパスを返す
+	virtual std::string GetInteractTextPath() const;
+	// 調べるUIを表示する座標を返す
+	virtual CVector GetInteractUIPos() const;
 
 #if _DEBUG
 	// デバッグ表示用の名前を取得
