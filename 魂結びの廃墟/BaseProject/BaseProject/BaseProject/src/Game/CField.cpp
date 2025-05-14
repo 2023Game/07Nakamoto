@@ -8,7 +8,7 @@ CField::CField()
 	: CObjectBase(ETag::eField, ETaskPriority::eBackground)
 	, mEffectAnimData(1, 11, true, 11, 0.03f)
 {
-	mpModel = CResourceManager::Get<CModel>("Field");
+	mpModel = CResourceManager::Get<CModel>("Floor");
 	mpModel2 = CResourceManager::Get<CModel>("Field2");
 
 	mpColliderMesh = new CColliderMesh(this, ELayer::eField, mpModel, true);
@@ -23,6 +23,12 @@ CField::~CField()
 		delete mpColliderMesh;
 		mpColliderMesh = nullptr;
 	}
+}
+
+// 床のコライダーを取得
+CCollider* CField::GetCollider() const
+{
+	return mpColliderMesh;
 }
 
 void CField::CreateFieldObjects()

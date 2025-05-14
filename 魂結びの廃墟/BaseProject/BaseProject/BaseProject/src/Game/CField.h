@@ -8,6 +8,9 @@ public:
 	CField();
 	~CField();
 
+	// 床のコライダーを取得
+	CCollider* GetCollider() const;
+
 	void Update();
 	void Render();
 

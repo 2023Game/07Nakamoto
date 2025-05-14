@@ -46,7 +46,8 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>(		"Sword",			"Weapon\\Sword\\sword.obj");
 	CResourceManager::Load<CModel>(		"Shield",			"Weapon\\Shield\\shield.obj");
 
-	CResourceManager::Load<CModel>(		"Field2",			"Field\\Abandoned_School.obj"); 
+	CResourceManager::Load<CModel>(		"Floor",			"Field\\Abandoned_School_Floor.obj");
+	CResourceManager::Load<CModel>(		"Field2",			"Field\\Abandoned_School4.obj"); 
 
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
@@ -77,6 +78,7 @@ void CGameScene::Load()
 	);
 
 	mainCamera->SetFollowTargetTf(player);
+	mainCamera->AddCollider(CField::GetCollider());
 
 	// ゲームメニューを作成
 	mpGameMenu = new CGameMenu();
