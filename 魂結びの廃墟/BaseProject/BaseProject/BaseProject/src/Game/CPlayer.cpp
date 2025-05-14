@@ -98,7 +98,7 @@ CPlayer::CPlayer()
 		BODY_RADIUS
 	);
 	mpBodyCol->SetCollisionTags({ ETag::eField, ETag::eRideableObject, ETag::eEnemy });
-	mpBodyCol->SetCollisionLayers({ ELayer::eField, ELayer::eEnemy, ELayer::eAttackCol });
+	mpBodyCol->SetCollisionLayers({ ELayer::eField, ELayer::eWall, ELayer::eEnemy, ELayer::eAttackCol });
 
 	mpSlashSE = CResourceManager::Get<CSound>("SlashSound");
 
@@ -684,6 +684,16 @@ void CPlayer::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 				}
 			}
 		}
+		// 壁と衝突した場合
+		else if (other->Layer() == ELayer::eWall)
+		{
+			// 横方向にのみ押し戻すため、
+			// 押し戻しベクトルのYの値を0にする
+			CVector adjust = hit.adjust;
+			adjust.Y(0.0f);
+			Position(Position() + adjust * hit.weight);
+		}
+
 		// 敵と衝突した場合
 		else if (other->Layer() == ELayer::eEnemy)
 		{

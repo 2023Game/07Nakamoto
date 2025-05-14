@@ -47,12 +47,13 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>(		"Shield",			"Weapon\\Shield\\shield.obj");
 
 	CResourceManager::Load<CModel>(		"Floor",			"Field\\Abandoned_School_Floor.obj");
-	CResourceManager::Load<CModel>(		"Field2",			"Field\\Abandoned_School4.obj"); 
+	CResourceManager::Load<CModel>(		"Wall",				"Field\\Abandoned_School_Wall.obj"); 
+	CResourceManager::Load<CModel>(		"WallCol",			"Field\\Abandoned_School_Wall_Col1.obj");
 
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
 
-	new CField();
+	mpField = new CField();
 
 	// サボテンの敵を作成
 	CCactus* cactus = new CCactus();
@@ -78,7 +79,7 @@ void CGameScene::Load()
 	);
 
 	mainCamera->SetFollowTargetTf(player);
-	mainCamera->AddCollider(CField::GetCollider());
+	mainCamera->AddCollider(mpField->GetCollider());
 
 	// ゲームメニューを作成
 	mpGameMenu = new CGameMenu();

@@ -8,27 +8,29 @@ CField::CField()
 	: CObjectBase(ETag::eField, ETaskPriority::eBackground)
 	, mEffectAnimData(1, 11, true, 11, 0.03f)
 {
-	mpModel = CResourceManager::Get<CModel>("Floor");
-	mpModel2 = CResourceManager::Get<CModel>("Field2");
+	mpFloor = CResourceManager::Get<CModel>("Floor");
+	mpWall = CResourceManager::Get<CModel>("Wall");
+	mpWallCol = CResourceManager::Get<CModel>("WallCol");
 
-	mpColliderMesh = new CColliderMesh(this, ELayer::eField, mpModel, true);
+	mpFloorColliderMesh = new CColliderMesh(this, ELayer::eField, mpFloor, true);
+	mpWallColliderMesh = new CColliderMesh(this, ELayer::eWall, mpWallCol, true);
 
 	//CreateFieldObjects();
 }
 
 CField::~CField()
 {
-	if (mpColliderMesh != nullptr)
+	if (mpFloorColliderMesh != nullptr)
 	{
-		delete mpColliderMesh;
-		mpColliderMesh = nullptr;
+		delete mpFloorColliderMesh;
+		mpFloorColliderMesh = nullptr;
 	}
 }
 
 // 床のコライダーを取得
-CCollider* CField::GetCollider() const
+CColliderMesh* CField::GetCollider() const
 {
-	return mpColliderMesh;
+	return mpFloorColliderMesh;
 }
 
 void CField::CreateFieldObjects()
@@ -125,6 +127,6 @@ void CField::Update()
 
 void CField::Render()
 {
-	mpModel->Render(Matrix());
-	mpModel2->Render(Matrix());
+	mpFloor->Render(Matrix());
+	mpWall->Render(Matrix());
 }

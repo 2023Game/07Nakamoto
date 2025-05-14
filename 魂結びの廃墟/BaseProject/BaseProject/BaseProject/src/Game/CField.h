@@ -9,7 +9,7 @@ public:
 	~CField();
 
 	// 床のコライダーを取得
-	CCollider* GetCollider() const;
+	CColliderMesh* GetCollider() const;
 
 	void Update();
 	void Render();
@@ -17,9 +17,11 @@ public:
 private:
 	void CreateFieldObjects();
 
-	CModel* mpModel;
-	CModel* mpModel2;
-	CColliderMesh* mpColliderMesh;
+	CModel* mpFloor;
+	CModel* mpWall;
+	CModel* mpWallCol;
+	CColliderMesh* mpFloorColliderMesh;
+	CColliderMesh* mpWallColliderMesh;
 
 	CModel* mpCubeModel;
 	CModel* mpCylinderModel;
