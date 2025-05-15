@@ -3,6 +3,8 @@
 #include "CMoveFloor.h"
 #include "CRotateFloor.h"
 #include "CLineEffect.h"
+#include "CRDoor.h"
+#include "CLDoor.h"
 
 CField::CField()
 	: CObjectBase(ETag::eField, ETaskPriority::eBackground)
@@ -15,6 +17,13 @@ CField::CField()
 	mpFloorColliderMesh = new CColliderMesh(this, ELayer::eField, mpFloor, true);
 	mpWallColliderMesh = new CColliderMesh(this, ELayer::eWall, mpWallCol, true);
 
+	// 右のドアの生成
+	mpRDoor = new CRDoor();
+	mpRDoor->Position(6.9f*5.5f, 0.0f, 8.15f*5.5f);
+	// 左のドアの生成
+	mpLDoor = new CLDoor();
+	mpLDoor->Position(5.1f * 5.5f, 0.0f, 8.15f * 5.5f);
+
 	//CreateFieldObjects();
 }
 
@@ -25,12 +34,23 @@ CField::~CField()
 		delete mpFloorColliderMesh;
 		mpFloorColliderMesh = nullptr;
 	}
+	if (mpWallColliderMesh != nullptr)
+	{
+		delete mpWallColliderMesh;
+		mpWallColliderMesh = nullptr;
+	}
 }
 
 // 床のコライダーを取得
-CColliderMesh* CField::GetCollider() const
+CColliderMesh* CField::GetFloorCol() const
 {
 	return mpFloorColliderMesh;
+}
+
+// 壁のコライダーの取得
+CColliderMesh* CField::GetWallCol() const
+{
+	return mpWallColliderMesh;
 }
 
 void CField::CreateFieldObjects()

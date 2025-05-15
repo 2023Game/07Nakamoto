@@ -48,11 +48,16 @@ void CGameScene::Load()
 
 	CResourceManager::Load<CModel>(		"Floor",			"Field\\Abandoned_School_Floor.obj");
 	CResourceManager::Load<CModel>(		"Wall",				"Field\\Abandoned_School_Wall.obj"); 
-	CResourceManager::Load<CModel>(		"WallCol",			"Field\\Abandoned_School_Wall_Col1.obj");
+	CResourceManager::Load<CModel>(		"WallCol",			"Field\\Abandoned_School_Wall_Col.obj");
+	CResourceManager::Load<CModel>(		"RightDoor",		"Door\\right_door.obj");
+	CResourceManager::Load<CModel>(		"RightDoorCol",		"Door\\right_door_col.obj");
+	CResourceManager::Load<CModel>(		"LeftDoor",			"Door\\left_door.obj");
+	CResourceManager::Load<CModel>(		"LeftDoorCol",		"Door\\left_door_col.obj");
 
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
 
+	// フィールドの生成
 	mpField = new CField();
 
 	// サボテンの敵を作成
@@ -79,7 +84,8 @@ void CGameScene::Load()
 	);
 
 	mainCamera->SetFollowTargetTf(player);
-	mainCamera->AddCollider(mpField->GetCollider());
+	mainCamera->AddCollider(mpField->GetFloorCol());
+	mainCamera->AddCollider(mpField->GetWallCol());
 
 	// ゲームメニューを作成
 	mpGameMenu = new CGameMenu();

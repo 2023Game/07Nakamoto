@@ -2,6 +2,9 @@
 #include "CObjectBase.h"
 #include "CColliderMesh.h"
 
+class CRDoor;
+class CLDoor;
+
 class CField : public CObjectBase
 {
 public:
@@ -9,7 +12,9 @@ public:
 	~CField();
 
 	// 床のコライダーを取得
-	CColliderMesh* GetCollider() const;
+	CColliderMesh* GetFloorCol() const;
+	// 壁のコライダーの取得
+	CColliderMesh* GetWallCol() const;
 
 	void Update();
 	void Render();
@@ -20,6 +25,10 @@ private:
 	CModel* mpFloor;
 	CModel* mpWall;
 	CModel* mpWallCol;
+
+	CRDoor* mpRDoor;
+	CLDoor* mpLDoor;
+
 	CColliderMesh* mpFloorColliderMesh;
 	CColliderMesh* mpWallColliderMesh;
 
