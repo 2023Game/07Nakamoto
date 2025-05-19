@@ -39,7 +39,6 @@ const CPlayer2::AnimData CPlayer2::ANIM_DATA[] =
 {
 	
 	{ "",						true,	0.0f,	1.0f	},	// Tポーズ
-	{ ANIM_PATH"idle.x",		true,	153.0f,	1.0f	},	// 待機
 
 };
 
@@ -60,7 +59,7 @@ CPlayer2::CPlayer2()
 	spInstance = this;
 
 	// モデルデータ取得
-	CModelX* model = CResourceManager::Get<CModelX>("Player");
+	CModelX* model = CResourceManager::Get<CModelX>("Player2");
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
