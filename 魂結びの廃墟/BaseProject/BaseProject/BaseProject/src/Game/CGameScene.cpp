@@ -48,7 +48,8 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>(		"Sword",			"Weapon\\Sword\\sword.obj");
 	CResourceManager::Load<CModel>(		"Shield",			"Weapon\\Shield\\shield.obj");
 
-	CResourceManager::Load<CModelX>(	"Player2",			"Character\\Player2\\kyoko.x");
+	//CResourceManager::Load<CModelX>(	"Player2",			"Character\\Player2\\kyoko2.x");
+	CResourceManager::Load<CModelX>(	"Cat",				"Character\\Cat\\cat.x");
 
 	CResourceManager::Load<CModel>(		"Floor",			"Field\\Abandoned_School_Floor.obj");
 	CResourceManager::Load<CModel>(		"Wall",				"Field\\Abandoned_School_Wall.obj"); 

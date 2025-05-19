@@ -59,7 +59,7 @@ CPlayer2::CPlayer2()
 	spInstance = this;
 
 	// モデルデータ取得
-	CModelX* model = CResourceManager::Get<CModelX>("Player2");
+	CModelX* model = CResourceManager::Get<CModelX>("Cat");
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
