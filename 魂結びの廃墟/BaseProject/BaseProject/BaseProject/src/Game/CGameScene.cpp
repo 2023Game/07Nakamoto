@@ -10,6 +10,8 @@
 #include "CLineEffect.h"
 #include "CCactus.h"
 
+#include "CPlayer2.h"
+
 //コンストラクタ
 CGameScene::CGameScene()
 	: CSceneBase(EScene::eGame)
@@ -46,6 +48,8 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>(		"Sword",			"Weapon\\Sword\\sword.obj");
 	CResourceManager::Load<CModel>(		"Shield",			"Weapon\\Shield\\shield.obj");
 
+	CResourceManager::Load<CModelX>(	"Player2",			"Character\\Player2\\kyoko.x");
+
 	CResourceManager::Load<CModel>(		"Floor",			"Field\\Abandoned_School_Floor.obj");
 	CResourceManager::Load<CModel>(		"Wall",				"Field\\Abandoned_School_Wall.obj"); 
 	CResourceManager::Load<CModel>(		"WallCol",			"Field\\Abandoned_School_Wall_Col.obj");
@@ -66,6 +70,10 @@ void CGameScene::Load()
 
 	CPlayer* player = new CPlayer();
 	player->Scale(1.0f, 1.0f, 1.0f);
+
+	//CPlayer2* player2 = new CPlayer2();
+	//player2->Scale(1.0f, 1.0f, 1.0f);
+	//player2->Position(10.0f, 0.0f, 0.0f);
 
 	// CGameCameraのテスト
 	//CGameCamera* mainCamera = new CGameCamera

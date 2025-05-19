@@ -77,6 +77,7 @@
     <ClCompile Include="src\Game\CCactus.cpp" />
     <ClCompile Include="src\Game\CCactusNeedle.cpp" />
     <ClCompile Include="src\Game\CLDoor.cpp" />
+    <ClCompile Include="src\Game\CPlayer2.cpp" />
     <ClCompile Include="src\Game\CRDoor.cpp" />
     <ClCompile Include="src\Game\CEnemy.cpp" />
     <ClCompile Include="src\Game\CField.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="src\Game\CTitleScene.h" />
     <ClInclude Include="src\Game\CWeapon.h" />
     <ClInclude Include="src\Game\CXCharacter.h" />
+    <ClInclude Include="src\Game\CPlayer2.h" />
     <ClInclude Include="src\Test\CBootMenuScene.h" />
     <ClInclude Include="src\Test\CColBase.h" />
     <ClInclude Include="src\Test\CColCapsule.h" />
