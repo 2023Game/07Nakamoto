@@ -1,0 +1,52 @@
+# Blender 4.2.3 LTS MTL File: 'kyoko2.blend'
+# www.blender.org
+
+newmtl Alpha
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd C:/Users/dogpo/Desktop/2023Game/07Nakamoto/魂結びの廃墟/データ/kyoko_ver5.3/kyoko_ver5.3/Texture/Original/Alpha.png
+
+newmtl Body
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd C:/Users/dogpo/Desktop/2023Game/07Nakamoto/魂結びの廃墟/データ/kyoko_ver5.3/kyoko_ver5.3/Texture/Original/Body.png
+
+newmtl Cloth
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd C:/Users/dogpo/Desktop/2023Game/07Nakamoto/魂結びの廃墟/データ/kyoko_ver5.3/kyoko_ver5.3/Texture/Original/Clothes.png
+
+newmtl Hair
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd C:/Users/dogpo/Desktop/2023Game/07Nakamoto/魂結びの廃墟/データ/kyoko_ver5.3/kyoko_ver5.3/Texture/Original/Hair.png
+
+newmtl NailTip
+Ns 96.078415
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd C:/Users/dogpo/Desktop/2023Game/07Nakamoto/魂結びの廃墟/データ/kyoko_ver5.3/kyoko_ver5.3/Texture/Original/NailTip.png

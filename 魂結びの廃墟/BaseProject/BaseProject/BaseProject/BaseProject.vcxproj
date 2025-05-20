@@ -76,6 +76,7 @@
     <ClCompile Include="src\Game\CBullet.cpp" />
     <ClCompile Include="src\Game\CCactus.cpp" />
     <ClCompile Include="src\Game\CCactusNeedle.cpp" />
+    <ClCompile Include="src\Game\CCat.cpp" />
     <ClCompile Include="src\Game\CLDoor.cpp" />
     <ClCompile Include="src\Game\CPlayer2.cpp" />
     <ClCompile Include="src\Game\CRDoor.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="src\Game\CBullet.h" />
     <ClInclude Include="src\Game\CCactus.h" />
     <ClInclude Include="src\Game\CCactusNeedle.h" />
+    <ClInclude Include="src\Game\CCat.h" />
     <ClInclude Include="src\Game\CLDoor.h" />
     <ClInclude Include="src\Game\CRDoor.h" />
     <ClInclude Include="src\Game\CEnemy.h" />

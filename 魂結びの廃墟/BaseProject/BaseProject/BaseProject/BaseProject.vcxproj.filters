@@ -388,6 +388,9 @@
     <ClCompile Include="src\Game\CPlayer2.cpp">
       <Filter>ソース ファイル\Game\Character</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CCat.cpp">
+      <Filter>ソース ファイル\Game\Character</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -706,6 +709,9 @@
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CPlayer2.h">
+      <Filter>ソース ファイル\Game\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CCat.h">
       <Filter>ソース ファイル\Game\Character</Filter>
     </ClInclude>
   </ItemGroup>

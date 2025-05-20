@@ -14,30 +14,12 @@
 #define JUMP_SPEED 1.5f		// ジャンプ速度
 #define GRAVITY 0.0625f		// 重力加速度
 
-#define MOTION_BLUR_TIME 3.0f	// モーションブラーを掛ける時間
-#define MOTION_BLUR_WIDTH 1.0f	// モーションブラーの幅
-#define MOTION_BLUR_COUNT 5		// モーションブラーの反復回数
-
-#define ATTACK_START_FRAME 26.0f	// 斬り攻撃の開始フレーム
-#define ATTACK_END_FRAME 50.0f		// 斬り攻撃の終了フレーム
-// 斬り攻撃の剣のオフセット座標
-#define ATTACK_SWORD_OFFSET_POS CVector(0.0f, 7.2f, 3.5f)
-// 斬り攻撃の剣のオフセット向き
-#define ATTACK_SWORD_OFFSET_ROT CVector(-20.0f, 0.0f, -7.0f)
-
-#define ATTACK2_START_FRAME 26.0f	// 蹴り攻撃の開始フレーム
-#define ATTACK2_END_FRAME 40.0f		// 蹴り攻撃の終了フレーム
-#define ATTACK2_COL_RADIUS 7.5f		// 蹴り攻撃のコライダーの半径
-// 蹴り攻撃のコライダーのオフセット座標
-#define ATTACK2_COL_OFFSET_POS CVector(0.0f, 4.0f, 5.0f)
-
 // プレイヤーのインスタンス
 CPlayer2* CPlayer2::spInstance = nullptr;
 
 // プレイヤーのアニメーションデータのテーブル
 const CPlayer2::AnimData CPlayer2::ANIM_DATA[] =
 {
-	
 	{ "",						true,	0.0f,	1.0f	},	// Tポーズ
 
 };
@@ -87,12 +69,14 @@ CPlayer2::CPlayer2()
 	mpBodyCol->SetCollisionLayers({ ELayer::eField, ELayer::eWall, ELayer::eDoor, ELayer::eEnemy, ELayer::eAttackCol });
 }
 
+// デストラクタ
 CPlayer2::~CPlayer2()
 {
 	// コライダーを削除
 	SAFE_DELETE(mpBodyCol);
 }
 
+// インスタンスを取得
 CPlayer2* CPlayer2::Instance()
 {
 	return spInstance;
@@ -129,101 +113,34 @@ void CPlayer2::UpdateIdle()
 	// 接地していれば、
 	if (mIsGrounded)
 	{
-		// 左クリックで斬撃攻撃へ移行
-		if (CInput::PushKey(VK_LBUTTON))
-		{
-			mMoveSpeed = CVector::zero;
-			ChangeState(EState::eAttack1);
-		}
-		// 右クリックでキック攻撃へ以降
-		else if (CInput::PushKey(VK_RBUTTON))
-		{
-			mMoveSpeed = CVector::zero;
-			ChangeState(EState::eAttack2);
-		}
-		// SPACEキーでジャンプ開始へ移行
-		else if (CInput::PushKey(VK_SPACE))
-		{
-			ChangeState(EState::eJumpStart);
-		}
+		//// 左クリックで斬撃攻撃へ移行
+		//if (CInput::PushKey(VK_LBUTTON))
+		//{
+		//	mMoveSpeed = CVector::zero;
+		//	ChangeState(EState::eAttack1);
+		//}
+		//// 右クリックでキック攻撃へ以降
+		//else if (CInput::PushKey(VK_RBUTTON))
+		//{
+		//	mMoveSpeed = CVector::zero;
+		//	ChangeState(EState::eAttack2);
+		//}
+		//// SPACEキーでジャンプ開始へ移行
+		//else if (CInput::PushKey(VK_SPACE))
+		//{
+		//	ChangeState(EState::eJumpStart);
+		//}
 	}
 }
 
 // 斬り攻撃
 void CPlayer2::UpdateAttack1()
 {
-	switch (mStateStep)
-	{
-	case 0:
-		// 攻撃アニメーションを開始
-		//ChangeAnimation(EAnimType::eAttack, true);
-
-		mStateStep++;
-		break;
-	case 1:
-		if (GetAnimationFrame() >= ATTACK_START_FRAME)
-		{
-			// 攻撃開始
-			AttackStart();
-
-			mStateStep++;
-		}
-		break;
-	case 2:
-		if (GetAnimationFrame() >= ATTACK_END_FRAME)
-		{
-			// 攻撃終了
-			AttackEnd();
-
-			mStateStep++;
-		}
-		break;
-	case 3:
-		// 攻撃アニメーションが終了したら、
-		if (IsAnimationFinished())
-		{
-			// 待機状態へ移行
-			ChangeState(EState::eIdle);
-			//ChangeAnimation(EAnimType::eIdle);
-		}
-		break;
-	}
 }
 
 // 蹴り攻撃
 void CPlayer2::UpdateAttack2()
 {
-	switch (mStateStep)
-	{
-	case 0:
-		// 攻撃アニメーションを開始
-		//ChangeAnimation(EAnimType::eKick, true);
-		mStateStep++;
-		break;
-	case 1:
-		if (GetAnimationFrame() >= ATTACK2_START_FRAME)
-		{
-			AttackStart();
-			mStateStep++;
-		}
-		break;
-	case 2:
-		if (GetAnimationFrame() >= ATTACK2_END_FRAME)
-		{
-			AttackEnd();
-			mStateStep++;
-		}
-		break;
-	case 3:
-		// 攻撃アニメーションが終了したら、
-		if (IsAnimationFinished())
-		{
-			// 待機状態へ移行
-			ChangeState(EState::eIdle);
-			//ChangeAnimation(EAnimType::eIdle);
-		}
-		break;
-	}
 }
 
 // ジャンプ開始
