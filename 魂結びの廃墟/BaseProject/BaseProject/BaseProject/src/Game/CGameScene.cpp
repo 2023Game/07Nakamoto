@@ -76,9 +76,9 @@ void CGameScene::Load()
 	CPlayer2* player2 = new CPlayer2();
 	player2->Scale(1.0f, 1.0f, 1.0f);
 
-	//CCat* cat = new CCat();
-	//cat->Scale(1.0f, 1.0f, 1.0f);
-	//cat->Position(10.0f, 0.0f, 0.0f);
+	CCat* cat = new CCat();
+	cat->Scale(1.0f, 1.0f, 1.0f);
+	cat->Position(10.0f, 0.0f, 0.0f);
 
 	// CGameCamera‚ÌƒeƒXƒg
 	//CGameCamera* mainCamera = new CGameCamera
