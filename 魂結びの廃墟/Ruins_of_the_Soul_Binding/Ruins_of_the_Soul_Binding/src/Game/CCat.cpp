@@ -135,10 +135,10 @@ CVector CCat::CalcMoveVec() const
 
 	// キーの入力ベクトルを取得
 	CVector input = CVector::zero;
-	if (CInput::Key('W'))		input.Y(-1.0f);
-	else if (CInput::Key('S'))	input.Y(1.0f);
-	if (CInput::Key('A'))		input.X(-1.0f);
-	else if (CInput::Key('D'))	input.X(1.0f);
+	//if (CInput::Key('W'))		input.Y(-1.0f);
+	//else if (CInput::Key('S'))	input.Y(1.0f);
+	//if (CInput::Key('A'))		input.X(-1.0f);
+	//else if (CInput::Key('D'))	input.X(1.0f);
 
 	// 入力ベクトルの長さで入力されているか判定
 	if (input.LengthSqr() > 0.0f)
