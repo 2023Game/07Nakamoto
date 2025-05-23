@@ -69,8 +69,8 @@ void CGameScene::Load()
 	mpField = new CField();
 
 	// ƒTƒ{ƒeƒ“‚Ì“G‚ðì¬
-	CCactus* cactus = new CCactus();
-	cactus->Position(0.0f, 0.0f, -100.0f);
+	//CCactus* cactus = new CCactus();
+	//cactus->Position(0.0f, 0.0f, -100.0f);
 
 	//CPlayer* player = new CPlayer();
 	//player->Scale(1.0f, 1.0f, 1.0f);

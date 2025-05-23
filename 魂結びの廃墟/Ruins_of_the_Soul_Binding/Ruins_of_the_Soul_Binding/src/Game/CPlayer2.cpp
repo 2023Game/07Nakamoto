@@ -6,6 +6,10 @@
 #include "CColliderCapsule.h"
 #include "CColliderSphere.h"
 
+#include "CCat.h"
+#include "CCamera.h"
+#include "CGameCamera2.h"
+
 // アニメーションのパス
 #define ANIM_PATH "Character\\Player2\\Rusk\\anim\\"
 #define BODY_HEIGHT 16.0f	// 本体のコライダーの高さ
@@ -204,7 +208,7 @@ void CPlayer2::DeleteObject(CObjectBase* obj)
 }
 
 // キーの入力情報から移動ベクトルを求める
-CVector CPlayer2::CalcMoveVec() const
+CVector CPlayer2::CalcMoveVec()
 {
 	CVector move = CVector::zero;
 
@@ -214,6 +218,16 @@ CVector CPlayer2::CalcMoveVec() const
 	else if (CInput::Key('S'))	input.Y(1.0f);
 	if (CInput::Key('A'))		input.X(-1.0f);
 	else if (CInput::Key('D'))	input.X(1.0f);
+
+	if (CInput::PushKey('C'))
+	{
+		CCat* cat = CCat::Instance();
+		CVector atPos = cat->Position() + CVector(0.0f, 10.0f, 0.0f);
+		CCamera* camera = CCamera::MainCamera();
+
+		camera->LookAt(atPos + CVector(0.0f, 0.0f, 40.0f), atPos, CVector::up);
+		camera->SetFollowTargetTf(cat);
+	}
 
 	// 入力ベクトルの長さで入力されているか判定
 	if (input.LengthSqr() > 0.0f)

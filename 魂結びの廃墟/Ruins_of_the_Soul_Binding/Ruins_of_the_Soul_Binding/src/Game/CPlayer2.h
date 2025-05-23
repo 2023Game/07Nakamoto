@@ -50,7 +50,7 @@ private:
 	void DeleteObject(CObjectBase* obj) override;
 
 	// キーの入力情報から移動ベクトルを求める
-	CVector CalcMoveVec() const;
+	CVector CalcMoveVec();
 
 	// 待機状態
 	void UpdateIdle();

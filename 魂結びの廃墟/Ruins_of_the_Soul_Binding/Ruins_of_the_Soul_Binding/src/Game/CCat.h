@@ -1,6 +1,6 @@
 #pragma once
 //キャラクタクラスのインクルード
-#include "CXCharacter.h"
+#include "CPlayerBace.h"
 #include "CRideableObject.h"
 #include "CSound.h"
 
@@ -10,7 +10,7 @@ class CCollider;
 猫クラス
 キャラクタクラスを継承
 */
-class CCat : public CXCharacter
+class CCat : public CPlayerBace
 {
 public:
 	//インスタンスのポインタの取得
@@ -106,19 +106,5 @@ private:
 	};
 	// 状態を切り替え
 	void ChangeState(EState state);
-
-	EState mState;				// 猫の状態
-	int mStateStep;				// 状態内のステップ管理用
-	float mElapsedTime;			// 経過時間計測用
-
-	CVector mMoveSpeed;			// 前後左右の移動速度
-	float mMoveSpeedY;			// 重力やジャンプによる上下の移動速度
-
-	bool mIsGrounded;			// 接地しているかどうか
-	CVector mGroundNormal;		// 接地している地面の法線
-
-	CCollider* mpBodyCol;		// 本体のコライダー
-
-	CTransform* mpRideObject;
 
 };

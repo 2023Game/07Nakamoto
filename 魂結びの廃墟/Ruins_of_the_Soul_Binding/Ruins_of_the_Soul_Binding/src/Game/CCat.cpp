@@ -18,7 +18,7 @@
 CCat* CCat::spInstance = nullptr;
 
 // 猫のアニメーションデータのテーブル
-const CCat::AnimData CCat::ANIM_DATA[] =
+const std::vector<CPlayerBace::AnimData> ANIM_DATE =
 {
 		{ "",						true,	0.0f,	1.0f	},	// Tポーズ
 
@@ -26,13 +26,6 @@ const CCat::AnimData CCat::ANIM_DATA[] =
 
 // コンストラクタ
 CCat::CCat()
-	: CXCharacter(ETag::ePlayer, ETaskPriority::ePlayer)
-	, mState(EState::eIdle)
-	, mStateStep(0)
-	, mElapsedTime(0.0f)
-	, mMoveSpeedY(0.0f)
-	, mIsGrounded(false)
-	, mpRideObject(nullptr)
 {
 	mMaxHp = 100000;
 	mHp = mMaxHp;
@@ -94,7 +87,7 @@ void CCat::ChangeAnimation(EAnimType type, bool restart)
 // 状態を切り替え
 void CCat::ChangeState(EState state)
 {
-	if (mState == state) return;
+	if (mState == (int)state) return;
 
 	// 攻撃中に他に状態に変わる時は、
 	// 攻撃終了処理を呼び出しておく
@@ -103,7 +96,7 @@ void CCat::ChangeState(EState state)
 		AttackEnd();
 	}
 
-	mState = state;
+	mState = (int)state;
 	mStateStep = 0;
 	mElapsedTime = 0.0f;
 }
@@ -135,10 +128,10 @@ CVector CCat::CalcMoveVec() const
 
 	// キーの入力ベクトルを取得
 	CVector input = CVector::zero;
-	//if (CInput::Key('W'))		input.Y(-1.0f);
-	//else if (CInput::Key('S'))	input.Y(1.0f);
-	//if (CInput::Key('A'))		input.X(-1.0f);
-	//else if (CInput::Key('D'))	input.X(1.0f);
+	if (CInput::Key('W'))		input.Y(-1.0f);
+	else if (CInput::Key('S'))	input.Y(1.0f);
+	if (CInput::Key('A'))		input.X(-1.0f);
+	else if (CInput::Key('D'))	input.X(1.0f);
 
 	// 入力ベクトルの長さで入力されているか判定
 	if (input.LengthSqr() > 0.0f)
@@ -179,7 +172,7 @@ void CCat::UpdateMove()
 		mMoveSpeed += move * MOVE_SPEED;
 
 		// 待機状態であれば、歩行アニメーションに切り替え
-		if (mState == EState::eIdle)
+		if (mState == (int)EState::eIdle)
 		{
 			//ChangeAnimation(EAnimType::eWalk);
 		}
@@ -188,7 +181,7 @@ void CCat::UpdateMove()
 	else
 	{
 		// 待機状態であれば、待機アニメーションに切り替え
-		if (mState == EState::eIdle)
+		if (mState == (int)EState::eIdle)
 		{
 			//ChangeAnimation(EAnimType::eIdle);
 		}
@@ -205,14 +198,14 @@ void CCat::Update()
 	switch (mState)
 	{
 		// 待機状態
-	case EState::eIdle:			UpdateIdle();		break;
+	case (int)EState::eIdle:			UpdateIdle();		break;
 	}
 
 	// 待機中とジャンプ中は、移動処理を行う
-	if (mState == EState::eIdle
-		|| mState == EState::eJumpStart
-		|| mState == EState::eJump
-		|| mState == EState::eJumpEnd)
+	if (mState == (int)EState::eIdle
+		|| mState == (int)EState::eJumpStart
+		|| mState == (int)EState::eJump
+		|| mState == (int)EState::eJumpEnd)
 	{
 		UpdateMove();
 	}

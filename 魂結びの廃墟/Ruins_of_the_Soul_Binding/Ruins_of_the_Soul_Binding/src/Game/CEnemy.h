@@ -1,8 +1,6 @@
 #ifndef CENEMY_H
 #define CENEMY_H
 #include "CXCharacter.h"
-#include "CCollider.h"
-#include "CModel.h"
 
 class CGaugeUI3D;
 
