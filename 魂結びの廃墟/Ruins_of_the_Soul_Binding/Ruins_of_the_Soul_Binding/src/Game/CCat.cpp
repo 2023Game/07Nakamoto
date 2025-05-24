@@ -33,19 +33,8 @@ CCat::CCat()
 	//インスタンスの設定
 	spInstance = this;
 
-	// モデルデータ取得
-	CModelX* model = CResourceManager::Get<CModelX>("Cat");
-
-	// テーブル内のアニメーションデータを読み込み
-	int size = ARRAY_SIZE(ANIM_DATA);
-	for (int i = 0; i < size; i++)
-	{
-		const AnimData& data = ANIM_DATA[i];
-		if (data.path.empty()) continue;
-		model->AddAnimationSet(data.path.c_str());
-	}
-	// CXCharacterの初期化
-	Init(model);
+	// 猫を初期化
+	InitPlayer("Cat", &ANIM_DATA);
 
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);

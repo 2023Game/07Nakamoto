@@ -34,6 +34,9 @@ public:
 	void Render();
 
 protected:
+	// ƒvƒŒƒCƒ„[‚Ì‰Šú‰»
+	void InitPlayer(std::string path, const std::vector<AnimData>* pAnimData);
+
 	// ó‘ÔØ‚è‘Ö‚¦
 	virtual void ChangeState(int state);
 
