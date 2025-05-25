@@ -37,7 +37,7 @@ CCat::CCat()
 	InitPlayer("Cat", &ANIM_DATA);
 
 	// 最初は待機アニメーションを再生
-	ChangeAnimation(EAnimType::eIdle);
+	ChangeAnimation((int)EAnimType::eIdle);
 
 	// 本体のコライダーを作成
 	mpBodyCol = new CColliderCapsule
@@ -65,19 +65,9 @@ CCat* CCat::Instance()
 	return spInstance;
 }
 
-// アニメーション切り替え
-void CCat::ChangeAnimation(EAnimType type, bool restart)
-{
-	if (!(EAnimType::None < type && type < EAnimType::Num)) return;
-	AnimData data = ANIM_DATA[(int)type];
-	CXCharacter::ChangeAnimation((int)type, data.loop, data.frameLength, restart);
-}
-
 // 状態を切り替え
-void CCat::ChangeState(EState state)
+void CCat::ChangeState(int state)
 {
-	if (mState == (int)state) return;
-
 	// 攻撃中に他に状態に変わる時は、
 	// 攻撃終了処理を呼び出しておく
 	if (IsAttacking())
@@ -85,9 +75,7 @@ void CCat::ChangeState(EState state)
 		AttackEnd();
 	}
 
-	mState = (int)state;
-	mStateStep = 0;
-	mElapsedTime = 0.0f;
+	CPlayerBase::ChangeState(state);
 }
 
 // 待機
@@ -324,11 +312,4 @@ void CCat::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			Position(Position() + adjust * hit.weight);
 		}
 	}
-
-}
-
-// 描画
-void CCat::Render()
-{
-	CXCharacter::Render();
 }

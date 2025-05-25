@@ -31,7 +31,7 @@ public:
 	// 更新
 	void Update() override;
 	// 描画
-	void Render();
+	void Render() override;
 
 protected:
 	// プレイヤーの初期化

@@ -22,7 +22,7 @@ public:
 	~CCat();
 
 	// 更新
-	void Update();
+	void Update() override;
 
 	// 攻撃中か
 	bool IsAttacking() const override;
@@ -41,10 +41,6 @@ public:
 	/// <param name="other">衝突した相手のコライダー</param>
 	/// <param name="hit">衝突した時の情報</param>
 	void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
-
-
-	// 描画
-	void Render();
 
 private:
 	// オブジェクト削除を伝える
@@ -76,8 +72,6 @@ private:
 
 		Num
 	};
-	// アニメーション切り替え
-	void ChangeAnimation(EAnimType type, bool restart = false);
 
 	// 猫のインスタンス
 	static CCat* spInstance;
@@ -94,6 +88,6 @@ private:
 		eHit,		// 仰け反り
 	};
 	// 状態を切り替え
-	void ChangeState(EState state);
+	void ChangeState(int state) override;
 
 };

@@ -22,7 +22,7 @@
 CPlayer2* CPlayer2::spInstance = nullptr;
 
 // プレイヤーのアニメーションデータのテーブル
-const CPlayer2::AnimData CPlayer2::ANIM_DATA[] =
+const std::vector<CPlayerBase::AnimData> ANIM_DATA =
 {
 	{ "",						true,	251.0f,	1.0f	},	// 待機
 	{ANIM_PATH"walk.x",			true,	31.0f,	0.5f	},	// 歩行
@@ -31,13 +31,6 @@ const CPlayer2::AnimData CPlayer2::ANIM_DATA[] =
 
 // コンストラクタ
 CPlayer2::CPlayer2()
-	: CXCharacter(ETag::ePlayer, ETaskPriority::ePlayer)
-	, mState(EState::eIdle)
-	, mStateStep(0)
-	, mElapsedTime(0.0f)
-	, mMoveSpeedY(0.0f)
-	, mIsGrounded(false)
-	, mpRideObject(nullptr)
 {
 	mMaxHp = 100000;
 	mHp = mMaxHp;
@@ -46,21 +39,10 @@ CPlayer2::CPlayer2()
 	spInstance = this;
 
 	// モデルデータ取得
-	CModelX* model = CResourceManager::Get<CModelX>("Player2");
-
-	// テーブル内のアニメーションデータを読み込み
-	int size = ARRAY_SIZE(ANIM_DATA);
-	for (int i = 0; i < size; i++)
-	{
-		const AnimData& data = ANIM_DATA[i];
-		if (data.path.empty()) continue;
-		model->AddAnimationSet(data.path.c_str());
-	}
-	// CXCharacterの初期化
-	Init(model);
+	InitPlayer("Player2", &ANIM_DATA);
 
 	// 最初は待機アニメーションを再生
-	ChangeAnimation(EAnimType::eIdle);
+	ChangeAnimation((int)EAnimType::eIdle);
 
 	// 本体のコライダーを作成
 	mpBodyCol = new CColliderCapsule
@@ -87,20 +69,9 @@ CPlayer2* CPlayer2::Instance()
 	return spInstance;
 }
 
-// アニメーション切り替え
-void CPlayer2::ChangeAnimation(EAnimType type, bool restart)
-{
-	if (!(EAnimType::None < type && type < EAnimType::Num)) return;
-	AnimData data = ANIM_DATA[(int)type];
-	CXCharacter::ChangeAnimation((int)type, data.loop, data.frameLength, restart);
-	CXCharacter::SetAnimationSpeed(data.speed);
-}
-
 // 状態を切り替え
-void CPlayer2::ChangeState(EState state)
+void CPlayer2::ChangeState(int state)
 {
-	if (mState == state) return;
-
 	// 攻撃中に他に状態に変わる時は、
 	// 攻撃終了処理を呼び出しておく
 	if (IsAttacking())
@@ -108,9 +79,7 @@ void CPlayer2::ChangeState(EState state)
 		AttackEnd();
 	}
 
-	mState = state;
-	mStateStep = 0;
-	mElapsedTime = 0.0f;
+	CPlayerBase::ChangeState(state);
 }
 
 // 待機
@@ -153,7 +122,7 @@ void CPlayer2::UpdateAttack2()
 void CPlayer2::UpdateJumpStart()
 {
 	//ChangeAnimation(EAnimType::eJumpStart);
-	ChangeState(EState::eJump);
+	ChangeState((int)EState::eJump);
 
 	mMoveSpeedY += JUMP_SPEED;
 	mIsGrounded = false;
@@ -165,7 +134,7 @@ void CPlayer2::UpdateJump()
 	if (mMoveSpeedY <= 0.0f)
 	{
 		//ChangeAnimation(EAnimType::eJumpEnd);
-		ChangeState(EState::eJumpEnd);
+		ChangeState((int)EState::eJumpEnd);
 	}
 }
 
@@ -176,7 +145,7 @@ void CPlayer2::UpdateJumpEnd()
 	// 地面に接地したら、待機状態へ戻す
 	if (IsAnimationFinished() && mIsGrounded)
 	{
-		ChangeState(EState::eIdle);
+		ChangeState((int)EState::eIdle);
 	}
 }
 
@@ -195,7 +164,7 @@ void CPlayer2::UpdateHit()
 		if (IsAnimationFinished())
 		{
 			// 待機状態へ移行
-			ChangeState(EState::eIdle);
+			ChangeState((int)EState::eIdle);
 			//ChangeAnimation(EAnimType::eIdle);
 		}
 		break;
@@ -268,18 +237,18 @@ void CPlayer2::UpdateMove()
 		mMoveSpeed += move * MOVE_SPEED;
 
 		// 待機状態であれば、歩行アニメーションに切り替え
-		if (mState == EState::eIdle)
+		if (mState == (int)EState::eIdle)
 		{
-			ChangeAnimation(EAnimType::eWalk);
+			ChangeAnimation((int)EAnimType::eWalk);
 		}
 	}
 	// 移動キーを入力していない
 	else
 	{
 		// 待機状態であれば、待機アニメーションに切り替え
-		if (mState == EState::eIdle)
+		if (mState == (int)EState::eIdle)
 		{
-			ChangeAnimation(EAnimType::eIdle);
+			ChangeAnimation((int)EAnimType::eIdle);
 		}
 	}
 }
@@ -294,26 +263,26 @@ void CPlayer2::Update()
 	switch (mState)
 	{
 		// 待機状態
-	case EState::eIdle:			UpdateIdle();		break;
+	case (int)EState::eIdle:			UpdateIdle();		break;
 		// 斬り攻撃
-	case EState::eAttack1:		UpdateAttack1();	break;
+	case (int)EState::eAttack1:		UpdateAttack1();	break;
 		// 蹴り攻撃
-	case EState::eAttack2:		UpdateAttack2();	break;
+	case (int)EState::eAttack2:		UpdateAttack2();	break;
 		// ジャンプ開始
-	case EState::eJumpStart:	UpdateJumpStart();	break;
+	case (int)EState::eJumpStart:	UpdateJumpStart();	break;
 		// ジャンプ中
-	case EState::eJump:			UpdateJump();		break;
+	case (int)EState::eJump:			UpdateJump();		break;
 		// ジャンプ終了
-	case EState::eJumpEnd:		UpdateJumpEnd();	break;
+	case (int)EState::eJumpEnd:		UpdateJumpEnd();	break;
 		// 仰け反り
-	case EState::eHit:			UpdateHit();		break;
+	case (int)EState::eHit:			UpdateHit();		break;
 	}
 
 	// 待機中とジャンプ中は、移動処理を行う
-	if (mState == EState::eIdle
-		|| mState == EState::eJumpStart
-		|| mState == EState::eJump
-		|| mState == EState::eJumpEnd)
+	if (mState == (int)EState::eIdle
+		|| mState == (int)EState::eJumpStart
+		|| mState == (int)EState::eJump
+		|| mState == (int)EState::eJumpEnd)
 	{
 		UpdateMove();
 	}
@@ -362,9 +331,9 @@ void CPlayer2::Update()
 bool CPlayer2::IsAttacking() const
 {
 	// 斬り攻撃中
-	if (mState == EState::eAttack1) return true;
+	if (mState == (int)EState::eAttack1) return true;
 	// 蹴り攻撃中
-	if (mState == EState::eAttack2) return true;
+	if (mState == (int)EState::eAttack2) return true;
 
 	// 攻撃中でない
 	return false;
@@ -394,7 +363,7 @@ void CPlayer2::TakeDamage(int damage, CObjectBase* causer)
 	if (!IsDeath())
 	{
 		// 仰け反り状態へ移行
-		ChangeState(EState::eHit);
+		ChangeState((int)EState::eHit);
 
 		// 攻撃を加えた相手の方向へ向く
 		CVector targetPos = causer->Position();
@@ -476,10 +445,4 @@ void CPlayer2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			Position(Position() + adjust * hit.weight);
 		}
 	}
-}
-
-// 描画
-void CPlayer2::Render()
-{
-	CXCharacter::Render();
 }

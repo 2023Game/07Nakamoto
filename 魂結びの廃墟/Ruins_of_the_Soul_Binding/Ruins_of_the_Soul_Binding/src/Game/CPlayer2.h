@@ -1,6 +1,6 @@
 #pragma once
 //キャラクタクラスのインクルード
-#include "CXCharacter.h"
+#include "CPlayerBase.h"
 #include "CRideableObject.h"
 #include "CSound.h"
 
@@ -10,7 +10,7 @@ class CCollider;
 プレイヤークラス
 キャラクタクラスを継承
 */
-class CPlayer2 : public CXCharacter
+class CPlayer2 : public CPlayerBase
 {
 public:
 	//インスタンスのポインタの取得
@@ -22,7 +22,7 @@ public:
 	~CPlayer2();
 
 	// 更新
-	void Update();
+	void Update() override;
 
 	// 攻撃中か
 	bool IsAttacking() const override;
@@ -41,9 +41,6 @@ public:
 	/// <param name="other">衝突した相手のコライダー</param>
 	/// <param name="hit">衝突した時の情報</param>
 	void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
-
-	// 描画
-	void Render();
 
 private:
 	// オブジェクト削除を伝える
@@ -87,22 +84,9 @@ private:
 
 		Num
 	};
-	// アニメーション切り替え
-	void ChangeAnimation(EAnimType type, bool restart = false);
 
 	// プレイヤーのインスタンス
 	static CPlayer2* spInstance;
-
-	// アニメーションデータ
-	struct AnimData
-	{
-		std::string path;	// アニメーションデータのパス
-		bool loop;			// ループするかどうか
-		float frameLength;	// アニメーションのフレーム数
-		float speed;		// アニメーション速度（1.0で等倍）
-	};
-	// アニメーションデータのテーブル
-	static const AnimData ANIM_DATA[];
 
 	// プレイヤーの状態
 	enum class EState
@@ -116,19 +100,5 @@ private:
 		eHit,		// 仰け反り
 	};
 	// 状態を切り替え
-	void ChangeState(EState state);
-
-	EState mState;				// プレイヤーの状態
-	int mStateStep;				// 状態内のステップ管理用
-	float mElapsedTime;			// 経過時間計測用
-
-	CVector mMoveSpeed;			// 前後左右の移動速度
-	float mMoveSpeedY;			// 重力やジャンプによる上下の移動速度
-
-	bool mIsGrounded;			// 接地しているかどうか
-	CVector mGroundNormal;		// 接地している地面の法線
-
-	CCollider* mpBodyCol;		// 本体のコライダー
-
-	CTransform* mpRideObject;
+	void ChangeState(int state) override;
 };
