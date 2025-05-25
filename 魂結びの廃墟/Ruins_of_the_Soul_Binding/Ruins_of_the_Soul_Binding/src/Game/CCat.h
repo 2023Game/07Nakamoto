@@ -1,6 +1,6 @@
 #pragma once
 //キャラクタクラスのインクルード
-#include "CPlayerBace.h"
+#include "CPlayerBase.h"
 #include "CRideableObject.h"
 #include "CSound.h"
 
@@ -10,7 +10,7 @@ class CCollider;
 猫クラス
 キャラクタクラスを継承
 */
-class CCat : public CPlayerBace
+class CCat : public CPlayerBase
 {
 public:
 	//インスタンスのポインタの取得
@@ -81,17 +81,6 @@ private:
 
 	// 猫のインスタンス
 	static CCat* spInstance;
-
-	// アニメーションデータ
-	struct AnimData
-	{
-		std::string path;	// アニメーションデータのパス
-		bool loop;			// ループするかどうか
-		float frameLength;	// アニメーションのフレーム数
-		float speed;		// アニメーション速度（1.0で等倍）
-	};
-	// アニメーションデータのテーブル
-	static const AnimData ANIM_DATA[];
 
 	// 猫の状態
 	enum class EState

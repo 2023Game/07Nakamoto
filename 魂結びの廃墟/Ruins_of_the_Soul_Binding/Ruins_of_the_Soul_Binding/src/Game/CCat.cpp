@@ -18,7 +18,7 @@
 CCat* CCat::spInstance = nullptr;
 
 // 猫のアニメーションデータのテーブル
-const std::vector<CPlayerBace::AnimData> ANIM_DATE =
+const std::vector<CPlayerBase::AnimData> ANIM_DATA =
 {
 		{ "",						true,	0.0f,	1.0f	},	// Tポーズ
 

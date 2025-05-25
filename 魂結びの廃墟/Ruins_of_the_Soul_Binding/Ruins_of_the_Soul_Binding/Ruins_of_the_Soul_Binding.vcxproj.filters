@@ -391,7 +391,7 @@
     <ClCompile Include="src\Game\CCat.cpp">
       <Filter>ソース ファイル\Game\Character</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CPlayerBace.cpp">
+    <ClCompile Include="src\Game\CPlayerBase.cpp">
       <Filter>ソース ファイル\Game\Character</Filter>
     </ClCompile>
   </ItemGroup>
@@ -717,7 +717,7 @@
     <ClInclude Include="src\Game\CCat.h">
       <Filter>ソース ファイル\Game\Character</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CPlayerBace.h">
+    <ClInclude Include="src\Game\CPlayerBase.h">
       <Filter>ソース ファイル\Game\Character</Filter>
     </ClInclude>
   </ItemGroup>
