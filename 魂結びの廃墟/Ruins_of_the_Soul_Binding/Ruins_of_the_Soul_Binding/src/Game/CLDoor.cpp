@@ -1,5 +1,6 @@
 #include "CLDoor.h"
 #include "Maths.h"
+#include "CInput.h"
 
 #define MOVE_POS 9.9f	// à⁄ìÆãóó£
 #define MOVE_TIME 5.0f	// à⁄ìÆéûä‘
@@ -49,21 +50,31 @@ void CLDoor::Update()
 	// ï¬Ç‹Ç¡ÇƒÇ¢ÇÈÇ∆Ç´
 	if (!mOpen)
 	{
-		Position(mDefaultPos);
+		if (CInput::PushKey('E'))
+		{
 
-		//float per = mElapsedTime / MOVE_TIME;
-		//Position(mDefaultPos + mMoveVec * sinf(M_PI * 2.0f * per));
+			float per = mElapsedTime / MOVE_TIME;
+			Position(mDefaultPos + CVector(MOVE_POS, 0.0f, 0.0f) * sinf(M_PI * 2.0f * per));
 
-		//mElapsedTime += 1.0f / 60.0f;
-		//if (mElapsedTime >= MOVE_TIME)
-		//{
-		//	mElapsedTime -= MOVE_TIME;
-		//}
+			mElapsedTime += 1.0f / 60.0f;
+			if (mElapsedTime >= MOVE_TIME)
+			{
+				mElapsedTime -= MOVE_TIME;
+			}
+
+			//Position(mDefaultPos + CVector(MOVE_POS, 0.0f, 0.0f));
+			//mOpen = true;
+		}
+		
 	}
 	// äJÇ¢ÇƒÇ¢ÇÈÇ∆Ç´
 	else
 	{
-		Position(mDefaultPos + mMoveVec);
+		if (CInput::PushKey('E'))
+		{
+			Position(mDefaultPos);
+			//mOpen = false;
+		}
 
 		//float per = mElapsedTime / MOVE_TIME;
 		//Position(mDefaultPos + mMoveVec * sinf(M_PI * 2.0f * per));
@@ -74,6 +85,7 @@ void CLDoor::Update()
 		//	mElapsedTime -= MOVE_TIME;
 		//}
 	}
+
 }
 
 // ï`âÊèàóù

@@ -95,6 +95,9 @@
     <Filter Include="ソース ファイル\Game\Field\Object\InteractObject">
       <UniqueIdentifier>{c5bb70cf-59de-47d3-9ec4-6c19fae41302}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Debug">
+      <UniqueIdentifier>{d0795bef-d8aa-4077-bbf1-63cddad632a2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -399,6 +402,9 @@
     </ClCompile>
     <ClCompile Include="src\Game\CRDoor.cpp">
       <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CDebugFieldOfView.cpp">
+      <Filter>ソース ファイル\Game\Debug</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -728,6 +734,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CRDoor.h">
       <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CDebugFieldOfView.h">
+      <Filter>ソース ファイル\Game\Debug</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

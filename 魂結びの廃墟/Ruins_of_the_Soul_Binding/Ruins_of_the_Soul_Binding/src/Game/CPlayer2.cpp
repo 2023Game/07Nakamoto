@@ -10,6 +10,7 @@
 #include "CCamera.h"
 #include "CGameCamera2.h"
 #include "CInteractObject.h"
+#include "CDebugFieldOfView.h"
 
 // アニメーションのパス
 #define ANIM_PATH "Character\\Player2\\Rusk\\anim\\"
@@ -36,6 +37,7 @@ const std::vector<CPlayerBase::AnimData> ANIM_DATA =
 
 // コンストラクタ
 CPlayer2::CPlayer2()
+	:mpDebugFov(nullptr)
 {
 	mMaxHp = 100000;
 	mHp = mMaxHp;
@@ -48,6 +50,11 @@ CPlayer2::CPlayer2()
 
 	// 最初は待機アニメーションを再生
 	ChangeAnimation((int)EAnimType::eIdle);
+
+#if _DEBUG
+	// 視野範囲のデバッグ表示クラスを作成
+	mpDebugFov = new CDebugFieldOfView(this, mFovAngle, FOV_LENGTH);
+#endif
 
 	// 本体のコライダーを作成
 	mpBodyCol = new CColliderCapsule
@@ -75,8 +82,18 @@ CPlayer2::CPlayer2()
 // デストラクタ
 CPlayer2::~CPlayer2()
 {
+#if _DEBUG
+	// 視野範囲のデバッグ表示が存在したら、一緒に削除する
+	if (mpDebugFov != nullptr)
+	{
+		mpDebugFov->SetOwner(nullptr);
+		mpDebugFov->Kill();
+	}
+#endif
+
 	// コライダーを削除
 	SAFE_DELETE(mpBodyCol);
+	SAFE_DELETE(mpSearchCol);
 }
 
 // インスタンスを取得
@@ -221,6 +238,12 @@ void CPlayer2::UpdateHit()
 // オブジェクト削除を伝える
 void CPlayer2::DeleteObject(CObjectBase* obj)
 {
+	// 削除されたのが視や表示用のクラスであれば、
+	// ポインタを空にする
+	if (obj == mpDebugFov)
+	{
+		mpDebugFov = nullptr;
+	}
 }
 
 // キーの入力情報から移動ベクトルを求める
@@ -361,7 +384,7 @@ void CPlayer2::Update()
 	}
 
 	// キャラクターの更新
-	CXCharacter::Update();
+	CPlayerBase::Update();
 
 	CVector pos = Position();
 	CDebugPrint::Print("PlayerHP:%d / %d\n", mHp, mMaxHp);
@@ -420,76 +443,5 @@ void CPlayer2::TakeDamage(int damage, CObjectBase* causer)
 
 		// 移動を停止
 		mMoveSpeed = CVector::zero;
-	}
-}
-
-// 衝突処理
-void CPlayer2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
-{
-	// 本体のコライダーの衝突判定
-	if (self == mpBodyCol)
-	{
-		// フィールドとの衝突
-		if (other->Layer() == ELayer::eField)
-		{
-			// 坂道で滑らないように、押し戻しベクトルのXとZの値を0にする
-			CVector adjust = hit.adjust;
-			adjust.X(0.0f);
-			adjust.Z(0.0f);
-
-			Position(Position() + adjust * hit.weight);
-
-			// 衝突した地面が床か天井かを内積で判定
-			CVector normal = hit.adjust.Normalized();
-			float dot = CVector::Dot(normal, CVector::up);
-			// 内積の結果がプラスであれば、床と衝突した
-			if (dot >= 0.0f)
-			{
-				// 落下などで床に上から衝突した時（下移動）のみ
-				// 上下の移動速度を0にする
-				if (mMoveSpeedY < 0.0f)
-				{
-					mMoveSpeedY = 0.0f;
-				}
-
-				// 接地した
-				mIsGrounded = true;
-				// 接地した地面の法線を記憶しておく
-				mGroundNormal = hit.adjust.Normalized();
-
-				if (other->Tag() == ETag::eRideableObject)
-				{
-					mpRideObject = other->Owner();
-				}
-			}
-			// 内積の結果がマイナスであれば、天井と衝突した
-			else
-			{
-				// ジャンプなどで天井に下から衝突した時（上移動）のみ
-				// 上下の移動速度を0にする
-				if (mMoveSpeedY > 0.0f)
-				{
-					mMoveSpeedY = 0.0f;
-				}
-			}
-		}
-		// 壁と衝突した場合
-		else if (other->Layer() == ELayer::eWall || other->Layer() == ELayer::eInteractObj)
-		{
-			// 横方向にのみ押し戻すため、
-			// 押し戻しベクトルのYの値を0にする
-			CVector adjust = hit.adjust;
-			adjust.Y(0.0f);
-			Position(Position() + adjust * hit.weight);
-		}
-		// 敵と衝突した場合
-		else if (other->Layer() == ELayer::eEnemy)
-		{
-			// 横方向にのみ押し戻すため、
-			// 押し戻しベクトルのYの値を0にする
-			CVector adjust = hit.adjust;
-			adjust.Y(0.0f);
-			Position(Position() + adjust * hit.weight);
-		}
 	}
 }

@@ -18,6 +18,7 @@ CPlayerBase::CPlayerBase()
 	, mGroundNormal(CVector::up)
 	, mpBodyCol(nullptr)
 	, mFovAngle(FOV_ANGLE)
+	, mpSearchCol(nullptr)
 {
 }
 
@@ -96,6 +97,21 @@ void CPlayerBase::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 			adjust.Y(0.0f);
 			Position(Position() + adjust * hit.weight);
 		}
+		// 調べるオブジェクトの探知コライダーとの当たり判定
+		else if (self == mpSearchCol)
+		{
+			CInteractObject* obj = dynamic_cast<CInteractObject*>(other->Owner());
+			if (obj != nullptr)
+			{
+				// 調べるオブジェクトの削除フラグが立っていなかったら
+				if (!obj->IsKill())
+				{
+					// 衝突した調べるオブジェクトをリストに追加
+					mNearInteractObjs.push_back(obj);
+				}
+			}
+		}
+
 	}
 }
 
@@ -200,13 +216,17 @@ void CPlayerBase::Update()
 	mMoveSpeedY -= GRAVITY;
 
 	// 移動
-	CVector moveSpeed = mMoveSpeed + CVector(0.0f, mMoveSpeedY, 0.0f);
-	Position(Position() + moveSpeed);
+	//CVector moveSpeed = mMoveSpeed + CVector(0.0f, mMoveSpeedY, 0.0f);
+	//Position(Position() + moveSpeed);
 
 	// キャラクターの更新
 	CXCharacter::Update();
 
 	mIsGrounded = false;
+
+	// 調べるオブジェクトのリストをクリア
+	mNearInteractObjs.clear();
+
 }
 
 // 描画
