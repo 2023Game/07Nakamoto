@@ -82,6 +82,7 @@ CPlayer2::CPlayer2()
 // デストラクタ
 CPlayer2::~CPlayer2()
 {
+
 #if _DEBUG
 	// 視野範囲のデバッグ表示が存在したら、一緒に削除する
 	if (mpDebugFov != nullptr)

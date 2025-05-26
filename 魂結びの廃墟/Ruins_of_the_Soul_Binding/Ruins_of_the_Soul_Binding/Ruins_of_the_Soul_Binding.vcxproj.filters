@@ -98,6 +98,9 @@
     <Filter Include="ソース ファイル\Game\Debug">
       <UniqueIdentifier>{d0795bef-d8aa-4077-bbf1-63cddad632a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Character\Player">
+      <UniqueIdentifier>{bef8eb1c-7b2a-4ecc-865c-1ba17117e1dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -162,9 +165,6 @@
     </ClCompile>
     <ClCompile Include="src\Game\CApplication.cpp">
       <Filter>ソース ファイル\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CPlayer.cpp">
-      <Filter>ソース ファイル\Game\Character</Filter>
     </ClCompile>
     <ClCompile Include="src\BaseSystem\CEffect.cpp">
       <Filter>ソース ファイル\BaseSystem\Effect</Filter>
@@ -385,15 +385,6 @@
     <ClCompile Include="src\BaseSystem\CFontData.cpp">
       <Filter>ソース ファイル\BaseSystem\UI</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CPlayer2.cpp">
-      <Filter>ソース ファイル\Game\Character</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CCat.cpp">
-      <Filter>ソース ファイル\Game\Character</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CPlayerBase.cpp">
-      <Filter>ソース ファイル\Game\Character</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CInteractObject.cpp">
       <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
     </ClCompile>
@@ -405,6 +396,21 @@
     </ClCompile>
     <ClCompile Include="src\Game\CDebugFieldOfView.cpp">
       <Filter>ソース ファイル\Game\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CCat.cpp">
+      <Filter>ソース ファイル\Game\Character\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPlayer.cpp">
+      <Filter>ソース ファイル\Game\Character\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPlayer2.cpp">
+      <Filter>ソース ファイル\Game\Character\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPlayerBase.cpp">
+      <Filter>ソース ファイル\Game\Character\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPlayerManager.cpp">
+      <Filter>ソース ファイル\Game\Character\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -473,9 +479,6 @@
     </ClInclude>
     <ClInclude Include="src\Game\CApplication.h">
       <Filter>ソース ファイル\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CPlayer.h">
-      <Filter>ソース ファイル\Game\Character</Filter>
     </ClInclude>
     <ClInclude Include="src\BaseSystem\CEffect.h">
       <Filter>ソース ファイル\BaseSystem\Effect</Filter>
@@ -717,15 +720,6 @@
     <ClInclude Include="src\BaseSystem\CFontData.h">
       <Filter>ソース ファイル\BaseSystem\UI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CPlayer2.h">
-      <Filter>ソース ファイル\Game\Character</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CCat.h">
-      <Filter>ソース ファイル\Game\Character</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CPlayerBase.h">
-      <Filter>ソース ファイル\Game\Character</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\CInteractObject.h">
       <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
     </ClInclude>
@@ -737,6 +731,21 @@
     </ClInclude>
     <ClInclude Include="src\Game\CDebugFieldOfView.h">
       <Filter>ソース ファイル\Game\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CCat.h">
+      <Filter>ソース ファイル\Game\Character\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPlayer.h">
+      <Filter>ソース ファイル\Game\Character\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPlayer2.h">
+      <Filter>ソース ファイル\Game\Character\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPlayerBase.h">
+      <Filter>ソース ファイル\Game\Character\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPlayerManager.h">
+      <Filter>ソース ファイル\Game\Character\Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
