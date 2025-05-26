@@ -8,6 +8,8 @@ enum class ETag
 
 	eField,	// フィールドを構成するオブジェクト
 	eRideableObject,	// 乗ることができるオブジェクト
+	eInteractObject,	// 調べることの出来るオブジェクト
+
 	eItem,	// アイテムのオブジェクト
 
 	ePlayer,// プレイヤー

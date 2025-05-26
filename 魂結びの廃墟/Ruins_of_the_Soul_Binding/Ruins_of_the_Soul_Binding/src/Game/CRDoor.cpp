@@ -7,7 +7,7 @@ CRDoor::CRDoor()
 	mpR_Door = CResourceManager::Get<CModel>("RightDoor");
 	mpR_DoorCol = CResourceManager::Get<CModel>("RightDoorCol");
 
-	mpR_DoorColliderMesh = new CColliderMesh(this, ELayer::eDoor, mpR_DoorCol, true);
+	mpR_DoorColliderMesh = new CColliderMesh(this, ELayer::eInteractObj, mpR_DoorCol, true);
 
 }
 

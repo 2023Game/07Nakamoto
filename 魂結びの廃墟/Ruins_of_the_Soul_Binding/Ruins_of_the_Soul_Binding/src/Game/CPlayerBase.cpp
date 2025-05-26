@@ -75,7 +75,7 @@ void CPlayerBase::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 			}
 		}
 		// 壁と衝突した場合
-		else if (other->Layer() == ELayer::eWall || other->Layer() == ELayer::eDoor)
+		else if (other->Layer() == ELayer::eWall || other->Layer() == ELayer::eInteractObj)
 		{
 			// 横方向にのみ押し戻すため、
 			// 押し戻しベクトルのYの値を0にする

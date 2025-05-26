@@ -92,6 +92,9 @@
     <Filter Include="ソース ファイル\Game\Character\Enemy">
       <UniqueIdentifier>{ec280ca7-8243-49d0-adff-34255272bfe1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Field\Object\InteractObject">
+      <UniqueIdentifier>{c5bb70cf-59de-47d3-9ec4-6c19fae41302}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -379,12 +382,6 @@
     <ClCompile Include="src\BaseSystem\CFontData.cpp">
       <Filter>ソース ファイル\BaseSystem\UI</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CRDoor.cpp">
-      <Filter>ソース ファイル\Game\Field\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CLDoor.cpp">
-      <Filter>ソース ファイル\Game\Field\Object</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CPlayer2.cpp">
       <Filter>ソース ファイル\Game\Character</Filter>
     </ClCompile>
@@ -393,6 +390,15 @@
     </ClCompile>
     <ClCompile Include="src\Game\CPlayerBase.cpp">
       <Filter>ソース ファイル\Game\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CInteractObject.cpp">
+      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CLDoor.cpp">
+      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CRDoor.cpp">
+      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -705,12 +711,6 @@
     <ClInclude Include="src\BaseSystem\CFontData.h">
       <Filter>ソース ファイル\BaseSystem\UI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CRDoor.h">
-      <Filter>ソース ファイル\Game\Field\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CLDoor.h">
-      <Filter>ソース ファイル\Game\Field\Object</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\CPlayer2.h">
       <Filter>ソース ファイル\Game\Character</Filter>
     </ClInclude>
@@ -719,6 +719,15 @@
     </ClInclude>
     <ClInclude Include="src\Game\CPlayerBase.h">
       <Filter>ソース ファイル\Game\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CInteractObject.h">
+      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CLDoor.h">
+      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CRDoor.h">
+      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -12,6 +12,8 @@ enum class ELayer
 	eGround,
 	ePlayer,
 	eEnemy,
+	eInteractObj,	// 調べるオブジェクト
+	eInteractSearch,// 調べるオブジェクト探知用
 
 	eAttackCol,
 };

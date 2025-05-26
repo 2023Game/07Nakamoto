@@ -11,9 +11,9 @@ public:
 	~CRDoor();
 
 	// XVˆ—
-	void Update();
+	void Update() override;
 	// •`‰æˆ—
-	void Render();
+	void Render() override;
 
 private:
 	CModel* mpR_Door;

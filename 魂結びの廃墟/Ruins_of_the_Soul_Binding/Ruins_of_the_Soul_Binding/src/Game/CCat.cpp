@@ -47,8 +47,8 @@ CCat::CCat()
 		CVector(0.0f, BODY_HEIGHT - BODY_RADIUS, 0.0f),
 		BODY_RADIUS
 	);
-	mpBodyCol->SetCollisionTags({ ETag::eField, ETag::eRideableObject, ETag::eEnemy });
-	mpBodyCol->SetCollisionLayers({ ELayer::eField, ELayer::eWall, ELayer::eDoor, ELayer::eEnemy, ELayer::eAttackCol });
+	mpBodyCol->SetCollisionTags({ ETag::eField, ETag::eInteractObject, ETag::eRideableObject, ETag::eEnemy });
+	mpBodyCol->SetCollisionLayers({ ELayer::eField, ELayer::eWall, ELayer::eInteractObj, ELayer::eEnemy, ELayer::eAttackCol });
 
 }
 
@@ -294,7 +294,7 @@ void CCat::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			}
 		}
 		// 壁と衝突した場合
-		else if (other->Layer() == ELayer::eWall || other->Layer() == ELayer::eDoor)
+		else if (other->Layer() == ELayer::eWall || other->Layer() == ELayer::eInteractObj)
 		{
 			// 横方向にのみ押し戻すため、
 			// 押し戻しベクトルのYの値を0にする

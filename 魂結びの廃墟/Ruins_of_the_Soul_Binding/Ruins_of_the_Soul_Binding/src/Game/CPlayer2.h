@@ -101,4 +101,6 @@ private:
 	};
 	// ó‘Ô‚ğØ‚è‘Ö‚¦
 	void ChangeState(int state) override;
+
+
 };

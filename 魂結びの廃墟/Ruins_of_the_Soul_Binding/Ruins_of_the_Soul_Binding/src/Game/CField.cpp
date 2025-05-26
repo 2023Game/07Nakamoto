@@ -19,10 +19,13 @@ CField::CField()
 
 	// 右のドアの生成
 	mpRDoor = new CRDoor();
-	mpRDoor->Position(6.9f*5.5f, 0.0f, 8.15f*5.5f);
+	mpRDoor->Position(37.95f, 0.0f, 44.825f);
 	// 左のドアの生成
-	mpLDoor = new CLDoor();
-	mpLDoor->Position(5.1f * 5.5f, 0.0f, 8.15f * 5.5f);
+	mpLDoor = new CLDoor
+	(
+		CVector(28.05f, 0.0f, 44.825f),
+		CVector(0.0f, 0.0f, 0.0f)
+	);
 
 	//CreateFieldObjects();
 }
