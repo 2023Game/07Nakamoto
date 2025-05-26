@@ -1,6 +1,7 @@
 #include "CPlayerBase.h"
 #include "CInteractObject.h"
 #include "Maths.h"
+#include "CPlayerManager.h"
 
 #define GRAVITY 0.0625f	// 重力加速度
 #define FOV_ANGLE		 60.0f		// 視野範囲の角度
@@ -19,7 +20,10 @@ CPlayerBase::CPlayerBase()
 	, mpBodyCol(nullptr)
 	, mFovAngle(FOV_ANGLE)
 	, mpSearchCol(nullptr)
+	, mIsOperate(false)
+	, mpCamera(nullptr)
 {
+	CPlayerManager::Instance()->AddPlayer(this);
 }
 
 // デストラクタ
@@ -27,6 +31,39 @@ CPlayerBase::~CPlayerBase()
 {
 	// コライダー削除
 	SAFE_DELETE(mpBodyCol);
+
+	// プレイヤー管理クラスが存在したら、プレイヤーリストから自身を取り除く
+	CPlayerManager* pm = CPlayerManager::Instance();
+	if (pm != nullptr)
+	{
+		pm->RemovePlayer(this);
+	}
+}
+
+// 操作するかどうか設定
+void CPlayerBase::SetOperate(bool operate)
+{
+	mIsOperate = operate;
+	// このプレイヤーを操作するのであれば、
+	if (mIsOperate)
+	{
+		// このプレイヤー用のカメラに切り替える
+		mpCamera->SetCurrent(true);
+
+		//TODO:フェードアウトの処理
+	}
+}
+
+// 操作中のプレイヤーかどうか
+bool CPlayerBase::IsOperate() const
+{
+	return mIsOperate;
+}
+
+// 操作中のカメラのポインタを設定
+void CPlayerBase::SetCamera(CCamera* camera)
+{
+	mpCamera = camera;
 }
 
 // 衝突処理

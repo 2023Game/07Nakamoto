@@ -1,5 +1,4 @@
 #pragma once
-#include <list>
 #include <vector>
 #include "CTask.h"
 
@@ -33,7 +32,7 @@ private:
 	static CPlayerManager* spInstance;
 
 	// プレイヤーのリスト
-	std::list<CPlayerBase*> mPlayers;
+	std::vector<CPlayerBase*> mPlayers;
 
 	int mCurrentIndex;	// 現在のインデックス
 };

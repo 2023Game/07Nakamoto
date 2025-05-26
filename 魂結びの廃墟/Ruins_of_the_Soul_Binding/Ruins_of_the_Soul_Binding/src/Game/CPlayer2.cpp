@@ -8,7 +8,7 @@
 
 #include "CCat.h"
 #include "CCamera.h"
-#include "CGameCamera2.h"
+#include "CPlayerCamera.h"
 #include "CInteractObject.h"
 #include "CDebugFieldOfView.h"
 
@@ -259,7 +259,7 @@ CVector CPlayer2::CalcMoveVec()
 	if (CInput::Key('A'))		input.X(-1.0f);
 	else if (CInput::Key('D'))	input.X(1.0f);
 
-	if (CInput::PushKey('C'))
+	/*if (CInput::PushKey('C'))
 	{
 		CCat* cat = CCat::Instance();
 		CVector atPos = cat->Position() + CVector(0.0f, 10.0f, 0.0f);
@@ -267,7 +267,7 @@ CVector CPlayer2::CalcMoveVec()
 
 		camera->LookAt(atPos + CVector(0.0f, 0.0f, 40.0f), atPos, CVector::up);
 		camera->SetFollowTargetTf(cat);
-	}
+	}*/
 
 	// 入力ベクトルの長さで入力されているか判定
 	if (input.LengthSqr() > 0.0f)
@@ -349,13 +349,17 @@ void CPlayer2::Update()
 	case (int)EState::eHit:			UpdateHit();		break;
 	}
 
-	// 待機中とジャンプ中は、移動処理を行う
-	if (mState == (int)EState::eIdle
-		|| mState == (int)EState::eJumpStart
-		|| mState == (int)EState::eJump
-		|| mState == (int)EState::eJumpEnd)
+	// このプレイヤーが操作中であれば、
+	if (IsOperate())
 	{
-		UpdateMove();
+		// 待機中とジャンプ中は、移動処理を行う
+		if (mState == (int)EState::eIdle
+			|| mState == (int)EState::eJumpStart
+			|| mState == (int)EState::eJump
+			|| mState == (int)EState::eJumpEnd)
+		{
+			UpdateMove();
+		}
 	}
 
 	mMoveSpeedY -= GRAVITY;

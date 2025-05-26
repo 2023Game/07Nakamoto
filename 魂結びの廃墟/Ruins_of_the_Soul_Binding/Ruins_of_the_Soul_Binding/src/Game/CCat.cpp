@@ -178,13 +178,17 @@ void CCat::Update()
 	case (int)EState::eIdle:			UpdateIdle();		break;
 	}
 
-	// 待機中とジャンプ中は、移動処理を行う
-	if (mState == (int)EState::eIdle
-		|| mState == (int)EState::eJumpStart
-		|| mState == (int)EState::eJump
-		|| mState == (int)EState::eJumpEnd)
+	// このプレイヤーを操作中であれば、
+	if (IsOperate())
 	{
-		UpdateMove();
+		// 待機中とジャンプ中は、移動処理を行う
+		if (mState == (int)EState::eIdle
+			|| mState == (int)EState::eJumpStart
+			|| mState == (int)EState::eJump
+			|| mState == (int)EState::eJumpEnd)
+		{
+			UpdateMove();
+		}
 	}
 
 	mMoveSpeedY -= GRAVITY;

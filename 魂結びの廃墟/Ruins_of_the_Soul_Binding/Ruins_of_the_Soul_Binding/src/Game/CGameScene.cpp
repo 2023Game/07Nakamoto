@@ -3,7 +3,7 @@
 #include "CField.h"
 #include "CPlayer.h"
 #include "CGameCamera.h"
-#include "CGameCamera2.h"
+#include "CPlayerCamera.h"
 #include "CInput.h"
 #include "CGameMenu.h"
 #include "CBGMManager.h"
@@ -12,6 +12,8 @@
 
 #include "CPlayer2.h"
 #include "CCat.h"
+
+#include "CPlayerManager.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -65,6 +67,8 @@ void CGameScene::Load()
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
 
+	new CPlayerManager();
+
 	// フィールドの生成
 	mpField = new CField();
 
@@ -90,9 +94,9 @@ void CGameScene::Load()
 	//	player->Position()
 	//);
 
-	// CGameCamera2のテスト
+	// CPlayerCameraのテスト
 	CVector atPos = player2->Position() + CVector(0.0f, 10.0f, 0.0f);
-	CGameCamera2* mainCamera = new CGameCamera2
+	CPlayerCamera* mainCamera = new CPlayerCamera
 	(
 		atPos + CVector(0.0f, 0.0f, 40.0f),
 		atPos
@@ -101,6 +105,19 @@ void CGameScene::Load()
 	mainCamera->SetFollowTargetTf(player2);
 	mainCamera->AddCollider(mpField->GetFloorCol());
 	mainCamera->AddCollider(mpField->GetWallCol());
+	player2->SetCamera(mainCamera);
+	player2->SetOperate(true);
+
+	CPlayerCamera* catCamera = new CPlayerCamera
+	(
+		atPos + CVector(0.0f, 0.0f, 40.0f),
+		atPos
+	);
+
+	catCamera->SetFollowTargetTf(cat);
+	catCamera->AddCollider(mpField->GetFloorCol());
+	catCamera->AddCollider(mpField->GetWallCol());
+	cat->SetCamera(catCamera);
 
 	// ゲームメニューを作成
 	mpGameMenu = new CGameMenu();

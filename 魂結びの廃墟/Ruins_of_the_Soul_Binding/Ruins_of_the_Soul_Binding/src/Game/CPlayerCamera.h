@@ -2,7 +2,7 @@
 #include "CCamera.h"
 
 // ゲーム中のカメラ
-class CGameCamera2 : public CCamera
+class CPlayerCamera : public CCamera
 {
 public:
 	/// <summary>
@@ -11,9 +11,9 @@ public:
 	/// <param name="eye">カメラの視点</param>
 	/// <param name="center">カメラの注視点</param>
 	/// <param name="isMainCamera">メインカメラかどうか</param>
-	CGameCamera2(const CVector& eye, const CVector& center, bool isMainCamera = true);
+	CPlayerCamera(const CVector& eye, const CVector& center, bool isMainCamera = true);
 	// デストラクタ
-	~CGameCamera2();
+	~CPlayerCamera();
 
 	void SetFollowTargetTf(CTransform* target) override;
 	void LookAt(const CVector& eye, const CVector& at,

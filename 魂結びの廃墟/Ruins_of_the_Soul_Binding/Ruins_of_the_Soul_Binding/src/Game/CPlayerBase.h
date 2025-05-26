@@ -22,6 +22,24 @@ public:
 	~CPlayerBase();
 
 	/// <summary>
+	/// 操作するかどうか設定
+	/// </summary>
+	/// <param name="operate">trueであれば、操作開始</param>
+	virtual void SetOperate(bool operate);
+
+	/// <summary>
+	/// 操作中のプレイヤーかどうか
+	/// </summary>
+	/// <returns>trueであれば、操作中</returns>
+	bool IsOperate() const;
+
+	/// <summary>
+	/// 操作中のカメラのポインタを設定
+	/// </summary>
+	/// <param name="camera">カメラのポインタ</param>
+	void SetCamera(CCamera* camera);
+
+	/// <summary>
 	/// 衝突処理
 	/// </summary>
 	/// <param name="self">衝突した自身のコライダー</param>
@@ -69,4 +87,6 @@ protected:
 
 	CTransform* mpRideObject;	// 乗ることの出来るオブジェクトか
 
+	bool mIsOperate;	// このプレイヤーを操作中かどうか
+	CCamera* mpCamera;	// このプレイヤーを操作している時のカメラ
 };	

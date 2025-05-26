@@ -24,15 +24,7 @@ CPlayerManager::CPlayerManager()
 CPlayerManager::~CPlayerManager()
 {
 	spInstance = nullptr;
-
-	auto itr = mPlayers.begin();
-	auto end = mPlayers.end();
-	while (itr != end)
-	{
-		CPlayerBase* del = *itr;
-		itr = mPlayers.erase(itr);
-		delete del;
-	}
+	mPlayers.clear();
 }
 
 // プレイヤーの追加
@@ -44,17 +36,29 @@ void CPlayerManager::AddPlayer(CPlayerBase* player)
 // プレイヤーを取り除く
 void CPlayerManager::RemovePlayer(CPlayerBase* player)
 {
-	mPlayers.remove(player);
+	auto find = std::find(mPlayers.begin(), mPlayers.end(), player);
+	if (find == mPlayers.end()) return;
+	mPlayers.erase(find);
 }
 
 // 操作キャラを切り替える
 void CPlayerManager::ChangePlayer()
 {
-	mCurrentIndex = (mCurrentIndex + 1) % mPlayers.size();
+	int size = mPlayers.size();
+	mCurrentIndex = (mCurrentIndex + 1) % size;
+
+	// 全プレイヤーに、そのプレイヤーを操作するかどうかを設定
+	for (int i = 0; i < size; i++)
+	{
+		mPlayers[i]->SetOperate(i == mCurrentIndex);
+	}
 }
 
 // 更新
 void CPlayerManager::Update()
 {
-	mPlayers[mCurrentIndex]->Update();
+	if (CInput::PushKey('C'))
+	{
+		ChangePlayer();
+	}
 }

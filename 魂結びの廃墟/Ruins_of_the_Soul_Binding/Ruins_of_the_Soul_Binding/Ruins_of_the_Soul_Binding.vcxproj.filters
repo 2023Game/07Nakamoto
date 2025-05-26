@@ -307,7 +307,7 @@
     <ClCompile Include="src\Game\CGameMenu.cpp">
       <Filter>ソース ファイル\Game\UI\Menu</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CGameCamera2.cpp">
+    <ClCompile Include="src\Game\CPlayerCamera.cpp">
       <Filter>ソース ファイル\Game\System</Filter>
     </ClCompile>
     <ClCompile Include="src\BaseSystem\CSoundManager.cpp">
@@ -639,7 +639,7 @@
     <ClInclude Include="src\Game\CGameMenu.h">
       <Filter>ソース ファイル\Game\UI\Menu</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CGameCamera2.h">
+    <ClInclude Include="src\Game\CPlayerCamera.h">
       <Filter>ソース ファイル\Game\System</Filter>
     </ClInclude>
     <ClInclude Include="src\BaseSystem\CSoundManager.h">

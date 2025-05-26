@@ -1,4 +1,4 @@
-#include "CGameCamera2.h"
+#include "CPlayerCamera.h"
 #include "CInput.h"
 #include "Maths.h"
 
@@ -8,7 +8,7 @@
 #define ROTATE_RANGE_X 45.0f
 
 // コンストラクタ
-CGameCamera2::CGameCamera2(const CVector& eye, const CVector& center, bool isMainCamera)
+CPlayerCamera::CPlayerCamera(const CVector& eye, const CVector& center, bool isMainCamera)
 	: CCamera(eye, center, isMainCamera)
 	, mFollowDefaultEyeVec(CVector::forward)
 	, mRotateAngle(CVector::zero)
@@ -16,11 +16,11 @@ CGameCamera2::CGameCamera2(const CVector& eye, const CVector& center, bool isMai
 }
 
 // デストラクタ
-CGameCamera2::~CGameCamera2()
+CPlayerCamera::~CPlayerCamera()
 {
 }
 
-void CGameCamera2::SetFollowTargetTf(CTransform* target)
+void CPlayerCamera::SetFollowTargetTf(CTransform* target)
 {
 	mFollowTargetTf = target;
 	if (mFollowTargetTf != nullptr)
@@ -30,7 +30,7 @@ void CGameCamera2::SetFollowTargetTf(CTransform* target)
 	}
 }
 
-void CGameCamera2::LookAt(const CVector& eye, const CVector& at, const CVector& up, bool updateTargetEye)
+void CPlayerCamera::LookAt(const CVector& eye, const CVector& at, const CVector& up, bool updateTargetEye)
 {
 	CCamera::LookAt(eye, at, up, updateTargetEye);
 	if (mFollowTargetTf != nullptr)
@@ -44,7 +44,7 @@ void CGameCamera2::LookAt(const CVector& eye, const CVector& at, const CVector& 
 }
 
 // 更新
-void CGameCamera2::Update()
+void CPlayerCamera::Update()
 {
 	// 追従するターゲットが設定されていれば、
 	if (mFollowTargetTf != nullptr)
