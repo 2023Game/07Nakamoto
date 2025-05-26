@@ -9,6 +9,7 @@
 #include "CCat.h"
 #include "CCamera.h"
 #include "CGameCamera2.h"
+#include "CInteractObject.h"
 
 // アニメーションのパス
 #define ANIM_PATH "Character\\Player2\\Rusk\\anim\\"
@@ -17,6 +18,10 @@
 #define MOVE_SPEED 0.75f	// 移動速度
 #define JUMP_SPEED 1.5f		// ジャンプ速度
 #define GRAVITY 0.0625f		// 重力加速度
+
+#define SEARCH_RADIUS	 10.0f		// 調べるオブジェクトを探知する範囲の半径
+#define FOV_ANGLE		 60.0f		// 視野範囲の角度
+#define FOV_LENGTH		 10.0f		// 視野範囲の距離
 
 // プレイヤーのインスタンス
 CPlayer2* CPlayer2::spInstance = nullptr;
@@ -55,6 +60,16 @@ CPlayer2::CPlayer2()
 	mpBodyCol->SetCollisionTags({ ETag::eField, ETag::eInteractObject, ETag::eRideableObject, ETag::eEnemy });
 	mpBodyCol->SetCollisionLayers({ ELayer::eField, ELayer::eWall, ELayer::eInteractObj, ELayer::eEnemy, ELayer::eAttackCol });
 
+	// 調べるオブジェクトを探知するコライダーを作成
+	mpSearchCol = new CColliderSphere
+	(
+		this, ELayer::eInteractSearch,
+		SEARCH_RADIUS
+	);
+	// 調べるオブジェクトのみ衝突するように設定
+	mpSearchCol->SetCollisionTags({ ETag::eInteractObject });
+	mpSearchCol->SetCollisionLayers({ ELayer::eInteractObj });
+
 }
 
 // デストラクタ
@@ -89,6 +104,37 @@ void CPlayer2::UpdateIdle()
 	// 接地していれば、
 	if (mIsGrounded)
 	{
+		// 近くの調べるオブジェクトを取得
+		CInteractObject* obj = GetNearInteractObj();
+		if (obj != nullptr)
+		{
+#if _DEBUG
+			// 探知範囲内に入ったオブジェクトの名前を表示
+			CDebugPrint::Print
+			(
+				"%s:%s\n",
+				obj->GetDebugName().c_str(),
+				obj->GetInteractStr().c_str()
+			);
+#endif
+
+			// 調べられるオブジェクトの上に調べるUIを表示
+			//CGameUI::Instance()->ShowInteractUI(obj);
+
+			// [E]キーを押したら、近くの調べるオブジェクトを調べる
+			if (CInput::PushKey('E'))
+			{
+				obj->Interact();
+			}
+		}
+		// 近くに調べるオブジェクトがなかった
+		else
+		{
+			// 調べるUIを非表示にする
+			//CGameUI::Instance()->HideInteractUI();
+		}
+
+
 		//// 左クリックで斬撃攻撃へ移行
 		//if (CInput::PushKey(VK_LBUTTON))
 		//{
@@ -318,14 +364,14 @@ void CPlayer2::Update()
 	CXCharacter::Update();
 
 	CVector pos = Position();
-	//CDebugPrint::Print("PlayerHP:%d / %d\n", mHp, mMaxHp);
-	//CDebugPrint::Print("PlayerPos:%.2f, %.2f, %.2f\n", pos.X(), pos.Y(), pos.Z());
-	//CDebugPrint::Print("PlayerGrounded:%s\n", mIsGrounded ? "true" : "false");
-	//CDebugPrint::Print("PlayerState:%d\n", mState);
+	CDebugPrint::Print("PlayerHP:%d / %d\n", mHp, mMaxHp);
+	CDebugPrint::Print("PlayerPos:%.2f, %.2f, %.2f\n", pos.X(), pos.Y(), pos.Z());
+	CDebugPrint::Print("PlayerGrounded:%s\n", mIsGrounded ? "true" : "false");
+	CDebugPrint::Print("PlayerState:%d\n", mState);
 
 	mIsGrounded = false;
 
-	//CDebugPrint::Print("FPS:%f\n", Times::FPS());
+	CDebugPrint::Print("FPS:%f\n", Times::FPS());
 }
 
 // 攻撃中か

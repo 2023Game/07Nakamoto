@@ -1,7 +1,14 @@
 #include "CLDoor.h"
+#include "Maths.h"
+
+#define MOVE_POS 9.9f	// 移動距離
+#define MOVE_TIME 5.0f	// 移動時間
 
 // コンストラクタ
 CLDoor::CLDoor(const CVector& pos, const CVector& rot)
+	: mDefaultPos(pos)
+	, mOpen(false)
+	, mElapsedTime(0.0f)
 {
 	// 扉のモデルデータの取得
 	mpL_Door = CResourceManager::Get<CModel>("LeftDoor");
@@ -12,7 +19,7 @@ CLDoor::CLDoor(const CVector& pos, const CVector& rot)
 	mpL_DoorColliderMesh = new CColliderMesh(this, ELayer::eInteractObj, mpL_DoorCol, true);
 
 	// 位置と向きを設定
-	Position(pos);
+	Position(mDefaultPos);
 	Rotate(rot);
 
 	mInteractStr = "閉まっている";
@@ -39,13 +46,33 @@ void CLDoor::Interact()
 // 更新処理
 void CLDoor::Update()
 {
-	if (mOpen)
+	// 閉まっているとき
+	if (!mOpen)
 	{
+		Position(mDefaultPos);
 
+		//float per = mElapsedTime / MOVE_TIME;
+		//Position(mDefaultPos + mMoveVec * sinf(M_PI * 2.0f * per));
+
+		//mElapsedTime += 1.0f / 60.0f;
+		//if (mElapsedTime >= MOVE_TIME)
+		//{
+		//	mElapsedTime -= MOVE_TIME;
+		//}
 	}
+	// 開いているとき
 	else
 	{
-		
+		Position(mDefaultPos + mMoveVec);
+
+		//float per = mElapsedTime / MOVE_TIME;
+		//Position(mDefaultPos + mMoveVec * sinf(M_PI * 2.0f * per));
+
+		//mElapsedTime += 1.0f / 60.0f;
+		//if (mElapsedTime >= MOVE_TIME)
+		//{
+		//	mElapsedTime -= MOVE_TIME;
+		//}
 	}
 }
 

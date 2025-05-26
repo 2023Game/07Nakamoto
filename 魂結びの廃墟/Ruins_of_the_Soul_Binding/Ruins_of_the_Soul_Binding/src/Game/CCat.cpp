@@ -216,15 +216,15 @@ void CCat::Update()
 	// キャラクターの更新
 	CXCharacter::Update();
 
-	CVector pos = Position();
-	CDebugPrint::Print("PlayerHP:%d / %d\n", mHp, mMaxHp);
-	CDebugPrint::Print("PlayerPos:%.2f, %.2f, %.2f\n", pos.X(), pos.Y(), pos.Z());
-	CDebugPrint::Print("PlayerGrounded:%s\n", mIsGrounded ? "true" : "false");
-	CDebugPrint::Print("PlayerState:%d\n", mState);
+	//CVector pos = Position();
+	//CDebugPrint::Print("PlayerHP:%d / %d\n", mHp, mMaxHp);
+	//CDebugPrint::Print("PlayerPos:%.2f, %.2f, %.2f\n", pos.X(), pos.Y(), pos.Z());
+	//CDebugPrint::Print("PlayerGrounded:%s\n", mIsGrounded ? "true" : "false");
+	//CDebugPrint::Print("PlayerState:%d\n", mState);
 
 	mIsGrounded = false;
 
-	CDebugPrint::Print("FPS:%f\n", Times::FPS());
+	//CDebugPrint::Print("FPS:%f\n", Times::FPS());
 
 }
 

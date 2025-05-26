@@ -24,5 +24,9 @@ private:
 
 	CColliderMesh* mpL_DoorColliderMesh;
 
+	CVector mDefaultPos;
+	CVector mMoveVec;
+	float mElapsedTime;
+
 	bool mOpen;	// ”à‚ªŠJ‚¢‚Ä‚¢‚é‚©
 };

@@ -1,6 +1,9 @@
 #include "CPlayerBase.h"
+#include "CInteractObject.h"
+#include "Maths.h"
 
 #define GRAVITY 0.0625f	// 重力加速度
+#define FOV_ANGLE		 60.0f		// 視野範囲の角度
 
 // コンストラクタ
 CPlayerBase::CPlayerBase()
@@ -14,6 +17,7 @@ CPlayerBase::CPlayerBase()
 	, mpRideObject(nullptr)
 	, mGroundNormal(CVector::up)
 	, mpBodyCol(nullptr)
+	, mFovAngle(FOV_ANGLE)
 {
 }
 
@@ -143,6 +147,50 @@ void CPlayerBase::ChangeAnimation(int type, bool restart)
 		restart
 	);
 	CXCharacter::SetAnimationSpeed(data.speed);
+}
+
+CInteractObject* CPlayerBase::GetNearInteractObj() const
+{
+	// 一番近くの調べるオブジェクトのポインタ格納用
+	CInteractObject* nearObj = nullptr;
+	float nearDist = 0.0f;	// 現在一番近くにある調べるオブジェクトまでの距離
+	CVector pos = Position();	// プレイヤーの座標を取得
+	// 探知範囲内の調べるオブジェクトを順番に調べる
+	for (CInteractObject* obj : mNearInteractObjs)
+	{
+
+		// 現在調べられない状態であれば、スルー
+		if (!obj->CanInteract()) continue;
+
+		// オブジェクトの座標を取得
+		CVector objPos = obj->Position();
+		// プレイヤーからオブジェクトまでのベクトルを求める
+		CVector vec = objPos - pos;
+		vec.Y(0.0f);	// オブジェクトとの高さの差を考慮しない
+
+		// ベクトルを正規化して長さを1にする
+		CVector dir = vec.Normalized();
+		// 自身の正面方向ベクトルを取得
+		CVector forward = VectorZ();
+		// プレイヤーとまでのベクトルと
+		// 自身の正面方向ベクトルの内積を求めて角度を出す
+		float dot = CVector::Dot(dir, forward);
+		// 視野角度のラジアンを求める
+		float angleR = Math::DegreeToRadian(mFovAngle);
+		// 求めた内積と視野角度で、視野範囲内か判断する
+		if (dot < cosf(angleR)) continue;
+
+		float dist = (obj->Position() - pos).LengthSqr();
+		// 一番最初の調べるオブジェクトか、
+		// 求めた距離が現在の一番近いオブジェクトよりも近い場合は、
+		if (nearObj == nullptr || dist < nearDist)
+		{
+			// 一番近いオブジェクトを更新
+			nearObj = obj;
+			nearDist = dist;
+		}
+	}
+	return nearObj;
 }
 
 // 更新

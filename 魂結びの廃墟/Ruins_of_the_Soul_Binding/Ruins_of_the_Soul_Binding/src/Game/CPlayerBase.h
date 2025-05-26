@@ -2,6 +2,7 @@
 #include "CXCharacter.h"
 
 class CCollider;
+class CInteractObject;
 
 class CPlayerBase : public CXCharacter
 {
@@ -58,6 +59,14 @@ protected:
 
 	CCollider* mpBodyCol;	// 本体のコライダー
 
-	CTransform* mpRideObject;
+	// 一番近くにある調べられるオブジェクトを取得
+	CInteractObject* GetNearInteractObj() const;
+	// 近くにある調べられるオブジェクトのリスト
+	std::list<CInteractObject*> mNearInteractObjs;
+	CCollider* mpSearchCol;	// 調べるオブジェクトを探知するコライダー
+
+	float mFovAngle;	// 視野範囲の角度
+
+	CTransform* mpRideObject;	// 乗ることの出来るオブジェクトか
 
 };	
