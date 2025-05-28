@@ -122,7 +122,9 @@ void CPlayerBase::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 			}
 		}
 		// 壁と衝突した場合
-		else if (other->Layer() == ELayer::eWall || other->Layer() == ELayer::eInteractObj)
+		else if (other->Layer() == ELayer::eWall 
+			|| other->Layer() == ELayer::eInteractObj
+			|| other->Layer() == ELayer::eDoor)
 		{
 			// 横方向にのみ押し戻すため、
 			// 押し戻しベクトルのYの値を0にする
@@ -139,18 +141,18 @@ void CPlayerBase::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 			adjust.Y(0.0f);
 			Position(Position() + adjust * hit.weight);
 		}
-		// 調べるオブジェクトの探知コライダーとの当たり判定
-		else if (self == mpSearchCol)
+	}
+	// 調べるオブジェクトの探知コライダーとの当たり判定
+	else if (self == mpSearchCol)
+	{
+		CInteractObject* obj = dynamic_cast<CInteractObject*>(other->Owner());
+		if (obj != nullptr)
 		{
-			CInteractObject* obj = dynamic_cast<CInteractObject*>(other->Owner());
-			if (obj != nullptr)
+			// 調べるオブジェクトの削除フラグが立っていなかったら
+			if (!obj->IsKill())
 			{
-				// 調べるオブジェクトの削除フラグが立っていなかったら
-				if (!obj->IsKill())
-				{
-					// 衝突した調べるオブジェクトをリストに追加
-					mNearInteractObjs.push_back(obj);
-				}
+				// 衝突した調べるオブジェクトをリストに追加
+				mNearInteractObjs.push_back(obj);
 			}
 		}
 	}

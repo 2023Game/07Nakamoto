@@ -1,13 +1,27 @@
 #include "CRDoor.h"
 
 // コンストラクタ
-CRDoor::CRDoor()
-	:CObjectBase(ETag::eField, ETaskPriority::eBackground)
+CRDoor::CRDoor(const CVector& pos, const CVector& angle, const CVector& openPos)
+	: mIsOpened(false)
+	, mAnimTime(1.0f)
+	, mElapsedTime(0.0f)
+	, mIsPlaying(false)
 {
+	// 扉のモデルデータの取得
 	mpR_Door = CResourceManager::Get<CModel>("RightDoor");
+	// 扉のコライダーデータの取得
 	mpR_DoorCol = CResourceManager::Get<CModel>("RightDoorCol");
 
-	mpR_DoorColliderMesh = new CColliderMesh(this, ELayer::eInteractObj, mpR_DoorCol, true);
+	// 扉のコライダー生成
+	mpR_DoorColliderMesh = new CColliderMesh(this, ELayer::eDoor, mpR_DoorCol, true);
+	mpR_DoorColliderMesh->SetCollisionTags({ ETag::ePlayer, ETag::eEnemy });
+	mpR_DoorColliderMesh->SetCollisionLayers({ ELayer::ePlayer,ELayer::eInteractSearch,ELayer::eEnemy });
+
+	mOpenPos = openPos;
+	mClosePos = pos;
+	Position(mIsOpened ? mOpenPos : mClosePos);
+
+	mInteractStr = "閉まっている";
 
 }
 
@@ -21,9 +35,72 @@ CRDoor::~CRDoor()
 	}
 }
 
+// 調べる
+void CRDoor::Interact()
+{
+	// 閉まっている
+	if (!mIsOpened)
+	{
+		mIsOpened = true;
+		mIsPlaying = true;
+	}
+	else if (mIsOpened)
+	{
+		mIsOpened = false;
+		mIsPlaying = true;
+	}
+
+	mInteractStr = mIsOpened ? "閉まっている" : "開いている";
+
+#if _DEBUG
+	SetDebugName("右の扉");
+#endif
+}
+
 // 更新処理
 void CRDoor::Update()
 {
+	if (mIsPlaying)
+	{
+		// 扉を開くアニメーション
+		if (mIsOpened)
+		{
+			if (mElapsedTime < mAnimTime)
+			{
+				float per = mElapsedTime / mAnimTime;
+				CVector pos = CVector::Lerp(mClosePos, mOpenPos, per);
+				Position(pos);
+				mElapsedTime += Times::DeltaTime();
+			}
+			else
+			{
+				Position(mOpenPos);
+				mElapsedTime = 0.0f;
+				mIsPlaying = false;
+			}
+		}
+		// 扉を閉じるアニメーション
+		else
+		{
+			if (mElapsedTime < mAnimTime)
+			{
+				float per = mElapsedTime / mAnimTime;
+				CVector pos = CVector::Lerp(mOpenPos, mClosePos, per);
+				Position(pos);
+				mElapsedTime += Times::DeltaTime();
+			}
+			else
+			{
+				Position(mClosePos);
+				mElapsedTime = 0.0f;
+				mIsPlaying = false;
+			}
+		}
+	}
+	// 開閉中ではない
+	else
+	{
+	}
 }
 
 // 描画処理

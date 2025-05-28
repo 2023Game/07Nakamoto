@@ -69,8 +69,26 @@ CPlayer2::CPlayer2()
 		CVector(0.0f, BODY_HEIGHT - BODY_RADIUS, 0.0f),
 		BODY_RADIUS
 	);
-	mpBodyCol->SetCollisionTags({ ETag::eField, ETag::eInteractObject, ETag::eRideableObject, ETag::eEnemy });
-	mpBodyCol->SetCollisionLayers({ ELayer::eField, ELayer::eWall, ELayer::eInteractObj, ELayer::eEnemy, ELayer::eAttackCol });
+	mpBodyCol->SetCollisionTags
+	(
+		{
+			ETag::eField,
+			ETag::eInteractObject,
+			ETag::eRideableObject,
+			ETag::eEnemy,
+		}
+	);
+	mpBodyCol->SetCollisionLayers
+	(
+		{
+			ELayer::eField,
+			ELayer::eWall,
+			ELayer::eInteractObj,
+			ELayer::eDoor,
+			ELayer::eEnemy,
+			ELayer::eAttackCol,
+		}
+	);
 
 	// 調べるオブジェクトを探知するコライダーを作成
 	mpSearchCol = new CColliderSphere
@@ -80,14 +98,13 @@ CPlayer2::CPlayer2()
 	);
 	// 調べるオブジェクトのみ衝突するように設定
 	mpSearchCol->SetCollisionTags({ ETag::eInteractObject });
-	mpSearchCol->SetCollisionLayers({ ELayer::eInteractObj });
+	mpSearchCol->SetCollisionLayers({ ELayer::eInteractObj,ELayer::eDoor });
 
 }
 
 // デストラクタ
 CPlayer2::~CPlayer2()
 {
-
 #if _DEBUG
 	// 視野範囲のデバッグ表示が存在したら、一緒に削除する
 	if (mpDebugFov != nullptr)
@@ -98,7 +115,6 @@ CPlayer2::~CPlayer2()
 #endif
 
 	// コライダーを削除
-	SAFE_DELETE(mpBodyCol);
 	SAFE_DELETE(mpSearchCol);
 }
 

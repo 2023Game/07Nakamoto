@@ -19,7 +19,7 @@ CLDoor::CLDoor(const CVector& pos, const CVector& angle,const CVector& openPos)
 	mpL_DoorCol = CResourceManager::Get<CModel>("LeftDoorCol");
 
 	// 扉のコライダー生成
-	mpL_DoorColliderMesh = new CColliderMesh(this, ELayer::eInteractObj, mpL_DoorCol, true);
+	mpL_DoorColliderMesh = new CColliderMesh(this, ELayer::eDoor, mpL_DoorCol, true);
 	mpL_DoorColliderMesh->SetCollisionTags({ ETag::ePlayer, ETag::eEnemy});
 	mpL_DoorColliderMesh->SetCollisionLayers({ ELayer::ePlayer,ELayer::eInteractSearch,ELayer::eEnemy });
 
@@ -57,6 +57,10 @@ void CLDoor::Interact()
 	}
 	
 	mInteractStr = mIsOpened ? "閉まっている" : "開いている";
+
+#if _DEBUG
+	SetDebugName("左の扉");
+#endif
 }
 
 // 更新処理
@@ -102,11 +106,6 @@ void CLDoor::Update()
 	// 開閉中ではない
 	else
 	{
-		// テスト用
-		//if (CInput::PushKey('E'))
-		//{
-		//	Interact();
-		//}
 	}		
 }
 

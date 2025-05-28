@@ -29,8 +29,13 @@ CField::CField()
 	mpWallColliderMesh = new CColliderMesh(this, ELayer::eWall, mpWallCol, true);
 
 	// 右のドアの生成
-	mpRDoor = new CRDoor();
-	mpRDoor->Position(37.95f, 0.0f, 44.825f);
+	mpRDoor = new CRDoor
+	(
+		CVector(37.95f, 0.0f, 44.825f),
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(28.05f, 0.0f, 44.825f)
+	);
+
 	// 左のドアの生成
 	mpLDoor = new CLDoor
 	(

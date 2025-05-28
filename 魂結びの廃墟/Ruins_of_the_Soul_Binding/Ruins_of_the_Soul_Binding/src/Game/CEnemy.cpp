@@ -75,11 +75,13 @@ void CEnemy::InitEnemy(std::string path, const std::vector<AnimData>* pAnimData)
 // 衝突処理
 void CEnemy::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
+	ELayer layer = other->Layer();
+
 	// 本体が衝突した
 	if (self == mpBodyCol)
 	{
 		// フィールドと衝突した
-		if (other->Layer() == ELayer::eField)
+		if (layer == ELayer::eField)
 		{
 			// 坂道で滑らないように、押し戻しベクトルのXとZの値を0にする
 			CVector adjust = hit.adjust;
@@ -118,7 +120,9 @@ void CEnemy::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			}
 		}
 		// 壁と衝突した場合
-		else if (other->Layer() == ELayer::eWall || other->Layer() == ELayer::eInteractObj)
+		else if (layer == ELayer::eWall
+			|| layer == ELayer::eInteractObj
+			|| layer == ELayer::eDoor)
 		{
 			// 横方向にのみ押し戻すため、
 			// 押し戻しベクトルのYの値を0にする

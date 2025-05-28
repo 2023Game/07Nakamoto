@@ -4,6 +4,7 @@
 // 視野範囲のデバッグ表示クラスの前宣言
 class CDebugFieldOfView;
 
+class CInteractObject;
 class CNavNode;
 
 // ウォーロックの敵クラス
@@ -118,5 +119,10 @@ private:
 	CObjectBase* mpBattleTarget;	// 戦闘相手
 	CCollider* mpAttack1Col;		// パンチ攻撃用のコライダー
 
+	// 一番近くにある調べられるオブジェクトを取得
+	CInteractObject* GetNearBreakObj() const;
+	// 近くにある調べられるオブジェクトのリスト
+	std::list<CInteractObject*> mNearBreakObjs;
+	CCollider* mpSearchCol;	// 調べるオブジェクトを探知するコライダー
 
 };

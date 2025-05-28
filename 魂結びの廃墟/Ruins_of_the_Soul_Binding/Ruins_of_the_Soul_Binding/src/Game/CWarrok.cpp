@@ -10,6 +10,7 @@
 #include "CField.h"
 #include "CNavNode.h"
 #include "CNavManager.h"
+#include "CInteractObject.h"
 
 // アニメーションのパス
 #define ANIM_PATH "Character\\Enemy\\Warrok\\anim\\"
@@ -39,6 +40,8 @@
 #define PATROL_INTERVAL		  3.0f	// 次の巡回ポイントに移動開始するまでの時間
 #define PATROL_NEAR_DIST	 10.0f	// 巡回開始時に選択される巡回ポイントの最短距離
 #define IDLE_TIME			  5.0f	// 待機状態の時間
+
+#define SEARCH_RADIUS	 10.0f		// 壊せるオブジェクトを探知する範囲の半径
 
 // 敵のアニメーションデータのテーブル
 const std::vector<CEnemy::AnimData> ANIM_DATA =
@@ -82,13 +85,22 @@ CWarrok::CWarrok(std::vector<CVector> patrolPoints)
 	);
 
 	// フィールドと、プレイヤーの攻撃コライダーとヒットするように設定
-	mpBodyCol->SetCollisionTags({ ETag::eField, ETag::ePlayer });
+	mpBodyCol->SetCollisionTags
+	(
+		{ 
+			ETag::eField,
+			ETag::ePlayer,
+			ETag::eInteractObject
+		}
+	);
 	mpBodyCol->SetCollisionLayers
 	(
 		{	ELayer::eField,
 			ELayer::eWall,
 			ELayer::ePlayer,
-			ELayer::eInteractObj }
+			ELayer::eInteractObj,
+			ELayer::eDoor
+		}
 	);
 
 	// 攻撃コライダーを作成
@@ -98,12 +110,34 @@ CWarrok::CWarrok(std::vector<CVector> patrolPoints)
 		ATTACK_COL_RADIUS
 	);
 	// プレイヤーの本体コライダーとのみヒットするように設定
-	mpAttack1Col->SetCollisionTags({ ETag::ePlayer });
-	mpAttack1Col->SetCollisionLayers({ ELayer::ePlayer });
+	mpAttack1Col->SetCollisionTags
+	(
+		{ 
+			ETag::ePlayer,
+			ETag::eInteractObject,
+		}
+	);
+	mpAttack1Col->SetCollisionLayers
+	(
+		{
+			ELayer::ePlayer,
+			ELayer::eDoor,
+		}
+	);
 	// 攻撃コライダーの座標を設定
 	mpAttack1Col->Position(ATTACK_COL_POS);
 	// 攻撃コライダーを最初はオフにしておく
 	mpAttack1Col->SetEnable(false);
+
+	// 壊せるオブジェクトを探知するコライダーを作成
+	mpSearchCol = new CColliderSphere
+	(
+		this, ELayer::eInteractSearch,
+		SEARCH_RADIUS
+	);
+	// 壊せるオブジェクトのみ衝突するように設定
+	mpSearchCol->SetCollisionTags({ ETag::eInteractObject });
+	mpSearchCol->SetCollisionLayers({ ELayer::eDoor });
 
 #if _DEBUG
 	// 視野範囲のデバッグ表示クラスを作成
@@ -130,7 +164,7 @@ CWarrok::CWarrok(std::vector<CVector> patrolPoints)
 CWarrok::~CWarrok()
 {
 	// 体のコライダーを削除
-	SAFE_DELETE(mpAttack1Col);
+	SAFE_DELETE(mpBodyCol);
 	// 攻撃コライダーを削除
 	SAFE_DELETE(mpAttack1Col);
 
@@ -241,20 +275,34 @@ void CWarrok::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 	// ベースの衝突処理を呼び出す
 	CEnemy::Collision(self, other, hit);
 
-	//// 攻撃コライダーがヒットした
-	//if (self == mpAttack1Col)
-	//{
-	//	// ヒットしたのがキャラクターかつ、
-	//	// まだ攻撃がヒットしていないキャラクターであれば
-	//	CCharaBase* chara = dynamic_cast<CCharaBase*>(other->Owner());
-	//	if (chara != nullptr && !IsAttackHitObj(chara))
-	//	{
-	//		// ダメージを与える
-	//		chara->TakeDamage(ATTACK_POWER, this);
-	//		// 攻撃ヒット済みリストに登録
-	//		AddAttackHitObj(chara);
-	//	}
-	//}
+	// 攻撃コライダーがヒットした
+	if (self == mpAttack1Col)
+	{
+		// ヒットしたのがキャラクターかつ、
+		// まだ攻撃がヒットしていないキャラクターであれば
+		CCharaBase* chara = dynamic_cast<CCharaBase*>(other->Owner());
+		if (chara != nullptr && !IsAttackHitObj(chara))
+		{
+			// ダメージを与える
+			chara->TakeDamage(ATTACK_POWER, this);
+			// 攻撃ヒット済みリストに登録
+			AddAttackHitObj(chara);
+		}
+	}
+	// 扉のオブジェクトの場合
+	else if (self == mpSearchCol)
+	{
+		CInteractObject* obj = dynamic_cast<CInteractObject*>(other->Owner());
+		if (obj != nullptr)
+		{
+			// 調べるオブジェクトの削除フラグが立っていなかったら
+			if (!obj->IsKill())
+			{
+				// 衝突した調べるオブジェクトをリストに追加
+				mNearBreakObjs.push_back(obj);
+			}
+		}
+	}
 }
 
 // 戦闘相手の方へ向く
@@ -366,6 +414,7 @@ bool CWarrok::IsLookPlayer() const
 
 }
 
+// プレイヤーに攻撃できるかどうか
 bool CWarrok::CanAttackPlayer() const
 {
 	// プレイヤーがいない場合は、攻撃できない
@@ -591,6 +640,14 @@ void CWarrok::UpdateChase()
 		return;
 	}
 
+	// プレイヤーとの間に壊せるオブジェクトがある場合、
+	if (mNearBreakObjs.size() != 0)
+	{
+		GetNearBreakObj();
+		//ChangeState((int)EState::eAttack);
+		//return;
+	}
+
 	// 走るアニメーションを再生
 	ChangeAnimation((int)EAnimType::eRun);
 
@@ -770,6 +827,8 @@ void CWarrok::Update()
 	// 敵のベースクラスの更新
 	CEnemy::Update();
 
+	mNearBreakObjs.clear();
+
 #if _DEBUG
 	// 現在の状態に合わせて視野範囲の色を変更
 	mpDebugFov->SetColor(GetStateColor((EState)mState));
@@ -874,4 +933,60 @@ CColor CWarrok::GetStateColor(EState state) const
 	case EState::eAttack:	return CColor::magenta;
 	}
 	return CColor::white;
+}
+
+CInteractObject* CWarrok::GetNearBreakObj() const
+{
+	// 一番近くの調べるオブジェクトのポインタ格納用
+	//CInteractObject* breakObj = nullptr;
+	//float nearDist = 0.0f;	// 現在一番近くにある調べるオブジェクトまでの距離
+	//CVector pos = Position();	// プレイヤーの座標を取得
+	// 探知範囲内の調べるオブジェクトを順番に調べる
+	for (CInteractObject* obj : mNearBreakObjs)
+	{
+		// 現在調べられない状態であれば、スルー
+		if (!obj->CanInteract()) continue;
+
+		// 敵の位置
+		CVector start = Position();
+		// プレイヤーの位置
+		CVector end = CPlayer2::Instance()->Position();
+		CHitInfo hit;
+
+		// ルート上に壊せるオブジェクトがあるか、
+		if (obj->CollisionRay(start, end, &hit));
+		{
+			// そのオブジェクトを返す
+			return obj;
+		}
+	}
+	//	// オブジェクトの座標を取得
+	//	CVector objPos = obj->Position();
+	//	// プレイヤーからオブジェクトまでのベクトルを求める
+	//	CVector vec = objPos - pos;
+	//	vec.Y(0.0f);	// オブジェクトとの高さの差を考慮しない
+
+	//	// ベクトルを正規化して長さを1にする
+	//	CVector dir = vec.Normalized();
+	//	// 自身の正面方向ベクトルを取得
+	//	CVector forward = VectorZ();
+	//	// プレイヤーとまでのベクトルと
+	//	// 自身の正面方向ベクトルの内積を求めて角度を出す
+	//	float dot = CVector::Dot(dir, forward);
+	//	// 視野角度のラジアンを求める
+	//	float angleR = Math::DegreeToRadian(mFovAngle);
+	//	// 求めた内積と視野角度で、視野範囲内か判断する
+	//	if (dot < cosf(angleR)) continue;
+
+	//	float dist = (obj->Position() - pos).LengthSqr();
+	//	// 一番最初の調べるオブジェクトか、
+	//	// 求めた距離が現在の一番近いオブジェクトよりも近い場合は、
+	//	if (breakObj == nullptr || dist < nearDist)
+	//	{
+	//		// 一番近いオブジェクトを更新
+	//		breakObj = obj;
+	//		nearDist = dist;
+	//	}
+	//}
+	//return breakObj;
 }
