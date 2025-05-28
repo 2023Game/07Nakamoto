@@ -18,8 +18,8 @@
 #define BODY_WIDTH	5.0f	// カプセルコライダーの幅
 #define BODY_RADIUS 4.5f	// カプセルコライダーの半径
 
-#define WALK_SPEED		25.0f	// 歩く速度
-#define RUN_SPEED		40.0f	// 走る速度
+#define WALK_SPEED		10.0f	// 歩く速度
+#define RUN_SPEED		20.0f	// 走る速度
 #define ROTATE_SPEED	6.0f	// 回転速度
 
 #define LOOKAT_SPEED 90.0f	// 相手の方へ向く速さ
