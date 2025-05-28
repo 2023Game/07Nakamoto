@@ -80,6 +80,8 @@
     <ClCompile Include="src\Game\CDebugFieldOfView.cpp" />
     <ClCompile Include="src\Game\CInteractObject.cpp" />
     <ClCompile Include="src\Game\CLDoor.cpp" />
+    <ClCompile Include="src\Game\CNavManager.cpp" />
+    <ClCompile Include="src\Game\CNavNode.cpp" />
     <ClCompile Include="src\Game\CPlayer2.cpp" />
     <ClCompile Include="src\Game\CPlayerBase.cpp" />
     <ClCompile Include="src\Game\CPlayerManager.cpp" />
@@ -102,6 +104,7 @@
     <ClCompile Include="src\Game\CSword.cpp" />
     <ClCompile Include="src\Game\CTitleScene.cpp" />
     <ClCompile Include="src\Game\CTitleUI.cpp" />
+    <ClCompile Include="src\Game\CWarrok.cpp" />
     <ClCompile Include="src\Game\CWeapon.cpp" />
     <ClCompile Include="src\Game\CXCharacter.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -194,6 +197,8 @@
     <ClInclude Include="src\Game\CDebugFieldOfView.h" />
     <ClInclude Include="src\Game\CInteractObject.h" />
     <ClInclude Include="src\Game\CLDoor.h" />
+    <ClInclude Include="src\Game\CNavManager.h" />
+    <ClInclude Include="src\Game\CNavNode.h" />
     <ClInclude Include="src\Game\CPlayerBase.h" />
     <ClInclude Include="src\Game\CPlayerManager.h" />
     <ClInclude Include="src\Game\CRDoor.h" />
@@ -215,6 +220,7 @@
     <ClInclude Include="src\Game\CSword.h" />
     <ClInclude Include="src\Game\CTitleUI.h" />
     <ClInclude Include="src\Game\CTitleScene.h" />
+    <ClInclude Include="src\Game\CWarrok.h" />
     <ClInclude Include="src\Game\CWeapon.h" />
     <ClInclude Include="src\Game\CXCharacter.h" />
     <ClInclude Include="src\Game\CPlayer2.h" />

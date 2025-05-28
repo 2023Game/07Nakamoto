@@ -13,7 +13,7 @@ CPlayerManager* CPlayerManager::Instance()
 
 // コンストラクタ
 CPlayerManager::CPlayerManager()
-	:CTask(ETaskPriority::eDefault, 0, ETaskPauseType::eGame)
+	:CTask(ETaskPriority::ePlayer, 0, ETaskPauseType::eGame)
 	, mCurrentIndex(0)
 {
 	assert(spInstance == nullptr);

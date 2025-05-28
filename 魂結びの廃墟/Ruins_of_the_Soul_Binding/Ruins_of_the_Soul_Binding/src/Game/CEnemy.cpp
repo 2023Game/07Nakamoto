@@ -20,9 +20,9 @@ CEnemy::CEnemy()
 	, mpHpGauge(nullptr)
 {
 	// HPゲージを作成
-	mpHpGauge = new CGaugeUI3D(this);
-	mpHpGauge->SetMaxPoint(mMaxHp);
-	mpHpGauge->SetCurrPoint(mHp);
+	//mpHpGauge = new CGaugeUI3D(this);
+	//mpHpGauge->SetMaxPoint(mMaxHp);
+	//mpHpGauge->SetCurrPoint(mHp);
 }
 
 // デストラクタ
@@ -117,6 +117,15 @@ void CEnemy::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 				}
 			}
 		}
+		// 壁と衝突した場合
+		else if (other->Layer() == ELayer::eWall || other->Layer() == ELayer::eInteractObj)
+		{
+			// 横方向にのみ押し戻すため、
+			// 押し戻しベクトルのYの値を0にする
+			CVector adjust = hit.adjust;
+			adjust.Y(0.0f);
+			Position(Position() + adjust * hit.weight);
+		}		
 		// プレイヤーと衝突した場合
 		else if (other->Layer() == ELayer::ePlayer)
 		{
@@ -172,10 +181,13 @@ void CEnemy::Update()
 
 	mIsGrounded = false;
 
-	// HPゲージを更新
-	mpHpGauge->Position(Position() + mGaugeOffsetPos);
-	mpHpGauge->SetMaxPoint(mMaxHp);
-	mpHpGauge->SetCurrPoint(mHp);
+	if (mpHpGauge != nullptr)
+	{
+		// HPゲージを更新
+		mpHpGauge->Position(Position() + mGaugeOffsetPos);
+		mpHpGauge->SetMaxPoint(mMaxHp);
+		mpHpGauge->SetCurrPoint(mHp);
+	}
 }
 
 // 描画

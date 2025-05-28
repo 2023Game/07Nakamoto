@@ -8,6 +8,9 @@ class CLDoor;
 class CField : public CObjectBase
 {
 public:
+	// フィールドのインスタンスを返す
+	static CField* Instance();
+
 	CField();
 	~CField();
 
@@ -16,11 +19,27 @@ public:
 	// 壁のコライダーの取得
 	CColliderMesh* GetWallCol() const;
 
+	/// <summary>
+	/// レイとフィールドオブジェクトの衝突判定
+	/// </summary>
+	/// <param name="start">レイの開始位置</param>
+	/// <param name="end">レイの終了位置</param>
+	/// <param name="hit">衝突情報返却用</param>
+	/// <returns>衝突したら、trueを返す</returns>
+	bool CollisionRay(const CVector& start, const CVector& end,
+		CHitInfo* hit) override;
+
 	void Update();
 	void Render();
 
 private:
+	// 経路探索用のノードを作成
+	void CreateNavNodes();
+
 	void CreateFieldObjects();
+
+	// フィールドのインスタンス
+	static CField* spInstance;
 
 	CModel* mpFloor;
 	CModel* mpWall;

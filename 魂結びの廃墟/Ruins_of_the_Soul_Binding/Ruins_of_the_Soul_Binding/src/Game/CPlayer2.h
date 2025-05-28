@@ -25,6 +25,9 @@ public:
 	// 更新
 	void Update() override;
 
+	// ステータスを整数にして取得する
+	int GetState();
+
 	// 攻撃中か
 	bool IsAttacking() const override;
 	// 攻撃開始

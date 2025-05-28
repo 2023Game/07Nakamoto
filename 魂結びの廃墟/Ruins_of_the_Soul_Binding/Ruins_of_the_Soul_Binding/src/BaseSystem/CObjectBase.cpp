@@ -12,6 +12,7 @@ CObjectBase::CObjectBase(ETag tag,
 	, mIsEnableCol(true)
 	, mDepth(0.0f)
 	, mColor(CColor::white)
+	, mpNavNode(nullptr)
 {
 }
 
@@ -112,6 +113,12 @@ void CObjectBase::AttackStart()
 // 攻撃終了
 void CObjectBase::AttackEnd()
 {
+}
+
+// 経路探索用のノード取得
+CNavNode* CObjectBase::GetNavNode() const
+{
+	return mpNavNode;
 }
 
 // 攻撃がヒットしたオブジェクトを追加

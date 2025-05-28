@@ -5,11 +5,22 @@
 #include "CLineEffect.h"
 #include "CRDoor.h"
 #include "CLDoor.h"
+#include "CNavNode.h"
+#include "CNavManager.h"
+
+CField* CField::spInstance = nullptr;
+
+CField* CField::Instance()
+{
+	return spInstance;
+}
 
 CField::CField()
 	: CObjectBase(ETag::eField, ETaskPriority::eBackground)
 	, mEffectAnimData(1, 11, true, 11, 0.03f)
 {
+	spInstance = this;
+
 	mpFloor = CResourceManager::Get<CModel>("Floor");
 	mpWall = CResourceManager::Get<CModel>("Wall");
 	mpWallCol = CResourceManager::Get<CModel>("WallCol");
@@ -26,6 +37,9 @@ CField::CField()
 		CVector(28.05f, 0.0f, 44.825f),
 		CVector(0.0f, 0.0f, 0.0f)
 	);
+
+	// 経路探索用のノードを作成
+	CreateNavNodes();
 
 	//CreateFieldObjects();
 }
@@ -54,6 +68,20 @@ CColliderMesh* CField::GetFloorCol() const
 CColliderMesh* CField::GetWallCol() const
 {
 	return mpWallColliderMesh;
+}
+
+// 経路探索用のノードを作成
+void CField::CreateNavNodes()
+{
+	CNavManager* navMgr = CNavManager::Instance();
+
+	if (navMgr != nullptr)
+	{
+		new CNavNode(CVector(-40.0f, 0.0f, 60.0f));
+		new CNavNode(CVector(-40.0f, 0.0f, 30.0f));
+		new CNavNode(CVector( 35.0f, 0.0f, 60.0f));
+		new CNavNode(CVector( 35.0f, 0.0f, 30.0f));
+	}
 }
 
 void CField::CreateFieldObjects()
@@ -142,6 +170,30 @@ void CField::CreateFieldObjects()
 		CVector pos = CVector::Lerp(startPos, endPos, alpha);
 		le->AddPoint(pos, width, width);
 	}
+}
+
+bool CField::CollisionRay(const CVector& start, const CVector& end, CHitInfo* hit)
+{
+	// 衝突情報保存用
+	CHitInfo tHit;
+	// 衝突したかどうかのフラグ
+	bool isHit = false;
+
+	// 床のオブジェクトとの衝突判定(1階と2階のノードが繋がらないようにするため)
+	if (CCollider::CollisionRay(mpFloorColliderMesh, start, end, &tHit))
+	{
+		*hit = tHit;
+		isHit = this;
+	}
+
+	// 壁のオブジェクトとの衝突判定
+	if (CCollider::CollisionRay(mpWallColliderMesh, start, end, &tHit))
+	{
+		*hit = tHit;
+		isHit = this;
+	}
+
+	return isHit;
 }
 
 void CField::Update()

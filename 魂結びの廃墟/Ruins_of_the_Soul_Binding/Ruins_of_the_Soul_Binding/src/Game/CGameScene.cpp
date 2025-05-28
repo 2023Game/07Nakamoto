@@ -2,6 +2,9 @@
 #include "CSceneManager.h"
 #include "CField.h"
 #include "CPlayer.h"
+#include "CPlayer2.h"
+#include "CCat.h"
+#include "CPlayerManager.h"
 #include "CGameCamera.h"
 #include "CPlayerCamera.h"
 #include "CInput.h"
@@ -9,11 +12,8 @@
 #include "CBGMManager.h"
 #include "CLineEffect.h"
 #include "CCactus.h"
-
-#include "CPlayer2.h"
-#include "CCat.h"
-
-#include "CPlayerManager.h"
+#include "CWarrok.h"
+#include "CNavManager.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -51,11 +51,8 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>(		"Sword",			"Weapon\\Sword\\sword.obj");
 	CResourceManager::Load<CModel>(		"Shield",			"Weapon\\Shield\\shield.obj");
 
-	//CResourceManager::Load<CModelX>(	"Player2",			"Character\\Player2\\kyoko.x");
 	CResourceManager::Load<CModelX>(	"Player2",			"Character\\Player2\\Rusk\\idle2.x");
-
 	CResourceManager::Load<CModelX>(	"Cat",				"Character\\Cat\\cat.x");
-
 	CResourceManager::Load<CModel>(		"Floor",			"Field\\Abandoned_School_Floor.obj");
 	CResourceManager::Load<CModel>(		"Wall",				"Field\\Abandoned_School_Wall.obj"); 
 	CResourceManager::Load<CModel>(		"WallCol",			"Field\\Abandoned_School_Wall_Col.obj");
@@ -63,11 +60,16 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>(		"RightDoorCol",		"Door\\right_door_col.obj");
 	CResourceManager::Load<CModel>(		"LeftDoor",			"Door\\left_door.obj");
 	CResourceManager::Load<CModel>(		"LeftDoorCol",		"Door\\left_door_col.obj");
+	CResourceManager::Load<CModelX>(	"Warrok",			"Character\\Enemy\\Warrok\\warrok.x");
 
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
 
+	// プレイヤーの管理クラスの作成
 	new CPlayerManager();
+
+	// 経路探索管理クラスを作成
+	new CNavManager();
 
 	// フィールドの生成
 	mpField = new CField();
@@ -79,12 +81,26 @@ void CGameScene::Load()
 	//CPlayer* player = new CPlayer();
 	//player->Scale(1.0f, 1.0f, 1.0f);
 
+	// プレイヤーの生成
 	CPlayer2* player2 = new CPlayer2();
 	player2->Scale(1.0f, 1.0f, 1.0f);
 
+	// 猫の生成
 	CCat* cat = new CCat();
 	cat->Scale(1.0f, 1.0f, 1.0f);
 	cat->Position(10.0f, 0.0f, 0.0f);
+
+	// ウォーロックの生成
+	CWarrok* warrok = new CWarrok
+	(
+		{
+			CVector( 70.0f, 1.0, 150.0f),
+			CVector(-70.0f, 1.0, 150.0f),
+			CVector(  0.0f, 1.0, 100.0f),
+		}
+	);
+	warrok->Scale(1.0f, 1.0f, 1.0f);
+	warrok->Position(70.0f, 1.0, 150.0f);
 
 	// CGameCameraのテスト
 	//CGameCamera* mainCamera = new CGameCamera

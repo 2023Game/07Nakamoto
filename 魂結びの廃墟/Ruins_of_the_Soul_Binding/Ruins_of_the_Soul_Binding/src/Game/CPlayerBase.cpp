@@ -2,6 +2,8 @@
 #include "CInteractObject.h"
 #include "Maths.h"
 #include "CPlayerManager.h"
+#include "CNavNode.h"
+#include "CNavManager.h"
 
 #define GRAVITY 0.0625f	// 重力加速度
 #define FOV_ANGLE		 60.0f		// 視野範囲の角度
@@ -24,6 +26,9 @@ CPlayerBase::CPlayerBase()
 	, mpCamera(nullptr)
 {
 	CPlayerManager::Instance()->AddPlayer(this);
+
+	mpNavNode = new CNavNode(Position(), true);
+	mpNavNode->SetColor(CColor::red);
 }
 
 // デストラクタ

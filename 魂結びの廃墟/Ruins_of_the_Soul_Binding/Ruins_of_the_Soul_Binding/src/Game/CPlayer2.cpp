@@ -1,12 +1,12 @@
 //プレイヤークラスのインクルード
 #include "CPlayer2.h"
 #include "CInput.h"
+#include "CNavNode.h"
+#include "CNavManager.h"
 #include "CCamera.h"
 #include "Maths.h"
 #include "CColliderCapsule.h"
 #include "CColliderSphere.h"
-
-#include "CCat.h"
 #include "CCamera.h"
 #include "CPlayerCamera.h"
 #include "CInteractObject.h"
@@ -14,6 +14,7 @@
 
 // アニメーションのパス
 #define ANIM_PATH "Character\\Player2\\Rusk\\anim\\"
+
 #define BODY_HEIGHT 16.0f	// 本体のコライダーの高さ
 #define BODY_RADIUS 3.0f	// 本体のコライダーの幅
 #define MOVE_SPEED 0.75f	// 移動速度
@@ -55,6 +56,10 @@ CPlayer2::CPlayer2()
 	// 視野範囲のデバッグ表示クラスを作成
 	mpDebugFov = new CDebugFieldOfView(this, mFovAngle, FOV_LENGTH);
 #endif
+
+	// 経路探索用のノードを作成
+	mpNavNode = new CNavNode(Position(), true);
+	mpNavNode->SetColor(CColor::red);
 
 	// 本体のコライダーを作成
 	mpBodyCol = new CColliderCapsule
@@ -259,16 +264,6 @@ CVector CPlayer2::CalcMoveVec()
 	if (CInput::Key('A'))		input.X(-1.0f);
 	else if (CInput::Key('D'))	input.X(1.0f);
 
-	/*if (CInput::PushKey('C'))
-	{
-		CCat* cat = CCat::Instance();
-		CVector atPos = cat->Position() + CVector(0.0f, 10.0f, 0.0f);
-		CCamera* camera = CCamera::MainCamera();
-
-		camera->LookAt(atPos + CVector(0.0f, 0.0f, 40.0f), atPos, CVector::up);
-		camera->SetFollowTargetTf(cat);
-	}*/
-
 	// 入力ベクトルの長さで入力されているか判定
 	if (input.LengthSqr() > 0.0f)
 	{
@@ -334,7 +329,7 @@ void CPlayer2::Update()
 	switch (mState)
 	{
 		// 待機状態
-	case (int)EState::eIdle:			UpdateIdle();		break;
+	case (int)EState::eIdle:		UpdateIdle();		break;
 		// 斬り攻撃
 	case (int)EState::eAttack1:		UpdateAttack1();	break;
 		// 蹴り攻撃
@@ -342,7 +337,7 @@ void CPlayer2::Update()
 		// ジャンプ開始
 	case (int)EState::eJumpStart:	UpdateJumpStart();	break;
 		// ジャンプ中
-	case (int)EState::eJump:			UpdateJump();		break;
+	case (int)EState::eJump:		UpdateJump();		break;
 		// ジャンプ終了
 	case (int)EState::eJumpEnd:		UpdateJumpEnd();	break;
 		// 仰け反り
@@ -376,6 +371,12 @@ void CPlayer2::Update()
 	CVector forward = CVector::Slerp(current, target, 0.125f);
 	Rotation(CQuaternion::LookRotation(forward));
 
+	// 経路探索用のノードが存在すれば、座標を更新
+	if (mpNavNode != nullptr)
+	{
+		mpNavNode->SetPos(Position());
+	}
+
 	// ホイールクリックで弾丸発射
 	if (CInput::PushKey(VK_MBUTTON))
 	{
@@ -400,6 +401,12 @@ void CPlayer2::Update()
 	mIsGrounded = false;
 
 	CDebugPrint::Print("FPS:%f\n", Times::FPS());
+}
+
+// ステータスを整数にして取得する
+int CPlayer2::GetState()
+{
+	return static_cast<int>(mState);
 }
 
 // 攻撃中か
