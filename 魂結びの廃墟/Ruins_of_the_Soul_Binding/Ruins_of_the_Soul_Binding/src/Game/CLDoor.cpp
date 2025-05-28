@@ -1,15 +1,17 @@
 #include "CLDoor.h"
 #include "Maths.h"
 #include "CInput.h"
+#include "CCollider.h"
 
 #define MOVE_POS 9.9f	// 移動距離
 #define MOVE_TIME 5.0f	// 移動時間
 
 // コンストラクタ
-CLDoor::CLDoor(const CVector& pos, const CVector& rot)
-	: mDefaultPos(pos)
-	, mOpen(false)
+CLDoor::CLDoor(const CVector& pos, const CVector& angle,const CVector& openPos)
+	: mIsOpened(false)
+	, mAnimTime(1.0f)
 	, mElapsedTime(0.0f)
+	, mIsPlaying(false)
 {
 	// 扉のモデルデータの取得
 	mpL_Door = CResourceManager::Get<CModel>("LeftDoor");
@@ -18,10 +20,12 @@ CLDoor::CLDoor(const CVector& pos, const CVector& rot)
 
 	// 扉のコライダー生成
 	mpL_DoorColliderMesh = new CColliderMesh(this, ELayer::eInteractObj, mpL_DoorCol, true);
+	mpL_DoorColliderMesh->SetCollisionTags({ ETag::ePlayer, ETag::eEnemy});
+	mpL_DoorColliderMesh->SetCollisionLayers({ ELayer::ePlayer,ELayer::eInteractSearch,ELayer::eEnemy });
 
-	// 位置と向きを設定
-	Position(mDefaultPos);
-	Rotate(rot);
+	mOpenPos = openPos;
+	mClosePos = pos;
+	Position(mIsOpened ? mOpenPos : mClosePos);
 
 	mInteractStr = "閉まっている";
 }
@@ -40,52 +44,70 @@ CLDoor::~CLDoor()
 // 調べる
 void CLDoor::Interact()
 {
-	mOpen = !mOpen;
-	mInteractStr = mOpen ? "閉まっている" : "開いている";
+	// 閉まっている
+	if (!mIsOpened)
+	{
+		mIsOpened = true;
+		mIsPlaying = true;
+	}
+	else if (mIsOpened)
+	{
+		mIsOpened = false;
+		mIsPlaying = true;
+	}
+	
+	mInteractStr = mIsOpened ? "閉まっている" : "開いている";
 }
 
 // 更新処理
 void CLDoor::Update()
 {
-	// 閉まっているとき
-	if (!mOpen)
+	if (mIsPlaying)
 	{
-		if (CInput::PushKey('E'))
+		// 扉を開くアニメーション
+		if (mIsOpened)
 		{
-
-			float per = mElapsedTime / MOVE_TIME;
-			Position(mDefaultPos + CVector(MOVE_POS, 0.0f, 0.0f) * sinf(M_PI * 2.0f * per));
-
-			mElapsedTime += 1.0f / 60.0f;
-			if (mElapsedTime >= MOVE_TIME)
+			if (mElapsedTime < mAnimTime)
 			{
-				mElapsedTime -= MOVE_TIME;
+				float per = mElapsedTime / mAnimTime;
+				CVector pos = CVector::Lerp(mClosePos, mOpenPos, per);
+				Position(pos);
+				mElapsedTime += Times::DeltaTime();
 			}
-
-			//Position(mDefaultPos + CVector(MOVE_POS, 0.0f, 0.0f));
-			//mOpen = true;
+			else
+			{
+				Position(mOpenPos);
+				mElapsedTime = 0.0f;
+				mIsPlaying = false;
+			}
 		}
-		
+		// 扉を閉じるアニメーション
+		else
+		{
+			if (mElapsedTime < mAnimTime)
+			{
+				float per = mElapsedTime / mAnimTime;
+				CVector pos = CVector::Lerp(mOpenPos, mClosePos, per);
+				Position(pos);
+				mElapsedTime += Times::DeltaTime();
+			}
+			else
+			{
+				Position(mClosePos);
+				mElapsedTime = 0.0f;
+				mIsPlaying = false;
+			}
+		}
 	}
-	// 開いているとき
+	// 開閉中ではない
 	else
 	{
-		if (CInput::PushKey('E'))
-		{
-			Position(mDefaultPos);
-			//mOpen = false;
-		}
-
-		//float per = mElapsedTime / MOVE_TIME;
-		//Position(mDefaultPos + mMoveVec * sinf(M_PI * 2.0f * per));
-
-		//mElapsedTime += 1.0f / 60.0f;
-		//if (mElapsedTime >= MOVE_TIME)
+		// テスト用
+		//if (CInput::PushKey('E'))
 		//{
-		//	mElapsedTime -= MOVE_TIME;
+		//	Interact();
 		//}
-	}
-
+	}		
 }
 
 // 描画処理

@@ -35,7 +35,8 @@ CField::CField()
 	mpLDoor = new CLDoor
 	(
 		CVector(28.05f, 0.0f, 44.825f),
-		CVector(0.0f, 0.0f, 0.0f)
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(37.95f, 0.0f, 44.825f)
 	);
 
 	// 経路探索用のノードを作成
@@ -179,13 +180,12 @@ bool CField::CollisionRay(const CVector& start, const CVector& end, CHitInfo* hi
 	// 衝突したかどうかのフラグ
 	bool isHit = false;
 
-	// 床のオブジェクトとの衝突判定(1階と2階のノードが繋がらないようにするため)
+	// 床のオブジェクトとの衝突判定
 	if (CCollider::CollisionRay(mpFloorColliderMesh, start, end, &tHit))
 	{
 		*hit = tHit;
 		isHit = this;
 	}
-
 	// 壁のオブジェクトとの衝突判定
 	if (CCollider::CollisionRay(mpWallColliderMesh, start, end, &tHit))
 	{

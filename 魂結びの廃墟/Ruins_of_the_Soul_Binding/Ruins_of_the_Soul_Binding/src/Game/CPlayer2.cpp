@@ -378,10 +378,10 @@ void CPlayer2::Update()
 	}
 
 	// ホイールクリックで弾丸発射
-	if (CInput::PushKey(VK_MBUTTON))
-	{
+	//if (CInput::PushKey(VK_MBUTTON))
+	//{
 
-	}
+	//}
 
 	// 「P」キーを押したら、ゲームを終了
 	if (CInput::PushKey('P'))

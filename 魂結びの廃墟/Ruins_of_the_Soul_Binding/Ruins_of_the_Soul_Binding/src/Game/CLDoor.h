@@ -6,7 +6,7 @@ class CLDoor : public CInteractObject
 {
 public:
 	// コンストラクタ
-	CLDoor(const CVector& pos,const CVector& rot);
+	CLDoor(const CVector& pos, const CVector& angle, const CVector& openPos);
 	// デストラクタ
 	~CLDoor();
 
@@ -22,11 +22,13 @@ private:
 	CModel* mpL_Door;	// モデルデータ
 	CModel* mpL_DoorCol;// コライダーデータ
 
-	CColliderMesh* mpL_DoorColliderMesh;
+	CColliderMesh* mpL_DoorColliderMesh;	// コライダー
 
-	CVector mDefaultPos;
-	CVector mMoveVec;
-	float mElapsedTime;
+	bool mIsOpened;	// 扉が開いているかどうか
 
-	bool mOpen;	// 扉が開いているか
+	CVector mClosePos;	// 扉が閉まっている時の座標
+	CVector mOpenPos;	// 扉が開いている時の座標
+	float mAnimTime;	// 開閉時間
+	float mElapsedTime;	// 経過時間保存用
+	bool mIsPlaying;	// 開閉中かどうか
 };

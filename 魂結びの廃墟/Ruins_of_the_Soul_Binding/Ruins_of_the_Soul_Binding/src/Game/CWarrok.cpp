@@ -241,20 +241,20 @@ void CWarrok::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 	// ベースの衝突処理を呼び出す
 	CEnemy::Collision(self, other, hit);
 
-	// 攻撃コライダーがヒットした
-	if (self == mpAttack1Col)
-	{
-		// ヒットしたのがキャラクターかつ、
-		// まだ攻撃がヒットしていないキャラクターであれば
-		CCharaBase* chara = dynamic_cast<CCharaBase*>(other->Owner());
-		if (chara != nullptr && !IsAttackHitObj(chara))
-		{
-			// ダメージを与える
-			chara->TakeDamage(ATTACK_POWER, this);
-			// 攻撃ヒット済みリストに登録
-			AddAttackHitObj(chara);
-		}
-	}
+	//// 攻撃コライダーがヒットした
+	//if (self == mpAttack1Col)
+	//{
+	//	// ヒットしたのがキャラクターかつ、
+	//	// まだ攻撃がヒットしていないキャラクターであれば
+	//	CCharaBase* chara = dynamic_cast<CCharaBase*>(other->Owner());
+	//	if (chara != nullptr && !IsAttackHitObj(chara))
+	//	{
+	//		// ダメージを与える
+	//		chara->TakeDamage(ATTACK_POWER, this);
+	//		// 攻撃ヒット済みリストに登録
+	//		AddAttackHitObj(chara);
+	//	}
+	//}
 }
 
 // 戦闘相手の方へ向く

@@ -153,7 +153,6 @@ void CPlayerBase::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 				}
 			}
 		}
-
 	}
 }
 
@@ -216,7 +215,6 @@ CInteractObject* CPlayerBase::GetNearInteractObj() const
 	// 探知範囲内の調べるオブジェクトを順番に調べる
 	for (CInteractObject* obj : mNearInteractObjs)
 	{
-
 		// 現在調べられない状態であれば、スルー
 		if (!obj->CanInteract()) continue;
 
