@@ -29,7 +29,8 @@
 
 #define ATTACK_COL_RADIUS 10.0f	// 攻撃コライダーの半径
 #define ATTACK_COL_POS CVector(0.0f, 5.0f, 8.0f)	// 攻撃コライダーの位置
-#define ATTACK_POWER 50		// 攻撃力
+
+#define ATTACK_POWER 5		// 攻撃力
 #define ATTACK_START_FRAME 39.0f	// 攻撃判定開始フレーム
 #define ATTACK_END_FRAME 46.0f		// 攻撃判定終了フレーム
 
@@ -288,14 +289,23 @@ void CWarrok::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			// 攻撃ヒット済みリストに登録
 			AddAttackHitObj(chara);
 		}
+
+		CInteractObject* obj = dynamic_cast<CInteractObject*>(other->Owner());
+		if (obj != nullptr && !IsAttackHitObj(obj))
+		{
+			// ダメージを与える
+			obj->TakeDamage(ATTACK_POWER, this);
+			// 攻撃ヒット済みリストに登録
+			AddAttackHitObj(obj);
+		}
 	}
-	// 扉のオブジェクトの場合
+	// オブジェクトサーチ用の場合
 	else if (self == mpSearchCol)
 	{
 		CInteractObject* obj = dynamic_cast<CInteractObject*>(other->Owner());
 		if (obj != nullptr)
 		{
-			// 調べるオブジェクトの削除フラグが立っていなかったら
+			// 壊せるオブジェクトの削除フラグが立っていなかったら
 			if (!obj->IsKill())
 			{
 				// 衝突した調べるオブジェクトをリストに追加
@@ -350,14 +360,14 @@ void CWarrok::ChangeState(int state)
 bool CWarrok::IsFoundPlayer() const
 {
 	// プレイヤーが存在しない場合は、視野範囲外とする
-	CPlayer2* player = CPlayer2::Instance();
-	if (player == nullptr) return false;
+	//CPlayer2* player = CPlayer2::Instance();
+	if (mpBattleTarget == nullptr) return false;
 
 	// プレイヤーが死亡状態の場合も、範囲外とする
-	if (player->GetState() == 8) return false;
+	//if (player->GetState() == 8) return false;
 
 	// プレイヤー座標を取得
-	CVector playerPos = player->Position();
+	CVector playerPos = mpBattleTarget->Position();
 	// 自分自身の座標を取得
 	CVector pos = Position();
 	// 自身からプレイヤーまでのベクトルを求める
@@ -393,15 +403,15 @@ bool CWarrok::IsFoundPlayer() const
 bool CWarrok::IsLookPlayer() const
 {
 	// プレイヤーが存在しない場合は、見えない
-	CPlayer2* player = CPlayer2::Instance();
-	if (player == nullptr) return false;
+	//CPlayer2* player = CPlayer2::Instance();
+	if (mpBattleTarget == nullptr) return false;
 	// フィールドが存在しない場合は、遮蔽物がないので見える
 	CField* field = CField::Instance();
 	if (field == nullptr) return true;
 
 	CVector offsetPos = CVector(0.0f, EYE_HEIGHT, 0.0f);
 	// プレイヤーの座標を取得
-	CVector playerPos = player->Position() + offsetPos;
+	CVector playerPos = mpBattleTarget->Position() + offsetPos;
 	// 自分自身の座標を取得
 	CVector selfPos = Position() + offsetPos;
 
@@ -418,11 +428,11 @@ bool CWarrok::IsLookPlayer() const
 bool CWarrok::CanAttackPlayer() const
 {
 	// プレイヤーがいない場合は、攻撃できない
-	CPlayer2* player = CPlayer2::Instance();
-	if ((player == nullptr)) return false;
+	//CPlayer2* player = CPlayer2::Instance();
+	if ((mpBattleTarget == nullptr)) return false;
 
 	// プレイヤーまでの距離が攻撃範囲外であれば、攻撃できない
-	CVector playerPos = player->Position();
+	CVector playerPos = mpBattleTarget->Position();
 	CVector vec = playerPos - Position();
 	vec.Y(0.0f);	//高さを考慮しない
 
@@ -540,6 +550,13 @@ void CWarrok::ChangePatrolPoint()
 // 待機状態の更新処理
 void CWarrok::UpdateIdle()
 {
+	// ターゲットのオブジェクトがなければ、
+	if (!mNearBreakObjs.size())
+	{
+		// ターゲットをプレイヤーに戻す
+		mpBattleTarget = CPlayer2::Instance();
+	}
+
 	// プレイヤーが視野範囲外に入ったら、追跡にする
 	if (IsFoundPlayer())
 	{
@@ -620,8 +637,8 @@ void CWarrok::UpdatePatrol()
 void CWarrok::UpdateChase()
 {
 	// プレイヤーの座標へ向けて移動する
-	CPlayer2* player = CPlayer2::Instance();
-	CVector targetPos = player->Position();
+	//CPlayer2* player = CPlayer2::Instance();
+	CVector targetPos = mpBattleTarget->Position();
 
 	// プレイヤーが見えなくなったら、見失った状態にする
 	if (!IsLookPlayer())
@@ -640,12 +657,13 @@ void CWarrok::UpdateChase()
 		return;
 	}
 
-	// プレイヤーとの間に壊せるオブジェクトがある場合、
-	if (mNearBreakObjs.size() != 0)
+	// 近くの壊せるオブジェクトを取得
+	CInteractObject* obj = GetNearBreakObj();
+	if (obj != nullptr)
 	{
-		GetNearBreakObj();
-		//ChangeState((int)EState::eAttack);
-		//return;
+		mpBattleTarget = obj;
+		ChangeState((int)EState::eAttack);
+		return;
 	}
 
 	// 走るアニメーションを再生
@@ -659,7 +677,7 @@ void CWarrok::UpdateChase()
 		mpNavNode->SetPos(Position());
 
 		// 自身のノードからプレイヤーのノードまでの最短経路を求める
-		CNavNode* playerNode = player->GetNavNode();
+		CNavNode* playerNode = mpBattleTarget->GetNavNode();
 		if (navMgr->Navigate(mpNavNode, playerNode, mMoveRoute))
 		{
 			// 自身のノードからプレイヤーのノードまで繋がっていたら、
@@ -686,6 +704,15 @@ void CWarrok::UpdateLost()
 	if (IsLookPlayer())
 	{
 		ChangeState((int)EState::eChase);
+		return;
+	}
+
+	// 近くの壊せるオブジェクトを取得
+	CInteractObject* obj = GetNearBreakObj();
+	if (obj != nullptr)
+	{
+		mpBattleTarget = obj;
+		ChangeState((int)EState::eAttack);
 		return;
 	}
 
@@ -782,7 +809,6 @@ void CWarrok::UpdateAttack1()
 		}
 		break;
 	}
-
 }
 
 // 針攻撃時の更新処理
@@ -827,6 +853,7 @@ void CWarrok::Update()
 	// 敵のベースクラスの更新
 	CEnemy::Update();
 
+	// 壊せるオブジェクトのリストをクリア
 	mNearBreakObjs.clear();
 
 #if _DEBUG
@@ -872,12 +899,12 @@ void CWarrok::Render()
 		);
 	}
 
-	CPlayer2* player = CPlayer2::Instance();
+	//CPlayer2* player = CPlayer2::Instance();
 	CField* field = CField::Instance();
-	if (player != nullptr && field != nullptr)
+	if (mpBattleTarget != nullptr && field != nullptr)
 	{
 		CVector offsetPos = CVector(0.0f, EYE_HEIGHT, 0.0f);
-		CVector playerPos = player->Position() + offsetPos;
+		CVector playerPos = mpBattleTarget->Position() + offsetPos;
 		CVector selfPos = Position() + offsetPos;
 
 		//プレイヤーとの間に遮蔽物が存在する場合
@@ -935,58 +962,59 @@ CColor CWarrok::GetStateColor(EState state) const
 	return CColor::white;
 }
 
+// 一番近くにある壊せるオブジェクトを取得
 CInteractObject* CWarrok::GetNearBreakObj() const
 {
 	// 一番近くの調べるオブジェクトのポインタ格納用
-	//CInteractObject* breakObj = nullptr;
-	//float nearDist = 0.0f;	// 現在一番近くにある調べるオブジェクトまでの距離
-	//CVector pos = Position();	// プレイヤーの座標を取得
+	CInteractObject* nearObj = nullptr;
+	float nearDist = 0.0f;	// 現在一番近くにある調べるオブジェクトまでの距離
+	CVector pos = Position();	// 敵自身の座標を取得
 	// 探知範囲内の調べるオブジェクトを順番に調べる
 	for (CInteractObject* obj : mNearBreakObjs)
 	{
 		// 現在調べられない状態であれば、スルー
 		if (!obj->CanInteract()) continue;
 
-		// 敵の位置
-		CVector start = Position();
-		// プレイヤーの位置
-		CVector end = CPlayer2::Instance()->Position();
-		CHitInfo hit;
+		// オブジェクトの座標を取得
+		CVector objPos = obj->Position();
+		// プレイヤーからオブジェクトまでのベクトルを求める
+		CVector vec = objPos - pos;
+		vec.Y(0.0f);	// オブジェクトとの高さの差を考慮しない
 
-		// ルート上に壊せるオブジェクトがあるか、
-		if (obj->CollisionRay(start, end, &hit));
+				// ベクトルを正規化して長さを1にする
+		CVector dir = vec.Normalized();
+		// 自身の正面方向ベクトルを取得
+		CVector forward = VectorZ();
+		// プレイヤーとまでのベクトルと
+		// 自身の正面方向ベクトルの内積を求めて角度を出す
+		float dot = CVector::Dot(dir, forward);
+		// 視野角度のラジアンを求める
+		float angleR = Math::DegreeToRadian(mFovAngle);
+		// 求めた内積と視野角度で、視野範囲内か判断する
+		if (dot < cosf(angleR)) continue;
+
+		float dist = (obj->Position() - pos).LengthSqr();
+		// 一番最初の調べるオブジェクトか、
+		// 求めた距離が現在の一番近いオブジェクトよりも近い場合は、
+		if (nearObj == nullptr || dist < nearDist)
 		{
-			// そのオブジェクトを返す
-			return obj;
+			// 一番近いオブジェクトを更新
+			nearObj = obj;
+			nearDist = dist;
 		}
 	}
-	//	// オブジェクトの座標を取得
-	//	CVector objPos = obj->Position();
-	//	// プレイヤーからオブジェクトまでのベクトルを求める
-	//	CVector vec = objPos - pos;
-	//	vec.Y(0.0f);	// オブジェクトとの高さの差を考慮しない
+	return nearObj;
 
-	//	// ベクトルを正規化して長さを1にする
-	//	CVector dir = vec.Normalized();
-	//	// 自身の正面方向ベクトルを取得
-	//	CVector forward = VectorZ();
-	//	// プレイヤーとまでのベクトルと
-	//	// 自身の正面方向ベクトルの内積を求めて角度を出す
-	//	float dot = CVector::Dot(dir, forward);
-	//	// 視野角度のラジアンを求める
-	//	float angleR = Math::DegreeToRadian(mFovAngle);
-	//	// 求めた内積と視野角度で、視野範囲内か判断する
-	//	if (dot < cosf(angleR)) continue;
+		//// 敵の位置
+		//CVector start = Position();
+		//// プレイヤーの位置
+		//CVector end = mpBattleTarget->Position();
+		//CHitInfo hit;
 
-	//	float dist = (obj->Position() - pos).LengthSqr();
-	//	// 一番最初の調べるオブジェクトか、
-	//	// 求めた距離が現在の一番近いオブジェクトよりも近い場合は、
-	//	if (breakObj == nullptr || dist < nearDist)
-	//	{
-	//		// 一番近いオブジェクトを更新
-	//		breakObj = obj;
-	//		nearDist = dist;
-	//	}
-	//}
-	//return breakObj;
+		//// ルート上に壊せるオブジェクトがあるか、
+		//if (obj->CollisionRay(start, end, &hit));
+		//{
+		//	// そのオブジェクトを返す
+		//	return obj;
+		//}
 }

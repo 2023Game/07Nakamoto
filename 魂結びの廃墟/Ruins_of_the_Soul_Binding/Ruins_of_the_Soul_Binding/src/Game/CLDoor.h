@@ -25,6 +25,7 @@ private:
 	CColliderMesh* mpL_DoorColliderMesh;	// コライダー
 
 	bool mIsOpened;	// 扉が開いているかどうか
+	bool mIsBroken;	// 扉が壊れたどうか
 
 	CVector mClosePos;	// 扉が閉まっている時の座標
 	CVector mOpenPos;	// 扉が開いている時の座標

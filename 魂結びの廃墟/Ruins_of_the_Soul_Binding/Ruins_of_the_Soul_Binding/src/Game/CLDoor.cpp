@@ -1,10 +1,8 @@
 #include "CLDoor.h"
-#include "Maths.h"
-#include "CInput.h"
-#include "CCollider.h"
 
-#define MOVE_POS 9.9f	// 移動距離
-#define MOVE_TIME 5.0f	// 移動時間
+//#define MOVE_POS 9.9f	// 移動距離
+//#define MOVE_TIME 5.0f	// 移動時間
+#define HP 15			// 体力
 
 // コンストラクタ
 CLDoor::CLDoor(const CVector& pos, const CVector& angle,const CVector& openPos)
@@ -12,6 +10,7 @@ CLDoor::CLDoor(const CVector& pos, const CVector& angle,const CVector& openPos)
 	, mAnimTime(1.0f)
 	, mElapsedTime(0.0f)
 	, mIsPlaying(false)
+	, mIsBroken(false)
 {
 	// 扉のモデルデータの取得
 	mpL_Door = CResourceManager::Get<CModel>("LeftDoor");
@@ -21,7 +20,17 @@ CLDoor::CLDoor(const CVector& pos, const CVector& angle,const CVector& openPos)
 	// 扉のコライダー生成
 	mpL_DoorColliderMesh = new CColliderMesh(this, ELayer::eDoor, mpL_DoorCol, true);
 	mpL_DoorColliderMesh->SetCollisionTags({ ETag::ePlayer, ETag::eEnemy});
-	mpL_DoorColliderMesh->SetCollisionLayers({ ELayer::ePlayer,ELayer::eInteractSearch,ELayer::eEnemy });
+	mpL_DoorColliderMesh->SetCollisionLayers
+	(
+		{ 
+			ELayer::ePlayer,
+			ELayer::eInteractSearch,
+			ELayer::eEnemy ,
+			ELayer::eAttackCol
+		}
+	);
+
+	mHp = HP;
 
 	mOpenPos = openPos;
 	mClosePos = pos;
@@ -107,6 +116,17 @@ void CLDoor::Update()
 	else
 	{
 	}		
+
+	if (mIsBroken)
+	{
+		Kill();
+	}
+
+	// HPが0になったら
+	if (mHp <= 0)
+	{
+		mIsBroken = true;	
+	}
 }
 
 // 描画処理

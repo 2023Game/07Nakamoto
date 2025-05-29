@@ -17,6 +17,9 @@ public:
 	// 調べる（継承先で実装）
 	virtual void Interact() = 0;
 
+	// ダメージを受ける
+	virtual void TakeDamage(int damege, CObjectBase* causer);
+
 	// 調べる内容のテキストを返す 
 	std::string GetInteractStr() const;
 	// 調べる内容のテキスト画像のパスを返す
@@ -37,4 +40,6 @@ protected:
 #if _DEBUG
 	std::string mDebugName;		// デバッグ表示用の名前
 #endif
+
+	int mHp;
 };

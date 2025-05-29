@@ -1,5 +1,7 @@
 #include "CRDoor.h"
 
+#define HP 15	// 体力
+
 // コンストラクタ
 CRDoor::CRDoor(const CVector& pos, const CVector& angle, const CVector& openPos)
 	: mIsOpened(false)
@@ -15,7 +17,17 @@ CRDoor::CRDoor(const CVector& pos, const CVector& angle, const CVector& openPos)
 	// 扉のコライダー生成
 	mpR_DoorColliderMesh = new CColliderMesh(this, ELayer::eDoor, mpR_DoorCol, true);
 	mpR_DoorColliderMesh->SetCollisionTags({ ETag::ePlayer, ETag::eEnemy });
-	mpR_DoorColliderMesh->SetCollisionLayers({ ELayer::ePlayer,ELayer::eInteractSearch,ELayer::eEnemy });
+	mpR_DoorColliderMesh->SetCollisionLayers
+	(
+		{ 
+			ELayer::ePlayer,
+			ELayer::eInteractSearch,
+			ELayer::eEnemy,
+			ELayer::eAttackCol,
+		}
+	);
+
+	mHp = HP;
 
 	mOpenPos = openPos;
 	mClosePos = pos;
@@ -100,6 +112,13 @@ void CRDoor::Update()
 	// 開閉中ではない
 	else
 	{
+	}
+
+	// HPが0になったら
+	if (mHp <= 0)
+	{
+		// 壊れる
+		Kill();
 	}
 }
 

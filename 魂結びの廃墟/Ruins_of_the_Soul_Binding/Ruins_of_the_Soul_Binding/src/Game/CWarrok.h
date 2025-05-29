@@ -119,7 +119,7 @@ private:
 	CObjectBase* mpBattleTarget;	// 戦闘相手
 	CCollider* mpAttack1Col;		// パンチ攻撃用のコライダー
 
-	// 一番近くにある調べられるオブジェクトを取得
+	// 一番近くにある壊せるオブジェクトを取得
 	CInteractObject* GetNearBreakObj() const;
 	// 近くにある調べられるオブジェクトのリスト
 	std::list<CInteractObject*> mNearBreakObjs;

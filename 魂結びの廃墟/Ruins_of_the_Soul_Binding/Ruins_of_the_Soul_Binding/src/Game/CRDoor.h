@@ -31,5 +31,4 @@ private:
 	float mAnimTime;	// 開閉時間
 	float mElapsedTime;	// 経過時間保存用
 	bool mIsPlaying;	// 開閉中かどうか
-
 };

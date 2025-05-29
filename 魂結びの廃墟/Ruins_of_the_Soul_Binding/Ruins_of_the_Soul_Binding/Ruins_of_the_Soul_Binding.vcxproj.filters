@@ -424,6 +424,9 @@
     <ClCompile Include="src\Game\CNavNode.cpp">
       <Filter>ソース ファイル\Game\Navigation</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CTestScene.cpp">
+      <Filter>ソース ファイル\Game\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -767,6 +770,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CNavNode.h">
       <Filter>ソース ファイル\Game\Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CTestScene.h">
+      <Filter>ソース ファイル\Game\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
