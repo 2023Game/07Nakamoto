@@ -41,6 +41,8 @@ private:
 	// フィールドのインスタンス
 	static CField* spInstance;
 
+	EScene mScene;
+
 	CModel* mpFloor;
 	CModel* mpWall;
 	CModel* mpWallCol;

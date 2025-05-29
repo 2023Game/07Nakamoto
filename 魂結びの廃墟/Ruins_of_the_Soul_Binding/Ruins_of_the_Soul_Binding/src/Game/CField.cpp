@@ -7,6 +7,7 @@
 #include "CLDoor.h"
 #include "CNavNode.h"
 #include "CNavManager.h"
+#include "CSceneManager.h"
 
 CField* CField::spInstance = nullptr;
 
@@ -21,31 +22,104 @@ CField::CField()
 {
 	spInstance = this;
 
-	mpFloor = CResourceManager::Get<CModel>("Floor");
-	mpWall = CResourceManager::Get<CModel>("Wall");
-	mpWallCol = CResourceManager::Get<CModel>("WallCol");
+	mScene = CSceneManager::Instance()->GetCurrentScene();
+	switch (mScene)
+	{
+		// ゲームシーン
+		case EScene::eGame:
+			mpFloor = CResourceManager::Get<CModel>("Floor");
+			mpWall = CResourceManager::Get<CModel>("Wall");
+			mpWallCol = CResourceManager::Get<CModel>("WallCol");
 
-	mpFloorColliderMesh = new CColliderMesh(this, ELayer::eField, mpFloor, true);
-	mpWallColliderMesh = new CColliderMesh(this, ELayer::eWall, mpWallCol, true);
+			mpFloorColliderMesh = new CColliderMesh(this, ELayer::eField, mpFloor, true);
+			mpWallColliderMesh = new CColliderMesh(this, ELayer::eWall, mpWallCol, true);
 
-	// 右のドアの生成
-	mpRDoor = new CRDoor
-	(
-		CVector(37.95f, 0.0f, 44.825f),
-		CVector(0.0f, 0.0f, 0.0f),
-		CVector(28.05f, 0.0f, 44.825f)
-	);
+			// 右のドアの生成
+			mpRDoor = new CRDoor
+			(
+				CVector(37.95f, 0.0f, 44.825f),
+				CVector(0.0f, 0.0f, 0.0f),
+				CVector(28.05f, 0.0f, 44.825f)
+			);
 
-	// 左のドアの生成
-	mpLDoor = new CLDoor
-	(
-		CVector(28.05f, 0.0f, 44.825f),
-		CVector(0.0f, 0.0f, 0.0f),
-		CVector(37.95f, 0.0f, 44.825f)
-	);
+			// 左のドアの生成
+			mpLDoor = new CLDoor
+			(
+				CVector(28.05f, 0.0f, 44.825f),
+				CVector(0.0f, 0.0f, 0.0f),
+				CVector(37.95f, 0.0f, 44.825f)
+			);
 
-	// 経路探索用のノードを作成
-	CreateNavNodes();
+			// 経路探索用のノードを作成
+			CreateNavNodes();
+
+			break;
+		// テストシーン
+		case EScene::eTest:
+			mpFloor = CResourceManager::Get<CModel>("Field");
+			mpWall = CResourceManager::Get<CModel>("Wall");
+			mpWallCol = CResourceManager::Get<CModel>("WallCol");
+
+			mpFloorColliderMesh = new CColliderMesh(this, ELayer::eField, mpFloor, true);
+			mpWallColliderMesh = new CColliderMesh(this, ELayer::eWall, mpWallCol, true);
+
+			new CLDoor
+			(
+				CVector(30.0f, 0.0f, 44.175f),
+				CVector(0.0f, 0.0f, 0.0f),
+				CVector(39.9f, 0.0f, 44.175f)
+			);
+			new CRDoor
+			(
+				CVector(39.9f, 0.0f, 44.175f),
+				CVector(0.0f, 0.0f, 0.0f),
+				CVector(30.0f, 0.0f, 44.175f)
+			);
+
+			new CLDoor
+			(
+				CVector(-36.0f, 0.0f, 44.175f),
+				CVector(0.0f, 0.0f, 0.0f),
+				CVector(-26.1, 0.0f, 44.175f)
+				);
+			new CRDoor
+			(
+				CVector(-26.1, 0.0f, 44.175f),
+				CVector(0.0f, 0.0f, 0.0f),
+				CVector(-36.0f, 0.0f, 44.175f)
+				);
+
+			new CLDoor
+			(
+				CVector(37.8027f, 0.0f, 132.73f),
+				CVector(0.0f, 0.0f, 0.0f),
+				CVector(27.903f, 0.0f, 132.73f)
+				);
+			new CRDoor
+			(
+				CVector(27.903f, 0.0f, 132.73f),
+				CVector(0.0f, 0.0f, 0.0f),
+				CVector(37.8027f, 0.0f, 132.73f)
+				);
+
+			new CLDoor
+			(
+				CVector(-28.1973f, 0.0f, 132.73f),
+				CVector(0.0f, 0.0f, 0.0f),
+				CVector(-38.0973f, 0.0f, 132.73f)
+				);
+			new CRDoor
+			(
+				CVector(-38.0973f, 0.0f, 132.73f),
+				CVector(0.0f, 0.0f, 0.0f),
+				CVector(-28.1973f, 0.0f, 132.73f)
+				);
+
+			// 経路探索用のノードを作成
+			CreateNavNodes();
+
+			break;
+	}
 
 	//CreateFieldObjects();
 }
@@ -83,10 +157,31 @@ void CField::CreateNavNodes()
 
 	if (navMgr != nullptr)
 	{
-		new CNavNode(CVector(-40.0f, 0.0f, 60.0f));
-		new CNavNode(CVector(-40.0f, 0.0f, 30.0f));
-		new CNavNode(CVector( 35.0f, 0.0f, 60.0f));
-		new CNavNode(CVector( 35.0f, 0.0f, 30.0f));
+		switch (mScene)
+		{
+			// ゲームシーンの場合、
+			case EScene::eGame:
+			// ノードの設定
+			new CNavNode(CVector(-40.0f, 0.0f, 60.0f));
+			new CNavNode(CVector(-40.0f, 0.0f, 30.0f));
+			new CNavNode(CVector(35.0f, 0.0f, 60.0f));
+			new CNavNode(CVector(35.0f, 0.0f, 30.0f));
+			break;
+			// テストシーンの場合
+			case EScene::eTest:
+			// ノードの設定
+			new CNavNode(CVector(-31.5f, 0.0f, 60.0f));
+			new CNavNode(CVector(-31.5f, 0.0f, 28.0f));
+			new CNavNode(CVector(35.0f, 0.0f, 28.0f));
+			new CNavNode(CVector(35.0f, 0.0f, 60.0f));
+
+			new CNavNode(CVector(32.0f, 0.0f, 120.0f));
+			new CNavNode(CVector(32.0f, 0.0f, 145.0f));
+			new CNavNode(CVector(-34.0f, 0.0f, 145.0f));
+			new CNavNode(CVector(-34.0f, 0.0f, 120.0f));
+
+			break;
+		}
 	}
 }
 

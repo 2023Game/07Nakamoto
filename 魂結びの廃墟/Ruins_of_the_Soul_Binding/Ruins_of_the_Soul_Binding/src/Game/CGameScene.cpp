@@ -37,21 +37,7 @@ void CGameScene::Load()
 
 	//ここでゲーム中に必要な
 	//リソースの読み込みやクラスの生成を行う
-
-	CResourceManager::Load<CModel>(		"Field",			"Field\\field.obj");
-	CResourceManager::Load<CModel>(		"FieldCube",		"Field\\Object\\cube.obj");
-	CResourceManager::Load<CModel>(		"FieldCylinder",	"Field\\Object\\cylinder.obj");
-	CResourceManager::Load<CModelX>(	"Player",			"Character\\Player\\player.x");
-	CResourceManager::Load<CModelX>(	"Cactus",			"Character\\Enemy\\Cactus\\cactus.x");
-	CResourceManager::Load<CModel>(		"CactusNeedle",		"Character\\Enemy\\Cactus\\needle.obj");
-	CResourceManager::Load<CTexture>(	"Laser",			"Effect\\laser.png");
-	CResourceManager::Load<CTexture>(	"LightningBolt",	"Effect\\lightning_bolt.png");
-	CResourceManager::Load<CModel>(		"Slash",			"Effect\\slash.obj");
-	CResourceManager::Load<CSound>(		"SlashSound",		"Sound\\SE\\slash.wav");
-	CResourceManager::Load<CModel>(		"Sword",			"Weapon\\Sword\\sword.obj");
-	CResourceManager::Load<CModel>(		"Shield",			"Weapon\\Shield\\shield.obj");
-
-	CResourceManager::Load<CModelX>(	"Player2",			"Character\\Player2\\Rusk\\idle2.x");
+	CResourceManager::Load<CModelX>(	"Player2",			"Character\\Player2\\Rusk\\idle.x");
 	CResourceManager::Load<CModelX>(	"Cat",				"Character\\Cat\\cat.x");
 	CResourceManager::Load<CModel>(		"Floor",			"Field\\Abandoned_School_Floor.obj");
 	CResourceManager::Load<CModel>(		"Wall",				"Field\\Abandoned_School_Wall.obj"); 
@@ -73,13 +59,6 @@ void CGameScene::Load()
 
 	// フィールドの生成
 	mpField = new CField();
-
-	// サボテンの敵を作成
-	//CCactus* cactus = new CCactus();
-	//cactus->Position(0.0f, 0.0f, -100.0f);
-
-	//CPlayer* player = new CPlayer();
-	//player->Scale(1.0f, 1.0f, 1.0f);
 
 	// プレイヤーの生成
 	CPlayer2* player2 = new CPlayer2();
