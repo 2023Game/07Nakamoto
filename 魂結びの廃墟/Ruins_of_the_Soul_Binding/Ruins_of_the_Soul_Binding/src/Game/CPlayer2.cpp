@@ -38,8 +38,11 @@ const std::vector<CPlayerBase::AnimData> ANIM_DATA =
 
 // コンストラクタ
 CPlayer2::CPlayer2()
+#if _DEBUG
 	:mpDebugFov(nullptr)
+#endif
 {
+	
 	mMaxHp = 100000;
 	mHp = mMaxHp;
 
@@ -260,12 +263,14 @@ void CPlayer2::UpdateHit()
 // オブジェクト削除を伝える
 void CPlayer2::DeleteObject(CObjectBase* obj)
 {
+#if _DEBUG
 	// 削除されたのが視や表示用のクラスであれば、
 	// ポインタを空にする
 	if (obj == mpDebugFov)
 	{
 		mpDebugFov = nullptr;
 	}
+#endif
 }
 
 // キーの入力情報から移動ベクトルを求める
@@ -408,15 +413,16 @@ void CPlayer2::Update()
 	// キャラクターの更新
 	CPlayerBase::Update();
 
+#if _DEBUG
 	CVector pos = Position();
 	CDebugPrint::Print("PlayerHP:%d / %d\n", mHp, mMaxHp);
 	CDebugPrint::Print("PlayerPos:%.2f, %.2f, %.2f\n", pos.X(), pos.Y(), pos.Z());
 	CDebugPrint::Print("PlayerGrounded:%s\n", mIsGrounded ? "true" : "false");
 	CDebugPrint::Print("PlayerState:%d\n", mState);
+	CDebugPrint::Print("FPS:%f\n", Times::FPS());
+#endif
 
 	mIsGrounded = false;
-
-	CDebugPrint::Print("FPS:%f\n", Times::FPS());
 }
 
 // ステータスを整数にして取得する
