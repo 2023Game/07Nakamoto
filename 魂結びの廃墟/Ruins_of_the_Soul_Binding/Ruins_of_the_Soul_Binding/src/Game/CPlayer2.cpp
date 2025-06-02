@@ -479,3 +479,11 @@ void CPlayer2::TakeDamage(int damage, CObjectBase* causer)
 		mMoveSpeed = CVector::zero;
 	}
 }
+
+// Õ“Ëˆ—
+void CPlayer2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
+{
+	CPlayerBase::Collision(self, other, hit);
+
+
+}

@@ -4,6 +4,7 @@
 #include "CPlayerManager.h"
 #include "CNavNode.h"
 #include "CNavManager.h"
+#include "CWarrok.h"
 
 #define GRAVITY 0.0625f	// d—Í‰Á‘¬“x
 #define FOV_ANGLE		 60.0f		// ‹–ì”ÍˆÍ‚ÌŠp“x

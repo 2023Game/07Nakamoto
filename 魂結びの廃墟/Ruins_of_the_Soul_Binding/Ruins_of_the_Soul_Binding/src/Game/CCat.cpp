@@ -8,8 +8,8 @@
 // アニメーションのパス
 #define ANIM_PATH "Character\\Cat\\anim\\"
 
-#define BODY_HEIGHT 16.0f	// 本体のコライダーの高さ
-#define BODY_RADIUS 3.0f	// 本体のコライダーの幅
+#define BODY_HEIGHT 12.0f	// 本体のコライダーの高さ
+#define BODY_RADIUS 4.0f	// 本体のコライダーの幅
 #define MOVE_SPEED 0.75f	// 移動速度
 #define JUMP_SPEED 1.5f		// ジャンプ速度
 #define GRAVITY 0.0625f		// 重力加速度
@@ -47,8 +47,29 @@ CCat::CCat()
 		CVector(0.0f, BODY_HEIGHT - BODY_RADIUS, 0.0f),
 		BODY_RADIUS
 	);
-	mpBodyCol->SetCollisionTags({ ETag::eField, ETag::eInteractObject, ETag::eRideableObject, ETag::eEnemy });
-	mpBodyCol->SetCollisionLayers({ ELayer::eField, ELayer::eWall, ELayer::eInteractObj, ELayer::eEnemy, ELayer::eAttackCol });
+	mpBodyCol->Rotate(90.0f, 0.0f, 0.0f);
+	mpBodyCol->Position(0.0f, BODY_RADIUS, 8.0f);
+
+	mpBodyCol->SetCollisionTags
+	(
+		{ 
+			ETag::eField,
+			ETag::eInteractObject,
+			ETag::eRideableObject, 
+			ETag::eEnemy,
+		}
+	);
+	mpBodyCol->SetCollisionLayers
+	(
+		{
+			ELayer::eField, 
+			ELayer::eWall, 
+			ELayer::eInteractObj,
+			ELayer::eEnemy,
+			ELayer::eAttackCol,
+			ELayer::eDoor,
+		}
+	);
 
 }
 
@@ -250,70 +271,5 @@ void CCat::TakeDamage(int damage, CObjectBase* causer)
 // 衝突処理
 void CCat::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
-	// 本体のコライダーの衝突判定
-	if (self == mpBodyCol)
-	{
-		// フィールドとの衝突
-		if (other->Layer() == ELayer::eField)
-		{
-			// 坂道で滑らないように、押し戻しベクトルのXとZの値を0にする
-			CVector adjust = hit.adjust;
-			adjust.X(0.0f);
-			adjust.Z(0.0f);
-
-			Position(Position() + adjust * hit.weight);
-
-			// 衝突した地面が床か天井かを内積で判定
-			CVector normal = hit.adjust.Normalized();
-			float dot = CVector::Dot(normal, CVector::up);
-			// 内積の結果がプラスであれば、床と衝突した
-			if (dot >= 0.0f)
-			{
-				// 落下などで床に上から衝突した時（下移動）のみ
-				// 上下の移動速度を0にする
-				if (mMoveSpeedY < 0.0f)
-				{
-					mMoveSpeedY = 0.0f;
-				}
-
-				// 接地した
-				mIsGrounded = true;
-				// 接地した地面の法線を記憶しておく
-				mGroundNormal = hit.adjust.Normalized();
-
-				if (other->Tag() == ETag::eRideableObject)
-				{
-					mpRideObject = other->Owner();
-				}
-			}
-			// 内積の結果がマイナスであれば、天井と衝突した
-			else
-			{
-				// ジャンプなどで天井に下から衝突した時（上移動）のみ
-				// 上下の移動速度を0にする
-				if (mMoveSpeedY > 0.0f)
-				{
-					mMoveSpeedY = 0.0f;
-				}
-			}
-		}
-		// 壁と衝突した場合
-		else if (other->Layer() == ELayer::eWall || other->Layer() == ELayer::eInteractObj)
-		{
-			// 横方向にのみ押し戻すため、
-			// 押し戻しベクトルのYの値を0にする
-			CVector adjust = hit.adjust;
-			adjust.Y(0.0f);
-			Position(Position() + adjust * hit.weight);
-		}
-		// 敵と衝突した場合
-		else if (other->Layer() == ELayer::eEnemy)
-		{
-			// 横方向にのみ押し戻すため、
-			// 押し戻しベクトルのYの値を0にする
-			CVector adjust = hit.adjust;
-			adjust.Y(0.0f);
-			Position(Position() + adjust * hit.weight);
-		}
-	}
+	CPlayerBase::Collision(self, other, hit);
 }

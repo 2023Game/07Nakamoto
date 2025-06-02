@@ -4,6 +4,7 @@
 // 視野範囲のデバッグ表示クラスの前宣言
 class CDebugFieldOfView;
 
+class CPlayerBase;
 class CInteractObject;
 class CNavNode;
 
@@ -113,6 +114,8 @@ private:
 
 	std::vector<CNavNode*> mMoveRoute;	// 求めた最短経路記憶用
 	int mNextMoveIndex;					// 次に移動するノードのインデックス値
+
+	std::list<CObjectBase*> mTargets;	//標的のリスト
 
 	bool mIsBattle;					// 戦闘状態か
 	float mBattleIdletime;			// 戦闘時の待機時間

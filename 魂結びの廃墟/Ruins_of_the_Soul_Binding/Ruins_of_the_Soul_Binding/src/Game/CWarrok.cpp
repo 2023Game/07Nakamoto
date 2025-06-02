@@ -5,6 +5,7 @@
 #include "CCactusNeedle.h"
 
 #include "CPlayer2.h"
+#include "CCat.h"
 #include "CDebugFieldOfView.h"
 #include "Primitive.h"
 #include "CField.h"
@@ -69,6 +70,10 @@ CWarrok::CWarrok(std::vector<CVector> patrolPoints)
 {
 	CPlayer2* player = CPlayer2::Instance();
 	mpBattleTarget = player;
+	mTargets.push_back(player);
+
+	CCat* cat = CCat::Instance();
+	mTargets.push_back(cat);
 
 	// 敵を初期化
 	InitEnemy("Warrok", &ANIM_DATA);
@@ -366,44 +371,47 @@ bool CWarrok::IsFoundPlayer() const
 	// プレイヤーが死亡状態の場合も、範囲外とする
 	//if (player->GetState() == 8) return false;
 
-	// プレイヤー座標を取得
-	CVector playerPos = mpBattleTarget->Position();
-	// 自分自身の座標を取得
-	CVector pos = Position();
-	// 自身からプレイヤーまでのベクトルを求める
-	CVector  vec = playerPos - pos;
-	vec.Y(0.0f);	//プレイヤーとの高さの差を考慮しない
+	for (CObjectBase* target : mTargets) 
+	{
+		// プレイヤー座標を取得
+		CVector playerPos = target->Position();
+		// 自分自身の座標を取得
+		CVector pos = Position();
+		// 自身からプレイヤーまでのベクトルを求める
+		CVector  vec = playerPos - pos;
+		vec.Y(0.0f);	//プレイヤーとの高さの差を考慮しない
 
-	// ① 視野角度内か求める
-	// ベクトルを正規化して長さを1にする
-	CVector dir = vec.Normalized();
-	// 自身の正面方向ベクトルを取得
-	CVector forward = VectorZ();
-	// プレイヤーとまでのベクトルと
-	// 自身の正面方向ベクトルの内積を求めて角度を出す
-	float dot = CVector::Dot(dir, forward);
-	// 視野角度のラジアンを求める
-	float angleR = Math::DegreeToRadian(mFovAngle);
-	// 求めた内積と視野角度で、視野範囲内か判断する
-	if (dot < cosf(angleR))	return false;
+		// ① 視野角度内か求める
+		// ベクトルを正規化して長さを1にする
+		CVector dir = vec.Normalized();
+		// 自身の正面方向ベクトルを取得
+		CVector forward = VectorZ();
+		// プレイヤーとまでのベクトルと
+		// 自身の正面方向ベクトルの内積を求めて角度を出す
+		float dot = CVector::Dot(dir, forward);
+		// 視野角度のラジアンを求める
+		float angleR = Math::DegreeToRadian(mFovAngle);
+		// 求めた内積と視野角度で、視野範囲内か判断する
+		if (dot < cosf(angleR))	return false;
 
-	// ② 視野距離内か求める
-	//プレイヤーまでの距離と視野距離で、視野範囲内か判断する
-	float dist = vec.Length();
-	if (dist > mFovLength)	return false;
+		// ② 視野距離内か求める
+		//プレイヤーまでの距離と視野距離で、視野範囲内か判断する
+		float dist = vec.Length();
+		if (dist > mFovLength)	return false;
 
-	// プレイヤーとの間に遮蔽物がないかチェックする
-	if (!IsLookPlayer()) return false;
+		// プレイヤーとの間に遮蔽物がないかチェックする
+		if (!IsLookPlayer()) return false;
 
-	//全ての条件をクリアしたので、視野範囲内である
-	return true;
+		mpBattleTarget = target;
+
+		//全ての条件をクリアしたので、視野範囲内である
+		return true;
+	}
 }
 
 // 現在位置からプレイヤーが見えているかどうか
 bool CWarrok::IsLookPlayer() const
 {
-	// プレイヤーが存在しない場合は、見えない
-	//CPlayer2* player = CPlayer2::Instance();
 	if (mpBattleTarget == nullptr) return false;
 	// フィールドが存在しない場合は、遮蔽物がないので見える
 	CField* field = CField::Instance();
@@ -1004,17 +1012,4 @@ CInteractObject* CWarrok::GetNearBreakObj() const
 		}
 	}
 	return nearObj;
-
-		//// 敵の位置
-		//CVector start = Position();
-		//// プレイヤーの位置
-		//CVector end = mpBattleTarget->Position();
-		//CHitInfo hit;
-
-		//// ルート上に壊せるオブジェクトがあるか、
-		//if (obj->CollisionRay(start, end, &hit));
-		//{
-		//	// そのオブジェクトを返す
-		//	return obj;
-		//}
 }
