@@ -4,6 +4,7 @@
 #include "Maths.h"
 #include "CColliderCapsule.h"
 #include "CColliderSphere.h"
+#include "CNavNode.h"
 
 // アニメーションのパス
 #define ANIM_PATH "Character\\Cat\\anim\\"
@@ -225,6 +226,12 @@ void CCat::Update()
 	target.Normalize();
 	CVector forward = CVector::Slerp(current, target, 0.125f);
 	Rotation(CQuaternion::LookRotation(forward));
+
+	// 経路探索用のノードが存在すれば、座標を更新
+	if (mpNavNode != nullptr)
+	{
+		mpNavNode->SetPos(Position());
+	}
 
 	// ホイールクリックで弾丸発射
 	if (CInput::PushKey(VK_MBUTTON))

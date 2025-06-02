@@ -69,7 +69,6 @@ CWarrok::CWarrok(std::vector<CVector> patrolPoints)
 
 {
 	CPlayer2* player = CPlayer2::Instance();
-	mpBattleTarget = player;
 	mTargets.push_back(player);
 
 	CCat* cat = CCat::Instance();
@@ -362,64 +361,51 @@ void CWarrok::ChangeState(int state)
 }
 
 // 現在位置からプレイヤーが見えているかどうか
-bool CWarrok::IsFoundPlayer() const
+bool CWarrok::IsFoundTarget(CObjectBase* target) const
 {
-	// プレイヤーが存在しない場合は、視野範囲外とする
-	//CPlayer2* player = CPlayer2::Instance();
-	if (mpBattleTarget == nullptr) return false;
+	// プレイヤー座標を取得
+	CVector playerPos = target->Position();
+	// 自分自身の座標を取得
+	CVector pos = Position();
+	// 自身からプレイヤーまでのベクトルを求める
+	CVector  vec = playerPos - pos;
+	vec.Y(0.0f);	//プレイヤーとの高さの差を考慮しない
 
-	// プレイヤーが死亡状態の場合も、範囲外とする
-	//if (player->GetState() == 8) return false;
+	// ① 視野角度内か求める
+	// ベクトルを正規化して長さを1にする
+	CVector dir = vec.Normalized();
+	// 自身の正面方向ベクトルを取得
+	CVector forward = VectorZ();
+	// プレイヤーとまでのベクトルと
+	// 自身の正面方向ベクトルの内積を求めて角度を出す
+	float dot = CVector::Dot(dir, forward);
+	// 視野角度のラジアンを求める
+	float angleR = Math::DegreeToRadian(mFovAngle);
+	// 求めた内積と視野角度で、視野範囲内か判断する
+	if (dot < cosf(angleR))	return false;
 
-	for (CObjectBase* target : mTargets) 
-	{
-		// プレイヤー座標を取得
-		CVector playerPos = target->Position();
-		// 自分自身の座標を取得
-		CVector pos = Position();
-		// 自身からプレイヤーまでのベクトルを求める
-		CVector  vec = playerPos - pos;
-		vec.Y(0.0f);	//プレイヤーとの高さの差を考慮しない
+	// ② 視野距離内か求める
+	//プレイヤーまでの距離と視野距離で、視野範囲内か判断する
+	float dist = vec.Length();
+	if (dist > mFovLength)	return false;
 
-		// ① 視野角度内か求める
-		// ベクトルを正規化して長さを1にする
-		CVector dir = vec.Normalized();
-		// 自身の正面方向ベクトルを取得
-		CVector forward = VectorZ();
-		// プレイヤーとまでのベクトルと
-		// 自身の正面方向ベクトルの内積を求めて角度を出す
-		float dot = CVector::Dot(dir, forward);
-		// 視野角度のラジアンを求める
-		float angleR = Math::DegreeToRadian(mFovAngle);
-		// 求めた内積と視野角度で、視野範囲内か判断する
-		if (dot < cosf(angleR))	return false;
+	// プレイヤーとの間に遮蔽物がないかチェックする
+	if (!IsLookTarget(target)) return false;
 
-		// ② 視野距離内か求める
-		//プレイヤーまでの距離と視野距離で、視野範囲内か判断する
-		float dist = vec.Length();
-		if (dist > mFovLength)	return false;
-
-		// プレイヤーとの間に遮蔽物がないかチェックする
-		if (!IsLookPlayer()) return false;
-
-		mpBattleTarget = target;
-
-		//全ての条件をクリアしたので、視野範囲内である
-		return true;
-	}
+	//全ての条件をクリアしたので、視野範囲内である
+	return true;
 }
 
 // 現在位置からプレイヤーが見えているかどうか
-bool CWarrok::IsLookPlayer() const
+bool CWarrok::IsLookTarget(CObjectBase* target) const
 {
-	if (mpBattleTarget == nullptr) return false;
 	// フィールドが存在しない場合は、遮蔽物がないので見える
 	CField* field = CField::Instance();
 	if (field == nullptr) return true;
 
 	CVector offsetPos = CVector(0.0f, EYE_HEIGHT, 0.0f);
 	// プレイヤーの座標を取得
-	CVector playerPos = mpBattleTarget->Position() + offsetPos;
+	CVector playerPos = target->Position() + offsetPos;
 	// 自分自身の座標を取得
 	CVector selfPos = Position() + offsetPos;
 
@@ -565,11 +551,15 @@ void CWarrok::UpdateIdle()
 		mpBattleTarget = CPlayer2::Instance();
 	}
 
-	// プレイヤーが視野範囲外に入ったら、追跡にする
-	if (IsFoundPlayer())
+	for (CObjectBase* target : mTargets)
 	{
-		ChangeState((int)EState::eChase);
-		return;
+		// プレイヤーが視野範囲内に入ったら、追跡にする
+		if (IsFoundTarget(target))
+		{
+			mpBattleTarget = target;
+			ChangeState((int)EState::eChase);
+			return;
+		}
 	}
 
 	// 待機アニメーションを再生
@@ -589,10 +579,15 @@ void CWarrok::UpdateIdle()
 // 巡回中の更新処理
 void CWarrok::UpdatePatrol()
 {
-	if (IsFoundPlayer())
+	for (CObjectBase* target : mTargets)
 	{
-		ChangeState((int)EState::eChase);
-		return;
+		// プレイヤーが視野範囲内に入ったら、追跡にする
+		if (IsFoundTarget(target))
+		{
+			mpBattleTarget = target;
+			ChangeState((int)EState::eChase);
+			return;
+		}
 	}
 
 	ChangeAnimation((int)EAnimType::eWalk);
@@ -645,11 +640,10 @@ void CWarrok::UpdatePatrol()
 void CWarrok::UpdateChase()
 {
 	// プレイヤーの座標へ向けて移動する
-	//CPlayer2* player = CPlayer2::Instance();
 	CVector targetPos = mpBattleTarget->Position();
 
 	// プレイヤーが見えなくなったら、見失った状態にする
-	if (!IsLookPlayer())
+	if (!IsLookTarget(mpBattleTarget))
 	{
 		// 見失った位置にノードを配置
 		mpLostPlayerNode->SetPos(targetPos);
@@ -705,11 +699,12 @@ void CWarrok::UpdateLost()
 	CNavManager* navMgr = CNavManager::Instance();
 	if (navMgr == nullptr)
 	{
+		//mpBattleTarget = nullptr;
 		ChangeState((int)EState::eIdle);
 		return;
 	}
 	// プレイヤーが見えたら、追跡状態へ移行
-	if (IsLookPlayer())
+	if (IsLookTarget(mpBattleTarget))
 	{
 		ChangeState((int)EState::eChase);
 		return;
@@ -742,6 +737,7 @@ void CWarrok::UpdateLost()
 		}
 		else
 		{
+			//mpBattleTarget = nullptr;
 			// 経路がつながっていなければ、待機状態へ戻す
 			ChangeState((int)EState::eIdle);
 			mpLostPlayerNode->SetEnable(false);
@@ -754,6 +750,7 @@ void CWarrok::UpdateLost()
 			mNextMoveIndex++;
 			if (mNextMoveIndex >= mMoveRoute.size())
 			{
+				//mpBattleTarget = nullptr;
 				// 移動が終われば待機状態へ移行
 				ChangeState((int)EState::eIdle);
 				mpLostPlayerNode->SetEnable(false);

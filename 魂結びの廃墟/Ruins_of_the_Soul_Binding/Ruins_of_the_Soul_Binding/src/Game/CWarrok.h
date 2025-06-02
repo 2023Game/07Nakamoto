@@ -70,9 +70,9 @@ private:
 	void LookAtBattleTarget(bool immediate = false);
 
 	// プレイヤーが視野範囲内に入ったかどうか
-	bool IsFoundPlayer() const;
+	bool IsFoundTarget(CObjectBase* target) const;
 	// 現在位置からプレイヤーが見えているかどうか
-	bool IsLookPlayer() const;
+	bool IsLookTarget(CObjectBase* target) const;
 	// プレイヤーを攻撃できるかどうか
 	bool CanAttackPlayer() const;
 
