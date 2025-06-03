@@ -31,7 +31,7 @@
 #define ATTACK_COL_RADIUS 10.0f	// 攻撃コライダーの半径
 #define ATTACK_COL_POS CVector(0.0f, 5.0f, 8.0f)	// 攻撃コライダーの位置
 
-#define ATTACK_POWER 5		// 攻撃力
+#define ATTACK_POWER 20		// 攻撃力
 #define ATTACK_START_FRAME 39.0f	// 攻撃判定開始フレーム
 #define ATTACK_END_FRAME 46.0f		// 攻撃判定終了フレーム
 
