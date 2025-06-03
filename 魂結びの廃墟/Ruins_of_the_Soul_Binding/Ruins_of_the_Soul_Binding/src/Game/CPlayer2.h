@@ -6,6 +6,7 @@
 
 class CCollider;
 class CDebugFieldOfView;
+class CGaugeUI;
 
 /*
 プレイヤークラス
@@ -55,18 +56,10 @@ private:
 
 	// 待機状態
 	void UpdateIdle();
-	// 斬り攻撃
-	void UpdateAttack1();
-	// 蹴り攻撃
-	void UpdateAttack2();
-	// ジャンプ開始
-	void UpdateJumpStart();
-	// ジャンプ中
-	void UpdateJump();
-	// ジャンプ終了
-	void UpdateJumpEnd();
 	// 仰け反り
 	void UpdateHit();
+	// 死亡処理
+	void UpdateDeath();
 
 	// 移動の更新処理
 	void UpdateMove();
@@ -76,15 +69,12 @@ private:
 	{
 		None = -1,
 
-		//eTPose,		// Tポーズ
 		eIdle,		// 待機
 		eWalk,		// 歩行
-		eAttack,	// 斬り攻撃
-		eKick,		// 蹴り攻撃
-		eJumpStart,	// ジャンプ開始
-		eJump,		// ジャンプ中
-		eJumpEnd,	// ジャンプ終了
+		eRun,		// 走行
 		eHit,		// 仰け反り
+		eDeath,		// 死亡
+		eAttack,	// 攻撃
 
 		Num
 	};
@@ -96,15 +86,17 @@ private:
 	enum class EState
 	{
 		eIdle,		// 待機
-		eAttack1,	// 斬り攻撃
-		eAttack2,	// 蹴り攻撃
-		eJumpStart,	// ジャンプ開始
-		eJump,		// ジャンプ中
-		eJumpEnd,	// ジャンプ終了
 		eHit,		// 仰け反り
+		eDeath,		// 死亡
 	};
 	// 状態を切り替え
 	void ChangeState(int state) override;
+
+	CGaugeUI* mpHpGauge;	// HPゲージ
+
+	int mMaxSt;	// スタミナの最大値
+	int mSt;	// スタミナ
+	CGaugeUI* mpStGauge;	// スタミナゲージ
 
 #if _DEBUG
 	CDebugFieldOfView* mpDebugFov;	// 視野範囲のデバッグ表示

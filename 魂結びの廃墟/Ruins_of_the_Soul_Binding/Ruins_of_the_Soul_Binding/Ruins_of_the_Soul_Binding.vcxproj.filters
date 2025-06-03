@@ -104,6 +104,9 @@
     <Filter Include="ソース ファイル\Game\Navigation">
       <UniqueIdentifier>{3909bb9b-3a80-4306-bc6a-31b3e91372ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\UI\Game">
+      <UniqueIdentifier>{7f8285d5-81cc-4868-b7d6-4da94eb97a97}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -426,6 +429,21 @@
     </ClCompile>
     <ClCompile Include="src\Game\CTestScene.cpp">
       <Filter>ソース ファイル\Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CGameUI.cpp">
+      <Filter>ソース ファイル\Game\UI\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CGaugeUI.cpp">
+      <Filter>ソース ファイル\Game\UI\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CHpGauge.cpp">
+      <Filter>ソース ファイル\Game\UI\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CInteractUI.cpp">
+      <Filter>ソース ファイル\Game\UI\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CStGauge.cpp">
+      <Filter>ソース ファイル\Game\UI\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -773,6 +791,21 @@
     </ClInclude>
     <ClInclude Include="src\Game\CTestScene.h">
       <Filter>ソース ファイル\Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CGameUI.h">
+      <Filter>ソース ファイル\Game\UI\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CGaugeUI.h">
+      <Filter>ソース ファイル\Game\UI\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CHpGauge.h">
+      <Filter>ソース ファイル\Game\UI\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CInteractUI.h">
+      <Filter>ソース ファイル\Game\UI\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CStGauge.h">
+      <Filter>ソース ファイル\Game\UI\Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -33,6 +33,7 @@ public:
 	/// <returns>trueであれば、操作中</returns>
 	bool IsOperate() const;
 
+
 	/// <summary>
 	/// 操作中のカメラのポインタを設定
 	/// </summary>

@@ -11,6 +11,10 @@
 #include "CPlayerCamera.h"
 #include "CInteractObject.h"
 #include "CDebugFieldOfView.h"
+#include "CGameUI.h"
+#include "CHpGauge.h"
+#include "CStGauge.h"
+#include "CSceneManager.h"
 
 // アニメーションのパス
 #define ANIM_PATH "Character\\Player2\\Rusk\\anim\\"
@@ -18,8 +22,12 @@
 #define BODY_HEIGHT 16.0f	// 本体のコライダーの高さ
 #define BODY_RADIUS 3.0f	// 本体のコライダーの幅
 #define MOVE_SPEED 0.75f	// 移動速度
+#define RUN_SPEED	1.0f	// 走る速度
 #define JUMP_SPEED 1.5f		// ジャンプ速度
 #define GRAVITY 0.0625f		// 重力加速度
+
+#define MAX_HP 100	// 体力の最大値
+#define MAX_ST 100	// スタミナの最大値
 
 #define SEARCH_RADIUS	 10.0f		// 調べるオブジェクトを探知する範囲の半径
 #define FOV_ANGLE		 60.0f		// 視野範囲の角度
@@ -33,17 +41,22 @@ const std::vector<CPlayerBase::AnimData> ANIM_DATA =
 {
 	{ "",						true,	251.0f,	1.0f	},	// 待機
 	{ANIM_PATH"walk.x",			true,	31.0f,	0.5f	},	// 歩行
+	{ANIM_PATH"run.x",			true,	22.0f,	0.5f	},	// 走行
+	{ANIM_PATH"hit.x",			false,	30.0f,	1.0f	},	// 走行(仮)
+	{ANIM_PATH"died.x",			false,	174.0f,	1.0f	},	// 走行
 
 };
 
 // コンストラクタ
 CPlayer2::CPlayer2()
+	: mMaxSt(MAX_ST)
+	, mSt(mMaxSt)
 #if _DEBUG
-	:mpDebugFov(nullptr)
+	,mpDebugFov(nullptr)
 #endif
 {
-	
-	mMaxHp = 100000;
+	// HPの設定
+	mMaxHp = MAX_HP;
 	mHp = mMaxHp;
 
 	//インスタンスの設定
@@ -103,6 +116,16 @@ CPlayer2::CPlayer2()
 	mpSearchCol->SetCollisionTags({ ETag::eInteractObject });
 	mpSearchCol->SetCollisionLayers({ ELayer::eInteractObj,ELayer::eDoor });
 
+	// HPゲージ作成
+	mpHpGauge = new CHpGauge();
+	mpHpGauge->SetMaxPoint(mMaxHp);
+	mpHpGauge->SetCurPoint(mHp);
+	mpHpGauge->SetPos(0.0f, 0.0f);
+	// スタミナゲージの作成
+	mpStGauge = new CStGauge();
+	mpStGauge->SetMaxPoint(mMaxSt);
+	mpStGauge->SetCurPoint(mSt);
+	mpStGauge->SetPos(10.0f, 40.0f);
 }
 
 // デストラクタ
@@ -119,6 +142,8 @@ CPlayer2::~CPlayer2()
 
 	// コライダーを削除
 	SAFE_DELETE(mpSearchCol);
+
+	spInstance = nullptr;
 }
 
 // インスタンスを取得
@@ -175,66 +200,6 @@ void CPlayer2::UpdateIdle()
 			// 調べるUIを非表示にする
 			//CGameUI::Instance()->HideInteractUI();
 		}
-
-
-		//// 左クリックで斬撃攻撃へ移行
-		//if (CInput::PushKey(VK_LBUTTON))
-		//{
-		//	mMoveSpeed = CVector::zero;
-		//	ChangeState(EState::eAttack1);
-		//}
-		//// 右クリックでキック攻撃へ以降
-		//else if (CInput::PushKey(VK_RBUTTON))
-		//{
-		//	mMoveSpeed = CVector::zero;
-		//	ChangeState(EState::eAttack2);
-		//}
-		//// SPACEキーでジャンプ開始へ移行
-		//else if (CInput::PushKey(VK_SPACE))
-		//{
-		//	ChangeState(EState::eJumpStart);
-		//}
-	}
-}
-
-// 斬り攻撃
-void CPlayer2::UpdateAttack1()
-{
-}
-
-// 蹴り攻撃
-void CPlayer2::UpdateAttack2()
-{
-}
-
-// ジャンプ開始
-void CPlayer2::UpdateJumpStart()
-{
-	//ChangeAnimation(EAnimType::eJumpStart);
-	ChangeState((int)EState::eJump);
-
-	mMoveSpeedY += JUMP_SPEED;
-	mIsGrounded = false;
-}
-
-// ジャンプ中
-void CPlayer2::UpdateJump()
-{
-	if (mMoveSpeedY <= 0.0f)
-	{
-		//ChangeAnimation(EAnimType::eJumpEnd);
-		ChangeState((int)EState::eJumpEnd);
-	}
-}
-
-// ジャンプ終了
-void CPlayer2::UpdateJumpEnd()
-{
-	// ジャンプアニメーションが終了かつ、
-	// 地面に接地したら、待機状態へ戻す
-	if (IsAnimationFinished() && mIsGrounded)
-	{
-		ChangeState((int)EState::eIdle);
 	}
 }
 
@@ -245,7 +210,7 @@ void CPlayer2::UpdateHit()
 	{
 	case 0:
 		// 仰け反りアニメーションを開始
-		//ChangeAnimation(EAnimType::eHit, true);
+		ChangeAnimation((int)EAnimType::eHit, true);
 		mStateStep++;
 		break;
 	case 1:
@@ -254,9 +219,25 @@ void CPlayer2::UpdateHit()
 		{
 			// 待機状態へ移行
 			ChangeState((int)EState::eIdle);
-			//ChangeAnimation(EAnimType::eIdle);
+			ChangeAnimation((int)EAnimType::eIdle);
 		}
 		break;
+	}
+}
+
+// 死亡処理
+void CPlayer2::UpdateDeath()
+{
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
+	// 死亡アニメーションを設定
+	ChangeAnimation((int)EAnimType::eDeath);
+
+	// アニメーションが終了したら、
+	if (IsAnimationFinished())
+	{
+		// ゲームオーバーシーンを読み込む
+		//CSceneManager::Instance()->LoadScene(EScene::eGameOver);
 	}
 }
 
@@ -321,12 +302,37 @@ void CPlayer2::UpdateMove()
 	// 求めた移動ベクトルの長さで入力されているか判定
 	if (move.LengthSqr() > 0.0f)
 	{
-		mMoveSpeed += move * MOVE_SPEED;
-
-		// 待機状態であれば、歩行アニメーションに切り替え
+		// 待機状態であれば、
 		if (mState == (int)EState::eIdle)
 		{
-			ChangeAnimation((int)EAnimType::eWalk);
+			if (CInput::Key(VK_SHIFT))
+			{
+				// スタミナがあれば、
+				if (mSt > 0)
+				{
+					// 走行アニメーションに切り替える
+					ChangeAnimation((int)EAnimType::eRun);
+
+					mMoveSpeed += move * RUN_SPEED;
+					mSt--;
+				}
+				else
+				{
+					// 転倒
+					//ChangeState((int)EState::eFall);
+				}
+			}
+			else
+			{
+				// 歩行アニメーションに切り替え
+				ChangeAnimation((int)EAnimType::eWalk);
+
+				mMoveSpeed += move * MOVE_SPEED;
+				if (mSt < 100)
+				{
+					mSt++;
+				}
+			}
 		}
 	}
 	// 移動キーを入力していない
@@ -343,36 +349,30 @@ void CPlayer2::UpdateMove()
 // 更新
 void CPlayer2::Update()
 {
+	if (mHp <= 0)
+	{
+		ChangeState((int)EState::eDeath);
+	}
+
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
 
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
 	{
-		// 待機状態
+	// 待機状態
 	case (int)EState::eIdle:		UpdateIdle();		break;
-		// 斬り攻撃
-	case (int)EState::eAttack1:		UpdateAttack1();	break;
-		// 蹴り攻撃
-	case (int)EState::eAttack2:		UpdateAttack2();	break;
-		// ジャンプ開始
-	case (int)EState::eJumpStart:	UpdateJumpStart();	break;
-		// ジャンプ中
-	case (int)EState::eJump:		UpdateJump();		break;
-		// ジャンプ終了
-	case (int)EState::eJumpEnd:		UpdateJumpEnd();	break;
-		// 仰け反り
+	// 仰け反り
 	case (int)EState::eHit:			UpdateHit();		break;
+	// 死亡処理
+	case (int)EState::eDeath:		UpdateDeath();		break;
 	}
 
 	// このプレイヤーが操作中であれば、
 	if (IsOperate())
 	{
-		// 待機中とジャンプ中は、移動処理を行う
-		if (mState == (int)EState::eIdle
-			|| mState == (int)EState::eJumpStart
-			|| mState == (int)EState::eJump
-			|| mState == (int)EState::eJumpEnd)
+		// 待機中は、移動処理を行う
+		if (mState == (int)EState::eIdle)
 		{
 			UpdateMove();
 		}
@@ -422,7 +422,24 @@ void CPlayer2::Update()
 	CDebugPrint::Print("FPS:%f\n", Times::FPS());
 #endif
 
+	// 地面についているか
 	mIsGrounded = false;
+
+	// 体力ゲージの更新
+	mpHpGauge->SetMaxPoint(mMaxHp);
+	mpHpGauge->SetCurPoint(mHp);
+	// スタミナゲージの更新処理
+	mpStGauge->SetMaxPoint(mMaxSt);
+	mpStGauge->SetCurPoint(mSt);
+
+	if (mState == (int)EState::eDeath)
+	{
+		if (CInput::PushKey('R'))
+		{
+			mHp = 100;
+			mState = (int)EState::eIdle;
+		}
+	}
 }
 
 // ステータスを整数にして取得する
@@ -434,11 +451,6 @@ int CPlayer2::GetState()
 // 攻撃中か
 bool CPlayer2::IsAttacking() const
 {
-	// 斬り攻撃中
-	if (mState == (int)EState::eAttack1) return true;
-	// 蹴り攻撃中
-	if (mState == (int)EState::eAttack2) return true;
-
 	// 攻撃中でない
 	return false;
 }

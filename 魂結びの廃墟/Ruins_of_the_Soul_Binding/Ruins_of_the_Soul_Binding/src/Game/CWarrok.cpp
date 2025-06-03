@@ -68,8 +68,8 @@ CWarrok::CWarrok(std::vector<CVector> patrolPoints)
 	, mNextMoveIndex(0)
 
 {
-	CPlayer2* player = CPlayer2::Instance();
-	mTargets.push_back(player);
+	CPlayer2* target = CPlayer2::Instance();
+	mTargets.push_back(target);
 
 	CCat* cat = CCat::Instance();
 	mTargets.push_back(cat);
@@ -89,7 +89,7 @@ CWarrok::CWarrok(std::vector<CVector> patrolPoints)
 		BODY_RADIUS, true
 	);
 
-	// フィールドと、プレイヤーの攻撃コライダーとヒットするように設定
+	// フィールドと、ターゲットの攻撃コライダーとヒットするように設定
 	mpBodyCol->SetCollisionTags
 	(
 		{ 
@@ -114,7 +114,7 @@ CWarrok::CWarrok(std::vector<CVector> patrolPoints)
 		this, ELayer::eAttackCol,
 		ATTACK_COL_RADIUS
 	);
-	// プレイヤーの本体コライダーとのみヒットするように設定
+	// ターゲットの本体コライダーとのみヒットするように設定
 	mpAttack1Col->SetCollisionTags
 	(
 		{ 
@@ -153,7 +153,7 @@ CWarrok::CWarrok(std::vector<CVector> patrolPoints)
 	mpNavNode = new CNavNode(Position(), true);
 	mpNavNode->SetColor(CColor::blue);
 
-	// プレイヤーを見失った位置のノードを作成
+	// ターゲットを見失った位置のノードを作成
 	mpLostPlayerNode = new CNavNode(CVector::zero, true);
 	mpLostPlayerNode->SetEnable(false);
 
@@ -360,23 +360,23 @@ void CWarrok::ChangeState(int state)
 	CEnemy::ChangeState(state);
 }
 
-// 現在位置からプレイヤーが見えているかどうか
+// 現在位置からターゲットが見えているかどうか
 bool CWarrok::IsFoundTarget(CObjectBase* target) const
 {
-	// プレイヤー座標を取得
-	CVector playerPos = target->Position();
+	// ターゲット座標を取得
+	CVector targetPos = target->Position();
 	// 自分自身の座標を取得
 	CVector pos = Position();
-	// 自身からプレイヤーまでのベクトルを求める
-	CVector  vec = playerPos - pos;
-	vec.Y(0.0f);	//プレイヤーとの高さの差を考慮しない
+	// 自身からターゲットまでのベクトルを求める
+	CVector  vec = targetPos - pos;
+	vec.Y(0.0f);	//ターゲットとの高さの差を考慮しない
 
 	// ① 視野角度内か求める
 	// ベクトルを正規化して長さを1にする
 	CVector dir = vec.Normalized();
 	// 自身の正面方向ベクトルを取得
 	CVector forward = VectorZ();
-	// プレイヤーとまでのベクトルと
+	// ターゲットまでのベクトルと
 	// 自身の正面方向ベクトルの内積を求めて角度を出す
 	float dot = CVector::Dot(dir, forward);
 	// 視野角度のラジアンを求める
@@ -385,18 +385,18 @@ bool CWarrok::IsFoundTarget(CObjectBase* target) const
 	if (dot < cosf(angleR))	return false;
 
 	// ② 視野距離内か求める
-	//プレイヤーまでの距離と視野距離で、視野範囲内か判断する
+	//ターゲットまでの距離と視野距離で、視野範囲内か判断する
 	float dist = vec.Length();
 	if (dist > mFovLength)	return false;
 
-	// プレイヤーとの間に遮蔽物がないかチェックする
+	// ターゲットとの間に遮蔽物がないかチェックする
 	if (!IsLookTarget(target)) return false;
 
 	//全ての条件をクリアしたので、視野範囲内である
 	return true;
 }
 
-// 現在位置からプレイヤーが見えているかどうか
+// 現在位置からターゲットが見えているかどうか
 bool CWarrok::IsLookTarget(CObjectBase* target) const
 {
 	// フィールドが存在しない場合は、遮蔽物がないので見える
@@ -404,30 +404,29 @@ bool CWarrok::IsLookTarget(CObjectBase* target) const
 	if (field == nullptr) return true;
 
 	CVector offsetPos = CVector(0.0f, EYE_HEIGHT, 0.0f);
-	// プレイヤーの座標を取得
-	CVector playerPos = target->Position() + offsetPos;
+	// ターゲットの座標を取得
+	CVector targetPos = target->Position() + offsetPos;
 	// 自分自身の座標を取得
 	CVector selfPos = Position() + offsetPos;
 
 	CHitInfo hit;
-	//フィールドとレイ判定を行い、遮蔽物が存在した場合は、プレイヤーが見えない
-	if (field->CollisionRay(selfPos, playerPos, &hit)) return false;
+	//フィールドとレイ判定を行い、遮蔽物が存在した場合は、ターゲットが見えない
+	if (field->CollisionRay(selfPos, targetPos, &hit)) return false;
 
-	// プレイヤーとの間に遮蔽物がないので、プレイヤーが見えている
+	// ターゲットとの間に遮蔽物がないので、ターゲットが見えている
 	return true;
 
 }
 
-// プレイヤーに攻撃できるかどうか
+// ターゲットに攻撃できるかどうか
 bool CWarrok::CanAttackPlayer() const
 {
-	// プレイヤーがいない場合は、攻撃できない
-	//CPlayer2* player = CPlayer2::Instance();
+	// ターゲットがいない場合は、攻撃できない
 	if ((mpBattleTarget == nullptr)) return false;
 
-	// プレイヤーまでの距離が攻撃範囲外であれば、攻撃できない
-	CVector playerPos = mpBattleTarget->Position();
-	CVector vec = playerPos - Position();
+	// ターゲットまでの距離が攻撃範囲外であれば、攻撃できない
+	CVector targetPos = mpBattleTarget->Position();
+	CVector vec = targetPos - Position();
 	vec.Y(0.0f);	//高さを考慮しない
 
 	float dist = vec.Length();
@@ -544,16 +543,15 @@ void CWarrok::ChangePatrolPoint()
 // 待機状態の更新処理
 void CWarrok::UpdateIdle()
 {
-	// ターゲットのオブジェクトがなければ、
-	if (!mNearBreakObjs.size())
+	// ターゲットのオブジェクトがあれば、
+	if (mNearBreakObjs.size())
 	{
-		// ターゲットをプレイヤーに戻す
-		mpBattleTarget = CPlayer2::Instance();
+		ChangeState((int)EState::eChase);
 	}
 
 	for (CObjectBase* target : mTargets)
 	{
-		// プレイヤーが視野範囲内に入ったら、追跡にする
+		// ターゲットが視野範囲内に入ったら、追跡にする
 		if (IsFoundTarget(target))
 		{
 			mpBattleTarget = target;
@@ -581,7 +579,7 @@ void CWarrok::UpdatePatrol()
 {
 	for (CObjectBase* target : mTargets)
 	{
-		// プレイヤーが視野範囲内に入ったら、追跡にする
+		// ターゲットが視野範囲内に入ったら、追跡にする
 		if (IsFoundTarget(target))
 		{
 			mpBattleTarget = target;
@@ -595,16 +593,16 @@ void CWarrok::UpdatePatrol()
 	// ステップごとに処理を切り替える
 	switch (mStateStep)
 	{
-		// ステップ0 : 巡回会指示の巡回ポイントを求める
+	// ステップ0 : 巡回開始の巡回ポイントを求める
 	case 0:
 		mNextPatrolIndex = -1;
 		ChangePatrolPoint();
 		mStateStep++;
 		break;
-		// ステップ1 : 巡回ポイントまで移動
+	// ステップ1 : 巡回ポイントまで移動
 	case 1:
 	{
-		ChangeAnimation((int)EAnimType::eWalk);
+		//ChangeAnimation((int)EAnimType::eWalk);
 		// 最短経路の次のノードまで移動
 		CNavNode* moveNode = mMoveRoute[mNextMoveIndex];
 		if (MoveTo(moveNode->GetPos(), WALK_SPEED))
@@ -639,10 +637,10 @@ void CWarrok::UpdatePatrol()
 // 追いかける時の更新処理
 void CWarrok::UpdateChase()
 {
-	// プレイヤーの座標へ向けて移動する
+	// ターゲットの座標へ向けて移動する
 	CVector targetPos = mpBattleTarget->Position();
 
-	// プレイヤーが見えなくなったら、見失った状態にする
+	// ターゲットが見えなくなったら、見失った状態にする
 	if (!IsLookTarget(mpBattleTarget))
 	{
 		// 見失った位置にノードを配置
@@ -652,7 +650,7 @@ void CWarrok::UpdateChase()
 		return;
 	}
 
-	// プレイヤーに攻撃できるならば、攻撃状態へ移行
+	// ターゲットに攻撃できるならば、攻撃状態へ移行
 	if (CanAttackPlayer())
 	{
 		ChangeState((int)EState::eAttack);
@@ -678,11 +676,11 @@ void CWarrok::UpdateChase()
 		// 経路探索用のノード座標を更新
 		mpNavNode->SetPos(Position());
 
-		// 自身のノードからプレイヤーのノードまでの最短経路を求める
-		CNavNode* playerNode = mpBattleTarget->GetNavNode();
-		if (navMgr->Navigate(mpNavNode, playerNode, mMoveRoute))
+		// 自身のノードからターゲットのノードまでの最短経路を求める
+		CNavNode* targetNode = mpBattleTarget->GetNavNode();
+		if (navMgr->Navigate(mpNavNode, targetNode, mMoveRoute))
 		{
-			// 自身のノードからプレイヤーのノードまで繋がっていたら、
+			// 自身のノードからターゲットのノードまで繋がっていたら、
 			// 移動する位置を次のノードの位置に設定
 			targetPos = mMoveRoute[1]->GetPos();
 		}
@@ -693,7 +691,7 @@ void CWarrok::UpdateChase()
 	}
 }
 
-// プレイヤーを見失った時の更新処理
+// ターゲットを見失った時の更新処理
 void CWarrok::UpdateLost()
 {
 	CNavManager* navMgr = CNavManager::Instance();
@@ -703,7 +701,7 @@ void CWarrok::UpdateLost()
 		ChangeState((int)EState::eIdle);
 		return;
 	}
-	// プレイヤーが見えたら、追跡状態へ移行
+	// ターゲットが見えたら、追跡状態へ移行
 	if (IsLookTarget(mpBattleTarget))
 	{
 		ChangeState((int)EState::eChase);
@@ -744,7 +742,7 @@ void CWarrok::UpdateLost()
 		}
 		break;
 	case 1:
-		// プレイヤーを見失った位置まで移動
+		// ターゲットを見失った位置まで移動
 		if (MoveTo(mMoveRoute[mNextMoveIndex]->GetPos(), RUN_SPEED))
 		{
 			mNextMoveIndex++;
@@ -894,7 +892,7 @@ void CWarrok::Render()
 	// 見失った状態であれば、
 	if (mState == (int)EState::eLost)
 	{
-		//プレイヤーを見失った位置にデバッグ表示
+		//ターゲットを見失った位置にデバッグ表示
 		float rad = 2.0f;
 		Primitive::DrawBox
 		(
@@ -904,17 +902,16 @@ void CWarrok::Render()
 		);
 	}
 
-	//CPlayer2* player = CPlayer2::Instance();
 	CField* field = CField::Instance();
 	if (mpBattleTarget != nullptr && field != nullptr)
 	{
 		CVector offsetPos = CVector(0.0f, EYE_HEIGHT, 0.0f);
-		CVector playerPos = mpBattleTarget->Position() + offsetPos;
+		CVector targetPos = mpBattleTarget->Position() + offsetPos;
 		CVector selfPos = Position() + offsetPos;
 
-		//プレイヤーとの間に遮蔽物が存在する場合
+		//ターゲットとの間に遮蔽物が存在する場合
 		CHitInfo hit;
-		if (field->CollisionRay(selfPos, playerPos, &hit))
+		if (field->CollisionRay(selfPos, targetPos, &hit))
 		{
 			// 衝突した位置まで赤線を描画
 			Primitive::DrawLine
@@ -927,10 +924,10 @@ void CWarrok::Render()
 		// 遮蔽物が存在しなかった場合
 		else
 		{
-			// プレイヤーの位置まで緑線を描画
+			// ターゲットの位置まで緑線を描画
 			Primitive::DrawLine
 			(
-				selfPos, playerPos,
+				selfPos, targetPos,
 				CColor::green,
 				2.0f
 			);
@@ -982,7 +979,7 @@ CInteractObject* CWarrok::GetNearBreakObj() const
 
 		// オブジェクトの座標を取得
 		CVector objPos = obj->Position();
-		// プレイヤーからオブジェクトまでのベクトルを求める
+		// ターゲットからオブジェクトまでのベクトルを求める
 		CVector vec = objPos - pos;
 		vec.Y(0.0f);	// オブジェクトとの高さの差を考慮しない
 
@@ -990,7 +987,7 @@ CInteractObject* CWarrok::GetNearBreakObj() const
 		CVector dir = vec.Normalized();
 		// 自身の正面方向ベクトルを取得
 		CVector forward = VectorZ();
-		// プレイヤーとまでのベクトルと
+		// ターゲットとまでのベクトルと
 		// 自身の正面方向ベクトルの内積を求めて角度を出す
 		float dot = CVector::Dot(dir, forward);
 		// 視野角度のラジアンを求める

@@ -78,7 +78,11 @@
     <ClCompile Include="src\Game\CCactusNeedle.cpp" />
     <ClCompile Include="src\Game\CCat.cpp" />
     <ClCompile Include="src\Game\CDebugFieldOfView.cpp" />
+    <ClCompile Include="src\Game\CGameUI.cpp" />
+    <ClCompile Include="src\Game\CGaugeUI.cpp" />
+    <ClCompile Include="src\Game\CHpGauge.cpp" />
     <ClCompile Include="src\Game\CInteractObject.cpp" />
+    <ClCompile Include="src\Game\CInteractUI.cpp" />
     <ClCompile Include="src\Game\CLDoor.cpp" />
     <ClCompile Include="src\Game\CNavManager.cpp" />
     <ClCompile Include="src\Game\CNavNode.cpp" />
@@ -101,6 +105,7 @@
     <ClCompile Include="src\Game\CRideabeObject.cpp" />
     <ClCompile Include="src\Game\CRotateFloor.cpp" />
     <ClCompile Include="src\Game\CSlash.cpp" />
+    <ClCompile Include="src\Game\CStGauge.cpp" />
     <ClCompile Include="src\Game\CSword.cpp" />
     <ClCompile Include="src\Game\CTestScene.cpp" />
     <ClCompile Include="src\Game\CTitleScene.cpp" />
@@ -196,7 +201,11 @@
     <ClInclude Include="src\Game\CCactusNeedle.h" />
     <ClInclude Include="src\Game\CCat.h" />
     <ClInclude Include="src\Game\CDebugFieldOfView.h" />
+    <ClInclude Include="src\Game\CGameUI.h" />
+    <ClInclude Include="src\Game\CGaugeUI.h" />
+    <ClInclude Include="src\Game\CHpGauge.h" />
     <ClInclude Include="src\Game\CInteractObject.h" />
+    <ClInclude Include="src\Game\CInteractUI.h" />
     <ClInclude Include="src\Game\CLDoor.h" />
     <ClInclude Include="src\Game\CNavManager.h" />
     <ClInclude Include="src\Game\CNavNode.h" />
@@ -218,6 +227,7 @@
     <ClInclude Include="src\Game\CRideableObject.h" />
     <ClInclude Include="src\Game\CRotateFloor.h" />
     <ClInclude Include="src\Game\CSlash.h" />
+    <ClInclude Include="src\Game\CStGauge.h" />
     <ClInclude Include="src\Game\CSword.h" />
     <ClInclude Include="src\Game\CTestScene.h" />
     <ClInclude Include="src\Game\CTitleUI.h" />
