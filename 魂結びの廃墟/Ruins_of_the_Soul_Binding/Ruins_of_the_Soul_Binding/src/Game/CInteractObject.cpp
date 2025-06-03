@@ -6,7 +6,6 @@
 CInteractObject::CInteractObject(ETaskPriority prio, int sortOrder, ETaskPauseType pause)
 	: CObjectBase(ETag::eInteractObject, prio, sortOrder, pause)
 	, mInteractStr("調べる")
-	, mHp(100)
 #if _DEBUG
 	, mDebugName("InteractObj")
 #endif
@@ -22,19 +21,6 @@ CInteractObject::~CInteractObject()
 bool CInteractObject::CanInteract() const
 {
 	return true;
-}
-
-void CInteractObject::TakeDamage(int damege, CObjectBase* causer)
-{
-	if (damege >= mHp)
-	{
-		mHp = 0;
-		Kill();
-	}
-	else
-	{
-		mHp -= damege;
-	}
 }
 
 // 調べる内容のテキストを返す 

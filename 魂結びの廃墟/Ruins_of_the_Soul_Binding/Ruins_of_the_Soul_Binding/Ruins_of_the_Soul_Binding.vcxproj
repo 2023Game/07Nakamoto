@@ -77,7 +77,9 @@
     <ClCompile Include="src\Game\CCactus.cpp" />
     <ClCompile Include="src\Game\CCactusNeedle.cpp" />
     <ClCompile Include="src\Game\CCat.cpp" />
+    <ClCompile Include="src\Game\CCatCamera.cpp" />
     <ClCompile Include="src\Game\CDebugFieldOfView.cpp" />
+    <ClCompile Include="src\Game\CDoor.cpp" />
     <ClCompile Include="src\Game\CGameUI.cpp" />
     <ClCompile Include="src\Game\CGaugeUI.cpp" />
     <ClCompile Include="src\Game\CHpGauge.cpp" />
@@ -200,7 +202,9 @@
     <ClInclude Include="src\Game\CCactus.h" />
     <ClInclude Include="src\Game\CCactusNeedle.h" />
     <ClInclude Include="src\Game\CCat.h" />
+    <ClInclude Include="src\Game\CCatCamera.h" />
     <ClInclude Include="src\Game\CDebugFieldOfView.h" />
+    <ClInclude Include="src\Game\CDoor.h" />
     <ClInclude Include="src\Game\CGameUI.h" />
     <ClInclude Include="src\Game\CGaugeUI.h" />
     <ClInclude Include="src\Game\CHpGauge.h" />

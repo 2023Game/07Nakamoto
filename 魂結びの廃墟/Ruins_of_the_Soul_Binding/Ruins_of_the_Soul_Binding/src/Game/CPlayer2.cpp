@@ -497,5 +497,26 @@ void CPlayer2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	CPlayerBase::Collision(self, other, hit);
 
+}
 
+// 操作中かどうか設定
+void CPlayer2::SetOperate(bool operate)
+{
+	// ベースクラスの処理を呼び出す
+	CPlayerBase::SetOperate(operate);
+
+	// 自身が操作プレイヤーの場合
+	if (mIsOperate)
+	{
+		// 自身を操作する時のUIを表示
+		mpHpGauge->SetShow(true);
+		mpStGauge->SetShow(true);
+	}
+	// 自身が操作プレイヤーでない場合
+	else
+	{
+		// 自身が操作する時のUIを非表示
+		mpHpGauge->SetShow(false);
+		mpStGauge->SetShow(false);
+	}
 }

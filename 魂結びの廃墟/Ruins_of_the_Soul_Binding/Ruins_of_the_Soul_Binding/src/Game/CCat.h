@@ -42,6 +42,12 @@ public:
 	/// <param name="hit">衝突した時の情報</param>
 	void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
 
+	/// <summary>
+	/// 操作するかどうか設定
+	/// </summary>
+	/// <param name="operate">trueであれば、操作開始</param>
+	void SetOperate(bool operate) override;
+
 private:
 	// オブジェクト削除を伝える
 	void DeleteObject(CObjectBase* obj) override;

@@ -7,6 +7,7 @@
 #include "CPlayerManager.h"
 #include "CGameCamera.h"
 #include "CPlayerCamera.h"
+#include "CCatCamera.h"
 #include "CInput.h"
 #include "CGameMenu.h"
 #include "CBGMManager.h"
@@ -125,7 +126,8 @@ void CTestScene::Load()
 	player2->SetCamera(mainCamera);
 	player2->SetOperate(true);
 
-	CPlayerCamera* catCamera = new CPlayerCamera
+	atPos = cat->Position() + CVector(0.0f, 2.5f, 0.0f);
+	CCatCamera* catCamera = new CCatCamera
 	(
 		atPos + CVector(0.0f, 0.0f, 40.0f),
 		atPos

@@ -551,6 +551,8 @@ void CWarrok::UpdateIdle()
 
 	for (CObjectBase* target : mTargets)
 	{
+		// ターゲットが死亡していたら、追跡対象としない
+		if (target->IsDeath()) continue;
 		// ターゲットが視野範囲内に入ったら、追跡にする
 		if (IsFoundTarget(target))
 		{
@@ -579,6 +581,8 @@ void CWarrok::UpdatePatrol()
 {
 	for (CObjectBase* target : mTargets)
 	{
+		// ターゲットが死亡していたら、追跡対象としない
+		if (target->IsDeath()) continue;
 		// ターゲットが視野範囲内に入ったら、追跡にする
 		if (IsFoundTarget(target))
 		{
@@ -639,6 +643,14 @@ void CWarrok::UpdateChase()
 {
 	// ターゲットの座標へ向けて移動する
 	CVector targetPos = mpBattleTarget->Position();
+	// ターゲットが死亡していたら
+	if (mpBattleTarget->IsDeath())
+	{
+		// ターゲットを解除し、待機状態へ戻す
+		mpBattleTarget = nullptr;
+		ChangeState((int)EState::eIdle);
+		return;
+	}
 
 	// ターゲットが見えなくなったら、見失った状態にする
 	if (!IsLookTarget(mpBattleTarget))
@@ -701,6 +713,16 @@ void CWarrok::UpdateLost()
 		ChangeState((int)EState::eIdle);
 		return;
 	}
+
+	// ターゲットが死亡していたら
+	if (mpBattleTarget->IsDeath())
+	{
+		// ターゲットを解除し、待機状態へ戻す
+		mpBattleTarget = nullptr;
+		ChangeState((int)EState::eIdle);
+		return;
+	}
+
 	// ターゲットが見えたら、追跡状態へ移行
 	if (IsLookTarget(mpBattleTarget))
 	{

@@ -10,6 +10,8 @@ CObjectBase::CObjectBase(ETag tag,
 	: CTask(prio, sortOrder, pause, dontDelete, addTaskList)
 	, mTag(tag)
 	, mIsEnableCol(true)
+	, mMaxHp(10)
+	, mHp(mMaxHp)
 	, mDepth(0.0f)
 	, mColor(CColor::white)
 	, mpNavNode(nullptr)
@@ -113,6 +115,50 @@ void CObjectBase::AttackStart()
 // 攻撃終了
 void CObjectBase::AttackEnd()
 {
+}
+
+// 最大HPを取得
+int CObjectBase::GetMaxHp() const
+{
+	return mMaxHp;
+}
+
+// 現在HPを取得
+int CObjectBase::GetHp() const
+{
+	return mHp;
+}
+
+// ダメージを受ける
+void CObjectBase::TakeDamage(int damage, CObjectBase* causer)
+{
+	// 既に死亡していたら、ダメージを受けない
+	if (IsDeath()) return;
+
+	// 受けたダメージが現在HP以上なら
+	if (damage >= mHp)
+	{
+		// HPを0にして、死亡
+		mHp = 0;
+		Death();
+	}
+	// 現在HPの方が多い場合は、ダメージ分減らす
+	else
+	{
+		mHp -= damage;
+	}
+}
+
+// 死亡
+void CObjectBase::Death()
+{
+}
+
+// 死んでいるかどうか
+bool CObjectBase::IsDeath() const
+{
+	// 現在HPが0ならば、死亡
+	return mHp <= 0;
 }
 
 // 経路探索用のノード取得

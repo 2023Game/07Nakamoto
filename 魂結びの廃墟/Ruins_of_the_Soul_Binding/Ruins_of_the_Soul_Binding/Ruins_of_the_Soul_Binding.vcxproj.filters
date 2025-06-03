@@ -445,6 +445,12 @@
     <ClCompile Include="src\Game\CStGauge.cpp">
       <Filter>ソース ファイル\Game\UI\Game</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CDoor.cpp">
+      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CCatCamera.cpp">
+      <Filter>ソース ファイル\Game\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -806,6 +812,12 @@
     </ClInclude>
     <ClInclude Include="src\Game\CStGauge.h">
       <Filter>ソース ファイル\Game\UI\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CDoor.h">
+      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CCatCamera.h">
+      <Filter>ソース ファイル\Game\System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
