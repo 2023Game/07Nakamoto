@@ -25,7 +25,7 @@ public:
 	void ChangePlayer();
 
 	// 更新
-	void Update();
+	void Update() override;
 
 private:
 	// プレイヤー管理クラスのインスタンスへのポインタ

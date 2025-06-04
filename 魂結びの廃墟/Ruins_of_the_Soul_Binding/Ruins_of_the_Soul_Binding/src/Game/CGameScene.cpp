@@ -92,16 +92,16 @@ void CGameScene::Load()
 
 	// CPlayerCamera‚ÌƒeƒXƒg
 	CVector atPos = player2->Position() + CVector(0.0f, 10.0f, 0.0f);
-	CPlayerCamera* mainCamera = new CPlayerCamera
+	CPlayerCamera* playerCamera = new CPlayerCamera
 	(
 		atPos + CVector(0.0f, 0.0f, 40.0f),
 		atPos
 	);
 
-	mainCamera->SetFollowTargetTf(player2);
-	mainCamera->AddCollider(mpField->GetFloorCol());
-	mainCamera->AddCollider(mpField->GetWallCol());
-	player2->SetCamera(mainCamera);
+	playerCamera->SetFollowTargetTf(player2);
+	playerCamera->AddCollider(mpField->GetFloorCol());
+	playerCamera->AddCollider(mpField->GetWallCol());
+	player2->SetCamera(playerCamera);
 	player2->SetOperate(true);
 
 	atPos = cat->Position() + CVector(0.0f, 2.5f, 0.0f);

@@ -7,6 +7,7 @@
 // カメラの上下回転の範囲
 #define ROTATE_RANGE_X 45.0f
 
+// コンストラクタ
 CCatCamera::CCatCamera(const CVector& eye, const CVector& center, bool isMainCamera)
 	: CCamera(eye, center, isMainCamera)
 	, mFollowDefaultEyeVec(CVector::forward)
@@ -14,10 +15,12 @@ CCatCamera::CCatCamera(const CVector& eye, const CVector& center, bool isMainCam
 {
 }
 
+// デストラクタ
 CCatCamera::~CCatCamera()
 {
 }
 
+// 追従するターゲットを設定
 void CCatCamera::SetFollowTargetTf(CTransform* target)
 {
 	mFollowTargetTf = target;
@@ -28,6 +31,7 @@ void CCatCamera::SetFollowTargetTf(CTransform* target)
 	}
 }
 
+// 注視する位置を設定（視点 + 注視点 + 上ベクトル）
 void CCatCamera::LookAt(const CVector& eye, const CVector& at, const CVector& up, bool updateTargetEye)
 {
 	CCamera::LookAt(eye, at, up, updateTargetEye);
@@ -41,6 +45,7 @@ void CCatCamera::LookAt(const CVector& eye, const CVector& at, const CVector& up
 	}
 }
 
+// 更新処理
 void CCatCamera::Update()
 {
 	// 追従するターゲットが設定されていれば、
@@ -52,6 +57,8 @@ void CCatCamera::Update()
 		float y = Math::Repeat(mRotateAngle.Y() + delta.X() * ROTATE_SPEED, 360.0f);
 		mRotateAngle.X(x);
 		mRotateAngle.Y(y);
+
+		//Rotation(CQuaternion(mRotateAngle));
 
 		// 回転値を求めて、注視点から視点までのベクトルを回転させることで、
 		// 視点の位置を更新する
