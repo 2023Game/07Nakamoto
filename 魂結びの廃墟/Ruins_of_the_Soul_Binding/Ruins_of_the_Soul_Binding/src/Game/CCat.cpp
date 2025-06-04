@@ -15,6 +15,9 @@
 #define JUMP_SPEED 1.5f		// ジャンプ速度
 #define GRAVITY 0.0625f		// 重力加速度
 
+// カメラの回転速度
+#define ROTATE_SPEED 1.5f
+
 // 猫のインスタンス
 CCat* CCat::spInstance = nullptr;
 
@@ -196,7 +199,7 @@ void CCat::Update()
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
 	{
-		// 待機状態
+	// 待機状態
 	case (int)EState::eIdle:			UpdateIdle();		break;
 	}
 
@@ -219,6 +222,13 @@ void CCat::Update()
 	// 移動
 	Position(Position() + moveSpeed);
 
+	// 猫を操作中だったら、
+	if (mIsOperate)
+	{
+		// マウスの左右移動で、猫を左右に回転
+		CVector2 delta = CInput::GetDeltaMousePos();
+		Rotate(0.0f, delta.X() * ROTATE_SPEED * Times::DeltaTime(), 0.0f);
+	}
 	// プレイヤーを移動方向へ向ける
 	//CVector current = VectorZ();
 	//CVector target = moveSpeed;

@@ -26,17 +26,17 @@ CCatCamera::~CCatCamera()
 void CCatCamera::Update()
 {
 	CVector2 delta = CInput::GetDeltaMousePos();
-	float x = Math::Repeat(mRotateAngle.X() + delta.Y() * ROTATE_SPEED, 360.0f);
-	float y = Math::Repeat(mRotateAngle.Y() + delta.X() * ROTATE_SPEED, 360.0f);
+	float x = Math::Clamp(mRotateAngle.X() - delta.Y() * ROTATE_SPEED, -ROTATE_RANGE_X, ROTATE_RANGE_X);
 	mRotateAngle.X(x);
-	mRotateAngle.Y(y);
+
+	CQuaternion rot = CQuaternion(mRotateAngle);
 
 	// 猫の視点の座標
 	mEye =	mpCat->Position() +	// 猫の座標 +
 			CVector(0.0f, 7.5f, 0.0f) +	// 上方向のオフセット地 +
 			mpCat->VectorZ() * 5.0f;	// 猫の正面方向へのオフセット値
 	// 猫視点の注視点
-	mAt = mEye + mpCat->VectorZ();		// 猫視点の座標 + 猫の正面方向ベクトル
+	mAt = mEye + mpCat->Rotation() * (rot * CVector::forward);		// 猫視点の座標 + 猫の正面方向ベクトル
 
 	mTargetEye = mEye;
 

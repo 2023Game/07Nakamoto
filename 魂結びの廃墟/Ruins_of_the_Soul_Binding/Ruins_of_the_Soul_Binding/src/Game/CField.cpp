@@ -53,7 +53,6 @@ CField::CField()
 	// 経路探索用のノードを作成
 	CreateNavNodes();
 
-
 	//CreateFieldObjects();
 }
 

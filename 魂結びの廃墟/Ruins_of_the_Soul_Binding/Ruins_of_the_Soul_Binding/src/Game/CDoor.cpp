@@ -13,6 +13,10 @@ CDoor::CDoor(const CVector& pos, const CVector& angle, const CVector& openPos,
 	, mElapsedTime(0.0f)
 	, mIsPlaying(false)
 {
+	mOpenPos = openPos;
+	mClosePos = pos;
+	Position(mIsOpened ? mOpenPos : mClosePos);
+
 	// 扉のモデルデータの取得
 	mpDoor = CResourceManager::Get<CModel>(modelName);
 	// 扉のコライダーデータの取得
@@ -35,10 +39,6 @@ CDoor::CDoor(const CVector& pos, const CVector& angle, const CVector& openPos,
 	CNavManager::Instance()->AddCollider(mpDoorColliderMesh);
 
 	mHp = HP;
-
-	mOpenPos = openPos;
-	mClosePos = pos;
-	Position(mIsOpened ? mOpenPos : mClosePos);
 
 	mInteractStr = "閉まっている";
 }
