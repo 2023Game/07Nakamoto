@@ -126,16 +126,8 @@ void CTestScene::Load()
 	player2->SetCamera(mainCamera);
 	player2->SetOperate(true);
 
-	atPos = cat->Position() + CVector(0.0f, 2.5f, 0.0f);
-	CCatCamera* catCamera = new CCatCamera
-	(
-		atPos + CVector(0.0f, 0.0f, 40.0f),
-		atPos
-	);
-
-	catCamera->SetFollowTargetTf(cat);
-	catCamera->AddCollider(mpField->GetFloorCol());
-	catCamera->AddCollider(mpField->GetWallCol());
+	// 猫視点のカメラを作成
+	CCatCamera* catCamera = new CCatCamera(cat);
 	cat->SetCamera(catCamera);
 
 	// ゲームメニューを作成

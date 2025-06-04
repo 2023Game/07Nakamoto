@@ -52,9 +52,7 @@ void CPlayerCamera::Update()
 		// マウスの移動量に合わせて、カメラの回転角度を変更
 		CVector2 delta = CInput::GetDeltaMousePos();
 		float x = Math::Clamp(mRotateAngle.X() + delta.Y() * ROTATE_SPEED, -ROTATE_RANGE_X, ROTATE_RANGE_X);
-		float y = Math::Repeat(mRotateAngle.Y() + delta.X() * ROTATE_SPEED, 360.0f);
 		mRotateAngle.X(x);
-		mRotateAngle.Y(y);
 
 		// 回転値を求めて、注視点から視点までのベクトルを回転させることで、
 		// 視点の位置を更新する
@@ -74,7 +72,4 @@ void CPlayerCamera::Update()
 
 	// 視点、注視点、上ベクトルから各行列を更新
 	LookAt(mEye, mAt, mUp, false);
-
-	// カメラのベースの更新処理
-	//CCamera::Update();
 }

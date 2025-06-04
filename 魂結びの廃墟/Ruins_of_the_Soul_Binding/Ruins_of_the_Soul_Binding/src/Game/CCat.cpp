@@ -138,7 +138,7 @@ CVector CCat::CalcMoveVec() const
 		// 上方向ベクトル(設置している場合は、地面の法線)
 		CVector up = mIsGrounded ? mGroundNormal : CVector::up;
 		// カメラの向きに合わせた移動ベクトルに変換
-		CCamera* mainCamera = CCamera::MainCamera();
+		CCamera* mainCamera = CCamera::CurrentCamera();
 		CVector camForward = mainCamera->VectorZ();
 		camForward.Y(0.0f);
 		camForward.Normalize();
@@ -220,12 +220,12 @@ void CCat::Update()
 	Position(Position() + moveSpeed);
 
 	// プレイヤーを移動方向へ向ける
-	CVector current = VectorZ();
-	CVector target = moveSpeed;
-	target.Y(0.0f);
-	target.Normalize();
-	CVector forward = CVector::Slerp(current, target, 0.125f);
-	Rotation(CQuaternion::LookRotation(forward));
+	//CVector current = VectorZ();
+	//CVector target = moveSpeed;
+	//target.Y(0.0f);
+	//target.Normalize();
+	//CVector forward = CVector::Slerp(current, target, 0.125f);
+	//Rotation(CQuaternion::LookRotation(forward));
 
 	// 経路探索用のノードが存在すれば、座標を更新
 	if (mpNavNode != nullptr)
@@ -258,6 +258,21 @@ void CCat::Update()
 
 	//CDebugPrint::Print("FPS:%f\n", Times::FPS());
 
+}
+
+// 描画
+void CCat::Render()
+{
+	// 猫を操作していたら、頭のない猫の体を描画
+	if (mIsOperate)
+	{
+
+	}
+	// 猫を操作してなけらば、全身を描画
+	else
+	{
+		CPlayerBase::Render();
+	}
 }
 
 // 攻撃開始

@@ -23,6 +23,8 @@ public:
 
 	// XV
 	void Update() override;
+	// •`‰æ
+	void Render() override;
 
 	// UŒ‚’†‚©
 	bool IsAttacking() const override;
