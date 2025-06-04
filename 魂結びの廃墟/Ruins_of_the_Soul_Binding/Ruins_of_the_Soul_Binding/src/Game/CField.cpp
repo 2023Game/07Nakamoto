@@ -23,103 +23,36 @@ CField::CField()
 	spInstance = this;
 
 	mScene = CSceneManager::Instance()->GetCurrentScene();
-	switch (mScene)
-	{
-		// ゲームシーン
-		case EScene::eGame:
-			mpFloor = CResourceManager::Get<CModel>("Floor");
-			mpWall = CResourceManager::Get<CModel>("Wall");
-			mpWallCol = CResourceManager::Get<CModel>("WallCol");
 
-			mpFloorColliderMesh = new CColliderMesh(this, ELayer::eField, mpFloor, true);
-			mpWallColliderMesh = new CColliderMesh(this, ELayer::eWall, mpWallCol, true);
+	mpFloor = CResourceManager::Get<CModel>("Floor");
+	mpWall = CResourceManager::Get<CModel>("Wall");
+	mpWallCol = CResourceManager::Get<CModel>("WallCol");
 
-			// 右のドアの生成
-			mpRDoor = new CRDoor
-			(
-				CVector(37.95f, 0.0f, 44.825f),
-				CVector(0.0f, 0.0f, 0.0f),
-				CVector(28.05f, 0.0f, 44.825f)
-			);
+	mpFloorColliderMesh = new CColliderMesh(this, ELayer::eField, mpFloor, true);
+	mpWallColliderMesh = new CColliderMesh(this, ELayer::eWall, mpWallCol, true);
 
-			// 左のドアの生成
-			mpLDoor = new CLDoor
-			(
-				CVector(28.05f, 0.0f, 44.825f),
-				CVector(0.0f, 0.0f, 0.0f),
-				CVector(37.95f, 0.0f, 44.825f)
-			);
+	// 経路探索用の遮蔽物チェックのコライダーに、フィールドの壁のコライダーを登録
+	CNavManager::Instance()->AddCollider(mpWallColliderMesh);
 
-			// 経路探索用のノードを作成
-			CreateNavNodes();
+	// 右のドアの生成
+	mpRDoor = new CRDoor
+	(
+		CVector(37.95f, 0.0f, 44.825f),
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(28.05f, 0.0f, 44.825f)
+	);
 
-			break;
-		// テストシーン
-		case EScene::eTest:
-			mpFloor = CResourceManager::Get<CModel>("Field");
-			mpWall = CResourceManager::Get<CModel>("Wall");
-			mpWallCol = CResourceManager::Get<CModel>("WallCol");
+	// 左のドアの生成
+	mpLDoor = new CLDoor
+	(
+		CVector(28.05f, 0.0f, 44.825f),
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(37.95f, 0.0f, 44.825f)
+	);
 
-			mpFloorColliderMesh = new CColliderMesh(this, ELayer::eField, mpFloor, true);
-			mpWallColliderMesh = new CColliderMesh(this, ELayer::eWall, mpWallCol, true);
+	// 経路探索用のノードを作成
+	CreateNavNodes();
 
-			new CLDoor
-			(
-				CVector(30.0f, 0.0f, 44.175f),
-				CVector(0.0f, 0.0f, 0.0f),
-				CVector(39.9f, 0.0f, 44.175f)
-			);
-			new CRDoor
-			(
-				CVector(39.9f, 0.0f, 44.175f),
-				CVector(0.0f, 0.0f, 0.0f),
-				CVector(30.0f, 0.0f, 44.175f)
-			);
-
-			new CLDoor
-			(
-				CVector(-36.0f, 0.0f, 44.175f),
-				CVector(0.0f, 0.0f, 0.0f),
-				CVector(-26.1, 0.0f, 44.175f)
-				);
-			new CRDoor
-			(
-				CVector(-26.1, 0.0f, 44.175f),
-				CVector(0.0f, 0.0f, 0.0f),
-				CVector(-36.0f, 0.0f, 44.175f)
-				);
-
-			new CLDoor
-			(
-				CVector(37.8027f, 0.0f, 132.73f),
-				CVector(0.0f, 0.0f, 0.0f),
-				CVector(27.903f, 0.0f, 132.73f)
-				);
-			new CRDoor
-			(
-				CVector(27.903f, 0.0f, 132.73f),
-				CVector(0.0f, 0.0f, 0.0f),
-				CVector(37.8027f, 0.0f, 132.73f)
-				);
-
-			new CLDoor
-			(
-				CVector(-28.1973f, 0.0f, 132.73f),
-				CVector(0.0f, 0.0f, 0.0f),
-				CVector(-38.0973f, 0.0f, 132.73f)
-				);
-			new CRDoor
-			(
-				CVector(-38.0973f, 0.0f, 132.73f),
-				CVector(0.0f, 0.0f, 0.0f),
-				CVector(-28.1973f, 0.0f, 132.73f)
-				);
-
-			// 経路探索用のノードを作成
-			CreateNavNodes();
-
-			break;
-	}
 
 	//CreateFieldObjects();
 }

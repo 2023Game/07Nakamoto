@@ -2,7 +2,7 @@
 #include "CSceneBase.h"
 class CGameMenu;
 class CSound;
-class CField;
+class CTestField;
 
 //タイトルシーン
 class CTestScene :public CSceneBase
@@ -19,5 +19,5 @@ public:
 
 private:
 	CGameMenu* mpGameMenu;
-	CField* mpField;
+	CTestField* mpField;
 };

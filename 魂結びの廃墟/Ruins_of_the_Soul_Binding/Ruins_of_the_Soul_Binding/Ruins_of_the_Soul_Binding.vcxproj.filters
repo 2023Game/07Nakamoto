@@ -101,11 +101,11 @@
     <Filter Include="ソース ファイル\Game\Character\Player">
       <UniqueIdentifier>{bef8eb1c-7b2a-4ecc-865c-1ba17117e1dc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Game\Navigation">
-      <UniqueIdentifier>{3909bb9b-3a80-4306-bc6a-31b3e91372ec}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Game\UI\Game">
       <UniqueIdentifier>{7f8285d5-81cc-4868-b7d6-4da94eb97a97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\BaseSystem\Navigation">
+      <UniqueIdentifier>{3909bb9b-3a80-4306-bc6a-31b3e91372ec}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -421,12 +421,6 @@
     <ClCompile Include="src\Game\CWarrok.cpp">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CNavManager.cpp">
-      <Filter>ソース ファイル\Game\Navigation</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CNavNode.cpp">
-      <Filter>ソース ファイル\Game\Navigation</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CTestScene.cpp">
       <Filter>ソース ファイル\Game\Scene</Filter>
     </ClCompile>
@@ -450,6 +444,15 @@
     </ClCompile>
     <ClCompile Include="src\Game\CCatCamera.cpp">
       <Filter>ソース ファイル\Game\System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BaseSystem\CNavManager.cpp">
+      <Filter>ソース ファイル\BaseSystem\Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BaseSystem\CNavNode.cpp">
+      <Filter>ソース ファイル\BaseSystem\Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CTestField.cpp">
+      <Filter>ソース ファイル\Game\Field</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -789,12 +792,6 @@
     <ClInclude Include="src\Game\CWarrok.h">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CNavManager.h">
-      <Filter>ソース ファイル\Game\Navigation</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CNavNode.h">
-      <Filter>ソース ファイル\Game\Navigation</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\CTestScene.h">
       <Filter>ソース ファイル\Game\Scene</Filter>
     </ClInclude>
@@ -818,6 +815,15 @@
     </ClInclude>
     <ClInclude Include="src\Game\CCatCamera.h">
       <Filter>ソース ファイル\Game\System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BaseSystem\CNavManager.h">
+      <Filter>ソース ファイル\BaseSystem\Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BaseSystem\CNavNode.h">
+      <Filter>ソース ファイル\BaseSystem\Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CTestField.h">
+      <Filter>ソース ファイル\Game\Field</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,6 +1,6 @@
 #include "CTestScene.h"
 #include "CSceneManager.h"
-#include "CField.h"
+#include "CTestField.h"
 #include "CPlayer.h"
 #include "CPlayer2.h"
 #include "CCat.h"
@@ -73,7 +73,7 @@ void CTestScene::Load()
 	new CNavManager();
 
 	// フィールドの生成
-	mpField = new CField();
+	mpField = new CTestField();
 
 	// サボテンの敵を作成
 	//CCactus* cactus = new CCactus();

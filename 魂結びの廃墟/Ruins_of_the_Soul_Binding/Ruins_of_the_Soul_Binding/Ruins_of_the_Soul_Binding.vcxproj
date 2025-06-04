@@ -47,6 +47,8 @@
     <ClCompile Include="src\BaseSystem\CModel.cpp" />
     <ClCompile Include="src\BaseSystem\CModelX.cpp" />
     <ClCompile Include="src\BaseSystem\CMyShader.cpp" />
+    <ClCompile Include="src\BaseSystem\CNavManager.cpp" />
+    <ClCompile Include="src\BaseSystem\CNavNode.cpp" />
     <ClCompile Include="src\BaseSystem\CRect.cpp" />
     <ClCompile Include="src\BaseSystem\CResource.cpp" />
     <ClCompile Include="src\BaseSystem\CResourceManager.cpp" />
@@ -86,8 +88,6 @@
     <ClCompile Include="src\Game\CInteractObject.cpp" />
     <ClCompile Include="src\Game\CInteractUI.cpp" />
     <ClCompile Include="src\Game\CLDoor.cpp" />
-    <ClCompile Include="src\Game\CNavManager.cpp" />
-    <ClCompile Include="src\Game\CNavNode.cpp" />
     <ClCompile Include="src\Game\CPlayer2.cpp" />
     <ClCompile Include="src\Game\CPlayerBase.cpp" />
     <ClCompile Include="src\Game\CPlayerManager.cpp" />
@@ -109,6 +109,7 @@
     <ClCompile Include="src\Game\CSlash.cpp" />
     <ClCompile Include="src\Game\CStGauge.cpp" />
     <ClCompile Include="src\Game\CSword.cpp" />
+    <ClCompile Include="src\Game\CTestField.cpp" />
     <ClCompile Include="src\Game\CTestScene.cpp" />
     <ClCompile Include="src\Game\CTitleScene.cpp" />
     <ClCompile Include="src\Game\CTitleUI.cpp" />
@@ -163,6 +164,8 @@
     <ClInclude Include="src\BaseSystem\CModel.h" />
     <ClInclude Include="src\BaseSystem\CModelX.h" />
     <ClInclude Include="src\BaseSystem\CMyShader.h" />
+    <ClInclude Include="src\BaseSystem\CNavManager.h" />
+    <ClInclude Include="src\BaseSystem\CNavNode.h" />
     <ClInclude Include="src\BaseSystem\ColliderType.h" />
     <ClInclude Include="src\BaseSystem\CollisionLayer.h" />
     <ClInclude Include="src\BaseSystem\CRect.h" />
@@ -211,8 +214,6 @@
     <ClInclude Include="src\Game\CInteractObject.h" />
     <ClInclude Include="src\Game\CInteractUI.h" />
     <ClInclude Include="src\Game\CLDoor.h" />
-    <ClInclude Include="src\Game\CNavManager.h" />
-    <ClInclude Include="src\Game\CNavNode.h" />
     <ClInclude Include="src\Game\CPlayerBase.h" />
     <ClInclude Include="src\Game\CPlayerManager.h" />
     <ClInclude Include="src\Game\CRDoor.h" />
@@ -233,6 +234,7 @@
     <ClInclude Include="src\Game\CSlash.h" />
     <ClInclude Include="src\Game\CStGauge.h" />
     <ClInclude Include="src\Game\CSword.h" />
+    <ClInclude Include="src\Game\CTestField.h" />
     <ClInclude Include="src\Game\CTestScene.h" />
     <ClInclude Include="src\Game\CTitleUI.h" />
     <ClInclude Include="src\Game\CTitleScene.h" />

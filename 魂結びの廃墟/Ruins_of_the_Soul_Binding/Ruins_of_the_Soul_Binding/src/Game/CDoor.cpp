@@ -1,4 +1,5 @@
 #include "CDoor.h"
+#include "CNavManager.h"
 
 //#define MOVE_POS 9.9f	// 移動距離
 //#define MOVE_TIME 5.0f	// 移動時間
@@ -29,6 +30,9 @@ CDoor::CDoor(const CVector& pos, const CVector& angle, const CVector& openPos,
 			ELayer::eAttackCol
 		}
 	);
+
+	// 経路探索用の遮蔽物チェックのコライダーに、扉のコライダーを登録
+	CNavManager::Instance()->AddCollider(mpDoorColliderMesh);
 
 	mHp = HP;
 

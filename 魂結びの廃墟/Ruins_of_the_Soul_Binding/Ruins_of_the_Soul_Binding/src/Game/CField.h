@@ -29,8 +29,8 @@ public:
 	bool CollisionRay(const CVector& start, const CVector& end,
 		CHitInfo* hit) override;
 
-	void Update();
-	void Render();
+	void Update() override;
+	void Render() override;
 
 private:
 	// Œo˜H’Tõ—p‚Ìƒm[ƒh‚ğì¬
