@@ -79,6 +79,24 @@ void CDoor::Death()
 	Kill();
 }
 
+// 衝突判定
+bool CDoor::CollisionRay(const CVector& start, const CVector& end, CHitInfo* hit)
+{
+	// 衝突情報保存用
+	CHitInfo tHit;
+	// 衝突したかどうかのフラグ
+	bool isHit = false;
+
+	// 扉のオブジェクトとの衝突判定
+	if (CCollider::CollisionRay(mpDoorColliderMesh, start, end, &tHit))
+	{
+		*hit = tHit;
+		isHit = this;
+	}
+
+	return isHit;
+}
+
 // 更新処理
 void CDoor::Update()
 {

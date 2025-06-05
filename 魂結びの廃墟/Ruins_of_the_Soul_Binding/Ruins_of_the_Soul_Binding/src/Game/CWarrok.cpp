@@ -9,6 +9,7 @@
 #include "CDebugFieldOfView.h"
 #include "Primitive.h"
 #include "CField.h"
+#include "CDoor.h"
 #include "CNavNode.h"
 #include "CNavManager.h"
 #include "CInteractObject.h"
@@ -411,7 +412,7 @@ bool CWarrok::IsLookTarget(CObjectBase* target) const
 
 	CHitInfo hit;
 	//フィールドとレイ判定を行い、遮蔽物が存在した場合は、ターゲットが見えない
-	if (field->CollisionRay(selfPos, targetPos, &hit)) return false;
+	if (field->CollisionRay(selfPos, targetPos, &hit)) return false;	
 
 	// ターゲットとの間に遮蔽物がないので、ターゲットが見えている
 	return true;
@@ -606,7 +607,6 @@ void CWarrok::UpdatePatrol()
 	// ステップ1 : 巡回ポイントまで移動
 	case 1:
 	{
-		//ChangeAnimation((int)EAnimType::eWalk);
 		// 最短経路の次のノードまで移動
 		CNavNode* moveNode = mMoveRoute[mNextMoveIndex];
 		if (MoveTo(moveNode->GetPos(), WALK_SPEED))
