@@ -49,6 +49,7 @@ CDoor::~CDoor()
 	// コライダーの削除
 	if (mpDoorColliderMesh != nullptr)
 	{
+		//CNavManager::Instance()->RemoveCollider(mpDoorColliderMesh);
 		delete mpDoorColliderMesh;
 		mpDoorColliderMesh = nullptr;
 	}
@@ -102,6 +103,7 @@ void CDoor::Update()
 {
 	if (mIsPlaying)
 	{
+		mInteract = false;
 		// 扉を開くアニメーション
 		if (mIsOpened)
 		{
@@ -117,6 +119,7 @@ void CDoor::Update()
 				Position(mOpenPos);
 				mElapsedTime = 0.0f;
 				mIsPlaying = false;
+				mInteract = true;
 			}
 		}
 		// 扉を閉じるアニメーション
@@ -140,6 +143,7 @@ void CDoor::Update()
 	// 開閉中ではない
 	else
 	{
+		mInteract = true;
 	}		
 }
 

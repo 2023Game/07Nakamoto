@@ -128,4 +128,11 @@ private:
 	std::list<CInteractObject*> mNearBreakObjs;
 	CCollider* mpSearchCol;	// 調べるオブジェクトを探知するコライダー
 
+	// 自分とターゲットの間に壊せるオブジェクトがあるか
+	bool IsBreakObject();
+
+#if _DEBUG
+	EScene mScene;
+#endif
+
 };

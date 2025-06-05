@@ -14,6 +14,11 @@
 #include "CNavManager.h"
 #include "CInteractObject.h"
 
+#if _DEBUG
+#include "CSceneManager.h"
+#include "CTestField.h"
+#endif
+
 // アニメーションのパス
 #define ANIM_PATH "Character\\Enemy\\Warrok\\anim\\"
 
@@ -67,7 +72,6 @@ CWarrok::CWarrok(std::vector<CVector> patrolPoints)
 	, mpDebugFov(nullptr)
 	, mNextPatrolIndex(-1)	// -1の時に一番近いポイントに移動
 	, mNextMoveIndex(0)
-
 {
 	CPlayer2* target = CPlayer2::Instance();
 	mTargets.push_back(target);
@@ -148,6 +152,8 @@ CWarrok::CWarrok(std::vector<CVector> patrolPoints)
 #if _DEBUG
 	// 視野範囲のデバッグ表示クラスを作成
 	mpDebugFov = new CDebugFieldOfView(this, mFovAngle, mFovLength);
+
+	mScene = CSceneManager::Instance()->GetCurrentScene();
 #endif
 
 	// 経路探索用のノードを作成
@@ -400,6 +406,28 @@ bool CWarrok::IsFoundTarget(CObjectBase* target) const
 // 現在位置からターゲットが見えているかどうか
 bool CWarrok::IsLookTarget(CObjectBase* target) const
 {
+#if _DEBUG
+	if (mScene == EScene::eTest)
+	{
+		CTestField* field = CTestField::Instance();
+
+		if (field == nullptr) return true;
+
+		CVector offsetPos = CVector(0.0f, EYE_HEIGHT, 0.0f);
+		// ターゲットの座標を取得
+		CVector targetPos = target->Position() + offsetPos;
+		// 自分自身の座標を取得
+		CVector selfPos = Position() + offsetPos;
+
+		CHitInfo hit;
+		//フィールドとレイ判定を行い、遮蔽物が存在した場合は、ターゲットが見えない
+		if (field->CollisionRay(selfPos, targetPos, &hit)) return false;
+
+		// ターゲットとの間に遮蔽物がないので、ターゲットが見えている
+		return true;
+	}
+#endif
+
 	// フィールドが存在しない場合は、遮蔽物がないので見える
 	CField* field = CField::Instance();
 	if (field == nullptr) return true;
@@ -709,7 +737,7 @@ void CWarrok::UpdateLost()
 	CNavManager* navMgr = CNavManager::Instance();
 	if (navMgr == nullptr)
 	{
-		//mpBattleTarget = nullptr;
+		mpBattleTarget = nullptr;
 		ChangeState((int)EState::eIdle);
 		return;
 	}
@@ -1005,7 +1033,7 @@ CInteractObject* CWarrok::GetNearBreakObj() const
 		CVector vec = objPos - pos;
 		vec.Y(0.0f);	// オブジェクトとの高さの差を考慮しない
 
-				// ベクトルを正規化して長さを1にする
+		// ベクトルを正規化して長さを1にする
 		CVector dir = vec.Normalized();
 		// 自身の正面方向ベクトルを取得
 		CVector forward = VectorZ();
@@ -1028,4 +1056,12 @@ CInteractObject* CWarrok::GetNearBreakObj() const
 		}
 	}
 	return nearObj;
+}
+// 自分とターゲットの間に壊せるオブジェクトがあるか
+bool CWarrok::IsBreakObject()
+{
+	
+
+
+	return true;
 }

@@ -218,8 +218,11 @@ CInteractObject* CPlayerBase::GetNearInteractObj() const
 	// 探知範囲内の調べるオブジェクトを順番に調べる
 	for (CInteractObject* obj : mNearInteractObjs)
 	{
-		// 現在調べられない状態であれば、スルー
-		if (!obj->CanInteract()) continue;
+		if (!obj->IsDeath())
+		{
+			// 現在調べられない状態であれば、スルー
+			if (!obj->CanInteract()) continue;
+		}
 
 		// オブジェクトの座標を取得
 		CVector objPos = obj->Position();
@@ -255,21 +258,11 @@ CInteractObject* CPlayerBase::GetNearInteractObj() const
 // 更新
 void CPlayerBase::Update()
 {
-	// 重力
-	mMoveSpeedY -= GRAVITY;
-
-	// 移動
-	//CVector moveSpeed = mMoveSpeed + CVector(0.0f, mMoveSpeedY, 0.0f);
-	//Position(Position() + moveSpeed);
-
 	// キャラクターの更新
 	CXCharacter::Update();
 
-	mIsGrounded = false;
-
 	// 調べるオブジェクトのリストをクリア
 	mNearInteractObjs.clear();
-
 }
 
 // 描画

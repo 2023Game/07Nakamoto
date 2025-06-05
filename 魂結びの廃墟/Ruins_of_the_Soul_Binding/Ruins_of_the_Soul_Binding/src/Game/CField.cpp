@@ -22,8 +22,6 @@ CField::CField()
 {
 	spInstance = this;
 
-	mScene = CSceneManager::Instance()->GetCurrentScene();
-
 	mpFloor = CResourceManager::Get<CModel>("Floor");
 	mpWall = CResourceManager::Get<CModel>("Wall");
 	mpWallCol = CResourceManager::Get<CModel>("WallCol");
@@ -89,31 +87,11 @@ void CField::CreateNavNodes()
 
 	if (navMgr != nullptr)
 	{
-		switch (mScene)
-		{
-			// ゲームシーンの場合、
-			case EScene::eGame:
-			// ノードの設定
-			new CNavNode(CVector(-40.0f, 0.0f, 60.0f));
-			new CNavNode(CVector(-40.0f, 0.0f, 30.0f));
-			new CNavNode(CVector(35.0f, 0.0f, 60.0f));
-			new CNavNode(CVector(35.0f, 0.0f, 30.0f));
-			break;
-			// テストシーンの場合
-			case EScene::eTest:
-			// ノードの設定
-			new CNavNode(CVector(-31.5f, 0.0f, 60.0f));
-			new CNavNode(CVector(-31.5f, 0.0f, 28.0f));
-			new CNavNode(CVector(35.0f, 0.0f, 28.0f));
-			new CNavNode(CVector(35.0f, 0.0f, 60.0f));
-
-			new CNavNode(CVector(32.0f, 0.0f, 120.0f));
-			new CNavNode(CVector(32.0f, 0.0f, 145.0f));
-			new CNavNode(CVector(-34.0f, 0.0f, 145.0f));
-			new CNavNode(CVector(-34.0f, 0.0f, 120.0f));
-
-			break;
-		}
+		// ノードの設定
+		new CNavNode(CVector(-40.0f, 0.0f, 60.0f));
+		new CNavNode(CVector(-40.0f, 0.0f, 30.0f));
+		new CNavNode(CVector(35.0f, 0.0f, 60.0f));
+		new CNavNode(CVector(35.0f, 0.0f, 30.0f));
 	}
 }
 
@@ -216,13 +194,13 @@ bool CField::CollisionRay(const CVector& start, const CVector& end, CHitInfo* hi
 	if (CCollider::CollisionRay(mpFloorColliderMesh, start, end, &tHit))
 	{
 		*hit = tHit;
-		isHit = this;
+		isHit = true;
 	}
 	// 壁のオブジェクトとの衝突判定
 	if (CCollider::CollisionRay(mpWallColliderMesh, start, end, &tHit))
 	{
 		*hit = tHit;
-		isHit = this;
+		isHit = true;
 	}
 
 	return isHit;

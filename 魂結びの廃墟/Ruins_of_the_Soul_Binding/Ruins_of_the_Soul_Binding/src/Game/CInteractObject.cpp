@@ -6,6 +6,7 @@
 CInteractObject::CInteractObject(ETaskPriority prio, int sortOrder, ETaskPauseType pause)
 	: CObjectBase(ETag::eInteractObject, prio, sortOrder, pause)
 	, mInteractStr("調べる")
+	, mInteract(true)
 #if _DEBUG
 	, mDebugName("InteractObj")
 #endif
@@ -20,7 +21,7 @@ CInteractObject::~CInteractObject()
 // 調べられる状態かどうか
 bool CInteractObject::CanInteract() const
 {
-	return true;
+	return mInteract;
 }
 
 // 調べる内容のテキストを返す 

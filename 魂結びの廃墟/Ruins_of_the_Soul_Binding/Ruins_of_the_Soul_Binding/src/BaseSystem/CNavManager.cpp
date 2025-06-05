@@ -185,6 +185,9 @@ void CNavManager::AddCollider(CCollider* col)
 void CNavManager::RemoveCollider(CCollider* col)
 {
 	std::remove(mColliders.begin(), mColliders.end(), col);
+
+	//auto end = std::remove(mColliders.begin(), mColliders.end(), col);
+	//mColliders.erase(end, mColliders.end());
 }
 
 // ‘S‚Ä‚Ìƒm[ƒh‚ÆŒo˜H‚ğ•`‰æ

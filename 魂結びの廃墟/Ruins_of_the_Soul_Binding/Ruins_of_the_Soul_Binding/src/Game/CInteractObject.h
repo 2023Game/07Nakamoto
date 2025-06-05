@@ -33,6 +33,7 @@ public:
 
 protected:
 	std::string mInteractStr;	// 調べる内容のテキスト
+	bool mInteract;		// 調べられる状態か
 
 #if _DEBUG
 	std::string mDebugName;		// デバッグ表示用の名前

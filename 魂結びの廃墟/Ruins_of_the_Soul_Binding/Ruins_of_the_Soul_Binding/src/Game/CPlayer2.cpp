@@ -191,7 +191,10 @@ void CPlayer2::UpdateIdle()
 			// [E]キーを押したら、近くの調べるオブジェクトを調べる
 			if (CInput::PushKey('E'))
 			{
-				obj->Interact();
+				if (obj->CInteractObject::CanInteract())
+				{
+					obj->Interact();
+				}
 			}
 		}
 		// 近くに調べるオブジェクトがなかった
@@ -328,7 +331,7 @@ void CPlayer2::UpdateMove()
 				ChangeAnimation((int)EAnimType::eWalk);
 
 				mMoveSpeed += move * MOVE_SPEED;
-				if (mSt < 100)
+				if (mSt < mMaxSt)
 				{
 					mSt++;
 				}
@@ -342,6 +345,11 @@ void CPlayer2::UpdateMove()
 		if (mState == (int)EState::eIdle)
 		{
 			ChangeAnimation((int)EAnimType::eIdle);
+
+			if (mSt < mMaxSt)
+			{
+				mSt++;
+			}
 		}
 	}
 }
@@ -378,10 +386,11 @@ void CPlayer2::Update()
 		}
 	}
 
+	// 重力
 	mMoveSpeedY -= GRAVITY;
-	CVector moveSpeed = mMoveSpeed + CVector(0.0f, mMoveSpeedY, 0.0f);
 
 	// 移動
+	CVector moveSpeed = mMoveSpeed + CVector(0.0f, mMoveSpeedY, 0.0f);
 	Position(Position() + moveSpeed);
 
 	// プレイヤーを移動方向へ向ける

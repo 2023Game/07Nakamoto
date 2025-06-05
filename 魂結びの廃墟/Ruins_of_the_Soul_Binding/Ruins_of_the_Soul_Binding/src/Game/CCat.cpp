@@ -229,13 +229,6 @@ void CCat::Update()
 		CVector2 delta = CInput::GetDeltaMousePos();
 		Rotate(0.0f, delta.X() * ROTATE_SPEED * Times::DeltaTime(), 0.0f);
 	}
-	// プレイヤーを移動方向へ向ける
-	//CVector current = VectorZ();
-	//CVector target = moveSpeed;
-	//target.Y(0.0f);
-	//target.Normalize();
-	//CVector forward = CVector::Slerp(current, target, 0.125f);
-	//Rotation(CQuaternion::LookRotation(forward));
 
 	// 経路探索用のノードが存在すれば、座標を更新
 	if (mpNavNode != nullptr)
@@ -256,7 +249,7 @@ void CCat::Update()
 	}
 
 	// キャラクターの更新
-	CXCharacter::Update();
+	CPlayerBase::Update();
 
 	//CVector pos = Position();
 	//CDebugPrint::Print("PlayerHP:%d / %d\n", mHp, mMaxHp);
@@ -264,6 +257,7 @@ void CCat::Update()
 	//CDebugPrint::Print("PlayerGrounded:%s\n", mIsGrounded ? "true" : "false");
 	//CDebugPrint::Print("PlayerState:%d\n", mState);
 
+	// 地面についているか
 	mIsGrounded = false;
 
 	//CDebugPrint::Print("FPS:%f\n", Times::FPS());
