@@ -1,13 +1,15 @@
 #include "CPlayerBase.h"
 #include "CInteractObject.h"
+#include "CInteractObjectManager.h"
 #include "Maths.h"
 #include "CPlayerManager.h"
 #include "CNavNode.h"
 #include "CNavManager.h"
 #include "CWarrok.h"
 
-#define GRAVITY 0.0625f	// 重力加速度
-#define FOV_ANGLE		 60.0f		// 視野範囲の角度
+#define GRAVITY			0.0625f	// 重力加速度
+#define FOV_ANGLE		60.0f		// 視野範囲の角度
+#define SEARC_DIST		10.0f		// 近くにあるオブジェクトを調べるときの距離
 
 // コンストラクタ
 CPlayerBase::CPlayerBase()
@@ -22,7 +24,7 @@ CPlayerBase::CPlayerBase()
 	, mGroundNormal(CVector::up)
 	, mpBodyCol(nullptr)
 	, mFovAngle(FOV_ANGLE)
-	, mpSearchCol(nullptr)
+	, mSearchDist(SEARC_DIST)
 	, mIsOperate(false)
 	, mpCamera(nullptr)
 {
@@ -143,20 +145,6 @@ void CPlayerBase::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 			Position(Position() + adjust * hit.weight);
 		}
 	}
-	// 調べるオブジェクトの探知コライダーとの当たり判定
-	else if (self == mpSearchCol)
-	{
-		CInteractObject* obj = dynamic_cast<CInteractObject*>(other->Owner());
-		if (obj != nullptr)
-		{
-			// 調べるオブジェクトの削除フラグが立っていなかったら
-			if (!obj->IsKill())
-			{
-				// 衝突した調べるオブジェクトをリストに追加
-				mNearInteractObjs.push_back(obj);
-			}
-		}
-	}
 }
 
 // プレイヤーの初期化
@@ -209,12 +197,22 @@ void CPlayerBase::ChangeAnimation(int type, bool restart)
 	CXCharacter::SetAnimationSpeed(data.speed);
 }
 
-CInteractObject* CPlayerBase::GetNearInteractObj() const
+CInteractObject* CPlayerBase::GetNearInteractObj()
 {
+	CVector pos = Position();	// プレイヤーの座標を取得
+	// プレイヤーの座標の近くにある調べるオブジェクトのリストを取得
+	bool found = CInteractObjectManager::Instance()->GetNearInteractObjects
+	(
+		pos, 
+		mSearchDist,
+		mNearInteractObjs
+	);
+	// 近くに調べるオブジェクトが見つからなかった
+	if (!found) return nullptr;
+
 	// 一番近くの調べるオブジェクトのポインタ格納用
 	CInteractObject* nearObj = nullptr;
 	float nearDist = 0.0f;	// 現在一番近くにある調べるオブジェクトまでの距離
-	CVector pos = Position();	// プレイヤーの座標を取得
 	// 探知範囲内の調べるオブジェクトを順番に調べる
 	for (CInteractObject* obj : mNearInteractObjs)
 	{

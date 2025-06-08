@@ -79,10 +79,10 @@ protected:
 	CCollider* mpBodyCol;	// 本体のコライダー
 
 	// 一番近くにある調べられるオブジェクトを取得
-	CInteractObject* GetNearInteractObj() const;
+	CInteractObject* GetNearInteractObj();
 	// 近くにある調べられるオブジェクトのリスト
-	std::list<CInteractObject*> mNearInteractObjs;
-	CCollider* mpSearchCol;	// 調べるオブジェクトを探知するコライダー
+	std::vector<CInteractObject*> mNearInteractObjs;
+	float mSearchDist;	// 近くにあるオブジェクトを調べるときの距離
 
 	float mFovAngle;	// 視野範囲の角度
 

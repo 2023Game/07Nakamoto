@@ -1,4 +1,5 @@
 #include "CInteractObject.h"
+#include "CInteractObjectManager.h"
 
 #define DEFAULT_TEXT_PATH "UI\\Interact\\interact.png"
 
@@ -11,11 +12,19 @@ CInteractObject::CInteractObject(ETaskPriority prio, int sortOrder, ETaskPauseTy
 	, mDebugName("InteractObj")
 #endif
 {
+	// 管理クラスのリストに自身を追加
+	CInteractObjectManager::Instance()->Add(this);
 }
 
 // デストラクタ
 CInteractObject::~CInteractObject()
 {
+	// 管理クラスが存在したら、自身をリストから取り除く
+	CInteractObjectManager* mgr = CInteractObjectManager::Instance();
+	if (mgr != nullptr)
+	{
+		mgr->Remove(this);
+	}
 }
 
 // 調べられる状態かどうか

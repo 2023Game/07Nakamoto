@@ -49,7 +49,12 @@ CDoor::~CDoor()
 	// コライダーの削除
 	if (mpDoorColliderMesh != nullptr)
 	{
-		//CNavManager::Instance()->RemoveCollider(mpDoorColliderMesh);
+		// 経路探索管理クラスが存在したら、遮蔽物リストからドアのコライダーをを取り除く
+		CNavManager* navMgr = CNavManager::Instance();
+		if (navMgr != nullptr)
+		{
+			navMgr->RemoveCollider(mpDoorColliderMesh);
+		}
 		delete mpDoorColliderMesh;
 		mpDoorColliderMesh = nullptr;
 	}

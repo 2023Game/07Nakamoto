@@ -454,6 +454,9 @@
     <ClCompile Include="src\Game\CTestField.cpp">
       <Filter>ソース ファイル\Game\Field</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CInteractObjectManager.cpp">
+      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -824,6 +827,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CTestField.h">
       <Filter>ソース ファイル\Game\Field</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CInteractObjectManager.h">
+      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

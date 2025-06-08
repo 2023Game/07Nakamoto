@@ -15,6 +15,7 @@
 #include "CCactus.h"
 #include "CWarrok.h"
 #include "CNavManager.h"
+#include "CInteractObjectManager.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -26,6 +27,8 @@ CGameScene::CGameScene()
 //デストラクタ
 CGameScene::~CGameScene()
 {
+	// 調べるオブジェクトの管理クラスを削除
+	CInteractObjectManager::CIearInstance();
 }
 
 //シーン読み込み
@@ -51,6 +54,9 @@ void CGameScene::Load()
 
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
+
+	// 調べるオブジェクトの管理クラスの作成
+	new CInteractObjectManager();
 
 	// プレイヤーの管理クラスの作成
 	new CPlayerManager();
