@@ -14,7 +14,8 @@
 #include "CLineEffect.h"
 #include "CCactus.h"
 #include "CWarrok.h"
-#include "CNavManager.h"
+#include "CNavManager.h"]
+#include "CInteractObjectManager.h"
 
 //コンストラクタ
 CTestScene::CTestScene()
@@ -39,32 +40,37 @@ void CTestScene::Load()
 	//ここでゲーム中に必要な
 	//リソースの読み込みやクラスの生成を行う
 
-	CResourceManager::Load<CModel>("Field", "Field\\field.obj");
-	CResourceManager::Load<CModel>("FieldCube", "Field\\Object\\cube.obj");
-	CResourceManager::Load<CModel>("FieldCylinder", "Field\\Object\\cylinder.obj");
-	CResourceManager::Load<CModelX>("Player", "Character\\Player\\player.x");
-	CResourceManager::Load<CModelX>("Cactus", "Character\\Enemy\\Cactus\\cactus.x");
-	CResourceManager::Load<CModel>("CactusNeedle", "Character\\Enemy\\Cactus\\needle.obj");
-	CResourceManager::Load<CTexture>("Laser", "Effect\\laser.png");
-	CResourceManager::Load<CTexture>("LightningBolt", "Effect\\lightning_bolt.png");
-	CResourceManager::Load<CModel>("Slash", "Effect\\slash.obj");
-	CResourceManager::Load<CSound>("SlashSound", "Sound\\SE\\slash.wav");
-	CResourceManager::Load<CModel>("Sword", "Weapon\\Sword\\sword.obj");
-	CResourceManager::Load<CModel>("Shield", "Weapon\\Shield\\shield.obj");
+	CResourceManager::Load<CModel>(		"Field",			"Field\\field.obj");
+	CResourceManager::Load<CModel>(		"FieldCube",		"Field\\Object\\cube.obj");
+	CResourceManager::Load<CModel>(		"FieldCylinder",	"Field\\Object\\cylinder.obj");
+	CResourceManager::Load<CModelX>(	"Player",			"Character\\Player\\player.x");
+	CResourceManager::Load<CModelX>(	"Cactus",			"Character\\Enemy\\Cactus\\cactus.x");
+	CResourceManager::Load<CModel>(		"CactusNeedle",		"Character\\Enemy\\Cactus\\needle.obj");
+	CResourceManager::Load<CTexture>(	"Laser",			"Effect\\laser.png");
+	CResourceManager::Load<CTexture>(	"LightningBolt",	"Effect\\lightning_bolt.png");
+	CResourceManager::Load<CModel>(		"Slash",			"Effect\\slash.obj");
+	CResourceManager::Load<CSound>(		"SlashSound",		"Sound\\SE\\slash.wav");
+	CResourceManager::Load<CModel>(		"Sword",			"Weapon\\Sword\\sword.obj");
+	CResourceManager::Load<CModel>(		"Shield",			"Weapon\\Shield\\shield.obj");
 
-	CResourceManager::Load<CModelX>("Player2", "Character\\Player2\\Rusk\\idle.x");
-	CResourceManager::Load<CModelX>("Cat", "Character\\Cat\\cat.x");
-	//CResourceManager::Load<CModel>("Floor", "Field\\Abandoned_School_Floor.obj");
-	CResourceManager::Load<CModel>("Wall", "Field\\Test\\test_wall2.obj");
-	CResourceManager::Load<CModel>("WallCol", "Field\\Test\\test_wall_col.obj");
-	CResourceManager::Load<CModel>("RightDoor", "Door\\right_door.obj");
-	CResourceManager::Load<CModel>("RightDoorCol", "Door\\right_door_col.obj");
-	CResourceManager::Load<CModel>("LeftDoor", "Door\\left_door.obj");
-	CResourceManager::Load<CModel>("LeftDoorCol", "Door\\left_door_col.obj");
-	CResourceManager::Load<CModelX>("Warrok", "Character\\Enemy\\Warrok\\warrok.x");
+	CResourceManager::Load<CModelX>(	"Player2",			"Character\\Player2\\Rusk\\idle.x");
+	CResourceManager::Load<CModelX>(	"Cat",				"Character\\Cat\\cat.x");
+	CResourceManager::Load<CModelX>(	"Warrok",			"Character\\Enemy\\Warrok\\warrok.x");
+
+	//CResourceManager::Load<CModel>(	"Floor",		"Field\\Abandoned_School_Floor.obj");
+	CResourceManager::Load<CModel>(		"Wall",				"Field\\Test\\test_wall2.obj");
+	CResourceManager::Load<CModel>(		"WallCol",			 "Field\\Test\\test_wall_col.obj");
+	CResourceManager::Load<CModel>(		"RightDoor",		"Door\\right_door.obj");
+	CResourceManager::Load<CModel>(		"RightDoorCol",		 "Door\\right_door_col.obj");
+	CResourceManager::Load<CModel>(		"LeftDoor",			 "Door\\left_door.obj");
+	CResourceManager::Load<CModel>(		"LeftDoorCol",		 "Door\\left_door_col.obj");
+	CResourceManager::Load<CModel>(		"DemonPower",		 "Field\\Object\\Demon_Power\\source_of_demon_power.obj");
 
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
+
+	// 調べるオブジェクトの管理クラスの作成
+	new CInteractObjectManager();
 
 	// プレイヤーの管理クラスの作成
 	new CPlayerManager();

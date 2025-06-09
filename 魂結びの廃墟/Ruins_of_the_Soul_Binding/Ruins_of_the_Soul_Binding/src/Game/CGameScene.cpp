@@ -43,6 +43,8 @@ void CGameScene::Load()
 	//リソースの読み込みやクラスの生成を行う
 	CResourceManager::Load<CModelX>(	"Player2",			"Character\\Player2\\Rusk\\idle.x");
 	CResourceManager::Load<CModelX>(	"Cat",				"Character\\Cat\\cat.x");
+	CResourceManager::Load<CModelX>(	"Warrok",			"Character\\Enemy\\Warrok\\warrok.x");
+
 	CResourceManager::Load<CModel>(		"Floor",			"Field\\Abandoned_School_Floor.obj");
 	CResourceManager::Load<CModel>(		"Wall",				"Field\\Abandoned_School_Wall.obj"); 
 	CResourceManager::Load<CModel>(		"WallCol",			"Field\\Abandoned_School_Wall_Col.obj");
@@ -50,7 +52,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>(		"RightDoorCol",		"Door\\right_door_col.obj");
 	CResourceManager::Load<CModel>(		"LeftDoor",			"Door\\left_door.obj");
 	CResourceManager::Load<CModel>(		"LeftDoorCol",		"Door\\left_door_col.obj");
-	CResourceManager::Load<CModelX>(	"Warrok",			"Character\\Enemy\\Warrok\\warrok.x");
+	CResourceManager::Load<CModel>(		"DemonPower",		"Field\\Object\\Demon_Power\\source_of_demon_power.obj");
 
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
