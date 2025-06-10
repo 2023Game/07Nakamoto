@@ -82,6 +82,7 @@
     <ClCompile Include="src\Game\CCatCamera.cpp" />
     <ClCompile Include="src\Game\CDebugFieldOfView.cpp" />
     <ClCompile Include="src\Game\CDemonPower.cpp" />
+    <ClCompile Include="src\Game\CDemonPowerManager.cpp" />
     <ClCompile Include="src\Game\CDoor.cpp" />
     <ClCompile Include="src\Game\CGameUI.cpp" />
     <ClCompile Include="src\Game\CGaugeUI.cpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="src\Game\CCatCamera.h" />
     <ClInclude Include="src\Game\CDebugFieldOfView.h" />
     <ClInclude Include="src\Game\CDemonPower.h" />
+    <ClInclude Include="src\Game\CDemonPowerManager.h" />
     <ClInclude Include="src\Game\CDoor.h" />
     <ClInclude Include="src\Game\CGameUI.h" />
     <ClInclude Include="src\Game\CGaugeUI.h" />

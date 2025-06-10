@@ -9,6 +9,7 @@
 #include "CNavManager.h"
 #include "CSceneManager.h"
 #include "CDemonPower.h"
+#include "CDemonPowerManager.h"
 
 CField* CField::spInstance = nullptr;
 
@@ -49,8 +50,14 @@ CField::CField()
 		CVector(37.95f, 0.0f, 44.825f)
 	);
 
+	new CDemonPowerManager();
+
 	// —d—Í‚ÌŒ¹
 	new CDemonPower(CVector(30.0f, 0.0f, 95.0f));
+	// —d—Í‚ÌŒ¹
+	new CDemonPower(CVector(40.0f, 0.0f, 95.0f));
+	// —d—Í‚ÌŒ¹
+	new CDemonPower(CVector(50.0f, 0.0f, 95.0f));
 
 	// Œo˜H’Tõ—p‚Ìƒm[ƒh‚ğì¬
 	CreateNavNodes();

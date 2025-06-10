@@ -66,6 +66,8 @@ private:
 	void UpdateHit();
 	// 死亡処理
 	void UpdateDeath();
+	// 妖力を注いでいる
+	void UpdateChanneling();
 
 	// 移動の更新処理
 	void UpdateMove();
@@ -80,7 +82,12 @@ private:
 		eRun,		// 走行
 		eHit,		// 仰け反り
 		eDeath,		// 死亡
-		eAttack,	// 攻撃
+
+		eChannelingStart,	// 妖力を流し込み開始
+		eChanneling,		// 妖力を流し込み中
+		eChannelingEnd,	// 妖力を流し込み終了
+
+		//eAttack,	// 攻撃
 
 		Num
 	};
@@ -94,6 +101,7 @@ private:
 		eIdle,		// 待機
 		eHit,		// 仰け反り
 		eDeath,		// 死亡
+		eChanneling	// 妖力を注いでいる
 	};
 	// 状態を切り替え
 	void ChangeState(int state) override;
@@ -103,6 +111,8 @@ private:
 	int mMaxSt;	// スタミナの最大値
 	int mSt;	// スタミナ
 	CGaugeUI* mpStGauge;	// スタミナゲージ
+
+	float mChannelingTime;	// 妖力を流し込んでいる時間
 
 #if _DEBUG
 	CDebugFieldOfView* mpDebugFov;	// 視野範囲のデバッグ表示

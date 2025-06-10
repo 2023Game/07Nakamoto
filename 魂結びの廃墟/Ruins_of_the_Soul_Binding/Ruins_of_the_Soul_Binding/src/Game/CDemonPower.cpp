@@ -1,4 +1,5 @@
 #include "CDemonPower.h"
+#include "CDemonPowerManager.h"
 #include "CModel.h"
 #include "CColliderSphere.h"
 #include "CWarrok.h"
@@ -38,13 +39,24 @@ CDemonPower::CDemonPower(const CVector& pos)
 	mHp = HP;
 	Position(pos);
 
+	CDemonPowerManager::Instance()->AddDemonPower(this);
+
 }
 
 // デストラクタ
 CDemonPower::~CDemonPower()
 {
 	// コライダーを削除
-	SAFE_DELETE(mpCollider);
+	if (mpCollider != nullptr)
+	{
+		// 妖力の源の管理リストから取り除く
+		CDemonPowerManager* dpManager = CDemonPowerManager::Instance();
+		if (dpManager != nullptr)
+		{
+			dpManager->RemovePower(this);
+		}
+		SAFE_DELETE(mpCollider);
+	}
 }
 
 // 調べる
@@ -65,6 +77,7 @@ void CDemonPower::Update()
 	if (mHp <= 0)
 	{
 		Kill();
+		CWarrok::Instance()->PowerDown();
 	}
 }
 

@@ -33,6 +33,8 @@
 #define FOV_ANGLE		 60.0f		// 視野範囲の角度
 #define FOV_LENGTH		 10.0f		// 視野範囲の距離
 
+#define CHANNELING_TIME	5.0f		// 妖力を流し込んでダメージが入るまでの時間
+
 // プレイヤーのインスタンス
 CPlayer2* CPlayer2::spInstance = nullptr;
 
@@ -42,8 +44,12 @@ const std::vector<CPlayerBase::AnimData> ANIM_DATA =
 	{ "",						true,	251.0f,	1.0f	},	// 待機
 	{ANIM_PATH"walk.x",			true,	31.0f,	0.5f	},	// 歩行
 	{ANIM_PATH"run.x",			true,	22.0f,	0.5f	},	// 走行
-	{ANIM_PATH"hit.x",			false,	30.0f,	1.0f	},	// 走行(仮)
+	{ANIM_PATH"hit.x",			false,	30.0f,	1.0f	},	// ダメージを受けた時(仮)
 	{ANIM_PATH"died.x",			false,	174.0f,	1.0f	},	// 走行
+
+	{ANIM_PATH"channeling_start.x",	false,	32.0f,	0.5f	},	// 妖力を流し込み開始
+	{ANIM_PATH"channeling.x",		true,	9.0f,	0.5f	},	// 妖力を流し込み中
+	{ANIM_PATH"channeling_end.x",	false,	39.0f,	0.5f	},	// 妖力を流し込み終了
 
 };
 
@@ -51,6 +57,7 @@ const std::vector<CPlayerBase::AnimData> ANIM_DATA =
 CPlayer2::CPlayer2()
 	: mMaxSt(MAX_ST)
 	, mSt(mMaxSt)
+	, mChannelingTime(0)
 #if _DEBUG
 	,mpDebugFov(nullptr)
 #endif
@@ -231,6 +238,50 @@ void CPlayer2::UpdateDeath()
 	}
 }
 
+// 妖力を注いでいる
+void CPlayer2::UpdateChanneling()
+{
+	switch (mStateStep)
+	{
+	case 0:
+		// 妖力を流し込むアニメーションを開始
+		ChangeAnimation((int)EAnimType::eChannelingStart);
+		mMoveSpeed.Set(0.0f, 0.0f, 0.0f);
+		mChannelingTime = 0;
+		mStateStep++;
+		break;
+	case 1:
+		// 左クリックを押している間
+		if (CInput::Key(VK_LBUTTON))
+		{
+			ChangeAnimation((int)EAnimType::eChanneling);
+			mChannelingTime += mChannelingTime * Times::DeltaTime();
+
+			if (mChannelingTime >= CHANNELING_TIME)
+			{
+				mChannelingTime = 0;
+			}
+		}
+		else
+		{
+			// アニメーションが終わったら
+			if (IsAnimationFinished())
+			{
+				mStateStep++;
+			}
+		}
+		break;
+	case 2:
+		// アニメーションが終わったら
+		if (IsAnimationFinished())
+		{
+			// 妖力の流し込みを終了
+			ChangeAnimation((int)EAnimType::eChannelingEnd);
+			ChangeState((int)EState::eIdle);
+		}
+	}
+}
+
 // オブジェクト削除を伝える
 void CPlayer2::DeleteObject(CObjectBase* obj)
 {
@@ -361,6 +412,8 @@ void CPlayer2::Update()
 	case (int)EState::eHit:			UpdateHit();		break;
 	// 死亡処理
 	case (int)EState::eDeath:		UpdateDeath();		break;
+	// 妖力を注いでいる
+	case (int)EState::eChanneling:	UpdateChanneling();	break;
 	}
 
 	// このプレイヤーが操作中であれば、
@@ -394,11 +447,11 @@ void CPlayer2::Update()
 		mpNavNode->SetPos(Position());
 	}
 
-	// ホイールクリックで弾丸発射
-	//if (CInput::PushKey(VK_MBUTTON))
-	//{
-
-	//}
+	// 左クリックを押したら妖力を流し込む
+	if (CInput::Key(VK_LBUTTON))
+	{
+		ChangeState((int)EState::eChanneling);
+	}
 
 	// 「P」キーを押したら、ゲームを終了
 	if (CInput::PushKey('P'))

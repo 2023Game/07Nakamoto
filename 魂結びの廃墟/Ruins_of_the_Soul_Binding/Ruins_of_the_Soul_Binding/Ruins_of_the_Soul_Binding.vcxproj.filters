@@ -460,6 +460,9 @@
     <ClCompile Include="src\Game\CDemonPower.cpp">
       <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CDemonPowerManager.cpp">
+      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -835,6 +838,9 @@
       <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CDemonPower.h">
+      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CDemonPowerManager.h">
       <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
     </ClInclude>
   </ItemGroup>

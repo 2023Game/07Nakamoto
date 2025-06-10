@@ -5,7 +5,7 @@ class CModel;
 class CColliderMesh;
 
 // 妖力の源のクラス
-class CDemonPower : CInteractObject
+class CDemonPower : public CInteractObject
 {
 public:
 	// コンストラクタ

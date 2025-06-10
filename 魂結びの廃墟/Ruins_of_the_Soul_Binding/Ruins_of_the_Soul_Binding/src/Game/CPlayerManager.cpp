@@ -3,6 +3,8 @@
 #include <assert.h>
 #include "CInput.h"
 
+#define RESERVED_CAPACITYE 5	// リストの初期容量
+
 CPlayerManager* CPlayerManager::spInstance = nullptr;
 
 // プレイヤー管理クラスのインスタンスを取得
@@ -18,6 +20,9 @@ CPlayerManager::CPlayerManager()
 {
 	assert(spInstance == nullptr);
 	spInstance = this;
+
+	// リストの初期容量の設定
+	mPlayers.reserve(RESERVED_CAPACITYE);
 }
 
 // デストラクタ

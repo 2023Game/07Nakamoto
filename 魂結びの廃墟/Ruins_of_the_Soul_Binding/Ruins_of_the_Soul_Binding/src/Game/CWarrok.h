@@ -12,6 +12,9 @@ class CNavNode;
 class CWarrok : public CEnemy
 {
 public:
+	// インスタンスのポインタを取得
+	static CWarrok* Instance();
+
 	// コンストラクタ
 	CWarrok(std::vector<CVector> patrolPoints);
 	// デストラクタ
@@ -24,6 +27,9 @@ public:
 	// 攻撃終了
 	void AttackEnd() override;
 
+	// 妖力の源の減少
+	void PowerDown();
+
 	// ダメージを受ける
 	void TakeDamage(int damage, CObjectBase* causer) override;
 	// 死亡
@@ -34,15 +40,15 @@ public:
 	// オブジェクト削除を伝える関数
 	void DeleteObject(CObjectBase* obj) override;
 
-	// 妖力の源をリストに追加
-	void SetDemonPower(CDemonPower* power);
-
 	// 更新
 	void Update() override;
 	// 描画
 	void Render() override;
 
 private:
+	// ウォーロックのインスタンス
+	static CWarrok* spInstance;
+
 	// アニメーションの種類
 	enum class EAnimType
 	{
@@ -133,6 +139,10 @@ private:
 
 	// 自分とターゲットの間に壊せるオブジェクトがあるか
 	bool IsBreakObject();
+
+	// 妖力の源の数
+	int mMaxDemonPower;
+	int mDemonPower;
 
 #if _DEBUG
 	EScene mScene;

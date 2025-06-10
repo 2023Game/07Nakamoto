@@ -13,6 +13,7 @@
 #include "CNavNode.h"
 #include "CNavManager.h"
 #include "CInteractObject.h"
+#include "CDemonPowerManager.h"
 
 #if _DEBUG
 #include "CSceneManager.h"
@@ -51,6 +52,9 @@
 
 #define SEARCH_RADIUS	 10.0f		// 壊せるオブジェクトを探知する範囲の半径
 
+// ボスのインスタンス
+CWarrok* CWarrok::spInstance = nullptr;
+
 // 敵のアニメーションデータのテーブル
 const std::vector<CEnemy::AnimData> ANIM_DATA =
 {
@@ -60,6 +64,12 @@ const std::vector<CEnemy::AnimData> ANIM_DATA =
 	{ ANIM_PATH"warrok_attack.x",	false,	81.0f,	1.0f	},	// 攻撃
 
 };
+
+// インスタンスのポインタを取得
+CWarrok* CWarrok::Instance()
+{
+	return spInstance;
+}
 
 // コンストラクタ
 CWarrok::CWarrok(std::vector<CVector> patrolPoints)
@@ -73,6 +83,8 @@ CWarrok::CWarrok(std::vector<CVector> patrolPoints)
 	, mNextPatrolIndex(-1)	// -1の時に一番近いポイントに移動
 	, mNextMoveIndex(0)
 {
+	spInstance = this;
+
 	CPlayer2* target = CPlayer2::Instance();
 	mTargets.push_back(target);
 
@@ -170,6 +182,10 @@ CWarrok::CWarrok(std::vector<CVector> patrolPoints)
 		CNavNode* node = new CNavNode(point, true);
 		mPatrolPoints.push_back(node);
 	}
+
+	// 妖力の源の数を取得
+	mMaxDemonPower = CDemonPowerManager::Instance()->GetDemonPower();
+	mDemonPower = mMaxDemonPower;
 }
 
 // デストラクタ
@@ -248,6 +264,12 @@ void CWarrok::AttackEnd()
 
 	// 攻撃コライダーをオフ
 	mpAttack1Col->SetEnable(false);
+}
+
+// 妖力の源の減少
+void CWarrok::PowerDown()
+{
+	mDemonPower--;
 }
 
 // ダメージを受ける

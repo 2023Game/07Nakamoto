@@ -2,6 +2,8 @@
 #include "CInteractObject.h"
 #include <assert.h>
 
+#define RESERVED_CAPACITYE 10	// リストの初期容量
+
 // インスタンス
 CInteractObjectManager* CInteractObjectManager::spInstance = nullptr;
 
@@ -11,23 +13,26 @@ CInteractObjectManager* CInteractObjectManager::Instance()
 	return spInstance;
 }
 
-// インスタンスを破棄
-void CInteractObjectManager::CIearInstance()
-{
-	SAFE_DELETE(spInstance);
-}
-
 // コンストラクタ
 CInteractObjectManager::CInteractObjectManager()
 {
 	assert(spInstance == nullptr);
 	spInstance = this;
+
+	// リストの初期容量の設定
+	mInteractObjects.reserve(RESERVED_CAPACITYE);
 }
 
 // デストラクタ
 CInteractObjectManager::~CInteractObjectManager()
 {
 	spInstance = nullptr;
+}
+
+// インスタンスを破棄
+void CInteractObjectManager::CIearInstance()
+{
+	SAFE_DELETE(spInstance);
 }
 
 // 調べるオブジェクトを追加

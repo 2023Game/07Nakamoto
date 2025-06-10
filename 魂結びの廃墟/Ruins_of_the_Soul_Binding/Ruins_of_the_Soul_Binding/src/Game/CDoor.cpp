@@ -55,8 +55,7 @@ CDoor::~CDoor()
 		{
 			navMgr->RemoveCollider(mpDoorColliderMesh);
 		}
-		delete mpDoorColliderMesh;
-		mpDoorColliderMesh = nullptr;
+		SAFE_DELETE(mpDoorColliderMesh);
 	}
 }
 
