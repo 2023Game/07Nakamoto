@@ -28,7 +28,7 @@ public:
 	/// <param name="pos">調べる座標</param>
 	/// <param name="distance">調べる距離</param>
 	/// <param name="list">見つかったオブジェクトを格納するリスト</param>
-	/// <returns>trueであれば、地区区のオブジェクトが存在した</returns>
+	/// <returns>trueであれば、近くのオブジェクトが存在した</returns>
 	bool GetNearInteractObjects(const CVector& pos, float distance,
 		std::vector<CInteractObject*>& list);
 

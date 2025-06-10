@@ -34,6 +34,9 @@ public:
 	// オブジェクト削除を伝える関数
 	void DeleteObject(CObjectBase* obj) override;
 
+	// 妖力の源をリストに追加
+	void SetDemonPower(CDemonPower* power);
+
 	// 更新
 	void Update() override;
 	// 描画

@@ -1,6 +1,7 @@
 #include "CDemonPower.h"
 #include "CModel.h"
 #include "CColliderSphere.h"
+#include "CWarrok.h"
 
 #define HP 10	// 耐久力
 
@@ -18,7 +19,6 @@ CDemonPower::CDemonPower(const CVector& pos)
 		4.0f, true
 	);
 
-	mpCollider->Position(pos);
 	mpCollider->SetCollisionTags
 	( 
 		{
@@ -36,6 +36,8 @@ CDemonPower::CDemonPower(const CVector& pos)
 	);
 
 	mHp = HP;
+	Position(pos);
+
 }
 
 // デストラクタ
