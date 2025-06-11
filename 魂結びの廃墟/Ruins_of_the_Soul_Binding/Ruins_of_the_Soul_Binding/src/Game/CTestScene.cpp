@@ -13,7 +13,7 @@
 #include "CBGMManager.h"
 #include "CLineEffect.h"
 #include "CCactus.h"
-#include "CWarrok.h"
+#include "CBoss.h"
 #include "CNavManager.h"]
 #include "CInteractObjectManager.h"
 
@@ -98,7 +98,7 @@ void CTestScene::Load()
 	cat->Position(10.0f, 0.0f, 0.0f);
 
 	// ウォーロックの生成
-	CWarrok* warrok = new CWarrok
+	CBoss* warrok = new CBoss
 	(
 		{
 			CVector(70.0f, 1.0, 60.0f),

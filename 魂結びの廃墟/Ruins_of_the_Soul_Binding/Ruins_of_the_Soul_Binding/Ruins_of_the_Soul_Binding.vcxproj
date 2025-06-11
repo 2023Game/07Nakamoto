@@ -117,7 +117,7 @@
     <ClCompile Include="src\Game\CTestScene.cpp" />
     <ClCompile Include="src\Game\CTitleScene.cpp" />
     <ClCompile Include="src\Game\CTitleUI.cpp" />
-    <ClCompile Include="src\Game\CWarrok.cpp" />
+    <ClCompile Include="src\Game\CBoss.cpp" />
     <ClCompile Include="src\Game\CWeapon.cpp" />
     <ClCompile Include="src\Game\CXCharacter.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -246,7 +246,7 @@
     <ClInclude Include="src\Game\CTestScene.h" />
     <ClInclude Include="src\Game\CTitleUI.h" />
     <ClInclude Include="src\Game\CTitleScene.h" />
-    <ClInclude Include="src\Game\CWarrok.h" />
+    <ClInclude Include="src\Game\CBoss.h" />
     <ClInclude Include="src\Game\CWeapon.h" />
     <ClInclude Include="src\Game\CXCharacter.h" />
     <ClInclude Include="src\Game\CPlayer2.h" />

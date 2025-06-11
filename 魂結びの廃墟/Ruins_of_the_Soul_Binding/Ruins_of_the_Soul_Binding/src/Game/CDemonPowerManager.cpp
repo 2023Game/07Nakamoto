@@ -1,7 +1,7 @@
 #include "CDemonPowerManager.h"
 #include "CDemonPower.h"
 #include <assert.h>
-#include "CWarrok.h"
+#include "CBoss.h"
 
 #define RESERVED_CAPACITYE 7	// ƒŠƒXƒg‚Ì‰Šú—e—Ê
 

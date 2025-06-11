@@ -2,7 +2,7 @@
 #include "CDemonPowerManager.h"
 #include "CModel.h"
 #include "CColliderSphere.h"
-#include "CWarrok.h"
+#include "CBoss.h"
 #include "CInteractObjectManager.h"
 
 #define HP 10	// ‘Ï‹v—Í
@@ -41,7 +41,7 @@ CDemonPower::CDemonPower(const CVector& pos)
 	mHp = HP;
 	Position(pos);
 
-	//CDemonPowerManager::Instance()->AddDemonPower(this);
+	CDemonPowerManager::Instance()->AddDemonPower(this);
 	
 }
 
@@ -79,7 +79,7 @@ void CDemonPower::Update()
 	if (mHp <= 0)
 	{
 		Kill();
-		CWarrok::Instance()->PowerDown();
+		CBoss::Instance()->PowerDown();
 	}
 }
 

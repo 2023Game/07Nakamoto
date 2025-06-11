@@ -7,6 +7,7 @@
 class CCollider;
 class CDebugFieldOfView;
 class CGaugeUI;
+class CDemonPower;
 
 /*
 プレイヤークラス
@@ -112,6 +113,8 @@ private:
 	int mSt;	// スタミナ
 	CGaugeUI* mpStGauge;	// スタミナゲージ
 
+	// 妖力を流し込んでいる妖力の源のオブジェクト
+	CDemonPower* mpChannelingDemonPower;
 	float mChannelingTime;	// 妖力を流し込んでいる時間
 
 #if _DEBUG

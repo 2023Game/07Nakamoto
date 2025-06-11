@@ -15,6 +15,7 @@
 #include "CHpGauge.h"
 #include "CStGauge.h"
 #include "CSceneManager.h"
+#include "CDemonPower.h"
 
 // アニメーションのパス
 #define ANIM_PATH "Character\\Player2\\Rusk\\anim\\"
@@ -28,12 +29,13 @@
 
 #define MAX_HP 100	// 体力の最大値
 #define MAX_ST 100	// スタミナの最大値
+#define DEMON_POWER_DAMAGE	1	// 妖力の源へのダメージ
 
 #define SEARCH_RADIUS	 10.0f		// 調べるオブジェクトを探知する範囲の半径
 #define FOV_ANGLE		 60.0f		// 視野範囲の角度
 #define FOV_LENGTH		 10.0f		// 視野範囲の距離
 
-#define CHANNELING_TIME	5.0f		// 妖力を流し込んでダメージが入るまでの時間
+#define CHANNELING_TIME	0.5f		// 妖力を流し込んでダメージが入るまでの時間
 
 // プレイヤーのインスタンス
 CPlayer2* CPlayer2::spInstance = nullptr;
@@ -194,18 +196,26 @@ void CPlayer2::UpdateIdle()
 			// 調べられるオブジェクトの上に調べるUIを表示
 			//CGameUI::Instance()->ShowInteractUI(obj);
 
-			// [E]キーを押したら、近くの調べるオブジェクトを調べる
-			if (CInput::PushKey('E'))
+			// 近くの調べられるオブジェクトが、妖力の源であれば、
+			if (CDemonPower* dp = dynamic_cast<CDemonPower*>(obj))
 			{
-				if (obj->CanInteract())
+				// 左クリックを押したら妖力を流し込む
+				if (CInput::PushKey(VK_LBUTTON))
 				{
-					obj->Interact();
+					mpChannelingDemonPower = dp;
+					ChangeState((int)EState::eChanneling);
 				}
 			}
-			// 左クリックを押したら妖力を流し込む
-			else if (CInput::Key(VK_LBUTTON))
+			else
 			{
-				ChangeState((int)EState::eChanneling);
+				// [E]キーを押したら、近くの調べるオブジェクトを調べる
+				if (CInput::PushKey('E'))
+				{
+					if (obj->CanInteract())
+					{
+						obj->Interact();
+					}
+				}
 			}
 		}
 		// 近くに調べるオブジェクトがなかった
@@ -258,6 +268,8 @@ void CPlayer2::UpdateDeath()
 // 妖力を注いでいる
 void CPlayer2::UpdateChanneling()
 {
+	// TODO:アニメーションを開始する距離が近かったら離れた位置に行って処理を開始する
+
 	switch (mStateStep)
 	{
 	case 0:
@@ -265,7 +277,9 @@ void CPlayer2::UpdateChanneling()
 		ChangeAnimation((int)EAnimType::eChannelingStart);
 		mMoveSpeed.Set(0.0f, 0.0f, 0.0f);
 		mChannelingTime = 0;
-
+		mStateStep++;
+		break;
+	case 1:
 		// アニメーションが終わったら
 		if (IsAnimationFinished())
 		{
@@ -273,38 +287,47 @@ void CPlayer2::UpdateChanneling()
 			mStateStep++;
 		}
 		break;
-	case 1:
+	case 2:
 		// 左クリックを押している間
 		if (CInput::Key(VK_LBUTTON))
 		{
 			// 妖力を流し込むアニメーション
 			ChangeAnimation((int)EAnimType::eChanneling);
-			mChannelingTime += mChannelingTime * Times::DeltaTime();
+			mChannelingTime += Times::DeltaTime();
 
 			if (mChannelingTime >= CHANNELING_TIME)
 			{
-				// TODO:目標にダメージを与える
-				mChannelingTime = 0;
+				// 目標にダメージを与える
+				mpChannelingDemonPower->TakeDamage(DEMON_POWER_DAMAGE, this);
+				// 目標が破壊されたら、次のステップへ
+				if (mpChannelingDemonPower->IsDeath())
+				{
+					mStateStep++;
+				}
+				mChannelingTime -= CHANNELING_TIME;
 			}
 		}
+		// マウスの左ボタンを離したら、次のステップへ
 		else
 		{
-			// アニメーションが終わったら
-			if (IsAnimationFinished())
-			{
-				mStateStep++;
-			}
+			mStateStep++;
 		}
 		break;
-	case 2:
-		// 妖力の流し込みを終了アニメーション
+	case 3:
+		// 妖力を流し込む目標のポインタを空にする
+		mpChannelingDemonPower = nullptr;
+		// 妖力の流し込みを終了アニメーションを再生開始
 		ChangeAnimation((int)EAnimType::eChannelingEnd);
+		mStateStep++;
+		break;
+	case 4:
 
 		// アニメーションが終わったら
 		if (IsAnimationFinished())
 		{
 			ChangeState((int)EState::eIdle);
 		}
+		break;
 	}
 }
 
