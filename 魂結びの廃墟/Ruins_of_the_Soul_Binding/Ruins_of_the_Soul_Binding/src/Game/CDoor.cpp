@@ -3,7 +3,7 @@
 
 //#define MOVE_POS 9.9f	// 移動距離
 //#define MOVE_TIME 5.0f	// 移動時間
-#define HP 15			// 体力
+#define HP 60			// 体力
 
 // コンストラクタ
 CDoor::CDoor(const CVector& pos, const CVector& angle, const CVector& openPos,

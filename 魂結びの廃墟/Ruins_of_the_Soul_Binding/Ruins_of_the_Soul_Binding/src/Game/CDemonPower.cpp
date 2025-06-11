@@ -36,6 +36,7 @@ CDemonPower::CDemonPower(const CVector& pos)
 			ELayer::eEnemy
 		}
 	);
+	mpCollider->Position(pos);
 
 	mHp = HP;
 	Position(pos);

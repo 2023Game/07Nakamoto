@@ -114,6 +114,16 @@ CPlayer2::CPlayer2()
 		}
 	);
 
+	// 調べるオブジェクトを探知するコライダーを作成
+	mpSearchCol = new CColliderSphere
+	(
+		this, ELayer::eInteractSearch,
+		SEARCH_RADIUS
+	);
+	// 調べるオブジェクトのみ衝突するように設定
+	mpSearchCol->SetCollisionTags({ ETag::eInteractObject });
+	mpSearchCol->SetCollisionLayers({ ELayer::eInteractObj });
+
 	// HPゲージ作成
 	mpHpGauge = new CHpGauge();
 	mpHpGauge->SetMaxPoint(mMaxHp);
@@ -138,6 +148,7 @@ CPlayer2::~CPlayer2()
 	}
 #endif
 
+	SAFE_DELETE(mpSearchCol);
 	spInstance = nullptr;
 }
 
@@ -554,9 +565,6 @@ void CPlayer2::TakeDamage(int damage, CObjectBase* causer)
 void CPlayer2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	CPlayerBase::Collision(self, other, hit);
-
-
-
 }
 
 // 操作中かどうか設定

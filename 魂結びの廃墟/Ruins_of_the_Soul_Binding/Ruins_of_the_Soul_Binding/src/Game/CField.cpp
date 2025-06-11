@@ -50,14 +50,31 @@ CField::CField()
 		CVector(37.95f, 0.0f, 44.825f)
 	);
 
+	// 右のドアの生成
+	mpRDoor = new CRDoor
+	(
+		CVector(-33.55f, 0.0f, 44.825f),
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(-43.45, 0.0f, 44.825f)
+	);
+
+	// 左のドアの生成
+	mpLDoor = new CLDoor
+	(
+		CVector(-43.45, 0.0f, 44.825f),
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(-33.55f, 0.0f, 44.825f)
+	);
+
+
 	new CDemonPowerManager();
 
 	// 妖力の源
-	new CDemonPower(CVector(30.0f, 0.0f, 95.0f));
+	new CDemonPower(CVector(30.0f, 5.0f, 10.0f));
 	// 妖力の源
-	new CDemonPower(CVector(40.0f, 0.0f, 95.0f));
+	new CDemonPower(CVector(20.0f, 5.0f, 10.0f));
 	// 妖力の源
-	new CDemonPower(CVector(50.0f, 0.0f, 95.0f));
+	new CDemonPower(CVector(10.0f, 5.0f, 10.0f));
 
 	// 経路探索用のノードを作成
 	CreateNavNodes();

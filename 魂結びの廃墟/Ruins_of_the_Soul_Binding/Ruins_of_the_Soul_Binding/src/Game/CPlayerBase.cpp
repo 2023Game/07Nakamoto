@@ -27,6 +27,7 @@ CPlayerBase::CPlayerBase()
 	, mSearchDist(SEARC_DIST)
 	, mIsOperate(false)
 	, mpCamera(nullptr)
+	, mpSearchCol(nullptr)
 {
 	CPlayerManager::Instance()->AddPlayer(this);
 
@@ -145,6 +146,21 @@ void CPlayerBase::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 			Position(Position() + adjust * hit.weight);
 		}
 	}
+	// 調べるオブジェクトの探知コライダーとの当たり判定
+	if (self == mpSearchCol)
+	{
+		CInteractObject* obj = dynamic_cast<CInteractObject*>(other->Owner());
+		if (obj != nullptr)
+		{
+			// 調べるオブジェクトの削除フラグが立っていなかったら
+			if (!obj->IsKill())
+			{
+				// 衝突した調べるオブジェクトをリストに追加
+				mNearInteractObjs.push_back(obj);
+			}
+		}
+	}
+
 }
 
 // プレイヤーの初期化

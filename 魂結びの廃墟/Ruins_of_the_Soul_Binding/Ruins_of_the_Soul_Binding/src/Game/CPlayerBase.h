@@ -77,6 +77,7 @@ protected:
 	CVector mGroundNormal;	// 接地している地面の法線
 
 	CCollider* mpBodyCol;	// 本体のコライダー
+	CCollider* mpSearchCol;	// 調べるオブジェクトを探知するコライダ―
 
 	// 一番近くにある調べられるオブジェクトを取得
 	CInteractObject* GetNearInteractObj();
