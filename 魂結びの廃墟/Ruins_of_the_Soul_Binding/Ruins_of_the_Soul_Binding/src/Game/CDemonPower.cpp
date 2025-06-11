@@ -3,6 +3,7 @@
 #include "CModel.h"
 #include "CColliderSphere.h"
 #include "CWarrok.h"
+#include "CInteractObjectManager.h"
 
 #define HP 10	// 耐久力
 
@@ -16,7 +17,7 @@ CDemonPower::CDemonPower(const CVector& pos)
 	// コライダーを設定
 	mpCollider = new CColliderSphere
 	(
-		this, ELayer::eInteractObj,
+		this, ELayer::eDemon,
 		4.0f, true
 	);
 
@@ -39,8 +40,8 @@ CDemonPower::CDemonPower(const CVector& pos)
 	mHp = HP;
 	Position(pos);
 
-	CDemonPowerManager::Instance()->AddDemonPower(this);
-
+	//CDemonPowerManager::Instance()->AddDemonPower(this);
+	
 }
 
 // デストラクタ

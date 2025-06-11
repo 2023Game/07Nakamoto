@@ -48,7 +48,7 @@ const std::vector<CPlayerBase::AnimData> ANIM_DATA =
 	{ANIM_PATH"died.x",			false,	174.0f,	1.0f	},	// 走行
 
 	{ANIM_PATH"channeling_start.x",	false,	32.0f,	0.5f	},	// 妖力を流し込み開始
-	{ANIM_PATH"channeling.x",		true,	9.0f,	0.5f	},	// 妖力を流し込み中
+	{ANIM_PATH"channeling.x",		true,	9.0f,	0.3f	},	// 妖力を流し込み中
 	{ANIM_PATH"channeling_end.x",	false,	39.0f,	0.5f	},	// 妖力を流し込み終了
 
 };
@@ -109,6 +109,7 @@ CPlayer2::CPlayer2()
 			ELayer::eInteractObj,
 			ELayer::eDoor,
 			ELayer::eEnemy,
+			ELayer::eDemon,
 			ELayer::eAttackCol,
 		}
 	);
@@ -190,6 +191,11 @@ void CPlayer2::UpdateIdle()
 					obj->Interact();
 				}
 			}
+			// 左クリックを押したら妖力を流し込む
+			else if (CInput::Key(VK_LBUTTON))
+			{
+				ChangeState((int)EState::eChanneling);
+			}
 		}
 		// 近くに調べるオブジェクトがなかった
 		else
@@ -248,17 +254,25 @@ void CPlayer2::UpdateChanneling()
 		ChangeAnimation((int)EAnimType::eChannelingStart);
 		mMoveSpeed.Set(0.0f, 0.0f, 0.0f);
 		mChannelingTime = 0;
-		mStateStep++;
+
+		// アニメーションが終わったら
+		if (IsAnimationFinished())
+		{
+			// 次のアニメーションへ
+			mStateStep++;
+		}
 		break;
 	case 1:
 		// 左クリックを押している間
 		if (CInput::Key(VK_LBUTTON))
 		{
+			// 妖力を流し込むアニメーション
 			ChangeAnimation((int)EAnimType::eChanneling);
 			mChannelingTime += mChannelingTime * Times::DeltaTime();
 
 			if (mChannelingTime >= CHANNELING_TIME)
 			{
+				// TODO:目標にダメージを与える
 				mChannelingTime = 0;
 			}
 		}
@@ -272,11 +286,12 @@ void CPlayer2::UpdateChanneling()
 		}
 		break;
 	case 2:
+		// 妖力の流し込みを終了アニメーション
+		ChangeAnimation((int)EAnimType::eChannelingEnd);
+
 		// アニメーションが終わったら
 		if (IsAnimationFinished())
 		{
-			// 妖力の流し込みを終了
-			ChangeAnimation((int)EAnimType::eChannelingEnd);
 			ChangeState((int)EState::eIdle);
 		}
 	}
@@ -447,12 +462,6 @@ void CPlayer2::Update()
 		mpNavNode->SetPos(Position());
 	}
 
-	// 左クリックを押したら妖力を流し込む
-	if (CInput::Key(VK_LBUTTON))
-	{
-		ChangeState((int)EState::eChanneling);
-	}
-
 	// 「P」キーを押したら、ゲームを終了
 	if (CInput::PushKey('P'))
 	{
@@ -545,6 +554,8 @@ void CPlayer2::TakeDamage(int damage, CObjectBase* causer)
 void CPlayer2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	CPlayerBase::Collision(self, other, hit);
+
+
 
 }
 

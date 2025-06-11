@@ -463,6 +463,9 @@
     <ClCompile Include="src\Game\CDemonPowerManager.cpp">
       <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CHandGlow.cpp">
+      <Filter>ソース ファイル\Game\Effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -842,6 +845,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CDemonPowerManager.h">
       <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CHandGlow.h">
+      <Filter>ソース ファイル\Game\Effect</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
