@@ -8,6 +8,7 @@ class CCollider;
 class CDebugFieldOfView;
 class CGaugeUI;
 class CDemonPower;
+class CHandGlow;
 
 /*
 プレイヤークラス
@@ -116,6 +117,9 @@ private:
 	// 妖力を流し込んでいる妖力の源のオブジェクト
 	CDemonPower* mpChannelingDemonPower;
 	float mChannelingTime;	// 妖力を流し込んでいる時間
+
+	// 手の光のエフェクト
+	//CHandGlow* mpHandGlow;
 
 #if _DEBUG
 	CDebugFieldOfView* mpDebugFov;	// 視野範囲のデバッグ表示

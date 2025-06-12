@@ -16,6 +16,7 @@
 #include "CStGauge.h"
 #include "CSceneManager.h"
 #include "CDemonPower.h"
+#include "CHandGlow.h"
 
 // アニメーションのパス
 #define ANIM_PATH "Character\\Player2\\Rusk\\anim\\"
@@ -289,7 +290,25 @@ void CPlayer2::UpdateChanneling()
 		break;
 	case 2:
 		// 左クリックを押している間
-		if (CInput::Key(VK_LBUTTON))
+		if (CInput::Key(VK_LBUTTON) && IsOperate())
+		{
+			// 妖力を流し込むアニメーション
+			ChangeAnimation((int)EAnimType::eChanneling);
+			mChannelingTime += Times::DeltaTime();
+
+			if (mChannelingTime >= CHANNELING_TIME)
+			{
+				// 目標にダメージを与える
+				mpChannelingDemonPower->TakeDamage(DEMON_POWER_DAMAGE, this);
+				// 目標が破壊されたら、次のステップへ
+				if (mpChannelingDemonPower->IsDeath())
+				{
+					mStateStep++;
+				}
+				mChannelingTime -= CHANNELING_TIME;
+			}
+		}
+		else if (!IsOperate())
 		{
 			// 妖力を流し込むアニメーション
 			ChangeAnimation((int)EAnimType::eChanneling);
@@ -326,6 +345,7 @@ void CPlayer2::UpdateChanneling()
 		if (IsAnimationFinished())
 		{
 			ChangeState((int)EState::eIdle);
+			ChangeAnimation((int)EAnimType::eIdle);
 		}
 		break;
 	}
@@ -524,6 +544,8 @@ void CPlayer2::Update()
 	mpStGauge->SetMaxPoint(mMaxSt);
 	mpStGauge->SetCurPoint(mSt);
 
+#if _DEBUG
+	// その場で復活
 	if (mState == (int)EState::eDeath)
 	{
 		if (CInput::PushKey('R'))
@@ -532,6 +554,8 @@ void CPlayer2::Update()
 			mState = (int)EState::eIdle;
 		}
 	}
+#endif // _DEBUG
+
 }
 
 // ステータスを整数にして取得する

@@ -8,7 +8,7 @@
 // アニメーションの1コマ表示時間
 #define ANIM_TIME 0.0625f
 // 光のエフェクトのアニメーションデータ
-TexAnimData CHandGlow::msAnimData = TexAnimData(1, 10, true, 64, ANIM_TIME);
+TexAnimData CHandGlow::msAnimData = TexAnimData(1, 10, true, 10, ANIM_TIME);
 
 // コンストラクタ
 CHandGlow::CHandGlow(ETag tag)
@@ -61,6 +61,4 @@ void CHandGlow::Update()
 {
 	// 基底クラスの更新処理
 	CBillBoardImage::Update();
-
-
 }

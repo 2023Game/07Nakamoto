@@ -3,6 +3,7 @@
 
 class CModel;
 class CColliderMesh;
+class CGaugeUI3D;
 
 // 妖力の源のクラス
 class CDemonPower : public CInteractObject
@@ -27,6 +28,9 @@ public:
 private:
 	CModel* mpModel;	//妖力も源のモデルデータ
 	CCollider* mpCollider;	// 妖力の源のコリジョンデータ
+
+	CGaugeUI3D* mpHpGauge;	// HPゲージ
+	CVector mGaugeOffsetPos;	// ゲージのオフセット位置
 
 	bool mBroken;	//	壊れたか
 };

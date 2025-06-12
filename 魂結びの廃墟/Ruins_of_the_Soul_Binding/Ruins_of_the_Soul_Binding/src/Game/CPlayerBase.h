@@ -3,6 +3,7 @@
 
 class CCollider;
 class CInteractObject;
+class CNavNode;
 
 class CPlayerBase : public CXCharacter
 {

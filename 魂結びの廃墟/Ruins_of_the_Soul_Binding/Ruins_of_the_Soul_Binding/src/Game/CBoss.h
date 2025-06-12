@@ -139,11 +139,8 @@ private:
 
 	// 自分とターゲットの間に壊せるオブジェクトがあるか
 	bool IsBreakObject();
-
-	// 妖力の源の数
-	int mMaxDemonPower;
-	int mDemonPower;
-
+	// 攻撃力
+	int mPower;
 #if _DEBUG
 	EScene mScene;
 #endif

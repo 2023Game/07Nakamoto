@@ -11,6 +11,8 @@
 #define FOV_ANGLE		60.0f		// 視野範囲の角度
 #define SEARC_DIST		10.0f		// 近くにあるオブジェクトを調べるときの距離
 
+#define RESERVED_CAPACITYE 5	// リストの初期容量
+
 // コンストラクタ
 CPlayerBase::CPlayerBase()
 	: CXCharacter(ETag::ePlayer, ETaskPriority::ePlayer)

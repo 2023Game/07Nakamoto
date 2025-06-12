@@ -4,8 +4,10 @@
 #include "CColliderSphere.h"
 #include "CBoss.h"
 #include "CInteractObjectManager.h"
+#include "CGaugeUI3D.h"
 
 #define HP 10	// 耐久力
+#define GAUGE_OFFSET_Y 10.0f
 
 // コンストラクタ
 CDemonPower::CDemonPower(const CVector& pos)
@@ -38,8 +40,16 @@ CDemonPower::CDemonPower(const CVector& pos)
 	);
 	mpCollider->Position(pos);
 
-	mHp = HP;
+	mMaxHp = HP;
+	mHp = mMaxHp;
 	Position(pos);
+
+	// HPゲージを作成
+	mpHpGauge = new CGaugeUI3D(this);
+	mpHpGauge->SetMaxPoint(mMaxHp);
+	mpHpGauge->SetCurrPoint(mHp);
+	// ゲージのオフセット位置を設定
+	mGaugeOffsetPos = CVector(0.0f, GAUGE_OFFSET_Y, 0.0f);
 
 	CDemonPowerManager::Instance()->AddDemonPower(this);
 	
@@ -59,12 +69,19 @@ CDemonPower::~CDemonPower()
 		}
 		SAFE_DELETE(mpCollider);
 	}
+
+	// HPゲージが存在したら、一緒に削除する
+	if (mpHpGauge != nullptr)
+	{
+		mpHpGauge->SetOwner(nullptr);
+		mpHpGauge->Kill();
+	}
 }
 
 // 調べる
 void CDemonPower::Interact()
 {
-	mHp -= 5;
+
 }
 
 // 破壊されたか
@@ -81,6 +98,16 @@ void CDemonPower::Update()
 		Kill();
 		CBoss::Instance()->PowerDown();
 	}
+
+	// HPゲージが存在すれば、
+	if (mpHpGauge != nullptr)
+	{
+		// HPゲージを更新
+		mpHpGauge->Position(Position() + mGaugeOffsetPos);
+		mpHpGauge->SetMaxPoint(mMaxHp);
+		mpHpGauge->SetCurrPoint(mHp);
+	}
+
 }
 
 // 描画処理

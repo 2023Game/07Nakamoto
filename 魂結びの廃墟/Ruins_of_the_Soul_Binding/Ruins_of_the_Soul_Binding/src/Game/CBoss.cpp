@@ -82,6 +82,7 @@ CBoss::CBoss(std::vector<CVector> patrolPoints)
 	, mpDebugFov(nullptr)
 	, mNextPatrolIndex(-1)	// -1の時に一番近いポイントに移動
 	, mNextMoveIndex(0)
+	, mPower(ATTACK_POWER)
 {
 	spInstance = this;
 
@@ -184,8 +185,8 @@ CBoss::CBoss(std::vector<CVector> patrolPoints)
 	}
 
 	// 妖力の源の数を取得
-	mMaxDemonPower = CDemonPowerManager::Instance()->GetDemonPower();
-	mDemonPower = mMaxDemonPower;
+	//mMaxDemonPower = CDemonPowerManager::Instance()->GetDemonPower();
+	//mDemonPower = mMaxDemonPower;
 }
 
 // デストラクタ
@@ -269,7 +270,7 @@ void CBoss::AttackEnd()
 // 妖力の源の減少
 void CBoss::PowerDown()
 {
-	mDemonPower--;
+	//mDemonPower--;
 }
 
 // ダメージを受ける
@@ -318,7 +319,7 @@ void CBoss::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		if (chara != nullptr && !IsAttackHitObj(chara))
 		{
 			// ダメージを与える
-			chara->TakeDamage(ATTACK_POWER, this);
+			chara->TakeDamage(mPower, this);
 			// 攻撃ヒット済みリストに登録
 			AddAttackHitObj(chara);
 		}
@@ -327,7 +328,7 @@ void CBoss::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		if (obj != nullptr && !IsAttackHitObj(obj))
 		{
 			// ダメージを与える
-			obj->TakeDamage(ATTACK_POWER, this);
+			obj->TakeDamage(mPower, this);
 			// 攻撃ヒット済みリストに登録
 			AddAttackHitObj(obj);
 		}
@@ -904,6 +905,25 @@ void CBoss::UpdateDeath()
 // 更新
 void CBoss::Update()
 {
+	// 妖力の源の数を取得
+	int demonPower = CDemonPowerManager::Instance()->GetDemonPower();
+	// 妖力の源が残り3つの時、
+	if (demonPower == 3)
+	{
+		//CDebugPrint::Print("DemonPower:%d\n", demonPower);
+	}
+	// 妖力の源が残り3つの時、
+	else if (demonPower == 2)
+	{
+		mPower = ATTACK_POWER + ATTACK_POWER;
+		//CDebugPrint::Print("DemonPower:%d\n", demonPower);
+	}
+	// 妖力の源が残り3つの時、
+	else if (demonPower == 1)
+	{
+		//CDebugPrint::Print("DemonPower:%d\n", demonPower);
+	}
+
 	// 状態に合わせて、更新処理を切り替える
 	switch ((EState)mState)
 	{
