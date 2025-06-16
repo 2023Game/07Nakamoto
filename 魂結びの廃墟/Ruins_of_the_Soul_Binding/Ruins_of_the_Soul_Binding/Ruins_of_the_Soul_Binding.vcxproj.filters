@@ -472,6 +472,9 @@
     <ClCompile Include="src\Game\CTrailManager.cpp">
       <Filter>ソース ファイル\Game\Navigation</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CTrailNode.cpp">
+      <Filter>ソース ファイル\Game\Navigation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -856,6 +859,9 @@
       <Filter>ソース ファイル\Game\Effect</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CTrailManager.h">
+      <Filter>ソース ファイル\Game\Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CTrailNode.h">
       <Filter>ソース ファイル\Game\Navigation</Filter>
     </ClInclude>
   </ItemGroup>

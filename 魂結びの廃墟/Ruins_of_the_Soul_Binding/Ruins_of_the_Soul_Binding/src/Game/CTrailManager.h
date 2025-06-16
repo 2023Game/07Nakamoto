@@ -1,16 +1,14 @@
 #pragma once
 #include <vector>
-#include "CTask.h"
+#include "CNavManager.h"
 
-class CTrailManager : public CTask
+// プレイヤーの痕跡のクラス
+class CTrailManager : public CNavManager
 {
 public:
 	// コンストラクタ
 	CTrailManager();
 	// デストラクタ
 	~CTrailManager();
-
-	// 
-
 private:
 };
