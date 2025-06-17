@@ -39,6 +39,9 @@
 #define CHANNELING_TIME	0.5f		// 妖力を流し込んでダメージが入るまでの時間
 
 #define MAX_DISTANCE 5.0f	// 追従する距離を更新する際の距離
+#define MAX_HISTORY_SIZE 5	// 追従用のリストの制限数
+
+#define RESERVED_CAPACITYE 7	// リストの初期容量
 
 // プレイヤーのインスタンス
 CPlayer2* CPlayer2::spInstance = nullptr;
@@ -63,8 +66,6 @@ CPlayer2::CPlayer2()
 	: mMaxSt(MAX_ST)
 	, mSt(mMaxSt)
 	, mChannelingTime(0)
-	, mTrail(0)
-	, mTrails{}
 #if _DEBUG
 	,mpDebugFov(nullptr)
 #endif
@@ -131,6 +132,7 @@ CPlayer2::CPlayer2()
 	mpSearchCol->SetCollisionTags({ ETag::eInteractObject });
 	mpSearchCol->SetCollisionLayers({ ELayer::eInteractObj });
 
+	mTrails.reserve(RESERVED_CAPACITYE);
 	SetTrail();
 
 	// HPゲージ作成
@@ -543,12 +545,12 @@ void CPlayer2::Update()
 	// 地面についているか
 	mIsGrounded = false;
 
+
 	CVector p = Position();
+	float distance = CVector::Distance(mLastPos, p);
 
-	if (CVector::Distance(mTrails[mTrail], p) >= MAX_DISTANCE)
+	if (distance >= MAX_DISTANCE)
 	{
-		mTrail++;
-
 		SetTrail();
 	};
 
@@ -655,16 +657,17 @@ void CPlayer2::SetOperate(bool operate)
 void CPlayer2::SetTrail()
 {
 	CVector pos = Position();
-	mTrails[mTrail] = pos;
+	mLastPos = pos;
 
-	if (mTrail < 5)
+	mTrails.push_back(pos);
+
+	if (mTrails.size() > MAX_HISTORY_SIZE)
 	{
-		mTrail = 0;
+		mTrails.erase(mTrails.begin());
 	}
 }
 
-// 追従用の配列を取得
-CVector CPlayer2::GetTrail(int trail)
+const std::vector<CVector>& CPlayer2::GetTrail() const
 {
-	return mTrails[trail];
+	return mTrails;
 }

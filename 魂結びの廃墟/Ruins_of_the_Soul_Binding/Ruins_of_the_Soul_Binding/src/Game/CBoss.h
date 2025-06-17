@@ -124,7 +124,7 @@ private:
 	std::vector<CNavNode*> mMoveRoute;	// 求めた最短経路記憶用
 	int mNextMoveIndex;					// 次に移動するノードのインデックス値
 
-	std::list<CObjectBase*> mTargets;	//標的のリスト
+	std::vector<CObjectBase*> mTargets;	//標的のリスト
 
 	bool mIsBattle;					// 戦闘状態か
 	float mBattleIdletime;			// 戦闘時の待機時間
@@ -134,7 +134,7 @@ private:
 	// 一番近くにある壊せるオブジェクトを取得
 	CInteractObject* GetNearBreakObj() const;
 	// 近くにある調べられるオブジェクトのリスト
-	std::list<CInteractObject*> mNearBreakObjs;
+	std::vector<CInteractObject*> mNearBreakObjs;
 	CCollider* mpSearchCol;	// 調べるオブジェクトを探知するコライダー
 
 	// 自分とターゲットの間に壊せるオブジェクトがあるか

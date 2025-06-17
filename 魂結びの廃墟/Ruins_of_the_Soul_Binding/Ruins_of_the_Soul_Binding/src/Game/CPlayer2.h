@@ -58,7 +58,7 @@ public:
 	// 追従する位置を設定
 	void SetTrail();
 	// 追従用の配列を取得
-	CVector GetTrail(int trail);
+	const std::vector<CVector>& GetTrail() const;
 
 private:
 	// オブジェクト削除を伝える
@@ -126,12 +126,10 @@ private:
 	// 手の光のエフェクト
 	//CHandGlow* mpHandGlow;
 
-	// 追従用の配列
-	CVector mTrails[5];
-	// 追従用配列の現在の数
-	int mTrail;
-	// 追従する距離を更新する際の距離
-	float mMaxDistance;
+	// 追従用の移動履歴を保管
+	std::vector<CVector> mTrails;
+	// 最後に位置を保存したときのプレイヤーの位置
+	CVector mLastPos;
 
 #if _DEBUG
 	CDebugFieldOfView* mpDebugFov;	// 視野範囲のデバッグ表示

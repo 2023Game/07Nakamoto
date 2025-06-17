@@ -5,6 +5,7 @@
 #include "CColliderCapsule.h"
 #include "CColliderSphere.h"
 #include "CNavNode.h"
+#include "CPlayer2.h"
 
 // アニメーションのパス
 #define ANIM_PATH "Character\\Cat\\anim\\"
@@ -14,6 +15,8 @@
 #define MOVE_SPEED 0.75f	// 移動速度
 #define JUMP_SPEED 1.5f		// ジャンプ速度
 #define GRAVITY 0.0625f		// 重力加速度
+
+#define TRAIL_SPEED 20.0f	// 追従字時のスピード
 
 // カメラの回転速度
 #define ROTATE_SPEED 1.5f
@@ -113,6 +116,30 @@ void CCat::UpdateIdle()
 	}
 }
 
+// 追従
+void CCat::UpdateTracking()
+{
+	const auto& trail = CPlayer2::Instance()->GetTrail();
+	size_t followIndex = 0;
+
+	// 空かどうかを調べる
+	if (!trail.empty())
+	{
+		// (std::min)マクロではなく関数テンプレートとして解釈させる
+		followIndex = (std::min)(size_t(2), trail.size() - 1);
+	}
+
+	if (MoveTo(trail[followIndex], TRAIL_SPEED))
+	{
+
+	}
+
+	if (IsOperate())
+	{
+		ChangeState((int)EState::eIdle);
+	}
+}
+
 bool CCat::IsAttacking() const
 {
 	return false;
@@ -190,6 +217,47 @@ void CCat::UpdateMove()
 	}
 }
 
+// 指定した位置まで移動する
+bool CCat::MoveTo(const CVector& targetPos, float speed)
+{
+	// 目的地までのベクトルを求める
+	CVector pos = Position();
+	CVector vec = targetPos - pos;
+	vec.Y(0.0f);
+	// 移動方向ベクトルを求める
+	CVector moveDir = vec.Normalized();
+
+	// 徐々に移動方向へ移動
+	CVector forward = CVector::Slerp
+	(
+		VectorZ(),	// 現在の正面方向
+		moveDir,	// 移動方向
+		ROTATE_SPEED * Times::DeltaTime()
+	);
+	Rotation(CQuaternion::LookRotation(forward));
+
+	// 今回の移動距離を求める
+	float moveDist = speed * Times::DeltaTime();
+	// 目的地までの残りの距離を求める
+	float remainDist = vec.Length();
+	// 残りの距離が移動距離より短い場合
+	if (remainDist <= moveDist)
+	{
+		// 目的地まで移動する
+		pos = CVector(targetPos.X(), pos.Y(), targetPos.Z());
+		Position(pos);
+		return true;	// 目的地に到着したので、trueを返す
+	}
+
+	// 残りの距離が移動距離より長い場合は、
+	// 移動距離分目的地へ移動する
+	pos += moveDir * moveDist;
+	Position(pos);
+
+	// 目的地には到着しなかった
+	return false;
+}
+
 // 更新
 void CCat::Update()
 {
@@ -200,7 +268,9 @@ void CCat::Update()
 	switch (mState)
 	{
 	// 待機状態
-	case (int)EState::eIdle:			UpdateIdle();		break;
+	case (int)EState::eIdle:		UpdateIdle();		break;
+	// 追従状態
+	case(int)EState::eTracking:			UpdateTracking();	break;
 	}
 
 	// このプレイヤーを操作中であれば、
@@ -215,6 +285,10 @@ void CCat::Update()
 			UpdateMove();
 		}
 	}
+	else
+	{
+		mState == (int)EState::eTracking;
+	}
 
 	mMoveSpeedY -= GRAVITY;
 	CVector moveSpeed = mMoveSpeed + CVector(0.0f, mMoveSpeedY, 0.0f);
@@ -228,6 +302,10 @@ void CCat::Update()
 		// マウスの左右移動で、猫を左右に回転
 		CVector2 delta = CInput::GetDeltaMousePos();
 		Rotate(0.0f, delta.X() * ROTATE_SPEED * Times::DeltaTime(), 0.0f);
+	}
+	else
+	{
+		ChangeState((int)EState::eTracking);
 	}
 
 	// 経路探索用のノードが存在すれば、座標を更新

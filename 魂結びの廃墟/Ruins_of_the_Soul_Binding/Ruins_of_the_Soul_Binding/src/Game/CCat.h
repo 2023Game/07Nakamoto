@@ -59,9 +59,14 @@ private:
 
 	// 待機状態
 	void UpdateIdle();
+	// 追従状態
+	void UpdateTracking();
 
 	// 移動の更新処理
 	void UpdateMove();
+
+	// 指定した位置まで移動する
+	bool MoveTo(const CVector& targetPos, float speed);
 
 	// アニメーションの種類
 	enum class EAnimType
@@ -94,6 +99,7 @@ private:
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了
 		eHit,		// 仰け反り
+		eTracking,	// 追従
 	};
 	// 状態を切り替え
 	void ChangeState(int state) override;
