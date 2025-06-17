@@ -5,6 +5,7 @@
 #include "CSound.h"
 
 class CCollider;
+class CNavNode;
 
 /*
 猫クラス
@@ -51,6 +52,9 @@ public:
 	void SetOperate(bool operate) override;
 
 private:
+	CVector mFollowPos;	// 猫がプレイヤーについていく時の座標
+	CVector mLookAtPos;	// 注視する座標
+
 	// オブジェクト削除を伝える
 	void DeleteObject(CObjectBase* obj) override;
 
@@ -104,4 +108,5 @@ private:
 	// 状態を切り替え
 	void ChangeState(int state) override;
 
+	CNavNode* mpTrackingNode;
 };

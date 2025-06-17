@@ -16,7 +16,8 @@
 #define JUMP_SPEED 1.5f		// ジャンプ速度
 #define GRAVITY 0.0625f		// 重力加速度
 
-#define TRAIL_SPEED 20.0f	// 追従字時のスピード
+#define TRAIL_SPEED 20.0f	// 追従時の速度
+#define TRACKING_DIST 30.0f	// プレイヤーから離れたらついてくる距離
 
 // カメラの回転速度
 #define ROTATE_SPEED 1.5f
@@ -119,23 +120,65 @@ void CCat::UpdateIdle()
 // 追従
 void CCat::UpdateTracking()
 {
-	const auto& trail = CPlayer2::Instance()->GetTrail();
-	size_t followIndex = 0;
+	CPlayer2 *player = CPlayer2::Instance();
+	CVector playerPos = player->Position();		// プレイヤーまでのベクトル
+	CVector playerVec = playerPos - Position();	// プレイヤーまでの距離
 
-	// 空かどうかを調べる
-	if (!trail.empty())
+	// ベクトルの2乗を求める(処理不可が軽いので)
+	float playerDist = playerVec.LengthSqr();
+	// プレイヤーから一定距離離れると、ついていく座標を更新
+	if (playerDist >= TRACKING_DIST * TRACKING_DIST)	// ベクトルの2乗と比較するのでTRACKING_DISTも2乗する
 	{
-		// (std::min)マクロではなく関数テンプレートとして解釈させる
-		followIndex = (std::min)(size_t(2), trail.size() - 1);
+		const auto& trail = player->GetTrail();
+		size_t followIndex = 0;
+
+		// 空かどうかを調べる
+		if (!trail.empty())
+		{
+			// 配列の番号で2番目を取得する
+			// 2番目まで中身がはいていない場合は、2番目より小さい配列を取得する
+			followIndex = min(size_t(2), trail.size() - 1);
+		}
+
+		// ついていく座標を設定
+		mFollowPos = trail[followIndex];
+		
+		mpTrackingNode = new CNavNode(mFollowPos, true);
+		mStateStep = 0;
 	}
 
-	if (MoveTo(trail[followIndex], TRAIL_SPEED))
+	switch (mStateStep)
 	{
-
+		// ステップ0：目標位置まで移動
+		case 0:
+			if (MoveTo(mFollowPos, TRAIL_SPEED))
+			{
+				mLookAtPos = playerPos;
+				mStateStep++;
+			}
+			break;
+		// ステップ1：プレイヤーの方向を向く
+		case 1:
+		{
+			CVector targetDir = mLookAtPos - Position();
+			targetDir.Y(0.0f);
+			targetDir.Normalize();
+			// 徐々に移動方向へ移動
+			CVector forward = CVector::Slerp
+			(
+				VectorZ(),	// 現在の正面方向
+				targetDir,	// プレイヤーの方向
+				ROTATE_SPEED * Times::DeltaTime()
+			);
+			Rotation(CQuaternion::LookRotation(forward));
+			break;
+		}
 	}
 
+	// 操作フラグがtrueになったら、
 	if (IsOperate())
 	{
+		// 待機状態にする
 		ChangeState((int)EState::eIdle);
 	}
 }
@@ -227,6 +270,25 @@ bool CCat::MoveTo(const CVector& targetPos, float speed)
 	// 移動方向ベクトルを求める
 	CVector moveDir = vec.Normalized();
 
+	// 今回の移動距離を求める
+	float moveDist = speed * Times::DeltaTime();
+	// 目的地までの残りの距離を求める
+	float remainDist = vec.Length();
+
+
+	// 残りの距離が移動距離より短い場合
+	if (remainDist <= moveDist)
+	{
+		// 目的地まで移動する
+		pos = CVector(targetPos.X(), pos.Y(), targetPos.Z());
+		Position(pos);
+		return true;	// 目的地に到着したので、trueを返す
+	}
+	else if (remainDist <= 20.0f)
+	{
+		return true;
+	}
+
 	// 徐々に移動方向へ移動
 	CVector forward = CVector::Slerp
 	(
@@ -236,22 +298,9 @@ bool CCat::MoveTo(const CVector& targetPos, float speed)
 	);
 	Rotation(CQuaternion::LookRotation(forward));
 
-	// 今回の移動距離を求める
-	float moveDist = speed * Times::DeltaTime();
-	// 目的地までの残りの距離を求める
-	float remainDist = vec.Length();
-	// 残りの距離が移動距離より短い場合
-	if (remainDist <= moveDist)
-	{
-		// 目的地まで移動する
-		pos = CVector(targetPos.X(), pos.Y(), targetPos.Z());
-		Position(pos);
-		return true;	// 目的地に到着したので、trueを返す
-	}
-
 	// 残りの距離が移動距離より長い場合は、
 	// 移動距離分目的地へ移動する
-	pos += moveDir * moveDist;
+	pos += forward * moveDist;
 	Position(pos);
 
 	// 目的地には到着しなかった

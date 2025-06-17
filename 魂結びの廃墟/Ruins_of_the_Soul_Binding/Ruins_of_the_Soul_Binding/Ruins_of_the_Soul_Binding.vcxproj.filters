@@ -107,9 +107,6 @@
     <Filter Include="ソース ファイル\BaseSystem\Navigation">
       <UniqueIdentifier>{3909bb9b-3a80-4306-bc6a-31b3e91372ec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Game\Navigation">
-      <UniqueIdentifier>{a687789a-1a9b-44db-a700-6a33f111b60a}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -468,12 +465,6 @@
     </ClCompile>
     <ClCompile Include="src\Game\CHandGlow.cpp">
       <Filter>ソース ファイル\Game\Effect</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CTrailManager.cpp">
-      <Filter>ソース ファイル\Game\Navigation</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CTrailNode.cpp">
-      <Filter>ソース ファイル\Game\Navigation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -857,12 +848,6 @@
     </ClInclude>
     <ClInclude Include="src\Game\CHandGlow.h">
       <Filter>ソース ファイル\Game\Effect</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CTrailManager.h">
-      <Filter>ソース ファイル\Game\Navigation</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CTrailNode.h">
-      <Filter>ソース ファイル\Game\Navigation</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

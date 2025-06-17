@@ -139,8 +139,13 @@ private:
 
 	// 自分とターゲットの間に壊せるオブジェクトがあるか
 	bool IsBreakObject();
+
 	// 攻撃力
 	int mPower;
+	// プレイヤーを見失ってからの経過時間
+	float mTimeSincePlayerLost;
+
+
 #if _DEBUG
 	EScene mScene;
 #endif
