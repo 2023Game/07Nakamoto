@@ -55,6 +55,11 @@ public:
 	/// <param name="operate">trueであれば、操作開始</param>
 	void SetOperate(bool operate) override;
 
+	// 追従する位置を設定
+	void SetTrail();
+	// 追従用の配列を取得
+	CVector GetTrail(int trail);
+
 private:
 	// オブジェクト削除を伝える
 	void DeleteObject(CObjectBase* obj) override;
@@ -120,6 +125,13 @@ private:
 
 	// 手の光のエフェクト
 	//CHandGlow* mpHandGlow;
+
+	// 追従用の配列
+	CVector mTrails[5];
+	// 追従用配列の現在の数
+	int mTrail;
+	// 追従する距離を更新する際の距離
+	float mMaxDistance;
 
 #if _DEBUG
 	CDebugFieldOfView* mpDebugFov;	// 視野範囲のデバッグ表示

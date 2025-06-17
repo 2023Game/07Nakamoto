@@ -38,6 +38,8 @@
 
 #define CHANNELING_TIME	0.5f		// 妖力を流し込んでダメージが入るまでの時間
 
+#define MAX_DISTANCE 5.0f	// 追従する距離を更新する際の距離
+
 // プレイヤーのインスタンス
 CPlayer2* CPlayer2::spInstance = nullptr;
 
@@ -61,6 +63,8 @@ CPlayer2::CPlayer2()
 	: mMaxSt(MAX_ST)
 	, mSt(mMaxSt)
 	, mChannelingTime(0)
+	, mTrail(0)
+	, mTrails{}
 #if _DEBUG
 	,mpDebugFov(nullptr)
 #endif
@@ -126,6 +130,8 @@ CPlayer2::CPlayer2()
 	// 調べるオブジェクトのみ衝突するように設定
 	mpSearchCol->SetCollisionTags({ ETag::eInteractObject });
 	mpSearchCol->SetCollisionLayers({ ELayer::eInteractObj });
+
+	SetTrail();
 
 	// HPゲージ作成
 	mpHpGauge = new CHpGauge();
@@ -537,6 +543,15 @@ void CPlayer2::Update()
 	// 地面についているか
 	mIsGrounded = false;
 
+	CVector p = Position();
+
+	if (CVector::Distance(mTrails[mTrail], p) >= MAX_DISTANCE)
+	{
+		mTrail++;
+
+		SetTrail();
+	};
+
 	// 体力ゲージの更新
 	mpHpGauge->SetMaxPoint(mMaxHp);
 	mpHpGauge->SetCurPoint(mHp);
@@ -634,4 +649,22 @@ void CPlayer2::SetOperate(bool operate)
 		mpHpGauge->SetShow(false);
 		mpStGauge->SetShow(false);
 	}
+}
+
+// 追従する位置を設定
+void CPlayer2::SetTrail()
+{
+	CVector pos = Position();
+	mTrails[mTrail] = pos;
+
+	if (mTrail < 5)
+	{
+		mTrail = 0;
+	}
+}
+
+// 追従用の配列を取得
+CVector CPlayer2::GetTrail(int trail)
+{
+	return mTrails[trail];
 }
