@@ -193,7 +193,7 @@ void CCat::UpdateTracking()
 		// ‚Â‚¢‚Ä‚¢‚­À•W‚ğİ’è
 		mFollowPos = trail[followIndex];
 		
-		mpTrackingNode = new CNavNode(mFollowPos, true);
+		new CNavNode(mFollowPos, true);
 		mStateStep = 0;
 	}
 
