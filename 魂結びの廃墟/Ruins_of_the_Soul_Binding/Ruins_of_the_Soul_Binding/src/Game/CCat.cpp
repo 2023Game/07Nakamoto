@@ -5,7 +5,9 @@
 #include "CColliderCapsule.h"
 #include "CColliderSphere.h"
 #include "CNavNode.h"
+#include "CNavManager.h"
 #include "CPlayer2.h"
+#include "CField.h"
 
 // アニメーションのパス
 #define ANIM_PATH "Character\\Cat\\anim\\"
@@ -15,6 +17,8 @@
 #define MOVE_SPEED 0.75f	// 移動速度
 #define JUMP_SPEED 1.5f		// ジャンプ速度
 #define GRAVITY 0.0625f		// 重力加速度
+
+#define EYE_HEIGHT	7.0f	// 視点の高さ
 
 #define TRAIL_SPEED 20.0f	// 追従時の速度
 #define TRACKING_DIST 30.0f	// プレイヤーから離れたらついてくる距離
@@ -79,6 +83,13 @@ CCat::CCat()
 		}
 	);
 
+	// 経路探索用のノードを作成
+	mpNavNode = new CNavNode(Position(), true);
+	mpNavNode->SetColor(CColor::white);
+
+	// 追従時に障害物を避けるためのノードを作成
+	mpTrackingNode = new CNavNode(CVector::zero, true);
+	mpTrackingNode->SetEnable(false);
 }
 
 // デストラクタ
@@ -86,6 +97,24 @@ CCat::~CCat()
 {
 	// コライダーを削除
 	SAFE_DELETE(mpBodyCol);
+
+	// 経路探索用のノードを破棄
+	CNavManager* navMgr = CNavManager::Instance();
+	if (navMgr != nullptr)
+	{
+		SAFE_DELETE(mpNavNode);
+		SAFE_DELETE(mpTrackingNode);
+
+		// 巡回ノードに配置したノードも全て削除
+		auto itr = mTrackingPoints.begin();
+		auto end = mTrackingPoints.end();
+		while (itr != end)
+		{
+			CNavNode* del = *itr;
+			itr = mTrackingPoints.erase(itr);
+			delete del;
+		}
+	}
 }
 
 // インスタンスを取得
@@ -105,6 +134,27 @@ void CCat::ChangeState(int state)
 	}
 
 	CPlayerBase::ChangeState(state);
+}
+
+// 現在位置からtターゲットが見えているかどうか
+bool CCat::IsLookTarget(CObjectBase* target) const
+{
+	// フィールドが存在しない場合は、遮蔽物がないので見える
+	CField* field = CField::Instance();
+	if (field == nullptr) return true;
+
+	CVector offsetPos = CVector(0.0f, EYE_HEIGHT, 0.0f);
+	// ターゲットの座標を取得
+	CVector targetPos = target->Position() + offsetPos;
+	// 自分自身の座標を取得
+	CVector selfPos = Position() + offsetPos;
+
+	CHitInfo hit;
+	//フィールドとレイ判定を行い、遮蔽物が存在した場合は、ターゲットが見えない
+	if (field->CollisionRay(selfPos, targetPos, &hit)) return false;
+
+	// ターゲットとの間に遮蔽物がないので、ターゲットが見えている
+	return true;
 }
 
 // 待機
@@ -147,6 +197,14 @@ void CCat::UpdateTracking()
 		mStateStep = 0;
 	}
 
+	if (!IsLookTarget(player))
+	{
+		mpTrackingNode->SetPos(player->Position());
+		mpTrackingNode->SetEnable(true);
+		ChangeState((int)EState::eLost);
+		return;
+	}
+
 	switch (mStateStep)
 	{
 		// ステップ0：目標位置まで移動
@@ -179,6 +237,66 @@ void CCat::UpdateTracking()
 	if (IsOperate())
 	{
 		// 待機状態にする
+		ChangeState((int)EState::eIdle);
+	}
+}
+
+// 見失った状態
+void CCat::UpdateLost()
+{
+	CNavManager* navMgr = CNavManager::Instance();
+	if (navMgr == nullptr)
+	{
+		ChangeState((int)EState::eIdle);
+		return;
+	}
+
+	CPlayer2* player = CPlayer2::Instance();
+	// ターゲットが見えたら、追跡状態へ移行
+	if (IsLookTarget(player))
+	{
+		ChangeState((int)EState::eTracking);
+		return;
+	}
+
+	switch (mStateStep)
+	{
+		// ステップ0：見失った位置までの最短経路を求める
+	case 0:
+		// 経路探索用のノード座標を更新
+		mpNavNode->SetPos(Position());
+
+		if (navMgr->Navigate(mpNavNode, mpTrackingNode, mMoveRoute))
+		{
+			// 見失った位置まで経路が繋がっていたら、次のステップへ
+			mNextMoveIndex = 1;
+			mStateStep++;
+		}
+		else
+		{
+			// 経路がつながっていなければ、追従状態へ戻す
+			ChangeState((int)EState::eIdle);
+			mpTrackingNode->SetEnable(false);
+		}
+		break;
+	case 1:
+		// ターゲットを見失った位置まで移動
+		if (MoveTo(mMoveRoute[mNextMoveIndex]->GetPos(), TRAIL_SPEED))
+		{
+			mNextMoveIndex++;
+			if (mNextMoveIndex >= mMoveRoute.size())
+			{
+				// 移動が終われば追従状態へ移行
+				ChangeState((int)EState::eIdle);
+				mpTrackingNode->SetEnable(false);
+			}
+		}
+		break;
+	}
+
+	// 操作キャラになったら
+	if (IsOperate())
+	{
 		ChangeState((int)EState::eIdle);
 	}
 }
@@ -319,7 +437,9 @@ void CCat::Update()
 	// 待機状態
 	case (int)EState::eIdle:		UpdateIdle();		break;
 	// 追従状態
-	case(int)EState::eTracking:			UpdateTracking();	break;
+	case(int)EState::eTracking:		UpdateTracking();	break;
+	// 見失った状態
+	case (int)EState::eLost:		UpdateLost();	break;
 	}
 
 	// このプレイヤーを操作中であれば、
