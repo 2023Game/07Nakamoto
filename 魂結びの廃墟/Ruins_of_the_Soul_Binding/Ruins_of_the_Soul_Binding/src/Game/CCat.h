@@ -105,8 +105,18 @@ private:
 		eJumpEnd,	// ジャンプ終了
 		eHit,		// 仰け反り
 		eTracking,	// 追従
+		eLost,
 	};
 	// 状態を切り替え
 	void ChangeState(int state) override;
 
+	// 現在位置からプレイヤーが見えているかどうか
+	bool IsLookTarget(CObjectBase* target) const;
+
+	// 追従するためのノード
+	CNavNode* mpTrackingNode;
+	// 追従ポイントのリスト
+	std::vector<CNavNode*> mTrackingRouteNodes;
+	// 次に巡回する番号
+	int mNextTrackingIndex;
 };

@@ -21,13 +21,11 @@
 
 #define EYE_HEIGHT	7.0f		// 視点の高さ
 
-#define TRAIL_SPEED 15.0f		// 追従時の速度
+#define TRAIL_SPEED 20.0f		// 追従時の速度
 #define TRACKING_DIST 30.0f		// プレイヤーから離れたらついてくる距離
-#define MAX_DISTANCE 5.0f		// 追従する距離を更新する際の距離
 
 // カメラの回転速度
 #define CAMERA_ROT_SPEED 1.5f
-
 
 // 猫のインスタンス
 CCat* CCat::spInstance = nullptr;
@@ -41,6 +39,8 @@ const std::vector<CPlayerBase::AnimData> ANIM_DATA =
 
 // コンストラクタ
 CCat::CCat()
+	: mpTrackingNode(nullptr)
+	, mNextTrackingIndex(-1)
 {
 	mMaxHp = 100000;
 	mHp = mMaxHp;
@@ -88,7 +88,7 @@ CCat::CCat()
 
 	// 経路探索用のノードを作成
 	mpNavNode = new CNavNode(Position(), true);
-	mpNavNode->SetColor(CColor::red);
+	mpNavNode->SetColor(CColor::white);
 
 	// 追従時に障害物を避けるためのノードを作成
 	mpTrackingNode = new CNavNode(CVector::zero, true);
@@ -100,8 +100,6 @@ CCat::~CCat()
 {
 	// コライダーを削除
 	SAFE_DELETE(mpBodyCol);
-
-	spInstance = nullptr;
 
 	// 経路探索用のノードを破棄
 	CNavManager* navMgr = CNavManager::Instance();
@@ -131,6 +129,27 @@ void CCat::ChangeState(int state)
 	CPlayerBase::ChangeState(state);
 }
 
+// 現在位置からtターゲットが見えているかどうか
+bool CCat::IsLookTarget(CObjectBase* target) const
+{
+	// フィールドが存在しない場合は、遮蔽物がないので見える
+	CField* field = CField::Instance();
+	if (field == nullptr) return true;
+
+	CVector offsetPos = CVector(0.0f, EYE_HEIGHT, 0.0f);
+	// ターゲットの座標を取得
+	CVector targetPos = target->Position() + offsetPos;
+	// 自分自身の座標を取得
+	CVector selfPos = Position() + offsetPos;
+
+	CHitInfo hit;
+	//フィールドとレイ判定を行い、遮蔽物が存在した場合は、ターゲットが見えない
+	if (field->CollisionRay(selfPos, targetPos, &hit)) return false;
+
+	// ターゲットとの間に遮蔽物がないので、ターゲットが見えている
+	return true;
+}
+
 // 待機
 void CCat::UpdateIdle()
 {
@@ -144,6 +163,15 @@ void CCat::UpdateIdle()
 // 追従
 void CCat::UpdateTracking()
 {
+	// 操作フラグがtrueになったら、
+	if (IsOperate())
+	{
+		// 待機状態にする
+		ChangeState((int)EState::eIdle);
+		mNextTrackingIndex = -1;
+		return;
+	}
+
 	CPlayer2 *player = CPlayer2::Instance();
 	CVector playerPos = player->Position();		// プレイヤーまでのベクトル
 	CVector playerVec = playerPos - Position();	// プレイヤーまでの距離
@@ -191,7 +219,7 @@ void CCat::UpdateTracking()
 			// 次に移動するノード番号が設定されていたら
 			if (mNextTrackingIndex >= 0)
 			{
-				// 次に移動するノードまで移動を行う
+				// 次に井地王するノードまで移動を行う
 				CNavNode* nextNode = mTrackingRouteNodes[mNextTrackingIndex];
 				// 移動経路が見つかった場合
 				if (MoveTo(nextNode->GetPos(), TRAIL_SPEED))
@@ -199,7 +227,7 @@ void CCat::UpdateTracking()
 					// 移動が終われば、次のノードを目的地に変更
 					mNextTrackingIndex++;
 					// 最終目的地まで移動が終わった
-					// (移動先のノード番号が移動経路のリストのサイズ以上だった場合)
+					// (移動先のノード番号が移動経路のリストのサイ以上だったい場合)
 					if (mNextTrackingIndex >= mTrackingRouteNodes.size())
 					{
 						mLookAtPos = playerPos;
@@ -231,13 +259,6 @@ void CCat::UpdateTracking()
 			Rotation(CQuaternion::LookRotation(forward));
 			break;
 		}
-	}
-
-	// 操作フラグがtrueになったら、
-	if (IsOperate())
-	{
-		// 待機状態にする
-		ChangeState((int)EState::eIdle);
 	}
 }
 
@@ -402,13 +423,6 @@ void CCat::Update()
 		CVector2 delta = CInput::GetDeltaMousePos();
 		Rotate(0.0f, delta.X() * CAMERA_ROT_SPEED * Times::DeltaTime(), 0.0f);
 
-		CVector p = Position();
-		float distance = CVector::Distance(mLastPos, p);
-
-		if (distance >= MAX_DISTANCE)
-		{
-			SetTrail();
-		};
 	}
 	else
 	{

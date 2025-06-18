@@ -11,8 +11,7 @@
 #define FOV_ANGLE		60.0f		// 視野範囲の角度
 #define SEARC_DIST		10.0f		// 近くにあるオブジェクトを調べるときの距離
 
-#define MAX_HISTORY_SIZE 5		// 追従用のリストの制限数
-#define RESERVED_CAPACITYE 7	// リストの初期容量
+#define RESERVED_CAPACITYE 5	// リストの初期容量
 
 // コンストラクタ
 CPlayerBase::CPlayerBase()
@@ -31,17 +30,8 @@ CPlayerBase::CPlayerBase()
 	, mIsOperate(false)
 	, mpCamera(nullptr)
 	, mpSearchCol(nullptr)
-	, mpTrackingNode(nullptr)
-	, mNextTrackingIndex(-1)
-
 {
 	CPlayerManager::Instance()->AddPlayer(this);
-
-	mTrails.reserve(RESERVED_CAPACITYE);
-	SetTrail();
-
-	mpNavNode = new CNavNode(Position(), true);
-	mpNavNode->SetColor(CColor::red);
 }
 
 // デストラクタ
@@ -87,9 +77,6 @@ void CPlayerBase::SetCamera(CCamera* camera)
 // 衝突処理
 void CPlayerBase::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
-	// 操作していない場合は、衝突判定を行わない
-	if (!mIsOperate)	return;
-
 	// 本体のコライダーの衝突判定
 	if (self == mpBodyCol)
 	{
@@ -278,26 +265,6 @@ CInteractObject* CPlayerBase::GetNearInteractObj()
 		}
 	}
 	return nearObj;
-}
-
-// 追従する位置を設定
-void CPlayerBase::SetTrail()
-{
-	CVector pos = Position();
-	mLastPos = pos;
-
-	mTrails.push_back(pos);
-
-	if (mTrails.size() > MAX_HISTORY_SIZE)
-	{
-		mTrails.erase(mTrails.begin());
-	}
-}
-
-// 追従用の配列を取得
-const std::vector<CVector>& CPlayerBase::GetTrail() const
-{
-	return mTrails;
 }
 
 // 更新

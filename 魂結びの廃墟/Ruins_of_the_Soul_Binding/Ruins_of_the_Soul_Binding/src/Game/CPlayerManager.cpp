@@ -59,11 +59,21 @@ void CPlayerManager::ChangePlayer()
 	}
 }
 
+// 操作していないキャラを待機状態にする
+void CPlayerManager::SetInactivePlayersWait()
+{
+
+}
+
 // 更新
 void CPlayerManager::Update()
 {
 	if (CInput::PushKey('C'))
 	{
 		ChangePlayer();
+	}
+	if (CInput::PushKey('Q'))
+	{
+
 	}
 }
