@@ -79,17 +79,17 @@ void CGameScene::Load()
 	cat->Scale(1.0f, 1.0f, 1.0f);
 	cat->Position(10.0f, 0.0f, 0.0f);
 
-	// ウォーロックの生成
-	CBoss* warrok = new CBoss
-	(
-		{
-			CVector( 70.0f, 1.0, 150.0f),
-			CVector(-70.0f, 1.0, 150.0f),
-			CVector(  0.0f, 1.0, 100.0f),
-		}
-	);
-	warrok->Scale(1.0f, 1.0f, 1.0f);
-	warrok->Position(70.0f, 1.0, 150.0f);
+	//// ウォーロックの生成
+	//CBoss* warrok = new CBoss
+	//(
+	//	{
+	//		CVector( 70.0f, 1.0, 150.0f),
+	//		CVector(-70.0f, 1.0, 150.0f),
+	//		CVector(  0.0f, 1.0, 100.0f),
+	//	}
+	//);
+	//warrok->Scale(1.0f, 1.0f, 1.0f);
+	//warrok->Position(70.0f, 1.0, 150.0f);
 
 	// CGameCameraのテスト
 	//CGameCamera* mainCamera = new CGameCamera

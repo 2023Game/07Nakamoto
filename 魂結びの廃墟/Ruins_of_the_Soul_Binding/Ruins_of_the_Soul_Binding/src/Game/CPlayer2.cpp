@@ -1,5 +1,6 @@
 //プレイヤークラスのインクルード
 #include "CPlayer2.h"
+#include "CCat.h"
 #include "CInput.h"
 #include "CNavNode.h"
 #include "CNavManager.h"
@@ -27,6 +28,7 @@
 #define RUN_SPEED	1.0f	// 走る速度
 #define JUMP_SPEED 1.5f		// ジャンプ速度
 #define GRAVITY 0.0625f		// 重力加速度
+#define ROTATE_SPEED	5.0f	// 移動時のプレイヤーの回転速度
 
 #define MAX_HP 100	// 体力の最大値
 #define MAX_ST 100	// スタミナの最大値
@@ -38,10 +40,9 @@
 
 #define CHANNELING_TIME	0.5f		// 妖力を流し込んでダメージが入るまでの時間
 
-#define MAX_DISTANCE 5.0f	// 追従する距離を更新する際の距離
-#define MAX_HISTORY_SIZE 5	// 追従用のリストの制限数
-
-#define RESERVED_CAPACITYE 7	// リストの初期容量
+#define TRAIL_SPEED 15.0f		// 追従時の速度
+#define TRACKING_DIST 30.0f		// プレイヤーから離れたらついてくる距離
+#define MAX_DISTANCE 5.0f		// 追従する距離を更新する際の距離
 
 // プレイヤーのインスタンス
 CPlayer2* CPlayer2::spInstance = nullptr;
@@ -88,10 +89,6 @@ CPlayer2::CPlayer2()
 	mpDebugFov = new CDebugFieldOfView(this, mFovAngle, FOV_LENGTH);
 #endif
 
-	// 経路探索用のノードを作成
-	mpNavNode = new CNavNode(Position(), true);
-	mpNavNode->SetColor(CColor::red);
-
 	// 本体のコライダーを作成
 	mpBodyCol = new CColliderCapsule
 	(
@@ -132,9 +129,6 @@ CPlayer2::CPlayer2()
 	mpSearchCol->SetCollisionTags({ ETag::eInteractObject });
 	mpSearchCol->SetCollisionLayers({ ELayer::eInteractObj });
 
-	mTrails.reserve(RESERVED_CAPACITYE);
-	SetTrail();
-
 	// HPゲージ作成
 	mpHpGauge = new CHpGauge();
 	mpHpGauge->SetMaxPoint(mMaxHp);
@@ -145,6 +139,15 @@ CPlayer2::CPlayer2()
 	mpStGauge->SetMaxPoint(mMaxSt);
 	mpStGauge->SetCurPoint(mSt);
 	mpStGauge->SetPos(10.0f, 40.0f);
+
+	// 経路探索用のノードを作成
+	mpNavNode = new CNavNode(Position(), true);
+	mpNavNode->SetColor(CColor::red);
+
+	// 追従時に障害物を避けるためのノードを作成
+	mpTrackingNode = new CNavNode(CVector::zero, true);
+	mpTrackingNode->SetEnable(false);
+
 }
 
 // デストラクタ
@@ -159,8 +162,18 @@ CPlayer2::~CPlayer2()
 	}
 #endif
 
+	// コライダーを削除
 	SAFE_DELETE(mpSearchCol);
+
 	spInstance = nullptr;
+
+	// 経路探索用のノードを破棄
+	CNavManager* navMgr = CNavManager::Instance();
+	if (navMgr != nullptr)
+	{
+		SAFE_DELETE(mpNavNode);
+		SAFE_DELETE(mpTrackingNode);
+	}
 }
 
 // インスタンスを取得
@@ -359,6 +372,116 @@ void CPlayer2::UpdateChanneling()
 	}
 }
 
+// 追従状態
+void CPlayer2::UpdateTracking()
+{
+	CCat* cat = CCat::Instance();
+	CVector catPos = cat->Position();		// プレイヤーまでのベクトル
+	CVector catVec = catPos - Position();	// プレイヤーまでの距離
+
+	// ベクトルの2乗を求める(処理不可が軽いので)
+	float playerDist = catVec.LengthSqr();
+	// プレイヤーから一定距離離れると、ついていく座標を更新
+	if (playerDist >= TRACKING_DIST * TRACKING_DIST)	// ベクトルの2乗と比較するのでTRACKING_DISTも2乗する
+	{
+		const auto& trail = cat->GetTrail();
+		size_t followIndex = 0;
+
+		// 空かどうかを調べる
+		if (!trail.empty())
+		{
+			// 配列の番号で2番目を取得する
+			// 2番目まで中身がはいていない場合は、2番目より小さい配列を取得する
+			followIndex = min(size_t(2), trail.size() - 1);
+		}
+
+		// ついていく座標を設定
+		mFollowPos = trail[followIndex];
+		// ついていく座標に経路探索用のノードを配置
+		mpTrackingNode->SetPos(mFollowPos);
+		mpTrackingNode->SetEnable(true);
+
+		// ついていく座標までの経路を探索する
+		CNavManager::Instance()->Navigate(mpNavNode, mpTrackingNode, mTrackingRouteNodes);
+		// 移動経路が見つかった
+		if (mTrackingRouteNodes.size() >= 2)
+		{
+			mNextTrackingIndex = 1;
+			mStateStep = 0;
+		}
+		else
+		{
+			ChangeAnimation((int)EAnimType::eIdle);
+
+			mNextTrackingIndex = -1;
+			mStateStep = -1;
+		}
+	}
+
+	switch (mStateStep)
+	{
+		// ステップ0：目標位置まで移動
+	case 0:
+		// 次に移動するノード番号が設定されていたら
+		if (mNextTrackingIndex >= 0)
+		{
+			ChangeAnimation((int)EAnimType::eWalk);
+
+			// 次に移動するノードまで移動を行う
+			CNavNode* nextNode = mTrackingRouteNodes[mNextTrackingIndex];
+			// 移動経路が見つかった場合
+			if (MoveTo(nextNode->GetPos(), TRAIL_SPEED))
+			{
+				
+
+				// 移動が終われば、次のノードを目的地に変更
+				mNextTrackingIndex++;
+				// 最終目的地まで移動が終わった
+				// (移動先のノード番号が移動経路のリストのサイズ以上だった場合)
+				if (mNextTrackingIndex >= mTrackingRouteNodes.size())
+				{
+					mLookAtPos = catPos;
+					mStateStep++;
+				}
+			}
+
+			if (MoveTo(mFollowPos, TRAIL_SPEED))
+			{
+				mLookAtPos = catPos;
+				mStateStep++;
+			}
+
+		}
+		break;
+		// ステップ1：プレイヤーの方向を向く
+	case 1:
+		{
+			ChangeAnimation((int)EAnimType::eWalk);
+
+			CVector targetDir = mLookAtPos - Position();
+			targetDir.Y(0.0f);
+			targetDir.Normalize();
+			// 徐々に移動方向へ移動
+			CVector forward = CVector::Slerp
+			(
+				VectorZ(),	// 現在の正面方向
+				targetDir,	// プレイヤーの方向
+				ROTATE_SPEED * Times::DeltaTime()
+			);
+			Rotation(CQuaternion::LookRotation(forward));
+			break;
+		}
+	}
+
+	// 操作フラグがtrueになったら、
+	if (IsOperate())
+	{
+		// 待機状態にする
+		ChangeState((int)EState::eIdle);
+	}
+
+}
+
 // オブジェクト削除を伝える
 void CPlayer2::DeleteObject(CObjectBase* obj)
 {
@@ -469,6 +592,54 @@ void CPlayer2::UpdateMove()
 	}
 }
 
+// 指定した位置まで移動する
+bool CPlayer2::MoveTo(const CVector& targetPos, float speed)
+{
+	// 目的地までのベクトルを求める
+	CVector pos = Position();
+	CVector vec = targetPos - pos;
+	vec.Y(0.0f);
+	// 移動方向ベクトルを求める
+	CVector moveDir = vec.Normalized();
+
+	// 今回の移動距離を求める
+	float moveDist = speed * Times::DeltaTime();
+	// 目的地までの残りの距離を求める
+	float remainDist = vec.Length();
+
+
+	// 残りの距離が移動距離より短い場合
+	if (remainDist <= moveDist)
+	{
+		// 目的地まで移動する
+		pos = CVector(targetPos.X(), pos.Y(), targetPos.Z());
+		Position(pos);
+		return true;	// 目的地に到着したので、trueを返す
+	}
+	else if (remainDist <= 20.0f)
+	{
+		return true;
+	}
+
+	// 徐々に移動方向へ移動
+	CVector forward = CVector::Slerp
+	(
+		VectorZ(),	// 現在の正面方向
+		moveDir,	// 移動方向
+		ROTATE_SPEED * Times::DeltaTime()
+	);
+	Rotation(CQuaternion::LookRotation(forward));
+
+	// 残りの距離が移動距離より長い場合は、
+	// 移動距離分目的地へ移動する
+	pos += forward * moveDist;
+	Position(pos);
+
+	// 目的地には到着しなかった
+	return false;
+
+}
+
 // 更新
 void CPlayer2::Update()
 {
@@ -491,6 +662,8 @@ void CPlayer2::Update()
 	case (int)EState::eDeath:		UpdateDeath();		break;
 	// 妖力を注いでいる
 	case (int)EState::eChanneling:	UpdateChanneling();	break;
+	// 追従状態
+	case(int)EState::eTracking:		UpdateTracking();	break;
 	}
 
 	// このプレイヤーが操作中であれば、
@@ -501,22 +674,35 @@ void CPlayer2::Update()
 		{
 			UpdateMove();
 		}
+
+
+		// 重力
+		mMoveSpeedY -= GRAVITY;
+
+		// 移動
+		CVector moveSpeed = mMoveSpeed + CVector(0.0f, mMoveSpeedY, 0.0f);
+		Position(Position() + moveSpeed);
+
+		// プレイヤーを移動方向へ向ける
+		CVector current = VectorZ();
+		CVector target = moveSpeed;
+		target.Y(0.0f);
+		target.Normalize();
+		CVector forward = CVector::Slerp(current, target, 0.125f);
+		Rotation(CQuaternion::LookRotation(forward));
+
+		CVector p = Position();
+		float distance = CVector::Distance(mLastPos, p);
+
+		if (distance >= MAX_DISTANCE)
+		{
+			SetTrail();
+		};
 	}
-
-	// 重力
-	mMoveSpeedY -= GRAVITY;
-
-	// 移動
-	CVector moveSpeed = mMoveSpeed + CVector(0.0f, mMoveSpeedY, 0.0f);
-	Position(Position() + moveSpeed);
-
-	// プレイヤーを移動方向へ向ける
-	CVector current = VectorZ();
-	CVector target = moveSpeed;
-	target.Y(0.0f);
-	target.Normalize();
-	CVector forward = CVector::Slerp(current, target, 0.125f);
-	Rotation(CQuaternion::LookRotation(forward));
+	else
+	{
+		ChangeState((int)EState::eTracking);
+	}
 
 	// 経路探索用のノードが存在すれば、座標を更新
 	if (mpNavNode != nullptr)
@@ -544,15 +730,6 @@ void CPlayer2::Update()
 
 	// 地面についているか
 	mIsGrounded = false;
-
-
-	CVector p = Position();
-	float distance = CVector::Distance(mLastPos, p);
-
-	if (distance >= MAX_DISTANCE)
-	{
-		SetTrail();
-	};
 
 	// 体力ゲージの更新
 	mpHpGauge->SetMaxPoint(mMaxHp);
@@ -651,23 +828,4 @@ void CPlayer2::SetOperate(bool operate)
 		mpHpGauge->SetShow(false);
 		mpStGauge->SetShow(false);
 	}
-}
-
-// 追従する位置を設定
-void CPlayer2::SetTrail()
-{
-	CVector pos = Position();
-	mLastPos = pos;
-
-	mTrails.push_back(pos);
-
-	if (mTrails.size() > MAX_HISTORY_SIZE)
-	{
-		mTrails.erase(mTrails.begin());
-	}
-}
-
-const std::vector<CVector>& CPlayer2::GetTrail() const
-{
-	return mTrails;
 }

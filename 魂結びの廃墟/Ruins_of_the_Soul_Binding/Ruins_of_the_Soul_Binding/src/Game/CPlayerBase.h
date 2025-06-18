@@ -54,6 +54,9 @@ public:
 	// 描画
 	void Render() override;
 
+	// 追従用の配列を取得
+	const std::vector<CVector>& GetTrail() const;
+
 protected:
 	// プレイヤーの初期化
 	void InitPlayer(std::string path, const std::vector<AnimData>* pAnimData);
@@ -92,4 +95,19 @@ protected:
 
 	bool mIsOperate;	// このプレイヤーを操作中かどうか
 	CCamera* mpCamera;	// このプレイヤーを操作している時のカメラ
+
+	// 追従する位置を設定
+	void SetTrail();
+	// 追従用の移動履歴を保管
+	std::vector<CVector> mTrails;
+	// 最後に位置を保存したときのプレイヤーの位置
+	CVector mLastPos;
+
+	// 追従するためのノード
+	CNavNode* mpTrackingNode;
+	// 追従時の移動経路ノードリスト
+	std::vector<CNavNode*> mTrackingRouteNodes;
+	// 追従時に次に移動するノードの番号
+	int mNextTrackingIndex;
+
 };	

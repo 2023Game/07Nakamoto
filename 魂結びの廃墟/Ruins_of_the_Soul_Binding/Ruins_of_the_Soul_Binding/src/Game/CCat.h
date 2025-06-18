@@ -66,8 +66,6 @@ private:
 	void UpdateIdle();
 	// 追従状態
 	void UpdateTracking();
-	// 見失った状態
-	void UpdateLost();
 
 	// 移動の更新処理
 	void UpdateMove();
@@ -107,21 +105,8 @@ private:
 		eJumpEnd,	// ジャンプ終了
 		eHit,		// 仰け反り
 		eTracking,	// 追従
-		eLost,
 	};
 	// 状態を切り替え
 	void ChangeState(int state) override;
 
-	// 現在位置からプレイヤーが見えているかどうか
-	bool IsLookTarget(CObjectBase* target) const;
-
-	std::vector<CNavNode*> mMoveRoute;	// 求めた最短経路記憶用
-	int mNextMoveIndex;					// 次に移動するノードのインデックス値
-
-	// 追従するためのノード
-	CNavNode* mpTrackingNode;
-	// 追従ポイントのリスト
-	std::vector<CNavNode*> mTrackingPoints;
-	// 次に巡回する番号
-	int mNextTrackingIndex;
 };

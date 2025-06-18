@@ -12,19 +12,22 @@
 // アニメーションのパス
 #define ANIM_PATH "Character\\Cat\\anim\\"
 
-#define BODY_HEIGHT 12.0f	// 本体のコライダーの高さ
-#define BODY_RADIUS 4.0f	// 本体のコライダーの幅
-#define MOVE_SPEED 0.75f	// 移動速度
-#define JUMP_SPEED 1.5f		// ジャンプ速度
-#define GRAVITY 0.0625f		// 重力加速度
+#define BODY_HEIGHT 12.0f		// 本体のコライダーの高さ
+#define BODY_RADIUS 4.0f		// 本体のコライダーの幅
+#define MOVE_SPEED 0.75f		// 移動速度
+#define JUMP_SPEED 1.5f			// ジャンプ速度
+#define GRAVITY 0.0625f			// 重力加速度
+#define ROTATE_SPEED	5.0f	// 移動時の猫の回転速度
 
-#define EYE_HEIGHT	7.0f	// 視点の高さ
+#define EYE_HEIGHT	7.0f		// 視点の高さ
 
-#define TRAIL_SPEED 20.0f	// 追従時の速度
-#define TRACKING_DIST 30.0f	// プレイヤーから離れたらついてくる距離
+#define TRAIL_SPEED 15.0f		// 追従時の速度
+#define TRACKING_DIST 30.0f		// プレイヤーから離れたらついてくる距離
+#define MAX_DISTANCE 5.0f		// 追従する距離を更新する際の距離
 
 // カメラの回転速度
-#define ROTATE_SPEED 1.5f
+#define CAMERA_ROT_SPEED 1.5f
+
 
 // 猫のインスタンス
 CCat* CCat::spInstance = nullptr;
@@ -85,7 +88,7 @@ CCat::CCat()
 
 	// 経路探索用のノードを作成
 	mpNavNode = new CNavNode(Position(), true);
-	mpNavNode->SetColor(CColor::white);
+	mpNavNode->SetColor(CColor::red);
 
 	// 追従時に障害物を避けるためのノードを作成
 	mpTrackingNode = new CNavNode(CVector::zero, true);
@@ -98,22 +101,14 @@ CCat::~CCat()
 	// コライダーを削除
 	SAFE_DELETE(mpBodyCol);
 
+	spInstance = nullptr;
+
 	// 経路探索用のノードを破棄
 	CNavManager* navMgr = CNavManager::Instance();
 	if (navMgr != nullptr)
 	{
 		SAFE_DELETE(mpNavNode);
 		SAFE_DELETE(mpTrackingNode);
-
-		// 巡回ノードに配置したノードも全て削除
-		auto itr = mTrackingPoints.begin();
-		auto end = mTrackingPoints.end();
-		while (itr != end)
-		{
-			CNavNode* del = *itr;
-			itr = mTrackingPoints.erase(itr);
-			delete del;
-		}
 	}
 }
 
@@ -134,27 +129,6 @@ void CCat::ChangeState(int state)
 	}
 
 	CPlayerBase::ChangeState(state);
-}
-
-// 現在位置からtターゲットが見えているかどうか
-bool CCat::IsLookTarget(CObjectBase* target) const
-{
-	// フィールドが存在しない場合は、遮蔽物がないので見える
-	CField* field = CField::Instance();
-	if (field == nullptr) return true;
-
-	CVector offsetPos = CVector(0.0f, EYE_HEIGHT, 0.0f);
-	// ターゲットの座標を取得
-	CVector targetPos = target->Position() + offsetPos;
-	// 自分自身の座標を取得
-	CVector selfPos = Position() + offsetPos;
-
-	CHitInfo hit;
-	//フィールドとレイ判定を行い、遮蔽物が存在した場合は、ターゲットが見えない
-	if (field->CollisionRay(selfPos, targetPos, &hit)) return false;
-
-	// ターゲットとの間に遮蔽物がないので、ターゲットが見えている
-	return true;
 }
 
 // 待機
@@ -192,27 +166,53 @@ void CCat::UpdateTracking()
 
 		// ついていく座標を設定
 		mFollowPos = trail[followIndex];
-		
-		new CNavNode(mFollowPos, true);
-		mStateStep = 0;
-	}
-
-	if (!IsLookTarget(player))
-	{
-		mpTrackingNode->SetPos(player->Position());
+		// ついていく座標に経路探索用のノードを配置
+		mpTrackingNode->SetPos(mFollowPos);
 		mpTrackingNode->SetEnable(true);
-		ChangeState((int)EState::eLost);
-		return;
+
+		// ついていく座標までの経路を探索する
+		CNavManager::Instance()->Navigate(mpNavNode, mpTrackingNode, mTrackingRouteNodes);
+		// 移動経路が見つかった
+		if (mTrackingRouteNodes.size() >= 2)
+		{
+			mNextTrackingIndex = 1;
+			mStateStep = 0;
+		}
+		else
+		{
+			mNextTrackingIndex = -1;
+		}
 	}
 
 	switch (mStateStep)
 	{
 		// ステップ0：目標位置まで移動
 		case 0:
-			if (MoveTo(mFollowPos, TRAIL_SPEED))
+			// 次に移動するノード番号が設定されていたら
+			if (mNextTrackingIndex >= 0)
 			{
-				mLookAtPos = playerPos;
-				mStateStep++;
+				// 次に移動するノードまで移動を行う
+				CNavNode* nextNode = mTrackingRouteNodes[mNextTrackingIndex];
+				// 移動経路が見つかった場合
+				if (MoveTo(nextNode->GetPos(), TRAIL_SPEED))
+				{
+					// 移動が終われば、次のノードを目的地に変更
+					mNextTrackingIndex++;
+					// 最終目的地まで移動が終わった
+					// (移動先のノード番号が移動経路のリストのサイズ以上だった場合)
+					if (mNextTrackingIndex >= mTrackingRouteNodes.size())
+					{
+						mLookAtPos = playerPos;
+						mStateStep++;
+					}
+				}
+
+				if (MoveTo(mFollowPos, TRAIL_SPEED))
+				{
+					mLookAtPos = playerPos;
+					mStateStep++;
+				}
+
 			}
 			break;
 		// ステップ1：プレイヤーの方向を向く
@@ -237,66 +237,6 @@ void CCat::UpdateTracking()
 	if (IsOperate())
 	{
 		// 待機状態にする
-		ChangeState((int)EState::eIdle);
-	}
-}
-
-// 見失った状態
-void CCat::UpdateLost()
-{
-	CNavManager* navMgr = CNavManager::Instance();
-	if (navMgr == nullptr)
-	{
-		ChangeState((int)EState::eIdle);
-		return;
-	}
-
-	CPlayer2* player = CPlayer2::Instance();
-	// ターゲットが見えたら、追跡状態へ移行
-	if (IsLookTarget(player))
-	{
-		ChangeState((int)EState::eTracking);
-		return;
-	}
-
-	switch (mStateStep)
-	{
-		// ステップ0：見失った位置までの最短経路を求める
-	case 0:
-		// 経路探索用のノード座標を更新
-		mpNavNode->SetPos(Position());
-
-		if (navMgr->Navigate(mpNavNode, mpTrackingNode, mMoveRoute))
-		{
-			// 見失った位置まで経路が繋がっていたら、次のステップへ
-			mNextMoveIndex = 1;
-			mStateStep++;
-		}
-		else
-		{
-			// 経路がつながっていなければ、追従状態へ戻す
-			ChangeState((int)EState::eIdle);
-			mpTrackingNode->SetEnable(false);
-		}
-		break;
-	case 1:
-		// ターゲットを見失った位置まで移動
-		if (MoveTo(mMoveRoute[mNextMoveIndex]->GetPos(), TRAIL_SPEED))
-		{
-			mNextMoveIndex++;
-			if (mNextMoveIndex >= mMoveRoute.size())
-			{
-				// 移動が終われば追従状態へ移行
-				ChangeState((int)EState::eIdle);
-				mpTrackingNode->SetEnable(false);
-			}
-		}
-		break;
-	}
-
-	// 操作キャラになったら
-	if (IsOperate())
-	{
 		ChangeState((int)EState::eIdle);
 	}
 }
@@ -438,8 +378,6 @@ void CCat::Update()
 	case (int)EState::eIdle:		UpdateIdle();		break;
 	// 追従状態
 	case(int)EState::eTracking:		UpdateTracking();	break;
-	// 見失った状態
-	case (int)EState::eLost:		UpdateLost();	break;
 	}
 
 	// このプレイヤーを操作中であれば、
@@ -453,24 +391,24 @@ void CCat::Update()
 		{
 			UpdateMove();
 		}
-	}
-	else
-	{
-		mState == (int)EState::eTracking;
-	}
 
-	mMoveSpeedY -= GRAVITY;
-	CVector moveSpeed = mMoveSpeed + CVector(0.0f, mMoveSpeedY, 0.0f);
+		mMoveSpeedY -= GRAVITY;
+		CVector moveSpeed = mMoveSpeed + CVector(0.0f, mMoveSpeedY, 0.0f);
 
-	// 移動
-	Position(Position() + moveSpeed);
+		// 移動
+		Position(Position() + moveSpeed);
 
-	// 猫を操作中だったら、
-	if (mIsOperate)
-	{
 		// マウスの左右移動で、猫を左右に回転
 		CVector2 delta = CInput::GetDeltaMousePos();
-		Rotate(0.0f, delta.X() * ROTATE_SPEED * Times::DeltaTime(), 0.0f);
+		Rotate(0.0f, delta.X() * CAMERA_ROT_SPEED * Times::DeltaTime(), 0.0f);
+
+		CVector p = Position();
+		float distance = CVector::Distance(mLastPos, p);
+
+		if (distance >= MAX_DISTANCE)
+		{
+			SetTrail();
+		};
 	}
 	else
 	{
@@ -481,12 +419,6 @@ void CCat::Update()
 	if (mpNavNode != nullptr)
 	{
 		mpNavNode->SetPos(Position());
-	}
-
-	// ホイールクリックで弾丸発射
-	if (CInput::PushKey(VK_MBUTTON))
-	{
-
 	}
 
 	// 「P」キーを押したら、ゲームを終了

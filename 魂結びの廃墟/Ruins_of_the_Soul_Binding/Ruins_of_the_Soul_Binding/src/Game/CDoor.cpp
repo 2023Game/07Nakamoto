@@ -36,7 +36,7 @@ CDoor::CDoor(const CVector& pos, const CVector& angle, const CVector& openPos,
 	);
 
 	// 経路探索用の遮蔽物チェックのコライダーに、扉のコライダーを登録
-	CNavManager::Instance()->AddCollider(mpDoorColliderMesh);
+	// CNavManager::Instance()->AddCollider(mpDoorColliderMesh);
 
 	mHp = HP;
 

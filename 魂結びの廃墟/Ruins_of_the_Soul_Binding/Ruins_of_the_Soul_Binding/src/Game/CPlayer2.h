@@ -55,12 +55,11 @@ public:
 	/// <param name="operate">trueであれば、操作開始</param>
 	void SetOperate(bool operate) override;
 
-	// 追従する位置を設定
-	void SetTrail();
-	// 追従用の配列を取得
-	const std::vector<CVector>& GetTrail() const;
 
 private:
+	CVector mFollowPos;	// 猫がプレイヤーについていく時の座標
+	CVector mLookAtPos;	// 注視する座標
+
 	// オブジェクト削除を伝える
 	void DeleteObject(CObjectBase* obj) override;
 
@@ -75,9 +74,14 @@ private:
 	void UpdateDeath();
 	// 妖力を注いでいる
 	void UpdateChanneling();
+	// 追従状態
+	void UpdateTracking();
 
 	// 移動の更新処理
 	void UpdateMove();
+
+	// 指定した位置まで移動する
+	bool MoveTo(const CVector& targetPos, float speed);
 
 	// アニメーションの種類
 	enum class EAnimType
@@ -108,7 +112,8 @@ private:
 		eIdle,		// 待機
 		eHit,		// 仰け反り
 		eDeath,		// 死亡
-		eChanneling	// 妖力を注いでいる
+		eChanneling,// 妖力を注いでいる
+		eTracking,	// 追従
 	};
 	// 状態を切り替え
 	void ChangeState(int state) override;
@@ -126,10 +131,6 @@ private:
 	// 手の光のエフェクト
 	//CHandGlow* mpHandGlow;
 
-	// 追従用の移動履歴を保管
-	std::vector<CVector> mTrails;
-	// 最後に位置を保存したときのプレイヤーの位置
-	CVector mLastPos;
 
 #if _DEBUG
 	CDebugFieldOfView* mpDebugFov;	// 視野範囲のデバッグ表示
