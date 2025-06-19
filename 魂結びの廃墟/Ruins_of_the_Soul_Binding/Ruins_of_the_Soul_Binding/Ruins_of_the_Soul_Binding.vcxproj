@@ -111,7 +111,9 @@
     <ClCompile Include="src\Game\CRideabeObject.cpp" />
     <ClCompile Include="src\Game\CRotateFloor.cpp" />
     <ClCompile Include="src\Game\CSlash.cpp" />
+    <ClCompile Include="src\Game\CStand.cpp" />
     <ClCompile Include="src\Game\CStGauge.cpp" />
+    <ClCompile Include="src\Game\CSwitch.cpp" />
     <ClCompile Include="src\Game\CSword.cpp" />
     <ClCompile Include="src\Game\CTestField.cpp" />
     <ClCompile Include="src\Game\CTestScene.cpp" />
@@ -240,7 +242,9 @@
     <ClInclude Include="src\Game\CRideableObject.h" />
     <ClInclude Include="src\Game\CRotateFloor.h" />
     <ClInclude Include="src\Game\CSlash.h" />
+    <ClInclude Include="src\Game\CStand.h" />
     <ClInclude Include="src\Game\CStGauge.h" />
+    <ClInclude Include="src\Game\CSwitch.h" />
     <ClInclude Include="src\Game\CSword.h" />
     <ClInclude Include="src\Game\CTestField.h" />
     <ClInclude Include="src\Game\CTestScene.h" />

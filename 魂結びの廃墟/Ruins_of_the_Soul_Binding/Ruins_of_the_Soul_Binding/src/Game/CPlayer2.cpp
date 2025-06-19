@@ -119,6 +119,7 @@ CPlayer2::CPlayer2()
 			ELayer::eEnemy,
 			ELayer::eDemon,
 			ELayer::eAttackCol,
+			ELayer::eObject,
 		}
 	);
 

@@ -125,7 +125,7 @@ void CPlayerBase::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 			}
 		}
 		// 壁と衝突した場合
-		else if (other->Layer() == ELayer::eWall 
+		else if (other->Layer() == ELayer::eWall
 			|| other->Layer() == ELayer::eInteractObj
 			|| other->Layer() == ELayer::eDoor)
 		{
@@ -144,8 +144,17 @@ void CPlayerBase::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 			adjust.Y(0.0f);
 			Position(Position() + adjust * hit.weight);
 		}
+		else if (other->Layer() == ELayer::eObject)
+		{
+			//// 横方向にのみ押し戻すため、
+			//// 押し戻しベクトルのYの値を0にする
+			//CVector adjust = hit.adjust;
+			//adjust.Y(0.0f);
+			//Position(Position() + adjust * hit.weight);
+
+		}
 	}
-	// 調べるオブジェクトの探知コライダーとの当たり判定
+	// 調べるオジェクトの探知コライダーとの当たり判定
 	if (self == mpSearchCol)
 	{
 		CInteractObject* obj = dynamic_cast<CInteractObject*>(other->Owner());

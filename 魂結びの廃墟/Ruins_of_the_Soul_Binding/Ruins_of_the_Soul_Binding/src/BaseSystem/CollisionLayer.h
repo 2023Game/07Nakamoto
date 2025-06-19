@@ -9,6 +9,7 @@ enum class ELayer
 	eField,
 	eWall,
 	eDoor,
+	eObject,
 	eGround,
 	ePlayer,
 	eEnemy,

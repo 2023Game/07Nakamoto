@@ -45,15 +45,22 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>(	"Player2",			"Character\\Player2\\Rusk\\idle.x");
 	CResourceManager::Load<CModelX>(	"Cat",				"Character\\Cat\\cat.x");
 	CResourceManager::Load<CModelX>(	"Warrok",			"Character\\Enemy\\Warrok\\warrok.x");
-
+	// 床
 	CResourceManager::Load<CModel>(		"Floor",			"Field\\Abandoned_School_Floor.obj");
+	// 壁
 	CResourceManager::Load<CModel>(		"Wall",				"Field\\Abandoned_School_Wall.obj"); 
 	CResourceManager::Load<CModel>(		"WallCol",			"Field\\Abandoned_School_Wall_Col.obj");
+	// 扉
 	CResourceManager::Load<CModel>(		"RightDoor",		"Door\\right_door.obj");
 	CResourceManager::Load<CModel>(		"RightDoorCol",		"Door\\right_door_col.obj");
 	CResourceManager::Load<CModel>(		"LeftDoor",			"Door\\left_door.obj");
 	CResourceManager::Load<CModel>(		"LeftDoorCol",		"Door\\left_door_col.obj");
+	// 妖力の源
 	CResourceManager::Load<CModel>(		"DemonPower",		"Field\\Object\\Demon_Power\\source_of_demon_power.obj");
+	// スイッチ
+	CResourceManager::Load<CModel>(		"Stand",			"Field\\Object\\Switch\\stand.obj");
+	CResourceManager::Load<CModel>(		"Button",			"Field\\Object\\Switch\\buttun.obj");
+	CResourceManager::Load<CModel>(		"StandCol",			"Field\\Object\\Switch\\stand_col.obj");
 
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
