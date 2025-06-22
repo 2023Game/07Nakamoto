@@ -107,6 +107,9 @@
     <Filter Include="ソース ファイル\BaseSystem\Navigation">
       <UniqueIdentifier>{3909bb9b-3a80-4306-bc6a-31b3e91372ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Field\Gimmick">
+      <UniqueIdentifier>{2c959bf4-7c1a-4315-9f2f-d1bfc69ef036}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -471,6 +474,9 @@
     </ClCompile>
     <ClCompile Include="src\Game\CStand.cpp">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CDoorGimmickLR.cpp">
+      <Filter>ソース ファイル\Game\Field\Gimmick</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -860,6 +866,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CStand.h">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CDoorGimmickLR.h">
+      <Filter>ソース ファイル\Game\Field\Gimmick</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

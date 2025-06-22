@@ -67,6 +67,9 @@ private:
 	// ’Ç]ó‘Ô
 	void UpdateTracking();
 
+	// ’Ç]‚ÌˆÚ“®Œo˜H‚ğ‚¯‚¢‚³‚ñ‚·‚é‚©‚Ç‚¤‚©
+	bool IsCalcTrackingRoute() const;
+
 	// ˆÚ“®‚ÌXVˆ—
 	void UpdateMove();
 

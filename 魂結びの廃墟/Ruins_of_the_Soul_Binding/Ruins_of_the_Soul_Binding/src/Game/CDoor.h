@@ -1,6 +1,7 @@
 #pragma once
 #include "CInteractObject.h"
 #include "CColliderMesh.h"
+#include <functional>
 
 class CDoor : public CInteractObject
 {
@@ -9,6 +10,14 @@ public:
 	CDoor(const CVector& pos, const CVector& angle, const CVector& openPos, std::string modelName, std::string colName);
 	// デストラクタ
 	virtual ~CDoor();
+
+	// 持ち主を設定する
+	void SetOwner(CObjectBase* owner);
+	// ドアの開閉状態が切り替わった時に呼び出す関数のポインタを設定
+	void SetOnChangeFunc(std::function<void()> func);
+
+	// ドアが開いているかどうか
+	bool IsOpened() const;
 
 	// 調べる
 	void Interact() override;
@@ -43,4 +52,8 @@ private:
 	float mAnimTime;	// 開閉時間
 	float mElapsedTime;	// 経過時間保存用
 	bool mIsPlaying;	// 開閉中かどうか
+
+	CObjectBase* mpOwner;	//	このドアの持ち主
+	// ドアの開閉状態が切り替わった時に呼び出す関数のポインタ
+	std::function<void()> mOnChangeFunc;
 };

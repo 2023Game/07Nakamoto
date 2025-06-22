@@ -12,10 +12,12 @@ CDoor::CDoor(const CVector& pos, const CVector& angle, const CVector& openPos,
 	, mAnimTime(1.0f)
 	, mElapsedTime(0.0f)
 	, mIsPlaying(false)
+	, mpOwner(nullptr)
 {
 	mOpenPos = openPos;
 	mClosePos = pos;
 	Position(mIsOpened ? mOpenPos : mClosePos);
+	Rotate(angle);
 
 	// 扉のモデルデータの取得
 	mpDoor = CResourceManager::Get<CModel>(modelName);
@@ -36,7 +38,7 @@ CDoor::CDoor(const CVector& pos, const CVector& angle, const CVector& openPos,
 	);
 
 	// 経路探索用の遮蔽物チェックのコライダーに、扉のコライダーを登録
-	// CNavManager::Instance()->AddCollider(mpDoorColliderMesh);
+	CNavManager::Instance()->AddCollider(mpDoorColliderMesh);
 
 	mHp = HP;
 
@@ -57,6 +59,31 @@ CDoor::~CDoor()
 		}
 		SAFE_DELETE(mpDoorColliderMesh);
 	}
+
+	// 持ち主が存在する場合は、持ち主に自身が削除されたことを伝える
+	if (mpOwner != nullptr)
+	{
+		mpOwner->DeleteObject(this);
+	}
+
+}
+
+// 持ち主を設定する
+void CDoor::SetOwner(CObjectBase* owner)
+{
+	mpOwner = owner;
+}
+
+// ドアの開閉状態が切り替わった時に呼び出す関数のポインタを設定
+void CDoor::SetOnChangeFunc(std::function<void()> func)
+{
+	mOnChangeFunc = func;
+}
+
+// ドアが開いているかどうか
+bool CDoor::IsOpened() const
+{
+	return mIsOpened;
 }
 
 // 調べる
@@ -72,6 +99,13 @@ void CDoor::Interact()
 	{
 		mIsOpened = false;
 		mIsPlaying = true;
+	}
+
+	// 切り替え時に呼び出す関数が設定されていたら、
+	// その関数を呼び出す
+	if (mOnChangeFunc != nullptr)
+	{
+		mOnChangeFunc();
 	}
 	
 	mInteractStr = mIsOpened ? "閉まっている" : "開いている";

@@ -84,6 +84,7 @@
     <ClCompile Include="src\Game\CDemonPower.cpp" />
     <ClCompile Include="src\Game\CDemonPowerManager.cpp" />
     <ClCompile Include="src\Game\CDoor.cpp" />
+    <ClCompile Include="src\Game\CDoorGimmickLR.cpp" />
     <ClCompile Include="src\Game\CGameUI.cpp" />
     <ClCompile Include="src\Game\CGaugeUI.cpp" />
     <ClCompile Include="src\Game\CHandGlow.cpp" />
@@ -216,6 +217,7 @@
     <ClInclude Include="src\Game\CDemonPower.h" />
     <ClInclude Include="src\Game\CDemonPowerManager.h" />
     <ClInclude Include="src\Game\CDoor.h" />
+    <ClInclude Include="src\Game\CDoorGimmickLR.h" />
     <ClInclude Include="src\Game\CGameUI.h" />
     <ClInclude Include="src\Game\CGaugeUI.h" />
     <ClInclude Include="src\Game\CHandGlow.h" />

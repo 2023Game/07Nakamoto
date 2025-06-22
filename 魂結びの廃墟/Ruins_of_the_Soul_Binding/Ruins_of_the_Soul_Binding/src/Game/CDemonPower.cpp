@@ -8,6 +8,7 @@
 
 #define HP 10	// 耐久力
 #define GAUGE_OFFSET_Y 10.0f
+#define OFFSET_POS CVector(0.0f, 1.5f, 0.0f)	// コライダーのオフセット
 
 // コンストラクタ
 CDemonPower::CDemonPower(const CVector& pos)
@@ -38,7 +39,7 @@ CDemonPower::CDemonPower(const CVector& pos)
 			ELayer::eEnemy
 		}
 	);
-	mpCollider->Position(pos);
+	mpCollider->Position(OFFSET_POS);
 
 	mMaxHp = HP;
 	mHp = mMaxHp;

@@ -13,8 +13,9 @@
 #define ANIM_PATH "Character\\Cat\\anim\\"
 
 #define BODY_HEIGHT 12.0f		// 本体のコライダーの高さ
-#define BODY_RADIUS 4.0f		// 本体のコライダーの幅
+#define BODY_RADIUS 3.0f		// 本体のコライダーの幅
 #define MOVE_SPEED 0.75f		// 移動速度
+#define MOVE_END_DIST 5.0f		// 移動終了する距離
 #define JUMP_SPEED 1.5f			// ジャンプ速度
 #define GRAVITY 0.0625f			// 重力加速度
 #define ROTATE_SPEED	5.0f	// 移動時の猫の回転速度
@@ -55,15 +56,12 @@ CCat::CCat()
 	ChangeAnimation((int)EAnimType::eIdle);
 
 	// 本体のコライダーを作成
-	mpBodyCol = new CColliderCapsule
+	mpBodyCol = new CColliderSphere
 	(
 		this, ELayer::ePlayer,
-		CVector(0.0f, BODY_RADIUS, 0.0f),
-		CVector(0.0f, BODY_HEIGHT - BODY_RADIUS, 0.0f),
 		BODY_RADIUS
 	);
-	mpBodyCol->Rotate(90.0f, 0.0f, 0.0f);
-	mpBodyCol->Position(0.0f, BODY_RADIUS, 8.0f);
+	mpBodyCol->Position(0.0f, BODY_RADIUS * 0.5f, 0.0f);
 
 	mpBodyCol->SetCollisionTags
 	(
@@ -160,6 +158,31 @@ void CCat::UpdateIdle()
 	}
 }
 
+// 追従時の移動経路をけいさんするかどうか
+bool CCat::IsCalcTrackingRoute() const
+{
+	// 移動していない状態
+	if (mNextTrackingIndex == -1)
+	{
+		CPlayer2* player = CPlayer2::Instance();
+		// プレイヤーまでの距離を求める
+		// 距離の2乗で求める(処理不可が軽いので)
+		float playerDist = (player->Position() - Position()).LengthSqr();
+		// プレイヤーから一定距離離れると、移動経路を計算する
+		return playerDist >= TRACKING_DIST * TRACKING_DIST;	// 距離の2乗と比較するのでTRACKING_DISTも2乗する
+	}
+
+	// 現在の移動経路が繋がらなくなっていたら、移動経路を再計算する
+	if (!CNavManager::Instance()->IsRouteValid(mTrackingRouteNodes)) return true;
+
+	// 現在位置から次の移動先のノードまで繋がっていなければ、移動経路を再計算する
+	CNavNode* nextNode = mTrackingRouteNodes[mNextTrackingIndex];
+	if (!mpNavNode->IsConnectNode(nextNode)) return true;
+
+	// 移動経路の計算は不要
+	return false;
+}
+
 // 追従
 void CCat::UpdateTracking()
 {
@@ -173,13 +196,10 @@ void CCat::UpdateTracking()
 	}
 
 	CPlayer2 *player = CPlayer2::Instance();
-	CVector playerPos = player->Position();		// プレイヤーまでのベクトル
-	CVector playerVec = playerPos - Position();	// プレイヤーまでの距離
+	CVector playerPos = player->Position();		// プレイヤーまでの座標
 
-	// ベクトルの2乗を求める(処理不可が軽いので)
-	float playerDist = playerVec.LengthSqr();
-	// プレイヤーから一定距離離れると、ついていく座標を更新
-	if (playerDist >= TRACKING_DIST * TRACKING_DIST)	// ベクトルの2乗と比較するのでTRACKING_DISTも2乗する
+	// 移動経路を再計算するか
+	if (IsCalcTrackingRoute())
 	{
 		const auto& trail = player->GetTrail();
 		size_t followIndex = 0;
@@ -231,16 +251,10 @@ void CCat::UpdateTracking()
 					if (mNextTrackingIndex >= mTrackingRouteNodes.size())
 					{
 						mLookAtPos = playerPos;
+						mNextTrackingIndex = -1;
 						mStateStep++;
 					}
 				}
-
-				if (MoveTo(mFollowPos, TRAIL_SPEED))
-				{
-					mLookAtPos = playerPos;
-					mStateStep++;
-				}
-
 			}
 			break;
 		// ステップ1：プレイヤーの方向を向く
@@ -363,7 +377,7 @@ bool CCat::MoveTo(const CVector& targetPos, float speed)
 		Position(pos);
 		return true;	// 目的地に到着したので、trueを返す
 	}
-	else if (remainDist <= 20.0f)
+	else if (remainDist <= MOVE_END_DIST)
 	{
 		return true;
 	}
@@ -413,21 +427,20 @@ void CCat::Update()
 			UpdateMove();
 		}
 
-		mMoveSpeedY -= GRAVITY;
-		CVector moveSpeed = mMoveSpeed + CVector(0.0f, mMoveSpeedY, 0.0f);
-
-		// 移動
-		Position(Position() + moveSpeed);
-
 		// マウスの左右移動で、猫を左右に回転
 		CVector2 delta = CInput::GetDeltaMousePos();
 		Rotate(0.0f, delta.X() * CAMERA_ROT_SPEED * Times::DeltaTime(), 0.0f);
-
 	}
 	else
 	{
 		ChangeState((int)EState::eTracking);
 	}
+
+	mMoveSpeedY -= GRAVITY;
+	CVector moveSpeed = mMoveSpeed + CVector(0.0f, mMoveSpeedY, 0.0f);
+
+	// 移動
+	Position(Position() + moveSpeed);
 
 	// 経路探索用のノードが存在すれば、座標を更新
 	if (mpNavNode != nullptr)

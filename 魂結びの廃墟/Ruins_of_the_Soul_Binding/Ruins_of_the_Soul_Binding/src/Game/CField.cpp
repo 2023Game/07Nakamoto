@@ -3,8 +3,7 @@
 #include "CMoveFloor.h"
 #include "CRotateFloor.h"
 #include "CLineEffect.h"
-#include "CRDoor.h"
-#include "CLDoor.h"
+#include "CDoorGimmickLR.h"
 #include "CNavNode.h"
 #include "CNavManager.h"
 #include "CSceneManager.h"
@@ -35,39 +34,21 @@ CField::CField()
 	// 経路探索用の遮蔽物チェックのコライダーに、フィールドの壁のコライダーを登録
 	CNavManager::Instance()->AddCollider(mpWallColliderMesh);
 
-	// 右のドアの生成
-	mpRDoor = new CRDoor
+	// 左右のドアを生成
+	new CDoorGimmickLR
 	(
-		CVector(37.95f, 0.0f, 44.825f),
-		CVector(0.0f, 0.0f, 0.0f),
-		CVector(28.05f, 0.0f, 44.825f)
+		CVector(33.0f,0.0f,44.825f),
+		CVector(0.0f,0.0f,0.0f)
 	);
 
-	// 左のドアの生成
-	mpLDoor = new CLDoor
+	// 左右のドアを生成
+	new CDoorGimmickLR
 	(
-		CVector(28.05f, 0.0f, 44.825f),
-		CVector(0.0f, 0.0f, 0.0f),
-		CVector(37.95f, 0.0f, 44.825f)
+		CVector(-38.5f, 0.0f, 44.825f),
+		CVector(0.0f, 0.0f, 0.0f)
 	);
 
-	// 右のドアの生成
-	mpRDoor = new CRDoor
-	(
-		CVector(-33.55f, 0.0f, 44.825f),
-		CVector(0.0f, 0.0f, 0.0f),
-		CVector(-43.45, 0.0f, 44.825f)
-	);
-
-	// 左のドアの生成
-	mpLDoor = new CLDoor
-	(
-		CVector(-43.45, 0.0f, 44.825f),
-		CVector(0.0f, 0.0f, 0.0f),
-		CVector(-33.55f, 0.0f, 44.825f)
-	);
-
-
+	// 妖力の源のマネージャーを生成
 	new CDemonPowerManager();
 
 	// 妖力の源
@@ -78,7 +59,7 @@ CField::CField()
 	new CDemonPower(CVector(10.0f, 5.0f, 10.0f));
 
 	// スイッチの生成
-	new CSwitch(CVector(30.0f, 0.0f, 30.0f));
+	new CSwitch(CVector(30.0f, 0.0f, 90.0f));
 
 	// 経路探索用のノードを作成
 	CreateNavNodes();
