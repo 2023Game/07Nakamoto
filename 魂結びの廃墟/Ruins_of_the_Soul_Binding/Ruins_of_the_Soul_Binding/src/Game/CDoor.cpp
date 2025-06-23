@@ -65,7 +65,6 @@ CDoor::~CDoor()
 	{
 		mpOwner->DeleteObject(this);
 	}
-
 }
 
 // ‚¿å‚ğİ’è‚·‚é

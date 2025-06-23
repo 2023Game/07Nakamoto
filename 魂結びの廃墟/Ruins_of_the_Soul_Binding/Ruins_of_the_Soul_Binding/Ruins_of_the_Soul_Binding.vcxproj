@@ -93,6 +93,8 @@
     <ClCompile Include="src\Game\CInteractObjectManager.cpp" />
     <ClCompile Include="src\Game\CInteractUI.cpp" />
     <ClCompile Include="src\Game\CLDoor.cpp" />
+    <ClCompile Include="src\Game\COpeningDoor.cpp" />
+    <ClCompile Include="src\Game\COpeningDoorGimmick.cpp" />
     <ClCompile Include="src\Game\CPlayer2.cpp" />
     <ClCompile Include="src\Game\CPlayerBase.cpp" />
     <ClCompile Include="src\Game\CPlayerManager.cpp" />
@@ -226,6 +228,8 @@
     <ClInclude Include="src\Game\CInteractObjectManager.h" />
     <ClInclude Include="src\Game\CInteractUI.h" />
     <ClInclude Include="src\Game\CLDoor.h" />
+    <ClInclude Include="src\Game\COpeningDoor.h" />
+    <ClInclude Include="src\Game\COpeningDoorGimmick.h" />
     <ClInclude Include="src\Game\CPlayerBase.h" />
     <ClInclude Include="src\Game\CPlayerManager.h" />
     <ClInclude Include="src\Game\CRDoor.h" />

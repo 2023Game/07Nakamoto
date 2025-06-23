@@ -478,6 +478,12 @@
     <ClCompile Include="src\Game\CDoorGimmickLR.cpp">
       <Filter>ソース ファイル\Game\Field\Gimmick</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\COpeningDoorGimmick.cpp">
+      <Filter>ソース ファイル\Game\Field\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\COpeningDoor.cpp">
+      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -869,6 +875,12 @@
     </ClInclude>
     <ClInclude Include="src\Game\CDoorGimmickLR.h">
       <Filter>ソース ファイル\Game\Field\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\COpeningDoorGimmick.h">
+      <Filter>ソース ファイル\Game\Field\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\COpeningDoor.h">
+      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

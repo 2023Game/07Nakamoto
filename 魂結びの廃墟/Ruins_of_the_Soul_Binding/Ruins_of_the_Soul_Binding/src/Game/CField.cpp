@@ -10,6 +10,7 @@
 #include "CDemonPower.h"
 #include "CDemonPowerManager.h"
 #include "CSwitch.h"
+#include "COpeningDoorGimmick.h"
 
 CField* CField::spInstance = nullptr;
 
@@ -40,12 +41,18 @@ CField::CField()
 		CVector(33.0f,0.0f,44.825f),
 		CVector(0.0f,0.0f,0.0f)
 	);
-
 	// 左右のドアを生成
 	new CDoorGimmickLR
 	(
 		CVector(-38.5f, 0.0f, 44.825f),
 		CVector(0.0f, 0.0f, 0.0f)
+	);
+
+	// 開き戸の生成
+	new COpeningDoorGimmick
+	(
+		CVector(0.0f,0.0f,60.0f),
+		CVector(0.0f,0.0f,0.0f)
 	);
 
 	// 妖力の源のマネージャーを生成
