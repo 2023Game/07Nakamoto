@@ -2,6 +2,7 @@
 #include "CNavManager.h"
 
 #define HP 60			// 体力
+#define DOOR_WIDTH 11.0f	// ドアの幅
 
 // コンストラクタ
 COpeningDoor::COpeningDoor(const CVector& pos, const CVector& angle, const CVector& openAngle)
@@ -17,9 +18,9 @@ COpeningDoor::COpeningDoor(const CVector& pos, const CVector& angle, const CVect
 	Position(pos);
 
 	// 扉のモデルデータの取得
-	mpDoor = CResourceManager::Get<CModel>("RightDoor");
+	mpDoor = CResourceManager::Get<CModel>("OpeningDoor");
 	// 扉のコライダーデータの取得
-	mpDoorCol = CResourceManager::Get<CModel>("RightDoorCol");
+	mpDoorCol = CResourceManager::Get<CModel>("OpeningDoorCol");
 
 	// 扉のコライダー生成
 	mpDoorColliderMesh = new CColliderMesh(this, ELayer::eDoor, mpDoorCol, true);
@@ -82,9 +83,20 @@ bool COpeningDoor::IsOpened() const
 	return mIsOpened;
 }
 
+// 調べられる状態かどうか
+bool COpeningDoor::CanInteract() const
+{
+	// ドアを開閉している途中なら、調べられない
+	if (mIsPlaying) return false;
+
+	return true;
+}
+
 // 調べる
 void COpeningDoor::Interact()
 {
+	// TODO:鍵が閉まっていたら、開かない
+
 	// 閉まっている
 	if (!mIsOpened)
 	{
@@ -105,6 +117,14 @@ void COpeningDoor::Interact()
 	}
 
 	mInteractStr = mIsOpened ? "閉まっている" : "開いている";
+}
+
+// 調べるときに参照するオブジェクトの位置
+CVector COpeningDoor::GetInteractPos() const
+{
+	// 開き戸は回転軸が原点なので、
+	// 回転軸からドアの幅の半分だけズラした位置を調べる位置とする
+	return Position() + VectorX() * DOOR_WIDTH * 0.5f;
 }
 
 // 壊れた時の処理
@@ -137,49 +157,25 @@ void COpeningDoor::Update()
 {
 	if (mIsPlaying)
 	{
-		mInteract = false;
-		// 扉を開くアニメーション
-		if (mIsOpened)
+		CVector strtAngle = mIsOpened ? mCloseAngle : mOpenAngle;
+		CVector endAngle = mIsOpened ? mOpenAngle : mCloseAngle;
+
+		// 時間経過による開閉アニメーション
+		if (mElapsedTime < mAnimTime)
 		{
-			if (mElapsedTime < mAnimTime)
-			{
-				float per = mElapsedTime / mAnimTime;
-				CVector angle = CVector::Lerp(mCloseAngle, mOpenAngle, per);
-				Rotate(angle);
-				mElapsedTime += Times::DeltaTime();
-			}
-			else
-			{
-				Rotate(mOpenAngle);
-				mElapsedTime = 0.0f;
-				mIsPlaying = false;
-				mInteract = true;
-			}
+			float per = mElapsedTime / mAnimTime;
+			CVector angle = CVector::Lerp(strtAngle, endAngle, per);
+			Rotation(CQuaternion(angle));
+			mElapsedTime += Times::DeltaTime();
 		}
-		// 扉を閉じるアニメーション
+		// アニメーション時間を経過した
 		else
 		{
-			if (mElapsedTime < mAnimTime)
-			{
-				float per = mElapsedTime / mAnimTime;
-				CVector angle = CVector::Lerp(mOpenAngle, mCloseAngle, per);
-				Rotate(angle);
-				mElapsedTime += Times::DeltaTime();
-			}
-			else
-			{
-				Rotate(mCloseAngle);
-				mElapsedTime = 0.0f;
-				mIsPlaying = false;
-			}
+			Rotation(CQuaternion(endAngle));
+			mElapsedTime = 0.0f;
+			mIsPlaying = false;
 		}
 	}
-	// 開閉中ではない
-	else
-	{
-		mInteract = true;
-	}
-
 }
 
 // 描画処理

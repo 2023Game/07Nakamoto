@@ -51,6 +51,12 @@ CVector CInteractObject::GetInteractUIPos() const
 	return Position() + CVector(0.0f, 10.0f, 0.0f);
 }
 
+// 調べるときに参照するオブジェクトの位置
+CVector CInteractObject::GetInteractPos() const
+{
+	return Position();
+}
+
 #if _DEBUG
 // デバッグ表示用の名前を取得
 std::string CInteractObject::GetDebugName() const

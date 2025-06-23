@@ -220,6 +220,7 @@ void CPlayerBase::ChangeAnimation(int type, bool restart)
 	CXCharacter::SetAnimationSpeed(data.speed);
 }
 
+// 一番近くにある調べられるオブジェクトを取得
 CInteractObject* CPlayerBase::GetNearInteractObj()
 {
 	CVector pos = Position();	// プレイヤーの座標を取得
@@ -246,7 +247,7 @@ CInteractObject* CPlayerBase::GetNearInteractObj()
 		}
 
 		// オブジェクトの座標を取得
-		CVector objPos = obj->Position();
+		CVector objPos = obj->GetInteractPos();
 		// プレイヤーからオブジェクトまでのベクトルを求める
 		CVector vec = objPos - pos;
 		vec.Y(0.0f);	// オブジェクトとの高さの差を考慮しない
@@ -263,7 +264,7 @@ CInteractObject* CPlayerBase::GetNearInteractObj()
 		// 求めた内積と視野角度で、視野範囲内か判断する
 		if (dot < cosf(angleR)) continue;
 
-		float dist = (obj->Position() - pos).LengthSqr();
+		float dist = (objPos - pos).LengthSqr();
 		// 一番最初の調べるオブジェクトか、
 		// 求めた距離が現在の一番近いオブジェクトよりも近い場合は、
 		if (nearObj == nullptr || dist < nearDist)

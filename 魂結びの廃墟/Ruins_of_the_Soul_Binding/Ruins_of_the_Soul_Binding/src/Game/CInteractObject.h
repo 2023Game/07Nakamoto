@@ -24,6 +24,9 @@ public:
 	// 調べるUIを表示する座標を返す
 	virtual CVector GetInteractUIPos() const;
 
+	// 調べるときに参照するオブジェクトの位置
+	virtual CVector GetInteractPos() const;
+
 #if _DEBUG
 	// デバッグ表示用の名前を取得
 	std::string GetDebugName() const;

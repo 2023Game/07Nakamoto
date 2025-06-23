@@ -19,8 +19,14 @@ public:
 	// ドアが開いているかどうか
 	bool IsOpened() const;
 
+	// 調べられる状態かどうか
+	bool CanInteract() const override;
 	// 調べる
 	void Interact() override;
+
+	// 調べるときに参照するオブジェクトの位置
+	CVector GetInteractPos() const override;
+
 	// 壊れた時の処理
 	void Death();
 

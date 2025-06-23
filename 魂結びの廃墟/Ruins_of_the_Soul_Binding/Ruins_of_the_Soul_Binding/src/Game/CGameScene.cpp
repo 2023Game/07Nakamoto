@@ -55,6 +55,8 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>(		"RightDoorCol",		"Door\\right_door_col.obj");
 	CResourceManager::Load<CModel>(		"LeftDoor",			"Door\\left_door.obj");
 	CResourceManager::Load<CModel>(		"LeftDoorCol",		"Door\\left_door_col.obj");
+	CResourceManager::Load<CModel>(		"OpeningDoor",		"Door\\opening_door.obj");
+	CResourceManager::Load<CModel>(		"OpeningDoorCol",	"Door\\opening_door_col.obj");
 	// 妖力の源
 	CResourceManager::Load<CModel>(		"DemonPower",		"Field\\Object\\Demon_Power\\source_of_demon_power.obj");
 	// スイッチ

@@ -63,7 +63,7 @@ bool CInteractObjectManager::GetNearInteractObjects(const CVector& pos, float di
 		if (obj->IsKill()) continue;
 
 		// 調べるオブジェクトと指定された座標の距離を取得
-		float dist = (obj->Position() - pos).LengthSqr();
+		float dist = (obj->GetInteractPos() - pos).LengthSqr();
 		// 求めた距離が指定された距離より遠ければ、次の調べるオブジェクトへ進む
 		if (dist > distance * distance) continue;
 
