@@ -52,11 +52,6 @@ void CPressAndHoldSwitch::ChangeSwith()
 }
 
 // 衝突処理
-bool CPressAndHoldSwitch::IsPushedObject(CObjectBase* obj) const
-{
-}
-
-// 衝突処理
 void CPressAndHoldSwitch::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	if (other->Layer() == ELayer::eCat)
@@ -92,16 +87,6 @@ void CPressAndHoldSwitch::Update()
 			mpLastPushedObject = nullptr;
 		}
 	}
-
-	if (!mSwitch)
-	{
-		Position(mDefaultPos);
-	}
-	else
-	{
-		Position(mOffSetPos);
-	}
-
 	// スイッチを踏んでいるオブジェクトのポインタを空にする
 	mpPushedObject = nullptr;
 }
@@ -109,5 +94,13 @@ void CPressAndHoldSwitch::Update()
 // 描画
 void CPressAndHoldSwitch::Render()
 {
-	mpButtonModel->Render(Matrix());
+	CMatrix m = Matrix();
+	if (mSwitch)
+	{
+		CMatrix transMtx;
+		transMtx.Translate(0.0f, -PRESSED_OFFSET_POS, 0.0f);
+		m = m * transMtx;
+	}
+
+	mpButtonModel->Render(m);
 }

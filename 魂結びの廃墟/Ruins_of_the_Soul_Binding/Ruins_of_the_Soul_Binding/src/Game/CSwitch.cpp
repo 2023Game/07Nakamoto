@@ -43,12 +43,6 @@ bool CSwitch::IsSwitchOn()
 	return mSwitch;
 }
 
-// ボタンのオンオフ切り替え
-void CSwitch::ChangeSwith()
-{
-	mSwitch = !mSwitch;
-}
-
 // 衝突処理
 void CSwitch::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
@@ -80,24 +74,24 @@ void CSwitch::Update()
 			mSwitch = false;
 		}
 	}
-
-	if (!mSwitch)
-	{
-		Position(mDefaultPos);
-	}
-	else
-	{
-		Position(mOffSetPos);
-	}
-
 	// スイッチを踏んでいるオブジェクトのポインタを空にする
 	mpPushedObject = nullptr;
 
-	// 1:22:23から
+	CDebugPrint::Print("スイッチ：%s\n", mSwitch ? "オン" : "オフ");
 }
 
 // 描画
 void CSwitch::Render()
 {
-	mpButtonModel->Render(Matrix());
+	CMatrix m = Matrix();
+	// スイッチが押されているときだけ、押し込んだ位置に移動
+	// （モデルデータの座標だけズラす）
+	if (mSwitch)
+	{
+		CMatrix transMtx;
+		transMtx.Translate(0.0f, -PRESSED_OFFSET_POS, 0.0f);
+		m = m * transMtx;
+	}
+
+	mpButtonModel->Render(m);
 }

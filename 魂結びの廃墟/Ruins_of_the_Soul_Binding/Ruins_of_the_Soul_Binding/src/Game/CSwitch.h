@@ -14,12 +14,6 @@ public:
 	// ボタンが押されているかどうか
 	bool IsSwitchOn();
 
-	// ボタンのオンオフ切り替え
-	void ChangeSwith();
-
-	// 現在ボタンを押しているオブジェクトかどうか
-	bool IsPushedObject(CObjectBase* obj) const;
-
 	/// <summary>
 	/// 衝突処理
 	/// </summary>
