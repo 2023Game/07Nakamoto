@@ -14,6 +14,12 @@ public:
 	// ボタンが押されているかどうか
 	bool IsSwitchOn();
 
+	// ボタンのオンオフ切り替え
+	void ChangeSwith();
+
+	// 現在ボタンを押しているオブジェクトかどうか
+	bool IsPushedObject(CObjectBase* obj) const;
+
 	/// <summary>
 	/// 衝突処理
 	/// </summary>
@@ -23,17 +29,23 @@ public:
 	void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
 
 	// 更新
-	void Update();
+	void Update() override;
 	// 描画
-	void Render();
+	void Render() override;
 
 private:
 	CModel* mpButtonModel;
 	CCollider* mpButtonColMesh;
+
+	// スイッチの上に乗っているオブジェクトのポインタ
+	CObjectBase* mpPushedObject;
 
 	bool mSwitch;
 	// 初期の高さ
 	CVector mDefaultPos;
 	// 押された時の座標
 	CVector mOffSetPos;
+
+	// 経過時間計測用
+	float mElapsedTime;
 };

@@ -81,7 +81,7 @@ void CEnemy::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 	if (self == mpBodyCol)
 	{
 		// フィールドと衝突した
-		if (layer == ELayer::eField)
+		if (layer == ELayer::eFloor)
 		{
 			// 坂道で滑らないように、押し戻しベクトルのXとZの値を0にする
 			CVector adjust = hit.adjust;
@@ -131,7 +131,7 @@ void CEnemy::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			Position(Position() + adjust * hit.weight);
 		}		
 		// プレイヤーと衝突した場合
-		else if (other->Layer() == ELayer::ePlayer)
+		else if (other->Layer() == ELayer::ePlayer || other->Layer() == ELayer::eCat)
 		{
 			// 横方向にのみ押し戻すため、
 			// 押し戻しベクトルのYの値を0にする

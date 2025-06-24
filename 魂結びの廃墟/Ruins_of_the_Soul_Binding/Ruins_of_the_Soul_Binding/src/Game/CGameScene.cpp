@@ -62,7 +62,8 @@ void CGameScene::Load()
 	// スイッチ
 	CResourceManager::Load<CModel>(		"Stand",			"Field\\Object\\Switch\\stand.obj");
 	CResourceManager::Load<CModel>(		"Button",			"Field\\Object\\Switch\\buttun.obj");
-	CResourceManager::Load<CModel>(		"StandCol",			"Field\\Object\\Switch\\stand_col.obj");
+	CResourceManager::Load<CModel>(		"StandWallCol",		"Field\\Object\\Switch\\stand_wall_col.obj");
+	CResourceManager::Load<CModel>(		"StandFloorCol",	"Field\\Object\\Switch\\stand_floor_col.obj");
 
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);

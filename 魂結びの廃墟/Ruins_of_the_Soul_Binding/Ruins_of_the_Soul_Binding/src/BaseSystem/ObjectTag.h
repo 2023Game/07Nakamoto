@@ -14,6 +14,7 @@ enum class ETag
 	eItem,	// アイテムのオブジェクト
 
 	ePlayer,// プレイヤー
+	eCat,	// 猫
 	eEnemy,	// エネミー
 
 	eBullet,// 弾丸

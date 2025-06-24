@@ -113,14 +113,16 @@ CBoss::CBoss(std::vector<CVector> patrolPoints)
 		{ 
 			ETag::eField,
 			ETag::ePlayer,
+			ETag::eCat,
 			ETag::eInteractObject
 		}
 	);
 	mpBodyCol->SetCollisionLayers
 	(
-		{	ELayer::eField,
+		{	ELayer::eFloor,
 			ELayer::eWall,
 			ELayer::ePlayer,
+			ELayer::eCat,
 			ELayer::eInteractObj,
 			ELayer::eDoor
 		}
@@ -137,6 +139,7 @@ CBoss::CBoss(std::vector<CVector> patrolPoints)
 	(
 		{ 
 			ETag::ePlayer,
+			ETag::eCat,
 			ETag::eInteractObject,
 		}
 	);
@@ -144,6 +147,7 @@ CBoss::CBoss(std::vector<CVector> patrolPoints)
 	(
 		{
 			ELayer::ePlayer,
+			ELayer::eCat,
 			ELayer::eDoor,
 		}
 	);

@@ -14,8 +14,8 @@
 #define RESERVED_CAPACITYE 5	// リストの初期容量
 
 // コンストラクタ
-CPlayerBase::CPlayerBase()
-	: CXCharacter(ETag::ePlayer, ETaskPriority::ePlayer)
+CPlayerBase::CPlayerBase(ETag tag)
+	: CXCharacter(tag, ETaskPriority::ePlayer)
 	, mState(0)
 	, mStateStep(0)
 	, mElapsedTime(0.0f)
@@ -81,8 +81,14 @@ void CPlayerBase::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 	if (self == mpBodyCol)
 	{
 		// フィールドとの衝突
-		if (other->Layer() == ELayer::eField)
+		if (other->Layer() == ELayer::eFloor)
 		{
+			// 衝突した面の角度が30度以上であれば、スルーする
+			// TODO:坂道や階段を登る処理対応時に要調整
+			CVector normal = hit.adjust.Normalized();
+			float dot = CVector::Dot(normal, CVector::up);
+			if (abs(dot) <= Math::DegreeToRadian(30.0f)) return;
+
 			// 坂道で滑らないように、押し戻しベクトルのXとZの値を0にする
 			CVector adjust = hit.adjust;
 			adjust.X(0.0f);
@@ -90,9 +96,9 @@ void CPlayerBase::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 
 			Position(Position() + adjust * hit.weight);
 
+			normal = hit.adjust.Normalized();
 			// 衝突した地面が床か天井かを内積で判定
-			CVector normal = hit.adjust.Normalized();
-			float dot = CVector::Dot(normal, CVector::up);
+			dot = CVector::Dot(normal, CVector::up);
 			// 内積の結果がプラスであれば、床と衝突した
 			if (dot >= 0.0f)
 			{
@@ -144,7 +150,7 @@ void CPlayerBase::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 			adjust.Y(0.0f);
 			Position(Position() + adjust * hit.weight);
 		}
-		else if (other->Layer() == ELayer::eObject)
+		else if (other->Layer() == ELayer::eSwitch)
 		{
 			//// 横方向にのみ押し戻すため、
 			//// 押し戻しベクトルのYの値を0にする

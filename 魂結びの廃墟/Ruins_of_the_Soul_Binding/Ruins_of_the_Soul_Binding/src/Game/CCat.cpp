@@ -16,7 +16,7 @@
 #define BODY_RADIUS 3.0f		// 本体のコライダーの幅
 #define MOVE_SPEED 0.75f		// 移動速度
 #define MOVE_END_DIST 5.0f		// 移動終了する距離
-#define JUMP_SPEED 1.5f			// ジャンプ速度
+#define JUMP_SPEED 1.0f			// ジャンプ速度
 #define GRAVITY 0.0625f			// 重力加速度
 #define ROTATE_SPEED	5.0f	// 移動時の猫の回転速度
 
@@ -40,7 +40,8 @@ const std::vector<CPlayerBase::AnimData> ANIM_DATA =
 
 // コンストラクタ
 CCat::CCat()
-	: mpTrackingNode(nullptr)
+	: CPlayerBase(ETag::eCat)
+	, mpTrackingNode(nullptr)
 	, mNextTrackingIndex(-1)
 {
 	mMaxHp = 100000;
@@ -58,7 +59,7 @@ CCat::CCat()
 	// 本体のコライダーを作成
 	mpBodyCol = new CColliderSphere
 	(
-		this, ELayer::ePlayer,
+		this, ELayer::eCat,
 		BODY_RADIUS
 	);
 	mpBodyCol->Position(0.0f, BODY_RADIUS * 0.5f, 0.0f);
@@ -75,12 +76,13 @@ CCat::CCat()
 	mpBodyCol->SetCollisionLayers
 	(
 		{
-			ELayer::eField, 
+			ELayer::eFloor, 
 			ELayer::eWall, 
 			ELayer::eInteractObj,
 			ELayer::eEnemy,
 			ELayer::eAttackCol,
 			ELayer::eDoor,
+			ELayer::eSwitch,
 		}
 	);
 
@@ -154,7 +156,11 @@ void CCat::UpdateIdle()
 	// 接地していれば、
 	if (mIsGrounded)
 	{
-
+		// SPACEキーでジャンプ
+		if (CInput::PushKey(VK_SPACE))
+		{
+			ChangeState((int)EState::eJumpStart);
+		}
 	}
 }
 
@@ -276,6 +282,7 @@ void CCat::UpdateTracking()
 	}
 }
 
+// 攻撃中か
 bool CCat::IsAttacking() const
 {
 	return false;
@@ -413,6 +420,12 @@ void CCat::Update()
 	case (int)EState::eIdle:		UpdateIdle();		break;
 	// 追従状態
 	case(int)EState::eTracking:		UpdateTracking();	break;
+	// ジャンプ開始
+	case(int)EState::eJumpStart:	UpdateJumpStart();	break;
+	// ジャンプ中
+	case(int)EState::eJump:			UpdateJump();		break;
+	// ジャンプ終了
+	case(int)EState::eJumpEnd:		UpdateJumpEnd();	break;
 	}
 
 	// このプレイヤーを操作中であれば、
@@ -482,6 +495,51 @@ void CCat::Render()
 	else
 	{
 		CPlayerBase::Render();
+	}
+}
+
+// ジャンプ開始
+void CCat::UpdateJumpStart()
+{
+	//ChangeAnimation((int)EAnimType::eJumpStart);
+	//float frame = GetAnimationFrame();
+	//mMoveSpeed = CVector::zero;
+
+	//if (frame >= JUNP_MOVE_START)
+	//{
+	//	mMoveSpeedY += JUMP_SPEED;
+	//	mIsGrounded = false;
+	//	ChangeState((int)EState::eJump);
+	//}
+
+	mMoveSpeedY += JUMP_SPEED;
+	mIsGrounded = false;
+	ChangeState((int)EState::eJump);
+}
+
+// ジャンプ中
+void CCat::UpdateJump()
+{
+	//ChangeAnimation((int)EAnimType::eJump);
+	if (mIsGrounded)
+	{
+		ChangeState((int)EState::eJumpEnd);
+	}
+}
+
+// ジャンプ終了
+void CCat::UpdateJumpEnd()
+{
+	if (mIsGrounded)
+	{
+		mMoveSpeed.X(0.0f);
+		mMoveSpeed.Z(0.0f);
+		//ChangeAnimation((int)EAnimType::eJumpEnd);
+
+		//if (IsAnimationFinished())
+		//{
+			ChangeState((int)EState::eIdle);
+		//}
 	}
 }
 

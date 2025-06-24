@@ -63,7 +63,8 @@ const std::vector<CPlayerBase::AnimData> ANIM_DATA =
 
 // コンストラクタ
 CPlayer2::CPlayer2()
-	: mMaxSt(MAX_ST)
+	: CPlayerBase(ETag::ePlayer)
+	, mMaxSt(MAX_ST)
 	, mSt(mMaxSt)
 	, mChannelingTime(0)
 #if _DEBUG
@@ -112,14 +113,14 @@ CPlayer2::CPlayer2()
 	mpBodyCol->SetCollisionLayers
 	(
 		{
-			ELayer::eField,
+			ELayer::eFloor,
 			ELayer::eWall,
 			ELayer::eInteractObj,
 			ELayer::eDoor,
 			ELayer::eEnemy,
 			ELayer::eDemon,
 			ELayer::eAttackCol,
-			ELayer::eObject,
+			ELayer::eSwitch,
 		}
 	);
 

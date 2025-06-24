@@ -4,6 +4,7 @@
 class CModel;
 class CCollider;
 
+// スイッチの土台クラス
 class CStand : public CObjectBase
 {
 public:
@@ -17,6 +18,6 @@ public:
 
 private:
 	CModel* mpStandModel;
-	CCollider* mpStandColMesh;
-
+	CCollider* mpStandWallColMesh;	// 土台の壁部分のコライダー
+	CCollider* mpStandFloorColMesh;	// 土台の床部分のコライダー
 };

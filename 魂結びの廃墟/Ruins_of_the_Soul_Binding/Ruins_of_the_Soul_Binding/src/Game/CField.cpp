@@ -29,7 +29,7 @@ CField::CField()
 	mpWall = CResourceManager::Get<CModel>("Wall");
 	mpWallCol = CResourceManager::Get<CModel>("WallCol");
 
-	mpFloorColliderMesh = new CColliderMesh(this, ELayer::eField, mpFloor, true);
+	mpFloorColliderMesh = new CColliderMesh(this, ELayer::eFloor, mpFloor, true);
 	mpWallColliderMesh = new CColliderMesh(this, ELayer::eWall, mpWallCol, true);
 
 	// 経路探索用の遮蔽物チェックのコライダーに、フィールドの壁のコライダーを登録
@@ -51,8 +51,8 @@ CField::CField()
 	// 開き戸の生成
 	new COpeningDoorGimmick
 	(
-		CVector(0.0f,0.0f,60.0f),
-		CVector(0.0f,0.0f,0.0f)
+		CVector(102.73f,0.0f,99.0f),
+		CVector(0.0f,90.0f,0.0f)
 	);
 
 	// 妖力の源のマネージャーを生成

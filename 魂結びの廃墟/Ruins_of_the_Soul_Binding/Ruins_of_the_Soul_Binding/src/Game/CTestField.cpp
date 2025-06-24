@@ -26,7 +26,7 @@ CTestField::CTestField()
 	mpWall = CResourceManager::Get<CModel>("Wall");
 	mpWallCol = CResourceManager::Get<CModel>("WallCol");
 
-	mpFloorColliderMesh = new CColliderMesh(this, ELayer::eField, mpFloor, true);
+	mpFloorColliderMesh = new CColliderMesh(this, ELayer::eFloor, mpFloor, true);
 	mpWallColliderMesh = new CColliderMesh(this, ELayer::eWall, mpWallCol, true);
 
 	// 経路探索用の遮蔽物チェックのコライダーに、フィールドの壁のコライダーを登録

@@ -28,6 +28,12 @@ public:
 	// 描画
 	void Render() override;
 
+	// ジャンプ開始
+	void UpdateJumpStart();
+	// ジャンプ中
+	void UpdateJump();
+	// ジャンプ終了
+	void UpdateJumpEnd();
 	// 攻撃中か
 	bool IsAttacking() const override;
 	// 攻撃開始
@@ -101,8 +107,8 @@ private:
 	enum class EState
 	{
 		eIdle,		// 待機
-		eAttack1,	// 斬り攻撃
-		eAttack2,	// 蹴り攻撃
+		eAttack1,	// ひっかき攻撃
+		eAttack2,	// 攻撃
 		eJumpStart,	// ジャンプ開始
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了

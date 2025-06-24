@@ -28,6 +28,7 @@ CDemonPower::CDemonPower(const CVector& pos)
 	( 
 		{
 			ETag::ePlayer,
+			ETag::eCat,
 			ETag::eEnemy,
 		}
 	);
@@ -35,6 +36,7 @@ CDemonPower::CDemonPower(const CVector& pos)
 	(
 		{
 			ELayer::ePlayer,
+			ELayer::eCat,
 			ELayer::eInteractSearch,
 			ELayer::eEnemy
 		}

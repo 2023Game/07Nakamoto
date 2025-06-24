@@ -6,12 +6,13 @@ enum class ELayer
 {
 	eNone = -1,
 	eTest,
-	eField,
-	eWall,
+	eFloor,		// 床の衝突判定用
+	eWall,		// 壁の衝突判定用
 	eDoor,
-	eObject,
+	eSwitch,
 	eGround,
 	ePlayer,
+	eCat,
 	eEnemy,
 	eInteractObj,	// 調べるオブジェクト
 	eInteractSearch,// 調べるオブジェクト探知用

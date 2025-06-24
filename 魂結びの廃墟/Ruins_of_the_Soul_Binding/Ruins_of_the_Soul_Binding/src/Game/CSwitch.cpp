@@ -2,24 +2,25 @@
 #include "CColliderMesh.h"
 #include "CStand.h"
 
-#define PRESSED_OFFSET_POS 0.8f	// 押されているときの座標
+#define PRESSED_OFFSET_POS 0.8f	// 押されているときのY座標
 
 // コンストラクタ
 CSwitch::CSwitch(const CVector& pos)
 	: CObjectBase(ETag::eField)
+	, mpPushedObject(nullptr)
 	, mSwitch(false)
 	, mDefaultPos(pos)
 	, mOffSetPos(mDefaultPos)
+	, mElapsedTime(0.0f)
 {
 	mpButtonModel = CResourceManager::Get <CModel>("Button");
-	mpButtonColMesh = new CColliderMesh(this, ELayer::eObject, mpButtonModel, true);
+	mpButtonColMesh = new CColliderMesh(this, ELayer::eSwitch, mpButtonModel, true);
 
-	mpButtonColMesh->SetCollisionTags({ ETag::ePlayer, ETag::eEnemy });
+	mpButtonColMesh->SetCollisionTags({ ETag::eCat,});
 	mpButtonColMesh->SetCollisionLayers
 	(
 		{
-			ELayer::ePlayer,
-			ELayer::eEnemy ,
+			ELayer::eCat,
 		}
 	);
 
@@ -33,10 +34,7 @@ CSwitch::CSwitch(const CVector& pos)
 // デストラクタ
 CSwitch::~CSwitch()
 {
-	if (mpButtonColMesh != nullptr)
-	{
-		SAFE_DELETE(mpButtonColMesh);
-	}
+	SAFE_DELETE(mpButtonColMesh);
 }
 
 // ボタンが押されているかどうか
@@ -45,13 +43,23 @@ bool CSwitch::IsSwitchOn()
 	return mSwitch;
 }
 
+// ボタンのオンオフ切り替え
+void CSwitch::ChangeSwith()
+{
+	mSwitch = !mSwitch;
+}
+
+// 衝突処理
 void CSwitch::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
-	if (other->Layer() == ELayer::ePlayer)
+	if (other->Layer() == ELayer::eCat)
 	{
 		if (self == mpButtonColMesh)
 		{
-			mSwitch = true;
+			// 乗っているオブジェクトを設定
+			mpPushedObject = other->Owner();
+			mElapsedTime = 0.0f;	// 経過時間をリセット
+			mSwitch = true;			// スイッチをオン
 		}
 	}
 }
@@ -59,6 +67,20 @@ void CSwitch::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 // 更新
 void CSwitch::Update()
 {
+	// スイッチの上に乗っているオブジェクトが存在しなくなった
+	if (mpPushedObject == nullptr)
+	{
+		// 一定時間後にスイッチをオフにする
+		if (mElapsedTime < 0.25f)
+		{
+			mElapsedTime += Times::DeltaTime();
+		}
+		else
+		{
+			mSwitch = false;
+		}
+	}
+
 	if (!mSwitch)
 	{
 		Position(mDefaultPos);
@@ -68,7 +90,10 @@ void CSwitch::Update()
 		Position(mOffSetPos);
 	}
 
-	mSwitch = false;
+	// スイッチを踏んでいるオブジェクトのポインタを空にする
+	mpPushedObject = nullptr;
+
+	// 1:22:23から
 }
 
 // 描画

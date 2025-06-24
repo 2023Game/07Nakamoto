@@ -24,11 +24,12 @@ COpeningDoor::COpeningDoor(const CVector& pos, const CVector& angle, const CVect
 
 	// 扉のコライダー生成
 	mpDoorColliderMesh = new CColliderMesh(this, ELayer::eDoor, mpDoorCol, true);
-	mpDoorColliderMesh->SetCollisionTags({ ETag::ePlayer, ETag::eEnemy });
+	mpDoorColliderMesh->SetCollisionTags({ ETag::ePlayer, ETag::eCat, ETag::eEnemy });
 	mpDoorColliderMesh->SetCollisionLayers
 	(
 		{
 			ELayer::ePlayer,
+			ELayer::eCat,
 			ELayer::eInteractSearch,
 			ELayer::eEnemy ,
 			ELayer::eAttackCol
