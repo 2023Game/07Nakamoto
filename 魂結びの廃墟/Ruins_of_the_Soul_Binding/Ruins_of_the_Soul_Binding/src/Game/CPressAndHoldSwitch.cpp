@@ -1,6 +1,7 @@
 #include "CPressAndHoldSwitch.h"
 #include "CColliderMesh.h"
 #include "CStand.h"
+#include "CNavManager.h"
 
 #define PRESSED_OFFSET_POS 0.8f	// 押されているときのY座標
 
@@ -27,6 +28,9 @@ CPressAndHoldSwitch::CPressAndHoldSwitch(const CVector& pos)
 
 	Position(mDefaultPos);
 	mOffSetPos.Y(mDefaultPos.Y() - PRESSED_OFFSET_POS);
+
+	// 経路探索用の遮蔽物チェックのコライダーに、扉のコライダーを登録
+	CNavManager::Instance()->AddCollider(mpButtonColMesh);
 
 	// スイッチの台を生成
 	new CStand(pos);

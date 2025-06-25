@@ -34,10 +34,6 @@ COpeningDoorGimmick::COpeningDoorGimmick(const CVector& pos, const CVector& angl
 	// Še•ûŒü‚ÌƒhƒA‚Ìƒm[ƒh“¯Žm‚ð‹­§“I‚ÉŒq‚®
 	mpNavNode1->AddForcedConnectNode(mpNavNode2);
 
-	// Œq‚ª‚éƒm[ƒh‚ðŽ©“®ŒŸõ‚·‚éÛ‚ÉAŠeƒm[ƒh‚ÌŒq‚ª‚È‚¢ƒm[ƒh‚ðÝ’è
-	mpNavNode1->AddBlockedNode(mpNavNode1);
-	mpNavNode2->AddBlockedNode(mpNavNode1);
-
 	// Œ»Žž“_‚Å‚ÌƒhƒA‚ÌŠJ•Âó‘Ô‚ðŒo˜H’Tõƒm[ƒh‚É”½‰f
 	OnChangeDoor();
 
@@ -46,8 +42,11 @@ COpeningDoorGimmick::COpeningDoorGimmick(const CVector& pos, const CVector& angl
 	// ƒfƒXƒgƒ‰ƒNƒ^
 COpeningDoorGimmick::~COpeningDoorGimmick()
 {
-	mpOpeningDoor->SetOwner(nullptr);
-	mpOpeningDoor->Kill();
+	if (mpOpeningDoor != nullptr)
+	{
+		mpOpeningDoor->SetOwner(nullptr);
+		mpOpeningDoor->Kill();
+	}
 
 	// Œo˜H’Tõƒm[ƒh‚ð‘S‚Äíœ
 	CNavManager* navMgr = CNavManager::Instance();
@@ -80,5 +79,4 @@ void COpeningDoorGimmick::OnChangeDoor()
 	// ŠJ‚«ŒË‚ÌŒo˜H‚ªŒq‚ª‚Á‚Ä‚¢‚é‚©Ý’è
 	mpNavNode1->SetEnableConnect(mpNavNode2, opened);
 	mpNavNode2->SetEnableConnect(mpNavNode1, opened);
-
 }

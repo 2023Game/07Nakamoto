@@ -1,29 +1,30 @@
 #include "CSwitchDoor.h"
-#include "CColliderMesh.h"
 #include "CSwitch.h"
-#include "CNavNode.h"
 #include "CNavManager.h"
 
-// コンストラクタ
+//コンストラクタ
 CSwitchDoor::CSwitchDoor(const CVector& pos, const CVector& angle, const CVector& openPos,
 	std::string modelName, std::string colName)
-	: CObjectBase(ETag::eGimmick)
-	, mpNavNode1(nullptr)
-	, mpNavNode2(nullptr)
-	, mpOwner(this)
+	: mIsOpened(false)
+	, mAnimTime(1.0f)
+	, mElapsedTime(0.0f)
+	, mIsPlaying(false)
+	, mpOwner(nullptr)
 {
-	mClosePos = pos;
 	mOpenPos = openPos;
+	mClosePos = pos;
 	Position(mIsOpened ? mOpenPos : mClosePos);
+	Rotate(angle);
 
-	Rotation(angle);
+	// 扉のモデルデータの取得
+	mpModel = CResourceManager::Get<CModel>(modelName);
+	// 扉のコライダーデータの取得
+	CModel* modelCol = CResourceManager::Get<CModel>(colName);
 
-	mpModel = CResourceManager::Get<CModel>("");
-
-	CModel* mesh = CResourceManager::Get<CModel>("");
-	mpColliderMesh = new CColliderMesh(this, ELayer::eSwitch, mesh, true);
-	mpColliderMesh->SetCollisionTags({ ETag::ePlayer, ETag::eCat, ETag::eEnemy });
-	mpColliderMesh->SetCollisionLayers
+	// 扉のコライダー生成
+	mpModelColliderMesh = new CColliderMesh(this, ELayer::eDoor, modelCol, true);
+	mpModelColliderMesh->SetCollisionTags({ ETag::ePlayer, ETag::eCat, ETag::eEnemy });
+	mpModelColliderMesh->SetCollisionLayers
 	(
 		{
 			ELayer::ePlayer,
@@ -31,21 +32,31 @@ CSwitchDoor::CSwitchDoor(const CVector& pos, const CVector& angle, const CVector
 			ELayer::eEnemy ,
 		}
 	);
+
+	// 経路探索用の遮蔽物チェックのコライダーに、扉のコライダーを登録
+	CNavManager::Instance()->AddCollider(mpModelColliderMesh);
 }
 
 // デストラクタ
 CSwitchDoor::~CSwitchDoor()
 {
 	// コライダーの削除
-	if (mpColliderMesh != nullptr)
+	if (mpModelColliderMesh != nullptr)
 	{
-		// 経路探索管理クラスが存在したら、遮蔽物リストからコライダーをを取り除く
+		// 経路探索管理クラスが存在したら、遮蔽物リストからドアのコライダーをを取り除く
 		CNavManager* navMgr = CNavManager::Instance();
 		if (navMgr != nullptr)
 		{
-			navMgr->RemoveCollider(mpColliderMesh);
+			navMgr->RemoveCollider(mpModelColliderMesh);
 		}
-		SAFE_DELETE(mpColliderMesh);
+		delete mpModelColliderMesh;
+		mpModelColliderMesh = nullptr;
+	}
+
+	// 持ち主が存在する場合は、持ち主に自身が削除されたことを伝える
+	if (mpOwner != nullptr)
+	{
+		mpOwner->DeleteObject(this);
 	}
 }
 
@@ -55,12 +66,25 @@ void CSwitchDoor::AddSwitch(CSwitch* sw)
 	mpSwitches.push_back(sw);
 }
 
+// 持ち主を設定する
+void CSwitchDoor::SetOwner(CObjectBase* owner)
+{
+	mpOwner = owner;
+}
+
+// 扉の開閉状態が切り替わった時に呼び出す関数のポインタを設定
+void CSwitchDoor::SetOnChangeFunc(std::function<void()> func)
+{
+	mOnChangeFunc = func;
+}
+
+// ドアが開いているかどうか
 bool CSwitchDoor::IsOpened() const
 {
 	return mIsOpened;
 }
 
-
+// レイとフィールドオブジェクトの衝突判定
 bool CSwitchDoor::CollisionRay(const CVector& start, const CVector& end, CHitInfo* hit)
 {
 	// 衝突情報保存用
@@ -69,7 +93,7 @@ bool CSwitchDoor::CollisionRay(const CVector& start, const CVector& end, CHitInf
 	bool isHit = false;
 
 	// 扉のオブジェクトとの衝突判定
-	if (CCollider::CollisionRay(mpColliderMesh, start, end, &tHit))
+	if (CCollider::CollisionRay(mpModelColliderMesh, start, end, &tHit))
 	{
 		*hit = tHit;
 		isHit = this;
@@ -81,18 +105,52 @@ bool CSwitchDoor::CollisionRay(const CVector& start, const CVector& end, CHitInf
 // 更新処理
 void CSwitchDoor::Update()
 {
-	// 閉まっている
-	if (!mIsOpened)
+	if (mIsPlaying)
 	{
-		mIsOpened = true;
-		mIsPlaying = true;
-	}
-	else if (mIsOpened)
-	{
-		mIsOpened = false;
-		mIsPlaying = true;
-	}
+		CVector startPos = mIsOpened ? mClosePos : mOpenPos;
+		CVector endPos = mIsOpened ? mOpenPos : mClosePos;
 
+		// 時間経過による開閉アニメーション
+		if (mElapsedTime < mAnimTime)
+		{
+			float per = mElapsedTime / mAnimTime;
+			CVector pos = CVector::Lerp(startPos, endPos, per);
+			Position(pos);
+			mElapsedTime += Times::DeltaTime();
+		}
+		// アニメーション時間を経過した
+		else
+		{
+			Position(endPos);
+			mElapsedTime = 0.0f;
+			mIsPlaying = false;
+		}
+	}
+	else
+	{
+		bool isSwitchOn = IsAllSwitchOn();
+
+		if (isSwitchOn && !mIsOpened)
+		{
+			mIsOpened = true;
+			mIsPlaying = true;
+		}
+		else if (!isSwitchOn && mIsOpened)
+		{
+			mIsOpened = false;
+			mIsPlaying = true;
+		}
+	}
+}
+
+// スイッチが全て押されているかどうか
+bool CSwitchDoor::IsAllSwitchOn() const
+{
+	for (CSwitch* sw : mpSwitches)
+	{
+		if (!sw->IsSwitchOn()) return false;
+	}
+	return true;
 }
 
 // 描画処理
@@ -101,8 +159,4 @@ void CSwitchDoor::Render()
 	mpModel->Render(Matrix());
 }
 
-// スイッチが全て押されているかどうか
-bool CSwitchDoor::IsSwitchOn() const
-{
-	return false;
-}
+

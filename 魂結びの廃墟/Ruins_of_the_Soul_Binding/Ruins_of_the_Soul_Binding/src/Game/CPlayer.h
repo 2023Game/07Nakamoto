@@ -25,6 +25,8 @@ public:
 
 	// 更新
 	void Update();
+	// 後更新
+	void LateUpdate() override;
 
 	// 攻撃中か
 	bool IsAttacking() const override;

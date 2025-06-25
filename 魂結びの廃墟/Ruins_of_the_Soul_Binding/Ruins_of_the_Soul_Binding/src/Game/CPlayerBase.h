@@ -50,6 +50,8 @@ public:
 
 	// 更新
 	void Update() override;
+	// 後更新
+	void LateUpdate() override;
 	// 描画
 	void Render() override;
 

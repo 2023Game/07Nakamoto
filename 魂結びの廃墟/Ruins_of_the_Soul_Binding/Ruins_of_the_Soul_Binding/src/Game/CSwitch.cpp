@@ -1,6 +1,7 @@
 #include "CSwitch.h"
 #include "CColliderMesh.h"
 #include "CStand.h"
+#include "CNavManager.h"
 
 #define PRESSED_OFFSET_POS 0.8f	// 押されているときのY座標
 
@@ -16,16 +17,20 @@ CSwitch::CSwitch(const CVector& pos)
 	mpButtonModel = CResourceManager::Get <CModel>("Button");
 	mpButtonColMesh = new CColliderMesh(this, ELayer::eSwitch, mpButtonModel, true);
 
-	mpButtonColMesh->SetCollisionTags({ ETag::eCat,});
+	mpButtonColMesh->SetCollisionTags({ ETag::eCat, ETag::ePlayer});
 	mpButtonColMesh->SetCollisionLayers
 	(
 		{
 			ELayer::eCat,
+			ELayer::ePlayer,
 		}
 	);
 
 	Position(mDefaultPos);
 	mOffSetPos.Y(mDefaultPos.Y() - PRESSED_OFFSET_POS);
+
+	// 経路探索用の遮蔽物チェックのコライダーに、扉のコライダーを登録
+	CNavManager::Instance()->AddCollider(mpButtonColMesh);
 
 	// スイッチの台を生成
 	new CStand(pos);
@@ -46,7 +51,7 @@ bool CSwitch::IsSwitchOn()
 // 衝突処理
 void CSwitch::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
-	if (other->Layer() == ELayer::eCat)
+	if (other->Layer() == ELayer::eCat || other->Layer() == ELayer::ePlayer)
 	{
 		if (self == mpButtonColMesh)
 		{
@@ -77,7 +82,7 @@ void CSwitch::Update()
 	// スイッチを踏んでいるオブジェクトのポインタを空にする
 	mpPushedObject = nullptr;
 
-	CDebugPrint::Print("スイッチ：%s\n", mSwitch ? "オン" : "オフ");
+	//CDebugPrint::Print("スイッチ:%s\n", mSwitch ? "オン" : "オフ");
 }
 
 // 描画

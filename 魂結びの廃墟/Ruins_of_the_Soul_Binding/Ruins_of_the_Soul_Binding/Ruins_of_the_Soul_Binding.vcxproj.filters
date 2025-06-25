@@ -469,12 +469,6 @@
     <ClCompile Include="src\Game\CHandGlow.cpp">
       <Filter>ソース ファイル\Game\Effect</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CSwitch.cpp">
-      <Filter>ソース ファイル\Game\Field\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CStand.cpp">
-      <Filter>ソース ファイル\Game\Field\Object</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CDoorGimmickLR.cpp">
       <Filter>ソース ファイル\Game\Field\Gimmick</Filter>
     </ClCompile>
@@ -484,10 +478,19 @@
     <ClCompile Include="src\Game\COpeningDoor.cpp">
       <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CSwitchDoor.cpp">
+    <ClCompile Include="src\Game\CSwitchDoorGimmick.cpp">
       <Filter>ソース ファイル\Game\Field\Gimmick</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CPressAndHoldSwitch.cpp">
+      <Filter>ソース ファイル\Game\Field\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CStand.cpp">
+      <Filter>ソース ファイル\Game\Field\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CSwitch.cpp">
+      <Filter>ソース ファイル\Game\Field\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CSwitchDoor.cpp">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClCompile>
   </ItemGroup>
@@ -873,12 +876,6 @@
     <ClInclude Include="src\Game\CHandGlow.h">
       <Filter>ソース ファイル\Game\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CSwitch.h">
-      <Filter>ソース ファイル\Game\Field\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CStand.h">
-      <Filter>ソース ファイル\Game\Field\Object</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\CDoorGimmickLR.h">
       <Filter>ソース ファイル\Game\Field\Gimmick</Filter>
     </ClInclude>
@@ -888,10 +885,19 @@
     <ClInclude Include="src\Game\COpeningDoor.h">
       <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CSwitchDoor.h">
+    <ClInclude Include="src\Game\CSwitchDoorGimmick.h">
       <Filter>ソース ファイル\Game\Field\Gimmick</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CPressAndHoldSwitch.h">
+      <Filter>ソース ファイル\Game\Field\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CStand.h">
+      <Filter>ソース ファイル\Game\Field\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CSwitch.h">
+      <Filter>ソース ファイル\Game\Field\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CSwitchDoor.h">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClInclude>
   </ItemGroup>

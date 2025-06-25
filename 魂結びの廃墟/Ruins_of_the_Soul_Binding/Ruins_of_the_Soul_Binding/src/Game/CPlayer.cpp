@@ -554,9 +554,6 @@ void CPlayer::Update()
 	// モーションブラーの更新処理
 	UpdateMotionBlur();
 
-	// キャラクターの更新
-	CXCharacter::Update();
-
 	// 武器の行列を更新
 	mpSword->UpdateMtx();
 
@@ -569,6 +566,12 @@ void CPlayer::Update()
 	mIsGrounded = false;
 
 	CDebugPrint::Print("FPS:%f\n", Times::FPS());
+}
+
+// 後更新
+void CPlayer::LateUpdate()
+{
+	CXCharacter::LateUpdate();
 }
 
 // 攻撃中か

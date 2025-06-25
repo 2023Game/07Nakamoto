@@ -22,8 +22,8 @@ CCatCamera::~CCatCamera()
 {
 }
 
-// 更新処理
-void CCatCamera::Update()
+// 後更新処理
+void CCatCamera::LateUpdate()
 {
 	CVector2 delta = CInput::GetDeltaMousePos();
 	float x = Math::Clamp(mRotateAngle.X() - delta.Y() * ROTATE_SPEED, -ROTATE_RANGE_X, ROTATE_RANGE_X);

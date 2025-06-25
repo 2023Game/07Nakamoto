@@ -9,8 +9,9 @@
 #include "CSceneManager.h"
 #include "CDemonPower.h"
 #include "CDemonPowerManager.h"
-#include "CSwitch.h"
 #include "COpeningDoorGimmick.h"
+#include "CSwitch.h"
+#include "CSwitchDoorGimmick.h"
 
 CField* CField::spInstance = nullptr;
 
@@ -55,6 +56,21 @@ CField::CField()
 		CVector(0.0f,90.0f,0.0f)
 	);
 
+	// スイッチの生成
+	CSwitch* switch1 = new CSwitch(CVector(30.0f, 0.0f, 90.0f));
+	// スイッチの生成
+	CSwitch* switch2 = new CSwitch(CVector(30.0f, -4.0f, 70.0f));
+
+	CSwitchDoorGimmick* switchdoor1 = new CSwitchDoorGimmick
+	(
+		CVector(-50.0f, 0.0f, 100.0f),
+		CVector(0.0f, 90.0f, 0.0f),
+		CVector(-50.0f, 0.0f, 109.9f),
+		"RightDoor", "RightDoorCol"
+	);
+	switchdoor1->AddSwitch(switch1);
+	switchdoor1->AddSwitch(switch2);
+
 	// 妖力の源のマネージャーを生成
 	new CDemonPowerManager();
 
@@ -64,9 +80,6 @@ CField::CField()
 	new CDemonPower(CVector(20.0f, 5.0f, 10.0f));
 	// 妖力の源
 	new CDemonPower(CVector(10.0f, 5.0f, 10.0f));
-
-	// スイッチの生成
-	new CSwitch(CVector(30.0f, 0.0f, 90.0f));
 
 	// 経路探索用のノードを作成
 	CreateNavNodes();

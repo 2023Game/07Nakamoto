@@ -21,7 +21,8 @@ public:
 		bool restart = false);
 	//更新処理
 	void Update(const CMatrix& m);
-	void Update();
+	// 後更新
+	void LateUpdate() override;
 	//描画処理
 	void Render();
 

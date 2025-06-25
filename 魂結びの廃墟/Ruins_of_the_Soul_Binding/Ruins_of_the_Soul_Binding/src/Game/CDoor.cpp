@@ -1,8 +1,6 @@
 #include "CDoor.h"
 #include "CNavManager.h"
 
-//#define MOVE_POS 9.9f	// 移動距離
-//#define MOVE_TIME 5.0f	// 移動時間
 #define HP 60			// 体力
 
 // コンストラクタ
@@ -141,48 +139,25 @@ void CDoor::Update()
 {
 	if (mIsPlaying)
 	{
-		mInteract = false;
-		// 扉を開くアニメーション
-		if (mIsOpened)
+		CVector startPos = mIsOpened ? mClosePos : mOpenPos;
+		CVector endPos = mIsOpened ? mOpenPos : mClosePos;
+
+		// 時間経過による開閉アニメーション
+		if (mElapsedTime < mAnimTime)
 		{
-			if (mElapsedTime < mAnimTime)
-			{
-				float per = mElapsedTime / mAnimTime;
-				CVector pos = CVector::Lerp(mClosePos, mOpenPos, per);
-				Position(pos);
-				mElapsedTime += Times::DeltaTime();
-			}
-			else
-			{
-				Position(mOpenPos);
-				mElapsedTime = 0.0f;
-				mIsPlaying = false;
-				mInteract = true;
-			}
+			float per = mElapsedTime / mAnimTime;
+			CVector pos = CVector::Lerp(startPos, endPos, per);
+			Position(pos);
+			mElapsedTime += Times::DeltaTime();
 		}
-		// 扉を閉じるアニメーション
+		// アニメーション時間を経過した
 		else
 		{
-			if (mElapsedTime < mAnimTime)
-			{
-				float per = mElapsedTime / mAnimTime;
-				CVector pos = CVector::Lerp(mOpenPos, mClosePos, per);
-				Position(pos);
-				mElapsedTime += Times::DeltaTime();
-			}
-			else
-			{
-				Position(mClosePos);
-				mElapsedTime = 0.0f;
-				mIsPlaying = false;
-			}
+			Position(endPos);
+			mElapsedTime = 0.0f;
+			mIsPlaying = false;
 		}
 	}
-	// 開閉中ではない
-	else
-	{
-		mInteract = true;
-	}		
 }
 
 // 描画処理

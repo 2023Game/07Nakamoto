@@ -1,16 +1,14 @@
 #pragma once
 #include "CObjectBase.h"
-#include <functional>
+#include "CColliderMesh.h"
+#include  <functional>
 
-class CModel;
-class CColliderMesh;
 class CSwitch;
-class CNavNode;
 
 class CSwitchDoor : public CObjectBase
 {
 public:
-	// コンストラクタ
+	//コンストラクタ
 	CSwitchDoor(const CVector& pos, const CVector& angle, const CVector& openPos,
 		std::string modelName, std::string colName);
 	// デストラクタ
@@ -18,6 +16,12 @@ public:
 
 	// 接続するスイッチを追加
 	void AddSwitch(CSwitch* sw);
+
+	// 持ち主を設定する
+	void SetOwner(CObjectBase* owner);
+	// 扉の開閉状態が切り替わった時に呼び出す関数のポインタを設定
+	void SetOnChangeFunc(std::function<void()> func);
+
 	// ドアが開いているかどうか
 	bool IsOpened() const;
 
@@ -38,13 +42,10 @@ public:
 
 private:
 	// スイッチが全て押されているかどうか
-	bool IsSwitchOn() const;
+	bool IsAllSwitchOn() const;
 
-	CModel* mpModel;	// 扉のモデルデータ
-	CColliderMesh* mpColliderMesh;	// 扉のコリジョンデータ
-
-	// このドアを開くために押す必要があるスイッチ
-	std::list<CSwitch*> mpSwitches;
+	CModel* mpModel;	// モデルデータ
+	CColliderMesh* mpModelColliderMesh;	// コライダー
 
 	bool mIsOpened;	// 扉が開いているかどうか
 
@@ -54,8 +55,13 @@ private:
 	float mElapsedTime;	// 経過時間保存用
 	bool mIsPlaying;	// 開閉中かどうか
 
-	CObjectBase* mpOwner;	// この扉の持ち主
+	// この扉を開くために押す必要があるスイッチ
+	std::list<CSwitch*> mpSwitches;
 
-	CNavNode* mpNavNode1;	//扉の経路探索ノード１つ目
-	CNavNode* mpNavNode2;	//扉の経路探索ノード２つ目
+
+	CObjectBase* mpOwner;	//	このドアの持ち主
+	// ドアの開閉状態が切り替わった時に呼び出す関数のポインタ
+	std::function<void()> mOnChangeFunc;
+
+
 };

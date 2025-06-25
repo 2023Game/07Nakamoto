@@ -15,8 +15,8 @@ public:
 	// デストラクタ
 	~CCatCamera();
 
-	// 更新
-	void Update() override;
+	// 後更新
+	void LateUpdate() override;
 
 private:
 	CCat* mpCat;	// 視点となる猫のクラス

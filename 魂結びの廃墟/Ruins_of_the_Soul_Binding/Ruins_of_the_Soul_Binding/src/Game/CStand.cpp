@@ -1,5 +1,6 @@
 #include "CStand.h"
 #include "CColliderMesh.h"
+#include "CNavManager.h"
 
 //コンストラクタ
 CStand::CStand(const CVector& pos)
@@ -17,6 +18,10 @@ CStand::CStand(const CVector& pos)
 	// 土台の床部分のコライダー作成
 	CModel* standFloorCol = CResourceManager::Get <CModel>("StandFloorCol");
 	mpStandFloorColMesh = new CColliderMesh(this, ELayer::eFloor, standFloorCol, true);
+
+	// 経路探索用の遮蔽物チェックのコライダーに、扉のコライダーを登録
+	CNavManager::Instance()->AddCollider(mpStandWallColMesh);
+	CNavManager::Instance()->AddCollider(mpStandFloorColMesh);
 
 }
 

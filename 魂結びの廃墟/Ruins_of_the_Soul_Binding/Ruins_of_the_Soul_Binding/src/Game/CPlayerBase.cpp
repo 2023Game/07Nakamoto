@@ -150,6 +150,10 @@ void CPlayerBase::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 			adjust.Y(0.0f);
 			Position(Position() + adjust * hit.weight);
 		}
+
+		// 押し戻し後にコライダーの位置を更新
+		mpBodyCol->Update();
+
 	}
 	// 調べるオジェクトの探知コライダーとの当たり判定
 	if (self == mpSearchCol)
@@ -277,11 +281,14 @@ CInteractObject* CPlayerBase::GetNearInteractObj()
 // 更新
 void CPlayerBase::Update()
 {
-	// キャラクターの更新
-	CXCharacter::Update();
-
 	// 調べるオブジェクトのリストをクリア
 	mNearInteractObjs.clear();
+}
+// 後更新
+void CPlayerBase::LateUpdate()
+{
+	// キャラクターの更新
+	CXCharacter::LateUpdate();
 }
 
 // 描画
