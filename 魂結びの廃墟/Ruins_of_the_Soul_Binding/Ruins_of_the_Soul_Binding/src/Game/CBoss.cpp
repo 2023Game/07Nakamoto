@@ -83,6 +83,7 @@ CBoss::CBoss(std::vector<CVector> patrolPoints)
 	, mNextPatrolIndex(-1)	// -1の時に一番近いポイントに移動
 	, mNextMoveIndex(0)
 	, mPower(ATTACK_POWER)
+	, mDemonPower(0)
 {
 	spInstance = this;
 
@@ -112,6 +113,7 @@ CBoss::CBoss(std::vector<CVector> patrolPoints)
 	(
 		{ 
 			ETag::eField,
+			ETag::eGimmick,
 			ETag::ePlayer,
 			ETag::eCat,
 			ETag::eInteractObject
@@ -274,7 +276,7 @@ void CBoss::AttackEnd()
 // 妖力の源の減少
 void CBoss::PowerDown()
 {
-	//mDemonPower--;
+	mDemonPower--;
 }
 
 // ダメージを受ける
@@ -755,6 +757,7 @@ void CBoss::UpdateChase()
 	// 移動処理
 	if (MoveTo(targetPos, RUN_SPEED))
 	{
+
 	}
 }
 
@@ -1102,12 +1105,4 @@ CInteractObject* CBoss::GetNearBreakObj() const
 		}
 	}
 	return nearObj;
-}
-// 自分とターゲットの間に壊せるオブジェクトがあるか
-bool CBoss::IsBreakObject()
-{
-	
-
-
-	return true;
 }

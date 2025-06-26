@@ -53,6 +53,8 @@ CCat::CCat()
 	// 猫を初期化
 	InitPlayer("Cat", &ANIM_DATA);
 
+	// 最初の状態を追従状態にする
+	ChangeState((int)EState::eTracking);
 	// 最初は待機アニメーションを再生
 	ChangeAnimation((int)EAnimType::eIdle);
 
@@ -68,6 +70,7 @@ CCat::CCat()
 	(
 		{ 
 			ETag::eField,
+			ETag::eGimmick,
 			ETag::eInteractObject,
 			ETag::eRideableObject, 
 			ETag::eEnemy,
@@ -162,6 +165,11 @@ void CCat::UpdateIdle()
 			ChangeState((int)EState::eJumpStart);
 		}
 	}
+
+	if (CInput::PushKey('Q'))
+	{
+		ChangeState((int)EState::eTracking);
+	}
 }
 
 // 追従時の移動経路をけいさんするかどうか
@@ -199,6 +207,10 @@ void CCat::UpdateTracking()
 		ChangeState((int)EState::eIdle);
 		mNextTrackingIndex = -1;
 		return;
+	}
+	else
+	{
+		ChangeState((int)EState::eTracking);
 	}
 
 	CPlayer2 *player = CPlayer2::Instance();
@@ -279,6 +291,11 @@ void CCat::UpdateTracking()
 			Rotation(CQuaternion::LookRotation(forward));
 			break;
 		}
+	}
+
+	if (CInput::PushKey('Q'))
+	{
+		ChangeState((int)EState::eIdle);
 	}
 }
 
@@ -443,10 +460,6 @@ void CCat::Update()
 		// マウスの左右移動で、猫を左右に回転
 		CVector2 delta = CInput::GetDeltaMousePos();
 		Rotate(0.0f, delta.X() * CAMERA_ROT_SPEED * Times::DeltaTime(), 0.0f);
-	}
-	else
-	{
-		ChangeState((int)EState::eTracking);
 	}
 
 	mMoveSpeedY -= GRAVITY;

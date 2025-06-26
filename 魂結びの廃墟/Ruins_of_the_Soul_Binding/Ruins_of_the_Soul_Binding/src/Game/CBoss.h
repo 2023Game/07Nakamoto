@@ -137,14 +137,10 @@ private:
 	std::vector<CInteractObject*> mNearBreakObjs;
 	CCollider* mpSearchCol;	// 調べるオブジェクトを探知するコライダー
 
-	// 自分とターゲットの間に壊せるオブジェクトがあるか
-	bool IsBreakObject();
-
 	// 攻撃力
 	int mPower;
-	// プレイヤーを見失ってからの経過時間
-	float mTimeSincePlayerLost;
-
+	// 妖力の源の数
+	int mDemonPower;
 
 #if _DEBUG
 	EScene mScene;

@@ -105,6 +105,7 @@ CPlayer2::CPlayer2()
 	(
 		{
 			ETag::eField,
+			ETag::eGimmick,
 			ETag::eInteractObject,
 			ETag::eRideableObject,
 			ETag::eEnemy,
@@ -205,7 +206,7 @@ void CPlayer2::UpdateIdle()
 #endif
 
 			// 調べられるオブジェクトの上に調べるUIを表示
-			//CGameUI::Instance()->ShowInteractUI(obj);
+			CGameUI::Instance()->ShowInteractUI(obj);
 
 			// 近くの調べられるオブジェクトが、妖力の源であれば、
 			if (CDemonPower* dp = dynamic_cast<CDemonPower*>(obj))
@@ -233,7 +234,7 @@ void CPlayer2::UpdateIdle()
 		else
 		{
 			// 調べるUIを非表示にする
-			//CGameUI::Instance()->HideInteractUI();
+			CGameUI::Instance()->HideInteractUI();
 		}
 	}
 }

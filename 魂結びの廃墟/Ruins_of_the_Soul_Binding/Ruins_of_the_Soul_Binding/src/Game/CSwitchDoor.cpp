@@ -5,7 +5,8 @@
 //コンストラクタ
 CSwitchDoor::CSwitchDoor(const CVector& pos, const CVector& angle, const CVector& openPos,
 	std::string modelName, std::string colName)
-	: mIsOpened(false)
+	: CObjectBase(ETag::eGimmick)
+	, mIsOpened(false)
 	, mAnimTime(1.0f)
 	, mElapsedTime(0.0f)
 	, mIsPlaying(false)

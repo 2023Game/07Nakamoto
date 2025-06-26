@@ -17,6 +17,7 @@
 #include "CNavManager.h"
 #include "CInteractObjectManager.h"
 #include "CDemonPowerManager.h"
+#include "CGameUI.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -79,6 +80,8 @@ void CGameScene::Load()
 
 	// フィールドの生成
 	mpField = new CField();
+
+	new CGameUI();
 
 	// プレイヤーの生成
 	CPlayer2* player2 = new CPlayer2();
