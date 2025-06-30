@@ -66,6 +66,9 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>(		"StandWallCol",		"Field\\Object\\Switch\\stand_wall_col.obj");
 	CResourceManager::Load<CModel>(		"StandFloorCol",	"Field\\Object\\Switch\\stand_floor_col.obj");
 
+	// テスト用の移動エリアを制限する壁
+	CResourceManager::Load<CModel>(		"TestWall",			"Field\\Test\\test_wall0.obj");
+
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
 

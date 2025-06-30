@@ -33,6 +33,10 @@ CField::CField()
 	mpFloorColliderMesh = new CColliderMesh(this, ELayer::eFloor, mpFloor, true);
 	mpWallColliderMesh = new CColliderMesh(this, ELayer::eWall, mpWallCol, true);
 
+	// テスト用
+	mpTestWall = CResourceManager::Get<CModel>("TestWall");
+	mpTestWallCol = new CColliderMesh(this, ELayer::eWall, mpTestWall, true);
+
 	// 経路探索用の遮蔽物チェックのコライダーに、フィールドの壁のコライダーを登録
 	CNavManager::Instance()->AddCollider(mpWallColliderMesh);
 
@@ -48,6 +52,26 @@ CField::CField()
 		CVector(-38.5f, 0.0f, 44.825f),
 		CVector(0.0f, 0.0f, 0.0f)
 	);
+	// 左右のドアを生成
+	new CDoorGimmickLR
+	(
+		CVector(99.0f, 0.0f, 43.175f),
+		CVector(0.0f, 0.0f, 0.0f)
+	);
+	// 左右のドアを生成
+	new CDoorGimmickLR
+	(
+		CVector(187.0f, 0.0f, 43.175f),
+		CVector(0.0f, 0.0f, 0.0f)
+	);
+
+	// 左右のドアを生成
+	new CDoorGimmickLR
+	(
+		CVector(100.531f, 0.0f, 214.5f),
+		CVector(0.0f, 90.0f, 0.0f)
+	);
+
 
 	// 開き戸の生成
 	new COpeningDoorGimmick
@@ -58,34 +82,45 @@ CField::CField()
 	// 開き戸の生成
 	new COpeningDoorGimmick
 	(
-		CVector(72.73f, 0.0f, 79.0f),
-		CVector(0.0f, 0.0f, 0.0f)
+		CVector(132.82f, 0.0f, 258.5f),
+		CVector(0.0f, 90.0f, 0.0f)
 	);
-
-	// スイッチの生成
-	CSwitch* switch1 = new CSwitch(CVector(30.0f, 0.0f, 90.0f));
-	// スイッチの生成
-	CSwitch* switch2 = new CSwitch(CVector(30.0f, -4.0f, 70.0f));
-
-	CSwitchDoorGimmick* switchdoor1 = new CSwitchDoorGimmick
+	// 開き戸の生成
+	new COpeningDoorGimmick
 	(
-		CVector(-50.0f, 0.0f, 100.0f),
-		CVector(0.0f, 90.0f, 0.0f),
-		CVector(-50.0f, 0.0f, 109.9f),
-		"RightDoor", "RightDoorCol"
+		CVector(132.82f, 0.0f, 280.5f),
+		CVector(0.0f, 90.0f, 0.0f)
 	);
-	switchdoor1->AddSwitch(switch1);
-	switchdoor1->AddSwitch(switch2);
+
+
+	//// スイッチの生成
+	//CSwitch* switch1 = new CSwitch(CVector(30.0f, 0.0f, 90.0f));
+	//// スイッチの生成
+	//CSwitch* switch2 = new CSwitch(CVector(30.0f, -4.0f, 70.0f));
+
+	//CSwitchDoorGimmick* switchdoor1 = new CSwitchDoorGimmick
+	//(
+	//	CVector(-50.0f, 0.0f, 100.0f),
+	//	CVector(0.0f, 90.0f, 0.0f),
+	//	CVector(-50.0f, 0.0f, 109.9f),
+	//	"RightDoor", "RightDoorCol"
+	//);
+	//switchdoor1->AddSwitch(switch1);
+	//switchdoor1->AddSwitch(switch2);
 
 	// 妖力の源のマネージャーを生成
 	new CDemonPowerManager();
 
 	// 妖力の源
-	new CDemonPower(CVector(30.0f, 5.0f, 10.0f));
+	new CDemonPower(CVector(140.0f, 5.0f, 120.0f));
 	// 妖力の源
-	new CDemonPower(CVector(20.0f, 5.0f, 10.0f));
+	new CDemonPower(CVector(140.0f, 5.0f, -20.0f));
 	// 妖力の源
-	new CDemonPower(CVector(10.0f, 5.0f, 10.0f));
+	new CDemonPower(CVector(-200.0f, 5.0f, 120.0f));
+	// 妖力の源
+	new CDemonPower(CVector(-30.0f, 5.0f, 220.0f));
+	// 妖力の源
+	new CDemonPower(CVector(55.0f, 5.0f, 250.0f));
 
 	// 経路探索用のノードを作成
 	CreateNavNodes();
@@ -127,10 +162,21 @@ void CField::CreateNavNodes()
 	if (navMgr != nullptr)
 	{
 		// ノードの設定
-		new CNavNode(CVector(-40.0f, 0.0f, 60.0f));
-		new CNavNode(CVector(-40.0f, 0.0f, 30.0f));
-		new CNavNode(CVector(35.0f, 0.0f, 60.0f));
-		new CNavNode(CVector(35.0f, 0.0f, 30.0f));
+		new CNavNode(CVector(-90.0f, 0.0f, 60.0f));
+		new CNavNode(CVector(65.0f, 0.0f, 60.0f));
+		new CNavNode(CVector(90.0f, 0.0f, 60.0f));
+		new CNavNode(CVector(90.0f, 0.0f, 180.0f));
+		new CNavNode(CVector(-90.0f, 0.0f, 180.0f));
+		new CNavNode(CVector(200.0f, 0.0f, 60.0f));
+		new CNavNode(CVector(200.0f, 0.0f, 180.0f));
+		new CNavNode(CVector(120.0f, 0.0f, 180.0f));
+		new CNavNode(CVector(120.0f, 0.0f, 450.0f));
+		new CNavNode(CVector(-20.0f, 0.0f, 450.0f));
+		new CNavNode(CVector(-20.0f, 0.0f, 400.0f));
+		new CNavNode(CVector(-90.0f, 0.0f, 310.0f));
+		new CNavNode(CVector(-180.0f, 0.0f, 180.0f));
+		new CNavNode(CVector(-180.0f, 0.0f, 60.0f));
+
 	}
 }
 
@@ -253,4 +299,5 @@ void CField::Render()
 {
 	mpFloor->Render(Matrix());
 	mpWall->Render(Matrix());
+	mpTestWall->Render(Matrix());
 }

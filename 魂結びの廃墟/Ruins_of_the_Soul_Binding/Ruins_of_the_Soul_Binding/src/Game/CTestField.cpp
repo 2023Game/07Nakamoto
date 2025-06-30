@@ -3,11 +3,15 @@
 #include "CMoveFloor.h"
 #include "CRotateFloor.h"
 #include "CLineEffect.h"
-#include "CRDoor.h"
-#include "CLDoor.h"
+#include "CDoorGimmickLR.h"
 #include "CNavNode.h"
 #include "CNavManager.h"
 #include "CSceneManager.h"
+#include "CDemonPower.h"
+#include "CDemonPowerManager.h"
+#include "COpeningDoorGimmick.h"
+#include "CSwitch.h"
+#include "CSwitchDoorGimmick.h"
 
 CTestField* CTestField::spInstance = nullptr;
 
@@ -32,56 +36,11 @@ CTestField::CTestField()
 	// 経路探索用の遮蔽物チェックのコライダーに、フィールドの壁のコライダーを登録
 	CNavManager::Instance()->AddCollider(mpWallColliderMesh);
 
-	new CLDoor
+	// 左右のドアを生成
+	new CDoorGimmickLR
 	(
-		CVector(30.0f, 0.0f, 44.175f),
-		CVector(0.0f, 0.0f, 0.0f),
-		CVector(39.9f, 0.0f, 44.175f)
-	);
-	new CRDoor
-	(
-		CVector(39.9f, 0.0f, 44.175f),
-		CVector(0.0f, 0.0f, 0.0f),
-		CVector(30.0f, 0.0f, 44.175f)
-	);
-
-	new CLDoor
-	(
-		CVector(-36.0f, 0.0f, 44.175f),
-		CVector(0.0f, 0.0f, 0.0f),
-		CVector(-26.1, 0.0f, 44.175f)
-	);
-	new CRDoor
-	(
-		CVector(-26.1, 0.0f, 44.175f),
-		CVector(0.0f, 0.0f, 0.0f),
-		CVector(-36.0f, 0.0f, 44.175f)
-	);
-
-	new CLDoor
-	(
-		CVector(37.8027f, 0.0f, 132.73f),
-		CVector(0.0f, 0.0f, 0.0f),
-		CVector(27.903f, 0.0f, 132.73f)
-	);
-	new CRDoor
-	(
-		CVector(27.903f, 0.0f, 132.73f),
-		CVector(0.0f, 0.0f, 0.0f),
-		CVector(37.8027f, 0.0f, 132.73f)
-	);
-
-	new CLDoor
-	(
-		CVector(-28.1973f, 0.0f, 132.73f),
-		CVector(0.0f, 0.0f, 0.0f),
-		CVector(-38.0973f, 0.0f, 132.73f)
-	);
-	new CRDoor
-	(
-		CVector(-38.0973f, 0.0f, 132.73f),
-		CVector(0.0f, 0.0f, 0.0f),
-		CVector(-28.1973f, 0.0f, 132.73f)
+		CVector(33.0f, 0.0f, 44.825f),
+		CVector(0.0f, 0.0f, 0.0f)
 	);
 
 	// 経路探索用のノードを作成

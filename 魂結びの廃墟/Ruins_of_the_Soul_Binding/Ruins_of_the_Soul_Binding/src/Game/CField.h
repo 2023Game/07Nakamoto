@@ -45,6 +45,9 @@ private:
 	CModel* mpWall;
 	CModel* mpWallCol;
 
+	CModel* mpTestWall;
+	CColliderMesh* mpTestWallCol;
+
 	CRDoor* mpRDoor;
 	CLDoor* mpLDoor;
 
