@@ -4,6 +4,9 @@
 #define HP 60			// 体力
 #define DOOR_WIDTH 11.0f	// ドアの幅
 
+#define UI_OFFSET_POS_Y	10.0f
+#define UI_OFFSET_POS_Z	 -4.95f
+
 // コンストラクタ
 COpeningDoor::COpeningDoor(const CVector& pos, const CVector& angle, const CVector& openAngle)
 	: mIsOpened(false)
@@ -16,6 +19,10 @@ COpeningDoor::COpeningDoor(const CVector& pos, const CVector& angle, const CVect
 	mCloseAngle = angle;
 	Rotate(mIsOpened ? mOpenAngle : mCloseAngle);
 	Position(pos);
+
+	// UIの座標を設定
+	mOffSetPos = CVector(0.0f, UI_OFFSET_POS_Y, 0.0f);
+	mOffSetPos -= VectorX() * UI_OFFSET_POS_Z;
 
 	// 扉のモデルデータの取得
 	mpDoor = CResourceManager::Get<CModel>("OpeningDoor");
@@ -104,6 +111,7 @@ void COpeningDoor::Interact()
 		mIsOpened = true;
 		mIsPlaying = true;
 	}
+	// 開いている
 	else if (mIsOpened)
 	{
 		mIsOpened = false;
@@ -177,6 +185,10 @@ void COpeningDoor::Update()
 			mIsPlaying = false;
 		}
 	}
+
+	// UIの座標を設定
+	mOffSetPos = CVector(0.0f, UI_OFFSET_POS_Y, 0.0f);
+	mOffSetPos -= VectorX() * UI_OFFSET_POS_Z;
 }
 
 // 描画処理

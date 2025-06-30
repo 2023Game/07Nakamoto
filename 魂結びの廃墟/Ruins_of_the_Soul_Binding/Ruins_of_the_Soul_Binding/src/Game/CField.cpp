@@ -55,6 +55,12 @@ CField::CField()
 		CVector(102.73f,0.0f,99.0f),
 		CVector(0.0f,90.0f,0.0f)
 	);
+	// 開き戸の生成
+	new COpeningDoorGimmick
+	(
+		CVector(72.73f, 0.0f, 79.0f),
+		CVector(0.0f, 0.0f, 0.0f)
+	);
 
 	// スイッチの生成
 	CSwitch* switch1 = new CSwitch(CVector(30.0f, 0.0f, 90.0f));

@@ -81,6 +81,7 @@ void CGameScene::Load()
 	// フィールドの生成
 	mpField = new CField();
 
+	// 
 	new CGameUI();
 
 	// プレイヤーの生成

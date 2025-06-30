@@ -35,6 +35,8 @@ public:
 #endif
 
 protected:
+	CVector mOffSetPos;	// 座標のオフセット
+
 	std::string mInteractStr;	// 調べる内容のテキスト
 	bool mInteract;		// 調べられる状態か
 

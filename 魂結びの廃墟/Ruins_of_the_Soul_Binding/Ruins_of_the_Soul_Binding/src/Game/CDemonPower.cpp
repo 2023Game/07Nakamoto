@@ -55,7 +55,6 @@ CDemonPower::CDemonPower(const CVector& pos)
 	mGaugeOffsetPos = CVector(0.0f, GAUGE_OFFSET_Y, 0.0f);
 
 	CDemonPowerManager::Instance()->AddDemonPower(this);
-	
 }
 
 // デストラクタ

@@ -191,6 +191,7 @@ CBoss::CBoss(std::vector<CVector> patrolPoints)
 	}
 
 	// —d—Í‚ÌŒ¹‚Ì”‚ðŽæ“¾
+	mDemonPower = CDemonPowerManager::Instance()->GetDemonPower();
 	//mMaxDemonPower = CDemonPowerManager::Instance()->GetDemonPower();
 	//mDemonPower = mMaxDemonPower;
 }

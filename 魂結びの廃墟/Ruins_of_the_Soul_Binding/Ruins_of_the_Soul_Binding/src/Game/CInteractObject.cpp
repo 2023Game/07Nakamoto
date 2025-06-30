@@ -2,12 +2,14 @@
 #include "CInteractObjectManager.h"
 
 #define DEFAULT_TEXT_PATH "UI\\Interact\\interact.png"
+#define OFFSET_POS	CVector(0.0f,10.0f,0.0f)
 
 // コンストラクタ
 CInteractObject::CInteractObject(ETaskPriority prio, int sortOrder, ETaskPauseType pause)
 	: CObjectBase(ETag::eInteractObject, prio, sortOrder, pause)
 	, mInteractStr("調べる")
 	, mInteract(true)
+	, mOffSetPos(OFFSET_POS)
 #if _DEBUG
 	, mDebugName("InteractObj")
 #endif
@@ -48,7 +50,7 @@ std::string CInteractObject::GetInteractTextPath() const
 // 調べるUIを表示する座標を返す
 CVector CInteractObject::GetInteractUIPos() const
 {
-	return Position() + CVector(0.0f, 10.0f, 0.0f);
+	return Position() + mOffSetPos;
 }
 
 // 調べるときに参照するオブジェクトの位置
