@@ -236,6 +236,12 @@ void CPlayer2::UpdateIdle()
 			// ’²‚×‚éUI‚ð”ñ•\Ž¦‚É‚·‚é
 			CGameUI::Instance()->HideInteractUI();
 		}
+
+		if (!IsOperate())
+		{
+			// ’²‚×‚éUI‚ð”ñ•\Ž¦‚É‚·‚é
+			CGameUI::Instance()->HideInteractUI();
+		}
 	}
 }
 

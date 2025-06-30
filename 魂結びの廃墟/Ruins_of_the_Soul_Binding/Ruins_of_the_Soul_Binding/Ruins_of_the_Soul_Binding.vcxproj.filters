@@ -493,6 +493,12 @@
     <ClCompile Include="src\Game\CSwitchDoor.cpp">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CGameClearScene.cpp">
+      <Filter>ソース ファイル\Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CGameClearUI.cpp">
+      <Filter>ソース ファイル\Game\UI\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -899,6 +905,12 @@
     </ClInclude>
     <ClInclude Include="src\Game\CSwitchDoor.h">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CGameClearScene.h">
+      <Filter>ソース ファイル\Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CGameClearUI.h">
+      <Filter>ソース ファイル\Game\UI\Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

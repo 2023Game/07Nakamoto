@@ -102,7 +102,7 @@ CCat::CCat()
 CCat::~CCat()
 {
 	// コライダーを削除
-	SAFE_DELETE(mpBodyCol);
+	//SAFE_DELETE(mpBodyCol);
 
 	// 経路探索用のノードを破棄
 	CNavManager* navMgr = CNavManager::Instance();
@@ -160,7 +160,7 @@ void CCat::UpdateIdle()
 	if (mIsGrounded)
 	{
 		// SPACEキーでジャンプ
-		if (CInput::PushKey(VK_SPACE))
+		if (CInput::PushKey(VK_SPACE) && IsOperate())
 		{
 			ChangeState((int)EState::eJumpStart);
 		}
@@ -319,8 +319,8 @@ CVector CCat::CalcMoveVec() const
 	CVector input = CVector::zero;
 	if (CInput::Key('W'))		input.Y(-1.0f);
 	else if (CInput::Key('S'))	input.Y(1.0f);
-	if (CInput::Key('A'))		input.X(-1.0f);
-	else if (CInput::Key('D'))	input.X(1.0f);
+	//if (CInput::Key('A'))		input.X(-1.0f);
+	//else if (CInput::Key('D'))	input.X(1.0f);
 
 	// 入力ベクトルの長さで入力されているか判定
 	if (input.LengthSqr() > 0.0f)

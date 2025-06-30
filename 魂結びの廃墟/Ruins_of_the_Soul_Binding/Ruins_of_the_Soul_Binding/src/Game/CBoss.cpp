@@ -14,9 +14,10 @@
 #include "CNavManager.h"
 #include "CInteractObject.h"
 #include "CDemonPowerManager.h"
+#include "CSceneManager.h"
 
 #if _DEBUG
-#include "CSceneManager.h"
+
 #include "CTestField.h"
 #endif
 
@@ -908,6 +909,8 @@ void CBoss::UpdateHit()
 // 死亡状態の更新処理
 void CBoss::UpdateDeath()
 {
+	// シーンをクリアシーンに変更
+	CSceneManager::Instance()->LoadScene(EScene::eClear);
 }
 
 // 更新
@@ -931,6 +934,10 @@ void CBoss::Update()
 	{
 		//CDebugPrint::Print("DemonPower:%d\n", demonPower);
 	}
+	else if (demonPower == 0)
+	{
+		// ChangeState((int)EState::eDeath);
+	}
 
 	// 状態に合わせて、更新処理を切り替える
 	switch ((EState)mState)
@@ -949,8 +956,8 @@ void CBoss::Update()
 		//case EState::eAttack2:	UpdateAttack2(); break;
 		//	// 仰け反り
 		//case EState::eHit:		UpdateHit();	break;
-		//	// 死亡状態
-		//case EState::eDeath:	UpdateDeath();	break;
+			// 死亡状態
+		case EState::eDeath:	UpdateDeath();	break;
 	}
 
 	// 敵のベースクラスの更新

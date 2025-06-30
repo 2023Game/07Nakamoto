@@ -70,6 +70,7 @@ private:
 		eChase,		// プレイヤーを追いかける
 		eLost,		// プレイヤーを見失う
 		eAttack,	// プレイヤー攻撃
+		eDeath,		// 死亡
 	};
 
 	// 状態切り替え

@@ -68,7 +68,38 @@ CField::CField()
 	// 左右のドアを生成
 	new CDoorGimmickLR
 	(
-		CVector(100.531f, 0.0f, 214.5f),
+		CVector(101.355f, 0.0f, 214.5f),
+		CVector(0.0f, -90.0f, 0.0f)
+	);
+	// 左右のドアを生成
+	new CDoorGimmickLR
+	(
+		CVector(101.355f, 0.0f, 280.5f),
+		CVector(0.0f, -90.0f, 0.0f)
+	);
+	// 左右のドアを生成
+	new CDoorGimmickLR
+	(
+		CVector(101.355f, 0.0f, 330.0f),
+		CVector(0.0f, -90.0f, 0.0f)
+	);
+	// 左右のドアを生成
+	new CDoorGimmickLR
+	(
+		CVector(-43.392f, 0.0f, 429.0),
+		CVector(0.0f, -90.0f, 0.0f)
+	);
+
+	// 左右のドアを生成
+	new CDoorGimmickLR
+	(
+		CVector(132.545f, 0.0f, 330.0f),
+		CVector(0.0f, 90.0f, 0.0f)
+	);
+	// 左右のドアを生成
+	new CDoorGimmickLR
+	(
+		CVector(132.545f, 0.0f, 434.5f),
 		CVector(0.0f, 90.0f, 0.0f)
 	);
 
@@ -91,22 +122,31 @@ CField::CField()
 		CVector(132.82f, 0.0f, 280.5f),
 		CVector(0.0f, 90.0f, 0.0f)
 	);
+	// 開き戸の生成
+	new COpeningDoorGimmick
+	(
+		CVector(-170.77f, 0.0f, 132.0f),
+		CVector(0.0f, 90.0f, 0.0f)
+	);
+	// 開き戸の生成
+	new COpeningDoorGimmick
+	(
+		CVector(-170.77f, 0.0f, 165.0f),
+		CVector(0.0f, 90.0f, 0.0f)
+	);
 
 
-	//// スイッチの生成
-	//CSwitch* switch1 = new CSwitch(CVector(30.0f, 0.0f, 90.0f));
-	//// スイッチの生成
-	//CSwitch* switch2 = new CSwitch(CVector(30.0f, -4.0f, 70.0f));
+	// スイッチの生成
+	CSwitch* switch1 = new CSwitch(CVector(50.0f, 0.0f, 230.0f));
 
-	//CSwitchDoorGimmick* switchdoor1 = new CSwitchDoorGimmick
-	//(
-	//	CVector(-50.0f, 0.0f, 100.0f),
-	//	CVector(0.0f, 90.0f, 0.0f),
-	//	CVector(-50.0f, 0.0f, 109.9f),
-	//	"RightDoor", "RightDoorCol"
-	//);
-	//switchdoor1->AddSwitch(switch1);
-	//switchdoor1->AddSwitch(switch2);
+	CSwitchDoorGimmick* switchdoor1 = new CSwitchDoorGimmick
+	(
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(0.0f, -30.0f, 0.0f),
+		"TestWallBrack", "TestWallBrack"
+	);
+	switchdoor1->AddSwitch(switch1);
 
 	// 妖力の源のマネージャーを生成
 	new CDemonPowerManager();
@@ -116,11 +156,11 @@ CField::CField()
 	// 妖力の源
 	new CDemonPower(CVector(140.0f, 5.0f, -20.0f));
 	// 妖力の源
-	new CDemonPower(CVector(-200.0f, 5.0f, 120.0f));
+	new CDemonPower(CVector(180.0f, 5.0f, 380.0f));
 	// 妖力の源
 	new CDemonPower(CVector(-30.0f, 5.0f, 220.0f));
 	// 妖力の源
-	new CDemonPower(CVector(55.0f, 5.0f, 250.0f));
+	new CDemonPower(CVector(-200.0f, 5.0f, 120.0f));
 
 	// 経路探索用のノードを作成
 	CreateNavNodes();
