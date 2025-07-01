@@ -151,16 +151,19 @@ CField::CField()
 	// 妖力の源のマネージャーを生成
 	new CDemonPowerManager();
 
-	// 妖力の源
-	new CDemonPower(CVector(140.0f, 5.0f, 120.0f));
-	// 妖力の源
-	new CDemonPower(CVector(140.0f, 5.0f, -20.0f));
-	// 妖力の源
-	new CDemonPower(CVector(180.0f, 5.0f, 380.0f));
-	// 妖力の源
-	new CDemonPower(CVector(-30.0f, 5.0f, 220.0f));
-	// 妖力の源
-	new CDemonPower(CVector(-200.0f, 5.0f, 120.0f));
+	// テスト用妖力の源
+	new CDemonPower(CVector(20.0f, 5.0f, 20.0f));
+
+	//// 妖力の源
+	//new CDemonPower(CVector(140.0f, 5.0f, 120.0f));
+	//// 妖力の源
+	//new CDemonPower(CVector(140.0f, 5.0f, -20.0f));
+	//// 妖力の源
+	//new CDemonPower(CVector(180.0f, 5.0f, 380.0f));
+	//// 妖力の源
+	//new CDemonPower(CVector(-30.0f, 5.0f, 220.0f));
+	//// 妖力の源
+	//new CDemonPower(CVector(-200.0f, 5.0f, 120.0f));
 
 	// 経路探索用のノードを作成
 	CreateNavNodes();

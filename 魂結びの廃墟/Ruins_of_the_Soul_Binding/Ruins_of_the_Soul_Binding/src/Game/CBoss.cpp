@@ -936,7 +936,7 @@ void CBoss::Update()
 	}
 	else if (demonPower == 0)
 	{
-		// ChangeState((int)EState::eDeath);
+		ChangeState((int)EState::eDeath);
 	}
 
 	// ó‘Ô‚É‡‚í‚¹‚ÄAXVˆ—‚ğØ‚è‘Ö‚¦‚é
