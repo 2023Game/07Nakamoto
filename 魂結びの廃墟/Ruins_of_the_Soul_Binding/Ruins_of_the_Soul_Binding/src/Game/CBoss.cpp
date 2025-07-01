@@ -204,6 +204,8 @@ CBoss::~CBoss()
 	SAFE_DELETE(mpBodyCol);
 	// 攻撃コライダーを削除
 	SAFE_DELETE(mpAttack1Col);
+	// 壊せるオブジェクトを探知するコライダーを削除
+	SAFE_DELETE(mpSearchCol);
 
 	// 視野範囲のデバッグ表示が存在したら、一緒に削除する
 	if (mpDebugFov != nullptr)

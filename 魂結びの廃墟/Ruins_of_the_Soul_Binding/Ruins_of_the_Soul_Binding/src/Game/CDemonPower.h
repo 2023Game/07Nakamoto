@@ -17,6 +17,11 @@ public:
 	// 調べる
 	void Interact() override;
 
+	// 調べる内容のテキスト画像のパスを返す
+	std::string GetInteractTextPath() const override;
+	// 調べる内容のテキスト画像のパスを返す
+	std::string GetInteractKeyPath() const override;
+
 	// 破壊されたか
 	bool BreakPower();
 

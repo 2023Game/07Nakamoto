@@ -21,6 +21,8 @@ public:
 	std::string GetInteractStr() const;
 	// 調べる内容のテキスト画像のパスを返す
 	virtual std::string GetInteractTextPath() const;
+	// 調べるキー画像のパスを返す
+	virtual std::string GetInteractKeyPath() const;
 	// 調べるUIを表示する座標を返す
 	virtual CVector GetInteractUIPos() const;
 

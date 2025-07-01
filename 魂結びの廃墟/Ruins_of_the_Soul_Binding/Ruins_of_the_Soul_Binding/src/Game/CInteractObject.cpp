@@ -2,6 +2,8 @@
 #include "CInteractObjectManager.h"
 
 #define DEFAULT_TEXT_PATH "UI\\Interact\\interact.png"
+#define DEFAULT_KEY_PATH "UI\\BottonUI\\E.png"
+
 #define OFFSET_POS	CVector(0.0f,10.0f,0.0f)
 
 // コンストラクタ
@@ -45,6 +47,12 @@ std::string CInteractObject::GetInteractStr() const
 std::string CInteractObject::GetInteractTextPath() const
 {
 	return DEFAULT_TEXT_PATH;
+}
+
+// 調べる内容のテキスト画像のパスを返す
+std::string CInteractObject::GetInteractKeyPath() const
+{
+	return DEFAULT_KEY_PATH;
 }
 
 // 調べるUIを表示する座標を返す

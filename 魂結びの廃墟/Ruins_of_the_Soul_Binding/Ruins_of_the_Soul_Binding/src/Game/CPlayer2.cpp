@@ -162,7 +162,7 @@ CPlayer2::~CPlayer2()
 	}
 #endif
 
-	SAFE_DELETE(mpSearchCol);
+	//SAFE_DELETE(mpSearchCol);
 	spInstance = nullptr;
 }
 

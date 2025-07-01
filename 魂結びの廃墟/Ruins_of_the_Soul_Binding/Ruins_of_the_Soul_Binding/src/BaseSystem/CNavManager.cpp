@@ -77,18 +77,20 @@ int CNavManager::FindConnectNavNodes(CNavNode* node, float distance)
 		CVector end = findNode->GetOffsetPos();
 		CHitInfo hit;
 		bool isHit = false;
-		// 登録されているコライダー全てと判定
-		for (CCollider* col : mColliders)
-		{
-			// ヒットしていたら、ヒットフラグをtrueにしてチェック終了
-			if (CCollider::CollisionRay(col, start, end, &hit))
-			{
-				isHit = true;
-				break;
-			}
-		}
-		// 何かにヒットした場合は、遮蔽物があるので接続できない
-		if (isHit) continue;;
+
+		// デバック時の負荷軽減のため一時的に削除
+		//// 登録されているコライダー全てと判定
+		//for (CCollider* col : mColliders)
+		//{
+		//	// ヒットしていたら、ヒットフラグをtrueにしてチェック終了
+		//	if (CCollider::CollisionRay(col, start, end, &hit))
+		//	{
+		//		isHit = true;
+		//		break;
+		//	}
+		//}
+		//// 何かにヒットした場合は、遮蔽物があるので接続できない
+		//if (isHit) continue;;
 
 		// 両方の条件を満たしたノードを接続リストに追加
 		node->AddConnect(findNode);

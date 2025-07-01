@@ -183,6 +183,8 @@ CField::~CField()
 		delete mpWallColliderMesh;
 		mpWallColliderMesh = nullptr;
 	}
+
+	SAFE_DELETE(mpTestWallCol);
 }
 
 // 床のコライダーを取得

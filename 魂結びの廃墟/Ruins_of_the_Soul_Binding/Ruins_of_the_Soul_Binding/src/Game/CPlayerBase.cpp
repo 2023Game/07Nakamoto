@@ -39,6 +39,7 @@ CPlayerBase::~CPlayerBase()
 {
 	// コライダー削除
 	SAFE_DELETE(mpBodyCol);
+	SAFE_DELETE(mpSearchCol);
 
 	// プレイヤー管理クラスが存在したら、プレイヤーリストから自身を取り除く
 	CPlayerManager* pm = CPlayerManager::Instance();

@@ -62,6 +62,11 @@ void CInteractUI::Show(CInteractObject* obj)
 	std::string path = obj->GetInteractTextPath();
 	mpTextImage->Load(path);
 
+	// 調べるキーのイメージを読み込み
+	std::string KeyPath = obj->GetInteractKeyPath();
+	mpButtonImage->Load(KeyPath);
+
+
 	// 調べるオブジェクトの座標に移動
 	Position(obj->GetInteractUIPos());
 

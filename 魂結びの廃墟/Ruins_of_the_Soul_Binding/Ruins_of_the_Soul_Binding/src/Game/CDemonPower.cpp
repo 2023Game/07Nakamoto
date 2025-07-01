@@ -6,8 +6,13 @@
 #include "CInteractObjectManager.h"
 #include "CGaugeUI3D.h"
 
+#define DEFAULT_TEXT_PATH "UI\\Interact\\break.png"
+#define DEFAULT_KEY_PATH "UI\\BottonUI\\LeftClick.png"
+
 #define HP 10	// 耐久力
-#define GAUGE_OFFSET_Y 10.0f
+
+#define KYE_UI_OFFSET_Y 12.0f	// キーのUIのオフセット
+#define GAUGE_OFFSET_Y 10.0f	// HPゲージのオフセット
 #define OFFSET_POS CVector(0.0f, 1.5f, 0.0f)	// コライダーのオフセット
 
 // コンストラクタ
@@ -47,12 +52,14 @@ CDemonPower::CDemonPower(const CVector& pos)
 	mHp = mMaxHp;
 	Position(pos);
 
+	mOffSetPos.Y(KYE_UI_OFFSET_Y);
+
 	// HPゲージを作成
 	mpHpGauge = new CGaugeUI3D(this);
 	mpHpGauge->SetMaxPoint(mMaxHp);
 	mpHpGauge->SetCurrPoint(mHp);
 	// ゲージのオフセット位置を設定
-	mGaugeOffsetPos = CVector(0.0f, GAUGE_OFFSET_Y, 0.0f);
+	mGaugeOffsetPos.Y(GAUGE_OFFSET_Y);
 
 	CDemonPowerManager::Instance()->AddDemonPower(this);
 }
@@ -84,6 +91,18 @@ CDemonPower::~CDemonPower()
 void CDemonPower::Interact()
 {
 
+}
+
+// 調べる内容のテキスト画像のパスを返す
+std::string CDemonPower::GetInteractTextPath() const
+{
+	return DEFAULT_TEXT_PATH;
+}
+
+// 調べる内容のテキスト画像のパスを返す
+std::string CDemonPower::GetInteractKeyPath() const
+{
+	return DEFAULT_KEY_PATH;
 }
 
 // 破壊されたか
