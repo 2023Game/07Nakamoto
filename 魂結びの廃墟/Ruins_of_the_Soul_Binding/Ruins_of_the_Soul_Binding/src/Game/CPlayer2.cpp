@@ -544,12 +544,12 @@ void CPlayer2::Update()
 	CPlayerBase::Update();
 
 #if _DEBUG
-	CVector pos = Position();
-	CDebugPrint::Print("PlayerHP:%d / %d\n", mHp, mMaxHp);
-	CDebugPrint::Print("PlayerPos:%.2f, %.2f, %.2f\n", pos.X(), pos.Y(), pos.Z());
-	CDebugPrint::Print("PlayerGrounded:%s\n", mIsGrounded ? "true" : "false");
-	CDebugPrint::Print("PlayerState:%d\n", mState);
-	CDebugPrint::Print("FPS:%f\n", Times::FPS());
+	//CVector pos = Position();
+	//CDebugPrint::Print("PlayerHP:%d / %d\n", mHp, mMaxHp);
+	//CDebugPrint::Print("PlayerPos:%.2f, %.2f, %.2f\n", pos.X(), pos.Y(), pos.Z());
+	//CDebugPrint::Print("PlayerGrounded:%s\n", mIsGrounded ? "true" : "false");
+	//CDebugPrint::Print("PlayerState:%d\n", mState);
+	//CDebugPrint::Print("FPS:%f\n", Times::FPS());
 #endif
 
 	// ’n–Ê‚É‚Â‚¢‚Ä‚¢‚é‚©

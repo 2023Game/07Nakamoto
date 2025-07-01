@@ -65,7 +65,7 @@ void CPlayerCamera::LateUpdate()
 	}
 
 #if _DEBUG
-	CDebugPrint::Print("Angle:%f, %f, %f", mRotateAngle.X(), mRotateAngle.Y(), mRotateAngle.Z());
+	//CDebugPrint::Print("Angle:%f, %f, %f\n", mRotateAngle.X(), mRotateAngle.Y(), mRotateAngle.Z());
 #endif
 
 	// 設定されているコライダーと衝突する場合は、
