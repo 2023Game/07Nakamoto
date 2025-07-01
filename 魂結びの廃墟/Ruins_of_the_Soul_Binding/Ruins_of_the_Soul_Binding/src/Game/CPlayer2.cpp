@@ -133,7 +133,7 @@ CPlayer2::CPlayer2()
 	);
 	// 調べるオブジェクトのみ衝突するように設定
 	mpSearchCol->SetCollisionTags({ ETag::eInteractObject });
-	mpSearchCol->SetCollisionLayers({ ELayer::eInteractObj });
+	mpSearchCol->SetCollisionLayers({ ELayer::eInteractObj , ELayer::eDemon});
 
 	mTrails.reserve(RESERVED_CAPACITYE);
 	SetTrail();
@@ -237,6 +237,7 @@ void CPlayer2::UpdateIdle()
 			CGameUI::Instance()->HideInteractUI();
 		}
 
+		// 操作中で無ければ、
 		if (!IsOperate())
 		{
 			// 調べるUIを非表示にする

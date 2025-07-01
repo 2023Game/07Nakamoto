@@ -8,6 +8,9 @@
 #include "CNavManager.h"
 #include "CPlayer2.h"
 #include "CField.h"
+#include "CGameUI.h"
+#include "CHpGauge.h"
+#include "CStGauge.h"
 
 // アニメーションのパス
 #define ANIM_PATH "Character\\Cat\\anim\\"
@@ -15,10 +18,14 @@
 #define BODY_HEIGHT 12.0f		// 本体のコライダーの高さ
 #define BODY_RADIUS 3.0f		// 本体のコライダーの幅
 #define MOVE_SPEED 0.75f		// 移動速度
+#define RUN_SPEED	1.0f		// 走る速度
 #define MOVE_END_DIST 5.0f		// 移動終了する距離
-#define JUMP_SPEED 1.0f			// ジャンプ速度
+#define JUMP_SPEED 1.0f			// ジャンプ速度d
 #define GRAVITY 0.0625f			// 重力加速度
 #define ROTATE_SPEED	5.0f	// 移動時の猫の回転速度
+
+#define MAX_HP 100	// 体力の最大値
+#define MAX_ST 100	// スタミナの最大値
 
 #define EYE_HEIGHT	7.0f		// 視点の高さ
 
@@ -43,8 +50,11 @@ CCat::CCat()
 	: CPlayerBase(ETag::eCat)
 	, mpTrackingNode(nullptr)
 	, mNextTrackingIndex(-1)
+	, mMaxSt(MAX_ST)
+	, mSt(mMaxSt)
 {
-	mMaxHp = 100000;
+	// HPの設定
+	mMaxHp = MAX_HP;
 	mHp = mMaxHp;
 
 	//インスタンスの設定
@@ -96,6 +106,21 @@ CCat::CCat()
 	// 追従時に障害物を避けるためのノードを作成
 	mpTrackingNode = new CNavNode(CVector::zero, true);
 	mpTrackingNode->SetEnable(false);
+
+	// HPゲージ作成
+	mpHpGauge = new CHpGauge();
+	mpHpGauge->SetMaxPoint(mMaxHp);
+	mpHpGauge->SetCurPoint(mHp);
+	mpHpGauge->SetPos(0.0f, 0.0f);
+	mpHpGauge->SetShow(false);
+
+	// スタミナゲージの作成
+	mpStGauge = new CStGauge();
+	mpStGauge->SetMaxPoint(mMaxSt);
+	mpStGauge->SetCurPoint(mSt);
+	mpStGauge->SetPos(10.0f, 40.0f);
+	mpStGauge->SetShow(false);
+
 }
 
 // デストラクタ
@@ -358,12 +383,37 @@ void CCat::UpdateMove()
 	// 求めた移動ベクトルの長さで入力されているか判定
 	if (move.LengthSqr() > 0.0f)
 	{
-		mMoveSpeed += move * MOVE_SPEED;
-
-		// 待機状態であれば、歩行アニメーションに切り替え
+		// 待機状態であれば、
 		if (mState == (int)EState::eIdle)
 		{
-			//ChangeAnimation(EAnimType::eWalk);
+			if (CInput::Key(VK_SHIFT))
+			{
+				// スタミナがあれば、
+				if (mSt > 0)
+				{
+					// 走行アニメーションに切り替える
+					//ChangeAnimation((int)EAnimType::eRun);
+
+					mMoveSpeed += move * RUN_SPEED;
+					mSt--;
+				}
+				else
+				{
+					// 転倒
+					//ChangeState((int)EState::eFall);
+				}
+			}
+			else
+			{
+				// 歩行アニメーションに切り替え
+				//ChangeAnimation((int)EAnimType::eWalk);
+
+				mMoveSpeed += move * MOVE_SPEED;
+				if (mSt < mMaxSt)
+				{
+					mSt++;
+				}
+			}
 		}
 	}
 	// 移動キーを入力していない
@@ -372,7 +422,12 @@ void CCat::UpdateMove()
 		// 待機状態であれば、待機アニメーションに切り替え
 		if (mState == (int)EState::eIdle)
 		{
-			//ChangeAnimation(EAnimType::eIdle);
+			ChangeAnimation((int)EAnimType::eIdle);
+
+			if (mSt < mMaxSt)
+			{
+				mSt++;
+			}
 		}
 	}
 }
@@ -494,6 +549,13 @@ void CCat::Update()
 
 	//CDebugPrint::Print("FPS:%f\n", Times::FPS());
 
+	// 体力ゲージの更新
+	mpHpGauge->SetMaxPoint(mMaxHp);
+	mpHpGauge->SetCurPoint(mHp);
+	// スタミナゲージの更新処理
+	mpStGauge->SetMaxPoint(mMaxSt);
+	mpStGauge->SetCurPoint(mSt);
+
 }
 
 // 描画
@@ -586,15 +648,15 @@ void CCat::SetOperate(bool operate)
 	if (mIsOperate)
 	{
 		// 自身を操作する時のUIを表示
-		//mpHpGauge->SetShow(true);
-		//mpStGauge->SetShow(true);
+		mpHpGauge->SetShow(true);
+		mpStGauge->SetShow(true);
 	}
 	// 自身が操作プレイヤーでない場合
 	else
 	{
 		// 自身が操作する時のUIを非表示
-		//mpHpGauge->SetShow(false);
-		//mpStGauge->SetShow(false);
+		mpHpGauge->SetShow(false);
+		mpStGauge->SetShow(false);
 	}
 
 }

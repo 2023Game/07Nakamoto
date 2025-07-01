@@ -7,6 +7,7 @@
 class CCollider;
 class CNavNode;
 class CNavManager;
+class CGaugeUI;
 
 /*
 猫クラス
@@ -118,6 +119,12 @@ private:
 	};
 	// 状態を切り替え
 	void ChangeState(int state) override;
+
+	CGaugeUI* mpHpGauge;	// HPゲージ
+
+	int mMaxSt;	// スタミナの最大値
+	int mSt;	// スタミナ
+	CGaugeUI* mpStGauge;	// スタミナゲージ
 
 	// 現在位置からプレイヤーが見えているかどうか
 	bool IsLookTarget(CObjectBase* target) const;

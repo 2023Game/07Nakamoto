@@ -1,6 +1,9 @@
 #include "CDoor.h"
 #include "CNavManager.h"
 
+#define DEFAULT_TEXT_PATH_OPEN		"UI\\Interact\\open.png"
+#define DEFAULT_TEXT_PATH_CLOSE		"UI\\Interact\\close.png"
+
 #define HP 60			// 体力
 
 // コンストラクタ
@@ -76,6 +79,22 @@ void CDoor::SetOwner(CObjectBase* owner)
 void CDoor::SetOnChangeFunc(std::function<void()> func)
 {
 	mOnChangeFunc = func;
+}
+
+// 調べる内容のテキスト画像のパスを返す
+std::string CDoor::GetInteractTextPath() const
+{
+	// 閉まっているか
+	if (mIsOpened)
+	{
+		// 閉まっていたら
+		return DEFAULT_TEXT_PATH_CLOSE;
+	}
+	else
+	{
+		// 開いていたら
+		return DEFAULT_TEXT_PATH_OPEN;
+	}
 }
 
 // ドアが開いているかどうか

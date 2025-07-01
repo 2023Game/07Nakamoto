@@ -36,8 +36,6 @@ private:
 	// 経路探索用のノードを作成
 	void CreateNavNodes();
 
-	void CreateFieldObjects();
-
 	// フィールドのインスタンス
 	static CField* spInstance;
 

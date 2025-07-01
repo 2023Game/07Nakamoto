@@ -97,32 +97,32 @@ void CGameScene::Load()
 	cat->Scale(1.0f, 1.0f, 1.0f);
 	cat->Position(10.0f, 0.0f, 0.0f);
 
-	// ウォーロックの生成
-	CBoss* warrok = new CBoss
-	(
-		{
-			CVector( 90.0f, 0.0, 60.0f),
-			CVector(200.0f, 0.0, 60.0f),
-			CVector(200.0f, 0.0, 180.0f),
-			CVector( 90.0f, 0.0, 180.0f),
-		}
-	);
-	warrok->Scale(1.0f, 1.0f, 1.0f);
-	warrok->Position(90.0f, 1.0, 60.0f);
+	//// ウォーロックの生成
+	//CBoss* warrok = new CBoss
+	//(
+	//	{
+	//		CVector( 90.0f, 0.0, 60.0f),
+	//		CVector(200.0f, 0.0, 60.0f),
+	//		CVector(200.0f, 0.0, 180.0f),
+	//		CVector( 90.0f, 0.0, 180.0f),
+	//	}
+	//);
+	//warrok->Scale(1.0f, 1.0f, 1.0f);
+	//warrok->Position(90.0f, 1.0, 60.0f);
 
 
-	// ウォーロックの生成
-	CBoss* warrok1 = new CBoss
-	(
-		{
-			CVector(-20.0f, 0.0, 380.0f),
-			CVector(-90.0f, 0.0, 380.0f),
-			CVector(-90.0f, 0.0, 320.0f),
-			CVector(-20.0f, 0.0, 320.0f),
-		}
-	);
-	warrok1->Scale(1.0f, 1.0f, 1.0f);
-	warrok1->Position(-20.0f, 1.0, 400.0f);
+	//// ウォーロックの生成
+	//CBoss* warrok1 = new CBoss
+	//(
+	//	{
+	//		CVector(-20.0f, 0.0, 380.0f),
+	//		CVector(-90.0f, 0.0, 380.0f),
+	//		CVector(-90.0f, 0.0, 320.0f),
+	//		CVector(-20.0f, 0.0, 320.0f),
+	//	}
+	//);
+	//warrok1->Scale(1.0f, 1.0f, 1.0f);
+	//warrok1->Position(-20.0f, 1.0, 400.0f);
 
 	// CGameCameraのテスト
 	//CGameCamera* mainCamera = new CGameCamera

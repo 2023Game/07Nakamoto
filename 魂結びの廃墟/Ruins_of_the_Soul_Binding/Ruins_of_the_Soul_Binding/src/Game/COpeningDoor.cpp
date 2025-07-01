@@ -1,6 +1,9 @@
 #include "COpeningDoor.h"
 #include "CNavManager.h"
 
+#define DEFAULT_TEXT_PATH_OPEN		"UI\\Interact\\open.png"
+#define DEFAULT_TEXT_PATH_CLOSE		"UI\\Interact\\close.png"
+
 #define HP 60			// 体力
 #define DOOR_WIDTH 11.0f	// ドアの幅
 
@@ -83,6 +86,22 @@ void COpeningDoor::SetOwner(CObjectBase* owner)
 void COpeningDoor::SetOnChangeFunc(std::function<void()> func)
 {
 	mOnChangeFunc = func;
+}
+
+// 調べる内容のテキスト画像のパスを返す
+std::string COpeningDoor::GetInteractTextPath() const
+{
+	// 閉まっているか
+	if (mIsOpened)
+	{
+		// 閉まっていたら
+		return DEFAULT_TEXT_PATH_CLOSE;
+	}
+	else
+	{
+		// 開いていたら
+		return DEFAULT_TEXT_PATH_OPEN;
+	}
 }
 
 // ドアが開いているかどうか

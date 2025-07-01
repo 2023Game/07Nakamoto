@@ -2,7 +2,7 @@
 #include "CInteractObject.h"
 
 class CModel;
-class CColliderMesh;
+class CCollider;
 class CGaugeUI3D;
 
 // —d—Í‚ÌŒ¹‚ÌƒNƒ‰ƒX

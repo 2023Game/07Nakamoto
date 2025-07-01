@@ -16,6 +16,9 @@ public:
 	// ドアの開閉状態が切り替わった時に呼び出す関数のポインタを設定
 	void SetOnChangeFunc(std::function<void()> func);
 
+	// 調べる内容のテキスト画像のパスを返す
+	std::string GetInteractTextPath() const override;
+
 	// ドアが開いているかどうか
 	bool IsOpened() const;
 
