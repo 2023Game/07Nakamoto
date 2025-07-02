@@ -23,13 +23,14 @@ public:
 
 	// 操作キャラを切り替える
 	void ChangePlayer();
-	// 操作していないキャラを待機状態にする
-	void SetInactivePlayersWait();
 
 	// 更新
 	void Update() override;
 
+
 private:
+	//EOwnerState mOwnerState;
+
 	// プレイヤー管理クラスのインスタンスへのポインタ
 	static CPlayerManager* spInstance;
 

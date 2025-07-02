@@ -2,6 +2,8 @@
 #include "CPlayerBase.h"
 #include <assert.h>
 #include "CInput.h"
+#include "CIcon.h"
+#include "CPlayer2.h"
 
 #define RESERVED_CAPACITYE 5	// リストの初期容量
 
@@ -57,12 +59,29 @@ void CPlayerManager::ChangePlayer()
 	{
 		mPlayers[i]->SetOperate(i == mCurrentIndex);
 	}
-}
 
-// 操作していないキャラを待機状態にする
-void CPlayerManager::SetInactivePlayersWait()
-{
+	// アイコンの変更
+	ETag tag = mPlayers[mCurrentIndex]->Tag();
+	if (tag == ETag::eCat)
+	{
+		// 猫のアイコンを設定
+		CIcon::Instance()->SetIcon((int)CIcon::EIcon::eCat);
+	}
+	else if (tag == ETag::ePlayer)
+	{
+		CPlayer2* player = dynamic_cast<CPlayer2*>(mPlayers[mCurrentIndex]);
 
+		if (player->GatActingTogether())
+		{
+			// 猫のアイコンを設定
+			CIcon::Instance()->SetIcon((int)CIcon::EIcon::eTogether);
+		}
+		else
+		{
+			// 少女のアイコンを設定
+			CIcon::Instance()->SetIcon((int)CIcon::EIcon::ePlayer);
+		}
+	}
 }
 
 // 更新
@@ -71,9 +90,18 @@ void CPlayerManager::Update()
 	if (CInput::PushKey('C'))
 	{
 		ChangePlayer();
-	}
-	if (CInput::PushKey('Q'))
-	{
 
+		// アイコンの変更
+		ETag tag = mPlayers[mCurrentIndex]->Tag();
+		if (tag == ETag::eCat)
+		{
+			// 猫のアイコンを設定
+			CIcon::Instance()->SetIcon((int)CIcon::EIcon::eCat);
+		}
+		else if (tag == ETag::ePlayer)
+		{
+			// 少女のアイコンを設定
+			CIcon::Instance()->SetIcon((int)CIcon::EIcon::ePlayer);
+		}
 	}
 }

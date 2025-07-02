@@ -11,6 +11,7 @@
 #include "CGameUI.h"
 #include "CHpGauge.h"
 #include "CStGauge.h"
+#include "CIcon.h"
 
 // アニメーションのパス
 #define ANIM_PATH "Character\\Cat\\anim\\"
@@ -26,6 +27,8 @@
 
 #define MAX_HP 100	// 体力の最大値
 #define MAX_ST 100	// スタミナの最大値
+#define HP_GAUGE_UI_POS 100.0f, 40.0f
+#define SP_GAUGE_UI_POS 110.0f, 80.0f
 
 #define EYE_HEIGHT	7.0f		// 視点の高さ
 
@@ -111,14 +114,14 @@ CCat::CCat()
 	mpHpGauge = new CHpGauge();
 	mpHpGauge->SetMaxPoint(mMaxHp);
 	mpHpGauge->SetCurPoint(mHp);
-	mpHpGauge->SetPos(0.0f, 0.0f);
+	mpHpGauge->SetPos(HP_GAUGE_UI_POS);
 	mpHpGauge->SetShow(false);
 
 	// スタミナゲージの作成
 	mpStGauge = new CStGauge();
 	mpStGauge->SetMaxPoint(mMaxSt);
 	mpStGauge->SetCurPoint(mSt);
-	mpStGauge->SetPos(10.0f, 40.0f);
+	mpStGauge->SetPos(SP_GAUGE_UI_POS);
 	mpStGauge->SetShow(false);
 
 }
@@ -191,9 +194,14 @@ void CCat::UpdateIdle()
 		}
 	}
 
-	if (CInput::PushKey('Q'))
+	if (!IsOperate())
 	{
-		ChangeState((int)EState::eTracking);
+		if (CInput::PushKey('Q'))
+		{
+			ChangeState((int)EState::eTracking);
+			// 猫と少女のアイコンを設定
+			CIcon::Instance()->SetIcon((int)CIcon::EIcon::eTogether);
+		}
 	}
 }
 
@@ -232,10 +240,6 @@ void CCat::UpdateTracking()
 		ChangeState((int)EState::eIdle);
 		mNextTrackingIndex = -1;
 		return;
-	}
-	else
-	{
-		ChangeState((int)EState::eTracking);
 	}
 
 	CPlayer2 *player = CPlayer2::Instance();
@@ -320,7 +324,10 @@ void CCat::UpdateTracking()
 
 	if (CInput::PushKey('Q'))
 	{
+		// その場で待機
 		ChangeState((int)EState::eIdle);
+		// 少女のアイコンを設定
+		CIcon::Instance()->SetIcon((int)CIcon::EIcon::ePlayer);
 	}
 }
 
@@ -344,6 +351,7 @@ CVector CCat::CalcMoveVec() const
 	CVector input = CVector::zero;
 	if (CInput::Key('W'))		input.Y(-1.0f);
 	else if (CInput::Key('S'))	input.Y(1.0f);
+
 	//if (CInput::Key('A'))		input.X(-1.0f);
 	//else if (CInput::Key('D'))	input.X(1.0f);
 
@@ -528,6 +536,9 @@ void CCat::Update()
 	{
 		mpNavNode->SetPos(Position());
 	}
+
+	if(CInput::Key('A'))	Rotate(CVector(0.0f, -1.0f, 0.0f));
+	else if (CInput::Key('D'))	Rotate(CVector(0.0f, 1.0f, 0.0f));
 
 	// 「P」キーを押したら、ゲームを終了
 	if (CInput::PushKey('P'))

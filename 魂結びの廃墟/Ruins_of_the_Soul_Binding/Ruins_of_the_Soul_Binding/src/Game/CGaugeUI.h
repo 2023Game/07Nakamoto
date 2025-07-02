@@ -3,6 +3,7 @@
 #include "CUIBase.h"
 
 class CImage;
+class CIcon;
 
 class CGaugeUI : public CUIBase
 {
@@ -31,8 +32,6 @@ protected:
 
 	CImage* mpWhiteImag;	// ゲージのイメージ
 	CImage* mpGaugeImag;	// 白イメージ
-	CImage* mpIcon;			// アイコンのイメージ
-	CImage* mpIconFrame;	// アイコンのフレーム
 
 	CVector2 mBaseBarSize;	// ゲージのイメージサイズ
 	int mMaxPoint;	// 最大値

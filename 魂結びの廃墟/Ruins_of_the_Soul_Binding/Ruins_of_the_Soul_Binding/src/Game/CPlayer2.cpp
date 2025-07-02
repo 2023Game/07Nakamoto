@@ -30,6 +30,9 @@
 
 #define MAX_HP 100	// 体力の最大値
 #define MAX_ST 100	// スタミナの最大値
+#define HP_GAUGE_UI_POS 100.0f, 40.0f
+#define SP_GAUGE_UI_POS 110.0f, 80.0f
+
 #define DEMON_POWER_DAMAGE	1	// 妖力の源へのダメージ
 
 #define SEARCH_RADIUS	 10.0f		// 調べるオブジェクトを探知する範囲の半径
@@ -67,6 +70,7 @@ CPlayer2::CPlayer2()
 	, mMaxSt(MAX_ST)
 	, mSt(mMaxSt)
 	, mChannelingTime(0)
+	, mTogether(true)
 #if _DEBUG
 	,mpDebugFov(nullptr)
 #endif
@@ -142,12 +146,12 @@ CPlayer2::CPlayer2()
 	mpHpGauge = new CHpGauge();
 	mpHpGauge->SetMaxPoint(mMaxHp);
 	mpHpGauge->SetCurPoint(mHp);
-	mpHpGauge->SetPos(0.0f, 0.0f);
+	mpHpGauge->SetPos(HP_GAUGE_UI_POS);
 	// スタミナゲージの作成
 	mpStGauge = new CStGauge();
 	mpStGauge->SetMaxPoint(mMaxSt);
 	mpStGauge->SetCurPoint(mSt);
-	mpStGauge->SetPos(10.0f, 40.0f);
+	mpStGauge->SetPos(SP_GAUGE_UI_POS);
 }
 
 // デストラクタ
@@ -367,6 +371,18 @@ void CPlayer2::UpdateChanneling()
 		}
 		break;
 	}
+}
+
+// 行動の状態を変更
+void CPlayer2::ChangeAction()
+{
+	mTogether = !mTogether;
+}
+
+// 一緒に行動しているか
+bool CPlayer2::GatActingTogether()
+{
+	return mTogether;
 }
 
 // オブジェクト削除を伝える

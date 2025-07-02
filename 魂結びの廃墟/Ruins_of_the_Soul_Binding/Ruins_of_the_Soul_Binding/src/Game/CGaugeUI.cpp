@@ -1,15 +1,12 @@
 #include "CGaugeUI.h"
 #include "CImage.h"
-#include "CPlayer2.h"
 #include "Maths.h"
-#include "CPlayerManager.h"
+#include "CIcon.h"
 
 CGaugeUI::CGaugeUI()
 	: CUIBase(ETaskPriority::eUI, 0, ETaskPauseType::eGame)
 	, mpWhiteImag(nullptr)
 	, mpGaugeImag(nullptr)
-	, mpIcon(nullptr)
-	, mpIconFrame(nullptr)
 	, mBaseBarSize(0.0f, 0.0f)
 	, mMaxPoint(100)
 	, mCurPoint(mMaxPoint)
@@ -42,38 +39,12 @@ CGaugeUI::CGaugeUI()
 	);
 	CVector2 center = CVector2(-mBaseBarSize.X() * 0.5f, 0.0f);
 	mpWhiteImag->SetCenter(center);
-
-	// アイコンを生成
-	mpIcon = new CImage
-	(
-		"UI\\Silhouette\\cat_girl.png",
-		ETaskPriority::eUI,
-		0,
-		ETaskPauseType::eGame,
-		false,
-		false
-	);
-	mpIcon->SetPos(CVector::zero);
-
-	// アイコンのフレーム
-	mpIconFrame = new CImage
-	(
-		"UI\\Silhouette\\frame.png",
-		ETaskPriority::eUI,
-		0,
-		ETaskPauseType::eGame,
-		false,
-		false
-	);
-	mpIconFrame->SetPos(CVector::zero);
 }
 
 CGaugeUI::~CGaugeUI()
 {
 	SAFE_DELETE(mpGaugeImag);
 	SAFE_DELETE(mpWhiteImag);
-	SAFE_DELETE(mpIcon);
-	SAFE_DELETE(mpIconFrame);
 
 }
 
@@ -115,8 +86,6 @@ CColor CGaugeUI::CalcBarColor() const
 // 更新
 void CGaugeUI::Update()
 {
-	CPlayerManager* pmg = CPlayerManager::Instance();
-	//pmg->
 }
 
 // 描画
@@ -141,10 +110,5 @@ void CGaugeUI::Render()
 	mpWhiteImag->SetColor(barColor);
 	// バーの描画
 	mpWhiteImag->Render();
-
-	// アイコンの描画
-	mpIcon->Render();
-	// アイコンのフレーム描画
-	mpIconFrame->Render();
 }
 

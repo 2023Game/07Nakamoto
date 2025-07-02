@@ -60,6 +60,11 @@ public:
 	// 追従用の配列を取得
 	const std::vector<CVector>& GetTrail() const;
 
+	// 行動の状態を変更
+	void ChangeAction();
+	// 一緒に行動しているか
+	bool GatActingTogether();
+
 private:
 	// オブジェクト削除を伝える
 	void DeleteObject(CObjectBase* obj) override;
@@ -118,6 +123,8 @@ private:
 	int mMaxSt;	// スタミナの最大値
 	int mSt;	// スタミナ
 	CGaugeUI* mpStGauge;	// スタミナゲージ
+
+	bool mTogether;	// 猫と一緒にいるか
 
 	// 妖力を流し込んでいる妖力の源のオブジェクト
 	CDemonPower* mpChannelingDemonPower;

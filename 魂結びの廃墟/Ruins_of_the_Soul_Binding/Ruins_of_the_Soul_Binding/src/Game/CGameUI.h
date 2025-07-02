@@ -2,6 +2,7 @@
 
 class CInteractUI;
 class CInteractObject;
+class CIcon;
 
 class CGameUI
 {
@@ -27,4 +28,5 @@ public:
 private:
 	static CGameUI* spInstance;	// CGameUIのインスタンス
 	CInteractUI* mpInteractUI;	// 調べるUI
+	CIcon* mpIcon;		// アイコンのUI
 };

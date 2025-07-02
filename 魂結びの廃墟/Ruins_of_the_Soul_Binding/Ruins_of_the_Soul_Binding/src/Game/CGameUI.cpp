@@ -1,6 +1,7 @@
 #include "CGameUI.h"
 #include "CInteractUI.h"
 #include "CInteractObject.h"
+#include "CIcon.h"
 
 // CGameUIのインスタンスの変数定義
 CGameUI* CGameUI::spInstance = nullptr;
@@ -28,11 +29,14 @@ CGameUI::CGameUI()
 	spInstance = this;
 
 	mpInteractUI = new CInteractUI();
+
+	mpIcon = new CIcon();
 }
 
 // デストラクタ
 CGameUI::~CGameUI()
 {
+	SAFE_DELETE(mpIcon);
 }
 
 // 指定したオブジェクトの調べるUIを表示
