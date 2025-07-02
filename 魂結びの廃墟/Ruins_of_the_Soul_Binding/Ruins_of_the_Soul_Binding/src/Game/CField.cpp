@@ -31,7 +31,12 @@ CField::CField()
 	mpWallCol = CResourceManager::Get<CModel>("WallCol");
 
 	mpFloorColliderMesh = new CColliderMesh(this, ELayer::eFloor, mpFloor, true);
-	mpWallColliderMesh = new CColliderMesh(this, ELayer::eWall, mpWallCol, true);
+	mpWallColliderMesh = new CColliderMesh
+	(
+		this, ELayer::eWall, mpWallCol,
+		true, 1.0f,
+		10, 1, 10
+	);
 
 	// テスト用
 	mpTestWall = CResourceManager::Get<CModel>("TestWall");

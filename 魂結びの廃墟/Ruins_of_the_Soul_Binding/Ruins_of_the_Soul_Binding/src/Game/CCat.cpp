@@ -388,6 +388,10 @@ void CCat::UpdateMove()
 
 	// プレイヤーの移動ベクトルを求める
 	CVector move = CalcMoveVec();
+
+	//if (CInput::Key('A'))	Rotate(CVector(0.0f, -1.0f, 0.0f));
+	//else if (CInput::Key('D'))	Rotate(CVector(0.0f, 1.0f, 0.0f));
+
 	// 求めた移動ベクトルの長さで入力されているか判定
 	if (move.LengthSqr() > 0.0f)
 	{
@@ -537,9 +541,6 @@ void CCat::Update()
 		mpNavNode->SetPos(Position());
 	}
 
-	if(CInput::Key('A'))	Rotate(CVector(0.0f, -1.0f, 0.0f));
-	else if (CInput::Key('D'))	Rotate(CVector(0.0f, 1.0f, 0.0f));
-
 	// 「P」キーを押したら、ゲームを終了
 	if (CInput::PushKey('P'))
 	{
@@ -548,17 +549,20 @@ void CCat::Update()
 
 	// キャラクターの更新
 	CPlayerBase::Update();
-
-	//CVector pos = Position();
-	//CDebugPrint::Print("PlayerHP:%d / %d\n", mHp, mMaxHp);
-	//CDebugPrint::Print("PlayerPos:%.2f, %.2f, %.2f\n", pos.X(), pos.Y(), pos.Z());
-	//CDebugPrint::Print("PlayerGrounded:%s\n", mIsGrounded ? "true" : "false");
-	//CDebugPrint::Print("PlayerState:%d\n", mState);
-
+#if _DEBUG
+	// 操作中なら
+	if (IsOperate())
+	{
+		CVector pos = Position();
+		CDebugPrint::Print("PlayerHP:%d / %d\n", mHp, mMaxHp);
+		CDebugPrint::Print("PlayerPos:%.2f, %.2f, %.2f\n", pos.X(), pos.Y(), pos.Z());
+		CDebugPrint::Print("PlayerGrounded:%s\n", mIsGrounded ? "true" : "false");
+		CDebugPrint::Print("PlayerState:%d\n", mState);
+		CDebugPrint::Print("FPS:%f\n", Times::FPS());
+	}
+#endif
 	// 地面についているか
 	mIsGrounded = false;
-
-	//CDebugPrint::Print("FPS:%f\n", Times::FPS());
 
 	// 体力ゲージの更新
 	mpHpGauge->SetMaxPoint(mMaxHp);
