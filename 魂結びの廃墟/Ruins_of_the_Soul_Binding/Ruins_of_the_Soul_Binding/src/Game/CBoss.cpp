@@ -16,11 +16,6 @@
 #include "CDemonPowerManager.h"
 #include "CSceneManager.h"
 
-#if _DEBUG
-
-#include "CTestField.h"
-#endif
-
 // アニメーションのパス
 #define ANIM_PATH "Character\\Enemy\\Warrok\\anim\\"
 
@@ -173,7 +168,6 @@ CBoss::CBoss(std::vector<CVector> patrolPoints)
 	// 視野範囲のデバッグ表示クラスを作成
 	mpDebugFov = new CDebugFieldOfView(this, mFovAngle, mFovLength);
 
-	mScene = CSceneManager::Instance()->GetCurrentScene();
 #endif
 
 	// 経路探索用のノードを作成
@@ -439,28 +433,6 @@ bool CBoss::IsFoundTarget(CObjectBase* target) const
 // 現在位置からターゲットが見えているかどうか
 bool CBoss::IsLookTarget(CObjectBase* target) const
 {
-#if _DEBUG
-	if (mScene == EScene::eTest)
-	{
-		CTestField* field = CTestField::Instance();
-
-		if (field == nullptr) return true;
-
-		CVector offsetPos = CVector(0.0f, EYE_HEIGHT, 0.0f);
-		// ターゲットの座標を取得
-		CVector targetPos = target->Position() + offsetPos;
-		// 自分自身の座標を取得
-		CVector selfPos = Position() + offsetPos;
-
-		CHitInfo hit;
-		//フィールドとレイ判定を行い、遮蔽物が存在した場合は、ターゲットが見えない
-		if (field->CollisionRay(selfPos, targetPos, &hit)) return false;
-
-		// ターゲットとの間に遮蔽物がないので、ターゲットが見えている
-		return true;
-	}
-#endif
-
 	// フィールドが存在しない場合は、遮蔽物がないので見える
 	CField* field = CField::Instance();
 	if (field == nullptr) return true;

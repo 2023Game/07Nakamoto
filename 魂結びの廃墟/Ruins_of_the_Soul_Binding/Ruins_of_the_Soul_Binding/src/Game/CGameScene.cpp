@@ -18,6 +18,7 @@
 #include "CInteractObjectManager.h"
 #include "CDemonPowerManager.h"
 #include "CGameUI.h"
+#include "CSpider.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -43,9 +44,12 @@ void CGameScene::Load()
 
 	//ここでゲーム中に必要な
 	//リソースの読み込みやクラスの生成を行う
+	// プレイヤー
 	CResourceManager::Load<CModelX>(	"Player2",			"Character\\Player2\\Rusk\\idle.x");
 	CResourceManager::Load<CModelX>(	"Cat",				"Character\\Cat\\cat.x");
+	// 敵
 	CResourceManager::Load<CModelX>(	"Warrok",			"Character\\Enemy\\Warrok\\warrok.x");
+	CResourceManager::Load<CModelX>(	"Spider",			"Character\\Enemy\\Spider\\spider.x");
 	// 床
 	CResourceManager::Load<CModel>(		"Floor",			"Field\\Abandoned_School_Floor.obj");
 	// 壁
@@ -110,6 +114,16 @@ void CGameScene::Load()
 	warrok->Scale(1.0f, 1.0f, 1.0f);
 	warrok->Position(90.0f, 1.0, 60.0f);
 
+	//// 蜘蛛
+	//CSpider* spider = new CSpider
+	//(
+	//	{
+	//		CVector(100.0f,0.0f,50.0f),
+	//		CVector(100.0f,0.0f, 50.0f),
+	//	}
+	//);
+	//spider->Scale(10.0f, 10.0f, 10.0f);
+	//spider->Position(100.0f, 0.0f, 50.0f);
 
 	//// ウォーロックの生成
 	//CBoss* warrok1 = new CBoss

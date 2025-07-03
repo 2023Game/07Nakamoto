@@ -424,9 +424,6 @@
     <ClCompile Include="src\Game\CBoss.cpp">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CTestScene.cpp">
-      <Filter>ソース ファイル\Game\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CGameUI.cpp">
       <Filter>ソース ファイル\Game\UI\Game</Filter>
     </ClCompile>
@@ -453,9 +450,6 @@
     </ClCompile>
     <ClCompile Include="src\BaseSystem\CNavNode.cpp">
       <Filter>ソース ファイル\BaseSystem\Navigation</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CTestField.cpp">
-      <Filter>ソース ファイル\Game\Field</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CInteractObjectManager.cpp">
       <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
@@ -501,6 +495,9 @@
     </ClCompile>
     <ClCompile Include="src\Game\CIcon.cpp">
       <Filter>ソース ファイル\Game\UI\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CSpider.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -840,9 +837,6 @@
     <ClInclude Include="src\Game\CBoss.h">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CTestScene.h">
-      <Filter>ソース ファイル\Game\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\CGameUI.h">
       <Filter>ソース ファイル\Game\UI\Game</Filter>
     </ClInclude>
@@ -869,9 +863,6 @@
     </ClInclude>
     <ClInclude Include="src\BaseSystem\CNavNode.h">
       <Filter>ソース ファイル\BaseSystem\Navigation</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CTestField.h">
-      <Filter>ソース ファイル\Game\Field</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CInteractObjectManager.h">
       <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
@@ -917,6 +908,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CIcon.h">
       <Filter>ソース ファイル\Game\UI\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CSpider.h">
+      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

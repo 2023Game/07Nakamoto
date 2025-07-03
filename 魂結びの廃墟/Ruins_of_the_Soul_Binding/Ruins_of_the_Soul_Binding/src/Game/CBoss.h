@@ -4,7 +4,6 @@
 // 視野範囲のデバッグ表示クラスの前宣言
 class CDebugFieldOfView;
 
-class CPlayerBase;
 class CInteractObject;
 class CNavNode;
 
@@ -142,9 +141,4 @@ private:
 	int mPower;
 	// 妖力の源の数
 	int mDemonPower;
-
-#if _DEBUG
-	EScene mScene;
-#endif
-
 };
