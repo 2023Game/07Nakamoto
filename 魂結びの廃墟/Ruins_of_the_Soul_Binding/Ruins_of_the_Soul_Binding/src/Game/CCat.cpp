@@ -351,9 +351,8 @@ CVector CCat::CalcMoveVec() const
 	CVector input = CVector::zero;
 	if (CInput::Key('W'))		input.Y(-1.0f);
 	else if (CInput::Key('S'))	input.Y(1.0f);
-
-	//if (CInput::Key('A'))		input.X(-1.0f);
-	//else if (CInput::Key('D'))	input.X(1.0f);
+	if (CInput::Key('A'))		input.X(-1.0f);
+	else if (CInput::Key('D'))	input.X(1.0f);
 
 	// 入力ベクトルの長さで入力されているか判定
 	if (input.LengthSqr() > 0.0f)
@@ -388,9 +387,6 @@ void CCat::UpdateMove()
 
 	// プレイヤーの移動ベクトルを求める
 	CVector move = CalcMoveVec();
-
-	//if (CInput::Key('A'))	Rotate(CVector(0.0f, -1.0f, 0.0f));
-	//else if (CInput::Key('D'))	Rotate(CVector(0.0f, 1.0f, 0.0f));
 
 	// 求めた移動ベクトルの長さで入力されているか判定
 	if (move.LengthSqr() > 0.0f)
@@ -531,7 +527,6 @@ void CCat::Update()
 
 	mMoveSpeedY -= GRAVITY;
 	CVector moveSpeed = mMoveSpeed + CVector(0.0f, mMoveSpeedY, 0.0f);
-
 	// 移動
 	Position(Position() + moveSpeed);
 
