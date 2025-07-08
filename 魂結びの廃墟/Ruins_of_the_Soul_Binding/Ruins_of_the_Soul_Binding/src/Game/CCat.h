@@ -122,8 +122,9 @@ private:
 
 	CGaugeUI* mpHpGauge;	// HPゲージ
 
-	int mMaxSt;	// スタミナの最大値
-	int mSt;	// スタミナ
+	float mMaxSt;	// スタミナの最大値
+	float mSt;	// スタミナ
+	bool mIsDash;	// ダッシュフラグ
 	CGaugeUI* mpStGauge;	// スタミナゲージ
 
 	// 現在位置からプレイヤーが見えているかどうか

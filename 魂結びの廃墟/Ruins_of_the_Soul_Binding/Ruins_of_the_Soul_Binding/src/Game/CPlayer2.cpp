@@ -46,6 +46,9 @@
 
 #define RESERVED_CAPACITYE 7	// リストの初期容量
 
+// スタミナ増減値(１秒間に増減する値）
+#define STAMINA_DELTA 20.0f
+
 // プレイヤーのインスタンス
 CPlayer2* CPlayer2::spInstance = nullptr;
 
@@ -149,8 +152,8 @@ CPlayer2::CPlayer2()
 	mpHpGauge->SetPos(HP_GAUGE_UI_POS);
 	// スタミナゲージの作成
 	mpStGauge = new CStGauge();
-	mpStGauge->SetMaxPoint(mMaxSt);
-	mpStGauge->SetCurPoint(mSt);
+	mpStGauge->SetMaxPoint((int)mMaxSt);
+	mpStGauge->SetCurPoint(ceilf(mSt));
 	mpStGauge->SetPos(SP_GAUGE_UI_POS);
 }
 
@@ -443,40 +446,46 @@ void CPlayer2::UpdateMove()
 
 	// プレイヤーの移動ベクトルを求める
 	CVector move = CalcMoveVec();
+
+	mIsDash = false;
+	bool isRecoveryStamina = true;
+
 	// 求めた移動ベクトルの長さで入力されているか判定
 	if (move.LengthSqr() > 0.0f)
 	{
 		// 待機状態であれば、
 		if (mState == (int)EState::eIdle)
 		{
+			// スタミナが残っている状態でSHIFTキーを押したら
 			if (CInput::Key(VK_SHIFT))
 			{
-				// スタミナがあれば、
-				if (mSt > 0)
-				{
-					// 走行アニメーションに切り替える
-					ChangeAnimation((int)EAnimType::eRun);
+				// ダッシュする
+				mIsDash = mSt > 0.0f;
+				// スタミナ減少
+				mSt -= max(STAMINA_DELTA * Times::DeltaTime(),
+					0.0f);
 
-					mMoveSpeed += move * RUN_SPEED;
-					mSt--;
-				}
-				else
-				{
-					// 転倒
-					//ChangeState((int)EState::eFall);
-				}
-			}
-			else
-			{
-				// 歩行アニメーションに切り替え
-				ChangeAnimation((int)EAnimType::eWalk);
+				// 走るアニメーション
+				ChangeAnimation((int)EAnimType::eRun);
 
-				mMoveSpeed += move * MOVE_SPEED;
-				if (mSt < mMaxSt)
-				{
-					mSt++;
-				}
+				// スタミナ回復フラグをオフ
+				isRecoveryStamina = false;
 			}
+		}
+
+		mMoveSpeed += move * (mIsDash ? RUN_SPEED : MOVE_SPEED);
+
+		// スタミナが無ければ
+		if (mSt < 0.0f)
+		{
+			mSt = 0.0f;
+			mMoveSpeed.X(0.0f);
+			mMoveSpeed.Z(0.0f);
+		}
+
+		if (!mIsDash)
+		{
+			ChangeAnimation((int)EAnimType::eWalk);
 		}
 	}
 	// 移動キーを入力していない
@@ -485,13 +494,17 @@ void CPlayer2::UpdateMove()
 		// 待機状態であれば、待機アニメーションに切り替え
 		if (mState == (int)EState::eIdle)
 		{
+			// 移動していなければ、スタミナ回復
 			ChangeAnimation((int)EAnimType::eIdle);
-
-			if (mSt < mMaxSt)
-			{
-				mSt++;
-			}
 		}
+	}
+
+	// スタミナ回復フラグが立っていたら
+	if (isRecoveryStamina)
+	{
+		mSt = min(
+			mSt + STAMINA_DELTA * Times::DeltaTime(),
+			mMaxSt);
 	}
 }
 
@@ -588,8 +601,8 @@ void CPlayer2::Update()
 	mpHpGauge->SetMaxPoint(mMaxHp);
 	mpHpGauge->SetCurPoint(mHp);
 	// スタミナゲージの更新処理
-	mpStGauge->SetMaxPoint(mMaxSt);
-	mpStGauge->SetCurPoint(mSt);
+	mpStGauge->SetMaxPoint((int)mMaxSt);
+	mpStGauge->SetCurPoint(ceilf(mSt));
 
 #if _DEBUG
 	// その場で復活

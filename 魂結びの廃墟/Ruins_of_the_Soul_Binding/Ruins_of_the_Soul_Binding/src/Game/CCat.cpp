@@ -38,6 +38,9 @@
 // カメラの回転速度
 #define CAMERA_ROT_SPEED 1.5f
 
+// スタミナ増減値(１秒間に増減する値）
+#define STAMINA_DELTA 20.0f
+
 // 猫のインスタンス
 CCat* CCat::spInstance = nullptr;
 
@@ -55,6 +58,7 @@ CCat::CCat()
 	, mNextTrackingIndex(-1)
 	, mMaxSt(MAX_ST)
 	, mSt(mMaxSt)
+	, mIsDash(false)
 {
 	// HPの設定
 	mMaxHp = MAX_HP;
@@ -119,8 +123,8 @@ CCat::CCat()
 
 	// スタミナゲージの作成
 	mpStGauge = new CStGauge();
-	mpStGauge->SetMaxPoint(mMaxSt);
-	mpStGauge->SetCurPoint(mSt);
+	mpStGauge->SetMaxPoint((int)mMaxSt);
+	mpStGauge->SetCurPoint(ceilf(mSt));
 	mpStGauge->SetPos(SP_GAUGE_UI_POS);
 	mpStGauge->SetShow(false);
 
@@ -388,41 +392,39 @@ void CCat::UpdateMove()
 	// プレイヤーの移動ベクトルを求める
 	CVector move = CalcMoveVec();
 
+	mIsDash = false;
+	bool isRecoveryStamina = true;
+
 	// 求めた移動ベクトルの長さで入力されているか判定
 	if (move.LengthSqr() > 0.0f)
 	{
 		// 待機状態であれば、
 		if (mState == (int)EState::eIdle)
 		{
+			// スタミナが残っている状態でSHIFTキーを押したら
 			if (CInput::Key(VK_SHIFT))
 			{
-				// スタミナがあれば、
-				if (mSt > 0)
-				{
-					// 走行アニメーションに切り替える
-					//ChangeAnimation((int)EAnimType::eRun);
+				// ダッシュする
+				mIsDash = mSt > 0.0f;
+				// スタミナ減少
+				mSt -= max(STAMINA_DELTA * Times::DeltaTime(),
+					0.0f);
 
-					mMoveSpeed += move * RUN_SPEED;
-					mSt--;
-				}
-				else
-				{
-					// 転倒
-					//ChangeState((int)EState::eFall);
-				}
-			}
-			else
-			{
-				// 歩行アニメーションに切り替え
-				//ChangeAnimation((int)EAnimType::eWalk);
-
-				mMoveSpeed += move * MOVE_SPEED;
-				if (mSt < mMaxSt)
-				{
-					mSt++;
-				}
+				// スタミナ回復フラグをオフ
+				isRecoveryStamina = false;
 			}
 		}
+
+		mMoveSpeed += move * (mIsDash ? RUN_SPEED : MOVE_SPEED);
+
+		// スタミナが無ければ
+		if (mSt < 0.0f)
+		{
+			mSt = 0.0f;
+			mMoveSpeed.X(0.0f);
+			mMoveSpeed.Z(0.0f);
+		}
+
 	}
 	// 移動キーを入力していない
 	else
@@ -430,13 +432,17 @@ void CCat::UpdateMove()
 		// 待機状態であれば、待機アニメーションに切り替え
 		if (mState == (int)EState::eIdle)
 		{
+			// 移動していなければ、スタミナ回復
 			ChangeAnimation((int)EAnimType::eIdle);
-
-			if (mSt < mMaxSt)
-			{
-				mSt++;
-			}
 		}
+	}
+
+	// スタミナ回復フラグが立っていたら
+	if (isRecoveryStamina)
+	{
+		mSt = min(
+			mSt + STAMINA_DELTA * Times::DeltaTime(),
+			mMaxSt);
 	}
 }
 
@@ -563,8 +569,8 @@ void CCat::Update()
 	mpHpGauge->SetMaxPoint(mMaxHp);
 	mpHpGauge->SetCurPoint(mHp);
 	// スタミナゲージの更新処理
-	mpStGauge->SetMaxPoint(mMaxSt);
-	mpStGauge->SetCurPoint(mSt);
+	mpStGauge->SetMaxPoint((int)mMaxSt);
+	mpStGauge->SetCurPoint(ceilf(mSt));
 
 }
 
@@ -574,7 +580,7 @@ void CCat::Render()
 	// 猫を操作していたら、頭のない猫の体を描画
 	if (mIsOperate)
 	{
-
+		// TODO:頭のない猫のモデルデータ
 	}
 	// 猫を操作してなけらば、全身を描画
 	else

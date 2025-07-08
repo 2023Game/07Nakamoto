@@ -120,8 +120,9 @@ private:
 
 	CGaugeUI* mpHpGauge;	// HPゲージ
 
-	int mMaxSt;	// スタミナの最大値
-	int mSt;	// スタミナ
+	float mMaxSt;	// スタミナの最大値
+	float mSt;	// スタミナ
+	bool mIsDash;	// ダッシュフラグ
 	CGaugeUI* mpStGauge;	// スタミナゲージ
 
 	bool mTogether;	// 猫と一緒にいるか
