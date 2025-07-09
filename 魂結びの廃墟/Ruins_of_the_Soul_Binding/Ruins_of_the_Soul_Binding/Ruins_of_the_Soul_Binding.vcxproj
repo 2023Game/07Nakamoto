@@ -78,6 +78,8 @@
     <ClCompile Include="src\Game\CGameClearUI.cpp" />
     <ClCompile Include="src\Game\CIcon.cpp" />
     <ClCompile Include="src\Game\CPressAndHoldSwitch.cpp" />
+    <ClCompile Include="src\Game\CRoom.cpp" />
+    <ClCompile Include="src\Game\CRoomManager.cpp" />
     <ClCompile Include="src\Game\CSpider.cpp" />
     <ClCompile Include="src\Game\CSwitchDoorGimmick.cpp" />
     <ClCompile Include="src\Game\CApplication.cpp" />
@@ -218,6 +220,8 @@
     <ClInclude Include="src\Game\CGameClearUI.h" />
     <ClInclude Include="src\Game\CIcon.h" />
     <ClInclude Include="src\Game\CPressAndHoldSwitch.h" />
+    <ClInclude Include="src\Game\CRoom.h" />
+    <ClInclude Include="src\Game\CRoomManager.h" />
     <ClInclude Include="src\Game\CSpider.h" />
     <ClInclude Include="src\Game\CSwitchDoorGimmick.h" />
     <ClInclude Include="src\Game\CApplication.h" />

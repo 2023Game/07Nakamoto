@@ -15,6 +15,7 @@
 #include "CInteractObject.h"
 #include "CDemonPowerManager.h"
 #include "CSceneManager.h"
+#include "CRoom.h"
 
 // アニメーションのパス
 #define ANIM_PATH "Character\\Enemy\\Warrok\\anim\\"
@@ -500,6 +501,12 @@ bool CBoss::MoveTo(const CVector& targetPos, float speed)
 		pos = CVector(targetPos.X(), pos.Y(), targetPos.Z());
 		Position(pos);
 		return true;	// 目的地に到着したので、trueを返す
+	}
+	// 残りの距離がキャラクターの半径より短い場合
+	else if (remainDist <= BODY_RADIUS)
+	{
+		// そこで移動を終了とする
+		return true;
 	}
 
 	// 残りの距離が移動距離より長い場合は、

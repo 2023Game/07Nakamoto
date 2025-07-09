@@ -12,6 +12,10 @@
 #include "COpeningDoorGimmick.h"
 #include "CSwitch.h"
 #include "CSwitchDoorGimmick.h"
+#include "CRoom.h"
+
+#define ROOM_SIZE_Y 33.0f
+#define ROOM_POS_Y	ROOM_SIZE_Y * 0.5f
 
 CField* CField::spInstance = nullptr;
 
@@ -46,6 +50,26 @@ CField::CField()
 
 	// 経路探索用の遮蔽物チェックのコライダーに、フィールドの壁のコライダーを登録
 	CNavManager::Instance()->AddCollider(mpWallColliderMesh);
+
+	CRoom* room = new CRoom
+	(
+		CVector(0.0f, ROOM_POS_Y, 0.0f),
+		CVector(110.0f, ROOM_SIZE_Y, 87.45f),
+		"1-1"
+	);
+	room = new CRoom
+	(
+		CVector(143.275f, ROOM_POS_Y, -5.63751f),
+		CVector(130.9f, ROOM_SIZE_Y, 95.425f),
+		"1-2"
+	);
+	room = new CRoom
+	(
+		CVector(141.471f, ROOM_POS_Y, 115.5f),
+		CVector(75.83f, ROOM_SIZE_Y, 88.0f),
+		"校長室"
+	);
+
 
 	// 左右のドアを生成
 	new CDoorGimmickLR

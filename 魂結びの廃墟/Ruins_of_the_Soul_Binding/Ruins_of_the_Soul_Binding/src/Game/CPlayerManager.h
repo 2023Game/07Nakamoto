@@ -24,9 +24,11 @@ public:
 	// 操作キャラを切り替える
 	void ChangePlayer();
 
+	// プレイヤーのリストを取得
+	const std::vector<CPlayerBase*>& GetPlayers() const;
+
 	// 更新
 	void Update() override;
-
 
 private:
 	//EOwnerState mOwnerState;

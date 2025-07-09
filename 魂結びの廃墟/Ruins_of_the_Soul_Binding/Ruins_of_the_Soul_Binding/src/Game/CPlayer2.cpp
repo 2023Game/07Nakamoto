@@ -17,6 +17,7 @@
 #include "CSceneManager.h"
 #include "CDemonPower.h"
 #include "CHandGlow.h"
+#include "CRoom.h"
 
 // アニメーションのパス
 #define ANIM_PATH "Character\\Player2\\Rusk\\anim\\"
@@ -388,6 +389,12 @@ bool CPlayer2::GatActingTogether()
 	return mTogether;
 }
 
+// プレイヤーのバウンディングボックスを返す
+const CBounds& CPlayer2::GetBounds() const
+{
+	return mpBodyCol->Bounds();
+}
+
 // オブジェクト削除を伝える
 void CPlayer2::DeleteObject(CObjectBase* obj)
 {
@@ -583,6 +590,7 @@ void CPlayer2::Update()
 		CDebugPrint::Print("PlayerState:%d\n", mState);
 		CDebugPrint::Print("FPS:%f\n", Times::FPS());
 	}
+	CDebugPrint::Print("部屋(人)：%s\n", mpInRoomPlayer != nullptr ? mpInRoomPlayer->GetName().c_str() : "なし");
 #endif
 
 	// 地面についているか

@@ -65,6 +65,9 @@ public:
 	// 一緒に行動しているか
 	bool GatActingTogether();
 
+	// プレイヤーのバウンディングボックスを返す
+	const CBounds& GetBounds() const override;
+
 private:
 	// オブジェクト削除を伝える
 	void DeleteObject(CObjectBase* obj) override;

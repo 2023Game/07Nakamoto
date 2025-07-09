@@ -12,6 +12,7 @@
 #include "CHpGauge.h"
 #include "CStGauge.h"
 #include "CIcon.h"
+#include "CRoom.h"
 
 // アニメーションのパス
 #define ANIM_PATH "Character\\Cat\\anim\\"
@@ -561,6 +562,8 @@ void CCat::Update()
 		CDebugPrint::Print("PlayerState:%d\n", mState);
 		CDebugPrint::Print("FPS:%f\n", Times::FPS());
 	}
+
+	CDebugPrint::Print("部屋(猫)：%s\n", mpInRoomPlayer != nullptr ? mpInRoomPlayer->GetName().c_str() : "なし");
 #endif
 	// 地面についているか
 	mIsGrounded = false;
@@ -675,4 +678,9 @@ void CCat::SetOperate(bool operate)
 		mpStGauge->SetShow(false);
 	}
 
+}
+
+const CBounds& CCat::GetBounds() const
+{
+	return mpBodyCol->Bounds();
 }

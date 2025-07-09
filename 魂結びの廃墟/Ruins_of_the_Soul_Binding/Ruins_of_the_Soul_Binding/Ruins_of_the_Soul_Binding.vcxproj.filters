@@ -53,9 +53,6 @@
     <Filter Include="ソース ファイル\Game\Field">
       <UniqueIdentifier>{acbeca61-006d-429d-8391-45dc7983885d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Game\Field\Object">
-      <UniqueIdentifier>{944b0643-4c32-4f86-9d33-49cba7329b64}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Test">
       <UniqueIdentifier>{ab8bd641-7ca6-42f9-8f59-214f855f6a94}</UniqueIdentifier>
     </Filter>
@@ -92,9 +89,6 @@
     <Filter Include="ソース ファイル\Game\Character\Enemy">
       <UniqueIdentifier>{ec280ca7-8243-49d0-adff-34255272bfe1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Game\Field\Object\InteractObject">
-      <UniqueIdentifier>{c5bb70cf-59de-47d3-9ec4-6c19fae41302}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Game\Debug">
       <UniqueIdentifier>{d0795bef-d8aa-4077-bbf1-63cddad632a2}</UniqueIdentifier>
     </Filter>
@@ -109,6 +103,15 @@
     </Filter>
     <Filter Include="ソース ファイル\Game\Field\Gimmick">
       <UniqueIdentifier>{2c959bf4-7c1a-4315-9f2f-d1bfc69ef036}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Field\Gimmick\Object">
+      <UniqueIdentifier>{944b0643-4c32-4f86-9d33-49cba7329b64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Field\Gimmick\Object\InteractObject">
+      <UniqueIdentifier>{c5bb70cf-59de-47d3-9ec4-6c19fae41302}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Field\Room">
+      <UniqueIdentifier>{396d36b8-2d1c-4c27-a0a9-580f985bf788}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -236,13 +239,13 @@
       <Filter>ソース ファイル\BaseSystem\UI</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CMoveFloor.cpp">
-      <Filter>ソース ファイル\Game\Field\Object</Filter>
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CRideabeObject.cpp">
-      <Filter>ソース ファイル\Game\Field\Object</Filter>
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CRotateFloor.cpp">
-      <Filter>ソース ファイル\Game\Field\Object</Filter>
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object</Filter>
     </ClCompile>
     <ClCompile Include="src\BaseSystem\CDebugProfiler.cpp">
       <Filter>ソース ファイル\BaseSystem\Debug</Filter>
@@ -395,13 +398,13 @@
       <Filter>ソース ファイル\BaseSystem\UI</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CInteractObject.cpp">
-      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object\InteractObject</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CLDoor.cpp">
-      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object\InteractObject</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CRDoor.cpp">
-      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object\InteractObject</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CDebugFieldOfView.cpp">
       <Filter>ソース ファイル\Game\Debug</Filter>
@@ -440,7 +443,7 @@
       <Filter>ソース ファイル\Game\UI\Game</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CDoor.cpp">
-      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object\InteractObject</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CCatCamera.cpp">
       <Filter>ソース ファイル\Game\System</Filter>
@@ -452,13 +455,13 @@
       <Filter>ソース ファイル\BaseSystem\Navigation</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CInteractObjectManager.cpp">
-      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object\InteractObject</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CDemonPower.cpp">
-      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object\InteractObject</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CDemonPowerManager.cpp">
-      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object\InteractObject</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CHandGlow.cpp">
       <Filter>ソース ファイル\Game\Effect</Filter>
@@ -470,7 +473,7 @@
       <Filter>ソース ファイル\Game\Field\Gimmick</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\COpeningDoor.cpp">
-      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object\InteractObject</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CSwitchDoorGimmick.cpp">
       <Filter>ソース ファイル\Game\Field\Gimmick</Filter>
@@ -479,13 +482,13 @@
       <Filter>ソース ファイル\Game\Field\Gimmick</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CStand.cpp">
-      <Filter>ソース ファイル\Game\Field\Object</Filter>
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CSwitch.cpp">
       <Filter>ソース ファイル\Game\Field\Gimmick</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CSwitchDoor.cpp">
-      <Filter>ソース ファイル\Game\Field\Object</Filter>
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CGameClearScene.cpp">
       <Filter>ソース ファイル\Game\Scene</Filter>
@@ -498,6 +501,12 @@
     </ClCompile>
     <ClCompile Include="src\Game\CSpider.cpp">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CRoom.cpp">
+      <Filter>ソース ファイル\Game\Field\Room</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CRoomManager.cpp">
+      <Filter>ソース ファイル\Game\Field\Room</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -646,13 +655,13 @@
       <Filter>ソース ファイル\BaseSystem\UI</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CMoveFloor.h">
-      <Filter>ソース ファイル\Game\Field\Object</Filter>
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CRideableObject.h">
-      <Filter>ソース ファイル\Game\Field\Object</Filter>
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CRotateFloor.h">
-      <Filter>ソース ファイル\Game\Field\Object</Filter>
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object</Filter>
     </ClInclude>
     <ClInclude Include="src\BaseSystem\CDebugProfiler.h">
       <Filter>ソース ファイル\BaseSystem\Debug</Filter>
@@ -808,13 +817,13 @@
       <Filter>ソース ファイル\BaseSystem\UI</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CInteractObject.h">
-      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object\InteractObject</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CLDoor.h">
-      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object\InteractObject</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CRDoor.h">
-      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object\InteractObject</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CDebugFieldOfView.h">
       <Filter>ソース ファイル\Game\Debug</Filter>
@@ -853,7 +862,7 @@
       <Filter>ソース ファイル\Game\UI\Game</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CDoor.h">
-      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object\InteractObject</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CCatCamera.h">
       <Filter>ソース ファイル\Game\System</Filter>
@@ -865,13 +874,13 @@
       <Filter>ソース ファイル\BaseSystem\Navigation</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CInteractObjectManager.h">
-      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object\InteractObject</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CDemonPower.h">
-      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object\InteractObject</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CDemonPowerManager.h">
-      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object\InteractObject</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CHandGlow.h">
       <Filter>ソース ファイル\Game\Effect</Filter>
@@ -883,7 +892,7 @@
       <Filter>ソース ファイル\Game\Field\Gimmick</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\COpeningDoor.h">
-      <Filter>ソース ファイル\Game\Field\Object\InteractObject</Filter>
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object\InteractObject</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CSwitchDoorGimmick.h">
       <Filter>ソース ファイル\Game\Field\Gimmick</Filter>
@@ -892,13 +901,13 @@
       <Filter>ソース ファイル\Game\Field\Gimmick</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CStand.h">
-      <Filter>ソース ファイル\Game\Field\Object</Filter>
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CSwitch.h">
       <Filter>ソース ファイル\Game\Field\Gimmick</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CSwitchDoor.h">
-      <Filter>ソース ファイル\Game\Field\Object</Filter>
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CGameClearScene.h">
       <Filter>ソース ファイル\Game\Scene</Filter>
@@ -911,6 +920,12 @@
     </ClInclude>
     <ClInclude Include="src\Game\CSpider.h">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CRoom.h">
+      <Filter>ソース ファイル\Game\Field\Room</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CRoomManager.h">
+      <Filter>ソース ファイル\Game\Field\Room</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

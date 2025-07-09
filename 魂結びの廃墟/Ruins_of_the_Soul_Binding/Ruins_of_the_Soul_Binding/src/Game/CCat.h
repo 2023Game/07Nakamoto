@@ -59,6 +59,9 @@ public:
 	/// <param name="operate">trueであれば、操作開始</param>
 	void SetOperate(bool operate) override;
 
+	// プレイヤーのバウンディングボックスを返す
+	const CBounds& GetBounds() const override;
+
 private:
 	CVector mFollowPos;	// 猫がプレイヤーについていく時の座標
 	CVector mLookAtPos;	// 注視する座標

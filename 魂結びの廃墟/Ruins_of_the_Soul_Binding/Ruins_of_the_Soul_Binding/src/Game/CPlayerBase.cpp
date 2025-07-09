@@ -6,6 +6,7 @@
 #include "CNavNode.h"
 #include "CNavManager.h"
 #include "CBoss.h"
+#include "CRoom.h"
 
 #define GRAVITY			0.0625f	// 重力加速度
 #define FOV_ANGLE		60.0f		// 視野範囲の角度
@@ -30,6 +31,7 @@ CPlayerBase::CPlayerBase(ETag tag)
 	, mIsOperate(false)
 	, mpCamera(nullptr)
 	, mpSearchCol(nullptr)
+	, mpInRoomPlayer(nullptr)
 {
 	CPlayerManager::Instance()->AddPlayer(this);
 }
@@ -73,6 +75,24 @@ bool CPlayerBase::IsOperate() const
 void CPlayerBase::SetCamera(CCamera* camera)
 {
 	mpCamera = camera;
+}
+
+// プレイヤーが入っている部屋を設定
+void CPlayerBase::SetRoom(CRoom* room)
+{
+	mpInRoomPlayer = room;
+}
+
+// プレイヤーが入っている部屋のポインタを返す
+CRoom* CPlayerBase::GetRoom() const
+{
+	return mpInRoomPlayer;
+}
+
+// プレイヤーのバウンディングボックスを返す
+const CBounds& CPlayerBase::GetBounds() const
+{
+	return CBounds();
 }
 
 // 衝突処理

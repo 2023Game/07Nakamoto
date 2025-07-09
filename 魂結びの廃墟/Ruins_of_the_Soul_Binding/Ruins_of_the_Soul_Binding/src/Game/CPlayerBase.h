@@ -4,6 +4,7 @@
 class CCollider;
 class CInteractObject;
 class CNavNode;
+class CRoom;
 
 class CPlayerBase : public CXCharacter
 {
@@ -39,6 +40,13 @@ public:
 	/// </summary>
 	/// <param name="camera">カメラのポインタ</param>
 	void SetCamera(CCamera* camera);
+
+	// プレイヤーが入っている部屋を設定
+	void SetRoom(CRoom* room);
+	// プレイヤーが入っている部屋のポインタを返す
+	CRoom* GetRoom() const;
+	// プレイヤーのバウンディングボックスを返す
+	virtual const CBounds& GetBounds() const;
 
 	/// <summary>
 	/// 衝突処理
@@ -93,4 +101,6 @@ protected:
 
 	bool mIsOperate;	// このプレイヤーを操作中かどうか
 	CCamera* mpCamera;	// このプレイヤーを操作している時のカメラ
+
+	CRoom* mpInRoomPlayer;	// プレイヤーが入っている部屋のポインタ
 };	

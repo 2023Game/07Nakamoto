@@ -14,6 +14,7 @@ enum class ETaskPriority
 	eEnemy,		// 敵
 	eWeapon,	// 武器
 	eItem,		// アイテム
+	eRoom,		// 部屋S
 
 	eEffect,	// エフェクト
 	eBillboard,	// ビルボードイメージ

@@ -84,6 +84,12 @@ void CPlayerManager::ChangePlayer()
 	}
 }
 
+// プレイヤーのリストを取得
+const std::vector<CPlayerBase*>& CPlayerManager::GetPlayers() const
+{
+	return mPlayers;
+}
+
 // 更新
 void CPlayerManager::Update()
 {
