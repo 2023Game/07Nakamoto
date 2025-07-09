@@ -57,6 +57,7 @@ private:
 		eWalk,		// 歩行
 		eRun,		// 走行
 		eAttack,	// 攻撃
+		eAlert,		// 警戒
 
 		Num			// アニメーションの種類の数
 	};
@@ -69,6 +70,7 @@ private:
 		eChase,		// プレイヤーを追いかける
 		eLost,		// プレイヤーを見失う
 		eAttack,	// プレイヤー攻撃
+		eAlert,
 		eDeath,		// 死亡
 	};
 
@@ -98,6 +100,8 @@ private:
 	void UpdateChase();
 	// プレイヤーを見失った時の更新処理
 	void UpdateLost();
+	// 警戒している時の処理
+	void UpdateAlert();
 	// パンチ攻撃時の更新処理
 	void UpdateAttack1();
 	// 針攻撃時の更新処理

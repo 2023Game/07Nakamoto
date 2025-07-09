@@ -58,7 +58,7 @@ const std::vector<CEnemy::AnimData> ANIM_DATA =
 	{ ANIM_PATH"warrok_walk.x",		true,	44.0f,	1.0f	},	// 歩行
 	{ ANIM_PATH"warrok_run.x",		true,	27.0f,	1.0f	},	// 走行
 	{ ANIM_PATH"warrok_attack.x",	false,	81.0f,	1.0f	},	// 攻撃
-
+	{ ANIM_PATH"warrok_alert.x",	false,	150.0f,	0.5f	},	// 警戒
 };
 
 // インスタンスのポインタを取得
@@ -791,7 +791,6 @@ void CBoss::UpdateLost()
 		}
 		else
 		{
-			//mpBattleTarget = nullptr;
 			// 経路がつながっていなければ、待機状態へ戻す
 			ChangeState((int)EState::eIdle);
 			mpLostPlayerNode->SetEnable(false);
@@ -804,11 +803,46 @@ void CBoss::UpdateLost()
 			mNextMoveIndex++;
 			if (mNextMoveIndex >= mMoveRoute.size())
 			{
-				//mpBattleTarget = nullptr;
-				// 移動が終われば待機状態へ移行
-				ChangeState((int)EState::eIdle);
+				// 移動が終われば警戒状態へ移行
+				ChangeState((int)EState::eAlert);
 				mpLostPlayerNode->SetEnable(false);
 			}
+		}
+		break;
+	}
+}
+
+// 警戒している時の処理
+void CBoss::UpdateAlert()
+{
+	// ステップごとに処理を切り替える
+	switch (mStateStep)
+	{
+	// ステップ１：警戒アニメーション再生
+	case 0:
+		ChangeAnimation((int)EAnimType::eAlert);
+		mStateStep++;
+		break;
+	// ステップ２：警戒開始
+	case 1:
+		for (CObjectBase* target : mTargets)
+		{
+			// ターゲットが死亡していたら、追跡対象としない
+			if (target->IsDeath()) continue;
+			// ターゲットが視野範囲内に入ったら、追跡にする
+			if (IsFoundTarget(target))
+			{
+				mpBattleTarget = target;
+				ChangeState((int)EState::eChase);
+				return;
+			}
+		}
+
+		// アニメーションが終わったら
+		if (IsAnimationFinished())
+		{
+			// 待機k状態へ移行
+			ChangeState((int)EState::eIdle());
 		}
 		break;
 	}
@@ -852,7 +886,7 @@ void CBoss::UpdateAttack1()
 		// アニメーション終了したら、待機状態へ戻す
 		if (IsAnimationFinished())
 		{
-			ChangeState((int)EState::eIdle);
+			mStateStep++;
 		}
 		break;
 		// ステップ４ : 攻撃終了後の待ち時間
@@ -916,22 +950,20 @@ void CBoss::Update()
 	// 状態に合わせて、更新処理を切り替える
 	switch ((EState)mState)
 	{
-		// 待機状態
+	// 待機状態
 	case EState::eIdle:		UpdateIdle();	break;
-		// 巡回状態
+	// 巡回状態
 	case EState::ePatrol:	UpdatePatrol();	break;
-		// 追いかける
+	// 追いかける
 	case EState::eChase:	UpdateChase();	break;
-		// 見失った状態
+	// 見失った状態
 	case EState::eLost:		UpdateLost();	break;
-		// パンチ攻撃
+	// パンチ攻撃
 	case EState::eAttack:	UpdateAttack1(); break;
-		//	// 針攻撃
-		//case EState::eAttack2:	UpdateAttack2(); break;
-		//	// 仰け反り
-		//case EState::eHit:		UpdateHit();	break;
-			// 死亡状態
-		case EState::eDeath:	UpdateDeath();	break;
+	// 警戒状態
+	case EState::eAlert:	UpdateAlert();	break;
+	// 死亡状態
+	case EState::eDeath:	UpdateDeath();	break;
 	}
 
 	// 敵のベースクラスの更新

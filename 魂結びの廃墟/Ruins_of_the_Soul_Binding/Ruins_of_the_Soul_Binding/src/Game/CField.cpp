@@ -15,11 +15,13 @@
 
 CField* CField::spInstance = nullptr;
 
+// インスタンスのポインタを取得
 CField* CField::Instance()
 {
 	return spInstance;
 }
 
+// コンストラクタ
 CField::CField()
 	: CObjectBase(ETag::eField, ETaskPriority::eBackground)
 	, mEffectAnimData(1, 11, true, 11, 0.03f)
@@ -176,6 +178,7 @@ CField::CField()
 	//CreateFieldObjects();
 }
 
+// デストラクタ
 CField::~CField()
 {
 	if (mpFloorColliderMesh != nullptr)
