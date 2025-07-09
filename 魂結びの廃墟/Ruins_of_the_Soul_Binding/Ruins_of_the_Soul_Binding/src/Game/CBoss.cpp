@@ -834,6 +834,8 @@ void CBoss::UpdateAlert()
 	case 1:
 		for (CObjectBase* target : mTargets)
 		{
+
+
 			// ターゲットが死亡していたら、追跡対象としない
 			if (target->IsDeath()) continue;
 			// ターゲットが視野範囲内に入ったら、追跡にする

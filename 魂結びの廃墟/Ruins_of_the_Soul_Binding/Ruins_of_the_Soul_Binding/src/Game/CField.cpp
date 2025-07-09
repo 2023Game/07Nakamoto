@@ -59,15 +59,57 @@ CField::CField()
 	);
 	room = new CRoom
 	(
+		CVector(-113.548f, ROOM_POS_Y, 0.0f),
+		CVector(110.0f, ROOM_SIZE_Y, 87.45f),
+		"1-2"
+	);
+	room = new CRoom
+	(
 		CVector(143.275f, ROOM_POS_Y, -5.63751f),
 		CVector(130.9f, ROOM_SIZE_Y, 95.425f),
-		"1-2"
+		"美術室"
 	);
 	room = new CRoom
 	(
 		CVector(141.471f, ROOM_POS_Y, 115.5f),
 		CVector(75.83f, ROOM_SIZE_Y, 88.0f),
 		"校長室"
+	);
+	room = new CRoom
+	(
+		CVector(171.187f, ROOM_POS_Y, 245.987f),
+		CVector(75.075f, ROOM_SIZE_Y, 34.375f),
+		"女子トイレ"
+	);
+	room = new CRoom
+	(
+		CVector(171.187f, ROOM_POS_Y, 283.387f),
+		CVector(75.075f, ROOM_SIZE_Y, 37.1249f),
+		"男子トイレ"
+	);
+	room = new CRoom
+	(
+		CVector(171.187f, ROOM_POS_Y, 382.8f),
+		CVector(75.075f, ROOM_SIZE_Y, 158.4f),
+		"空き教室"
+	);
+	room = new CRoom
+	(
+		CVector(-32.9816f, ROOM_POS_Y, 247.225f),
+		CVector(87.7248f, ROOM_SIZE_Y, 109.45f),
+		"2-1"
+	);
+	room = new CRoom
+	(
+		CVector(56.3932f, ROOM_POS_Y, 247.225f),
+		CVector(87.7248f, ROOM_SIZE_Y, 109.45f),
+		"2-2"
+	);
+	room = new CRoom
+	(
+		CVector(50.5403f, ROOM_POS_Y, 370.975f),
+		CVector(99.4306f, ROOM_SIZE_Y, 134.75f),
+		"技術室"
 	);
 
 
