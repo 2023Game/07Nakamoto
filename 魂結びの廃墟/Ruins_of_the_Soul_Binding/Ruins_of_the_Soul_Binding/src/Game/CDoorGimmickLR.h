@@ -3,13 +3,14 @@
 
 class CDoor;
 class CNavNode;
+class CRoom;
 
 // 左右ドアのギミック
 class CDoorGimmickLR : public CObjectBase
 {
 public:
 	// コンストラクタ
-	CDoorGimmickLR(const CVector& pos, const CVector& angle);
+	CDoorGimmickLR(const CVector& pos, const CVector& angle, CRoom* room);
 	// デストラクタ
 	~CDoorGimmickLR();
 

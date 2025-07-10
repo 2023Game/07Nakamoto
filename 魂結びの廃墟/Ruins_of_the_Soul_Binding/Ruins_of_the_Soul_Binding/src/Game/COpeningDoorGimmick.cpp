@@ -2,6 +2,7 @@
 #include "COpeningDoor.h"
 #include "CNavNode.h"
 #include "CNavManager.h"
+#include "CRoom.h"
 
 // 開き戸の中心位置からのオフセット量
 #define DOOR_OFFSET_DIST 4.95f
@@ -9,7 +10,7 @@
 #define DOOR_NODE_DIST 14.0f
 
 // コンストラクタ
-COpeningDoorGimmick::COpeningDoorGimmick(const CVector& pos, const CVector& angle)
+COpeningDoorGimmick::COpeningDoorGimmick(const CVector& pos, const CVector& angle, CRoom* room)
 	: CObjectBase(ETag::eGimmick)
 	, mpOpeningDoor(nullptr)
 	, mpNavNode1(nullptr)
@@ -17,15 +18,16 @@ COpeningDoorGimmick::COpeningDoorGimmick(const CVector& pos, const CVector& angl
 {
 	// 位置や回転値を反映
 	Position(pos);
-	Rotate(angle);
+	Rotation(angle);
 
 	// 開いた時の回転を求める計算
 	CVector rot = angle + CVector(0.0f, 90.0f, 0.0f);
 
 	// 開き扉を作成
-	mpOpeningDoor = new COpeningDoor(pos, angle, rot);
+	mpOpeningDoor = new COpeningDoor(pos, angle, rot, room);
 	mpOpeningDoor->SetOwner(this);
 	mpOpeningDoor->SetOnChangeFunc(std::bind(&COpeningDoorGimmick::OnChangeDoor, this));
+	mpOpeningDoor->SetRoom(room);
 
 	// 経路探索用のノードを作成
 	mpNavNode1 = new CNavNode(pos + VectorZ() * DOOR_NODE_DIST - CVector(0.0f, 0.0f, DOOR_OFFSET_DIST));

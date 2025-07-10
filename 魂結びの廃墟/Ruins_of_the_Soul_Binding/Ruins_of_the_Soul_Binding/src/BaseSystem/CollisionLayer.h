@@ -16,6 +16,7 @@ enum class ELayer
 	eEnemy,
 	eInteractObj,	// 調べるオブジェクト
 	eInteractSearch,// 調べるオブジェクト探知用
+	eBreakableSearch,	// 壊せるオブジェクト探知用
 	eDemon,			// 妖力の攻撃を行えるオブジェクト
 	eAttackCol,
 };

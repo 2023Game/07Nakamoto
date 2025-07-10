@@ -508,6 +508,9 @@
     <ClCompile Include="src\Game\CRoomManager.cpp">
       <Filter>ソース ファイル\Game\Field\Room</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CDoorBase.cpp">
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object\InteractObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -926,6 +929,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CRoomManager.h">
       <Filter>ソース ファイル\Game\Field\Room</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CDoorBase.h">
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object\InteractObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

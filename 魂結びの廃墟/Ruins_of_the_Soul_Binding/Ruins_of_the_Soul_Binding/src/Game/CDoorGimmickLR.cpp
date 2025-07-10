@@ -4,6 +4,7 @@
 #include "CRDoor.h"
 #include "CNavNode.h"
 #include "CNavManager.h"
+#include "CRoom.h"
 
 // 左右のドアの中心位置からのオフセット量
 #define DOOR_OFFSET_DIST 4.95f
@@ -11,7 +12,7 @@
 #define DOOR_NODE_DIST 10.0f
 
 // コンストラクタ
-CDoorGimmickLR::CDoorGimmickLR(const CVector& pos, const CVector& angle)
+CDoorGimmickLR::CDoorGimmickLR(const CVector& pos, const CVector& angle, CRoom* room)
 	: CObjectBase(ETag::eGimmick)
 	, mpDoorL(nullptr)
 	, mpDoorR(nullptr)
@@ -32,11 +33,13 @@ CDoorGimmickLR::CDoorGimmickLR(const CVector& pos, const CVector& angle)
 	mpDoorL = new CLDoor(posL, angle, posR);
 	mpDoorL->SetOwner(this);
 	mpDoorL->SetOnChangeFunc(std::bind(&CDoorGimmickLR::OnChangeDoor, this));
+	mpDoorL->SetRoom(room);
 
 	// 右側のドアを作成
 	mpDoorR = new CRDoor(posR, angle, posL);
 	mpDoorR->SetOwner(this);
 	mpDoorR->SetOnChangeFunc(std::bind(&CDoorGimmickLR::OnChangeDoor, this));
+	mpDoorR->SetRoom(room);
 
 	// 経路探索用のノードを作成
 	mpNavNodeL1 = new CNavNode(posL + VectorZ() * DOOR_NODE_DIST);

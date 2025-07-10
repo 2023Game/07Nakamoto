@@ -51,163 +51,8 @@ CField::CField()
 	// 経路探索用の遮蔽物チェックのコライダーに、フィールドの壁のコライダーを登録
 	CNavManager::Instance()->AddCollider(mpWallColliderMesh);
 
-	CRoom* room = new CRoom
-	(
-		CVector(0.0f, ROOM_POS_Y, 0.0f),
-		CVector(110.0f, ROOM_SIZE_Y, 87.45f),
-		"1-1"
-	);
-	room = new CRoom
-	(
-		CVector(-113.548f, ROOM_POS_Y, 0.0f),
-		CVector(110.0f, ROOM_SIZE_Y, 87.45f),
-		"1-2"
-	);
-	room = new CRoom
-	(
-		CVector(143.275f, ROOM_POS_Y, -5.63751f),
-		CVector(130.9f, ROOM_SIZE_Y, 95.425f),
-		"美術室"
-	);
-	room = new CRoom
-	(
-		CVector(141.471f, ROOM_POS_Y, 115.5f),
-		CVector(75.83f, ROOM_SIZE_Y, 88.0f),
-		"校長室"
-	);
-	room = new CRoom
-	(
-		CVector(171.187f, ROOM_POS_Y, 245.987f),
-		CVector(75.075f, ROOM_SIZE_Y, 34.375f),
-		"女子トイレ"
-	);
-	room = new CRoom
-	(
-		CVector(171.187f, ROOM_POS_Y, 283.387f),
-		CVector(75.075f, ROOM_SIZE_Y, 37.1249f),
-		"男子トイレ"
-	);
-	room = new CRoom
-	(
-		CVector(171.187f, ROOM_POS_Y, 382.8f),
-		CVector(75.075f, ROOM_SIZE_Y, 158.4f),
-		"空き教室"
-	);
-	room = new CRoom
-	(
-		CVector(-32.9816f, ROOM_POS_Y, 247.225f),
-		CVector(87.7248f, ROOM_SIZE_Y, 109.45f),
-		"2-1"
-	);
-	room = new CRoom
-	(
-		CVector(56.3932f, ROOM_POS_Y, 247.225f),
-		CVector(87.7248f, ROOM_SIZE_Y, 109.45f),
-		"2-2"
-	);
-	room = new CRoom
-	(
-		CVector(50.5403f, ROOM_POS_Y, 370.975f),
-		CVector(99.4306f, ROOM_SIZE_Y, 134.75f),
-		"技術室"
-	);
-
-
-	// 左右のドアを生成
-	new CDoorGimmickLR
-	(
-		CVector(33.0f,0.0f,44.825f),
-		CVector(0.0f,0.0f,0.0f)
-	);
-	// 左右のドアを生成
-	new CDoorGimmickLR
-	(
-		CVector(-38.5f, 0.0f, 44.825f),
-		CVector(0.0f, 0.0f, 0.0f)
-	);
-	// 左右のドアを生成
-	new CDoorGimmickLR
-	(
-		CVector(99.0f, 0.0f, 43.175f),
-		CVector(0.0f, 0.0f, 0.0f)
-	);
-	// 左右のドアを生成
-	new CDoorGimmickLR
-	(
-		CVector(187.0f, 0.0f, 43.175f),
-		CVector(0.0f, 0.0f, 0.0f)
-	);
-
-	// 左右のドアを生成
-	new CDoorGimmickLR
-	(
-		CVector(101.355f, 0.0f, 214.5f),
-		CVector(0.0f, -90.0f, 0.0f)
-	);
-	// 左右のドアを生成
-	new CDoorGimmickLR
-	(
-		CVector(101.355f, 0.0f, 280.5f),
-		CVector(0.0f, -90.0f, 0.0f)
-	);
-	// 左右のドアを生成
-	new CDoorGimmickLR
-	(
-		CVector(101.355f, 0.0f, 330.0f),
-		CVector(0.0f, -90.0f, 0.0f)
-	);
-	// 左右のドアを生成
-	new CDoorGimmickLR
-	(
-		CVector(-43.392f, 0.0f, 429.0),
-		CVector(0.0f, -90.0f, 0.0f)
-	);
-
-	// 左右のドアを生成
-	new CDoorGimmickLR
-	(
-		CVector(132.545f, 0.0f, 330.0f),
-		CVector(0.0f, 90.0f, 0.0f)
-	);
-	// 左右のドアを生成
-	new CDoorGimmickLR
-	(
-		CVector(132.545f, 0.0f, 434.5f),
-		CVector(0.0f, 90.0f, 0.0f)
-	);
-
-
-	// 開き戸の生成
-	new COpeningDoorGimmick
-	(
-		CVector(102.73f,0.0f,99.0f),
-		CVector(0.0f,90.0f,0.0f)
-	);
-	// 開き戸の生成
-	new COpeningDoorGimmick
-	(
-		CVector(132.82f, 0.0f, 258.5f),
-		CVector(0.0f, 90.0f, 0.0f)
-	);
-	// 開き戸の生成
-	new COpeningDoorGimmick
-	(
-		CVector(132.82f, 0.0f, 280.5f),
-		CVector(0.0f, 90.0f, 0.0f)
-	);
-	// 開き戸の生成
-	new COpeningDoorGimmick
-	(
-		CVector(-170.77f, 0.0f, 132.0f),
-		CVector(0.0f, 90.0f, 0.0f)
-	);
-	// 開き戸の生成
-	new COpeningDoorGimmick
-	(
-		CVector(-170.77f, 0.0f, 165.0f),
-		CVector(0.0f, 90.0f, 0.0f)
-	);
-
+	// 部屋の作成
+	CreateRoomObjects();
 
 	// スイッチの生成
 	CSwitch* switch1 = new CSwitch(CVector(50.0f, 0.0f, 230.0f));
@@ -282,7 +127,7 @@ void CField::CreateNavNodes()
 	{
 		// ノードの設定
 		new CNavNode(CVector(-90.0f, 0.0f, 60.0f));
-		new CNavNode(CVector(65.0f, 0.0f, 60.0f));
+		new CNavNode(CVector(66.0f, 0.0f, 60.0f));
 		new CNavNode(CVector(90.0f, 0.0f, 60.0f));
 		new CNavNode(CVector(90.0f, 0.0f, 180.0f));
 		new CNavNode(CVector(-90.0f, 0.0f, 180.0f));
@@ -291,13 +136,212 @@ void CField::CreateNavNodes()
 		new CNavNode(CVector(120.0f, 0.0f, 180.0f));
 		new CNavNode(CVector(120.0f, 0.0f, 450.0f));
 		new CNavNode(CVector(-20.0f, 0.0f, 450.0f));
-		new CNavNode(CVector(-20.0f, 0.0f, 400.0f));
+		new CNavNode(CVector(-20.0f, 0.0f, 395.0f));
+		new CNavNode(CVector(-90.0f, 0.0f, 395.0f));
 		new CNavNode(CVector(-90.0f, 0.0f, 310.0f));
+		new CNavNode(CVector(-265.0f, 0.0f, 395.0f));
+		new CNavNode(CVector(-265.0f, 0.0f, 256.5f));
 		new CNavNode(CVector(-180.0f, 0.0f, 180.0f));
 		new CNavNode(CVector(-180.0f, 0.0f, 60.0f));
+		new CNavNode(CVector(-230.0f, 0.0f, 55.5f));
+		new CNavNode(CVector(-275.0f, 0.0f, 55.5f));
+		new CNavNode(CVector(-275.0f, 0.0f, -210.0f));
+		new CNavNode(CVector(-155.5f, 0.0f, -210.0f));
+		new CNavNode(CVector(-155.5f, 0.0f, -300.0f));
+		new CNavNode(CVector(-155.5f, 0.0f, -59.0f));
+		new CNavNode(CVector(-155.5f, 0.0f, -180.0f));
+		new CNavNode(CVector(66.0f, 0.0f, -52.0f));
+		new CNavNode(CVector(80.0f, 0.0f, -64.5f));
+		new CNavNode(CVector(-20.0f, 0.0f, -300.0f));
+		new CNavNode(CVector(-20.0f, 0.0f, -180.0f));
+		new CNavNode(CVector(5.5f, 0.0f, -130.5f));
+		new CNavNode(CVector(80.5f, 0.0f, -130.5f));
+		new CNavNode(CVector(80.5f, 0.0f, -250.0f));
 
 	}
 }
+
+// 部屋の作成
+void CField::CreateRoomObjects()
+{
+	// 1-1教室を作生成
+	CRoom* room1_1 = new CRoom
+	(
+		CVector(0.0f, ROOM_POS_Y, 0.0f),
+		CVector(110.0f, ROOM_SIZE_Y, 87.45f),
+		"1-1"
+	);
+	// 左右のドアを生成
+	new CDoorGimmickLR
+	(
+		CVector(33.0f, 0.0f, 44.825f),
+		CVector(0.0f, 0.0f, 0.0f),
+		room1_1
+	);
+	// 左右のドアを生成
+	new CDoorGimmickLR
+	(
+		CVector(-38.5f, 0.0f, 44.825f),
+		CVector(0.0f, 0.0f, 0.0f),
+		room1_1
+	);
+
+
+	CRoom* room1_2 = new CRoom
+	(
+		CVector(-113.548f, ROOM_POS_Y, 0.0f),
+		CVector(110.0f, ROOM_SIZE_Y, 87.45f),
+		"1-2"
+	);
+	CRoom* room1 = new CRoom
+	(
+		CVector(143.275f, ROOM_POS_Y, -5.63751f),
+		CVector(130.9f, ROOM_SIZE_Y, 95.425f),
+		"美術室"
+	);
+	CRoom* principalRoom = new CRoom
+	(
+		CVector(141.471f, ROOM_POS_Y, 115.5f),
+		CVector(75.83f, ROOM_SIZE_Y, 88.0f),
+		"校長室"
+	);
+	CRoom* room2 = new CRoom
+	(
+		CVector(171.187f, ROOM_POS_Y, 245.987f),
+		CVector(75.075f, ROOM_SIZE_Y, 34.375f),
+		"女子トイレ"
+	);
+	CRoom* room3 = new CRoom
+	(
+		CVector(171.187f, ROOM_POS_Y, 283.387f),
+		CVector(75.075f, ROOM_SIZE_Y, 37.1249f),
+		"男子トイレ"
+	);
+	CRoom* room4 = new CRoom
+	(
+		CVector(171.187f, ROOM_POS_Y, 382.8f),
+		CVector(75.075f, ROOM_SIZE_Y, 158.4f),
+		"空き教室"
+	);
+	CRoom* room5 = new CRoom
+	(
+		CVector(-32.9816f, ROOM_POS_Y, 247.225f),
+		CVector(87.7248f, ROOM_SIZE_Y, 109.45f),
+		"2-1"
+	);
+	CRoom* room6 = new CRoom
+	(
+		CVector(56.3932f, ROOM_POS_Y, 247.225f),
+		CVector(87.7248f, ROOM_SIZE_Y, 109.45f),
+		"2-2"
+	);
+	CRoom* room7 = new CRoom
+	(
+		CVector(50.5403f, ROOM_POS_Y, 370.975f),
+		CVector(99.4306f, ROOM_SIZE_Y, 134.75f),
+		"技術室"
+	);
+
+	// 左右のドアを生成
+	new CDoorGimmickLR
+	(
+		CVector(99.0f, 0.0f, 43.175f),
+		CVector(0.0f, 0.0f, 0.0f),
+		nullptr
+	);
+	// 左右のドアを生成
+	new CDoorGimmickLR
+	(
+		CVector(187.0f, 0.0f, 43.175f),
+		CVector(0.0f, 0.0f, 0.0f),
+		nullptr
+	);
+
+	// 左右のドアを生成
+	new CDoorGimmickLR
+	(
+		CVector(101.355f, 0.0f, 214.5f),
+		CVector(0.0f, -90.0f, 0.0f),
+		nullptr
+	);
+	// 左右のドアを生成
+	new CDoorGimmickLR
+	(
+		CVector(101.355f, 0.0f, 280.5f),
+		CVector(0.0f, -90.0f, 0.0f),
+		nullptr
+	);
+	// 左右のドアを生成
+	new CDoorGimmickLR
+	(
+		CVector(101.355f, 0.0f, 330.0f),
+		CVector(0.0f, -90.0f, 0.0f),
+		nullptr
+	);
+	// 左右のドアを生成
+	new CDoorGimmickLR
+	(
+		CVector(-43.392f, 0.0f, 429.0),
+		CVector(0.0f, -90.0f, 0.0f),
+		nullptr
+	);
+
+	// 左右のドアを生成
+	new CDoorGimmickLR
+	(
+		CVector(132.545f, 0.0f, 330.0f),
+		CVector(0.0f, 90.0f, 0.0f),
+		nullptr
+	);
+	// 左右のドアを生成
+	new CDoorGimmickLR
+	(
+		CVector(132.545f, 0.0f, 434.5f),
+		CVector(0.0f, 90.0f, 0.0f),
+		nullptr
+	);
+
+
+
+	// 開き戸の生成
+	new COpeningDoorGimmick
+	(
+		CVector(102.73f, 0.0f, 99.0f),
+		CVector(0.0f, 90.0f, 0.0f),
+		nullptr
+	);
+	// 開き戸の生成
+	new COpeningDoorGimmick
+	(
+		CVector(132.82f, 0.0f, 258.5f),
+		CVector(0.0f, 90.0f, 0.0f),
+		nullptr
+	);
+	// 開き戸の生成
+	new COpeningDoorGimmick
+	(
+		CVector(132.82f, 0.0f, 280.5f),
+		CVector(0.0f, 90.0f, 0.0f),
+		nullptr
+	);
+	// 開き戸の生成
+	new COpeningDoorGimmick
+	(
+		CVector(-170.77f, 0.0f, 132.0f),
+		CVector(0.0f, 90.0f, 0.0f),
+		nullptr
+	);
+	// 開き戸の生成
+	new COpeningDoorGimmick
+	(
+		CVector(-170.77f, 0.0f, 165.0f),
+		CVector(0.0f, 90.0f, 0.0f),
+		nullptr
+	);
+
+}
+
+// レイとフィールドオブジェクトの衝突判定
 bool CField::CollisionRay(const CVector& start, const CVector& end, CHitInfo* hit)
 {
 	// 衝突情報保存用

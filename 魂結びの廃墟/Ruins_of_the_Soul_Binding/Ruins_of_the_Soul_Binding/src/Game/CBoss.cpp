@@ -158,7 +158,7 @@ CBoss::CBoss(std::vector<CVector> patrolPoints)
 	// 壊せるオブジェクトを探知するコライダーを作成
 	mpSearchCol = new CColliderSphere
 	(
-		this, ELayer::eInteractSearch,
+		this, ELayer::eBreakableSearch,
 		SEARCH_RADIUS
 	);
 	// 壊せるオブジェクトのみ衝突するように設定
@@ -341,13 +341,14 @@ void CBoss::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 	// オブジェクトサーチ用の場合
 	else if (self == mpSearchCol)
 	{
-		CInteractObject* obj = dynamic_cast<CInteractObject*>(other->Owner());
+		CObjectBase* obj = other->Owner();
 		if (obj != nullptr)
 		{
-			// 壊せるオブジェクトの削除フラグが立っていなかったら
-			if (!obj->IsKill())
+			// 壊せるオブジェクトの削除フラグが立っていないかつ、
+			// 壊れている状態でなければ、
+			if (!obj->IsKill() && obj->IsDeath())
 			{
-				// 衝突した調べるオブジェクトをリストに追加
+				// 衝突した壊せるオブジェクトをリストに追加
 				mNearBreakObjs.push_back(obj);
 			}
 		}
@@ -471,6 +472,26 @@ bool CBoss::CanAttackPlayer() const
 	return true;
 }
 
+// 壊せるオブジェクトを攻撃するか確認
+bool CBoss::CheckAttackBreakObj()
+{
+	// 現在の戦闘相手がプレイヤーでなければ、壊せるオブジェクトを攻撃しない
+	CPlayerBase* player = dynamic_cast<CPlayerBase*>(mpBattleTarget);
+	if (mpBattleTarget == nullptr) return false;
+
+	// 近くに壊せるオブジェクトがなければ、壊せるオブジェクトを攻撃しない
+	CObjectBase* obj = GetNearBreakObj();
+	if (obj == nullptr) return false;
+
+	// 壊せるオブジェクトを攻撃対象にして、
+	// 攻撃状態へ移行
+	mpBattleTarget = obj;
+	ChangeState((int)EState::eAttack);
+
+	// 攻撃状態へ移行したので、trueを返す
+	return true;
+}
+
 // 指定した位置まで移動する
 bool CBoss::MoveTo(const CVector& targetPos, float speed)
 {
@@ -584,12 +605,6 @@ void CBoss::ChangePatrolPoint()
 // 待機状態の更新処理
 void CBoss::UpdateIdle()
 {
-	// ターゲットのオブジェクトがあれば、
-	if (mNearBreakObjs.size())
-	{
-		ChangeState((int)EState::eChase);
-	}
-
 	for (CObjectBase* target : mTargets)
 	{
 		// ターゲットが死亡していたら、追跡対象としない
@@ -708,13 +723,10 @@ void CBoss::UpdateChase()
 		ChangeState((int)EState::eAttack);
 		return;
 	}
-
-	// 近くの壊せるオブジェクトを取得
-	CInteractObject* obj = GetNearBreakObj();
-	if (obj != nullptr)
+ 
+	// 近くの壊せるオブジェクトを壊すのであれば追跡状態を抜ける
+	if (CheckAttackBreakObj())
 	{
-		mpBattleTarget = obj;
-		ChangeState((int)EState::eAttack);
 		return;
 	}
 
@@ -771,12 +783,9 @@ void CBoss::UpdateLost()
 		return;
 	}
 
-	// 近くの壊せるオブジェクトを取得
-	CInteractObject* obj = GetNearBreakObj();
-	if (obj != nullptr)
+	// 近くの壊せるオブジェクトを壊すのであれば、見失った状態を抜ける
+	if (CheckAttackBreakObj())
 	{
-		mpBattleTarget = obj;
-		ChangeState((int)EState::eAttack);
 		return;
 	}
 
@@ -1087,18 +1096,32 @@ CColor CBoss::GetStateColor(EState state) const
 }
 
 // 一番近くにある壊せるオブジェクトを取得
-CInteractObject* CBoss::GetNearBreakObj() const
+CObjectBase* CBoss::GetNearBreakObj() const
 {
-	// 一番近くの調べるオブジェクトのポインタ格納用
-	CInteractObject* nearObj = nullptr;
-	float nearDist = 0.0f;	// 現在一番近くにある調べるオブジェクトまでの距離
+	// 一番近くの壊せるオブジェクトのポインタ格納用
+	CObjectBase* nearObj = nullptr;
+	float nearDist = 0.0f;	// 現在一番近くにある壊せるオブジェクトまでの距離
 	CVector pos = Position();	// 敵自身の座標を取得
-	// 探知範囲内の調べるオブジェクトを順番に調べる
-	for (CInteractObject* obj : mNearBreakObjs)
+	// 探知範囲内の壊せるオブジェクトを順番に調べる
+	for (CObjectBase* obj : mNearBreakObjs)
 	{
-		// 現在調べられない状態であれば、スルー
-		if (!obj->CanInteract()) continue;
+		// 壊せるオブジェクトがドアかどうか確認
+		CDoorBase* door = dynamic_cast<CDoorBase*>(obj);
+		if (door != nullptr)
+		{
+			// 戦闘相手がプレイヤーかどうか確認
+			CPlayerBase* player = dynamic_cast<CPlayerBase*>(mpBattleTarget);
+			if (player != nullptr)
+			{
+				// プレイヤーがどの部屋にも入っていないのであれば、ドアは壊さないのでスルー
+				CRoom* playerRoom = player->GetRoom();
+				if (playerRoom == nullptr) continue;
 
+				// プレイヤーがいる部屋とドアが設置されている部屋が一致しなければ、スルー
+				CRoom* doorRoom = door->GetRoom();
+				if (player->GetRoom() != doorRoom) continue;
+			}
+		}
 		// オブジェクトの座標を取得
 		CVector objPos = obj->Position();
 		// ターゲットからオブジェクトまでのベクトルを求める
@@ -1118,7 +1141,7 @@ CInteractObject* CBoss::GetNearBreakObj() const
 		if (dot < cosf(angleR)) continue;
 
 		float dist = (obj->Position() - pos).LengthSqr();
-		// 一番最初の調べるオブジェクトか、
+		// 一番最初の壊せるオブジェクトか、
 		// 求めた距離が現在の一番近いオブジェクトよりも近い場合は、
 		if (nearObj == nullptr || dist < nearDist)
 		{

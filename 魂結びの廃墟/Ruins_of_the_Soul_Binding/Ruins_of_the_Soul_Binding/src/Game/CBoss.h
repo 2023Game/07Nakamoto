@@ -86,6 +86,8 @@ private:
 	bool IsLookTarget(CObjectBase* target) const;
 	// プレイヤーを攻撃できるかどうか
 	bool CanAttackPlayer() const;
+	// 壊せるオブジェクトを攻撃するか確認
+	bool CheckAttackBreakObj();
 
 	// 指定した位置まで移動する
 	bool MoveTo(const CVector& targetPos, float speed);
@@ -136,9 +138,9 @@ private:
 	CCollider* mpAttack1Col;		// パンチ攻撃用のコライダー
 
 	// 一番近くにある壊せるオブジェクトを取得
-	CInteractObject* GetNearBreakObj() const;
-	// 近くにある調べられるオブジェクトのリスト
-	std::vector<CInteractObject*> mNearBreakObjs;
+	CObjectBase* GetNearBreakObj() const;
+	// 近くにある壊せるオブジェクトのリスト
+	std::vector<CObjectBase*> mNearBreakObjs;
 	CCollider* mpSearchCol;	// 調べるオブジェクトを探知するコライダー
 
 	// 攻撃力

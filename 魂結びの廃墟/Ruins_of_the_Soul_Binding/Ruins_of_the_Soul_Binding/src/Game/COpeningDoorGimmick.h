@@ -3,13 +3,14 @@
 
 class COpeningDoor;
 class CNavNode;
+class CRoom;
 
 // 開き戸のギミック
 class COpeningDoorGimmick : public CObjectBase
 {
 public:
 	// コンストラクタ
-	COpeningDoorGimmick(const CVector& pos, const CVector& angle);
+	COpeningDoorGimmick(const CVector& pos, const CVector& angle, CRoom* room);
 	// デストラクタ
 	~COpeningDoorGimmick();
 

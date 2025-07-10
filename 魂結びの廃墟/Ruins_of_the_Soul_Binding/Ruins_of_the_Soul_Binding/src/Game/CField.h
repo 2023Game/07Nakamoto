@@ -35,6 +35,8 @@ public:
 private:
 	// 経路探索用のノードを作成
 	void CreateNavNodes();
+	// 部屋の作成
+	void CreateRoomObjects();
 
 	// フィールドのインスタンス
 	static CField* spInstance;
