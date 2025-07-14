@@ -186,19 +186,36 @@ void CField::CreateRoomObjects()
 		room1_1
 	);
 
-
+	// 1-2教室を作生成
 	CRoom* room1_2 = new CRoom
 	(
 		CVector(-113.548f, ROOM_POS_Y, 0.0f),
 		CVector(110.0f, ROOM_SIZE_Y, 87.45f),
 		"1-2"
 	);
-	CRoom* room1 = new CRoom
+
+	// 美術室
+	CRoom* artRoom = new CRoom
 	(
 		CVector(143.275f, ROOM_POS_Y, -5.63751f),
 		CVector(130.9f, ROOM_SIZE_Y, 95.425f),
 		"美術室"
 	);
+	// 左右のドアを生成
+	new CDoorGimmickLR
+	(
+		CVector(99.0f, 0.0f, 43.175f),
+		CVector(0.0f, 0.0f, 0.0f),
+		artRoom
+	);
+	// 左右のドアを生成
+	new CDoorGimmickLR
+	(
+		CVector(187.0f, 0.0f, 43.175f),
+		CVector(0.0f, 0.0f, 0.0f),
+		artRoom
+	);
+
 	CRoom* principalRoom = new CRoom
 	(
 		CVector(141.471f, ROOM_POS_Y, 115.5f),
@@ -242,20 +259,7 @@ void CField::CreateRoomObjects()
 		"技術室"
 	);
 
-	// 左右のドアを生成
-	new CDoorGimmickLR
-	(
-		CVector(99.0f, 0.0f, 43.175f),
-		CVector(0.0f, 0.0f, 0.0f),
-		nullptr
-	);
-	// 左右のドアを生成
-	new CDoorGimmickLR
-	(
-		CVector(187.0f, 0.0f, 43.175f),
-		CVector(0.0f, 0.0f, 0.0f),
-		nullptr
-	);
+	
 
 	// 左右のドアを生成
 	new CDoorGimmickLR
