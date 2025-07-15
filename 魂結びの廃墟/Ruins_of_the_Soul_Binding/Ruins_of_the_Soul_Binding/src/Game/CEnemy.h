@@ -28,6 +28,9 @@ public:
 	// オブジェクト削除を伝える関数
 	void DeleteObject(CObjectBase* obj) override;
 
+	// 自身のバウンディングボックスを返す
+	const CBounds& GetBounds() const override;
+
 	/// <summary>
 	/// 衝突処理
 	/// </summary>

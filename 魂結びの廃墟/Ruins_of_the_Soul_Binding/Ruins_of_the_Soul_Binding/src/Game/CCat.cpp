@@ -563,7 +563,7 @@ void CCat::Update()
 		CDebugPrint::Print("FPS:%f\n", Times::FPS());
 	}
 
-	CDebugPrint::Print("•”‰®(”L)F%s\n", mpInRoomPlayer != nullptr ? mpInRoomPlayer->GetName().c_str() : "‚È‚µ");
+	CDebugPrint::Print("•”‰®(”L)F%s\n", mpRoom != nullptr ? mpRoom->GetName().c_str() : "‚È‚µ");
 #endif
 	// ’n–Ê‚É‚Â‚¢‚Ä‚¢‚é‚©
 	mIsGrounded = false;

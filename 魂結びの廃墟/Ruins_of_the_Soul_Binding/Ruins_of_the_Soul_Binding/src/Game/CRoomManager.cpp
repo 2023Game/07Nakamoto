@@ -47,28 +47,23 @@ void CRoomManager::Remove(CRoom* room)
 	mRooms.erase(result);
 }
 
-// 後更新
-void CRoomManager::LateUpdate()
+// 指定したオブジェクトが入っている部屋を返す
+CRoom* CRoomManager::GetCurrentRoom(CObjectBase* obj) const
 {
-	auto players = CPlayerManager::Instance()->GetPlayers();
-	for (CPlayerBase* player : players)
+	const CBounds& objBounds = obj->GetBounds();
+	CRoom* inRoom = nullptr;
+	for (CRoom* room : mRooms)
 	{
-		const CBounds& playerBounds = player->GetBounds();
-		CRoom* inRoom = nullptr;
-		for (CRoom* room : mRooms)
+		const CBounds& roomBounds = room->GetBounds();
+		// 部屋とオブジェクトのバウンディングボックスが触れていたら
+		if (CBounds::Intersect(roomBounds, objBounds))
 		{
-			const CBounds& roomBounds = room->GetBounds();
-			// 部屋とプレイヤーmのバウンディングボックスが触れていたら
-			if (CBounds::Intersect(roomBounds, playerBounds))
-			{
-				// 入っている部屋を設定
-				inRoom = room;
-				break;
-			}
+			// 入っている部屋を返す
+			return room;
 		}
-
-		player->SetRoom(inRoom);
 	}
+
+	return nullptr;
 }
 
 #if _DEBUG

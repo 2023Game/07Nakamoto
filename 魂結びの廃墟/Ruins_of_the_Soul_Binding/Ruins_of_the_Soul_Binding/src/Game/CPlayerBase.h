@@ -41,12 +41,8 @@ public:
 	/// <param name="camera">カメラのポインタ</param>
 	void SetCamera(CCamera* camera);
 
-	// プレイヤーが入っている部屋を設定
-	void SetRoom(CRoom* room);
-	// プレイヤーが入っている部屋のポインタを返す
-	CRoom* GetRoom() const;
 	// プレイヤーのバウンディングボックスを返す
-	virtual const CBounds& GetBounds() const;
+	const CBounds& GetBounds() const override;
 
 	/// <summary>
 	/// 衝突処理
@@ -102,5 +98,4 @@ protected:
 	bool mIsOperate;	// このプレイヤーを操作中かどうか
 	CCamera* mpCamera;	// このプレイヤーを操作している時のカメラ
 
-	CRoom* mpInRoomPlayer;	// プレイヤーが入っている部屋のポインタ
 };	

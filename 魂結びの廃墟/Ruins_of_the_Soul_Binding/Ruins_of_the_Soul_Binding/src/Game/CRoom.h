@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 // •”‰®ƒNƒ‰ƒX
 class CRoom

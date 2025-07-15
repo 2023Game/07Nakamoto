@@ -3,6 +3,7 @@
 #include "CCollisionManager.h"
 #include "CColliderCapsule.h"
 #include "CGaugeUI3D.h"
+#include "CRoomManager.h"
 
 #define GRAVITY 0.0625f
 
@@ -48,6 +49,12 @@ void CEnemy::DeleteObject(CObjectBase* obj)
 	{
 		mpHpGauge = nullptr;
 	}
+}
+
+// 自身のバウンディングボックスを返す
+const CBounds& CEnemy::GetBounds() const
+{
+	return mpBodyCol->Bounds();
 }
 
 // 敵の初期化
@@ -190,10 +197,16 @@ void CEnemy::Update()
 		mpHpGauge->SetCurrPoint(mHp);
 	}
 }
+
 // 後更新
 void CEnemy::LateUpdate()
 {
 	CXCharacter::LateUpdate();
+
+	// 現在入っている部屋の更新
+	CRoom* currRoom = CRoomManager::Instance()->GetCurrentRoom(this);
+	SetRoom(currRoom);
+
 }
 
 // 描画

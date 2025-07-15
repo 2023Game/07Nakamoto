@@ -3,8 +3,6 @@
 #include "CColliderMesh.h"
 #include <functional>
 
-class CRoom;
-
 class CDoorBase : public CInteractObject
 {
 public:
@@ -17,11 +15,6 @@ public:
 	void SetOwner(CObjectBase* owner);
 	// ドアの開閉状態が切り替わった時に呼び出す関数のポインタを設定
 	void SetOnChangeFunc(std::function<void()> func);
-
-	// どの部屋の扉か設定
-	void SetRoom(CRoom* room);
-	// どの部屋の扉か返す
-	CRoom* GetRoom() const;
 
 	// 調べる内容のテキスト画像のパスを返す
 	std::string GetInteractTextPath() const override;
@@ -64,5 +57,4 @@ private:
 	// ドアの開閉状態が切り替わった時に呼び出す関数のポインタ
 	std::function<void()> mOnChangeFunc;
 
-	CRoom* mpRoom;		// 部屋のポインタ
 };

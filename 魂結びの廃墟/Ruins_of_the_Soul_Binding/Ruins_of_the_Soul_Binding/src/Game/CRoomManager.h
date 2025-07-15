@@ -14,8 +14,8 @@ public:
 	// 部屋をリストから取り除く
 	void Remove(CRoom* room);
 
-	// 後更新
-	void LateUpdate() override;
+	// 指定したオブジェクトが入っている部屋を返す
+	CRoom* GetCurrentRoom(CObjectBase* obj) const;
 
 #if _DEBUG
 	// 部屋を表示するかどうか

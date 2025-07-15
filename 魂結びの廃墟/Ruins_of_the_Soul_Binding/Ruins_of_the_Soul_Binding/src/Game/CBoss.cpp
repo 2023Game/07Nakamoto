@@ -52,6 +52,8 @@
 
 #define SEARCH_RADIUS	 10.0f		// 壊せるオブジェクトを探知する範囲の半径
 
+#define UPDATE_LOST_POS_TIME 2.0f	// 見失った位置を更新する時間
+
 // ボスのインスタンス
 CBoss* CBoss::spInstance = nullptr;
 
@@ -75,7 +77,8 @@ CBoss* CBoss::Instance()
 CBoss::CBoss(std::vector<CVector> patrolPoints)
 	: mIsBattle(false)
 	, mBattleIdletime(0.0f)
-	, mpBattleTarget(nullptr)
+	, mpBattleTargetChara(nullptr)
+	, mpBattleTargetObj(nullptr)
 	, mpAttack1Col(nullptr)
 	, mFovAngle(FOV_ANGLE)
 	, mFovLength(FOV_LENGTH)
@@ -90,10 +93,10 @@ CBoss::CBoss(std::vector<CVector> patrolPoints)
 	spInstance = this;
 
 	CPlayer2* target = CPlayer2::Instance();
-	mTargets.push_back(target);
+	mTargetCharas.push_back(target);
 
 	CCat* cat = CCat::Instance();
-	mTargets.push_back(cat);
+	mTargetCharas.push_back(cat);
 
 	// 敵を初期化
 	InitEnemy("Warrok", &ANIM_DATA);
@@ -300,14 +303,20 @@ void CBoss::TakeDamage(int damage, CObjectBase* causer)
 		// 仰け反り状態へ移行
 		// ChangeState((int)EState::eHit);
 
-		// 攻撃を加えた相手を戦闘相手に設定
-		mpBattleTarget = causer;
+		// ダメージを与えた相手がキャラクターかどうか判定
+		// TODO：飛び道具だった場合は、その持ち主を判定
+		CCharaBase* chara = dynamic_cast<CCharaBase*>(causer);
+		if (chara != nullptr)
+		{
+			// 攻撃を加えた相手を戦闘相手に設定
+			mpBattleTargetChara = chara;
 
-		// 攻撃を加えた相手の方向へ向く
-		LookAtBattleTarget(true);
+			// 攻撃を加えた相手の方向へ向く
+			LookAtBattleTarget(true);
 
-		// 戦闘状態へ切り替え
-		mIsBattle = true;
+			// 戦闘状態へ切り替え
+			mIsBattle = true;
+		}
 
 		// 移動を停止
 		mMoveSpeed = CVector::zero;
@@ -368,11 +377,12 @@ void CBoss::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 // 戦闘相手の方へ向く
 void CBoss::LookAtBattleTarget(bool immediate)
 {
+	CObjectBase* battleTarget = GetBattleTarget();
 	// 戦闘相手がいなければ、処理しない
-	if (mpBattleTarget == nullptr) return;
+	if (battleTarget == nullptr) return;
 
 	// 戦闘相手までの方向ベクトルを求める
-	CVector targetPos = mpBattleTarget->Position();
+	CVector targetPos = battleTarget->Position();
 	CVector vec = targetPos - Position();
 	vec.Y(0.0f);
 	vec.Normalize();
@@ -422,6 +432,15 @@ void CBoss::ChangeState(int state)
 	}
 	// 状態切り替え
 	CEnemy::ChangeState(state);
+}
+
+// 現在の戦闘相手を取得
+CObjectBase* CBoss::GetBattleTarget() const
+{
+	// 壊すオブジェクトを優先して返す
+	if (mpBattleTargetObj != nullptr)return mpBattleTargetObj;
+	// 壊すオブジェクトが無ければ、戦闘相手のキャラクターを返す
+	return mpBattleTargetChara;
 }
 
 // 現在位置からターゲットが見えているかどうか
@@ -483,13 +502,14 @@ bool CBoss::IsLookTarget(CObjectBase* target) const
 }
 
 // ターゲットに攻撃できるかどうか
-bool CBoss::CanAttackPlayer() const
+bool CBoss::CanAttackBattleTarget() const
 {
+	CObjectBase* battleTarget = GetBattleTarget();
 	// ターゲットがいない場合は、攻撃できない
-	if ((mpBattleTarget == nullptr)) return false;
+	if ((battleTarget == nullptr)) return false;
 
 	// ターゲットまでの距離が攻撃範囲外であれば、攻撃できない
-	CVector targetPos = mpBattleTarget->Position();
+	CVector targetPos = battleTarget->Position();
 	CVector vec = targetPos - Position();
 	vec.Y(0.0f);	//高さを考慮しない
 
@@ -503,9 +523,8 @@ bool CBoss::CanAttackPlayer() const
 // 壊せるオブジェクトを攻撃するか確認
 bool CBoss::CheckAttackBreakObj()
 {
-	// 現在の戦闘相手がプレイヤーでなければ、壊せるオブジェクトを攻撃しない
-	CPlayerBase* player = dynamic_cast<CPlayerBase*>(mpBattleTarget);
-	if (mpBattleTarget == nullptr) return false;
+	// 戦闘相手（キャラクター）が存在しなければ、壊せるオブジェクトを攻撃しない
+	if (mpBattleTargetChara == nullptr) return false;
 
 	// 近くに壊せるオブジェクトがなければ、壊せるオブジェクトを攻撃しない
 	CObjectBase* obj = GetNearBreakObj();
@@ -513,11 +532,55 @@ bool CBoss::CheckAttackBreakObj()
 
 	// 壊せるオブジェクトを攻撃対象にして、
 	// 攻撃状態へ移行
-	mpBattleTarget = obj;
+	mpBattleTargetObj = obj;
 	ChangeState((int)EState::eAttack);
 
 	// 攻撃状態へ移行したので、trueを返す
 	return true;
+}
+
+// キャラクターを攻撃するか確認
+bool CBoss::ChackAttackChara()
+{
+	for (CCharaBase* target : mTargetCharas)
+	{
+		// ターゲットが死亡していたら、追跡対象としない
+		if (target->IsDeath()) continue;
+		// ターゲットが視野範囲内に入ったら、追跡にする
+		if (IsFoundTarget(target))
+		{
+			// 戦闘相手（キャラクター）を設定
+			mpBattleTargetChara = target;
+			ChangeState((int)EState::eChase);
+			return true;
+		}
+	}
+
+	return false;
+}
+
+// 戦闘相手の死亡確認をして、戦闘相手がまだ存在するか確認
+CObjectBase* CBoss::ChackDeathBattleTargets()
+{
+	// 戦闘相手（オブジェクト）を優先で死亡確認を行う
+	if (mpBattleTargetObj != nullptr)
+	{
+		// 死亡していなければ、オブジェクトを返す
+		if (!mpBattleTargetObj->IsDeath()) return mpBattleTargetObj;
+
+		mpBattleTargetObj = nullptr;
+
+	}
+	// 戦闘相手（キャラクター）の死亡確認
+	if (mpBattleTargetChara != nullptr)
+	{
+		// 死亡していなければ、キャラクターを返す
+		if (!mpBattleTargetChara->IsDeath()) return mpBattleTargetChara;
+		mpBattleTargetChara = nullptr;
+	}
+	
+	// 戦闘相手がどちらも存在しなかったので、nullptrを返す
+	return nullptr;
 }
 
 // 指定した位置まで移動する
@@ -633,17 +696,10 @@ void CBoss::ChangePatrolPoint()
 // 待機状態の更新処理
 void CBoss::UpdateIdle()
 {
-	for (CObjectBase* target : mTargets)
+	// 攻撃するキャラクターが見つかった場合は、この処理を実行しない
+	if (ChackAttackChara())
 	{
-		// ターゲットが死亡していたら、追跡対象としない
-		if (target->IsDeath()) continue;
-		// ターゲットが視野範囲内に入ったら、追跡にする
-		if (IsFoundTarget(target))
-		{
-			mpBattleTarget = target;
-			ChangeState((int)EState::eChase);
-			return;
-		}
+		return;
 	}
 
 	// 待機アニメーションを再生
@@ -663,17 +719,10 @@ void CBoss::UpdateIdle()
 // 巡回中の更新処理
 void CBoss::UpdatePatrol()
 {
-	for (CObjectBase* target : mTargets)
+	// 攻撃するキャラクターが見つかった場合は、この処理を実行しない
+	if (ChackAttackChara())
 	{
-		// ターゲットが死亡していたら、追跡対象としない
-		if (target->IsDeath()) continue;
-		// ターゲットが視野範囲内に入ったら、追跡にする
-		if (IsFoundTarget(target))
-		{
-			mpBattleTarget = target;
-			ChangeState((int)EState::eChase);
-			return;
-		}
+		return;
 	}
 
 	ChangeAnimation((int)EAnimType::eWalk);
@@ -724,19 +773,20 @@ void CBoss::UpdatePatrol()
 // 追いかける時の更新処理
 void CBoss::UpdateChase()
 {
-	// ターゲットの座標へ向けて移動する
-	CVector targetPos = mpBattleTarget->Position();
-	// ターゲットが死亡していたら
-	if (mpBattleTarget->IsDeath())
+	// 戦闘相手が存在しなかった場合は、
+	CObjectBase* battleTarget = ChackDeathBattleTargets();
+	if (battleTarget == nullptr)
 	{
 		// ターゲットを解除し、待機状態へ戻す
-		mpBattleTarget = nullptr;
 		ChangeState((int)EState::eIdle);
 		return;
 	}
 
+	// ターゲットの座標へ向けて移動する
+	CVector targetPos = battleTarget->Position();
+
 	// ターゲットが見えなくなったら、見失った状態にする
-	if (!IsLookTarget(mpBattleTarget))
+	if (!IsLookTarget(battleTarget))
 	{
 		// 見失った位置にノードを配置
 		mpLostPlayerNode->SetPos(targetPos);
@@ -746,7 +796,7 @@ void CBoss::UpdateChase()
 	}
 
 	// ターゲットに攻撃できるならば、攻撃状態へ移行
-	if (CanAttackPlayer())
+	if (CanAttackBattleTarget())
 	{
 		ChangeState((int)EState::eAttack);
 		return;
@@ -769,7 +819,7 @@ void CBoss::UpdateChase()
 		mpNavNode->SetPos(Position());
 
 		// 自身のノードからターゲットのノードまでの最短経路を求める
-		CNavNode* targetNode = mpBattleTarget->GetNavNode();
+		CNavNode* targetNode = battleTarget->GetNavNode();
 		if (navMgr->Navigate(mpNavNode, targetNode, mMoveRoute))
 		{
 			// 自身のノードからターゲットのノードまで繋がっていたら、
@@ -788,24 +838,18 @@ void CBoss::UpdateChase()
 void CBoss::UpdateLost()
 {
 	CNavManager* navMgr = CNavManager::Instance();
-	if (navMgr == nullptr)
-	{
-		mpBattleTarget = nullptr;
-		ChangeState((int)EState::eIdle);
-		return;
-	}
 
-	// ターゲットが死亡していたら
-	if (mpBattleTarget->IsDeath())
+	// 戦闘相手が存在しなかった場合は、
+	CObjectBase* battleTarget = ChackDeathBattleTargets();
+	if (battleTarget == nullptr)
 	{
 		// ターゲットを解除し、待機状態へ戻す
-		mpBattleTarget = nullptr;
 		ChangeState((int)EState::eIdle);
 		return;
 	}
 
 	// ターゲットが見えたら、追跡状態へ移行
-	if (IsLookTarget(mpBattleTarget))
+	if (IsLookTarget(battleTarget))
 	{
 		ChangeState((int)EState::eChase);
 		return;
@@ -822,37 +866,51 @@ void CBoss::UpdateLost()
 
 	switch (mStateStep)
 	{
-		// ステップ0：見失った位置までの最短経路を求める
-	case 0:
-		// 経路探索用のノード座標を更新
-		mpNavNode->SetPos(Position());
-
-		if (navMgr->Navigate(mpNavNode, mpLostPlayerNode, mMoveRoute))
-		{
-			// 見失った位置まで経路が繋がっていたら、次のステップへ
-			mNextMoveIndex = 1;
+			// ステップ0：見失った位置までの最短経路を求める
+		case 0:
+			mLostElapsedTime = 0.0f;
 			mStateStep++;
-		}
-		else
-		{
-			// 経路がつながっていなければ、待機状態へ戻す
-			ChangeState((int)EState::eIdle);
-			mpLostPlayerNode->SetEnable(false);
-		}
-		break;
-	case 1:
-		// ターゲットを見失った位置まで移動
-		if (MoveTo(mMoveRoute[mNextMoveIndex]->GetPos(), RUN_SPEED))
-		{
-			mNextMoveIndex++;
-			if (mNextMoveIndex >= mMoveRoute.size())
+			break;
+		case 1:
+			// 経路探索用のノード座標を更新
+			mpNavNode->SetPos(Position());
+			mpLostPlayerNode->SetPos(battleTarget->Position());
+
+			if (!navMgr->Navigate(mpNavNode, mpLostPlayerNode, mMoveRoute))
 			{
-				// 移動が終われば警戒状態へ移行
-				ChangeState((int)EState::eAlert);
+				// 経路がつながっていなければ、待機状態へ戻す
+				ChangeState((int)EState::eIdle);
 				mpLostPlayerNode->SetEnable(false);
 			}
-		}
-		break;
+			else
+			{
+				// 見失った位置まで経路が繋がっていたら、次のステップへ
+				// 次の移動先を１番近い場所に設定
+				mNextMoveIndex = 1;
+			}
+		case 2:
+			// ターゲットを見失った位置まで移動
+			if (MoveTo(mMoveRoute[mNextMoveIndex]->GetPos(), RUN_SPEED))
+			{
+				mNextMoveIndex++;
+				if (mNextMoveIndex >= mMoveRoute.size())
+				{
+					// 移動が終われば警戒状態へ移行
+					ChangeState((int)EState::eAlert);
+					mpLostPlayerNode->SetEnable(false);
+				}
+			}
+			
+			if (mLostElapsedTime < UPDATE_LOST_POS_TIME)
+			{
+				// 見失った時間を加算
+				mLostElapsedTime += Times::DeltaTime();
+				if (mLostElapsedTime >= UPDATE_LOST_POS_TIME)
+				{
+					mStateStep++;
+				}
+			}
+			break;
 	}
 }
 
@@ -869,19 +927,10 @@ void CBoss::UpdateAlert()
 		break;
 	// ステップ２：警戒開始
 	case 1:
-		for (CObjectBase* target : mTargets)
+		// 攻撃できるキャラクターが存在した場合は、そこで終了
+		if (ChackAttackChara())
 		{
-
-
-			// ターゲットが死亡していたら、追跡対象としない
-			if (target->IsDeath()) continue;
-			// ターゲットが視野範囲内に入ったら、追跡にする
-			if (IsFoundTarget(target))
-			{
-				mpBattleTarget = target;
-				ChangeState((int)EState::eChase);
-				return;
-			}
+			return;
 		}
 
 		// アニメーションが終わったら
@@ -943,8 +992,30 @@ void CBoss::UpdateAttack1()
 		}
 		else
 		{
-			// 時間が経過したら、待機状態へ移行
-			ChangeState((int)EState::eIdle);
+			// 戦闘相手の死亡チェック
+			CObjectBase* batteleTarget = ChackDeathBattleTargets();
+			// 戦闘相手が存在しなかった場合
+			if (batteleTarget == nullptr)
+			{
+				// 待機状態へ移行
+				ChangeState((int)EState::eIdle);
+			}
+			// 戦闘相手が存在した場合
+			else
+			{
+				// 戦闘相手が視野範囲内にいた場合は、追跡状態へ移行
+				if (IsLookTarget(batteleTarget))
+				{
+					ChangeState((int)EState::eChase);
+				}
+				// 戦闘相手が視野範囲内にいなかった場合、見失った状態へ移行
+				else
+				{
+					mpLostPlayerNode->SetPos(batteleTarget->Position());
+					mpLostPlayerNode->SetEnable(true);
+					ChangeState((int)EState::eLost);
+				}
+			}
 		}
 		break;
 	}
@@ -1040,6 +1111,9 @@ void CBoss::Update()
 	mpDebugFov->SetColor(GetStateColor((EState)mState));
 
 	CDebugPrint::Print("状態 : %s\n", GetStateStr((EState)mState).c_str());
+	CDebugPrint::Print("部屋(ボス)：%s\n", mpRoom != nullptr ? mpRoom->GetName().c_str() : "なし");
+
+
 #endif
 }
 
@@ -1086,10 +1160,13 @@ void CBoss::Render()
 	}
 
 	CField* field = CField::Instance();
-	if (mpBattleTarget != nullptr && field != nullptr)
+
+	CObjectBase* battleTarget = GetBattleTarget();
+
+	if (battleTarget != nullptr && field != nullptr)
 	{
 		CVector offsetPos = CVector(0.0f, EYE_HEIGHT, 0.0f);
-		CVector targetPos = mpBattleTarget->Position() + offsetPos;
+		CVector targetPos = battleTarget->Position() + offsetPos;
 		CVector selfPos = Position() + offsetPos;
 
 		//ターゲットとの間に遮蔽物が存在する場合
@@ -1150,6 +1227,11 @@ CColor CBoss::GetStateColor(EState state) const
 // 一番近くにある壊せるオブジェクトを取得
 CObjectBase* CBoss::GetNearBreakObj() const
 {
+	// キャラクターを追いかけている状態でなければ、壊せるオブジェクトを壊さない
+	if (mpBattleTargetChara == nullptr) return nullptr;
+	// 既に壊せるオブジェクトを攻撃中であれば、新しく壊せるオブジェクトを設定しない
+	if (mpBattleTargetObj != nullptr) return nullptr;
+
 	// 一番近くの壊せるオブジェクトのポインタ格納用
 	CObjectBase* nearObj = nullptr;
 	float nearDist = 0.0f;	// 現在一番近くにある壊せるオブジェクトまでの距離
@@ -1161,18 +1243,14 @@ CObjectBase* CBoss::GetNearBreakObj() const
 		CDoorBase* door = dynamic_cast<CDoorBase*>(obj);
 		if (door != nullptr)
 		{
-			// 戦闘相手がプレイヤーかどうか確認
-			CPlayerBase* player = dynamic_cast<CPlayerBase*>(mpBattleTarget);
-			if (player != nullptr)
-			{
-				// プレイヤーがどの部屋にも入っていないのであれば、ドアは壊さないのでスルー
-				CRoom* playerRoom = player->GetRoom();
-				if (playerRoom == nullptr) continue;
+			// プレイヤーが入っている部屋を取得
+			CRoom* playerRoom = mpBattleTargetChara->GetRoom();
+			// プレイヤーと自身が同じ部屋にいる場合は、ドアを壊さない
+			if (playerRoom == mpRoom) continue;
 
-				// プレイヤーがいる部屋とドアが設置されている部屋が一致しなければ、スルー
-				CRoom* doorRoom = door->GetRoom();
-				if (player->GetRoom() != doorRoom) continue;
-			}
+			// プレイヤーが自身がいる部屋のドアでなければ、スルー
+			CRoom* doorRoom = door->GetRoom();
+			if (playerRoom != doorRoom && mpRoom != doorRoom) continue;
 		}
 		// オブジェクトの座標を取得
 		CVector objPos = obj->Position();

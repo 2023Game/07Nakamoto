@@ -7,6 +7,7 @@
 #include "CNavManager.h"
 #include "CBoss.h"
 #include "CRoom.h"
+#include "CRoomManager.h"
 
 #define GRAVITY			0.0625f	// 重力加速度
 #define FOV_ANGLE		60.0f		// 視野範囲の角度
@@ -31,7 +32,6 @@ CPlayerBase::CPlayerBase(ETag tag)
 	, mIsOperate(false)
 	, mpCamera(nullptr)
 	, mpSearchCol(nullptr)
-	, mpInRoomPlayer(nullptr)
 {
 	CPlayerManager::Instance()->AddPlayer(this);
 }
@@ -77,22 +77,10 @@ void CPlayerBase::SetCamera(CCamera* camera)
 	mpCamera = camera;
 }
 
-// プレイヤーが入っている部屋を設定
-void CPlayerBase::SetRoom(CRoom* room)
-{
-	mpInRoomPlayer = room;
-}
-
-// プレイヤーが入っている部屋のポインタを返す
-CRoom* CPlayerBase::GetRoom() const
-{
-	return mpInRoomPlayer;
-}
-
 // プレイヤーのバウンディングボックスを返す
 const CBounds& CPlayerBase::GetBounds() const
 {
-	return CBounds();
+	return mpBodyCol->Bounds();
 }
 
 // 衝突処理
@@ -305,11 +293,16 @@ void CPlayerBase::Update()
 	// 調べるオブジェクトのリストをクリア
 	mNearInteractObjs.clear();
 }
+
 // 後更新
 void CPlayerBase::LateUpdate()
 {
 	// キャラクターの更新
 	CXCharacter::LateUpdate();
+
+	// 現在入っている部屋の更新
+	CRoom* currRoom = CRoomManager::Instance()->GetCurrentRoom(this);
+	SetRoom(currRoom);
 }
 
 // 描画

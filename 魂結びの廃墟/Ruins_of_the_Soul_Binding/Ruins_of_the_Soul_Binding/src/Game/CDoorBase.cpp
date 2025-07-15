@@ -12,7 +12,6 @@ CDoorBase::CDoorBase(const CVector& pos, const CVector& angle,
 	: mIsOpened(false)
 	, mIsPlaying(false)
 	, mpOwner(nullptr)
-	, mpRoom(nullptr)
 {
 	Position(pos);
 	Rotation(angle);
@@ -77,18 +76,6 @@ void CDoorBase::SetOwner(CObjectBase* owner)
 void CDoorBase::SetOnChangeFunc(std::function<void()> func)
 {
 	mOnChangeFunc = func;
-}
-
-// どの部屋の扉か設定
-void CDoorBase::SetRoom(CRoom* room)
-{
-	mpRoom = room;
-}
-
-// どの部屋の扉か返す
-CRoom* CDoorBase::GetRoom() const
-{
-	return mpRoom;
 }
 
 // 調べる内容のテキスト画像のパスを返す

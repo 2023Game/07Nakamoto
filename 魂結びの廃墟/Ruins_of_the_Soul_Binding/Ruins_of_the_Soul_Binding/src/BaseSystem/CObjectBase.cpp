@@ -15,6 +15,7 @@ CObjectBase::CObjectBase(ETag tag,
 	, mDepth(0.0f)
 	, mColor(CColor::white)
 	, mpNavNode(nullptr)
+	, mpRoom(nullptr)
 {
 }
 
@@ -86,6 +87,24 @@ void CObjectBase::CalcDepth()
 float CObjectBase::GetDepth() const
 {
 	return mDepth;
+}
+
+// 自身が入っている部屋を設定
+void CObjectBase::SetRoom(CRoom* room)
+{
+	mpRoom = room;
+}
+
+// 自身が入っている部屋のポインタを返す
+CRoom* CObjectBase::GetRoom() const
+{
+	return mpRoom;
+}
+
+// 自身のバウンディングボックスを返す
+const CBounds& CObjectBase::GetBounds() const
+{
+	return CBounds();
 }
 
 // 衝突処理

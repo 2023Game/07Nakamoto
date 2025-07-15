@@ -590,7 +590,7 @@ void CPlayer2::Update()
 		CDebugPrint::Print("PlayerState:%d\n", mState);
 		CDebugPrint::Print("FPS:%f\n", Times::FPS());
 	}
-	CDebugPrint::Print("部屋(人)：%s\n", mpInRoomPlayer != nullptr ? mpInRoomPlayer->GetName().c_str() : "なし");
+	CDebugPrint::Print("部屋(人)：%s\n", mpRoom != nullptr ? mpRoom->GetName().c_str() : "なし");
 #endif
 
 	// 地面についているか

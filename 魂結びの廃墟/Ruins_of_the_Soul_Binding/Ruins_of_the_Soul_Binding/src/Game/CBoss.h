@@ -77,20 +77,27 @@ private:
 	// 状態切り替え
 	void ChangeState(int state) override;
 
+	// 現在の戦闘相手を取得
+	CObjectBase* GetBattleTarget() const;
+
 	// 戦闘相手の方へ向く
 	void LookAtBattleTarget(bool immediate = false);
 
 	// 頭の正面方向ベクトルを取得
 	CVector GetHeadForwardVec() const;
 
-	// プレイヤーが視野範囲内に入ったかどうか
+	// 指定したターゲットが視野範囲内に入ったかどうか
 	bool IsFoundTarget(CObjectBase* target) const;
-	// 現在位置からプレイヤーが見えているかどうか
+	// 現在位置からターゲットが見えているかどうか
 	bool IsLookTarget(CObjectBase* target) const;
-	// プレイヤーを攻撃できるかどうか
-	bool CanAttackPlayer() const;
+	// 戦闘相手を攻撃できるかどうか
+	bool CanAttackBattleTarget() const;
 	// 壊せるオブジェクトを攻撃するか確認
 	bool CheckAttackBreakObj();
+	// キャラクターを攻撃するか確認
+	bool ChackAttackChara();
+	// 戦闘相手の死亡確認をして、戦闘相手がまだ存在するか確認
+	CObjectBase* ChackDeathBattleTargets();
 
 	// 指定した位置まで移動する
 	bool MoveTo(const CVector& targetPos, float speed);
@@ -130,6 +137,7 @@ private:
 #endif
 
 	CNavNode* mpLostPlayerNode;	// プレイヤーを見失った位置のノード
+	float mLostElapsedTime;		// 見失ってからの経過時間
 	// 巡回ポイントのリスト
 	std::vector<CNavNode*> mPatrolPoints;
 	int mNextPatrolIndex;	// 次に巡回する番号
@@ -137,11 +145,12 @@ private:
 	std::vector<CNavNode*> mMoveRoute;	// 求めた最短経路記憶用
 	int mNextMoveIndex;					// 次に移動するノードのインデックス値
 
-	std::vector<CObjectBase*> mTargets;	//標的のリスト
+	std::vector<CCharaBase*> mTargetCharas;	//標的のリスト
 
 	bool mIsBattle;					// 戦闘状態か
 	float mBattleIdletime;			// 戦闘時の待機時間
-	CObjectBase* mpBattleTarget;	// 戦闘相手
+	CCharaBase* mpBattleTargetChara;	// 戦闘相手（キャラクター用）
+	CObjectBase* mpBattleTargetObj;		// 戦闘相手（オブジェクト用）
 	CCollider* mpAttack1Col;		// パンチ攻撃用のコライダー
 
 	// 一番近くにある壊せるオブジェクトを取得

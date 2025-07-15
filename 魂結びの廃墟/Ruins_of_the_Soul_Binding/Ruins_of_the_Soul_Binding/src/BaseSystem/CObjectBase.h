@@ -54,6 +54,13 @@ public:
 	// カメラからの距離を取得
 	float GetDepth() const;
 
+	// 自身が入っている部屋を設定
+	void SetRoom(CRoom* room);
+	// 自身が入っている部屋のポインタを返す
+	CRoom* GetRoom() const;
+	// 自身のバウンディングボックスを返す
+	virtual const CBounds& GetBounds() const;
+
 	/// <summary>
 	/// 衝突処理
 	/// </summary>
@@ -125,5 +132,5 @@ protected:
 
 	CNavNode* mpNavNode;// 経路探索用のノードポインタ
 
-	// CRoom* mpRoom;
+	CRoom* mpRoom;
 };
