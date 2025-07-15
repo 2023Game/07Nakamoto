@@ -39,9 +39,12 @@
 #define ATTACK_START_FRAME 39.0f	// 攻撃判定開始フレーム
 #define ATTACK_END_FRAME 46.0f		// 攻撃判定終了フレーム
 
-#define FOV_ANGLE			 45.0f	// 視野範囲の角度
-#define FOV_LENGTH			100.0f	// 視野範囲の距離
+#define FOV_ANGLE			 50.0f	// 視野範囲の角度
+#define FOV_LENGTH			200.0f	// 視野範囲の距離
 #define EYE_HEIGHT			 10.0f	// 視点の高さ
+
+#define ALERT_FOV_ANGLE		 60.0f	// 警戒時の視野範囲の角度
+#define ALERT_FOV_LENGTH	300.0f	// 警戒時の視野範囲の距離
 
 #define PATROL_INTERVAL		  3.0f	// 次の巡回ポイントに移動開始するまでの時間
 #define PATROL_NEAR_DIST	 10.0f	// 巡回開始時に選択される巡回ポイントの最短距離
@@ -192,6 +195,10 @@ CBoss::CBoss(std::vector<CVector> patrolPoints)
 	mDemonPower = CDemonPowerManager::Instance()->GetDemonPower();
 	//mMaxDemonPower = CDemonPowerManager::Instance()->GetDemonPower();
 	//mDemonPower = mMaxDemonPower;
+
+	// 頭の行列を取得
+	CModelXFrame* frame = mpModel->FinedFrame("Armature_mixamorig_Head");
+	mpHeadMtx = &frame->CombinedMatrix();
 
 }
 
@@ -386,6 +393,24 @@ void CBoss::LookAtBattleTarget(bool immediate)
 	}
 }
 
+// 頭の正面方向ベクトルを取得
+CVector CBoss::GetHeadForwardVec() const
+{
+	if (mpHeadMtx == nullptr) return VectorZ();
+	
+	CMatrix m;
+	m.RotateX(-90.0f);
+	m = m * (*mpHeadMtx);
+	CVector vec = m.VectorZ();
+	vec.Y(0.0f);
+
+	CVector start = m.Position();
+	CVector end = start + m.VectorZ() * 100.0f;
+	Primitive::DrawLine(start, end, CColor::red, 2.0f);
+
+	return vec.Normalized();
+}
+
 // 状態切り替え
 void CBoss::ChangeState(int state)
 {
@@ -413,8 +438,8 @@ bool CBoss::IsFoundTarget(CObjectBase* target) const
 	// ① 視野角度内か求める
 	// ベクトルを正規化して長さを1にする
 	CVector dir = vec.Normalized();
-	// 自身の正面方向ベクトルを取得
-	CVector forward = VectorZ();
+	// 自身の頭の正面方向ベクトルを取得
+	CVector forward = GetHeadForwardVec();
 	// ターゲットまでのベクトルと
 	// 自身の正面方向ベクトルの内積を求めて角度を出す
 	float dot = CVector::Dot(dir, forward);
@@ -968,6 +993,23 @@ void CBoss::Update()
 		ChangeState((int)EState::eDeath);
 	}
 
+	// 警戒時は視野範囲が広がる
+	if (mState == (int)EState::eAlert)
+	{
+		mFovAngle = ALERT_FOV_ANGLE;
+		mFovLength = ALERT_FOV_LENGTH;
+	}
+	// 通常時の視野範囲を設定
+	else
+	{
+		mFovAngle = FOV_ANGLE;
+		mFovLength = FOV_LENGTH;
+	}
+
+#if _DEBUG
+	mpDebugFov->Set(mFovAngle, mFovLength);
+#endif
+
 	// 状態に合わせて、更新処理を切り替える
 	switch ((EState)mState)
 	{
@@ -1007,6 +1049,13 @@ void CBoss::Render()
 	CEnemy::Render();
 
 #if _DEBUG
+
+	// 視野範囲のデバッグ表示に頭の向きを反映
+	CVector vec = GetHeadForwardVec();
+	mHeadForwardMtx = CMatrix::LookRotation(vec, CVector::up);
+	mHeadForwardMtx.Position(Position());
+	mpDebugFov->SetMatrix(&mHeadForwardMtx);
+
 	// 巡回中であれば、
 	if (mState == (int)EState::ePatrol)
 	{

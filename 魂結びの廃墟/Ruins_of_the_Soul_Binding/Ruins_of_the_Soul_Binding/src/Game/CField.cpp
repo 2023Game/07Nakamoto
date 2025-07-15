@@ -222,42 +222,90 @@ void CField::CreateRoomObjects()
 		CVector(75.83f, ROOM_SIZE_Y, 88.0f),
 		"校長室"
 	);
-	CRoom* room2 = new CRoom
+
+	CRoom* womensRestroom = new CRoom
 	(
 		CVector(171.187f, ROOM_POS_Y, 245.987f),
 		CVector(75.075f, ROOM_SIZE_Y, 34.375f),
 		"女子トイレ"
 	);
-	CRoom* room3 = new CRoom
+
+	CRoom* mensRestroom = new CRoom
 	(
 		CVector(171.187f, ROOM_POS_Y, 283.387f),
 		CVector(75.075f, ROOM_SIZE_Y, 37.1249f),
 		"男子トイレ"
 	);
-	CRoom* room4 = new CRoom
+
+	CRoom* emptyClassroom = new CRoom
 	(
 		CVector(171.187f, ROOM_POS_Y, 382.8f),
 		CVector(75.075f, ROOM_SIZE_Y, 158.4f),
 		"空き教室"
 	);
-	CRoom* room5 = new CRoom
+
+	CRoom* room2_1 = new CRoom
 	(
 		CVector(-32.9816f, ROOM_POS_Y, 247.225f),
 		CVector(87.7248f, ROOM_SIZE_Y, 109.45f),
 		"2-1"
 	);
-	CRoom* room6 = new CRoom
+
+	CRoom* room2_2 = new CRoom
 	(
 		CVector(56.3932f, ROOM_POS_Y, 247.225f),
 		CVector(87.7248f, ROOM_SIZE_Y, 109.45f),
 		"2-2"
 	);
-	CRoom* room7 = new CRoom
+
+	CRoom* technicalRoom = new CRoom
 	(
 		CVector(50.5403f, ROOM_POS_Y, 370.975f),
 		CVector(99.4306f, ROOM_SIZE_Y, 134.75f),
 		"技術室"
 	);
+
+	CRoom* technicalPreparationRoom = new CRoom
+	(
+		CVector(-90.5837f, ROOM_POS_Y, 434.913f),
+		CVector(92.1827f, ROOM_SIZE_Y, 54.175f),
+		"技術準備室"
+	);
+
+	CRoom* coatingRoom = new CRoom
+	(
+		CVector(-206.25f, ROOM_POS_Y, 434.913f),
+		CVector(135.85f, ROOM_SIZE_Y, 54.175f),
+		"被覆室"
+	);
+
+	CRoom* coatingPreparationRoom = new CRoom
+	(
+		CVector(-303.188f, ROOM_POS_Y, 434.913f),
+		CVector(54.7261f, ROOM_SIZE_Y, 54.175),
+		"被覆準備室"
+	);
+
+	CRoom* kitchenRoom = new CRoom
+	(
+		CVector(-176.825f, ROOM_POS_Y, 337.838f),
+		CVector(152.35f, ROOM_SIZE_Y, 81.675f),
+		"調理室"
+	);
+	CRoom* kitchenRoom2 = new CRoom
+	(
+		CVector(-213.125f, ROOM_POS_Y, 283.663f),
+		CVector(79.75f, ROOM_SIZE_Y, 26.675f),
+		"調理室"
+	);
+
+	CRoom* kitchenPreparationRoom = new CRoom
+	(
+		CVector(-136.125f, ROOM_POS_Y, 258.087f),
+		CVector(70.95f, ROOM_SIZE_Y, 74.525f),
+		"調理準備室"
+	);
+
 
 	
 

@@ -80,6 +80,9 @@ private:
 	// 戦闘相手の方へ向く
 	void LookAtBattleTarget(bool immediate = false);
 
+	// 頭の正面方向ベクトルを取得
+	CVector GetHeadForwardVec() const;
+
 	// プレイヤーが視野範囲内に入ったかどうか
 	bool IsFoundTarget(CObjectBase* target) const;
 	// 現在位置からプレイヤーが見えているかどうか
@@ -123,6 +126,7 @@ private:
 
 #if _DEBUG
 	CDebugFieldOfView* mpDebugFov;	// 視野範囲のデバッグ表示
+	CMatrix mHeadForwardMtx;
 #endif
 
 	CNavNode* mpLostPlayerNode;	// プレイヤーを見失った位置のノード
@@ -150,4 +154,8 @@ private:
 	int mPower;
 	// 妖力の源の数
 	int mDemonPower;
+
+	// 頭の行列
+	const CMatrix* mpHeadMtx;
+
 };

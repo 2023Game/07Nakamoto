@@ -1,6 +1,7 @@
 #include "CRoom.h"
 #include "CRoomManager.h"
 #include "Primitive.h"
+#include "CVector.h"
 
 // バウンディングボックスのサイズを部屋のサイズから小さくする長さ
 #define BOUNDS_REDUCE_DIST 3.0f

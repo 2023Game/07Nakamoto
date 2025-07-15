@@ -4,6 +4,7 @@
 #include "ObjectTag.h"
 #include "CCollider.h"
 #include "CColor.h"
+#include "CRoom.h"
 
 class CNavNode;
 
@@ -123,4 +124,6 @@ protected:
 	std::list<CObjectBase*> mAttackHitObjects;
 
 	CNavNode* mpNavNode;// 経路探索用のノードポインタ
+
+	// CRoom* mpRoom;
 };
