@@ -120,7 +120,10 @@ private:
 
 	float mFovAngle;	// 視野範囲の角度
 	float mFovLength;	// 視野範囲の距離
+
+#if _DEBUG
 	CDebugFieldOfView* mpDebugFov;	// 視野範囲のデバッグ表示
+#endif
 
 	CNavNode* mpLostPlayerNode;	// プレイヤーを見失った位置のノード
 	// 巡回ポイントのリスト

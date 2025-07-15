@@ -76,11 +76,13 @@ CBoss::CBoss(std::vector<CVector> patrolPoints)
 	, mpAttack1Col(nullptr)
 	, mFovAngle(FOV_ANGLE)
 	, mFovLength(FOV_LENGTH)
-	, mpDebugFov(nullptr)
 	, mNextPatrolIndex(-1)	// -1の時に一番近いポイントに移動
 	, mNextMoveIndex(0)
 	, mPower(ATTACK_POWER)
 	, mDemonPower(0)
+#if _DEBUG
+	, mpDebugFov(nullptr)
+#endif
 {
 	spInstance = this;
 
@@ -190,6 +192,7 @@ CBoss::CBoss(std::vector<CVector> patrolPoints)
 	mDemonPower = CDemonPowerManager::Instance()->GetDemonPower();
 	//mMaxDemonPower = CDemonPowerManager::Instance()->GetDemonPower();
 	//mDemonPower = mMaxDemonPower;
+
 }
 
 // デストラクタ
@@ -346,7 +349,7 @@ void CBoss::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		{
 			// 壊せるオブジェクトの削除フラグが立っていないかつ、
 			// 壊れている状態でなければ、
-			if (!obj->IsKill() && obj->IsDeath())
+			if (!obj->IsKill() && !obj->IsDeath())
 			{
 				// 衝突した壊せるオブジェクトをリストに追加
 				mNearBreakObjs.push_back(obj);
