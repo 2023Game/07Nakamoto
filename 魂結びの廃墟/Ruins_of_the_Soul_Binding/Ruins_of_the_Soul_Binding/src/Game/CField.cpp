@@ -146,12 +146,30 @@ void CField::CreateNavNodes()
 // 部屋の作成
 void CField::CreateRoomObjects()
 {
-	// テスト用
+	// 確認用(削除予定)
 	// 開き戸の生成
 	new COpeningDoorGimmick
 	(
-		CVector(20.0f, 0.0f, 20.0f),
+		CVector(-20.0f, 0.0f, 20.0f),
+		CVector(0.0f, 0.0f, 0.0f),
+		nullptr
+	);
+	new COpeningDoorGimmick
+	(
+		CVector(-40.0f, 0.0f, 20.0f),
+		CVector(0.0f, 90.0f, 0.0f),
+		nullptr
+	);
+	new COpeningDoorGimmick
+	(
+		CVector(-20.0f, 0.0f, -20.0f),
 		CVector(0.0f, -90.0f, 0.0f),
+		nullptr
+	);
+	new COpeningDoorGimmick
+	(
+		CVector(-40.0f, 0.0f, -20.0f),
+		CVector(0.0f, 180.0f, 0.0f),
 		nullptr
 	);
 
@@ -442,6 +460,7 @@ void CField::CreateRoomObjects()
 		kitchenRoom
 	);
 
+	// 調理準備室を生成
 	CRoom* kitchenPreparationRoom = new CRoom
 	(
 		CVector(-136.125f, ROOM_POS_Y, 258.087f),
@@ -508,18 +527,34 @@ void CField::CreateRoomObjects()
 		officeRoom
 	);
 
+	// 資料室を生成
 	CRoom* documentRoom = new CRoom
 	(
 		CVector(-274.526f, ROOM_POS_Y, 140.25f),
 		CVector(66.9476f, ROOM_SIZE_Y, 58.85f),
 		"資料室"
 	);
+	// 開き戸の生成
+	new COpeningDoorGimmick
+	(
+		CVector(-291.5f, 0.0f, 170.5f),
+		CVector(0.0f, 0.0f, 0.0f),
+		documentRoom
+	);
 
+	// 暗室を生成
 	CRoom* darkRoom = new CRoom
 	(
 		CVector(-285.802f, ROOM_POS_Y, 88.0f),
 		CVector(89.4987f, ROOM_SIZE_Y, 42.35f),
 		"暗室"
+	);
+	// 開き戸の生成
+	new COpeningDoorGimmick
+	(
+		CVector(-325.6f, 0.0f, 66.0f),
+		CVector(0.0f, 180.0f, 0.0f),
+		darkRoom
 	);
 
 	// 写真部の部屋を生成
@@ -549,6 +584,13 @@ void CField::CreateRoomObjects()
 	(
 		CVector(-285.725f, 0.0f, -93.5f),
 		CVector(0.0f, -90.0f, 0.0f),
+		printingRoom
+	);
+	// 開き戸の生成
+	new COpeningDoorGimmick
+	(
+		CVector(-313.5f, 0.0f, -33.0f),
+		CVector(0.0f, 0.0f, 0.0f),
 		printingRoom
 	);
 
@@ -603,18 +645,34 @@ void CField::CreateRoomObjects()
 		room3_1
 	);
 
+	// 男子トイレ3を生成
 	CRoom* mensRestroom3 = new CRoom
 	(
 		CVector(-207.901f, ROOM_POS_Y, -269.362f),
 		CVector(23.65f, ROOM_SIZE_Y, 87.725f),
 		"男子トイレ3"
 	);
+	// 開き戸の生成
+	new COpeningDoorGimmick
+	(
+		CVector(-198.0f, 0.0f, -224.675f),
+		CVector(0.0f, 0.0f, 0.0f),
+		mensRestroom3
+	);
 
+	// 女子トイレ3を生成
 	CRoom* womensRestroom3 = new CRoom
 	(
 		CVector(-181.501f, ROOM_POS_Y, -269.362f),
 		CVector(25.8499f, ROOM_SIZE_Y, 87.725f),
 		"女子トイレ3"
+	);
+	// 開き戸の生成
+	new COpeningDoorGimmick
+	(
+		CVector(-170.5f, 0.0f, -224.675f),
+		CVector(0.0f, 0.0f, 0.0f),
+		womensRestroom3
 	);
 
 	// 3-2教室を生成
@@ -661,20 +719,37 @@ void CField::CreateRoomObjects()
 		audioVisualRoom
 	);
 
+	// 視聴覚準備室を生成
 	CRoom* audioVisualPreparationRoom = new CRoom
 	(
 		CVector(19.25f, ROOM_POS_Y, -95.2097f),
 		CVector(99.55f, ROOM_SIZE_Y, 38.9305f),
 		"視聴覚準備室"
 	);
+	// 開き戸の生成
+	new COpeningDoorGimmick
+	(
+		CVector(-31.35f, 0.0f, -82.5f),
+		CVector(0.0f, 90.0f, 0.0f),
+		audioVisualPreparationRoom
+	);
 
+	// 物置の生成
 	CRoom* storeRoom = new CRoom
 	(
 		CVector(43.0383f, ROOM_POS_Y, -192.25f),
 		CVector(51.9734f, ROOM_SIZE_Y, 87.725f),
 		"物置"
 	);
+	// 左右のドアを生成
+	new CDoorGimmickLR
+	(
+		CVector(49.5f, 0.0f, -147.287f),
+		CVector(0.0f, 0.0f, 0.0f),
+		storeRoom
+	);
 
+	// 職員室の生成
 	CRoom* staffRoom = new CRoom
 	(
 		CVector(158.262f, ROOM_POS_Y, -210.04f),
@@ -708,6 +783,13 @@ void CField::CreateRoomObjects()
 	(
 		CVector(106.699f, 0.0f, -77.0f),
 		CVector(0.0f, 90.0f, 0.0f),
+		artPreparationRoom
+	);
+	// 開き戸の生成
+	new COpeningDoorGimmick
+	(
+		CVector(198.0f, 0.0f, -54.175f),
+		CVector(0.0f, 0.0f, 0.0f),
 		artPreparationRoom
 	);
 

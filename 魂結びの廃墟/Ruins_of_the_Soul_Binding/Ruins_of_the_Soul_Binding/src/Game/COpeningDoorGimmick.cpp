@@ -5,7 +5,7 @@
 #include "CRoom.h"
 
 // 開き戸の中心位置からのオフセット量
-#define DOOR_OFFSET_DIST 4.95f
+#define DOOR_OFFSET_DIST CVector(0.0f, 0.0f, 5.5f))
 // 開き戸に配置するノードの距離
 #define DOOR_NODE_DIST 14.0f
 
@@ -30,8 +30,8 @@ COpeningDoorGimmick::COpeningDoorGimmick(const CVector& pos, const CVector& angl
 	mpOpeningDoor->SetRoom(room);
 
 	// 経路探索用のノードを作成
-	mpNavNode1 = new CNavNode(pos + VectorZ() * DOOR_NODE_DIST - CVector(0.0f, 0.0f, DOOR_OFFSET_DIST));
-	mpNavNode2 = new CNavNode(pos - VectorZ() * DOOR_NODE_DIST - CVector(0.0f, 0.0f, DOOR_OFFSET_DIST));
+	mpNavNode1 = new CNavNode(pos + VectorZ() * DOOR_NODE_DIST - DOOR_OFFSET_DIST;
+	mpNavNode2 = new CNavNode(pos - VectorZ() * DOOR_NODE_DIST - DOOR_OFFSET_DIST;
 
 	// 各方向のドアのノード同士を強制的に繋ぐ
 	mpNavNode1->AddForcedConnectNode(mpNavNode2);
