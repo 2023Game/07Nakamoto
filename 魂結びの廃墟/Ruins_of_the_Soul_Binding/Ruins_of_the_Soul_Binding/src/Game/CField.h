@@ -28,8 +28,10 @@ public:
 	/// <returns>衝突したら、trueを返す</returns>
 	bool CollisionRay(const CVector& start, const CVector& end,
 		CHitInfo* hit) override;
-
+	
+	// 更新
 	void Update() override;
+	// 描画
 	void Render() override;
 
 private:
@@ -37,6 +39,8 @@ private:
 	void CreateNavNodes();
 	// 部屋の作成
 	void CreateRoomObjects();
+	// ギミックをの生成
+	void CreateGimmick();
 
 	// フィールドのインスタンス
 	static CField* spInstance;
@@ -45,8 +49,8 @@ private:
 	CModel* mpWall;
 	CModel* mpWallCol;
 
-	CModel* mpTestWall;
-	CColliderMesh* mpTestWallCol;
+	//CModel* mpTestWall;
+	//CColliderMesh* mpTestWallCol;
 
 	CRDoor* mpRDoor;
 	CLDoor* mpLDoor;

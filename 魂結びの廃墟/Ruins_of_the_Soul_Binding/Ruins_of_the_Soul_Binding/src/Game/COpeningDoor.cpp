@@ -15,8 +15,8 @@ COpeningDoor::COpeningDoor(const CVector& pos, const CVector& angle, const CVect
 {
 	mOpenAngle = openAngle;
 	mCloseAngle = angle;
-	Rotation(mIsOpened ? mOpenAngle : mCloseAngle);
 	Position(pos);
+	Rotation(mIsOpened ? mOpenAngle : mCloseAngle);
 
 	// UIÇÃç¿ïWÇê›íË
 	mOffSetPos = CVector(0.0f, UI_OFFSET_POS_Y, 0.0f);
