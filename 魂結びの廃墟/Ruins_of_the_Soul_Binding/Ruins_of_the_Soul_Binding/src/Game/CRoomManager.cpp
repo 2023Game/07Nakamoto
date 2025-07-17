@@ -54,12 +54,15 @@ CRoom* CRoomManager::GetCurrentRoom(CObjectBase* obj) const
 	CRoom* inRoom = nullptr;
 	for (CRoom* room : mRooms)
 	{
-		const CBounds& roomBounds = room->GetBounds();
-		// 部屋とオブジェクトのバウンディングボックスが触れていたら
-		if (CBounds::Intersect(roomBounds, objBounds))
+		const std::vector<CBounds>& roomBounds = room->GetBounds();
+		for (const CBounds& bounds : roomBounds)
 		{
-			// 入っている部屋を返す
-			return room;
+			// 部屋とオブジェクトのバウンディングボックスが触れていたら
+			if (CBounds::Intersect(bounds, objBounds))
+			{
+				// 入っている部屋を返す
+				return room;
+			}
 		}
 	}
 

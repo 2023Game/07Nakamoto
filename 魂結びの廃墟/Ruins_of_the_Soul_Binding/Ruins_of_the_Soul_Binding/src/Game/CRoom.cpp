@@ -6,19 +6,23 @@
 #define BOUNDS_REDUCE_DIST 3.0f
 
 // コンストラクタ
-CRoom::CRoom(const CVector& center, const CVector& size, std::string name)
-	: mCenter(center)
-	, mSize(size)
+CRoom::CRoom(std::vector<RoomData> roomData, std::string name)
+	: mRoomData(roomData)
 	, mName(name)
 {
 	// 部屋管理クラスのリストに自信を登録
 	CRoomManager::Instance()->Add(this);
 
-	// 部屋のバウンディングボックスの設定
-	CVector boundsSize = mSize;
-	boundsSize.X(boundsSize.X() - BOUNDS_REDUCE_DIST * 2.0f);
-	boundsSize.Z(boundsSize.Z() - BOUNDS_REDUCE_DIST * 2.0f);
-	mBounds.SetPos(mCenter, boundsSize);
+	for (const RoomData& data : mRoomData)
+	{
+		// 部屋のバウンディングボックスの設定
+		CVector boundsSize = data.size;;
+		boundsSize.X(boundsSize.X() - BOUNDS_REDUCE_DIST * 2.0f);
+		boundsSize.Z(boundsSize.Z() - BOUNDS_REDUCE_DIST * 2.0f);
+		CBounds bounds;
+		bounds.SetPos(data.center, boundsSize);
+		mBounds.push_back(bounds);
+	}
 }
 
 // デストラクタ
@@ -28,18 +32,6 @@ CRoom::~CRoom()
 	CRoomManager::Instance()->Remove(this);
 }
 
-// 部屋の中心位置を取得
-const CVector& CRoom::GetCenter() const
-{
-	return mCenter;
-}
-
-// 部屋のサイズを取得
-const CVector& CRoom::GetSize() const
-{
-	return mSize;
-}
-
 // 部屋の名前を取得
 std::string CRoom::GetName() const
 {
@@ -47,7 +39,7 @@ std::string CRoom::GetName() const
 }
 
 // 部屋のバウンディングボックスを返す
-const CBounds& CRoom::GetBounds() const
+const std::vector<CBounds>& CRoom::GetBounds() const
 {
 	return mBounds;
 }
@@ -55,10 +47,16 @@ const CBounds& CRoom::GetBounds() const
 // 描画
 void CRoom::Render()
 {
-	CColor color = CColor::cyan;
-	// 部屋のサイズでワイヤーボックスを描画
-	Primitive::DrawWireBox(mCenter, mSize, color);
-	// 部屋のバウンディングボックスのサイズを描画
-	color.A(0.5f);
-	Primitive::DrawBox(mBounds.Center(), mBounds.Size(), color);
+	int count = mRoomData.size();
+	for (int i = 0; i < count; i++)
+	{
+		const RoomData& data = mRoomData[i];
+
+		CColor color = CColor::cyan;
+		// 部屋のサイズでワイヤーボックスを描画
+		Primitive::DrawWireBox(data.center, data.size, color);
+		// 部屋のバウンディングボックスのサイズを描画
+		color.A(0.5f);
+		Primitive::DrawBox(mBounds[i].Center(), mBounds[i].Size(), color);
+	}
 }

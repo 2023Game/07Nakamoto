@@ -53,8 +53,8 @@ void CGameScene::Load()
 	// è∞
 	CResourceManager::Load<CModel>(		"Floor",			"Field\\Abandoned_School_Floor.obj");
 	// ï«
-	CResourceManager::Load<CModel>(		"Wall",				"Field\\Abandoned_School_Wall.obj"); 
-	CResourceManager::Load<CModel>(		"WallCol",			"Field\\Abandoned_School_Wall_Col.obj");
+	CResourceManager::Load<CModel>(		"Wall",				"Field\\Abandoned_School_Wall2.obj"); 
+	CResourceManager::Load<CModel>(		"WallCol",			"Field\\Abandoned_School_Wall_Col2.obj");
 	// î‡
 	CResourceManager::Load<CModel>(		"RightDoor",		"Door\\right_door.obj");
 	CResourceManager::Load<CModel>(		"RightDoorCol",		"Door\\right_door_col.obj");

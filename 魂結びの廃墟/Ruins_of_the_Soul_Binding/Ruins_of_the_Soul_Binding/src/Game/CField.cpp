@@ -146,39 +146,15 @@ void CField::CreateNavNodes()
 // 部屋の作成
 void CField::CreateRoomObjects()
 {
-	// 確認用(削除予定)
-	// 開き戸の生成
-	new COpeningDoorGimmick
-	(
-		CVector(-20.0f, 0.0f, 20.0f),
-		CVector(0.0f, 0.0f, 0.0f),
-		nullptr
-	);
-	new COpeningDoorGimmick
-	(
-		CVector(-40.0f, 0.0f, 20.0f),
-		CVector(0.0f, 90.0f, 0.0f),
-		nullptr
-	);
-	new COpeningDoorGimmick
-	(
-		CVector(-20.0f, 0.0f, -20.0f),
-		CVector(0.0f, -90.0f, 0.0f),
-		nullptr
-	);
-	new COpeningDoorGimmick
-	(
-		CVector(-40.0f, 0.0f, -20.0f),
-		CVector(0.0f, 180.0f, 0.0f),
-		nullptr
-	);
-
-
 	// 1-1教室を作生成
 	CRoom* room1_1 = new CRoom
 	(
-		CVector(0.0f, ROOM_POS_Y, 0.0f),
-		CVector(110.0f, ROOM_SIZE_Y, 87.45f),
+		{
+			{
+				CVector(0.0f, ROOM_POS_Y, 0.0f),
+				CVector(110.0f, ROOM_SIZE_Y, 87.45f)
+			},
+		},
 		"1-1"
 	);
 	// 左右のドアを生成
@@ -199,8 +175,12 @@ void CField::CreateRoomObjects()
 	// 1-2教室を作生成
 	CRoom* room1_2 = new CRoom
 	(
-		CVector(-113.548f, ROOM_POS_Y, 0.0f),
-		CVector(110.0f, ROOM_SIZE_Y, 87.45f),
+		{
+			{
+				CVector(-113.548f, ROOM_POS_Y, 0.0f),
+				CVector(110.0f, ROOM_SIZE_Y, 87.45f),
+			}
+		},
 		"1-2"
 	);
 	// 左右のドアを生成
@@ -221,8 +201,12 @@ void CField::CreateRoomObjects()
 	// 美術室を生成
 	CRoom* artRoom = new CRoom
 	(
-		CVector(143.275f, ROOM_POS_Y, -5.63751f),
-		CVector(130.9f, ROOM_SIZE_Y, 95.425f),
+		{
+			{
+				CVector(143.275f, ROOM_POS_Y, -5.63751f),
+				CVector(130.9f, ROOM_SIZE_Y, 95.425f),
+			} 
+		},
 		"美術室"
 	);
 	// 左右のドアを生成
@@ -243,8 +227,12 @@ void CField::CreateRoomObjects()
 	// 校長室を生成
 	CRoom* principalRoom = new CRoom
 	(
-		CVector(141.471f, ROOM_POS_Y, 115.5f),
-		CVector(75.83f, ROOM_SIZE_Y, 88.0f),
+		{
+			{
+				CVector(141.471f, ROOM_POS_Y, 115.5f),
+				CVector(75.83f, ROOM_SIZE_Y, 88.0f),
+			}
+		},
 		"校長室"
 	);
 	// 開き戸の生成
@@ -258,8 +246,12 @@ void CField::CreateRoomObjects()
 	// 女子トイレ１を生成
 	CRoom* womensRestroom1 = new CRoom
 	(
-		CVector(171.187f, ROOM_POS_Y, 245.987f),
-		CVector(75.075f, ROOM_SIZE_Y, 34.375f),
+		{
+			{
+				CVector(171.187f, ROOM_POS_Y, 245.987f),
+				CVector(75.075f, ROOM_SIZE_Y, 34.375f),
+			}
+		},
 		"女子トイレ1"
 	);
 	// 開き戸の生成
@@ -273,8 +265,12 @@ void CField::CreateRoomObjects()
 	// 男子トイレ１を生成
 	CRoom* mensRestroom1 = new CRoom
 	(
-		CVector(171.187f, ROOM_POS_Y, 283.387f),
-		CVector(75.075f, ROOM_SIZE_Y, 37.1249f),
+		{
+			{
+				CVector(171.187f, ROOM_POS_Y, 283.387f),
+				CVector(75.075f, ROOM_SIZE_Y, 37.1249f),
+			}
+		},
 		"男子トイレ1"
 	);
 	// 開き戸の生成
@@ -288,8 +284,12 @@ void CField::CreateRoomObjects()
 	// 空き教室を生成
 	CRoom* emptyClassroom = new CRoom
 	(
-		CVector(171.187f, ROOM_POS_Y, 382.8f),
-		CVector(75.075f, ROOM_SIZE_Y, 158.4f),
+		{
+			{
+				CVector(171.187f, ROOM_POS_Y, 382.8f),
+				CVector(75.075f, ROOM_SIZE_Y, 158.4f),
+			}
+		},
 		"空き教室"
 	);
 	// 左右のドアを生成
@@ -310,8 +310,12 @@ void CField::CreateRoomObjects()
 	// 2-1教室を生成
 	CRoom* room2_1 = new CRoom
 	(
-		CVector(-32.9816f, ROOM_POS_Y, 247.225f),
-		CVector(87.7248f, ROOM_SIZE_Y, 109.45f),
+		{
+			{
+				CVector(-32.9816f, ROOM_POS_Y, 247.225f),
+				CVector(87.7248f, ROOM_SIZE_Y, 109.45f),
+			}
+		}, 
 		"2-1"
 	);
 	// 左右のドアを生成
@@ -332,8 +336,12 @@ void CField::CreateRoomObjects()
 	// 2-2教室を生成
 	CRoom* room2_2 = new CRoom
 	(
-		CVector(56.3932f, ROOM_POS_Y, 247.225f),
-		CVector(87.7248f, ROOM_SIZE_Y, 109.45f),
+		{
+			{
+				CVector(56.3932f, ROOM_POS_Y, 247.225f),
+				CVector(87.7248f, ROOM_SIZE_Y, 109.45f),
+			}
+		},
 		"2-2"
 	);
 	// 左右のドアを生成
@@ -354,8 +362,12 @@ void CField::CreateRoomObjects()
 	// 技術室を生成
 	CRoom* technicalRoom = new CRoom
 	(
-		CVector(50.5403f, ROOM_POS_Y, 370.975f),
-		CVector(99.4306f, ROOM_SIZE_Y, 134.75f),
+		{
+			{
+				CVector(50.5403f, ROOM_POS_Y, 370.975f),
+				CVector(99.4306f, ROOM_SIZE_Y, 134.75f),
+			}
+		},
 		"技術室"
 	);
 	// 左右のドアを生成
@@ -376,8 +388,12 @@ void CField::CreateRoomObjects()
 	// 技術準備室を生成
 	CRoom* technicalPreparationRoom = new CRoom
 	(
-		CVector(-90.5837f, ROOM_POS_Y, 434.913f),
-		CVector(92.1827f, ROOM_SIZE_Y, 54.175f),
+		{
+			{
+				CVector(-90.5837f, ROOM_POS_Y, 434.913f),
+				CVector(92.1827f, ROOM_SIZE_Y, 54.175f),
+			}
+		},
 		"技術準備室"
 	);
 	// 左右のドアを生成
@@ -391,8 +407,12 @@ void CField::CreateRoomObjects()
 	// 被覆室を生成
 	CRoom* coatingRoom = new CRoom
 	(
-		CVector(-206.25f, ROOM_POS_Y, 434.913f),
-		CVector(135.85f, ROOM_SIZE_Y, 54.175f),
+		{
+			{
+				CVector(-206.25f, ROOM_POS_Y, 434.913f),
+				CVector(135.85f, ROOM_SIZE_Y, 54.175f),
+			}
+		},
 		"被覆室"
 	);
 	// 左右のドアを生成
@@ -413,8 +433,12 @@ void CField::CreateRoomObjects()
 	// 被覆準備室を生成
 	CRoom* coatingPreparationRoom = new CRoom
 	(
-		CVector(-303.188f, ROOM_POS_Y, 434.913f),
-		CVector(54.7261f, ROOM_SIZE_Y, 54.175),
+		{
+			{
+				CVector(-303.188f, ROOM_POS_Y, 434.913f),
+				CVector(54.7261f, ROOM_SIZE_Y, 54.175),
+			}
+		},
 		"被覆準備室"
 	);
 	// 開き戸の生成
@@ -428,14 +452,17 @@ void CField::CreateRoomObjects()
 	// 調理室を設定
 	CRoom* kitchenRoom = new CRoom
 	(
-		CVector(-176.825f, ROOM_POS_Y, 337.838f),
-		CVector(152.35f, ROOM_SIZE_Y, 81.675f),
-		"調理室"
-	);
-	CRoom* kitchenRoom2 = new CRoom
-	(
-		CVector(-213.125f, ROOM_POS_Y, 283.663f),
-		CVector(79.75f, ROOM_SIZE_Y, 26.675f),
+		{
+			{
+				CVector(-176.825f, ROOM_POS_Y, 337.838f),
+				CVector(152.35f, ROOM_SIZE_Y, 81.675f),
+			},
+
+			{
+				CVector(-213.125f, ROOM_POS_Y, 324.5f),
+				CVector(79.75f, ROOM_SIZE_Y, 108.35f),
+			},
+		},
 		"調理室"
 	);
 	// 左右のドアを生成
@@ -463,8 +490,12 @@ void CField::CreateRoomObjects()
 	// 調理準備室を生成
 	CRoom* kitchenPreparationRoom = new CRoom
 	(
-		CVector(-136.125f, ROOM_POS_Y, 258.087f),
-		CVector(70.95f, ROOM_SIZE_Y, 74.525f),
+		{
+			{
+				CVector(-136.125f, ROOM_POS_Y, 258.087f),
+				CVector(70.95f, ROOM_SIZE_Y, 74.525f),
+			}
+		},
 		"調理準備室"
 	);
 	// 左右のドアを生成
@@ -485,8 +516,12 @@ void CField::CreateRoomObjects()
 	// 男子トイレ２を生成
 	CRoom* mensRestroom2 = new CRoom
 	(
-		CVector(-134.475f, ROOM_POS_Y, 123.063f),
-		CVector(70.95f, ROOM_SIZE_Y, 27.225f),
+		{
+			{
+				CVector(-134.475f, ROOM_POS_Y, 123.063f),
+				CVector(70.95f, ROOM_SIZE_Y, 27.225f),
+			}
+		},
 		"男子トイレ2"
 	);
 	// 開き戸の生成
@@ -500,8 +535,12 @@ void CField::CreateRoomObjects()
 	// 女子トイレ２を生成
 	CRoom* womensRestroom2 = new CRoom
 	(
-		CVector(-134.475f, ROOM_POS_Y, 154.0f),
-		CVector(70.95f, ROOM_SIZE_Y, 31.35f),
+		{
+			{
+				CVector(-134.475f, ROOM_POS_Y, 154.0f),
+				CVector(70.95f, ROOM_SIZE_Y, 31.35f),
+			}
+		},
 		"女子トイレ2"
 	);
 	// 開き戸の生成
@@ -515,8 +554,12 @@ void CField::CreateRoomObjects()
 	// 事務室を生成
 	CRoom* officeRoom = new CRoom
 	(
-		CVector(-274.526f, ROOM_POS_Y, 207.233f),
-		CVector(66.9476f, ROOM_SIZE_Y, 71.8158f),
+		{
+			{
+				CVector(-274.526f, ROOM_POS_Y, 207.233f),
+				CVector(66.9476f, ROOM_SIZE_Y, 71.8158f),
+			}
+		},
 		"事務室"
 	);
 	// 左右のドアを生成
@@ -530,8 +573,12 @@ void CField::CreateRoomObjects()
 	// 資料室を生成
 	CRoom* documentRoom = new CRoom
 	(
-		CVector(-274.526f, ROOM_POS_Y, 140.25f),
-		CVector(66.9476f, ROOM_SIZE_Y, 58.85f),
+		{
+			{
+				CVector(-274.526f, ROOM_POS_Y, 140.25f),
+				CVector(66.9476f, ROOM_SIZE_Y, 58.85f),
+			}
+		},
 		"資料室"
 	);
 	// 開き戸の生成
@@ -545,8 +592,12 @@ void CField::CreateRoomObjects()
 	// 暗室を生成
 	CRoom* darkRoom = new CRoom
 	(
-		CVector(-285.802f, ROOM_POS_Y, 88.0f),
-		CVector(89.4987f, ROOM_SIZE_Y, 42.35f),
+		{
+			{
+				CVector(-285.802f, ROOM_POS_Y, 88.0f),
+				CVector(89.4987f, ROOM_SIZE_Y, 42.35f),
+			}
+		},
 		"暗室"
 	);
 	// 開き戸の生成
@@ -560,8 +611,12 @@ void CField::CreateRoomObjects()
 	// 写真部の部屋を生成
 	CRoom* photographyClubRoom = new CRoom
 	(
-		CVector(-308.688f, ROOM_POS_Y, 16.5f),
-		CVector(43.7261f, ROOM_SIZE_Y, 97.35f),
+		{
+			{
+				CVector(-308.688f, ROOM_POS_Y, 16.5f),
+				CVector(43.7261f, ROOM_SIZE_Y, 97.35f),
+			}
+		},
 		"写真部の部屋"
 	);
 	// 左右のドアを生成
@@ -575,8 +630,12 @@ void CField::CreateRoomObjects()
 	// 印刷室そ生成
 	CRoom* printingRoom = new CRoom
 	(
-		CVector(-308.688f, ROOM_POS_Y, -71.5f),
-		CVector(43.7261f, ROOM_SIZE_Y, 75.35f),
+		{
+			{
+				CVector(-308.688f, ROOM_POS_Y, -71.5f),
+				CVector(43.7261f, ROOM_SIZE_Y, 75.35f),
+			}
+		},
 		"印刷室"
 	);
 	// 左右のドアを生成
@@ -597,8 +656,12 @@ void CField::CreateRoomObjects()
 	// PC教室を生成
 	CRoom* pcRoom = new CRoom
 	(
-		CVector(-214.562f, ROOM_POS_Y, -77.0775f),
-		CVector(89.2237f, ROOM_SIZE_Y, 241.605f),
+		{
+			{
+				CVector(-214.562f, ROOM_POS_Y, -77.0775f),
+				CVector(89.2237f, ROOM_SIZE_Y, 241.605f),
+			}
+		},
 		"PC教室"
 	);
 	// 左右のドアを生成
@@ -626,8 +689,12 @@ void CField::CreateRoomObjects()
 	//3-1教室の生成
 	CRoom* room3_1 = new CRoom
 	(
-		CVector(-275.964f, ROOM_POS_Y, -269.362f),
-		CVector(109.175f, ROOM_SIZE_Y, 87.725f),
+		{
+			{
+				CVector(-275.964f, ROOM_POS_Y, -269.362f),
+				CVector(109.175f, ROOM_SIZE_Y, 87.725f),
+			}
+		},
 		"3-1"
 	);
 	// 左右のドアを生成
@@ -648,8 +715,12 @@ void CField::CreateRoomObjects()
 	// 男子トイレ3を生成
 	CRoom* mensRestroom3 = new CRoom
 	(
-		CVector(-207.901f, ROOM_POS_Y, -269.362f),
-		CVector(23.65f, ROOM_SIZE_Y, 87.725f),
+		{
+			{
+				CVector(-207.901f, ROOM_POS_Y, -269.362f),
+				CVector(23.65f, ROOM_SIZE_Y, 87.725f),
+			}
+		},
 		"男子トイレ3"
 	);
 	// 開き戸の生成
@@ -663,8 +734,12 @@ void CField::CreateRoomObjects()
 	// 女子トイレ3を生成
 	CRoom* womensRestroom3 = new CRoom
 	(
-		CVector(-181.501f, ROOM_POS_Y, -269.362f),
-		CVector(25.8499f, ROOM_SIZE_Y, 87.725f),
+		{
+			{
+				CVector(-181.501f, ROOM_POS_Y, -269.362f),
+				CVector(25.8499f, ROOM_SIZE_Y, 87.725f),
+			}
+		},
 		"女子トイレ3"
 	);
 	// 開き戸の生成
@@ -678,8 +753,12 @@ void CField::CreateRoomObjects()
 	// 3-2教室を生成
 	CRoom* room3_2 = new CRoom
 	(
-		CVector(-86.9f, ROOM_POS_Y, -243.393f),
-		CVector(109.45f, ROOM_SIZE_Y, 87.725f),
+		{
+			{
+				CVector(-86.9f, ROOM_POS_Y, -243.393f),
+				CVector(109.45f, ROOM_SIZE_Y, 87.725f),
+			}
+		},
 		"3-2"
 	);
 	// 左右のドアを生成
@@ -700,8 +779,12 @@ void CField::CreateRoomObjects()
 	// 視聴覚室を生成
 	CRoom* audioVisualRoom = new CRoom
 	(
-		CVector(-86.9f, ROOM_POS_Y, -119.47f),
-		CVector(109.45f, ROOM_SIZE_Y, 87.4502f),
+		{
+			{
+				CVector(-86.9f, ROOM_POS_Y, -119.47f),
+				CVector(109.45f, ROOM_SIZE_Y, 87.4502f),
+			}
+		},
 		"視聴覚室"
 	);
 	// 左右のドアを生成
@@ -722,8 +805,12 @@ void CField::CreateRoomObjects()
 	// 視聴覚準備室を生成
 	CRoom* audioVisualPreparationRoom = new CRoom
 	(
-		CVector(19.25f, ROOM_POS_Y, -95.2097f),
-		CVector(99.55f, ROOM_SIZE_Y, 38.9305f),
+		{
+			{
+				CVector(19.25f, ROOM_POS_Y, -95.2097f),
+				CVector(99.55f, ROOM_SIZE_Y, 38.9305f),
+			}
+		},
 		"視聴覚準備室"
 	);
 	// 開き戸の生成
@@ -737,8 +824,12 @@ void CField::CreateRoomObjects()
 	// 物置の生成
 	CRoom* storeRoom = new CRoom
 	(
-		CVector(43.0383f, ROOM_POS_Y, -192.25f),
-		CVector(51.9734f, ROOM_SIZE_Y, 87.725f),
+		{
+			{
+				CVector(43.0383f, ROOM_POS_Y, -192.25f),
+				CVector(51.9734f, ROOM_SIZE_Y, 87.725f),
+			}
+		},
 		"物置"
 	);
 	// 左右のドアを生成
@@ -752,8 +843,12 @@ void CField::CreateRoomObjects()
 	// 職員室の生成
 	CRoom* staffRoom = new CRoom
 	(
-		CVector(158.262f, ROOM_POS_Y, -210.04f),
-		CVector(100.926f, ROOM_SIZE_Y, 154.43f),
+		{
+			{
+				CVector(158.262f, ROOM_POS_Y, -210.04f),
+				CVector(100.926f, ROOM_SIZE_Y, 154.43f),
+			}
+		},
 		"職員室"
 	);
 	// 左右のドアを生成
@@ -774,8 +869,12 @@ void CField::CreateRoomObjects()
 	// 美術準備室を生成
 	CRoom* artPreparationRoom = new CRoom
 	(
-		CVector(158.262f, ROOM_POS_Y, -93.0875f),
-		CVector(100.926f, ROOM_SIZE_Y, 76.175f),
+		{
+			{
+				CVector(158.262f, ROOM_POS_Y, -93.0875f),
+				CVector(100.926f, ROOM_SIZE_Y, 76.175f),
+			}
+		},
 		"美術準備室"
 	);
 	// 左右のドアを生成
@@ -795,14 +894,23 @@ void CField::CreateRoomObjects()
 
 	CRoom* gymnasium = new CRoom
 	(
-		CVector(-30.3886f, ROOM_POS_Y, -358.05f),
-		CVector(273.075f, ROOM_SIZE_Y, 86.3499f),
+		{
+			{
+				CVector(-30.3886f, ROOM_POS_Y, -358.05f),
+				CVector(273.075f, ROOM_SIZE_Y, 86.3499f),
+			}
+		},
 		"体育館"
 	);
 	CRoom* sportsWarehouse = new CRoom
 	(
-		CVector(-194.151f, ROOM_POS_Y, -358.05f),
-		CVector(51.15f, ROOM_SIZE_Y, 86.3499f),
+		{
+			{
+				CVector(-194.151f, ROOM_POS_Y, -358.05f),
+				CVector(51.15f, ROOM_SIZE_Y, 86.3499f),
+			}
+		},
+
 		"体育倉庫"
 	);
 
