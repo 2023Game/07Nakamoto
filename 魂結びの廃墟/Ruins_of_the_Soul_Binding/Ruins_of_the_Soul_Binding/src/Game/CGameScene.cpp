@@ -19,6 +19,7 @@
 #include "CDemonPowerManager.h"
 #include "CGameUI.h"
 #include "CSpider.h"
+#include "CInventory.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -88,6 +89,9 @@ void CGameScene::Load()
 
 	// フィールドの生成
 	mpField = new CField();
+
+	// ゲームメニューを作成
+	new CInventory();
 
 	// UIの生成
 	new CGameUI();
@@ -176,6 +180,21 @@ void CGameScene::Update()
 	//{
 	//	mpGameBGM->PlayLoop(-1, 1.0f, false, 1.0f);
 	//}
+
+	// ゲームメニューを開いてなければ、[Ｍ]キーでメニューを開く
+	CInventory* inv = CInventory::Instance();
+	if (CInput::PushKey(VK_TAB))
+	{
+		if (!inv->IsOpened())
+		{
+			inv->Open();
+		}
+		else
+		{
+			inv->Close();
+		}
+	}
+
 
 	if (CInput::PushKey('H'))
 	{

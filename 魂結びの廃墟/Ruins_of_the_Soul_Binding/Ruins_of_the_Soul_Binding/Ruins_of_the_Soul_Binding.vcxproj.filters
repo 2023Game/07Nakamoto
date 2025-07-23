@@ -113,6 +113,9 @@
     <Filter Include="ソース ファイル\Game\Field\Room">
       <UniqueIdentifier>{396d36b8-2d1c-4c27-a0a9-580f985bf788}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Item">
+      <UniqueIdentifier>{d9e18b96-912a-4b43-b9d9-f156e3e7638b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -510,6 +513,18 @@
     </ClCompile>
     <ClCompile Include="src\Game\CDoorBase.cpp">
       <Filter>ソース ファイル\Game\Field\Gimmick\Object\InteractObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CItemMenu.cpp">
+      <Filter>ソース ファイル\Game\UI\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CInventory.cpp">
+      <Filter>ソース ファイル\Game\UI\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\ItemData.cpp">
+      <Filter>ソース ファイル\Game\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CItemSlotUI.cpp">
+      <Filter>ソース ファイル\Game\UI\Menu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -932,6 +947,18 @@
     </ClInclude>
     <ClInclude Include="src\Game\CDoorBase.h">
       <Filter>ソース ファイル\Game\Field\Gimmick\Object\InteractObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CItemMenu.h">
+      <Filter>ソース ファイル\Game\UI\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CInventory.h">
+      <Filter>ソース ファイル\Game\UI\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\ItemData.h">
+      <Filter>ソース ファイル\Game\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CItemSlotUI.h">
+      <Filter>ソース ファイル\Game\UI\Menu</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

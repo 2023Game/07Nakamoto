@@ -18,6 +18,7 @@
 #include "CDemonPower.h"
 #include "CHandGlow.h"
 #include "CRoom.h"
+#include "ItemData.h"
 
 // アニメーションのパス
 #define ANIM_PATH "Character\\Player2\\Rusk\\anim\\"
@@ -387,6 +388,44 @@ void CPlayer2::ChangeAction()
 bool CPlayer2::GatActingTogether()
 {
 	return mTogether;
+}
+
+// 指定したアイテムを使用できるかどうか
+bool CPlayer2::CanUseItem(const ItemData* item)
+{
+	switch (item->effectType)
+	{
+		// HP回復アイテムは、現在のHPが減っている時は使用可
+	case ItemEffectType::RecoveryHP:
+		return mHp < mMaxHp;
+
+	case ItemEffectType::Throw:
+		return true;
+
+	}
+
+	return false;
+}
+
+// アイテムの効果を使う
+void CPlayer2::UseItem(const ItemData* item)
+{
+	switch (item->effectType)
+	{
+		// 回復アイテムの場合
+	case ItemEffectType::RecoveryHP:
+		mHp = mHp + item->recovery;
+
+		if (mHp > mMaxHp)
+		{
+			mHp = mMaxHp;
+		}
+		break;
+		// 投擲アイテムの場合
+	case ItemEffectType::Throw:
+
+		break;
+	}
 }
 
 // プレイヤーのバウンディングボックスを返す

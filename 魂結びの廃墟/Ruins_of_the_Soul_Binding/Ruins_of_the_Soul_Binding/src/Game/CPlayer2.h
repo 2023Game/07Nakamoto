@@ -9,6 +9,7 @@ class CDebugFieldOfView;
 class CGaugeUI;
 class CDemonPower;
 class CHandGlow;
+struct ItemData;
 
 /*
 プレイヤークラス
@@ -64,6 +65,11 @@ public:
 	void ChangeAction();
 	// 一緒に行動しているか
 	bool GatActingTogether();
+
+	// 指定したアイテムを使用できるかどうか
+	bool CanUseItem(const ItemData* item);
+	// アイテムの効果を使う
+	void UseItem(const ItemData* item);
 
 	// プレイヤーのバウンディングボックスを返す
 	const CBounds& GetBounds() const override;
