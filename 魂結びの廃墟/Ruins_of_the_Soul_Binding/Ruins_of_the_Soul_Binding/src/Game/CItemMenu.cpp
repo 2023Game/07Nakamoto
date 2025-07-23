@@ -1,5 +1,4 @@
 #include "CItemMenu.h"
-
 #include "CImage.h"
 #include "CText.h"
 #include "CItemSlotUI.h"
@@ -7,6 +6,8 @@
 #include "CButton.h"
 
 #define BACK_ADJUST_POS CVector2(30.0f,-30.0f)	//背景の調整位置
+#define BUTTON_SIZE CVector2(60.0f,30.0f)		// ボタンのサイズ
+#define BUTTON_POS_Y 30.0f		// ボタンのY座標
 
 CItemMenu* CItemMenu::spInstance = nullptr;
 
@@ -33,8 +34,8 @@ CItemMenu::CItemMenu()
 	// 使うボタンを生成
 	CButton* btn1 = new CButton
 	(
-		CVector2(0.0f, 0.0f),
-		CVector2(60.0f, 30.0f),
+		CVector2::zero,
+		BUTTON_SIZE,
 		ETaskPriority::eUI, 0, ETaskPauseType::eGame,
 		false, false
 	);
@@ -48,8 +49,8 @@ CItemMenu::CItemMenu()
 	// 戻るボタンを生成
 	CButton* btn2 = new CButton
 	(
-		CVector2(0.0f, 0.0f),
-		CVector2(60.0f, 30.0f),
+		CVector2::zero,
+		BUTTON_SIZE,
 		ETaskPriority::eUI, 0, ETaskPauseType::eGame,
 		false, false
 	);
@@ -157,7 +158,7 @@ void CItemMenu::UpdateIdle()
 	for (int i = 0; i < size; i++)
 	{
 		CButton* btn = mButtons[i];
-		btn->SetPos(mPosition + BACK_ADJUST_POS + CVector2(0.0f, 30.0f * i));
+		btn->SetPos(mPosition + BACK_ADJUST_POS + CVector2(0.0f, BUTTON_POS_Y * i));
 	}
 	//ChangeState(EState::eSelect);
 }

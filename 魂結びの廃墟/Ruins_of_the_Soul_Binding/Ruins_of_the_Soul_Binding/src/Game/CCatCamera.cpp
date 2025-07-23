@@ -15,6 +15,7 @@ CCatCamera::CCatCamera(CCat* cat)
 	, mFollowDefaultEyeVec(CVector::forward)
 	, mRotateAngle(CVector::zero)
 {
+	SetPauseType(ETaskPauseType::eGame);
 }
 
 // デストラクタ

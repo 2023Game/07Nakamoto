@@ -13,6 +13,7 @@ CPlayerCamera::CPlayerCamera(const CVector& eye, const CVector& center, bool isM
 	, mFollowDefaultEyeVec(CVector::forward)
 	, mRotateAngle(CVector::zero)
 {
+	SetPauseType(ETaskPauseType::eGame);
 }
 
 // デストラクタ

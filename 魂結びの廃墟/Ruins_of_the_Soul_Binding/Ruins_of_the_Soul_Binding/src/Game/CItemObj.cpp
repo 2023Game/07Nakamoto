@@ -4,7 +4,7 @@
 #include "CImage3D.h"
 
 #define INTERACT_TEXT_PATH "UI\\Interact\\pickup.png"
-#define WORLD_UNIT_PER_PIXEL 50.0f
+#define WORLD_UNIT_PER_PIXEL 100.0f
 
 // コンストラクタ
 CItemObj::CItemObj(ItemType type)
@@ -99,20 +99,19 @@ std::string CItemObj::GetInteractTextPath() const
 // 調べるUIを表示する座標を返す
 CVector CItemObj::GetInteractUIPos() const
 {
-	return Position() + CVector(0.0f, 5.0f, 0.0f);
+	return Position() + CVector(0.0f, 10.0f, 0.0f);
 }
 
 // 更新処理
 void CItemObj::Update()
 {
-
+	mpItemImage->Position(Position());
 	mpItemImage->Update();
 }
 
 // 描画処理
 void CItemObj::Render()
 {
-	//mpItemImage->SetColor(mColor);
 	mpItemImage->Render();
 }
 

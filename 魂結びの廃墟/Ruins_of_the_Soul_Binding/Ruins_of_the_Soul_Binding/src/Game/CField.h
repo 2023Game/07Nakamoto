@@ -41,6 +41,8 @@ private:
 	void CreateRoomObjects();
 	// ギミックをの生成
 	void CreateGimmick();
+	// アイテムを生成
+	void CreateItem();
 
 	// フィールドのインスタンス
 	static CField* spInstance;

@@ -5,8 +5,9 @@
 #include "CInput.h"
 #include "CItemMenu.h"
 
-#define COUNT_TEXT_POS CVector2(15.0f, 0.0f)
-#define SLOT_SIZE 60.0f
+#define COUNT_TEXT_POS CVector2(40.0f, 30.0f)
+#define SLOT_SIZE 137.0f
+#define FONT_SIZE 24
 
 // コンストラクタ
 CItemSlotUI::CItemSlotUI(int slotIdx)
@@ -29,8 +30,8 @@ CItemSlotUI::CItemSlotUI(int slotIdx)
 	// アイテムの個数のテキスト生成
 	mpCountText = new CText
 	(
-		nullptr, 24,
-		CVector2::zero, CVector2(400.0f, 300.0f),
+		nullptr, FONT_SIZE,
+		CVector2::zero, CVector2::zero,
 		CColor::black,
 		ETaskPriority::eUI, 0,
 		ETaskPauseType::eMenu,

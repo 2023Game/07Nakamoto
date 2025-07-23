@@ -14,7 +14,7 @@
 
 #define ITEM_WIDTH 750.0f		// アイテムを格納するX座標
 #define ITEM_HEIGHT 220.0f		// アイテムを格納するY座標
-#define ITEMSLOT_SIZE 137.0f		// アイテムのサイズ
+#define ITEMSLOT_SIZE 137.0f	// アイテムのサイズ
 
 #define SLOT_FRAME 1.5f		// アイテムスロットの枠の幅
 #define SLOT_COLUMN 3		// アイテムスロットの列

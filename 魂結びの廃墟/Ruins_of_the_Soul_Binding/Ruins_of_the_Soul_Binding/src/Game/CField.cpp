@@ -56,9 +56,8 @@ CField::CField()
 	CreateRoomObjects();
 	// ギミックの生成
 	CreateGimmick();
-
-	CItemObj* flameCharm = new CItemObj(ItemType::FlameCharm);
-	flameCharm->Position(10.0f, 0.0f, 30.0f);
+	// アイテムを生成
+	CreateItem();
 
 	// 妖力の源のマネージャーを生成
 	new CDemonPowerManager();
@@ -933,6 +932,19 @@ void CField::CreateGimmick()
 	//	"TestWallBrack", "TestWallBrack"
 	//);
 	//switchdoor1->AddSwitch(switch1);
+
+}
+
+// アイテムを生成
+void CField::CreateItem()
+{
+	CItemObj* flameCharm = new CItemObj(ItemType::FlameCharm);
+	flameCharm->Position(10.0f, 0.0f, 30.0f);
+	flameCharm = new CItemObj(ItemType::FlameCharm);
+	flameCharm->Position(20.0f, 0.0f, 30.0f);
+
+	CItemObj* barrierCharm = new CItemObj(ItemType::BarrierCharm);
+	barrierCharm->Position(-20.0f, 0.0f, 1.0f);
 
 }
 
