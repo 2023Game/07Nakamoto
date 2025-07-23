@@ -77,7 +77,7 @@ namespace Item
 				"ê‡ñæï∂",
 				"Item\\2D\\substituteCharm.png",
 				"Item\\3D\\substituteCharm.obj",
-				ItemEffectType::Throw,
+				ItemEffectType::Substitute,
 				0,
 				20
 			}

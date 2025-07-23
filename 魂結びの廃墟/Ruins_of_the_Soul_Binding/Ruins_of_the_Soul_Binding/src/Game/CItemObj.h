@@ -39,4 +39,5 @@ protected:
 	CImage3D* mpItemImage;		// アイテムのイメージデータ
 	CCollider* mpCollider;	// アイテムのコライダー
 
+
 };

@@ -5,6 +5,7 @@
 
 #define INTERACT_TEXT_PATH "UI\\Interact\\pickup.png"
 #define WORLD_UNIT_PER_PIXEL 100.0f
+#define MIN_SIZ		CVector2(50.0f,50.0f)
 
 // コンストラクタ
 CItemObj::CItemObj(ItemType type)
@@ -105,6 +106,10 @@ CVector CItemObj::GetInteractUIPos() const
 // 更新処理
 void CItemObj::Update()
 {
+	mpItemImage->SetSize(mpItemImage->GetSize() - CVector2(1.0f, 1.0f) * Times::DeltaTime());
+
+	mpItemImage->Rotation(mpItemImage->Rotation());
+
 	mpItemImage->Position(Position());
 	mpItemImage->Update();
 }
