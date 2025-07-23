@@ -13,11 +13,11 @@
 #define INVENTORY_HEIGHT 360.0f	// インベントリのY座標
 
 #define ITEM_WIDTH 750.0f		// アイテムを格納するX座標
-#define ITEM_HEIGHT 150.0f		// アイテムを格納するY座標
-#define ITEMSLOT_SIZE 139.0f		// アイテムのサイズ
+#define ITEM_HEIGHT 220.0f		// アイテムを格納するY座標
+#define ITEMSLOT_SIZE 137.0f		// アイテムのサイズ
 
-#define SLOT_FRAME 3		// アイテムスロットの枠の幅
-#define SLOT_COLUMN 3		// アイテムスロットの列数
+#define SLOT_FRAME 1.5f		// アイテムスロットの枠の幅
+#define SLOT_COLUMN 3		// アイテムスロットの列
 #define SLOT_ROW 3			// アイテムスロットの行数
 
 // アイテムスロット数

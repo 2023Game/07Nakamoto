@@ -33,6 +33,17 @@ CGameScene::~CGameScene()
 {
 	// 調べるオブジェクトの管理クラスを削除
 	CInteractObjectManager::CIearInstance();
+
+	// 次に読み込まれるシーンがゲームシーンでなければ、
+	CSceneManager* sceneMgr = CSceneManager::Instance();
+	if (sceneMgr != nullptr)
+	{
+		// アイテムのリソースを全て破棄する
+		Item::DeleteItemResources();
+
+		// ゲームUIを破棄する
+		CGameUI::ClearInstance();
+	}
 }
 
 //シーン読み込み
@@ -195,7 +206,7 @@ void CGameScene::Update()
 		}
 	}
 
-
+#if _DEBUG
 	if (CInput::PushKey('H'))
 	{
 		CSceneManager::Instance()->LoadScene(EScene::eTitle);
@@ -209,4 +220,5 @@ void CGameScene::Update()
 			mpGameMenu->Open();
 		}
 	}
+#endif
 }

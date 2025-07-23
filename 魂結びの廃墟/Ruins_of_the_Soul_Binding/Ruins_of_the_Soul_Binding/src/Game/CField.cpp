@@ -13,6 +13,7 @@
 #include "CSwitch.h"
 #include "CSwitchDoorGimmick.h"
 #include "CRoom.h"
+#include "CItemObj.h"
 
 #define ROOM_SIZE_Y 33.0f
 #define ROOM_POS_Y	ROOM_SIZE_Y * 0.5f
@@ -56,6 +57,8 @@ CField::CField()
 	// ギミックの生成
 	CreateGimmick();
 
+	CItemObj* flameCharm = new CItemObj(ItemType::FlameCharm);
+	flameCharm->Position(10.0f, 0.0f, 30.0f);
 
 	// 妖力の源のマネージャーを生成
 	new CDemonPowerManager();
