@@ -2,10 +2,20 @@
 #include "CColliderSphere.h"
 #include "CInventory.h"
 #include "CImage3D.h"
+#include "Maths.h"
 
 #define INTERACT_TEXT_PATH "UI\\Interact\\pickup.png"
-#define WORLD_UNIT_PER_PIXEL 100.0f
-#define MIN_SIZ		CVector2(50.0f,50.0f)
+#define WORLD_UNIT_PER_PIXEL 80.0f
+
+// 1秒間で回転する角度
+#define ROTATE_SPEED 90.0f
+
+// 拡縮アニメーションの周期
+#define SCALING_TIME 2.0f
+// 拡縮アニメーション時のスケール最小値
+#define SCALING_MIN 0.75f
+// 拡縮アニメーション時のスケール最大値
+#define SCALING_MAX 1.25f
 
 // コンストラクタ
 CItemObj::CItemObj(ItemType type)
@@ -46,6 +56,10 @@ CItemObj::CItemObj(ItemType type)
 
 	// 調べるときに表示するテキストを設定
 	mInteractStr = "拾う";
+
+	// ランダムで所為の回転角度を求める
+	float angleZ = Math::Rand(0.0f, 360.0f);
+	mpItemImage->Rotation(0.0f, 0.0f, angleZ);
 }
 
 // デストラクタ
@@ -106,9 +120,14 @@ CVector CItemObj::GetInteractUIPos() const
 // 更新処理
 void CItemObj::Update()
 {
-	mpItemImage->SetSize(mpItemImage->GetSize() - CVector2(1.0f, 1.0f) * Times::DeltaTime());
+	// 時間経過に合わせて拡縮アニメーションを再生
+	float alpha = fmodf(Times::Time(), SCALING_TIME) / SCALING_TIME;
+	float t = (sinf(M_PI * 2.0f * alpha) + 1.0f) * 0.5f;
+	float scale = Math::Lerp(SCALING_MIN, SCALING_MAX, t);
+	mpItemImage->Scale(scale,scale,scale);
 
-	mpItemImage->Rotation(mpItemImage->Rotation());
+	// Z軸回転
+	mpItemImage->Rotate(0.0f, 0.0f, ROTATE_SPEED * Times::DeltaTime());
 
 	mpItemImage->Position(Position());
 	mpItemImage->Update();

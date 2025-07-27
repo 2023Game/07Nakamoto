@@ -939,12 +939,12 @@ void CField::CreateGimmick()
 void CField::CreateItem()
 {
 	CItemObj* flameCharm = new CItemObj(ItemType::FlameCharm);
-	flameCharm->Position(10.0f, 0.0f, 30.0f);
+	flameCharm->Position(10.0f, 0.5f, 30.0f);
 	flameCharm = new CItemObj(ItemType::FlameCharm);
-	flameCharm->Position(20.0f, 0.0f, 30.0f);
+	flameCharm->Position(20.0f, 0.5f, 30.0f);
 
 	CItemObj* barrierCharm = new CItemObj(ItemType::BarrierCharm);
-	barrierCharm->Position(-20.0f, 0.0f, 1.0f);
+	barrierCharm->Position(-20.0f, 0.5f, 1.0f);
 
 }
 
