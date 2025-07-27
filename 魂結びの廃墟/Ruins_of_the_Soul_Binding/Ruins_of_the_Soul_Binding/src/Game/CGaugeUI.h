@@ -32,6 +32,7 @@ protected:
 
 	CImage* mpWhiteImag;	// ゲージのイメージ
 	CImage* mpGaugeImag;	// 白イメージ
+	CImage* mpFrameImage;	// ゲージの枠のイメージ
 
 	CVector2 mBaseBarSize;	// ゲージのイメージサイズ
 	int mMaxPoint;	// 最大値

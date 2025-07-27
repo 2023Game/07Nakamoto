@@ -29,7 +29,7 @@
 #define MAX_HP 100	// 体力の最大値
 #define MAX_ST 100	// スタミナの最大値
 #define HP_GAUGE_UI_POS 100.0f, 40.0f
-#define SP_GAUGE_UI_POS 110.0f, 80.0f
+#define SP_GAUGE_UI_POS 110.0f, 70.0f
 
 #define EYE_HEIGHT	7.0f		// 視点の高さ
 

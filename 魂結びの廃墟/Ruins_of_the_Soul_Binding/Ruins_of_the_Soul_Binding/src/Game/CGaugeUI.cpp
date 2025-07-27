@@ -3,12 +3,15 @@
 #include "Maths.h"
 #include "CIcon.h"
 
+#define MAX_POINT 100
+
 CGaugeUI::CGaugeUI()
 	: CUIBase(ETaskPriority::eUI, 0, ETaskPauseType::eGame)
 	, mpWhiteImag(nullptr)
 	, mpGaugeImag(nullptr)
+	, mpFrameImage(nullptr)
 	, mBaseBarSize(0.0f, 0.0f)
-	, mMaxPoint(100)
+	, mMaxPoint(MAX_POINT)
 	, mCurPoint(mMaxPoint)
 	, mPercent(1.0f)
 {
@@ -39,6 +42,19 @@ CGaugeUI::CGaugeUI()
 	);
 	CVector2 center = CVector2(-mBaseBarSize.X() * 0.5f, 0.0f);
 	mpWhiteImag->SetCenter(center);
+
+	// ƒQ[ƒW‚Ì˜g‚ğ¶¬
+	mpFrameImage = new CImage
+	(
+		"UI\\washi_gauge.png",
+		ETaskPriority::eUI,
+		0,
+		ETaskPauseType::eGame,
+		false,
+		false
+	);
+	//mpFrameImage->SetCenter(center);
+
 }
 
 CGaugeUI::~CGaugeUI()
@@ -110,5 +126,9 @@ void CGaugeUI::Render()
 	mpWhiteImag->SetColor(barColor);
 	// ƒo[‚Ì•`‰æ
 	mpWhiteImag->Render();
+
+	// ˜g‚Ì•`‰æ
+	mpFrameImage->SetPos(pos);
+	mpFrameImage->Render();
 }
 
