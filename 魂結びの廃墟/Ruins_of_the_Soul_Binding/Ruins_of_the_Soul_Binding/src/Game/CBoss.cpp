@@ -226,8 +226,8 @@ CBoss::~CBoss()
 	CNavManager* navMgr = CNavManager::Instance();
 	if (navMgr != nullptr)
 	{
-		SAFE_DELETE(mpNavNode);
-		SAFE_DELETE(mpLostPlayerNode);
+		mpNavNode->Kill();
+		mpLostPlayerNode->Kill();
 
 		// 巡回ノードに配置したノードも全て削除
 		auto itr = mPatrolPoints.begin();
@@ -236,7 +236,7 @@ CBoss::~CBoss()
 		{
 			CNavNode* del = *itr;
 			itr = mPatrolPoints.erase(itr);
-			delete del;
+			del->Kill();
 		}
 	}
 }
@@ -631,11 +631,13 @@ bool CBoss::MoveTo(const CVector& targetPos, float speed)
 }
 
 // 次に巡回するポイントを変更する
-void CBoss::ChangePatrolPoint()
+bool CBoss::ChangePatrolPoint()
 {
+	// 自身の経路探索ノードが更新中の場合は処理しない
+	if (mpNavNode->IsUpdating()) return false;
 	// 巡回ポイントが設定されていない場合は処理しない
 	int size = mPatrolPoints.size();
-	if (size == 0) return;
+	if (size == 0) return false;
 
 	// 巡回開始時であれば、一番近い巡回ポイントを選択
 	if (mNextPatrolIndex == -1)
@@ -669,27 +671,35 @@ void CBoss::ChangePatrolPoint()
 		if (mNextPatrolIndex >= size) mNextPatrolIndex -= size;
 	}
 
-	if (mNextPatrolIndex >= 0)
-	{
-		CNavManager* navMgr = CNavManager::Instance();
-		if (navMgr != nullptr)
-		{
-			// 経路探索用のノード座標を更新
-			mpNavNode->SetPos(Position());
+	return mNextPatrolIndex >= 0;
+}
 
-			// 巡回ポイントの経路探索ノードの位置を設定しなおすことで、
-			// 各ノードへの接続情報を更新
-			for (CNavNode* node : mPatrolPoints)
-			{
-				node->SetPos(node->GetPos());
-			}
-			// 巡回ポイントまでの最短経路を求める
-			if (navMgr->Navigate(mpNavNode, mPatrolPoints[mNextPatrolIndex], mMoveRoute))
-			{
-				// 次の目的地のインデックスを設定
-				mNextMoveIndex = 1;
-			}
-		}
+// 巡回ルートを更新する
+bool CBoss::UpdatePatrolRouto()
+{
+	// 巡回ポイントの経路探索ノードの位置を設定しなおすことで、
+	// 各ノードへの接続情報を更新
+	for (CNavNode* node : mPatrolPoints)
+	{
+		node->SetPos(node->GetPos());
+	}
+
+	if (!(0 <= mNextPatrolIndex && mNextPatrolIndex < mPatrolPoints.size())) return false;
+
+	CNavManager* navMgr = CNavManager::Instance();
+	if(navMgr == nullptr) return false;
+
+	// 自身のノードが更新中ならば、経路探索は行わない
+	if (mpNavNode->IsUpdating()) return false;
+	// 巡回ポイントが更新中ならば、経路探索を行う
+	CNavNode* patrolPoint = mPatrolPoints[mNextPatrolIndex];
+	if (patrolPoint->IsUpdating()) return false;
+	
+	// 巡回ポイントまでの最短経路を求める
+	if (navMgr->Navigate(mpNavNode, patrolPoint, mMoveRoute))
+	{
+		// 次の目的地のインデックスを設定
+		mNextMoveIndex = 1;
 	}
 }
 
@@ -733,11 +743,21 @@ void CBoss::UpdatePatrol()
 	// ステップ0 : 巡回開始の巡回ポイントを求める
 	case 0:
 		mNextPatrolIndex = -1;
-		ChangePatrolPoint();
-		mStateStep++;
+		if (ChangePatrolPoint())
+		{
+			mStateStep++;
+		}
+		
 		break;
-	// ステップ1 : 巡回ポイントまで移動
+	// ステップ1 : 巡回ポイントまでの移動経路探索
 	case 1:
+		if(UpdatePatrolRouto())
+		{
+			mStateStep++;
+		}
+		break;
+	// ステップ2 : 巡回ポイントまで移動
+	case 2:
 	{
 		// 最短経路の次のノードまで移動
 		CNavNode* moveNode = mMoveRoute[mNextMoveIndex];
@@ -753,8 +773,8 @@ void CBoss::UpdatePatrol()
 		}
 		break;
 	}
-	// ステップ2 : 移動後の待機
-	case 2:
+	// ステップ3 : 移動後の待機
+	case 3:
 		ChangeAnimation((int)EAnimType::eIdle);
 		if (mElapsedTime < PATROL_INTERVAL)
 		{
@@ -762,9 +782,11 @@ void CBoss::UpdatePatrol()
 		}
 		else
 		{
-			ChangePatrolPoint();
-			mStateStep = 1;
-			mElapsedTime = 0.0f;
+			if (ChangePatrolPoint())
+			{
+				mStateStep = 1;
+				mElapsedTime = 0.0f;
+			}
 		}
 		break;
 	}
@@ -815,16 +837,18 @@ void CBoss::UpdateChase()
 	CNavManager* navMgr = CNavManager::Instance();
 	if (navMgr != nullptr)
 	{
-		// 経路探索用のノード座標を更新
-		mpNavNode->SetPos(Position());
-
+		// 自身のノードとターゲットのノードが更新中でなければ、
 		// 自身のノードからターゲットのノードまでの最短経路を求める
 		CNavNode* targetNode = battleTarget->GetNavNode();
-		if (navMgr->Navigate(mpNavNode, targetNode, mMoveRoute))
+		if (!mpNavNode->IsUpdating()
+			&& targetNode != nullptr && !targetNode->IsUpdating())
 		{
-			// 自身のノードからターゲットのノードまで繋がっていたら、
-			// 移動する位置を次のノードの位置に設定
-			targetPos = mMoveRoute[1]->GetPos();
+			if (navMgr->Navigate(mpNavNode, targetNode, mMoveRoute))
+			{
+				// 自身のノードからターゲットのノードまで繋がっていたら、
+				// 移動する位置を次のノードの位置に設定
+				targetPos = mMoveRoute[1]->GetPos();
+			}
 		}
 	}
 	// 移動処理
@@ -873,41 +897,48 @@ void CBoss::UpdateLost()
 			break;
 		case 1:
 			// 経路探索用のノード座標を更新
-			mpNavNode->SetPos(Position());
 			mpLostPlayerNode->SetPos(battleTarget->Position());
 
-			if (!navMgr->Navigate(mpNavNode, mpLostPlayerNode, mMoveRoute))
+			// 自身のノードと見失った位置のノードが更新中でなければ
+			if (!mpNavNode->IsUpdating() && !mpLostPlayerNode->IsUpdating())
 			{
-				// 経路がつながっていなければ、待機状態へ戻す
-				ChangeState((int)EState::eIdle);
-				mpLostPlayerNode->SetEnable(false);
-			}
-			else
-			{
-				// 見失った位置まで経路が繋がっていたら、次のステップへ
-				// 次の移動先を１番近い場所に設定
-				mNextMoveIndex = 1;
-			}
-		case 2:
-			// ターゲットを見失った位置まで移動
-			if (MoveTo(mMoveRoute[mNextMoveIndex]->GetPos(), RUN_SPEED))
-			{
-				mNextMoveIndex++;
-				if (mNextMoveIndex >= mMoveRoute.size())
+				if (!navMgr->Navigate(mpNavNode, mpLostPlayerNode, mMoveRoute))
 				{
-					// 移動が終われば警戒状態へ移行
-					ChangeState((int)EState::eAlert);
+					// 経路がつながっていなければ、待機状態へ戻す
+					ChangeState((int)EState::eIdle);
 					mpLostPlayerNode->SetEnable(false);
 				}
-			}
-			
-			if (mLostElapsedTime < UPDATE_LOST_POS_TIME)
-			{
-				// 見失った時間を加算
-				mLostElapsedTime += Times::DeltaTime();
-				if (mLostElapsedTime >= UPDATE_LOST_POS_TIME)
+				else
 				{
-					mStateStep++;
+					// 見失った位置まで経路が繋がっていたら、次のステップへ
+					// 次の移動先を１番近い場所に設定
+					mNextMoveIndex = 1;
+				}
+			}
+		case 2:
+			// 次の移動先のインデックス値が不正値でなければ
+			if (0 <= mNextMoveIndex && mNextMoveIndex < mMoveRoute.size())
+			{
+				// ターゲットを見失った位置まで移動
+				if (MoveTo(mMoveRoute[mNextMoveIndex]->GetPos(), RUN_SPEED))
+				{
+					mNextMoveIndex++;
+					if (mNextMoveIndex >= mMoveRoute.size())
+					{
+						// 移動が終われば警戒状態へ移行
+						ChangeState((int)EState::eAlert);
+						mpLostPlayerNode->SetEnable(false);
+					}
+				}
+
+				if (mLostElapsedTime < UPDATE_LOST_POS_TIME)
+				{
+					// 見失った時間を加算
+					mLostElapsedTime += Times::DeltaTime();
+					if (mLostElapsedTime >= UPDATE_LOST_POS_TIME)
+					{
+						mStateStep++;
+					}
 				}
 			}
 			break;
@@ -1102,6 +1133,12 @@ void CBoss::Update()
 
 	// 敵のベースクラスの更新
 	CEnemy::Update();
+
+	// 経路探索用のノード座標を更新
+	if (mpNavNode != nullptr)
+	{
+		mpNavNode->SetPos(Position());
+	}
 
 	// 壊せるオブジェクトのリストをクリア
 	mNearBreakObjs.clear();

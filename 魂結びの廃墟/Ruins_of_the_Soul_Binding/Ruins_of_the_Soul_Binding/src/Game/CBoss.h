@@ -102,7 +102,9 @@ private:
 	// 指定した位置まで移動する
 	bool MoveTo(const CVector& targetPos, float speed);
 	// 次に巡回するポイントを変更する
-	void ChangePatrolPoint();
+	bool ChangePatrolPoint();
+	// 巡回ルートを更新する
+	bool UpdatePatrolRouto();
 
 	// 待機状態の更新処理
 	void UpdateIdle();

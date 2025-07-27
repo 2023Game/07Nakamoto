@@ -47,8 +47,8 @@ CSwitchDoorGimmick::~CSwitchDoorGimmick()
 	CNavManager* navMgr = CNavManager::Instance();
 	if (navMgr != nullptr)
 	{
-		SAFE_DELETE(mpNavNode1);
-		SAFE_DELETE(mpNavNode2);
+		mpNavNode1->Kill();
+		mpNavNode2->Kill();
 	}
 }
 

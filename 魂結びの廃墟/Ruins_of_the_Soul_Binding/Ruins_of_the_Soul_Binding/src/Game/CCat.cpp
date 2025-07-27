@@ -141,8 +141,8 @@ CCat::~CCat()
 	CNavManager* navMgr = CNavManager::Instance();
 	if (navMgr != nullptr)
 	{
-		SAFE_DELETE(mpNavNode);
-		SAFE_DELETE(mpTrackingNode);
+		mpNavNode->Kill();
+		mpTrackingNode->Kill();
 	}
 }
 
@@ -213,6 +213,10 @@ void CCat::UpdateIdle()
 // 追従時の移動経路をけいさんするかどうか
 bool CCat::IsCalcTrackingRoute() const
 {
+	// 経路探索の開始ノードと終了ノードが更新中だったら、移動経路を再計算しない
+	if (mpNavNode->IsUpdating()) return false;
+	if (mpTrackingNode->IsUpdating()) return false;
+
 	// 移動していない状態
 	if (mNextTrackingIndex == -1)
 	{
@@ -250,26 +254,27 @@ void CCat::UpdateTracking()
 	CPlayer2 *player = CPlayer2::Instance();
 	CVector playerPos = player->Position();		// プレイヤーまでの座標
 
+	const auto& trail = player->GetTrail();
+	size_t followIndex = 0;
+
+	// 空かどうかを調べる
+	if (!trail.empty())
+	{
+		// 配列の番号で2番目を取得する
+		// 2番目まで中身がはいていない場合は、2番目より小さい配列を取得する
+		followIndex = min(size_t(2), trail.size() - 1);
+	}
+
+	// ついていく座標を設定
+	mFollowPos = trail[followIndex];
+	// ついていく座標に経路探索用のノードを配置
+	mpTrackingNode->SetPos(mFollowPos);
+	mpTrackingNode->SetEnable(true);
+
+
 	// 移動経路を再計算するか
 	if (IsCalcTrackingRoute())
 	{
-		const auto& trail = player->GetTrail();
-		size_t followIndex = 0;
-
-		// 空かどうかを調べる
-		if (!trail.empty())
-		{
-			// 配列の番号で2番目を取得する
-			// 2番目まで中身がはいていない場合は、2番目より小さい配列を取得する
-			followIndex = min(size_t(2), trail.size() - 1);
-		}
-
-		// ついていく座標を設定
-		mFollowPos = trail[followIndex];
-		// ついていく座標に経路探索用のノードを配置
-		mpTrackingNode->SetPos(mFollowPos);
-		mpTrackingNode->SetEnable(true);
-
 		// ついていく座標までの経路を探索する
 		CNavManager::Instance()->Navigate(mpNavNode, mpTrackingNode, mTrackingRouteNodes);
 		// 移動経路が見つかった

@@ -83,10 +83,10 @@ CDoorGimmickLR::~CDoorGimmickLR()
 	CNavManager* navMgr = CNavManager::Instance();
 	if (navMgr != nullptr)
 	{
-		SAFE_DELETE(mpNavNodeL1);
-		SAFE_DELETE(mpNavNodeL2);
-		SAFE_DELETE(mpNavNodeR1);
-		SAFE_DELETE(mpNavNodeR2);
+		mpNavNodeL1->Kill();
+		mpNavNodeL2->Kill();
+		mpNavNodeR1->Kill();
+		mpNavNodeR2->Kill();
 	}
 }
 
