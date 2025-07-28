@@ -19,6 +19,8 @@
 #include "CHandGlow.h"
 #include "CRoom.h"
 #include "ItemData.h"
+#include "CEquipmentUI.h"
+#include "CFireball.h"
 
 // アニメーションのパス
 #define ANIM_PATH "Character\\Player2\\Rusk\\anim\\"
@@ -48,8 +50,15 @@
 
 #define RESERVED_CAPACITYE 7	// リストの初期容量
 
+#define EQIOPMENT_UI_POS 1150.0f, 620.0f	// 装備中のアイテムのUI座標
+#define EQIOPMENT_UI_ALPHA 0.8f				// 装備中のアイテムのUIのアルファ値
 // スタミナ増減値(１秒間に増減する値）
 #define STAMINA_DELTA 20.0f
+
+// 火球の発射位置のオフセット座標
+#define FIREBALL_OFFSET_POS CVector(0.0f, 5.0f, 10.0f)
+#define FIREBALL_SPEED 100.0f	// 火球の速度
+#define FIREBALL_DIST 200.0f	// 火球が移動できる距離
 
 // プレイヤーのインスタンス
 CPlayer2* CPlayer2::spInstance = nullptr;
@@ -157,6 +166,10 @@ CPlayer2::CPlayer2()
 	mpStGauge->SetMaxPoint((int)mMaxSt);
 	mpStGauge->SetCurPoint(ceilf(mSt));
 	mpStGauge->SetPos(SP_GAUGE_UI_POS);
+
+	mpEquipment = new CEquipmentUI();
+	mpEquipment->SetPos(EQIOPMENT_UI_POS);
+	mpEquipment->SetAlpha(EQIOPMENT_UI_ALPHA);
 }
 
 // デストラクタ
@@ -192,6 +205,16 @@ void CPlayer2::ChangeState(int state)
 	}
 
 	CPlayerBase::ChangeState(state);
+}
+
+// 火球を発射
+void CPlayer2::ShotFireball()
+{
+	CVector pos = Position() + Rotation() * FIREBALL_OFFSET_POS;
+	CVector forward = VectorZ();
+
+	CFireball* fireball = new CFireball(FIREBALL_SPEED, FIREBALL_DIST);
+	fireball->Position(pos);
 }
 
 // 待機
@@ -613,6 +636,12 @@ void CPlayer2::Update()
 	if (CInput::PushKey('P'))
 	{
 		System::ExitGame();
+	}
+
+	// 「P」キーを押したら、ゲームを終了
+	if (CInput::PushKey('F'))
+	{
+		ShotFireball();
 	}
 
 	// キャラクターの更新

@@ -81,6 +81,9 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>(		"Button",			"Field\\Object\\Switch\\buttun.obj");
 	CResourceManager::Load<CModel>(		"StandWallCol",		"Field\\Object\\Switch\\stand_wall_col.obj");
 	CResourceManager::Load<CModel>(		"StandFloorCol",	"Field\\Object\\Switch\\stand_floor_col.obj");
+	// 火球
+	CResourceManager::Load<CModel>(		"Fireball",			"Weapon\\fire.obj");
+	
 
 	// テスト用の移動エリアを制限する壁
 	CResourceManager::Load<CModel>(		"TestWall",			"Field\\Test\\test_wall0.obj");

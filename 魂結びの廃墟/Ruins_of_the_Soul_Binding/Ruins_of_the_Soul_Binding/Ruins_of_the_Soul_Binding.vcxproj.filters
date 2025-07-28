@@ -532,6 +532,12 @@
     <ClCompile Include="src\Game\CItemObj.cpp">
       <Filter>ソース ファイル\Game\Item\Object</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CEquipmentUI.cpp">
+      <Filter>ソース ファイル\Game\UI\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CFireball.cpp">
+      <Filter>ソース ファイル\Game\Weapon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -968,6 +974,12 @@
     </ClInclude>
     <ClInclude Include="src\Game\CItemObj.h">
       <Filter>ソース ファイル\Game\Item\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CEquipmentUI.h">
+      <Filter>ソース ファイル\Game\UI\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CFireball.h">
+      <Filter>ソース ファイル\Game\Weapon</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

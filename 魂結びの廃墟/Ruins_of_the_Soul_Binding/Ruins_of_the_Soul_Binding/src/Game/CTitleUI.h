@@ -60,8 +60,10 @@ private:
 	int mSelectIndex;	// 現在選択している項目
 
 	CFont* mpLogoFont;	// タイトルロゴのフォント
-	CText* mpTitleLogo;	// タイトルロゴ
+	//CText* mpTitleLogo;	// タイトルロゴ
 	CImage* mpTitleBg;	// タイトル背景イメージ
+	CImage* mpTitleLogo;	// タイトルロゴのイメージ
+	CImage* mpTitleLogo2;	// タイトルロゴのフリガナのイメージ
 	CText* mpStartText;	// 「CLICK TO START」のテキスト
 	std::vector<CExpandButton*> mButtons;
 };

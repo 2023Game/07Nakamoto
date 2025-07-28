@@ -10,6 +10,7 @@ class CGaugeUI;
 class CDemonPower;
 class CHandGlow;
 struct ItemData;
+class CEquipmentUI;
 
 /*
 プレイヤークラス
@@ -127,12 +128,17 @@ private:
 	// 状態を切り替え
 	void ChangeState(int state) override;
 
+	// 火球を発射
+	void ShotFireball();
+
 	CGaugeUI* mpHpGauge;	// HPゲージ
 
 	float mMaxSt;	// スタミナの最大値
 	float mSt;	// スタミナ
 	bool mIsDash;	// ダッシュフラグ
 	CGaugeUI* mpStGauge;	// スタミナゲージ
+
+	CEquipmentUI* mpEquipment;	// 装備枠
 
 	bool mTogether;	// 猫と一緒にいるか
 

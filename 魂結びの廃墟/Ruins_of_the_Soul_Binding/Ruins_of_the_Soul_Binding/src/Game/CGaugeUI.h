@@ -27,7 +27,7 @@ protected:
 	// 現在のポイントをゲージに反映
 	void ApplyPoint();
 
-	// バーの
+	// バーの色(白)
 	virtual CColor CalcBarColor() const;
 
 	CImage* mpWhiteImag;	// ゲージのイメージ

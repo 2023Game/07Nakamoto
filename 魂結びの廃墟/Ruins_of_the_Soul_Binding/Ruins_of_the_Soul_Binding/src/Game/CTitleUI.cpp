@@ -25,39 +25,65 @@ CTitleUI::CTitleUI()
 	, mElapsedTime(0.0f)
 	, mIsEnd(false)
 {
-	// タイトルロゴのフォントデータを生成
-	mpLogoFont = new CFont("res\\Font\\toroman.ttf");
-	mpLogoFont->SetFontSize(128);
-	mpLogoFont->SetAlignment(FTGL::TextAlignment::ALIGN_CENTER);
-	mpLogoFont->SetLineLength(WINDOW_WIDTH);
+	//// タイトルロゴのフォントデータを生成
+	//mpLogoFont = new CFont("res\\Font\\toroman.ttf");
+	//mpLogoFont->SetFontSize(128);
+	//mpLogoFont->SetAlignment(FTGL::TextAlignment::ALIGN_CENTER);
+	//mpLogoFont->SetLineLength(WINDOW_WIDTH);
 
-	// タイトルロゴのテキストを生成
-	mpTitleLogo = new CText
-	(
-		mpLogoFont, 128,
-		CVector2(0.0f, 32.0f),
-		CVector2(WINDOW_WIDTH, WINDOW_HEIGHT),
-		CColor(0.11f, 0.1f, 0.1f),
-		ETaskPriority::eUI,
-		0,
-		ETaskPauseType::eDefault,
-		false,
-		false
-	);
-	mpTitleLogo->SetText("タイトルロゴ");
-	mpTitleLogo->SetEnableOutline(true);
-	mpTitleLogo->SetOutlineColor(CColor(0.9f, 0.9f, 0.9f));
+	//// タイトルロゴのテキストを生成
+	//mpTitleLogo = new CText
+	//(
+	//	mpLogoFont, 128,
+	//	CVector2(0.0f, 32.0f),
+	//	CVector2(WINDOW_WIDTH, WINDOW_HEIGHT),
+	//	CColor(0.11f, 0.1f, 0.1f),
+	//	ETaskPriority::eUI,
+	//	0,
+	//	ETaskPauseType::eDefault,
+	//	false,
+	//	false
+	//);
+	//mpTitleLogo->SetText("タイトルロゴ");
+	//mpTitleLogo->SetEnableOutline(true);
+	//mpTitleLogo->SetOutlineColor(CColor(0.9f, 0.9f, 0.9f));
 
 	// タイトル画面の背景イメージを生成
 	mpTitleBg = new CImage
 	(
-		"UI/title_bg.png",
+		"UI\\Title\\title_bg.png",
 		ETaskPriority::eUI,
 		0,
 		ETaskPauseType::eDefault,
 		false,
 		false
 	);
+
+	// タイトルロゴの画像イメージを生成
+	mpTitleLogo2 = new CImage
+	(
+		"UI\\Title\\title_text2.png",
+		ETaskPriority::eUI,
+		0,
+		ETaskPauseType::eDefault,
+		false,
+		false
+	);
+	mpTitleLogo2->SetCenter(mpTitleLogo2->GetSize() * 0.5f);
+	mpTitleLogo2->SetPos(CVector2(640.0f, 220.0f));
+
+	// タイトルロゴの画像イメージを生成
+	mpTitleLogo = new CImage
+	(
+		"UI\\Title\\title_text.png",
+		ETaskPriority::eUI,
+		0,
+		ETaskPauseType::eDefault,
+		false,
+		false
+	);
+	mpTitleLogo->SetCenter(mpTitleLogo->GetSize() * 0.5f);
+	mpTitleLogo->SetPos(CVector2(640.0f, 300.0f));
 
 	// 「CLICK TO START」のテキストを生成
 	mpStartText = new CText
@@ -89,7 +115,7 @@ CTitleUI::CTitleUI()
 		false, false
 	);
 	// ボタンの画像を読み込み
-	btn1->LoadButtonImage("UI/title_start0.png", "UI/title_start1.png");
+	btn1->LoadButtonImage("UI\\Title\\title_start0.png", "UI\\Title\\title_start1.png");
 	// ボタンクリック時に呼び出されるコールバック関数を設定
 	btn1->SetOnClickFunc(std::bind(&CTitleUI::OnClickStart, this));
 	// ボタンは最初は無効化して、スケール値を0にしておく
@@ -106,7 +132,7 @@ CTitleUI::CTitleUI()
 		ETaskPriority::eUI, 0, ETaskPauseType::eGame,
 		false, false
 	);
-	btn2->LoadButtonImage("UI/title_option0.png", "UI/title_option1.png");
+	btn2->LoadButtonImage("UI\\Title\\title_option0.png", "UI\\Title\\title_option1.png");
 	btn2->SetOnClickFunc(std::bind(&CTitleUI::OnClickOption, this));
 	btn2->SetEnable(false);
 	btn2->SetScale(0.0f);
@@ -120,7 +146,7 @@ CTitleUI::CTitleUI()
 		ETaskPriority::eUI, 0, ETaskPauseType::eGame,
 		false, false
 	);
-	btn3->LoadButtonImage("UI/title_quit0.png", "UI/title_quit1.png");
+	btn3->LoadButtonImage("UI\\Title\\title_quit0.png", "UI\\Title\\title_quit1.png");
 	btn3->SetOnClickFunc(std::bind(&CTitleUI::OnClickQuit, this));
 	btn3->SetEnable(false);
 	btn3->SetScale(0.0f);
@@ -130,8 +156,10 @@ CTitleUI::CTitleUI()
 // デストラクタ
 CTitleUI::~CTitleUI()
 {
-	SAFE_DELETE(mpLogoFont);
+	//SAFE_DELETE(mpLogoFont);
+	//SAFE_DELETE(mpTitleLogo);
 	SAFE_DELETE(mpTitleLogo);
+	SAFE_DELETE(mpTitleLogo2);
 	SAFE_DELETE(mpTitleBg);
 	SAFE_DELETE(mpStartText);
 
@@ -328,7 +356,7 @@ void CTitleUI::Update()
 			break;
 	}
 
-	mpTitleLogo->Update();
+	//mpTitleLogo->Update();
 	mpTitleBg->Update();
 	mpStartText->Update();
 	for (CButton* btn : mButtons)
@@ -342,11 +370,13 @@ void CTitleUI::Render()
 {
 	// 描画順：
 	// 背景→タイトルロゴ→「CLICK TO START」かメニューボタン
-
+	// 
 	// 背景描画
 	mpTitleBg->Render();
 	// タイトルロゴ描画
+	//mpTitleLogo->Render();
 	mpTitleLogo->Render();
+	mpTitleLogo2->Render();
 
 	// 待機状態ならば、「CLICK TO START」を表示
 	if (mState == EState::eIdle)
