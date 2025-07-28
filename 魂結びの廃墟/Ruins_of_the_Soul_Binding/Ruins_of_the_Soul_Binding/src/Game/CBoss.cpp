@@ -416,7 +416,9 @@ CVector CBoss::GetHeadForwardVec() const
 
 	CVector start = m.Position();
 	CVector end = start + m.VectorZ() * 100.0f;
-	Primitive::DrawLine(start, end, CColor::red, 2.0f);
+
+	// Šm”F—p
+	//Primitive::DrawLine(start, end, CColor::red, 2.0f);
 
 	return vec.Normalized();
 }

@@ -7,6 +7,7 @@
 class CItemSlotUI;
 class CExpandButton;
 class CItemMenu;
+class SlotData;
 
 // インベントリのクラス
 class CInventory : public CTask
@@ -29,6 +30,8 @@ public:
 
 	// アイテムを追加する
 	void AddItem(ItemType type, int count);
+	// アイテムスロットのデータを取得
+	const std::vector<SlotData>& GetItemSlotData() const;
 
 	// カーソルがスロットに重なった
 	void EnterItemSlot(int index);
@@ -49,8 +52,6 @@ private:
 
 	CImage* mpBackground;		// インベントリの背景
 	CImage* mpInventoryFrame;	// インベントリの枠
-	//CImage* mpBackMenu;		// 閉じるボタン
-	//CImage* mpSelectFrame;	// 選択されているボタンを強調する枠
 	CImage* mpSlotHighlight;	// カーソルが重なっているアイテムスロットを強調表示する
 	CItemMenu* mpItemMenu;		// アイテム選択のメニュー覧
 

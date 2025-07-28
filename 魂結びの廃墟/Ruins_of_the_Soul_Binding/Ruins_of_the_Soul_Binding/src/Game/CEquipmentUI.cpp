@@ -1,5 +1,6 @@
 #include "CEquipmentUI.h"
 #include "CImage.h"
+#include "CInventory.h"
 
 // コンストラクタ
 CEquipmentUI::CEquipmentUI()

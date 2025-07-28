@@ -46,7 +46,7 @@ CItemMenu::CItemMenu()
 	// ボタンリストに追加
 	mButtons.push_back(btn1);
 
-	// 戻るボタンを生成
+	// 装備ボタンを生成
 	CButton* btn2 = new CButton
 	(
 		CVector2::zero,
@@ -55,11 +55,26 @@ CItemMenu::CItemMenu()
 		false, false
 	);
 	// ボタンの画像を読み込み
-	btn2->LoadButtonImage("UI\\ItemMenu\\close1.png", "UI\\ItemMenu\\close2.png");
+	btn2->LoadButtonImage("UI\\ItemMenu\\equip1.png", "UI\\ItemMenu\\equip2.png");
 	// ボタンクリック時に呼び出されるコールバック関数を設定
-	btn2->SetOnClickFunc(std::bind(&CItemMenu::OnClickClose, this));
+	btn2->SetOnClickFunc(std::bind(&CItemMenu::OnClickUse, this));
 	// ボタンリストに追加
 	mButtons.push_back(btn2);
+
+	// 戻るボタンを生成
+	CButton* btn3 = new CButton
+	(
+		CVector2::zero,
+		BUTTON_SIZE,
+		ETaskPriority::eUI, 0, ETaskPauseType::eGame,
+		false, false
+	);
+	// ボタンの画像を読み込み
+	btn3->LoadButtonImage("UI\\ItemMenu\\close1.png", "UI\\ItemMenu\\close2.png");
+	// ボタンクリック時に呼び出されるコールバック関数を設定
+	btn3->SetOnClickFunc(std::bind(&CItemMenu::OnClickClose, this));
+	// ボタンリストに追加
+	mButtons.push_back(btn3);
 
 	SetEnable(false);
 	SetShow(false);
