@@ -15,22 +15,27 @@ CRoomManager::CRoomManager()
 	, mIsShowRoom(false)
 #endif
 {
-
+	spInstance = this;
 }
 
 // デストラクタ
 CRoomManager::~CRoomManager()
 {
+	spInstance = nullptr;
+
+	// 部屋のデータを全て削除
+	auto itr = mRooms.begin();
+	while (itr != mRooms.end())
+	{
+		CRoom* room = *itr;
+		delete room;
+		itr = mRooms.erase(itr);
+	}
 }
 
 // インスタンスを取得
 CRoomManager* CRoomManager::Instance()
 {
-	if (spInstance == nullptr)
-	{
-		spInstance = new CRoomManager();
-	}
-
 	return spInstance;
 }
 

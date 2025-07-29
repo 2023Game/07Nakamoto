@@ -28,8 +28,11 @@ CRoom::CRoom(std::vector<RoomData> roomData, std::string name)
 // デストラクタ
 CRoom::~CRoom()
 {
-	// 部屋管理クラスのリストから自身を取り除く
-	CRoomManager::Instance()->Remove(this);
+	CRoomManager* rm = CRoomManager::Instance();
+	if (rm != nullptr)
+	{
+		rm->Remove(this);
+	}
 }
 
 // 部屋の名前を取得

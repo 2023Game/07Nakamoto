@@ -6,6 +6,7 @@
 class CItemSlotUI;
 class CImage;
 class SlotData;
+struct ItemData;
 
 class CEquipmentUI : public CUIBase
 {
@@ -15,7 +16,8 @@ public:
 	// デストラクタ
 	~CEquipmentUI();
 
-
+	// 指定したアイテムを装備
+	void EquipItem(const ItemData* item);
 
 	// 更新
 	void Update() override;
@@ -24,22 +26,5 @@ public:
 
 private:
 	CImage* mpEquipmentSlot1;	// 装備スロット枠のイメージ
-	CImage* mpEquipmentSlot2;	// 装備スロット枠のイメージ
-	CImage* mpEquipmentSlot3;	// 装備スロット枠のイメージ
-
-	//// アイテムスロットのデータ
-	//struct SlotData
-	//{
-	//	// そのスロットに入っているアイテムのデータ
-	//	const ItemData* data;
-	//	int count;		// 入っているアイテムの個数
-	//	CItemSlotUI* slotUI;	// アイテムスロットのUI
-	//	SlotData()
-	//		: data(nullptr)
-	//		, count(0)
-	//		, slotUI(nullptr)
-	//	{}
-	//};
-	//// アイテムスロットのリスト
-	//std::vector<SlotData> mItemSlots;
+	CImage* mpEquipItemImage;	// 装備しているアイテムのイメージ
 };

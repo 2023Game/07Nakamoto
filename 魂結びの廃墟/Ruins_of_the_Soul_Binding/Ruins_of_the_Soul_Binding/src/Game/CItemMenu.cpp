@@ -57,7 +57,7 @@ CItemMenu::CItemMenu()
 	// ボタンの画像を読み込み
 	btn2->LoadButtonImage("UI\\ItemMenu\\equip1.png", "UI\\ItemMenu\\equip2.png");
 	// ボタンクリック時に呼び出されるコールバック関数を設定
-	btn2->SetOnClickFunc(std::bind(&CItemMenu::OnClickUse, this));
+	btn2->SetOnClickFunc(std::bind(&CItemMenu::OnClickEquipment, this));
 	// ボタンリストに追加
 	mButtons.push_back(btn2);
 

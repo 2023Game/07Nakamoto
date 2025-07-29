@@ -9,6 +9,9 @@ public:
 	// インスタンスを取得
 	static CRoomManager* Instance();
 
+	// コンストラクタ
+	CRoomManager();
+
 	// 部屋をリストに追加
 	void Add(CRoom* room);
 	// 部屋をリストから取り除く
@@ -24,10 +27,7 @@ public:
 	void Render() override;
 #endif
 
-
 private:
-	// コンストラクタ
-	CRoomManager();
 	// デストラクタ
 	~CRoomManager();
 

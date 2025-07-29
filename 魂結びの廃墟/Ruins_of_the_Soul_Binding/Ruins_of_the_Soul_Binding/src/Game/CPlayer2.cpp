@@ -20,6 +20,7 @@
 #include "CRoom.h"
 #include "ItemData.h"
 #include "CEquipmentUI.h"
+#include "CInventory.h"
 #include "CFireball.h"
 
 // アニメーションのパス
@@ -85,6 +86,7 @@ CPlayer2::CPlayer2()
 	, mSt(mMaxSt)
 	, mChannelingTime(0)
 	, mTogether(true)
+	, mEquipItemSlotIndex(-1)
 #if _DEBUG
 	,mpDebugFov(nullptr)
 #endif
@@ -223,57 +225,17 @@ void CPlayer2::UpdateIdle()
 	// 接地していれば、
 	if (mIsGrounded)
 	{
-		// 近くの調べるオブジェクトを取得
-		CInteractObject* obj = GetNearInteractObj();
-		if (obj != nullptr)
+		// 近くの調べるオブジェクトの確認
+		CheckNearInteractObj();
+
+		// 何かアイテムを装備しているか
+		if (mEquipItemSlotIndex >= 0)
 		{
-#if _DEBUG
-			// 探知範囲内に入ったオブジェクトの名前を表示
-			CDebugPrint::Print
-			(
-				"%s:%s\n",
-				obj->GetDebugName().c_str(),
-				obj->GetInteractStr().c_str()
-			);
-#endif
-
-			// 調べられるオブジェクトの上に調べるUIを表示
-			CGameUI::Instance()->ShowInteractUI(obj);
-
-			// 近くの調べられるオブジェクトが、妖力の源であれば、
-			if (CDemonPower* dp = dynamic_cast<CDemonPower*>(obj))
+			// 装備している状態で左クリックで、アイテムを使用
+			if (CInput::PushKey(VK_LBUTTON))
 			{
-				// 左クリックを押したら妖力を流し込む
-				if (CInput::PushKey('E'))
-				{
-					mpChannelingDemonPower = dp;
-					ChangeState((int)EState::eChanneling);
-				}
+				CInventory::Instance()->UseItemSlot(mEquipItemSlotIndex);
 			}
-			else
-			{
-				// [E]キーを押したら、近くの調べるオブジェクトを調べる
-				if (CInput::PushKey('E'))
-				{
-					if (obj->CanInteract())
-					{
-						obj->Interact();
-					}
-				}
-			}
-		}
-		// 近くに調べるオブジェクトがなかった
-		else
-		{
-			// 調べるUIを非表示にする
-			CGameUI::Instance()->HideInteractUI();
-		}
-
-		// 操作中で無ければ、
-		if (!IsOperate())
-		{
-			// 調べるUIを非表示にする
-			CGameUI::Instance()->HideInteractUI();
 		}
 	}
 }
@@ -451,10 +413,35 @@ void CPlayer2::UseItem(const ItemData* item)
 	}
 }
 
+// 指定したスロット番号のアイテムを装備
+void CPlayer2::EquipItem(int slotIndex)
+{
+	// 既に設定しているスロット番号と一致したら処理しない
+	if (slotIndex == mEquipItemSlotIndex) return;
+
+	// 装備しているスロット番号を記憶しておく
+	mEquipItemSlotIndex = slotIndex;
+	// 装備したアイテムをUIに設定
+	const ItemData* itemData = CInventory::Instance()->GetItemSlotData(mEquipItemSlotIndex);
+	mpEquipment->EquipItem(itemData);
+
+}
+
+// 装備しているアイテムスロットの番号を返す
+int CPlayer2::GetEquipItemSlotIndex() const
+{
+	return mEquipItemSlotIndex;
+}
+
 // プレイヤーのバウンディングボックスを返す
 const CBounds& CPlayer2::GetBounds() const
 {
 	return mpBodyCol->Bounds();
+}
+
+const CEquipmentUI& CPlayer2::GetEquipmentUI() const
+{
+	return *mpEquipment;
 }
 
 // オブジェクト削除を伝える
@@ -506,6 +493,64 @@ CVector CPlayer2::CalcMoveVec()
 	}
 
 	return move;
+}
+
+// 近くの調べるオブジェクトの確認処理
+void CPlayer2::CheckNearInteractObj()
+{
+	// 近くの調べるオブジェクトを取得
+	CInteractObject* obj = GetNearInteractObj();
+	if (obj != nullptr)
+	{
+#if _DEBUG
+		// 探知範囲内に入ったオブジェクトの名前を表示
+		CDebugPrint::Print
+		(
+			"%s:%s\n",
+			obj->GetDebugName().c_str(),
+			obj->GetInteractStr().c_str()
+		);
+#endif
+
+		// 調べられるオブジェクトの上に調べるUIを表示
+		CGameUI::Instance()->ShowInteractUI(obj);
+
+		// 近くの調べられるオブジェクトが、妖力の源であれば、
+		if (CDemonPower* dp = dynamic_cast<CDemonPower*>(obj))
+		{
+			// 妖力の源の近くで、
+			// [E]キーを押したら、妖力を流し込む
+			if (CInput::PushKey('E'))
+			{
+				mpChannelingDemonPower = dp;
+				ChangeState((int)EState::eChanneling);
+			}
+		}
+		else
+		{
+			// [E]キーを押したら、近くの調べるオブジェクトを調べる
+			if (CInput::PushKey('E'))
+			{
+				if (obj->CanInteract())
+				{
+					obj->Interact();
+				}
+			}
+		}
+	}
+	// 近くに調べるオブジェクトがなかった
+	else
+	{
+		// 調べるUIを非表示にする
+		CGameUI::Instance()->HideInteractUI();
+	}
+
+	// 操作中で無ければ、
+	if (!IsOperate())
+	{
+		// 調べるUIを非表示にする
+		CGameUI::Instance()->HideInteractUI();
+	}
 }
 
 // 移動の更新処理
@@ -638,7 +683,7 @@ void CPlayer2::Update()
 		System::ExitGame();
 	}
 
-	// 「P」キーを押したら、ゲームを終了
+	// 「F」キーを押したら、火球を発射
 	if (CInput::PushKey('F'))
 	{
 		ShotFireball();
@@ -679,19 +724,6 @@ void CPlayer2::Update()
 	// スタミナゲージの更新処理
 	mpStGauge->SetMaxPoint((int)mMaxSt);
 	mpStGauge->SetCurPoint(ceilf(mSt));
-
-#if _DEBUG
-	// その場で復活
-	if (mState == (int)EState::eDeath)
-	{
-		if (CInput::PushKey('R'))
-		{
-			mHp = 100;
-			mState = (int)EState::eIdle;
-		}
-	}
-#endif // _DEBUG
-
 }
 
 // ステータスを整数にして取得する

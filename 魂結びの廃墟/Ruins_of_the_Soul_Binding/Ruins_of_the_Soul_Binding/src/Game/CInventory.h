@@ -30,8 +30,12 @@ public:
 
 	// アイテムを追加する
 	void AddItem(ItemType type, int count);
-	// アイテムスロットのデータを取得
-	//const std::vector<SlotData>& GetItemSlotData() const;
+
+	// 指定された番号のアイテムスロットを返す
+	const ItemData* GetItemSlotData(int slotIndex) const;
+
+	// 指定したアイテムスロットのアイテムを使用
+	void UseItemSlot(int index);
 
 	// カーソルがスロットに重なった
 	void EnterItemSlot(int index);
@@ -48,8 +52,12 @@ public:
 	void Render() override;
 
 private:
+	// 指定したアイテムスロットのアイテムを装備
+	void EquipItemSlot(int index);
+
 	static CInventory* spInstance;
 
+	CImage* mpBlakBg;			// 黒背景
 	CImage* mpBackground;		// インベントリの背景
 	CImage* mpInventoryFrame;	// インベントリの枠
 	CImage* mpSlotHighlight;	// カーソルが重なっているアイテムスロットを強調表示する

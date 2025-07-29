@@ -33,7 +33,7 @@ CInventory* CInventory::Instance()
 
 // コンストラクタ
 CInventory::CInventory()
-	: CTask(ETaskPriority::eUI, 0, ETaskPauseType::eMenu)
+	: CTask(ETaskPriority::eInventry, 0, ETaskPauseType::eMenu)
 	, mItemSlots(SLOT_COUNT)
 	, mSlotButtons(SLOT_COLUMN)
 	, mIsOpened(false)
@@ -53,11 +53,20 @@ CInventory::CInventory()
 		slot.slotUI = new CItemSlotUI(i);
 	}
 
+	mpBlakBg = new CImage
+	(
+		"UI\\white.png",
+		ETaskPriority::eInventry, 0, ETaskPauseType::eMenu,
+		false, false
+	);
+	mpBlakBg->SetSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+	mpBlakBg->SetColor(0.0f, 0.0f, 0.0f, 0.5f);
+
 	// インベントリの背景
 	mpBackground = new CImage
 	(
 		"UI\\menu_back.png",
-		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
+		ETaskPriority::eInventry, 0, ETaskPauseType::eMenu,
 		false, false
 	);
 	mpBackground->SetCenter(mpBackground->GetSize() * 0.5f);
@@ -68,7 +77,7 @@ CInventory::CInventory()
 	mpInventoryFrame = new CImage
 	(
 		"UI\\StatusScreen\\Item_slot.png",
-		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
+		ETaskPriority::eInventry, 0, ETaskPauseType::eMenu,
 		false, false
 	);
 	mpInventoryFrame->SetCenter(mpInventoryFrame->GetSize() * 0.5f);
@@ -78,7 +87,7 @@ CInventory::CInventory()
 	mpSlotHighlight = new CImage
 	(
 		"UI\\white.png",
-		ETaskPriority::eUI, 0,
+		ETaskPriority::eInventry, 0,
 		ETaskPauseType::eMenu,
 		false, false
 	);
@@ -103,6 +112,7 @@ CInventory::~CInventory()
 		spInstance = nullptr;
 	}
 
+	SAFE_DELETE(mpBlakBg);
 	SAFE_DELETE(mpBackground);
 	SAFE_DELETE(mpInventoryFrame);
 	SAFE_DELETE(mpSlotHighlight);
@@ -271,11 +281,35 @@ void CInventory::AddItem(ItemType type, int count)
 	}
 }
 
-// アイテムスロットのデータを取得
-//const std::vector<SlotData>& CInventory::GetItemSlotData() const
-//{
-//	//return mItemSlots;
-//}
+// 指定された番号のアイテムスロットを返す
+const ItemData* CInventory::GetItemSlotData(int slotIndex) const
+{
+	// 範囲がいであれば、nullptrを返す
+	if (!(0 <= slotIndex && slotIndex < mItemSlots.size())) return nullptr;
+	return mItemSlots[slotIndex].data;
+}
+
+// 指定したアイテムスロットのアイテムを使用
+void CInventory::UseItemSlot(int index)
+{
+	CPlayer2* player = CPlayer2::Instance();
+	SlotData& slot = mItemSlots[index];
+
+	// アイテムを使用
+	player->UseItem(slot.data);
+	// 使用したアイテムの個数を減らす
+	slot.count--;
+	// アイテムが無くなれば、アイテムスロットを空にする
+	if (slot.count == 0)
+	{
+		slot.data = nullptr;
+
+		// プレイヤーに装備解除を伝える
+		player->EquipItem(-1);
+	}
+	// アイテムスロットの情報をUIに反映
+	slot.slotUI->SetItemSloto(slot.data, slot.count);
+}
 
 // カーソルがスロットに重なった
 void CInventory::EnterItemSlot(int index)
@@ -333,8 +367,28 @@ void CInventory::ReleaseItemSlot(int index)
 	enterData.count = tmpCount;
 	enterData.slotUI->SetItemSloto(enterData.data, enterData.count);
 
+	// プレイヤーがアイテムを装備しているか
+	CPlayer2* player = CPlayer2::Instance();
+	int equipSlotIndex = player->GetEquipItemSlotIndex();
+	if (equipSlotIndex >= 0)
+	{
+		// 掴んで移動したアイテムが装備アイテムであれば、
+		// 移動後のスロットのアイテムを装備アイテムとして設定
+		if (equipSlotIndex == mGrabSlotIndex) player->EquipItem(mEnterSlotIndex);
+		// 離したスロットのアイテムが装備アイテムであれば、
+		// 掴んだスロットと入れ替えたアイテムを装備アイテムとして設定
+		else if (equipSlotIndex == mEnterSlotIndex) player->EquipItem(mGrabSlotIndex);
+	}
+
 	// 掴んでいた状態を解除
 	mGrabSlotIndex = -1;
+}
+
+// 指定したアイテムスロットのアイテムを装備
+void CInventory::EquipItemSlot(int index)
+{
+	CPlayer2* player = CPlayer2::Instance();
+	player->EquipItem(index);
 }
 
 // 更新
@@ -399,16 +453,7 @@ void CInventory::Update()
 				Close();
 
 				// アイテムを使用
-				player->UseItem(slot.data);
-				// 使用したアイテムの個数を減らす
-				slot.count--;
-				// アイテムが無くなれば、アイテムスロットを空にする
-				if (slot.count == 0)
-				{
-					slot.data = nullptr;
-				}
-				// アイテムスロットの情報をUIに反映
-				slot.slotUI->SetItemSloto(slot.data, slot.count);
+				UseItemSlot(mEnterSlotIndex);
 			}
 			// アイテムが使用できなかった場合
 			else
@@ -420,7 +465,11 @@ void CInventory::Update()
 		// 「装備」を押した場合
 		else if (mpItemMenu->IsEquipment())
 		{
+			// アイテムを装備したら、アイテムメニューとインベントリを閉じる
+			mpItemMenu->Close();
+			Close();
 
+			EquipItemSlot(mEnterSlotIndex);
 		}
 		// 「閉じる」を押した場合
 		else if (mpItemMenu->IsClose())
@@ -433,6 +482,7 @@ void CInventory::Update()
 // 描画
 void CInventory::Render()
 {
+	mpBlakBg->Render();
 	mpBackground->Render();
 	mpInventoryFrame->Render();
 
@@ -473,3 +523,4 @@ void CInventory::Render()
 	}
 
 }
+

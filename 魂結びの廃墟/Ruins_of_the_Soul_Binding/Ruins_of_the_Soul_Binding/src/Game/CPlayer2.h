@@ -71,9 +71,16 @@ public:
 	bool CanUseItem(const ItemData* item);
 	// アイテムの効果を使う
 	void UseItem(const ItemData* item);
+	// 指定したスロット番号のアイテムを装備
+	void EquipItem(int slotIndex);
+	// 装備しているアイテムスロットの番号を返す
+	int GetEquipItemSlotIndex() const;
 
 	// プレイヤーのバウンディングボックスを返す
 	const CBounds& GetBounds() const override;
+
+	// 装備UIのポインタを返す
+	const CEquipmentUI& GetEquipmentUI() const;
 
 private:
 	// オブジェクト削除を伝える
@@ -81,6 +88,9 @@ private:
 
 	// キーの入力情報から移動ベクトルを求める
 	CVector CalcMoveVec();
+
+	// 近くの調べるオブジェクトの確認処理
+	void CheckNearInteractObj();
 
 	// 待機状態
 	void UpdateIdle();
@@ -153,6 +163,9 @@ private:
 	std::vector<CVector> mTrails;
 	// 最後に位置を保存したときのプレイヤーの位置
 	CVector mLastPos;
+
+	// そ美しているアイテムのスロットインデックス値
+	int mEquipItemSlotIndex;
 
 #if _DEBUG
 	CDebugFieldOfView* mpDebugFov;	// 視野範囲のデバッグ表示

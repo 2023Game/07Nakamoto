@@ -20,6 +20,7 @@
 #include "CGameUI.h"
 #include "CSpider.h"
 #include "CInventory.h"
+#include "CRoomManager.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -92,19 +93,22 @@ void CGameScene::Load()
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
 
-	// 調べるオブジェクトの管理クラスの作成
+	// 部屋管理クラスを生成
+	new CRoomManager();
+
+	// 調べるオブジェクトの管理クラスの生成
 	new CInteractObjectManager();
 
-	// プレイヤーの管理クラスの作成
+	// プレイヤーの管理クラスの生成
 	new CPlayerManager();
 
-	// 経路探索管理クラスを作成
+	// 経路探索管理クラスを生成
 	new CNavManager();
 
 	// フィールドの生成
 	mpField = new CField();
 
-	// ゲームメニューを作成
+	// ゲームメニューを生成
 	new CInventory();
 
 	// UIの生成
