@@ -31,7 +31,7 @@ public:
 	// アイテムを追加する
 	void AddItem(ItemType type, int count);
 	// アイテムスロットのデータを取得
-	const std::vector<SlotData>& GetItemSlotData() const;
+	//const std::vector<SlotData>& GetItemSlotData() const;
 
 	// カーソルがスロットに重なった
 	void EnterItemSlot(int index);

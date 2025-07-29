@@ -23,7 +23,7 @@
 #include "CFireball.h"
 
 // アニメーションのパス
-#define ANIM_PATH "Character\\Player2\\Rusk\\anim\\"
+#define ANIM_PATH "Character\\Player2\\Rusk2\\anim\\"
 
 #define BODY_HEIGHT 16.0f	// 本体のコライダーの高さ
 #define BODY_RADIUS 3.0f	// 本体のコライダーの幅
@@ -66,14 +66,14 @@ CPlayer2* CPlayer2::spInstance = nullptr;
 // プレイヤーのアニメーションデータのテーブル
 const std::vector<CPlayerBase::AnimData> ANIM_DATA =
 {
-	{ "",						true,	251.0f,	1.0f	},	// 待機
+	{ "",						true,	301.0f,	1.0f	},	// 待機
 	{ANIM_PATH"walk.x",			true,	31.0f,	0.5f	},	// 歩行
 	{ANIM_PATH"run.x",			true,	22.0f,	0.5f	},	// 走行
-	{ANIM_PATH"hit.x",			false,	30.0f,	1.0f	},	// ダメージを受けた時(仮)
-	{ANIM_PATH"died.x",			false,	174.0f,	1.0f	},	// 走行
+	{ANIM_PATH"hit.x",			false,	37.0f,	1.0f	},	// ダメージを受けた時(仮)
+	{ANIM_PATH"died.x",			false,	96.0f,	0.7f	},	// 死亡
 
 	{ANIM_PATH"channeling_start.x",	false,	32.0f,	0.5f	},	// 妖力を流し込み開始
-	{ANIM_PATH"channeling.x",		true,	9.0f,	0.3f	},	// 妖力を流し込み中
+	{ANIM_PATH"channeling.x",		true,	3.0f,	0.3f	},	// 妖力を流し込み中
 	{ANIM_PATH"channeling_end.x",	false,	39.0f,	0.5f	},	// 妖力を流し込み終了
 
 };

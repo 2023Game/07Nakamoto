@@ -272,10 +272,10 @@ void CInventory::AddItem(ItemType type, int count)
 }
 
 // アイテムスロットのデータを取得
-const std::vector<SlotData>& CInventory::GetItemSlotData() const
-{
-	//return mItemSlots;
-}
+//const std::vector<SlotData>& CInventory::GetItemSlotData() const
+//{
+//	//return mItemSlots;
+//}
 
 // カーソルがスロットに重なった
 void CInventory::EnterItemSlot(int index)

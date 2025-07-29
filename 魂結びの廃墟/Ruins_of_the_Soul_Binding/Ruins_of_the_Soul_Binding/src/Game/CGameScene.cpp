@@ -57,7 +57,7 @@ void CGameScene::Load()
 	//ここでゲーム中に必要な
 	//リソースの読み込みやクラスの生成を行う
 	// プレイヤー
-	CResourceManager::Load<CModelX>(	"Player2",			"Character\\Player2\\Rusk\\idle.x");
+	CResourceManager::Load<CModelX>(	"Player2",			"Character\\Player2\\Rusk2\\idle.x");
 	CResourceManager::Load<CModelX>(	"Cat",				"Character\\Cat\\cat.x");
 	// 敵
 	CResourceManager::Load<CModelX>(	"Warrok",			"Character\\Enemy\\Warrok\\warrok.x");
