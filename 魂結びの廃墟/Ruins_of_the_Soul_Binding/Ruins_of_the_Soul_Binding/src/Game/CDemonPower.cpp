@@ -7,7 +7,7 @@
 #include "CGaugeUI3D.h"
 
 #define DEFAULT_TEXT_PATH "UI\\Interact\\break.png"
-#define DEFAULT_KEY_PATH "UI\\BottonUI\\LeftClick.png"
+#define DEFAULT_KEY_PATH "UI\\BottonUI\\E.png"
 
 #define HP 10	// ‘Ï‹v—Í
 

@@ -124,10 +124,15 @@ bool CItemMenu::IsUse() const
 	return mSelectIndex == 0;
 }
 
+bool CItemMenu::IsEquipment() const
+{
+	return mSelectIndex == 1;
+}
+
 // アイテムメニューを閉じるか
 bool CItemMenu::IsClose() const
 {
-	return mSelectIndex == 1;
+	return mSelectIndex == 2;
 }
 
 // 更新
@@ -195,7 +200,7 @@ void CItemMenu::ChangeState(EState state)
 	mStateStep = 0;
 }
 
-// [Use]クリック時のコールバック関数
+// [使う]クリック時のコールバック関数
 void CItemMenu::OnClickUse()
 {
 	if (mDecision) return;
@@ -204,11 +209,20 @@ void CItemMenu::OnClickUse()
 	mDecision = true;
 }
 
-// [Back]クリック時のコールバック関数
-void CItemMenu::OnClickClose()
+// [装備]クリック時のコールバック関数
+void CItemMenu::OnClickEquipment()
 {
 	if (mDecision) return;
 
 	mSelectIndex = 1;
+	mDecision = true;
+}
+
+// [戻る]クリック時のコールバック関数
+void CItemMenu::OnClickClose()
+{
+	if (mDecision) return;
+
+	mSelectIndex = 2;
 	mDecision = true;
 }

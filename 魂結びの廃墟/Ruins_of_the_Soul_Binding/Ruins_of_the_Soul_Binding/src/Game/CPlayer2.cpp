@@ -244,7 +244,7 @@ void CPlayer2::UpdateIdle()
 			if (CDemonPower* dp = dynamic_cast<CDemonPower*>(obj))
 			{
 				// 左クリックを押したら妖力を流し込む
-				if (CInput::PushKey(VK_LBUTTON))
+				if (CInput::PushKey('E'))
 				{
 					mpChannelingDemonPower = dp;
 					ChangeState((int)EState::eChanneling);
@@ -340,7 +340,7 @@ void CPlayer2::UpdateChanneling()
 		break;
 	case 2:
 		// 左クリックを押している間
-		if (CInput::Key(VK_LBUTTON) && IsOperate())
+		if (CInput::Key('E') && IsOperate())
 		{
 			// 妖力を流し込むアニメーション
 			ChangeAnimation((int)EAnimType::eChanneling);

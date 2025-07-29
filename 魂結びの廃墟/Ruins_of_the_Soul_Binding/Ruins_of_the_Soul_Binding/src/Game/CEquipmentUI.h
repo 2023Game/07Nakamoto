@@ -23,7 +23,9 @@ public:
 	void Render() override;
 
 private:
-	CImage* mpEquipmentSlot;	// 装備スロット枠のイメージ
+	CImage* mpEquipmentSlot1;	// 装備スロット枠のイメージ
+	CImage* mpEquipmentSlot2;	// 装備スロット枠のイメージ
+	CImage* mpEquipmentSlot3;	// 装備スロット枠のイメージ
 
 	//// アイテムスロットのデータ
 	//struct SlotData

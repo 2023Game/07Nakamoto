@@ -25,6 +25,8 @@ public:
 
 	// アイテムを使う
 	bool IsUse() const;
+	// アイテムを装備するか
+	bool IsEquipment() const;
 	// アイテムメニューが閉じているか
 	bool IsClose() const;
 
@@ -56,6 +58,8 @@ private:
 
 	// [使う]クリック時のコールバック関数
 	void OnClickUse();
+	// [装備]クリック時のコールバック関数
+	void OnClickEquipment();
 	// [戻る]クリック時のコールバック関数
 	void OnClickClose();
 

@@ -417,6 +417,11 @@ void CInventory::Update()
 				mpItemMenu->Close();
 			}
 		}
+		// 「装備」を押した場合
+		else if (mpItemMenu->IsEquipment())
+		{
+
+		}
 		// 「閉じる」を押した場合
 		else if (mpItemMenu->IsClose())
 		{

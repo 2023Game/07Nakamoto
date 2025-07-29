@@ -5,25 +5,26 @@
 // コンストラクタ
 CEquipmentUI::CEquipmentUI()
 	: CUIBase(ETaskPriority::eUI, 0, ETaskPauseType::eGame)
-	, mpEquipmentSlot(nullptr)
+	, mpEquipmentSlot1(nullptr)
 {
-	mpEquipmentSlot = new CImage
+	// 装備アイテムのスロットの生成
+	mpEquipmentSlot1 = new CImage
 	(
-		"UI\\EquipmentSlot.png",
+		"UI\\EquipmentSlot2.png",
 		ETaskPriority::eUI,
 		0,
 		ETaskPauseType::eGame,
 		false,
 		false
 	);
-	mpEquipmentSlot->SetCenter(mpEquipmentSlot->GetSize() * 0.5f);
+	mpEquipmentSlot1->SetCenter(mpEquipmentSlot1->GetSize() * 0.5f);
 
 }
 
 // デストラクタ
 CEquipmentUI::~CEquipmentUI()
 {
-	SAFE_DELETE(mpEquipmentSlot);
+	SAFE_DELETE(mpEquipmentSlot1);
 }
 
 // 更新
@@ -34,7 +35,7 @@ void CEquipmentUI::Update()
 // 描画
 void CEquipmentUI::Render()
 {
-	mpEquipmentSlot->SetAlpha(GetAlpha());
-	mpEquipmentSlot->SetPos(mPosition);
-	mpEquipmentSlot->Render();
+	mpEquipmentSlot1->SetAlpha(GetAlpha());
+	mpEquipmentSlot1->SetPos(mPosition);
+	mpEquipmentSlot1->Render();
 }
