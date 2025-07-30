@@ -46,6 +46,18 @@ CField::CField()
 	);
 
 	// テスト用
+	mpTestObj = CResourceManager::Get<CModel>("TestObj");
+	mpTestObjFloorMesh = new CColliderMesh
+	(
+		this, ELayer::eFloor, CResourceManager::Get<CModel>("TestObjFloor"),
+		true, 1.0f
+	);
+	mpTestObjWallMesh = new CColliderMesh
+	(
+		this, ELayer::eWall, CResourceManager::Get<CModel>("TestObjWall"),
+		true, 1.0f
+	);
+
 	//mpTestWall = CResourceManager::Get<CModel>("TestWall");
 	//mpTestWallCol = new CColliderMesh(this, ELayer::eWall, mpTestWall, true);
 
@@ -87,7 +99,10 @@ CField::~CField()
 {
 	SAFE_DELETE(mpFloorColliderMesh);
 	SAFE_DELETE(mpWallColliderMesh);
-	// SAFE_DELETE(mpTestWallCol);
+
+	SAFE_DELETE(mpTestObjWallMesh);
+	SAFE_DELETE(mpTestObjWallMesh);
+
 }
 
 // 床のコライダーを取得
@@ -141,6 +156,9 @@ void CField::CreateNavNodes()
 		new CNavNode(CVector(5.5f, 0.0f, -130.5f));
 		new CNavNode(CVector(80.5f, 0.0f, -130.5f));
 		new CNavNode(CVector(80.5f, 0.0f, -250.0f));
+
+		new CNavNode(CVector(40.0f, 0.0f, 185.0f));
+		new CNavNode(CVector(40.0f, 0.0f, 200.0f));
 
 	}
 }
@@ -982,5 +1000,7 @@ void CField::Render()
 {
 	mpFloor->Render(Matrix());
 	mpWall->Render(Matrix());
+
+	mpTestObj->Render(Matrix());
 	//mpTestWall->Render(Matrix());
 }

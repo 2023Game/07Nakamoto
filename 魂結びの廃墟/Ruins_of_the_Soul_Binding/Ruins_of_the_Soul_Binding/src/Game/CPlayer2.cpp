@@ -56,6 +56,8 @@
 // スタミナ増減値(１秒間に増減する値）
 #define STAMINA_DELTA 20.0f
 
+#define ITEM_RECAST_TIME 5.0f	// アイテムの再使用できるまでの時間
+
 // 火球の発射位置のオフセット座標
 #define FIREBALL_OFFSET_POS CVector(0.0f, 5.0f, 10.0f)
 #define FIREBALL_SPEED 100.0f	// 火球の速度
@@ -87,6 +89,7 @@ CPlayer2::CPlayer2()
 	, mChannelingTime(0)
 	, mTogether(true)
 	, mEquipItemSlotIndex(-1)
+	, mItemRecastTime(0.0f)
 #if _DEBUG
 	,mpDebugFov(nullptr)
 #endif
@@ -209,6 +212,17 @@ void CPlayer2::ChangeState(int state)
 	CPlayerBase::ChangeState(state);
 }
 
+// アイテムのクールタイム
+void CPlayer2::ItemRecast()
+{
+	mItemRecastTime -= Times::DeltaTime();
+
+	if (mItemRecastTime < 0.0f)
+	{
+		mItemRecastTime = 0.0f;
+	}
+}
+
 // 火球を発射
 void CPlayer2::ShotFireball()
 {
@@ -231,10 +245,15 @@ void CPlayer2::UpdateIdle()
 		// 何かアイテムを装備しているか
 		if (mEquipItemSlotIndex >= 0)
 		{
-			// 装備している状態で左クリックで、アイテムを使用
-			if (CInput::PushKey(VK_LBUTTON))
+			if (mItemRecastTime <= 0.0f)
 			{
-				CInventory::Instance()->UseItemSlot(mEquipItemSlotIndex);
+				// 装備している状態で左クリックで、アイテムを使用
+				if (CInput::PushKey(VK_LBUTTON))
+				{
+					CInventory::Instance()->UseItemSlot(mEquipItemSlotIndex);
+
+					mItemRecastTime = ITEM_RECAST_TIME;
+				}
 			}
 		}
 	}
@@ -697,18 +716,19 @@ void CPlayer2::Update()
 	if (IsOperate())
 	{
 		CVector pos = Position();
-		CDebugPrint::Print("PlayerHP:%d / %d\n", mHp, mMaxHp);
+		//CDebugPrint::Print("PlayerHP:%d / %d\n", mHp, mMaxHp);
 		CDebugPrint::Print("PlayerPos:%.2f, %.2f, %.2f\n", pos.X(), pos.Y(), pos.Z());
-		CDebugPrint::Print("PlayerGrounded:%s\n", mIsGrounded ? "true" : "false");
+		//CDebugPrint::Print("PlayerGrounded:%s\n", mIsGrounded ? "true" : "false");
 		CDebugPrint::Print("PlayerState:%d\n", mState);
 		CDebugPrint::Print("FPS:%f\n", Times::FPS());
 	}
 	CDebugPrint::Print("部屋(人)：%s\n", mpRoom != nullptr ? mpRoom->GetName().c_str() : "なし");
+	CDebugPrint::Print("Recast:%f\n", mItemRecastTime);
+
 #endif
 
 	// 地面についているか
 	mIsGrounded = false;
-
 
 	CVector p = Position();
 	float distance = CVector::Distance(mLastPos, p);
@@ -717,6 +737,12 @@ void CPlayer2::Update()
 	{
 		SetTrail();
 	};
+
+	if (mItemRecastTime > 0.0f)
+	{
+		ItemRecast();
+	}
+
 
 	// 体力ゲージの更新
 	mpHpGauge->SetMaxPoint(mMaxHp);

@@ -66,8 +66,8 @@ void CGameScene::Load()
 	// 床
 	CResourceManager::Load<CModel>(		"Floor",			"Field\\Abandoned_School_Floor.obj");
 	// 壁
-	CResourceManager::Load<CModel>(		"Wall",				"Field\\Abandoned_School_Wall2.obj"); 
-	CResourceManager::Load<CModel>(		"WallCol",			"Field\\Abandoned_School_Wall_Col2.obj");
+	CResourceManager::Load<CModel>(		"Wall",				"Field\\Abandoned_School_Wall3.obj"); 
+	CResourceManager::Load<CModel>(		"WallCol",			"Field\\Abandoned_School_Wall_Col3.obj");
 	// 扉
 	CResourceManager::Load<CModel>(		"RightDoor",		"Door\\right_door.obj");
 	CResourceManager::Load<CModel>(		"RightDoorCol",		"Door\\right_door_col.obj");
@@ -87,6 +87,10 @@ void CGameScene::Load()
 	
 
 	// テスト用の移動エリアを制限する壁
+	CResourceManager::Load<CModel>(		"TestObj",			"Field\\Test\\obj4.obj");
+	CResourceManager::Load<CModel>(		"TestObjFloor",		"Field\\Test\\obj4_floor.obj");
+	CResourceManager::Load<CModel>(		"TestObjWall",		"Field\\Test\\obj4_wall.obj");
+
 	CResourceManager::Load<CModel>(		"TestWall",			"Field\\Test\\test_wall0.obj");
 	CResourceManager::Load<CModel>(		"TestWallBrack",	"Field\\Test\\Brack_Wall.obj");
 

@@ -138,6 +138,9 @@ private:
 	// 状態を切り替え
 	void ChangeState(int state) override;
 
+	// アイテムのクールタイム
+	void ItemRecast();
+
 	// 火球を発射
 	void ShotFireball();
 
@@ -164,8 +167,10 @@ private:
 	// 最後に位置を保存したときのプレイヤーの位置
 	CVector mLastPos;
 
-	// そ美しているアイテムのスロットインデックス値
+	// 装備しているアイテムのスロットインデックス値
 	int mEquipItemSlotIndex;
+
+	float mItemRecastTime;	// アイテムの使用時のクールタイム
 
 #if _DEBUG
 	CDebugFieldOfView* mpDebugFov;	// 視野範囲のデバッグ表示

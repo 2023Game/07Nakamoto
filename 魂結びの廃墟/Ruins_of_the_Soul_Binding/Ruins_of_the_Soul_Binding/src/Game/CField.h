@@ -51,6 +51,10 @@ private:
 	CModel* mpWall;
 	CModel* mpWallCol;
 
+	CModel* mpTestObj;
+	CColliderMesh* mpTestObjWallMesh;
+	CColliderMesh* mpTestObjFloorMesh;
+
 	//CModel* mpTestWall;
 	//CColliderMesh* mpTestWallCol;
 
