@@ -41,8 +41,10 @@
 
 #define FOV_ANGLE			 50.0f	// 視野範囲の角度
 #define FOV_LENGTH			200.0f	// 視野範囲の距離
+#define FOV_HEIGHT			 10.0f	// 視野範囲の高さ
 #define EYE_HEIGHT			 10.0f	// 視点の高さ
 
+#define ALERT_STOP_TIME		  2.0f	// 警戒状態へ遷移する静止時間
 #define ALERT_FOV_ANGLE		 60.0f	// 警戒時の視野範囲の角度
 #define ALERT_FOV_LENGTH	300.0f	// 警戒時の視野範囲の距離
 
@@ -86,6 +88,7 @@ CBoss::CBoss(std::vector<CVector> patrolPoints)
 	, mNextMoveIndex(0)
 	, mPower(ATTACK_POWER)
 	, mDemonPower(0)
+	, mStopElapsedTime(0.0f)
 #if _DEBUG
 	, mpDebugFov(nullptr)
 #endif
@@ -434,6 +437,7 @@ void CBoss::ChangeState(int state)
 	}
 	// 状態切り替え
 	CEnemy::ChangeState(state);
+	mStopElapsedTime = 0.0f;
 }
 
 // 現在の戦闘相手を取得
@@ -454,6 +458,7 @@ bool CBoss::IsFoundTarget(CObjectBase* target) const
 	CVector pos = Position();
 	// 自身からターゲットまでのベクトルを求める
 	CVector  vec = targetPos - pos;
+
 	vec.Y(0.0f);	//ターゲットとの高さの差を考慮しない
 
 	// ① 視野角度内か求める
@@ -484,15 +489,21 @@ bool CBoss::IsFoundTarget(CObjectBase* target) const
 // 現在位置からターゲットが見えているかどうか
 bool CBoss::IsLookTarget(CObjectBase* target) const
 {
+	CVector targetPos = target->Position();
+	CVector selfPos = Position();
+	// ターゲットの高さで視野範囲内か判定
+	float diffY = abs(targetPos.Y() - selfPos.Y());
+	if (diffY >= FOV_HEIGHT) return false;
+
 	// フィールドが存在しない場合は、遮蔽物がないので見える
 	CField* field = CField::Instance();
 	if (field == nullptr) return true;
 
 	CVector offsetPos = CVector(0.0f, EYE_HEIGHT, 0.0f);
 	// ターゲットの座標を取得
-	CVector targetPos = target->Position() + offsetPos;
+	targetPos += offsetPos;
 	// 自分自身の座標を取得
-	CVector selfPos = Position() + offsetPos;
+	selfPos += offsetPos;
 
 	CHitInfo hit;
 	//フィールドとレイ判定を行い、遮蔽物が存在した場合は、ターゲットが見えない
@@ -542,7 +553,7 @@ bool CBoss::CheckAttackBreakObj()
 }
 
 // キャラクターを攻撃するか確認
-bool CBoss::ChackAttackChara()
+bool CBoss::CheckAttackChara()
 {
 	for (CCharaBase* target : mTargetCharas)
 	{
@@ -709,7 +720,7 @@ bool CBoss::UpdatePatrolRouto()
 void CBoss::UpdateIdle()
 {
 	// 攻撃するキャラクターが見つかった場合は、この処理を実行しない
-	if (ChackAttackChara())
+	if (CheckAttackChara())
 	{
 		return;
 	}
@@ -732,7 +743,7 @@ void CBoss::UpdateIdle()
 void CBoss::UpdatePatrol()
 {
 	// 攻撃するキャラクターが見つかった場合は、この処理を実行しない
-	if (ChackAttackChara())
+	if (CheckAttackChara())
 	{
 		return;
 	}
@@ -806,6 +817,14 @@ void CBoss::UpdateChase()
 		return;
 	}
 
+	// 一定時間静止すると、警戒状態へ移行
+	if (mStopElapsedTime >= ALERT_STOP_TIME)
+	{
+		// 移動が終われば警戒状態へ移行
+		ChangeState((int)EState::eAlert);
+		return;
+	}
+
 	// ターゲットの座標へ向けて移動する
 	CVector targetPos = battleTarget->Position();
 
@@ -819,10 +838,21 @@ void CBoss::UpdateChase()
 		return;
 	}
 
-	// ターゲットに攻撃できるならば、攻撃状態へ移行
+	// ターゲットに攻撃できるならば、
 	if (CanAttackBattleTarget())
 	{
-		ChangeState((int)EState::eAttack);
+		// ターゲットの高さの差分が視野範囲内ならば
+		float diffY = abs(battleTarget->Position().Y() - Position().Y());
+		if (diffY < FOV_HEIGHT)
+		{
+			// 攻撃状態へ移行
+			ChangeState((int)EState::eAttack);
+		}
+		// 視野範囲外であれば、警戒状態へ移行
+		else
+		{
+			ChangeState((int)EState::eAlert);
+		}
 		return;
 	}
  
@@ -853,10 +883,10 @@ void CBoss::UpdateChase()
 			}
 		}
 	}
+
 	// 移動処理
 	if (MoveTo(targetPos, RUN_SPEED))
 	{
-
 	}
 }
 
@@ -884,6 +914,14 @@ void CBoss::UpdateLost()
 	// 近くの壊せるオブジェクトを壊すのであれば、見失った状態を抜ける
 	if (CheckAttackBreakObj())
 	{
+		return;
+	}
+
+	// 一定時間静止すると、警戒状態へ移行
+	if (mStopElapsedTime >= ALERT_STOP_TIME)
+	{
+		// 移動が終われば警戒状態へ移行
+		ChangeState((int)EState::eAlert);
 		return;
 	}
 
@@ -961,7 +999,7 @@ void CBoss::UpdateAlert()
 	// ステップ２：警戒開始
 	case 1:
 		// 攻撃できるキャラクターが存在した場合は、そこで終了
-		if (ChackAttackChara())
+		if (CheckAttackChara())
 		{
 			return;
 		}
@@ -1074,6 +1112,23 @@ void CBoss::UpdateDeath()
 // 更新
 void CBoss::Update()
 {
+	CVector currPos = Position();
+	float moveDist = (currPos - mLastPos).Length();
+	if (moveDist <= 0.1f)
+	{
+		mStopElapsedTime += Times::DeltaTime();
+	}
+	else
+	{
+		mStopElapsedTime = 0.0f;
+	}
+	mLastPos = Position();
+
+#if _DEBUG
+	CDebugPrint::Print("moveDist:%f\n", moveDist);
+	CDebugPrint::Print("StopTime:%f\n", mStopElapsedTime);
+#endif
+
 	// 妖力の源の数を取得
 	int demonPower = CDemonPowerManager::Instance()->GetDemonPower();
 	// 妖力の源が残り3つの時、

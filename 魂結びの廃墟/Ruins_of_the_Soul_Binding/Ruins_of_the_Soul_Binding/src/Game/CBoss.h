@@ -95,7 +95,7 @@ private:
 	// 壊せるオブジェクトを攻撃するか確認
 	bool CheckAttackBreakObj();
 	// キャラクターを攻撃するか確認
-	bool ChackAttackChara();
+	bool CheckAttackChara();
 	// 戦闘相手の死亡確認をして、戦闘相手がまだ存在するか確認
 	CObjectBase* ChackDeathBattleTargets();
 
@@ -142,6 +142,7 @@ private:
 	float mLostElapsedTime;		// 見失ってからの経過時間
 	// 巡回ポイントのリスト
 	std::vector<CNavNode*> mPatrolPoints;
+	//std::vector<CVector*> mPatrolPoints;
 	int mNextPatrolIndex;	// 次に巡回する番号
 
 	std::vector<CNavNode*> mMoveRoute;	// 求めた最短経路記憶用
@@ -169,4 +170,6 @@ private:
 	// 頭の行列
 	const CMatrix* mpHeadMtx;
 
+	float mStopElapsedTime;
+	CVector mLastPos;
 };
