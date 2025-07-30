@@ -193,8 +193,8 @@ CBoss::CBoss(std::vector<CVector> patrolPoints)
 	// 巡回ポイントに経路探索用のノードを配置
 	for (CVector point : patrolPoints)
 	{
-		CNavNode* node = new CNavNode(point, true);
-		mPatrolPoints.push_back(node);
+		//CNavNode* node = new CNavNode(point, true);
+		mPatrolPoints.push_back(point);
 	}
 
 	// 妖力の源の数を取得
@@ -232,15 +232,15 @@ CBoss::~CBoss()
 		mpNavNode->Kill();
 		mpLostPlayerNode->Kill();
 
-		// 巡回ノードに配置したノードも全て削除
-		auto itr = mPatrolPoints.begin();
-		auto end = mPatrolPoints.end();
-		while (itr != end)
-		{
-			CNavNode* del = *itr;
-			itr = mPatrolPoints.erase(itr);
-			del->Kill();
-		}
+		//// 巡回ノードに配置したノードも全て削除
+		//auto itr = mPatrolPoints.begin();
+		//auto end = mPatrolPoints.end();
+		//while (itr != end)
+		//{
+		//	CNavNode* del = *itr;
+		//	itr = mPatrolPoints.erase(itr);
+		//	del->Kill();
+		//}
 	}
 }
 
@@ -660,7 +660,7 @@ bool CBoss::ChangePatrolPoint()
 		// 全ての巡回ポイントの距離を調べ、一番近い巡回ポイントを探す
 		for (int i = 0; i < size; i++)
 		{
-			CVector point = mPatrolPoints[i]->GetPos();
+			CVector point = mPatrolPoints[i];
 			CVector vec = point - Position();
 			vec.Y(0.0f);
 			float dist = vec.Length();
@@ -1234,7 +1234,7 @@ void CBoss::Render()
 			CColor c = i == mNextPatrolIndex ? CColor::red : CColor::cyan;
 			Primitive::DrawBox
 			(
-				mPatrolPoints[i]->GetPos() + CVector(0.0f, rad * 2.0f, 0.0f),
+				mPatrolPoints[i] + CVector(0.0f, rad * 2.0f, 0.0f),
 				CVector::one * rad,
 				c
 			);

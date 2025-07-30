@@ -141,8 +141,8 @@ private:
 	CNavNode* mpLostPlayerNode;	// プレイヤーを見失った位置のノード
 	float mLostElapsedTime;		// 見失ってからの経過時間
 	// 巡回ポイントのリスト
-	std::vector<CNavNode*> mPatrolPoints;
-	//std::vector<CVector*> mPatrolPoints;
+	//std::vector<CNavNode*> mPatrolPoints;
+	std::vector<CVector> mPatrolPoints;
 	int mNextPatrolIndex;	// 次に巡回する番号
 
 	std::vector<CNavNode*> mMoveRoute;	// 求めた最短経路記憶用
