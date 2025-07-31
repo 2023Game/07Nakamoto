@@ -131,10 +131,65 @@ void CGameScene::Load()
 	CBoss* warrok = new CBoss
 	(
 		{
-			CVector( 90.0f, 0.0, 60.0f),
-			CVector(200.0f, 0.0, 60.0f),
-			CVector(200.0f, 0.0, 180.0f),
-			CVector( 90.0f, 0.0, 180.0f),
+			// ルート1
+			{
+				CVector(200.0f, 0.0, 60.0f),
+				CVector(200.0f, 0.0, 180.0f),
+				CVector(120.0f, 0.0, 180.0f),
+				CVector(120.0f, 0.0, 450.0f),
+				CVector(-20.0f, 0.0, 450.0f),
+				CVector(-20.0f, 0.0, 395.0f),
+			},
+			// ルート2
+			{
+				CVector(-300.0f, 0.0, 395.0f),
+				CVector(-300.0f, 0.0, 256.5f),
+				CVector(-210.0f, 0.0, 256.5f),
+				CVector(-210.0f, 0.0, 55.5f),
+				CVector(-274.5f, 0.0, 55.5f),
+				CVector(-274.5f, 0.0, -210.0f),
+				CVector(-155.0f, 0.0, -210.0f),
+				CVector(-155.0f, 0.0, -300.0f),
+				CVector(-20.0f, 0.0, -300.0f),
+			},
+			// ルート3
+			{
+				CVector(85.0f, 0.0, -250.0f),
+				CVector(85.0f, 0.0, -64.5f),
+				CVector(66.0f, 0.0, -64.5f),
+				CVector(66.0f, 0.0, 115.0f),
+				CVector(-50.0f, 0.0, 115.0f),
+				CVector(-90.0f, 0.0, 180.0f),
+				CVector(-110.0f, 0.0, 194.5f),
+				CVector(-170.0f, 0.0, 194.5f),
+
+			},
+			// ルート4
+			{
+				CVector(-11.5f, 0.0, -180.0f),
+				CVector(-155.0f, 0.0, -180.0f),
+				CVector(65.0f, 0.0, -60.0f),
+				CVector(65.0f, 0.0, 60.0f),
+				CVector(-90.0f, 0.0, 60.0f),
+				CVector(-90.0f, 0.0, 310.0f),
+				CVector(-80.0f, 0.0, 330.0f),
+			},
+			// ルート5
+			{
+				CVector(-90.0f, 0.0, 395.0f),
+				CVector(-265.0f, 0.0, 395.0f),
+				CVector(-265.0f, 0.0, 256.5f),
+				CVector(-230.0f, 0.0, 256.5f),
+				CVector(-180.0f, 0.0, 195.0f),
+				CVector(-90.0f, 0.0, 180.0f),
+				CVector(66.0f, 0.0, 60.0f),
+				CVector(66.0f, 0.0, -62.0f),
+				CVector(90.0f, 0.0, -65.0f),
+				CVector(90.0f, 0.0, -130.0f),
+				CVector(5.0f, 0.0, -130.0f),
+				CVector(-10.0f, 0.0, -150.0f),
+			},
+
 		}
 	);
 	warrok->Scale(1.0f, 1.0f, 1.0f);

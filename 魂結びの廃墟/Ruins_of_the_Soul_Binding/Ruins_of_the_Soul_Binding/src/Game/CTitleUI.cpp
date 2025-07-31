@@ -106,7 +106,7 @@ CTitleUI::CTitleUI()
 	mpStartText->SetEnableOutline(true);
 	mpStartText->SetOutlineColor(CColor(0.0f, 0.0f, 0.0f));
 
-	// [START]ボタンを生成
+	// [はじめる]ボタンを生成
 	CExpandButton* btn1 = new CExpandButton
 	(
 		CVector2(WINDOW_WIDTH * 0.5f, 450.0f),
@@ -124,7 +124,7 @@ CTitleUI::CTitleUI()
 	// ボタンリストに追加
 	mButtons.push_back(btn1);
 
-	// [OPTION]ボタンを生成
+	// [設定]ボタンを生成
 	CExpandButton* btn2 = new CExpandButton
 	(
 		CVector2(WINDOW_WIDTH * 0.5f, 550.0f),
@@ -138,7 +138,7 @@ CTitleUI::CTitleUI()
 	btn2->SetScale(0.0f);
 	mButtons.push_back(btn2);
 
-	// [QUIT]ボタンを生成
+	// [おわる]ボタンを生成
 	CExpandButton* btn3 = new CExpandButton
 	(
 		CVector2(WINDOW_WIDTH * 0.5f, 650.0f),

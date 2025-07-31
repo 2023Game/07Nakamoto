@@ -8,13 +8,9 @@
 #include "CExpandButton.h"
 #include "Easing.h"
 
-// 「CLICK TO START」の点滅時間
-#define START_TEXT_BLINK_TIME 1.0f
-// 「CLICK TO START」の点滅間隔
-#define START_TEXT_INTERVAL_TIME 3.0f
-// タイトルメニューのアニメーション時間
+// メニューのアニメーション時間
 #define OPEN_ANIM_TIME 0.25f
-// タイトルメニューのアニメーション後の待ち時間
+// メニューのアニメーション後の待ち時間
 #define OPENED_WAIT_TIME 0.5f
 
 // コンストラクタ
@@ -36,23 +32,40 @@ CGameClearUI::CGameClearUI()
 		false
 	);
 
-	// [START]ボタンを生成
+	// [タイトルへ]ボタンを生成
 	CExpandButton* btn1 = new CExpandButton
 	(
 		CVector2(WINDOW_WIDTH * 0.5f, 450.0f),
-		CVector2(181.0f, 47.0f),
+		CVector2(224.0f, 50.0f),
 		ETaskPriority::eUI, 0, ETaskPauseType::eGame,
 		false, false
 	);
-	// ボタンの画像を読み込み
-	btn1->LoadButtonImage("UI\\title_quit0.png", "UI\\title_quit1.png");
+	// タイトルへの画像を読み込み
+	btn1->LoadButtonImage("UI\\title_he0.png", "UI\\title_he1.png");
 	// ボタンクリック時に呼び出されるコールバック関数を設定
 	btn1->SetOnClickFunc(std::bind(&CGameClearUI::OnClickStart, this));
 	// ボタンは最初は無効化して、スケール値を0にしておく
 	btn1->SetEnable(false);
-	//btn1->SetScale(0.0f);
 	// ボタンリストに追加
 	mButtons.push_back(btn1);
+
+	// [おわる]ボタンを生成
+	CExpandButton* btn2 = new CExpandButton
+	(
+		CVector2(WINDOW_WIDTH * 0.5f, 550.0f),
+		CVector2(180.0f, 52.0f),
+		ETaskPriority::eUI, 0, ETaskPauseType::eGame,
+		false, false
+	);
+	// タイトルへの画像を読み込み
+	btn2->LoadButtonImage("UI\\Title\\title_quit0.png", "UI\\Title\\title_quit1.png");
+	// ボタンクリック時に呼び出されるコールバック関数を設定
+	btn2->SetOnClickFunc(std::bind(&CGameClearUI::OnClickQuit, this));
+	// ボタンは最初は無効化して、スケール値を0にしておく
+	btn2->SetEnable(false);
+	// ボタンリストに追加
+	mButtons.push_back(btn2);
+
 }
 
 // デストラクタ
@@ -76,10 +89,10 @@ bool CGameClearUI::IsEnd() const
 	return mIsEnd;
 }
 
-// コンティニューするか
-bool CGameClearUI::IsContinue() const
+// タイトル画面にするか
+bool CGameClearUI::IsTitle() const
 {
-	// 選択項目が1つ目ならば、リトライ
+	// 選択項目が1つ目ならば、タイトル画面
 	return mSelectIndex == 0;
 }
 
@@ -185,7 +198,7 @@ void CGameClearUI::ChangeState(EState state)
 	mElapsedTime = 0.0f;
 }
 
-// [START]クリック時のコールバック関数
+// [タイトルへ]クリック時のコールバック関数
 void CGameClearUI::OnClickStart()
 {
 	if (mIsEnd) return;
@@ -194,7 +207,7 @@ void CGameClearUI::OnClickStart()
 	mIsEnd = true;
 }
 
-// [QUIT]クリック時のコールバック関数
+// [おわる]クリック時のコールバック関数
 void CGameClearUI::OnClickQuit()
 {
 	if (mIsEnd) return;

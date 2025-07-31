@@ -15,7 +15,7 @@ public:
 	static CBoss* Instance();
 
 	// コンストラクタ
-	CBoss(std::vector<CVector> patrolPoints);
+	CBoss(std::vector<std::vector<CVector>> patrolPoints);
 	// デストラクタ
 	~CBoss();
 

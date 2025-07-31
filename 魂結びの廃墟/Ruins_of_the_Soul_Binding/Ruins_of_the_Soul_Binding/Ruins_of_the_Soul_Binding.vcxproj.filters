@@ -538,6 +538,12 @@
     <ClCompile Include="src\Game\CFireball.cpp">
       <Filter>ソース ファイル\Game\Weapon</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CGameOverScene.cpp">
+      <Filter>ソース ファイル\Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CGameOverUI.cpp">
+      <Filter>ソース ファイル\Game\UI\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -980,6 +986,12 @@
     </ClInclude>
     <ClInclude Include="src\Game\CFireball.h">
       <Filter>ソース ファイル\Game\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CGameOverScene.h">
+      <Filter>ソース ファイル\Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CGameOverUI.h">
+      <Filter>ソース ファイル\Game\UI\Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -46,17 +46,17 @@ CField::CField()
 	);
 
 	// テスト用
-	mpTestObj = CResourceManager::Get<CModel>("TestObj");
-	mpTestObjFloorMesh = new CColliderMesh
-	(
-		this, ELayer::eFloor, CResourceManager::Get<CModel>("TestObjFloor"),
-		true, 1.0f
-	);
-	mpTestObjWallMesh = new CColliderMesh
-	(
-		this, ELayer::eWall, CResourceManager::Get<CModel>("TestObjWall"),
-		true, 1.0f
-	);
+	//mpTestObj = CResourceManager::Get<CModel>("TestObj");
+	//mpTestObjFloorMesh = new CColliderMesh
+	//(
+	//	this, ELayer::eFloor, CResourceManager::Get<CModel>("TestObjFloor"),
+	//	true, 1.0f
+	//);
+	//mpTestObjWallMesh = new CColliderMesh
+	//(
+	//	this, ELayer::eWall, CResourceManager::Get<CModel>("TestObjWall"),
+	//	true, 1.0f
+	//);
 
 	//mpTestWall = CResourceManager::Get<CModel>("TestWall");
 	//mpTestWallCol = new CColliderMesh(this, ELayer::eWall, mpTestWall, true);
@@ -100,8 +100,8 @@ CField::~CField()
 	SAFE_DELETE(mpFloorColliderMesh);
 	SAFE_DELETE(mpWallColliderMesh);
 
-	SAFE_DELETE(mpTestObjWallMesh);
-	SAFE_DELETE(mpTestObjWallMesh);
+	//SAFE_DELETE(mpTestObjWallMesh);
+	//SAFE_DELETE(mpTestObjWallMesh);
 
 }
 
@@ -1001,6 +1001,6 @@ void CField::Render()
 	mpFloor->Render(Matrix());
 	mpWall->Render(Matrix());
 
-	mpTestObj->Render(Matrix());
+	//mpTestObj->Render(Matrix());
 	//mpTestWall->Render(Matrix());
 }

@@ -13,10 +13,10 @@ public:
 	// デストラクタ
 	~CGameClearUI();
 
-	// ゲームオーバー画面終了か
+	// ゲームクリア画面終了か
 	bool IsEnd() const;
-	// ゲームをコンティニューするか
-	bool IsContinue() const;
+	// ゲームをタイトル画面にするか
+	bool IsTitle() const;
 	// ゲームを終了するか
 	bool IsExitGame() const;
 
@@ -41,9 +41,9 @@ private:
 	// 状態切り替え
 	void ChangeState(EState state);
 
-	// [START]クリック時のコールバック関数
+	// [タイトルへ]クリック時のコールバック関数
 	void OnClickStart();
-	// [QUIT]クリック時のコールバック関数
+	// [おわる]クリック時のコールバック関数
 	void OnClickQuit();
 
 	EState mState;		// 現在の状態

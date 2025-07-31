@@ -43,8 +43,8 @@ void CGameClearScrene::Update()
 	// ゲームクリア画面が
 	if (mpGameClearUI->IsEnd())
 	{
-		// コンティニューならば、シーンを読み込む
-		if (mpGameClearUI->IsContinue())
+		// タイトルへならば、シーンを読み込む
+		if (mpGameClearUI->IsTitle())
 		{
 			CSceneManager::Instance()->LoadScene(EScene::eTitle);
 		}

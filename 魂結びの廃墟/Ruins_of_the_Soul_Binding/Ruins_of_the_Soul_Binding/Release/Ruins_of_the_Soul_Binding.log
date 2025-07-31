@@ -1,8 +1,13 @@
-﻿  CPlayer2.cpp
+﻿  CBoss.cpp
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Ruins_of_the_Soul_Binding\src\Game\CBoss.cpp(705,50): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Ruins_of_the_Soul_Binding\src\Game\CBoss.cpp(798,23): warning C4018: '>=': signed と unsigned の数値を比較しようとしました。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Ruins_of_the_Soul_Binding\src\Game\CBoss.cpp(992,46): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Ruins_of_the_Soul_Binding\src\Game\CBoss.cpp(998,25): warning C4018: '>=': signed と unsigned の数値を比較しようとしました。
+C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Ruins_of_the_Soul_Binding\src\Game\CBoss.cpp(1043,29): warning C4353: 非標準の拡張機能が使用: 関数式として定数 0 が使用されています。本来の '__noop' 関数を使用してください
   コード生成しています。
-  2 of 4540 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  1 of 5360 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    8 functions had inline decision re-evaluated but remain unchanged
+    9 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
 ftgl_static.lib(FTPixmapFont.obj) : warning LNK4099: PDB 'ftgl_static.pdb' が 'ftgl_static.lib(FTPixmapFont.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\ftgl_static.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(FTSimpleLayout.obj) : warning LNK4099: PDB 'ftgl_static.pdb' が 'ftgl_static.lib(FTSimpleLayout.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\ftgl_static.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
@@ -20,8 +25,8 @@ ftgl_static.lib(ftdebug.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_sta
 ftgl_static.lib(winfnt.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(winfnt.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(type42.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(type42.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(type1.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(type1.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
-ftgl_static.lib(truetype.obj) : warning LNK4099: PDB '' が 'ftgl_static.lib(truetype.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
-ftgl_static.lib(svg.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(svg.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(truetype.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(truetype.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(svg.obj) : warning LNK4099: PDB '' が 'ftgl_static.lib(svg.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(sdf.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(sdf.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(smooth.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(smooth.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(sfnt.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(sfnt.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
@@ -33,7 +38,7 @@ ftgl_static.lib(pfr.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.
 ftgl_static.lib(pcf.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(pcf.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(ftlzw.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(ftlzw.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(ftgzip.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(ftgzip.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
-ftgl_static.lib(type1cid.obj) : warning LNK4099: PDB '' が 'ftgl_static.lib(type1cid.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(type1cid.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(type1cid.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(cff.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(cff.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(bdf.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(bdf.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(ftmm.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(ftmm.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。

@@ -79,6 +79,8 @@
     <ClCompile Include="src\Game\CFireball.cpp" />
     <ClCompile Include="src\Game\CGameClearScene.cpp" />
     <ClCompile Include="src\Game\CGameClearUI.cpp" />
+    <ClCompile Include="src\Game\CGameOverScene.cpp" />
+    <ClCompile Include="src\Game\CGameOverUI.cpp" />
     <ClCompile Include="src\Game\CIcon.cpp" />
     <ClCompile Include="src\Game\CInventory.cpp" />
     <ClCompile Include="src\Game\CItemMenu.cpp" />
@@ -229,6 +231,8 @@
     <ClInclude Include="src\Game\CFireball.h" />
     <ClInclude Include="src\Game\CGameClearScene.h" />
     <ClInclude Include="src\Game\CGameClearUI.h" />
+    <ClInclude Include="src\Game\CGameOverScene.h" />
+    <ClInclude Include="src\Game\CGameOverUI.h" />
     <ClInclude Include="src\Game\CIcon.h" />
     <ClInclude Include="src\Game\CInventory.h" />
     <ClInclude Include="src\Game\CItemMenu.h" />

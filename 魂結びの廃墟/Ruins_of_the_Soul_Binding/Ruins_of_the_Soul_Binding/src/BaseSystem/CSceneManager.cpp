@@ -3,6 +3,7 @@
 #include "CTitleScene.h"
 #include "CGameScene.h"
 #include "CGameClearScene.h"
+#include "CGameOverScene.h"
 
 #include "Test/CBootMenuScene.h"
 #include "Test/CCollisionTestScene.h"
@@ -111,6 +112,8 @@ void CSceneManager::ChangeNextScene()
 		case EScene::eGame:		mpScene = new CGameScene();		break;
 		//クリアシーン
 		case EScene::eClear:	mpScene = new CGameClearScrene(); break;
+		// ゲームオーバーシーン
+		case EScene::eGameOver:	mpScene = new CGameOverScene(); break;
 		//起動時メニュー
 		case EScene::eBootMenu:	mpScene = new CBootMenuScene();	break;
 		//衝突判定テスト

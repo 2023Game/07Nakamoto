@@ -47,6 +47,7 @@ const std::vector<CBounds>& CRoom::GetBounds() const
 	return mBounds;
 }
 
+#if _DEBUG
 // •`‰æ
 void CRoom::Render()
 {
@@ -63,3 +64,5 @@ void CRoom::Render()
 		Primitive::DrawBox(mBounds[i].Center(), mBounds[i].Size(), color);
 	}
 }
+#endif
+

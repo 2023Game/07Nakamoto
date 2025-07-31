@@ -4,6 +4,7 @@
 #include "CImage.h"
 
 class CGameClearUI;
+
 // ゲームクリアシーン
 class CGameClearScrene :public CSceneBase
 {
@@ -13,9 +14,9 @@ public:
 	// デストラクタ
 	~CGameClearScrene();
 	//シーン読み込み
-	void Load();
+	void Load() override;
 	//シーンの更新処理
-	void Update();
+	void Update() override;
 
 private:
 	CGameClearUI* mpGameClearUI;

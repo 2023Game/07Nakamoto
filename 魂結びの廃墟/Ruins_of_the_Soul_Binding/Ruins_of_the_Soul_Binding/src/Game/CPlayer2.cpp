@@ -293,7 +293,7 @@ void CPlayer2::UpdateDeath()
 	if (IsAnimationFinished())
 	{
 		// ゲームオーバーシーンを読み込む
-		//CSceneManager::Instance()->LoadScene(EScene::eGameOver);
+		CSceneManager::Instance()->LoadScene(EScene::eGameOver);
 	}
 }
 

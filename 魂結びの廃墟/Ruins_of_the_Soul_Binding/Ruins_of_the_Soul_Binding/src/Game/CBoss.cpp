@@ -24,7 +24,7 @@
 #define BODY_WIDTH	5.0f	// カプセルコライダーの幅
 #define BODY_RADIUS 4.5f	// カプセルコライダーの半径
 
-#define WALK_SPEED		10.0f	// 歩く速度
+#define WALK_SPEED		20.0f	// 歩く速度
 #define RUN_SPEED		20.0f	// 走る速度
 #define ROTATE_SPEED	6.0f	// 回転速度
 
@@ -76,7 +76,7 @@ CBoss* CBoss::Instance()
 }
 
 // コンストラクタ
-CBoss::CBoss(std::vector<CVector> patrolPoints)
+CBoss::CBoss(std::vector<std::vector<CVector>> patrolPoints)
 	: mIsBattle(false)
 	, mBattleIdletime(0.0f)
 	, mpBattleTargetChara(nullptr)
@@ -194,9 +194,9 @@ CBoss::CBoss(std::vector<CVector> patrolPoints)
 
 	mPatrolRoutes.resize(1);
 	// 巡回ポイントに経路探索用のノードを配置
-	for (CVector point : patrolPoints)
+	for (std::vector<CVector> point : patrolPoints)
 	{
-		mPatrolRoutes[0].push_back(point);
+		mPatrolRoutes.push_back(point);
 	}
 	mpPatrolStartPoint = new CNavNode(CVector::zero, true);
 	mpPatrolStartPoint->SetEnable(false);
@@ -222,12 +222,14 @@ CBoss::~CBoss()
 	// 壊せるオブジェクトを探知するコライダーを削除
 	SAFE_DELETE(mpSearchCol);
 
+#if _DEBUG
 	// 視野範囲のデバッグ表示が存在したら、一緒に削除する
 	if (mpDebugFov != nullptr)
 	{
 		mpDebugFov->SetOwner(nullptr);
 		mpDebugFov->Kill();
 	}
+#endif
 
 	// 経路探索用のノードを破棄
 	CNavManager* navMgr = CNavManager::Instance();
@@ -252,12 +254,15 @@ CBoss::~CBoss()
 // オブジェクト削除を伝える関数
 void CBoss::DeleteObject(CObjectBase* obj)
 {
+#if _DEBUG
+
 	// 削除されたオブジェクトが視野範囲のデバッグ表示であれば
 	// 自身が削除された
 	if (obj == mpDebugFov)
 	{
 		mpDebugFov = nullptr;
 	}
+#endif
 }
 
 // 攻撃中か
@@ -708,7 +713,6 @@ bool CBoss::UpdatePatrolRoute()
 	CVector point = (*mpCurrentPatrolRoute)[mNextPatrolIndex];
 	mpPatrolStartPoint->SetEnable(true);
 	mpPatrolStartPoint->SetPos(point);
-
 	if (mpPatrolStartPoint->IsUpdating()) return false;
 	
 	// 巡回ポイントまでの最短経路を求める
@@ -761,17 +765,19 @@ void CBoss::UpdatePatrol()
 	{
 	// ステップ0 : 巡回開始の巡回ポイントを求める
 	case 0:
-
-		// TODO:ランダムでルート選択
-		mpCurrentPatrolRoute = &mPatrolRoutes[0];
+	{
+		// ランダムでルート選択
+		int random = Math::Rand(0, mPatrolRoutes.size() - 1);
+		mpCurrentPatrolRoute = &mPatrolRoutes[random];
 
 		mNextPatrolIndex = -1;
 		if (ChangePatrolPoint())
 		{
 			mStateStep++;
 		}
-		
+
 		break;
+	}
 	// ステップ1 : 巡回ポイントまでの移動経路探索
 	case 1:
 		if(UpdatePatrolRoute())
@@ -816,7 +822,7 @@ void CBoss::UpdatePatrol()
 	case 4:
 		{
 			// 次の巡回ポイントまで移動
-			CVector nextPoint = (*mpCurrentPatrolRoute)[mNextMoveIndex];
+			CVector nextPoint = (*mpCurrentPatrolRoute)[mNextPatrolIndex];
 			if (MoveTo(nextPoint, WALK_SPEED))
 			{
 				// 移動が終われば、移動目的地を次の巡回ポイントに切り替える
