@@ -84,6 +84,8 @@ CBoss::CBoss(std::vector<CVector> patrolPoints)
 	, mpAttack1Col(nullptr)
 	, mFovAngle(FOV_ANGLE)
 	, mFovLength(FOV_LENGTH)
+	, mpCurrentPatrolRoute(nullptr)
+	, mpPatrolStartPoint(nullptr)
 	, mNextPatrolIndex(-1)	// -1の時に一番近いポイントに移動
 	, mNextMoveIndex(0)
 	, mPower(ATTACK_POWER)
@@ -190,12 +192,14 @@ CBoss::CBoss(std::vector<CVector> patrolPoints)
 	mpLostPlayerNode = new CNavNode(CVector::zero, true);
 	mpLostPlayerNode->SetEnable(false);
 
+	mPatrolRoutes.resize(1);
 	// 巡回ポイントに経路探索用のノードを配置
 	for (CVector point : patrolPoints)
 	{
-		//CNavNode* node = new CNavNode(point, true);
-		mPatrolPoints.push_back(point);
+		mPatrolRoutes[0].push_back(point);
 	}
+	mpPatrolStartPoint = new CNavNode(CVector::zero, true);
+	mpPatrolStartPoint->SetEnable(false);
 
 	// 妖力の源の数を取得
 	mDemonPower = CDemonPowerManager::Instance()->GetDemonPower();
@@ -231,6 +235,7 @@ CBoss::~CBoss()
 	{
 		mpNavNode->Kill();
 		mpLostPlayerNode->Kill();
+		mpPatrolStartPoint->Kill();
 
 		//// 巡回ノードに配置したノードも全て削除
 		//auto itr = mPatrolPoints.begin();
@@ -647,57 +652,52 @@ bool CBoss::MoveTo(const CVector& targetPos, float speed)
 bool CBoss::ChangePatrolPoint()
 {
 	// 自身の経路探索ノードが更新中の場合は処理しない
-	if (mpNavNode->IsUpdating()) return false;
+	//if (mpNavNode->IsUpdating()) return false;
 	// 巡回ポイントが設定されていない場合は処理しない
-	int size = mPatrolPoints.size();
+	int size = mpCurrentPatrolRoute->size();
 	if (size == 0) return false;
 
 	// 巡回開始時であれば、一番近い巡回ポイントを選択
 	if (mNextPatrolIndex == -1)
 	{
-		int nearIndex = -1;		// 一番近い巡回ポイントの番号
-		float nearDist = 0.0f;	// 一番近い巡回ポイントまでの距離
-		// 全ての巡回ポイントの距離を調べ、一番近い巡回ポイントを探す
-		for (int i = 0; i < size; i++)
-		{
-			CVector point = mPatrolPoints[i];
-			CVector vec = point - Position();
-			vec.Y(0.0f);
-			float dist = vec.Length();
-			// 巡回ポイントが近すぎる場合は、スルー
-			if (dist < PATROL_NEAR_DIST) continue;
-			// 一番最初の巡回ポイントもしくは、
-			// 現在一番近い巡回ポイントよりさらに近い場合は、
-			// 巡回ポイントの番号を置き換える
-			if (nearIndex < 0 || dist < nearDist)
-			{
-				nearIndex = i;
-				nearDist = dist;
-			}
-		}
-		mNextPatrolIndex = nearIndex;
+		mNextPatrolIndex = 0;
+
+		//int nearIndex = -1;		// 一番近い巡回ポイントの番号
+		//float nearDist = 0.0f;	// 一番近い巡回ポイントまでの距離
+		//// 全ての巡回ポイントの距離を調べ、一番近い巡回ポイントを探す
+		//for (int i = 0; i < size; i++)
+		//{
+		//	CVector point = (*mpCurrentPatrolRoute)[i];
+		//	CVector vec = point - Position();
+		//	vec.Y(0.0f);
+		//	float dist = vec.Length();
+		//	// 巡回ポイントが近すぎる場合は、スルー
+		//	if (dist < PATROL_NEAR_DIST) continue;
+		//	// 一番最初の巡回ポイントもしくは、
+		//	// 現在一番近い巡回ポイントよりさらに近い場合は、
+		//	// 巡回ポイントの番号を置き換える
+		//	if (nearIndex < 0 || dist < nearDist)
+		//	{
+		//		nearIndex = i;
+		//		nearDist = dist;
+		//	}
+		//}
+		//mNextPatrolIndex = nearIndex;
 	}
 	// 巡回中だった場合、次の巡回ポイントを指定する
 	else
 	{
 		mNextPatrolIndex++;
-		if (mNextPatrolIndex >= size) mNextPatrolIndex -= size;
+		if (mNextPatrolIndex >= size) return false;
 	}
 
 	return mNextPatrolIndex >= 0;
 }
 
 // 巡回ルートを更新する
-bool CBoss::UpdatePatrolRouto()
+bool CBoss::UpdatePatrolRoute()
 {
-	// 巡回ポイントの経路探索ノードの位置を設定しなおすことで、
-	// 各ノードへの接続情報を更新
-	for (CNavNode* node : mPatrolPoints)
-	{
-		node->SetPos(node->GetPos());
-	}
-
-	if (!(0 <= mNextPatrolIndex && mNextPatrolIndex < mPatrolPoints.size())) return false;
+	if (!(0 <= mNextPatrolIndex && mNextPatrolIndex < mpCurrentPatrolRoute->size())) return false;
 
 	CNavManager* navMgr = CNavManager::Instance();
 	if(navMgr == nullptr) return false;
@@ -705,15 +705,21 @@ bool CBoss::UpdatePatrolRouto()
 	// 自身のノードが更新中ならば、経路探索は行わない
 	if (mpNavNode->IsUpdating()) return false;
 	// 巡回ポイントが更新中ならば、経路探索を行う
-	CNavNode* patrolPoint = mPatrolPoints[mNextPatrolIndex];
-	if (patrolPoint->IsUpdating()) return false;
+	CVector point = (*mpCurrentPatrolRoute)[mNextPatrolIndex];
+	mpPatrolStartPoint->SetEnable(true);
+	mpPatrolStartPoint->SetPos(point);
+
+	if (mpPatrolStartPoint->IsUpdating()) return false;
 	
 	// 巡回ポイントまでの最短経路を求める
-	if (navMgr->Navigate(mpNavNode, patrolPoint, mMoveRoute))
+	if (navMgr->Navigate(mpNavNode, mpPatrolStartPoint, mMoveRoute))
 	{
 		// 次の目的地のインデックスを設定
 		mNextMoveIndex = 1;
 	}
+
+	mpPatrolStartPoint->SetEnable(false);
+	return true;
 }
 
 // 待機状態の更新処理
@@ -755,6 +761,10 @@ void CBoss::UpdatePatrol()
 	{
 	// ステップ0 : 巡回開始の巡回ポイントを求める
 	case 0:
+
+		// TODO:ランダムでルート選択
+		mpCurrentPatrolRoute = &mPatrolRoutes[0];
+
 		mNextPatrolIndex = -1;
 		if (ChangePatrolPoint())
 		{
@@ -764,12 +774,12 @@ void CBoss::UpdatePatrol()
 		break;
 	// ステップ1 : 巡回ポイントまでの移動経路探索
 	case 1:
-		if(UpdatePatrolRouto())
+		if(UpdatePatrolRoute())
 		{
 			mStateStep++;
 		}
 		break;
-	// ステップ2 : 巡回ポイントまで移動
+	// ステップ2 : 最初の巡回開始ポイントまで移動
 	case 2:
 	{
 		// 最短経路の次のノードまで移動
@@ -797,11 +807,27 @@ void CBoss::UpdatePatrol()
 		{
 			if (ChangePatrolPoint())
 			{
-				mStateStep = 1;
+				mStateStep++;
 				mElapsedTime = 0.0f;
 			}
 		}
 		break;
+	// ステップ4：次の巡回ポイントまで移動
+	case 4:
+		{
+			// 次の巡回ポイントまで移動
+			CVector nextPoint = (*mpCurrentPatrolRoute)[mNextMoveIndex];
+			if (MoveTo(nextPoint, WALK_SPEED))
+			{
+				// 移動が終われば、移動目的地を次の巡回ポイントに切り替える
+				if (!ChangePatrolPoint())
+				{
+					// 次の巡回ポイントが存在しなければ、待機状態へ変更
+					ChangeState((int)EState::eIdle);
+				}
+			}
+			break;
+		}
 	}
 }
 
@@ -1227,17 +1253,20 @@ void CBoss::Render()
 	// 巡回中であれば、
 	if (mState == (int)EState::ePatrol)
 	{
-		float rad = 1.0f;
-		int size = mPatrolPoints.size();
-		for (int i = 0; i < size; i++)
+		if (mpCurrentPatrolRoute != nullptr)
 		{
-			CColor c = i == mNextPatrolIndex ? CColor::red : CColor::cyan;
-			Primitive::DrawBox
-			(
-				mPatrolPoints[i] + CVector(0.0f, rad * 2.0f, 0.0f),
-				CVector::one * rad,
-				c
-			);
+			float rad = 1.0f;
+			int size = mpCurrentPatrolRoute->size();
+			for (int i = 0; i < size; i++)
+			{
+				CColor c = i == mNextPatrolIndex ? CColor::red : CColor::cyan;
+				Primitive::DrawBox
+				(
+					(*mpCurrentPatrolRoute)[i] + CVector(0.0f, rad * 2.0f, 0.0f),
+					CVector::one * rad,
+					c
+				);
+			}
 		}
 	}
 	// 見失った状態であれば、

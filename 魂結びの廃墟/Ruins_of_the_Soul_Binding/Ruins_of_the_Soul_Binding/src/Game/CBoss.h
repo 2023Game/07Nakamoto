@@ -104,7 +104,7 @@ private:
 	// 次に巡回するポイントを変更する
 	bool ChangePatrolPoint();
 	// 巡回ルートを更新する
-	bool UpdatePatrolRouto();
+	bool UpdatePatrolRoute();
 
 	// 待機状態の更新処理
 	void UpdateIdle();
@@ -140,9 +140,12 @@ private:
 
 	CNavNode* mpLostPlayerNode;	// プレイヤーを見失った位置のノード
 	float mLostElapsedTime;		// 見失ってからの経過時間
+
 	// 巡回ポイントのリスト
-	//std::vector<CNavNode*> mPatrolPoints;
-	std::vector<CVector> mPatrolPoints;
+	std::vector<CVector>* mpCurrentPatrolRoute;
+	std::vector<std::vector<CVector>> mPatrolRoutes;
+	CNavNode* mpPatrolStartPoint;
+
 	int mNextPatrolIndex;	// 次に巡回する番号
 
 	std::vector<CNavNode*> mMoveRoute;	// 求めた最短経路記憶用
