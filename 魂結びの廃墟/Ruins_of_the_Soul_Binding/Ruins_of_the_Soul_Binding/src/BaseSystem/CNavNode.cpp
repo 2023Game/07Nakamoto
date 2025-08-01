@@ -308,7 +308,9 @@ void CNavNode::EndUpdateConnectNode()
 // ノード更新中か
 bool CNavNode::IsUpdating() const
 {
-	return mIsUpdaingConnectNode;
+	if (mIsUpdateConnectNode) return true;
+	if (mIsUpdaingConnectNode) return true;
+	return false;
 }
 
 // ノードの色設定（デバッグ用）

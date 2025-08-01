@@ -168,6 +168,7 @@ void CGameScene::Load()
 			{
 				CVector(-11.5f, 0.0, -180.0f),
 				CVector(-155.0f, 0.0, -180.0f),
+				CVector(-155.0f, 0.0, -60.0f),
 				CVector(65.0f, 0.0, -60.0f),
 				CVector(65.0f, 0.0, 60.0f),
 				CVector(-90.0f, 0.0, 60.0f),

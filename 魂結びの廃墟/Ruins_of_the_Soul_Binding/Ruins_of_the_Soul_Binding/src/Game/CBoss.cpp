@@ -192,7 +192,6 @@ CBoss::CBoss(std::vector<std::vector<CVector>> patrolPoints)
 	mpLostPlayerNode = new CNavNode(CVector::zero, true);
 	mpLostPlayerNode->SetEnable(false);
 
-	mPatrolRoutes.resize(1);
 	// 巡回ポイントに経路探索用のノードを配置
 	for (std::vector<CVector> point : patrolPoints)
 	{
@@ -721,6 +720,8 @@ bool CBoss::UpdatePatrolRoute()
 		// 次の目的地のインデックスを設定
 		mNextMoveIndex = 1;
 	}
+	// 経路探索に失敗した
+	else return false;
 
 	mpPatrolStartPoint->SetEnable(false);
 	return true;
@@ -758,69 +759,71 @@ void CBoss::UpdatePatrol()
 		return;
 	}
 
-	ChangeAnimation((int)EAnimType::eWalk);
-
 	// ステップごとに処理を切り替える
 	switch (mStateStep)
 	{
-	// ステップ0 : 巡回開始の巡回ポイントを求める
-	case 0:
-	{
-		// ランダムでルート選択
-		int random = Math::Rand(0, mPatrolRoutes.size() - 1);
-		mpCurrentPatrolRoute = &mPatrolRoutes[random];
+		// ステップ0 : 巡回開始の巡回ポイントを求める
+		case 0:
+		{
+			ChangeAnimation((int)EAnimType::eIdle);
+			// ランダムでルート選択
+			int random = Math::Rand(0, mPatrolRoutes.size() - 1);
+			mpCurrentPatrolRoute = &mPatrolRoutes[random];
 
-		mNextPatrolIndex = -1;
-		if (ChangePatrolPoint())
-		{
-			mStateStep++;
-		}
-
-		break;
-	}
-	// ステップ1 : 巡回ポイントまでの移動経路探索
-	case 1:
-		if(UpdatePatrolRoute())
-		{
-			mStateStep++;
-		}
-		break;
-	// ステップ2 : 最初の巡回開始ポイントまで移動
-	case 2:
-	{
-		// 最短経路の次のノードまで移動
-		CNavNode* moveNode = mMoveRoute[mNextMoveIndex];
-		if (MoveTo(moveNode->GetPos(), WALK_SPEED))
-		{
-			// 移動が終われば、次のノードまで移動
-			mNextMoveIndex++;
-			// 最後のノード(目的地のノード)だった場合は、次のステップへ進める
-			if (mNextMoveIndex >= mMoveRoute.size())
-			{
-				mStateStep++;
-			}
-		}
-		break;
-	}
-	// ステップ3 : 移動後の待機
-	case 3:
-		ChangeAnimation((int)EAnimType::eIdle);
-		if (mElapsedTime < PATROL_INTERVAL)
-		{
-			mElapsedTime += Times::DeltaTime();
-		}
-		else
-		{
+			mNextPatrolIndex = -1;
 			if (ChangePatrolPoint())
 			{
 				mStateStep++;
-				mElapsedTime = 0.0f;
 			}
+
+			break;
 		}
-		break;
-	// ステップ4：次の巡回ポイントまで移動
-	case 4:
+		// ステップ1 : 巡回ポイントまでの移動経路探索
+		case 1:
+			ChangeAnimation((int)EAnimType::eIdle);
+			if(UpdatePatrolRoute())
+			{
+				mStateStep++;
+			}
+			break;
+		// ステップ2 : 最初の巡回開始ポイントまで移動
+		case 2:
 		{
+			ChangeAnimation((int)EAnimType::eWalk);
+			// 最短経路の次のノードまで移動
+			CNavNode* moveNode = mMoveRoute[mNextMoveIndex];
+			if (MoveTo(moveNode->GetPos(), WALK_SPEED))
+			{
+				// 移動が終われば、次のノードまで移動
+				mNextMoveIndex++;
+				// 最後のノード(目的地のノード)だった場合は、次のステップへ進める
+				if (mNextMoveIndex >= mMoveRoute.size())
+				{
+					mStateStep++;
+				}
+			}
+			break;
+		}
+		// ステップ3 : 移動後の待機
+		case 3:
+			ChangeAnimation((int)EAnimType::eIdle);
+			if (mElapsedTime < PATROL_INTERVAL)
+			{
+				mElapsedTime += Times::DeltaTime();
+			}
+			else
+			{
+				if (ChangePatrolPoint())
+				{
+					mStateStep++;
+					mElapsedTime = 0.0f;
+				}
+			}
+			break;
+		// ステップ4：次の巡回ポイントまで移動
+		case 4:
+		{
+			ChangeAnimation((int)EAnimType::eWalk);
 			// 次の巡回ポイントまで移動
 			CVector nextPoint = (*mpCurrentPatrolRoute)[mNextPatrolIndex];
 			if (MoveTo(nextPoint, WALK_SPEED))
@@ -1200,24 +1203,28 @@ void CBoss::Update()
 #if _DEBUG
 	mpDebugFov->Set(mFovAngle, mFovLength);
 #endif
-
-	// 状態に合わせて、更新処理を切り替える
-	switch ((EState)mState)
+	
+	// シーンマネージャーの準備が終わったか
+	if (CSceneManager::Instance()->IsReady())
 	{
-	// 待機状態
-	case EState::eIdle:		UpdateIdle();	break;
-	// 巡回状態
-	case EState::ePatrol:	UpdatePatrol();	break;
-	// 追いかける
-	case EState::eChase:	UpdateChase();	break;
-	// 見失った状態
-	case EState::eLost:		UpdateLost();	break;
-	// パンチ攻撃
-	case EState::eAttack:	UpdateAttack1(); break;
-	// 警戒状態
-	case EState::eAlert:	UpdateAlert();	break;
-	// 死亡状態
-	case EState::eDeath:	UpdateDeath();	break;
+		// 状態に合わせて、更新処理を切り替える
+		switch ((EState)mState)
+		{
+			// 待機状態
+		case EState::eIdle:		UpdateIdle();	break;
+			// 巡回状態
+		case EState::ePatrol:	UpdatePatrol();	break;
+			// 追いかける
+		case EState::eChase:	UpdateChase();	break;
+			// 見失った状態
+		case EState::eLost:		UpdateLost();	break;
+			// パンチ攻撃
+		case EState::eAttack:	UpdateAttack1(); break;
+			// 警戒状態
+		case EState::eAlert:	UpdateAlert();	break;
+			// 死亡状態
+		case EState::eDeath:	UpdateDeath();	break;
+		}
 	}
 
 	// 敵のベースクラスの更新
