@@ -3,7 +3,6 @@
 #include "CColliderSphere.h"
 #include "Maths.h"
 #include "CCactusNeedle.h"
-
 #include "CPlayer2.h"
 #include "CCat.h"
 #include "CDebugFieldOfView.h"
@@ -16,6 +15,8 @@
 #include "CDemonPowerManager.h"
 #include "CSceneManager.h"
 #include "CRoom.h"
+
+#include "CDebugInput.h"
 
 // アニメーションのパス
 #define ANIM_PATH "Character\\Enemy\\Warrok\\anim\\"
@@ -564,6 +565,9 @@ bool CBoss::CheckAttackBreakObj()
 // キャラクターを攻撃するか確認
 bool CBoss::CheckAttackChara()
 {
+	// テスト用 : プレイイヤーを見つけても無視する
+	//return false;
+
 	for (CCharaBase* target : mTargetCharas)
 	{
 		// ターゲットが死亡していたら、追跡対象としない
@@ -1268,18 +1272,48 @@ void CBoss::Render()
 	{
 		if (mpCurrentPatrolRoute != nullptr)
 		{
-			float rad = 1.0f;
 			int size = mpCurrentPatrolRoute->size();
+			CVector offset = CVector(0.0f, 6.0f, 0.0f);
 			for (int i = 0; i < size; i++)
 			{
 				CColor c = i == mNextPatrolIndex ? CColor::red : CColor::cyan;
 				Primitive::DrawBox
 				(
-					(*mpCurrentPatrolRoute)[i] + CVector(0.0f, rad * 2.0f, 0.0f),
-					CVector::one * rad,
+					(*mpCurrentPatrolRoute)[i] + offset,
+					CVector::one,
 					c
 				);
+
+				// 巡回ポイント間のラインを表示
+				if (i > 0)
+				{
+					CVector start = (*mpCurrentPatrolRoute)[i - 1] + offset;
+					CVector end = (*mpCurrentPatrolRoute)[i] + offset;
+					CColor c = i == mNextPatrolIndex ? CColor::red : CColor::yellow;
+					Primitive::DrawLine(start, end, c, 2.0f);
+				}
 			}
+
+			// 経路探索による移動中でであれば、経路探索によるルートを表示
+			if (mStateStep == 2)
+			{
+				int size = mMoveRoute.size();
+				for (int i = 0; i < size; i++)
+				{
+					if (i == 0)continue;
+					if (i == 1 && mNextMoveIndex > 1)continue;
+					CVector start = mMoveRoute[i - 1]->GetOffsetPos() + CVector(0.0f, 2.0f, 0.0f);
+					CVector end = mMoveRoute[i]->GetOffsetPos() + CVector(0.0f, 2.0f, 0.0f);
+					CColor c = i == mNextMoveIndex ? CColor::blue : CColor::cyan;
+					Primitive::DrawLine(start, end, c, 2.0f);
+				}
+			}
+		}
+
+		if (CDebugInput::PushKey('K'))
+		{
+			ChangeState((int)EState::eIdle);
+			ChangeState((int)EState::ePatrol);
 		}
 	}
 	// 見失った状態であれば、

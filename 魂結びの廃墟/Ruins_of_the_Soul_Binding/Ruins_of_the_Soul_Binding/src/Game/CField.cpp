@@ -14,6 +14,7 @@
 #include "CSwitchDoorGimmick.h"
 #include "CRoom.h"
 #include "CItemObj.h"
+#include "CDemonWall.h"
 
 #define ROOM_SIZE_Y 33.0f
 #define ROOM_POS_Y	ROOM_SIZE_Y * 0.5f
@@ -45,22 +46,6 @@ CField::CField()
 		10, 1, 10
 	);
 
-	// テスト用
-	//mpTestObj = CResourceManager::Get<CModel>("TestObj");
-	//mpTestObjFloorMesh = new CColliderMesh
-	//(
-	//	this, ELayer::eFloor, CResourceManager::Get<CModel>("TestObjFloor"),
-	//	true, 1.0f
-	//);
-	//mpTestObjWallMesh = new CColliderMesh
-	//(
-	//	this, ELayer::eWall, CResourceManager::Get<CModel>("TestObjWall"),
-	//	true, 1.0f
-	//);
-
-	//mpTestWall = CResourceManager::Get<CModel>("TestWall");
-	//mpTestWallCol = new CColliderMesh(this, ELayer::eWall, mpTestWall, true);
-
 	// 経路探索用の遮蔽物チェックのコライダーに、フィールドの壁のコライダーを登録
 	CNavManager::Instance()->AddCollider(mpWallColliderMesh);
 
@@ -71,22 +56,25 @@ CField::CField()
 	// アイテムを生成
 	CreateItem();
 
+	CDemonWall* demonWall = new CDemonWall();
+	demonWall->SetAlpha(0.8f);
+
 	// 妖力の源のマネージャーを生成
 	new CDemonPowerManager();
 
 	// テスト用妖力の源
-	new CDemonPower(CVector(20.0f, 5.0f, 20.0f));
+	//new CDemonPower(CVector(20.0f, 5.0f, 20.0f));
 
-	//// 妖力の源
-	//new CDemonPower(CVector(140.0f, 5.0f, 120.0f));
-	//// 妖力の源
-	//new CDemonPower(CVector(140.0f, 5.0f, -20.0f));
-	//// 妖力の源
-	//new CDemonPower(CVector(180.0f, 5.0f, 380.0f));
-	//// 妖力の源
-	//new CDemonPower(CVector(-30.0f, 5.0f, 220.0f));
-	//// 妖力の源
-	//new CDemonPower(CVector(-200.0f, 5.0f, 120.0f));
+	// 妖力の源
+	new CDemonPower(CVector(140.0f, 5.0f, 120.0f));
+	// 妖力の源
+	new CDemonPower(CVector(140.0f, 5.0f, -20.0f));
+	// 妖力の源
+	new CDemonPower(CVector(180.0f, 5.0f, 380.0f));
+	// 妖力の源
+	new CDemonPower(CVector(-30.0f, 5.0f, 220.0f));
+	// 妖力の源
+	new CDemonPower(CVector(-200.0f, 5.0f, 120.0f));
 
 	// 経路探索用のノードを作成
 	CreateNavNodes();
@@ -99,10 +87,6 @@ CField::~CField()
 {
 	SAFE_DELETE(mpFloorColliderMesh);
 	SAFE_DELETE(mpWallColliderMesh);
-
-	//SAFE_DELETE(mpTestObjWallMesh);
-	//SAFE_DELETE(mpTestObjWallMesh);
-
 }
 
 // 床のコライダーを取得
@@ -157,9 +141,15 @@ void CField::CreateNavNodes()
 		new CNavNode(CVector(80.5f, 0.0f, -130.5f));
 		new CNavNode(CVector(80.5f, 0.0f, -250.0f));
 
+		// 猫が通る穴
 		new CNavNode(CVector(40.0f, 0.0f, 185.0f));
 		new CNavNode(CVector(40.0f, 0.0f, 200.0f));
 
+		// ギミックの壁
+		new CNavNode(CVector(-70.0f, 0.0f, 214.0f));
+		new CNavNode(CVector(-90.0f, 0.0f, 214.0f));
+		new CNavNode(CVector(-90.0f, 0.0f, 280.0f));
+		new CNavNode(CVector(-70.0f, 0.0f, 280.0f));
 	}
 }
 
@@ -354,30 +344,30 @@ void CField::CreateRoomObjects()
 	);
 
 	// 2-2教室を生成
-	CRoom* room2_2 = new CRoom
-	(
-		{
-			{
-				CVector(56.3932f, ROOM_POS_Y, 247.225f),
-				CVector(87.7248f, ROOM_SIZE_Y, 109.45f),
-			}
-		},
-		"2-2"
-	);
-	// 左右のドアを生成
-	new CDoorGimmickLR
-	(
-		CVector(-78.2194f, 0.0f, 280.225f),
-		CVector(0.0f, 90.0f, 0.0f),
-		room2_2
-	);
-	// 左右のドアを生成
-	new CDoorGimmickLR
-	(
-		CVector(-78.2194f, 0.0f, 214.225f),
-		CVector(0.0f, 90.0f, 0.0f),
-		room2_2
-	);
+	//CRoom* room2_2 = new CRoom
+	//(
+	//	{
+	//		{
+	//			CVector(56.3932f, ROOM_POS_Y, 247.225f),
+	//			CVector(87.7248f, ROOM_SIZE_Y, 109.45f),
+	//		}
+	//	},
+	//	"2-2"
+	//);
+	//// 左右のドアを生成
+	//new CDoorGimmickLR
+	//(
+	//	CVector(-78.2194f, 0.0f, 280.225f),
+	//	CVector(0.0f, 90.0f, 0.0f),
+	//	room2_2
+	//);
+	//// 左右のドアを生成
+	//new CDoorGimmickLR
+	//(
+	//	CVector(-78.2194f, 0.0f, 214.225f),
+	//	CVector(0.0f, 90.0f, 0.0f),
+	//	room2_2
+	//);
 
 	// 技術室を生成
 	CRoom* technicalRoom = new CRoom
@@ -942,14 +932,14 @@ void CField::CreateGimmick()
 	// スイッチの生成
 	CSwitch* switch1 = new CSwitch(CVector(50.0f, 0.0f, 230.0f));
 
-	//CSwitchDoorGimmick* switchdoor1 = new CSwitchDoorGimmick
-	//(
-	//	CVector(0.0f, 0.0f, 0.0f),
-	//	CVector(0.0f, 0.0f, 0.0f),
-	//	CVector(0.0f, -30.0f, 0.0f),
-	//	"TestWallBrack", "TestWallBrack"
-	//);
-	//switchdoor1->AddSwitch(switch1);
+	CSwitchDoorGimmick* switchdoor1 = new CSwitchDoorGimmick
+	(
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(0.0f, -30.0f, 0.0f),
+		"TestWallBrack", "TestWallBrack"
+	);
+	switchdoor1->AddSwitch(switch1);
 
 }
 

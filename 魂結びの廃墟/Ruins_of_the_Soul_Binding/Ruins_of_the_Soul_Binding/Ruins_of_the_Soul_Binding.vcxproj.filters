@@ -544,6 +544,9 @@
     <ClCompile Include="src\Game\CGameOverUI.cpp">
       <Filter>ソース ファイル\Game\UI\Game</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CDemonWall.cpp">
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -992,6 +995,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CGameOverUI.h">
       <Filter>ソース ファイル\Game\UI\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CDemonWall.h">
+      <Filter>ソース ファイル\Game\Field\Gimmick\Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -84,7 +84,10 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>(		"StandFloorCol",	"Field\\Object\\Switch\\stand_floor_col.obj");
 	// 火球
 	CResourceManager::Load<CModel>(		"Fireball",			"Weapon\\fire.obj");
-	
+	// 妖力の壁
+	CResourceManager::Load<CModel>(		"DemonWall",		"Field\\Gimmick\\demon_wall.obj");
+	CResourceManager::Load<CModel>(		"DemonWallCol",		"Field\\Gimmick\\demon_wall_col.obj");
+
 
 	// テスト用の移動エリアを制限する壁
 	//CResourceManager::Load<CModel>(		"TestObj",			"Field\\Test\\obj4.obj");
@@ -92,7 +95,9 @@ void CGameScene::Load()
 	//CResourceManager::Load<CModel>(		"TestObjWall",		"Field\\Test\\obj4_wall.obj");
 
 	//CResourceManager::Load<CModel>(		"TestWall",			"Field\\Test\\test_wall0.obj");
-	//CResourceManager::Load<CModel>(		"TestWallBrack",	"Field\\Test\\Brack_Wall.obj");
+	
+	// スイッチのギミックと連動する壁
+	CResourceManager::Load<CModel>(		"TestWallBrack",	"Field\\Test\\Brack_Wall.obj");
 
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);

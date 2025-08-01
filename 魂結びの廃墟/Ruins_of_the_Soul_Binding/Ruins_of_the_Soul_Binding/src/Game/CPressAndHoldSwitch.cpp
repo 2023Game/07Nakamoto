@@ -63,7 +63,7 @@ void CPressAndHoldSwitch::Collision(CCollider* self, CCollider* other, const CHi
 		if (self == mpButtonColMesh)
 		{
 			mpPushedObject = other->Owner();
-			// 前回のへれーむでも触れていたオブジェクトであれば、処理しない
+			// 前回のフレームでも触れていたオブジェクトであれば、処理しない
 			if (mpPushedObject == mpLastPushedObject)	return;
 
 			mpLastPushedObject = mpPushedObject;
