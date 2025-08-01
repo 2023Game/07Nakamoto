@@ -1,53 +1,18 @@
-﻿  CGamePause.cpp
-  CInput.cpp
-  CNavManager.cpp
-  CNavNode.cpp
-  CSceneManager.cpp
-  CUIBase.cpp
-  CDemonWall.cpp
-  CGameClearScene.cpp
-  CGameClearUI.cpp
-  CGameOverScene.cpp
-  CGameOverUI.cpp
+﻿  CDebugProfiler.cpp
+  CRect.cpp
+  CResource.cpp
+  Maths.cpp
+  Primitive.cpp
+  CFireball.cpp
+  CFlame.cpp
   CInventory.cpp
 C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Ruins_of_the_Soul_Binding\src\Game\CInventory.cpp(288,36): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-  CItemSlotUI.cpp
-  CPressAndHoldSwitch.cpp
-  CSpider.cpp
-  CSwitchDoorGimmick.cpp
-  CApplication.cpp
-  CCat.cpp
-C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Ruins_of_the_Soul_Binding\src\Game\CCat.cpp(308,29): warning C4018: '>=': signed と unsigned の数値を比較しようとしました。
-  CCatCamera.cpp
-  CDoorGimmickLR.cpp
-  コンパイル中...
-  COpeningDoorGimmick.cpp
-  CPlayer2.cpp
-  CPlayerBase.cpp
-C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Ruins_of_the_Soul_Binding\src\Game\CPlayerBase.cpp(221,26): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-  CPlayerManager.cpp
-  CField.cpp
-  CFlamethrower.cpp
-  CGameCamera.cpp
-  CPlayerCamera.cpp
-  CGameMenu.cpp
-C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Ruins_of_the_Soul_Binding\src\Game\CGameMenu.cpp(119,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-  CGameScene.cpp
-  CPlayer.cpp
-  CTitleScene.cpp
-  CTitleUI.cpp
-  CBoss.cpp
-C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Ruins_of_the_Soul_Binding\src\Game\CBoss.cpp(708,50): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Ruins_of_the_Soul_Binding\src\Game\CBoss.cpp(804,24): warning C4018: '>=': signed と unsigned の数値を比較しようとしました。
-C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Ruins_of_the_Soul_Binding\src\Game\CBoss.cpp(999,46): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Ruins_of_the_Soul_Binding\src\Game\CBoss.cpp(1005,25): warning C4018: '>=': signed と unsigned の数値を比較しようとしました。
-C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Ruins_of_the_Soul_Binding\src\Game\CBoss.cpp(1050,29): warning C4353: 非標準の拡張機能が使用: 関数式として定数 0 が使用されています。本来の '__noop' 関数を使用してください
+  CMeasure.cpp
   main.cpp
-  CBootMenuScene.cpp
   コード生成しています。
-  270 of 5432 functions ( 5.0%) were compiled, the rest were copied from previous compilation.
-    4 functions were new in current compilation
-    108 functions had inline decision re-evaluated but remain unchanged
+  0 of 5432 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
 ftgl_static.lib(FTPixmapFont.obj) : warning LNK4099: PDB 'ftgl_static.pdb' が 'ftgl_static.lib(FTPixmapFont.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\ftgl_static.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(FTSimpleLayout.obj) : warning LNK4099: PDB 'ftgl_static.pdb' が 'ftgl_static.lib(FTSimpleLayout.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\ftgl_static.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
@@ -60,10 +25,10 @@ ftgl_static.lib(FTGlyphContainer.obj) : warning LNK4099: PDB 'ftgl_static.pdb' �
 ftgl_static.lib(FTGlyph.obj) : warning LNK4099: PDB 'ftgl_static.pdb' が 'ftgl_static.lib(FTGlyph.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\ftgl_static.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(FTLibrary.obj) : warning LNK4099: PDB 'ftgl_static.pdb' が 'ftgl_static.lib(FTLibrary.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\ftgl_static.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(FTCharmap.obj) : warning LNK4099: PDB 'ftgl_static.pdb' が 'ftgl_static.lib(FTCharmap.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\ftgl_static.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
-ftgl_static.lib(ftsystem.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(ftsystem.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(ftsystem.obj) : warning LNK4099: PDB '' が 'ftgl_static.lib(ftsystem.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(ftdebug.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(ftdebug.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(winfnt.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(winfnt.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
-ftgl_static.lib(type42.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(type42.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(type42.obj) : warning LNK4099: PDB '' が 'ftgl_static.lib(type42.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(type1.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(type1.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(truetype.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(truetype.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(svg.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(svg.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
@@ -74,16 +39,16 @@ ftgl_static.lib(raster.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_stat
 ftgl_static.lib(psmodule.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(psmodule.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(pshinter.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(pshinter.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(psaux.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(psaux.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
-ftgl_static.lib(pfr.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(pfr.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(pfr.obj) : warning LNK4099: PDB '' が 'ftgl_static.lib(pfr.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(pcf.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(pcf.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
-ftgl_static.lib(ftlzw.obj) : warning LNK4099: PDB '' が 'ftgl_static.lib(ftlzw.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(ftlzw.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(ftlzw.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(ftgzip.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(ftgzip.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(type1cid.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(type1cid.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(cff.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(cff.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(bdf.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(bdf.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(ftmm.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(ftmm.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
-ftgl_static.lib(ftinit.obj) : warning LNK4099: PDB '' が 'ftgl_static.lib(ftinit.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
-ftgl_static.lib(ftbitmap.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(ftbitmap.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(ftinit.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(ftinit.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static.lib(ftbitmap.obj) : warning LNK4099: PDB '' が 'ftgl_static.lib(ftbitmap.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(ftbase.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(ftbase.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static.lib(autofit.obj) : warning LNK4099: PDB 'freetype.pdb' が 'ftgl_static.lib(autofit.obj)' で、または 'C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\freetype.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
   Ruins_of_the_Soul_Binding.vcxproj -> C:\Users\dogpo\Desktop\2023Game\07Nakamoto\魂結びの廃墟\Ruins_of_the_Soul_Binding\Release\Ruins_of_the_Soul_Binding.exe
