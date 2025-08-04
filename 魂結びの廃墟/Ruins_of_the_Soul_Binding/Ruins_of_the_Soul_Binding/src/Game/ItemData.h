@@ -22,7 +22,7 @@ enum class ItemEffectType
 	None = -1,
 
 	RecoveryHP,		// HP回復
-	Weapon,			// 武器
+	Fireball,		// 火球
 	Throw,			// 投擲アイテム
 	Installation,	// 設置アイテム
 	Substitute,		// 身代わりアイテム

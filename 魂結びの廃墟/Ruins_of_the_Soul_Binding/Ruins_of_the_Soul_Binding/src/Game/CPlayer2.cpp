@@ -59,7 +59,7 @@
 #define ITEM_RECAST_TIME 5.0f	// アイテムの再使用できるまでの時間
 
 // 火球の発射位置のオフセット座標
-#define FIREBALL_OFFSET_POS CVector(0.0f, 5.0f, 10.0f)
+#define FIREBALL_OFFSET_POS CVector(0.0f, 10.0f, 12.0f)
 #define FIREBALL_SPEED 100.0f	// 火球の速度
 #define FIREBALL_DIST 200.0f	// 火球が移動できる距離
 
@@ -189,7 +189,6 @@ CPlayer2::~CPlayer2()
 	}
 #endif
 
-	//SAFE_DELETE(mpSearchCol);
 	spInstance = nullptr;
 }
 
@@ -231,6 +230,7 @@ void CPlayer2::ShotFireball()
 
 	CFireball* fireball = new CFireball(FIREBALL_SPEED, FIREBALL_DIST);
 	fireball->Position(pos);
+	fireball->Rotation(CQuaternion::LookRotation(forward, CVector::up));
 }
 
 // 待機
@@ -425,6 +425,13 @@ void CPlayer2::UseItem(const ItemData* item)
 			mHp = mMaxHp;
 		}
 		break;
+	// 火球の呪符
+	case ItemEffectType::Fireball:
+
+		ShotFireball();
+
+		break;
+
 		// 投擲アイテムの場合
 	case ItemEffectType::Throw:
 
@@ -700,12 +707,6 @@ void CPlayer2::Update()
 	if (CInput::PushKey('P'))
 	{
 		System::ExitGame();
-	}
-
-	// 「F」キーを押したら、火球を発射
-	if (CInput::PushKey('F'))
-	{
-		ShotFireball();
 	}
 
 	// キャラクターの更新

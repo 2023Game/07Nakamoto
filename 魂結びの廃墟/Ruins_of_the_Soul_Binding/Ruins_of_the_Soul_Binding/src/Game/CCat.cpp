@@ -13,6 +13,7 @@
 #include "CStGauge.h"
 #include "CIcon.h"
 #include "CRoom.h"
+#include "CSceneManager.h"
 
 // アニメーションのパス
 #define ANIM_PATH "Character\\Cat\\anim\\"
@@ -26,7 +27,10 @@
 #define GRAVITY 0.0625f			// 重力加速度
 #define ROTATE_SPEED	5.0f	// 移動時の猫の回転速度
 
-#define MAX_HP 100	// 体力の最大値
+#define ATTACK_COL_RADIUS	5.0f	// 攻撃用コライダーの半径
+#define ATTACK_COL_POS	CVector(0.0f,2.0f,5.0f)	// 攻撃コライダーの位置
+
+#define MAX_HP 10	// 体力の最大値
 #define MAX_ST 100	// スタミナの最大値
 #define HP_GAUGE_UI_POS 100.0f, 40.0f
 #define SP_GAUGE_UI_POS 110.0f, 70.0f
@@ -56,6 +60,7 @@ const std::vector<CPlayerBase::AnimData> ANIM_DATA =
 CCat::CCat()
 	: CPlayerBase(ETag::eCat)
 	, mpTrackingNode(nullptr)
+	, mpAttackCol(nullptr)
 	, mNextTrackingIndex(-1)
 	, mMaxSt(MAX_ST)
 	, mSt(mMaxSt)
@@ -107,6 +112,30 @@ CCat::CCat()
 		}
 	);
 
+	// 攻撃コライダーを作成
+	mpAttackCol = new CColliderSphere
+	(
+		this, ELayer::eAttackCol,
+		ATTACK_COL_RADIUS
+	);
+	// 敵にのみ当たるように設定
+	mpAttackCol->SetCollisionTags
+	(
+		{
+			ETag::eEnemy,
+		}
+	);
+	mpAttackCol->SetCollisionLayers
+	(
+		{
+			ELayer::eEnemy,
+		}
+	);
+	// 攻撃コライダーの座標を設定
+	mpAttackCol->Position(ATTACK_COL_POS);
+	// 攻撃コライダーを最初はオフにしておく
+	mpAttackCol->SetEnable(false);
+
 	// 経路探索用のノードを作成
 	mpNavNode = new CNavNode(Position(), true);
 	mpNavNode->SetColor(CColor::white);
@@ -134,9 +163,6 @@ CCat::CCat()
 // デストラクタ
 CCat::~CCat()
 {
-	// コライダーを削除
-	//SAFE_DELETE(mpBodyCol);
-
 	// 経路探索用のノードを破棄
 	CNavManager* navMgr = CNavManager::Instance();
 	if (navMgr != nullptr)
@@ -144,6 +170,9 @@ CCat::~CCat()
 		mpNavNode->Kill();
 		mpTrackingNode->Kill();
 	}
+
+	SAFE_DELETE(mpAttackCol);
+	spInstance = nullptr;
 }
 
 // インスタンスを取得
@@ -197,8 +226,14 @@ void CCat::UpdateIdle()
 		{
 			ChangeState((int)EState::eJumpStart);
 		}
+		else if (CInput::PushKey(VK_LBUTTON) && IsOperate())
+		{
+			ChangeState((int)EState::eAttack1);
+		}
+		 
 	}
 
+	// 操作中でない場合、
 	if (!IsOperate())
 	{
 		if (CInput::PushKey('Q'))
@@ -339,6 +374,32 @@ void CCat::UpdateTracking()
 		// 少女のアイコンを設定
 		CIcon::Instance()->SetIcon((int)CIcon::EIcon::ePlayer);
 	}
+}
+
+// 攻撃状態の更新処理
+void CCat::UpdateAttack()
+{
+	// ステップごとに処理を切り替える
+	switch (mStateStep)
+	{
+
+	}
+}
+
+// 死亡処理
+void CCat::UpdateDeath()
+{
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
+	// 死亡アニメーションを設定
+	//ChangeAnimation((int)EAnimType::eDeath);
+
+	// アニメーションが終了したら、
+	//if (IsAnimationFinished())
+	//{
+		// ゲームオーバーシーンを読み込む
+		CSceneManager::Instance()->LoadScene(EScene::eGameOver);
+	//}
 }
 
 // 攻撃中か
@@ -502,6 +563,11 @@ bool CCat::MoveTo(const CVector& targetPos, float speed)
 // 更新
 void CCat::Update()
 {
+	if (mHp <= 0)
+	{
+		ChangeState((int)EState::eDeath);
+	}
+
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
 
@@ -518,6 +584,9 @@ void CCat::Update()
 	case(int)EState::eJump:			UpdateJump();		break;
 	// ジャンプ終了
 	case(int)EState::eJumpEnd:		UpdateJumpEnd();	break;
+	// 死亡処理
+	case (int)EState::eDeath:		UpdateDeath();		break;
+
 	}
 
 	// このプレイヤーを操作中であれば、
@@ -655,6 +724,24 @@ void CCat::AttackEnd()
 // ダメージを受ける
 void CCat::TakeDamage(int damage, CObjectBase* causer)
 {
+	// ベースクラスのダメージ処理を呼び出す
+	CXCharacter::TakeDamage(damage, causer);
+
+	// 死亡していなければ、
+	if (!IsDeath())
+	{
+		// 仰け反り状態へ移行
+		//ChangeState((int)EState::eHit);
+
+		// 攻撃を加えた相手の方向へ向く
+		CVector targetPos = causer->Position();
+		CVector vec = targetPos - Position();
+		vec.Y(0.0f);
+		Rotation(CQuaternion::LookRotation(vec.Normalized()));
+
+		// 移動を停止
+		mMoveSpeed = CVector::zero;
+	}
 }
 
 // 衝突処理

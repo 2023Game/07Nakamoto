@@ -76,6 +76,10 @@ private:
 	void UpdateIdle();
 	// ’Ç]ó‘Ô
 	void UpdateTracking();
+	// UŒ‚ó‘Ô
+	void UpdateAttack();
+	// €–Sˆ—
+	void UpdateDeath();
 
 	// ’Ç]‚ÌˆÚ“®Œo˜H‚ğŒvZ‚·‚é‚©‚Ç‚¤‚©
 	bool IsCalcTrackingRoute() const;
@@ -118,10 +122,13 @@ private:
 		eJumpEnd,	// ƒWƒƒƒ“ƒvI—¹
 		eHit,		// ‹Â‚¯”½‚è
 		eTracking,	// ’Ç]
-		eLost,
+		eLost,		// ƒvƒŒƒCƒ„[‚ğŒ©¸‚¤
+		eDeath,		// €–S
 	};
 	// ó‘Ô‚ğØ‚è‘Ö‚¦
 	void ChangeState(int state) override;
+
+	CCollider* mpAttackCol;
 
 	CGaugeUI* mpHpGauge;	// HPƒQ[ƒW
 

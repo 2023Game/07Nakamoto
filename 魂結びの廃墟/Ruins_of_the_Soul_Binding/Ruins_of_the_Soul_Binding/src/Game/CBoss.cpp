@@ -26,7 +26,7 @@
 #define BODY_RADIUS 4.5f	// カプセルコライダーの半径
 
 #define WALK_SPEED		20.0f	// 歩く速度
-#define RUN_SPEED		20.0f	// 走る速度
+#define RUN_SPEED		30.0f	// 走る速度
 #define ROTATE_SPEED	6.0f	// 回転速度
 
 #define LOOKAT_SPEED 90.0f	// 相手の方へ向く速さ
@@ -90,6 +90,7 @@ CBoss::CBoss(std::vector<std::vector<CVector>> patrolPoints)
 	, mNextPatrolIndex(-1)	// -1の時に一番近いポイントに移動
 	, mNextMoveIndex(0)
 	, mPower(ATTACK_POWER)
+	, mMaxDemonPower(0)
 	, mDemonPower(0)
 	, mStopElapsedTime(0.0f)
 #if _DEBUG
@@ -202,9 +203,8 @@ CBoss::CBoss(std::vector<std::vector<CVector>> patrolPoints)
 	mpPatrolStartPoint->SetEnable(false);
 
 	// 妖力の源の数を取得
-	mDemonPower = CDemonPowerManager::Instance()->GetDemonPower();
-	//mMaxDemonPower = CDemonPowerManager::Instance()->GetDemonPower();
-	//mDemonPower = mMaxDemonPower;
+	mMaxDemonPower = CDemonPowerManager::Instance()->GetDemonPower();
+	mDemonPower = mMaxDemonPower;
 
 	// 頭の行列を取得
 	CModelXFrame* frame = mpModel->FinedFrame("Armature_mixamorig_Head");
@@ -1173,23 +1173,27 @@ void CBoss::Update()
 	// 妖力の源が残り3つの時、
 	if (demonPower == 3)
 	{
-		//CDebugPrint::Print("DemonPower:%d\n", demonPower);
+		
 	}
-	// 妖力の源が残り3つの時、
+	// 妖力の源が残り2つの時、
 	else if (demonPower == 2)
 	{
 		mPower = ATTACK_POWER + ATTACK_POWER;
-		//CDebugPrint::Print("DemonPower:%d\n", demonPower);
 	}
-	// 妖力の源が残り3つの時、
+	// 妖力の源が残り1つの時、
 	else if (demonPower == 1)
 	{
-		//CDebugPrint::Print("DemonPower:%d\n", demonPower);
+		
 	}
 	else if (demonPower == 0)
 	{
 		ChangeState((int)EState::eDeath);
 	}
+
+#if _DEBUG
+	// 残りの妖力の源の表示
+	CDebugPrint::Print("DemonPower:%d\n", demonPower);
+#endif
 
 	// 警戒時は視野範囲が広がる
 	if (mState == (int)EState::eAlert)

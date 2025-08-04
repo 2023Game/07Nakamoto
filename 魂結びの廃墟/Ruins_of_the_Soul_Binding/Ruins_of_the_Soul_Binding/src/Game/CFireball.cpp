@@ -4,7 +4,7 @@
 
 // コンストラクタ
 CFireball::CFireball(float speed, float dist)
-	: CObjectBase(ETag::eEnemy, ETaskPriority::eWeapon, 0, ETaskPauseType::eGame)
+	: CObjectBase(ETag::ePlayer, ETaskPriority::eWeapon, 0, ETaskPauseType::eGame)
 	, mpModel(nullptr)
 	, mpCollider(nullptr)
 	, mMoveSpeed(speed)
@@ -18,7 +18,7 @@ CFireball::CFireball(float speed, float dist)
 	mpCollider = new CColliderSphere
 	(
 		this, ELayer::eAttackCol,
-		3.0f
+		10.0f
 	);
 
 	// プレイヤーとフィールドと衝突するように設定
@@ -36,10 +36,10 @@ CFireball::~CFireball()
 // 衝突処理
 void CFireball::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
-	// プレイヤーに衝突した
+	// 敵に衝突した
 	if (other->Layer() == ELayer::eEnemy)
 	{
-		// プレイヤーにダメージを与える
+		// 敵にダメージを与える
 		CCharaBase* chara = dynamic_cast<CCharaBase*>(other->Owner());
 		if (chara != nullptr)
 		{

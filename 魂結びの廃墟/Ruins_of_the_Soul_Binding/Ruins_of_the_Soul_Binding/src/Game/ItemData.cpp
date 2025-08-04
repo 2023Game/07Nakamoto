@@ -17,7 +17,7 @@ namespace Item
 				"ê‡ñæï∂",
 				"Item\\2D\\flameCharm.png",
 				"Item\\3D\\flameCharm.obj",
-				ItemEffectType::Throw,
+				ItemEffectType::Fireball,
 				0,
 				20
 			}

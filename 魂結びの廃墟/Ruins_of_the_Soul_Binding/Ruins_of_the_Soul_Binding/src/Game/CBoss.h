@@ -165,10 +165,12 @@ private:
 	std::vector<CObjectBase*> mNearBreakObjs;
 	CCollider* mpSearchCol;	// 調べるオブジェクトを探知するコライダー
 
-	// 攻撃力
-	int mPower;
+	// 妖力の源の最大値
+	int mMaxDemonPower;
 	// 妖力の源の数
 	int mDemonPower;
+	// 攻撃力
+	int mPower;
 
 	// 頭の行列
 	const CMatrix* mpHeadMtx;
