@@ -722,9 +722,9 @@ void CPlayer2::Update()
 		//CDebugPrint::Print("PlayerGrounded:%s\n", mIsGrounded ? "true" : "false");
 		CDebugPrint::Print("PlayerState:%d\n", mState);
 		CDebugPrint::Print("FPS:%f\n", Times::FPS());
+		CDebugPrint::Print("Recast:%f\n", mItemRecastTime);
 	}
 	CDebugPrint::Print("•”‰®(l)F%s\n", mpRoom != nullptr ? mpRoom->GetName().c_str() : "‚È‚µ");
-	CDebugPrint::Print("Recast:%f\n", mItemRecastTime);
 
 #endif
 

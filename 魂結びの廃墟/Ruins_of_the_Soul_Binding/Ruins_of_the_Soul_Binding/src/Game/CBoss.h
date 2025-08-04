@@ -58,6 +58,7 @@ private:
 		eRun,		// 走行
 		eAttack,	// 攻撃
 		eAlert,		// 警戒
+		eHit,		// よろめき
 
 		Num			// アニメーションの種類の数
 	};
@@ -70,7 +71,8 @@ private:
 		eChase,		// プレイヤーを追いかける
 		eLost,		// プレイヤーを見失う
 		eAttack,	// プレイヤー攻撃
-		eAlert,
+		eAlert,		// 警戒
+		eHit,		// よろめき
 		eDeath,		// 死亡
 	};
 

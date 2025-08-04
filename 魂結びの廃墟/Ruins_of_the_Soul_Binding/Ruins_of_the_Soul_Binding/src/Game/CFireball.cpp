@@ -21,7 +21,7 @@ CFireball::CFireball(float speed, float dist)
 		10.0f
 	);
 
-	// プレイヤーとフィールドと衝突するように設定
+	// 敵とフィールドと衝突するように設定
 	mpCollider->SetCollisionTags({ ETag::eEnemy, ETag::eField });
 	mpCollider->SetCollisionLayers({ ELayer::eEnemy, ELayer::eFloor , ELayer::eWall });
 }
@@ -44,11 +44,15 @@ void CFireball::Collision(CCollider* self, CCollider* other, const CHitInfo& hit
 		if (chara != nullptr)
 		{
 			chara->TakeDamage(10, this);
+			// 自身を削除
+			Kill();
 		}
 	}
-
-	// 何かにぶつかったら、自身を削除
-	Kill();
+	if (other->Layer() == ELayer::eWall || other->Layer() == ELayer::eFloor)
+	{
+		// 何かにぶつかったら、自身を削除
+		Kill();
+	}
 }
 
 // 更新処理

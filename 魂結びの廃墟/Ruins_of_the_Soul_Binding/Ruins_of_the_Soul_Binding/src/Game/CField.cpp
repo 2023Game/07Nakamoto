@@ -950,9 +950,17 @@ void CField::CreateItem()
 	flameCharm->Position(10.0f, 0.5f, 30.0f);
 	flameCharm = new CItemObj(ItemType::FlameCharm);
 	flameCharm->Position(20.0f, 0.5f, 30.0f);
+	flameCharm = new CItemObj(ItemType::FlameCharm);
+	flameCharm->Position(30.0f, 0.5f, 30.0f);
+	flameCharm = new CItemObj(ItemType::FlameCharm);
+	flameCharm->Position(0.0f, 0.5f, 30.0f);
+	flameCharm = new CItemObj(ItemType::FlameCharm);
+	flameCharm->Position(-10.0f, 0.5f, 30.0f);
+	flameCharm = new CItemObj(ItemType::FlameCharm);
+	flameCharm->Position(-20.0f, 0.5f, 30.0f);
 
-	CItemObj* barrierCharm = new CItemObj(ItemType::BarrierCharm);
-	barrierCharm->Position(-20.0f, 0.5f, 1.0f);
+	//CItemObj* barrierCharm = new CItemObj(ItemType::BarrierCharm);
+	//barrierCharm->Position(-20.0f, 0.5f, 1.0f);
 
 }
 

@@ -30,7 +30,7 @@
 #define ATTACK_COL_RADIUS	5.0f	// 攻撃用コライダーの半径
 #define ATTACK_COL_POS	CVector(0.0f,2.0f,5.0f)	// 攻撃コライダーの位置
 
-#define MAX_HP 10	// 体力の最大値
+#define MAX_HP 100	// 体力の最大値
 #define MAX_ST 100	// スタミナの最大値
 #define HP_GAUGE_UI_POS 100.0f, 40.0f
 #define SP_GAUGE_UI_POS 110.0f, 70.0f

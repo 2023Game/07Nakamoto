@@ -68,6 +68,7 @@ const std::vector<CEnemy::AnimData> ANIM_DATA =
 	{ ANIM_PATH"warrok_run.x",		true,	27.0f,	1.0f	},	// 走行
 	{ ANIM_PATH"warrok_attack.x",	false,	81.0f,	1.0f	},	// 攻撃
 	{ ANIM_PATH"warrok_alert.x",	false,	150.0f,	0.5f	},	// 警戒
+	{ ANIM_PATH"warrok_hit.x" ,		false,	32.0f,	0.5f	},	// よろめき
 };
 
 // インスタンスのポインタを取得
@@ -128,7 +129,7 @@ CBoss::CBoss(std::vector<std::vector<CVector>> patrolPoints)
 			ETag::eGimmick,
 			ETag::ePlayer,
 			ETag::eCat,
-			ETag::eInteractObject
+			ETag::eInteractObject,
 		}
 	);
 	mpBodyCol->SetCollisionLayers
@@ -138,7 +139,8 @@ CBoss::CBoss(std::vector<std::vector<CVector>> patrolPoints)
 			ELayer::ePlayer,
 			ELayer::eCat,
 			ELayer::eInteractObj,
-			ELayer::eDoor
+			ELayer::eDoor,
+			ELayer::eAttackCol,
 		}
 	);
 
@@ -307,6 +309,11 @@ void CBoss::PowerDown()
 // ダメージを受ける
 void CBoss::TakeDamage(int damage, CObjectBase* causer)
 {
+	if (!mDemonPower == 0)
+	{
+		damage = 0;
+	}
+
 	// ベースクラスのダメージ処理を呼び出す
 	CEnemy::TakeDamage(damage, causer);
 
@@ -314,22 +321,22 @@ void CBoss::TakeDamage(int damage, CObjectBase* causer)
 	if (!IsDeath())
 	{
 		// 仰け反り状態へ移行
-		// ChangeState((int)EState::eHit);
+		ChangeState((int)EState::eHit);
 
 		// ダメージを与えた相手がキャラクターかどうか判定
 		// TODO：飛び道具だった場合は、その持ち主を判定
-		CCharaBase* chara = dynamic_cast<CCharaBase*>(causer);
-		if (chara != nullptr)
-		{
-			// 攻撃を加えた相手を戦闘相手に設定
-			mpBattleTargetChara = chara;
+		//CCharaBase* chara = dynamic_cast<CCharaBase*>(causer);
+		//if (chara != nullptr)
+		//{
+		//	// 攻撃を加えた相手を戦闘相手に設定
+		//	mpBattleTargetChara = chara;
 
-			// 攻撃を加えた相手の方向へ向く
-			LookAtBattleTarget(true);
+		//	// 攻撃を加えた相手の方向へ向く
+		//	LookAtBattleTarget(true);
 
-			// 戦闘状態へ切り替え
-			mIsBattle = true;
-		}
+		//	// 戦闘状態へ切り替え
+		//	mIsBattle = true;
+		//}
 
 		// 移動を停止
 		mMoveSpeed = CVector::zero;
@@ -1139,6 +1146,24 @@ void CBoss::UpdateAttack2()
 // 仰け反り状態の更新処理
 void CBoss::UpdateHit()
 {
+	// ステップごとに処理を分ける
+	switch (mStateStep)
+	{
+		// ステップ0：仰け反りアニメーション再生
+	case 0:
+		ChangeAnimation((int)EAnimType::eHit, true);
+		mStateStep++;
+		break;
+		// ステップ1：アニメーション終了待ち
+	case 1:
+		// 仰け反りアニメーションが終了したら、
+		// 待機状態へ戻す
+		if (IsAnimationFinished())
+		{
+			ChangeState((int)EState::eIdle);
+		}
+		break;
+	}
 }
 
 // 死亡状態の更新処理
@@ -1218,19 +1243,21 @@ void CBoss::Update()
 		// 状態に合わせて、更新処理を切り替える
 		switch ((EState)mState)
 		{
-			// 待機状態
+		// 待機状態
 		case EState::eIdle:		UpdateIdle();	break;
-			// 巡回状態
+		// 巡回状態
 		case EState::ePatrol:	UpdatePatrol();	break;
-			// 追いかける
+		// 追いかける
 		case EState::eChase:	UpdateChase();	break;
-			// 見失った状態
+		// 見失った状態
 		case EState::eLost:		UpdateLost();	break;
-			// パンチ攻撃
+		// パンチ攻撃
 		case EState::eAttack:	UpdateAttack1(); break;
-			// 警戒状態
+		// 警戒状態
 		case EState::eAlert:	UpdateAlert();	break;
-			// 死亡状態
+		// 仰け反り
+		case EState::eHit:		UpdateHit();	break;
+		// 死亡状態
 		case EState::eDeath:	UpdateDeath();	break;
 		}
 	}
