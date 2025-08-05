@@ -59,7 +59,7 @@
 #define ITEM_RECAST_TIME 5.0f	// アイテムの再使用できるまでの時間
 
 // 火球の発射位置のオフセット座標
-#define FIREBALL_OFFSET_POS CVector(0.0f, 10.0f, 12.0f)
+#define FIREBALL_OFFSET_POS CVector(0.0f, 10.0f, 10.0f)
 #define FIREBALL_SPEED 100.0f	// 火球の速度
 #define FIREBALL_DIST 200.0f	// 火球が移動できる距離
 
@@ -738,12 +738,11 @@ void CPlayer2::Update()
 	{
 		SetTrail();
 	};
-
+	// アイテムのクールタイム処理
 	if (mItemRecastTime > 0.0f)
 	{
 		ItemRecast();
 	}
-
 
 	// 体力ゲージの更新
 	mpHpGauge->SetMaxPoint(mMaxHp);

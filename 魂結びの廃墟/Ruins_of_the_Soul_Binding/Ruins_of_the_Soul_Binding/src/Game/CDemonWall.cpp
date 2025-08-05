@@ -7,6 +7,7 @@ CDemonWall::CDemonWall()
 	: CObjectBase(ETag::eField)
 	, mpModel(nullptr)
 	, mpColliderMesh(nullptr)
+	, mpDemonPowar(nullptr)
 {
 	mpModel = CResourceManager::Get<CModel>("DemonWall");
 

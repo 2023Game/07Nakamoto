@@ -3,6 +3,7 @@
 
 class CModel;
 class CCollider;
+class CDemonPowar;
 
 class CDemonWall : public CObjectBase
 {
@@ -18,4 +19,5 @@ public:
 private:
 	CModel* mpModel;	// モデルデータ
 	CCollider* mpColliderMesh;	// コライダー
+	CDemonPowar* mpDemonPowar;	// 連携させる妖力の源
 };

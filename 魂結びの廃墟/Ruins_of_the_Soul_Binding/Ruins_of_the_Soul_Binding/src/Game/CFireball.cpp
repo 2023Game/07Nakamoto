@@ -18,7 +18,7 @@ CFireball::CFireball(float speed, float dist)
 	mpCollider = new CColliderSphere
 	(
 		this, ELayer::eAttackCol,
-		10.0f
+		7.0f
 	);
 
 	// 敵とフィールドと衝突するように設定
@@ -59,7 +59,7 @@ void CFireball::Collision(CCollider* self, CCollider* other, const CHitInfo& hit
 void CFireball::Update()
 {
 	// このフレームで移動距離を求める
-	float moveDist = mMoveSpeed * Times::DeltaTime();
+	float moveDist = mMoveSpeed * Times::DeltaTime() * 0.5f;
 
 	// 移動距離分、移動させる
 	CVector pos = Position();
