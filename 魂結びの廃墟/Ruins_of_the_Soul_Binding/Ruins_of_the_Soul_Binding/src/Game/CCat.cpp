@@ -37,7 +37,7 @@
 
 #define EYE_HEIGHT	7.0f		// 視点の高さ
 
-#define TRAIL_SPEED 20.0f		// 追従時の速度
+#define TRAIL_SPEED 45.0f		// 追従時の速度
 #define TRACKING_DIST 30.0f		// プレイヤーから離れたらついてくる距離
 
 // カメラの回転速度
@@ -245,7 +245,7 @@ void CCat::UpdateIdle()
 	}
 }
 
-// 追従時の移動経路をけいさんするかどうか
+// 追従時の移動経路を計算するかどうか
 bool CCat::IsCalcTrackingRoute() const
 {
 	// 経路探索の開始ノードと終了ノードが更新中だったら、移動経路を再計算しない

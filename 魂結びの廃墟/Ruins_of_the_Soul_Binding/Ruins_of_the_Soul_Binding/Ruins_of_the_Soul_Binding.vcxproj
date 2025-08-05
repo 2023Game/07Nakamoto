@@ -86,6 +86,7 @@
     <ClCompile Include="src\Game\CInventory.cpp" />
     <ClCompile Include="src\Game\CItemMenu.cpp" />
     <ClCompile Include="src\Game\CItemObj.cpp" />
+    <ClCompile Include="src\Game\CItemPositions.cpp" />
     <ClCompile Include="src\Game\CItemSlotUI.cpp" />
     <ClCompile Include="src\Game\CPressAndHoldSwitch.cpp" />
     <ClCompile Include="src\Game\CRoom.cpp" />
@@ -239,6 +240,7 @@
     <ClInclude Include="src\Game\CInventory.h" />
     <ClInclude Include="src\Game\CItemMenu.h" />
     <ClInclude Include="src\Game\CItemObj.h" />
+    <ClInclude Include="src\Game\CItemPositions.h" />
     <ClInclude Include="src\Game\CItemSlotUI.h" />
     <ClInclude Include="src\Game\CPressAndHoldSwitch.h" />
     <ClInclude Include="src\Game\CRoom.h" />

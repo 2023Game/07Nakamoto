@@ -64,7 +64,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>(	"Warrok",			"Character\\Enemy\\Warrok\\warrok.x");
 	CResourceManager::Load<CModelX>(	"Spider",			"Character\\Enemy\\Spider\\spider.x");
 	// 床
-	CResourceManager::Load<CModel>(		"Floor",			"Field\\Abandoned_School_Floor2.obj");
+	CResourceManager::Load<CModel>(		"Floor",			"Field\\Abandoned_School_Floor3.obj");
 	// 壁
 	CResourceManager::Load<CModel>(		"Wall",				"Field\\Abandoned_School_Wall3.obj"); 
 	CResourceManager::Load<CModel>(		"WallCol",			"Field\\Abandoned_School_Wall_Col3.obj");
@@ -87,14 +87,7 @@ void CGameScene::Load()
 	// 妖力の壁
 	CResourceManager::Load<CModel>(		"DemonWall",		"Field\\Gimmick\\demon_wall.obj");
 	CResourceManager::Load<CModel>(		"DemonWallCol",		"Field\\Gimmick\\demon_wall_col.obj");
-
-
-	// テスト用の移動エリアを制限する壁
-	//CResourceManager::Load<CModel>(		"TestObj",			"Field\\Test\\obj4.obj");
-	//CResourceManager::Load<CModel>(		"TestObjFloor",		"Field\\Test\\obj4_floor.obj");
-	//CResourceManager::Load<CModel>(		"TestObjWall",		"Field\\Test\\obj4_wall.obj");
-
-	//CResourceManager::Load<CModel>(		"TestWall",			"Field\\Test\\test_wall0.obj");
+	CResourceManager::Load<CModel>(		"BlockerWall",		"Field\\Test\\DemonWallOut.obj");
 	
 	// スイッチのギミックと連動する壁
 	CResourceManager::Load<CModel>(		"TestWallBrack",	"Field\\Test\\Brack_Wall.obj");

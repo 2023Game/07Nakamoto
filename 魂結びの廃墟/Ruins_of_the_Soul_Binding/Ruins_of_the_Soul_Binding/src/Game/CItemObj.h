@@ -38,6 +38,4 @@ protected:
 	const ItemData* mpItemData;	// アイテムデータのポインタ
 	CImage3D* mpItemImage;		// アイテムのイメージデータ
 	CCollider* mpCollider;	// アイテムのコライダー
-
-
 };

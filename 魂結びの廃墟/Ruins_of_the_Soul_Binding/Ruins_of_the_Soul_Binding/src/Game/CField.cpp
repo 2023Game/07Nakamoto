@@ -46,6 +46,10 @@ CField::CField()
 		10, 1, 10
 	);
 
+	// 場外に出ないための壁を生成
+	mpBlockerWall = CResourceManager::Get<CModel>("BlockerWall");
+	CColliderMesh* blockerWall = new CColliderMesh(this, ELayer::eWall, mpBlockerWall, true);
+
 	// 経路探索用の遮蔽物チェックのコライダーに、フィールドの壁のコライダーを登録
 	CNavManager::Instance()->AddCollider(mpWallColliderMesh);
 
@@ -999,6 +1003,5 @@ void CField::Render()
 	mpFloor->Render(Matrix());
 	mpWall->Render(Matrix());
 
-	//mpTestObj->Render(Matrix());
-	//mpTestWall->Render(Matrix());
+	mpBlockerWall->Render(Matrix());
 }

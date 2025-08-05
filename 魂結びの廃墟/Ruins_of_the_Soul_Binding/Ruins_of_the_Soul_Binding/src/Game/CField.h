@@ -66,6 +66,7 @@ private:
 
 	CModel* mpCubeModel;
 	CModel* mpCylinderModel;
+	CModel* mpBlockerWall;
 
 	TexAnimData mEffectAnimData;
 };
