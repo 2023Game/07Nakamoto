@@ -547,7 +547,7 @@
     <ClCompile Include="src\Game\CDemonWall.cpp">
       <Filter>ソース ファイル\Game\Field\Gimmick\Object</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CItemPositions.cpp">
+    <ClCompile Include="src\Game\CItemManager.cpp">
       <Filter>ソース ファイル\Game\Item\Object</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1002,7 +1002,7 @@
     <ClInclude Include="src\Game\CDemonWall.h">
       <Filter>ソース ファイル\Game\Field\Gimmick\Object</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CItemPositions.h">
+    <ClInclude Include="src\Game\CItemManager.h">
       <Filter>ソース ファイル\Game\Item\Object</Filter>
     </ClInclude>
   </ItemGroup>

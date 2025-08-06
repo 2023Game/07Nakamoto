@@ -16,11 +16,11 @@
 #include "CBoss.h"
 #include "CNavManager.h"
 #include "CInteractObjectManager.h"
-#include "CDemonPowerManager.h"
 #include "CGameUI.h"
 #include "CSpider.h"
 #include "CInventory.h"
 #include "CRoomManager.h"
+#include "CItemManager.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -45,6 +45,9 @@ CGameScene::~CGameScene()
 		// ゲームUIを破棄する
 		CGameUI::ClearInstance();
 	}
+
+	// アイテムマネージャーを解放
+	CItemManager::ClearInstance();
 }
 
 //シーン読み込み
@@ -88,9 +91,13 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>(		"DemonWall",		"Field\\Gimmick\\demon_wall.obj");
 	CResourceManager::Load<CModel>(		"DemonWallCol",		"Field\\Gimmick\\demon_wall_col.obj");
 	CResourceManager::Load<CModel>(		"BlockerWall",		"Field\\Test\\DemonWallOut.obj");
-	
 	// スイッチのギミックと連動する壁
 	CResourceManager::Load<CModel>(		"TestWallBrack",	"Field\\Test\\Brack_Wall.obj");
+
+	// テスト用オブジェクト
+	CResourceManager::Load<CModel>("TestObj", "Field\\Test\\test_obj.obj");
+	CResourceManager::Load<CModel>("TestObjWallCol", "Field\\Test\\test_obj_wall_col.obj");
+	CResourceManager::Load<CModel>("TestObjFloorCol", "Field\\Test\\test_obj_floor_col.obj");
 
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
@@ -109,6 +116,9 @@ void CGameScene::Load()
 
 	// フィールドの生成
 	mpField = new CField();
+
+	// フィールドのアイテムを生成
+	CItemManager::Instance()->SpawnItems();
 
 	// ゲームメニューを生成
 	new CInventory();

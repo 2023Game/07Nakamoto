@@ -7,13 +7,11 @@
 #include "CNavNode.h"
 #include "CNavManager.h"
 #include "CSceneManager.h"
-#include "CDemonPower.h"
 #include "CDemonPowerManager.h"
 #include "COpeningDoorGimmick.h"
 #include "CSwitch.h"
 #include "CSwitchDoorGimmick.h"
 #include "CRoom.h"
-#include "CItemObj.h"
 #include "CDemonWall.h"
 
 #define ROOM_SIZE_Y 33.0f
@@ -57,28 +55,14 @@ CField::CField()
 	CreateRoomObjects();
 	// ƒMƒ~ƒbƒN‚Ì¶¬
 	CreateGimmick();
-	// ƒAƒCƒeƒ€‚ð¶¬
-	CreateItem();
 
 	CDemonWall* demonWall = new CDemonWall();
-	demonWall->SetAlpha(0.8f);
 
 	// —d—Í‚ÌŒ¹‚Ìƒ}ƒl[ƒWƒƒ[‚ð¶¬
 	new CDemonPowerManager();
 
 	// ƒeƒXƒg—p—d—Í‚ÌŒ¹
 	//new CDemonPower(CVector(20.0f, 5.0f, 20.0f));
-
-	// —d—Í‚ÌŒ¹
-	new CDemonPower(CVector(140.0f, 5.0f, 120.0f));
-	// —d—Í‚ÌŒ¹
-	new CDemonPower(CVector(140.0f, 5.0f, -20.0f));
-	// —d—Í‚ÌŒ¹
-	new CDemonPower(CVector(180.0f, 5.0f, 380.0f));
-	// —d—Í‚ÌŒ¹
-	new CDemonPower(CVector(-30.0f, 5.0f, 220.0f));
-	// —d—Í‚ÌŒ¹
-	new CDemonPower(CVector(-200.0f, 5.0f, 120.0f));
 
 	// Œo˜H’Tõ—p‚Ìƒm[ƒh‚ðì¬
 	CreateNavNodes();
@@ -944,27 +928,6 @@ void CField::CreateGimmick()
 		"TestWallBrack", "TestWallBrack"
 	);
 	switchdoor1->AddSwitch(switch1);
-
-}
-
-// ƒAƒCƒeƒ€‚ð¶¬
-void CField::CreateItem()
-{
-	CItemObj* flameCharm = new CItemObj(ItemType::FlameCharm);
-	flameCharm->Position(10.0f, 0.5f, 30.0f);
-	flameCharm = new CItemObj(ItemType::FlameCharm);
-	flameCharm->Position(20.0f, 0.5f, 30.0f);
-	flameCharm = new CItemObj(ItemType::FlameCharm);
-	flameCharm->Position(30.0f, 0.5f, 30.0f);
-	flameCharm = new CItemObj(ItemType::FlameCharm);
-	flameCharm->Position(0.0f, 0.5f, 30.0f);
-	flameCharm = new CItemObj(ItemType::FlameCharm);
-	flameCharm->Position(-10.0f, 0.5f, 30.0f);
-	flameCharm = new CItemObj(ItemType::FlameCharm);
-	flameCharm->Position(-20.0f, 0.5f, 30.0f);
-
-	//CItemObj* barrierCharm = new CItemObj(ItemType::BarrierCharm);
-	//barrierCharm->Position(-20.0f, 0.5f, 1.0f);
 
 }
 

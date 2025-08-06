@@ -18,7 +18,7 @@ CFireball::CFireball(float speed, float dist)
 	mpCollider = new CColliderSphere
 	(
 		this, ELayer::eAttackCol,
-		7.0f
+		5.0f
 	);
 
 	// 敵とフィールドと衝突するように設定
@@ -48,7 +48,7 @@ void CFireball::Collision(CCollider* self, CCollider* other, const CHitInfo& hit
 			Kill();
 		}
 	}
-	if (other->Layer() == ELayer::eWall || other->Layer() == ELayer::eFloor)
+	if (other->Layer() == ELayer::eWall)
 	{
 		// 何かにぶつかったら、自身を削除
 		Kill();

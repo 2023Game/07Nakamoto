@@ -11,7 +11,7 @@ class CItemObj :public CInteractObject
 {
 public:
 	// コンストラクタ
-	CItemObj(ItemType type);
+	CItemObj(ItemType type, CVector pos);
 	// デストラクタ
 	~CItemObj();
 

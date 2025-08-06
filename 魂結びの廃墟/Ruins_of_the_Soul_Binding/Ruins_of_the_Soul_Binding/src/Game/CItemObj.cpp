@@ -18,7 +18,7 @@
 #define SCALING_MAX 1.25f
 
 // コンストラクタ
-CItemObj::CItemObj(ItemType type)
+CItemObj::CItemObj(ItemType type, CVector pos)
 	: CInteractObject(ETaskPriority::eItem, 0, ETaskPauseType::eGame)
 	, mItemTyope(type)
 	, mpItemData(nullptr)
@@ -60,6 +60,8 @@ CItemObj::CItemObj(ItemType type)
 	// ランダムで所為の回転角度を求める
 	float angleZ = Math::Rand(0.0f, 360.0f);
 	mpItemImage->Rotation(0.0f, 0.0f, angleZ);
+
+	Position(pos);
 }
 
 // デストラクタ
