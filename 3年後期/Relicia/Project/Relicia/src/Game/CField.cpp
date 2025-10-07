@@ -135,7 +135,7 @@ void CField::InitializeRoom()
 }
 
 // ƒ_ƒ“ƒWƒ‡ƒ“‚Ì¶¬
-void CField::CreateDungeon()
+void CField::CreateDungeon(int sections)
 {
 	//new CDoor(CVector(0.0f, 0.0f, 0.0f));
 	//new CPillar(CVector(30.0f, 0.0f, 0.0f));
@@ -146,6 +146,8 @@ void CField::CreateDungeon()
 
 	// •”‰®‚Ì‰Šú‰»
 	InitializeRoom();
+
+
 
 	// •”‰®‚Ì‘å‚«‚³‚ğİ’è
 	int roomW = Math::Rand(3, 11);

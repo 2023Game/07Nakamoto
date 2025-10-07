@@ -43,8 +43,11 @@ private:
 	// 部屋の初期化
 	void InitializeRoom();
 
-	// ダンジョンの生成
-	void CreateDungeon();
+	/// <summary>
+	/// ダンジョンの生成
+	/// </summary>
+	/// <param name="sections">区画の数</param>
+	void CreateDungeon(int sections);
 
 	// 部屋のタイルのデバック表示
 	void PrintRoom();
