@@ -7,16 +7,16 @@ class CDoor : public CObjectBase
 {
 public:
 	// コンストラクタ
-	CDoor(CModel* model, const CVector& pos);
+	CDoor(const CVector& pos);
 	// デストラクタ
 	~CDoor();
 
 	// 更新
-	void Update();
+	void Update() override;
 	// 描画
-	void Render();
+	void Render() override;
 
 private:
 	CModel* mpModel;
-
+	
 };

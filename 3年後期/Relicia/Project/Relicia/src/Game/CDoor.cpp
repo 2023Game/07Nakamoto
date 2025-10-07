@@ -1,12 +1,11 @@
 #include "CDoor.h"
-#include "Maths.h"
 
 // コンストラクタ
-CDoor::CDoor(CModel* model, const CVector& pos)
-	: mpModel(model)
+CDoor::CDoor(const CVector& pos)
 {
-	Position(pos);
+	mpModel = CResourceManager::Get<CModel>("Door"),
 
+	Position(pos);
 
 }
 

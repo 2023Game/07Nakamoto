@@ -47,6 +47,10 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>(		"Shield",			"Weapon\\Shield\\shield.obj");
 
 	CResourceManager::Load<CModel>(		"Door",				"Dungeon\\Door.obj");
+	CResourceManager::Load<CModel>(		"Floor",			"Dungeon\\Floor.obj");
+	CResourceManager::Load<CModel>(		"Pillar",			"Dungeon\\Pillar.obj");
+	CResourceManager::Load<CModel>(		"Wall",				"Dungeon\\Wall.obj");
+	CResourceManager::Load<CModel>(		"Wall_Entrance",	"Dungeon\\Wall_Entrance.obj");
 
 	// ƒQ[ƒ€BGM‚ð“Ç‚Ýž‚Ý
 	CBGMManager::Instance()->Play(EBGMType::eGame);

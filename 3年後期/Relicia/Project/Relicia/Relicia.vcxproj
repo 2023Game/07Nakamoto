@@ -79,9 +79,11 @@
     <ClCompile Include="src\Game\CCactus.cpp" />
     <ClCompile Include="src\Game\CCactusNeedle.cpp" />
     <ClCompile Include="src\Game\CEnemy.cpp" />
+    <ClCompile Include="src\Game\CEntrance.cpp" />
     <ClCompile Include="src\Game\CField.cpp" />
     <ClCompile Include="src\Game\CFlame.cpp" />
     <ClCompile Include="src\Game\CFlamethrower.cpp" />
+    <ClCompile Include="src\Game\CFloor.cpp" />
     <ClCompile Include="src\Game\CGameCamera.cpp" />
     <ClCompile Include="src\Game\CGameCamera2.cpp" />
     <ClCompile Include="src\Game\CGameMenu.cpp" />
@@ -89,6 +91,7 @@
     <ClCompile Include="src\Game\CGaugeUI3D.cpp" />
     <ClCompile Include="src\Game\CImage.cpp" />
     <ClCompile Include="src\Game\CMoveFloor.cpp" />
+    <ClCompile Include="src\Game\CPillar.cpp" />
     <ClCompile Include="src\Game\CPlayer.cpp" />
     <ClCompile Include="src\Game\CRideabeObject.cpp" />
     <ClCompile Include="src\Game\CRotateFloor.cpp" />
@@ -96,6 +99,7 @@
     <ClCompile Include="src\Game\CSword.cpp" />
     <ClCompile Include="src\Game\CTitleScene.cpp" />
     <ClCompile Include="src\Game\CTitleUI.cpp" />
+    <ClCompile Include="src\Game\CWall.cpp" />
     <ClCompile Include="src\Game\CWeapon.cpp" />
     <ClCompile Include="src\Game\CXCharacter.cpp" />
     <ClCompile Include="src\Game\CDoor.cpp" />
@@ -188,9 +192,11 @@
     <ClInclude Include="src\Game\CCactus.h" />
     <ClInclude Include="src\Game\CCactusNeedle.h" />
     <ClInclude Include="src\Game\CEnemy.h" />
+    <ClInclude Include="src\Game\CEntrance.h" />
     <ClInclude Include="src\Game\CField.h" />
     <ClInclude Include="src\Game\CFlame.h" />
     <ClInclude Include="src\Game\CFlamethrower.h" />
+    <ClInclude Include="src\Game\CFloor.h" />
     <ClInclude Include="src\Game\CGameCamera.h" />
     <ClInclude Include="src\Game\CGameCamera2.h" />
     <ClInclude Include="src\Game\CGameMenu.h" />
@@ -198,6 +204,7 @@
     <ClInclude Include="src\Game\CGaugeUI3D.h" />
     <ClInclude Include="src\Game\CImage.h" />
     <ClInclude Include="src\Game\CMoveFloor.h" />
+    <ClInclude Include="src\Game\CPillar.h" />
     <ClInclude Include="src\Game\CPlayer.h" />
     <ClInclude Include="src\Game\CRideableObject.h" />
     <ClInclude Include="src\Game\CRotateFloor.h" />
@@ -205,6 +212,7 @@
     <ClInclude Include="src\Game\CSword.h" />
     <ClInclude Include="src\Game\CTitleUI.h" />
     <ClInclude Include="src\Game\CTitleScene.h" />
+    <ClInclude Include="src\Game\CWall.h" />
     <ClInclude Include="src\Game\CWeapon.h" />
     <ClInclude Include="src\Game\CXCharacter.h" />
     <ClInclude Include="src\Game\CDoor.h" />
