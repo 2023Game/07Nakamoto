@@ -23,6 +23,7 @@ private:
 		ePillar,	// 柱
 	};
 
+	// 区画のデータ
 	struct RoomInfo
 	{
 		TileType typeId = TileType::None;	// タイルの種類
@@ -36,22 +37,30 @@ private:
 		int h;
 	};
 
+	// 壁の配列のデータ
+	struct Point
+	{
+		int x, y;
+	};
+
 	// 部屋の情報を設定
 	void SetRoomParameters(RoomInfo& info);
 
 	// 区画のデータ配列
 	RoomInfo mMapData[ROOM_HEIGHT][ROOM_WIDTH];
+	// 扉に変更する候補格納用リスト
+	std::vector<Point> mDoorCandidates;
 
 	// 区画の初期化
 	void InitializeSection();
 
-	// 床の設定
+	// 部屋の床の設定
 	void CreateRoomFloor(const RoomInfo& info);
-	// 壁の設定
+	// 部屋の壁の設定
 	void CreateRoomWall(const RoomInfo& info);
-	// 四隅の柱を設定
+	// 部屋の四隅の柱を設定
 	void CreateRoomPillar(const RoomInfo& info);
-	// 扉の設定
+	// 部屋の扉の設定
 	void CreateRoomDoor(const RoomInfo& info);
 
 #if _DEBUG

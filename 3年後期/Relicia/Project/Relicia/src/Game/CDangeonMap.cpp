@@ -15,11 +15,17 @@
 #define MAX_ROOM_WIDTH (ROOM_WIDTH % 2 == 0 ? ROOM_WIDTH - 3 : ROOM_WIDTH - 2)
 #define MAX_ROOM_HEIGHT (ROOM_HEIGHT % 2 == 0 ? ROOM_HEIGHT - 3 : ROOM_HEIGHT -2)
 
+// 部屋の扉の最大数
+#define MAX_DOOR 3
+
 #define TILE_SIZE 20.0f	// タイルモデルの大きさ
 
 // コンストラクタ
 CDangeonMap::CDangeonMap()
 {
+	// 扉に変更する候補格納用リストの初期化
+	mDoorCandidates.clear();
+
 	RoomInfo info;
 
 	SetRoomParameters(info);
@@ -27,13 +33,13 @@ CDangeonMap::CDangeonMap()
 	// 部屋の初期化
 	InitializeSection();
 
-	// 床の設定
+	// ①部屋の床の設定
 	CreateRoomFloor(info);
-	// 壁の設定
+	// ②部屋の壁の設定
 	CreateRoomWall(info);
-	// 四隅の柱を設定
+	// ③部屋の四隅の柱を設定
 	CreateRoomPillar(info);
-	// 扉の設定
+	// ④部屋の扉の設定
 	CreateRoomDoor(info);
 
 #if _DEBUG
@@ -90,7 +96,7 @@ void CDangeonMap::InitializeSection()
 	}
 }
 
-// 床の設定
+// 部屋の床の設定
 void CDangeonMap::CreateRoomFloor(const RoomInfo& info)
 {
 	// 床を設定
@@ -103,7 +109,7 @@ void CDangeonMap::CreateRoomFloor(const RoomInfo& info)
 	}
 }
 
-// 壁の設定
+// 部屋の壁の設定
 void CDangeonMap::CreateRoomWall(const RoomInfo& info)
 {
 	// 上下の壁の設定
@@ -111,16 +117,37 @@ void CDangeonMap::CreateRoomWall(const RoomInfo& info)
 	{
 		mMapData[info.y][x].typeId = TileType::eWall;
 		mMapData[info.y + info.h - 1][x].typeId = TileType::eWall;
+		
+		// もしxの値が奇数なら
+		if (x % 2 == 1)
+		{
+			// 上の壁の座標を追加
+			mDoorCandidates.push_back({ x, info.y });
+
+			// 下の壁の座標を追加
+			mDoorCandidates.push_back({ x, info.y + info.h - 1 });
+		}
+
 	}
 	// 左右の壁を設定
 	for (int y = info.y + 1; y < info.y + info.h - 1; y++)
 	{
 		mMapData[y][info.x].typeId = TileType::eWall;
 		mMapData[y][info.x + info.w - 1].typeId = TileType::eWall;
+
+		// もしyの値が奇数なら
+		if (y % 2 == 1)
+		{
+			// 左の壁の座標を追加
+			mDoorCandidates.push_back({ info.x, y });
+
+			// 右の壁の座標を追加
+			mDoorCandidates.push_back({ info.x + info.w - 1, y });
+		}
 	}
 }
 
-// 四隅の柱を設定
+// 部屋の四隅の柱を設定
 void CDangeonMap::CreateRoomPillar(const RoomInfo& info)
 {
 	mMapData[info.y][info.x].typeId = TileType::ePillar;	// 左上
@@ -129,9 +156,44 @@ void CDangeonMap::CreateRoomPillar(const RoomInfo& info)
 	mMapData[info.y + info.h - 1][info.x + info.w - 1].typeId = TileType::ePillar;	 // 右下
 }
 
-// 扉の設定
+// 部屋の扉の設定
 void CDangeonMap::CreateRoomDoor(const RoomInfo& info)
 {
+	// 部屋の扉の数を設定
+	int numDoors = Math::Rand(1, MAX_DOOR);
+
+	// 候補リストのサイズを取得
+	int currentSize = static_cast<int>(mDoorCandidates.size());
+	// 部屋が小さすぎて扉候補数が少ない場合に対応
+	numDoors = std::min(numDoors, currentSize);
+
+	// 生成する扉が無くなるまで
+	while (numDoors > 0)
+	{
+		// 候補リストの最大インデックスを取得
+		int maxIndex = currentSize - 1;
+
+		// 0から最大インデックスまでの乱数を生成
+		int randomIndex = Math::Rand(0, maxIndex);
+
+		// ランダムに選ばれた座標を取得
+		Point selectedDoorPos = mDoorCandidates[randomIndex];
+
+		// その位置のタイルを扉に上書き
+		mMapData[selectedDoorPos.y][selectedDoorPos.x].typeId = TileType::eDoor;
+
+		// 壁から扉に上書きした要素をリストの末尾と入れ替える
+		mDoorCandidates[randomIndex] = mDoorCandidates.back();
+
+		// 末尾の要素を削除する
+		mDoorCandidates.pop_back();
+
+		// リストのサイズを更新
+		currentSize--;
+
+		// 生成する扉のカウントを減らす
+		numDoors--;
+	}
 }
 
 #if _DEBUG
@@ -146,7 +208,7 @@ void CDangeonMap::PrintSection()
 			else if (mMapData[y][x].typeId == TileType::eFloor) printf("1");
 			else if (mMapData[y][x].typeId == TileType::eWall) printf("2");
 			else if (mMapData[y][x].typeId == TileType::ePillar) printf("3");
-
+			else if (mMapData[y][x].typeId == TileType::eDoor) printf("4");
 		}
 		printf("\n");
 	}
