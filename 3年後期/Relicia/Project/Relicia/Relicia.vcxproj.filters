@@ -406,6 +406,9 @@
     <ClCompile Include="src\Game\CEntrance.cpp">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CDangeonMap.cpp">
+      <Filter>ソース ファイル\Game\Field</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -737,6 +740,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CEntrance.h">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CDangeonMap.h">
+      <Filter>ソース ファイル\Game\Field</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

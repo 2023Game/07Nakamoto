@@ -1,0 +1,61 @@
+#pragma once
+
+#define ROOM_WIDTH 15	// 区画の幅
+#define ROOM_HEIGHT 15	// 区画の奥行
+
+class CDangeonMap
+{
+public:
+	// コンストラクタ
+	CDangeonMap();
+	// デストラクタ
+	~CDangeonMap();
+
+private:
+	// タイルの種類
+	enum class TileType
+	{
+		None,		// 無し
+		eFloor,		// 床
+		eWall,		// 壁
+		eEntrance,	// 出入口
+		eDoor,		// 扉
+		ePillar,	// 柱
+	};
+
+	struct RoomInfo
+	{
+		TileType typeId = TileType::None;	// タイルの種類
+
+		// マップのインデックス(左上隅の座標)
+		int x; 
+		int y;
+
+		// 部屋のサイズ(幅と奥行)
+		int w;
+		int h;
+	};
+
+	// 部屋の情報を設定
+	void SetRoomParameters(RoomInfo& info);
+
+	// 区画のデータ配列
+	RoomInfo mMapData[ROOM_HEIGHT][ROOM_WIDTH];
+
+	// 区画の初期化
+	void InitializeSection();
+
+	// 床の設定
+	void CreateRoomFloor(const RoomInfo& info);
+	// 壁の設定
+	void CreateRoomWall(const RoomInfo& info);
+	// 四隅の柱を設定
+	void CreateRoomPillar(const RoomInfo& info);
+	// 扉の設定
+	void CreateRoomDoor(const RoomInfo& info);
+
+#if _DEBUG
+	// 区画のタイルのデバック表示
+	void PrintSection();
+#endif
+};
