@@ -3,6 +3,8 @@
 #define ROOM_WIDTH 15	// 区画の幅
 #define ROOM_HEIGHT 15	// 区画の奥行
 
+#define TILE_SIZE 20.0f	// タイルモデルの大きさ
+
 class CDangeonMap
 {
 public:
@@ -11,7 +13,16 @@ public:
 	// デストラクタ
 	~CDangeonMap();
 
-private:
+	// 方向を表すデータ
+	enum class Direction
+	{
+		eNorth,	// 北
+		eSouth,	// 南
+		eEast,	// 東
+		eWest,	// 西
+
+	};
+
 	// タイルの種類
 	enum class TileType
 	{
@@ -23,13 +34,18 @@ private:
 		ePillar,	// 柱
 	};
 
+	// タイルの情報
+	struct Tile
+	{
+		TileType typeId = TileType::None;	// タイルの種類
+		Direction dir = Direction::eNorth;	// 方向(壁や扉の回転用)
+	};
+
 	// 区画のデータ
 	struct RoomInfo
 	{
-		TileType typeId = TileType::None;	// タイルの種類
-
 		// マップのインデックス(左上隅の座標)
-		int x; 
+		int x;
 		int y;
 
 		// 部屋のサイズ(幅と奥行)
@@ -43,11 +59,14 @@ private:
 		int x, y;
 	};
 
+	// タイルの情報を取得
+	const Tile& GetTile(int x,int y) const;
+private:
 	// 部屋の情報を設定
 	void SetRoomParameters(RoomInfo& info);
 
 	// 区画のデータ配列
-	RoomInfo mMapData[ROOM_HEIGHT][ROOM_WIDTH];
+	Tile mMapData[ROOM_HEIGHT][ROOM_WIDTH];
 	// 扉に変更する候補格納用リスト
 	std::vector<Point> mDoorCandidates;
 

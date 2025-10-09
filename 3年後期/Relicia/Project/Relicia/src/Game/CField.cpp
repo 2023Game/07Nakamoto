@@ -4,6 +4,11 @@
 #include "CRotateFloor.h"
 #include "CLineEffect.h"
 #include "CDangeonMap.h"
+#include "CFloor.h"
+#include "CDoor.h"
+#include "CWall.h"
+#include "CPillar.h"
+#include "CEntrance.h"
 
 CField::CField()
 	: CObjectBase(ETag::eField, ETaskPriority::eBackground)
@@ -15,7 +20,9 @@ CField::CField()
 
 	//CreateFieldObjects();
 
-	new CDangeonMap();
+	mpMapData = new CDangeonMap();
+
+	CreateRoom();
 }
 
 CField::~CField()
@@ -115,11 +122,78 @@ void CField::CreateFieldObjects()
 	}
 }
 
+// 方角によって回転値を設定
+int CField::ConvertDirectionAngle(CDangeonMap::Direction dir) const
+{
+	switch (dir)
+	{
+		// 北の場合
+		case CDangeonMap::Direction::eNorth:	return 0;
+		// 東の場合
+		case CDangeonMap::Direction::eEast:		return 90;
+		// 南の場合
+		case CDangeonMap::Direction::eSouth:	return 180;
+		// 西の場合
+		case CDangeonMap::Direction::eWest:		return 270;
+
+		default:	return 0;
+	}
+}
+
+// 部屋の生成
+void CField::CreateRoom()
+{
+	// 配列データの列
+	for (int y = 0; y < ROOM_HEIGHT; y++)
+	{
+		// 配列データの行
+		for (int x = 0; x < ROOM_WIDTH; x++)
+		{
+			// タイル情報の2次元配列のデータを取得
+			CDangeonMap::Tile tile = mpMapData->GetTile(x, y);
+
+			// 床の場合
+			if (tile.typeId == CDangeonMap::TileType::eFloor)
+			{
+				// 床の生成
+				CFloor* floor = new CFloor(CVector(x * TILE_SIZE, 1, y * TILE_SIZE));
+				mpFloorObjects.push_back(floor);
+			}
+			// 壁の場合
+			else if (tile.typeId == CDangeonMap::TileType::eWall)
+			{
+				// 壁の生成
+				CWall* wall = new CWall(CVector(x * TILE_SIZE, 1, y * TILE_SIZE));
+				// 壁の回転値を設定
+				int rotY = ConvertDirectionAngle(tile.dir);
+				wall->Rotation(0.0f, rotY, 0.0f);
+
+				mpWallObjects.push_back(wall);
+			}
+
+		}
+	}
+
+}
+
+// 更新
 void CField::Update()
 {
 }
 
+// 描画
 void CField::Render()
 {
 	mpModel->Render(Matrix());
+
+	// 床の描画
+	for (CFloor* floor : mpFloorObjects)
+	{
+		floor->Render();
+	}
+	// 壁の描画
+	for (CWall* wall : mpWallObjects)
+	{
+		wall->Render();
+	}
 }

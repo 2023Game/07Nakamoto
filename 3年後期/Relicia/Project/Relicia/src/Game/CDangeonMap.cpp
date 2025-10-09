@@ -1,10 +1,5 @@
 #include "CDangeonMap.h"
 #include "Maths.h"
-#include "CFloor.h"
-#include "CDoor.h"
-#include "CWall.h"
-#include "CPillar.h"
-#include "CEntrance.h"
 
 // 生成する部屋の幅と高さの最小値
 #define MIN_ROOM_SIZE 3
@@ -17,8 +12,6 @@
 
 // 部屋の扉の最大数
 #define MAX_DOOR 3
-
-#define TILE_SIZE 20.0f	// タイルモデルの大きさ
 
 // コンストラクタ
 CDangeonMap::CDangeonMap()
@@ -51,6 +44,12 @@ CDangeonMap::CDangeonMap()
 // デストラクタ
 CDangeonMap::~CDangeonMap()
 {
+}
+
+// タイルの情報を取得
+const CDangeonMap::Tile& CDangeonMap::GetTile(int x, int y) const
+{
+	return mMapData[y][x];
 }
 
 // 部屋の情報を設定
@@ -115,9 +114,14 @@ void CDangeonMap::CreateRoomWall(const RoomInfo& info)
 	// 上下の壁の設定
 	for (int x = info.x + 1; x < info.x + info.w - 1; x++)
 	{
+		// 上の壁
 		mMapData[info.y][x].typeId = TileType::eWall;
+		mMapData[info.y][x].dir = Direction::eSouth;
+
+		// 下の壁
 		mMapData[info.y + info.h - 1][x].typeId = TileType::eWall;
-		
+		mMapData[info.y + info.h - 1][x].dir = Direction::eNorth;
+
 		// もしxの値が奇数なら
 		if (x % 2 == 1)
 		{
@@ -132,8 +136,13 @@ void CDangeonMap::CreateRoomWall(const RoomInfo& info)
 	// 左右の壁を設定
 	for (int y = info.y + 1; y < info.y + info.h - 1; y++)
 	{
+		// 左の壁
 		mMapData[y][info.x].typeId = TileType::eWall;
+		mMapData[y][info.x].dir = Direction::eEast;
+
+		// 右の壁
 		mMapData[y][info.x + info.w - 1].typeId = TileType::eWall;
+		mMapData[y][info.x + info.w - 1].dir = Direction::eWest;
 
 		// もしyの値が奇数なら
 		if (y % 2 == 1)
