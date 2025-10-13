@@ -21,6 +21,10 @@ public:
 		eEast,	// 東
 		eWest,	// 西
 
+		eNorthEast,	// 北東
+		eSouthEast,	// 南東
+		eSouthWest,	// 南西
+		eNorthWest,	// 北西
 	};
 
 	// タイルの種類
@@ -30,8 +34,9 @@ public:
 		eFloor,		// 床
 		eWall,		// 壁
 		eEntrance,	// 出入口
-		eDoor,		// 扉
 		ePillar,	// 柱
+
+		eDoor,		// 扉
 	};
 
 	// タイルの情報
@@ -67,8 +72,8 @@ private:
 
 	// 区画のデータ配列
 	Tile mMapData[ROOM_HEIGHT][ROOM_WIDTH];
-	// 扉に変更する候補格納用リスト
-	std::vector<Point> mDoorCandidates;
+	// 出入口に変更する候補格納用リスト
+	std::vector<Point> mEntranceCandidates;
 
 	// 区画の初期化
 	void InitializeSection();
@@ -79,8 +84,8 @@ private:
 	void CreateRoomWall(const RoomInfo& info);
 	// 部屋の四隅の柱を設定
 	void CreateRoomPillar(const RoomInfo& info);
-	// 部屋の扉の設定
-	void CreateRoomDoor(const RoomInfo& info);
+	// 部屋の出入口の設定
+	void CreateRoomEntrance(const RoomInfo& info);
 
 #if _DEBUG
 	// 区画のタイルのデバック表示

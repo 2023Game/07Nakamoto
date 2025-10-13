@@ -10,6 +10,8 @@
 #include "CPillar.h"
 #include "CEntrance.h"
 
+#define PILLAR_OFFSET_POS 10.0f
+
 CField::CField()
 	: CObjectBase(ETag::eField, ETaskPriority::eBackground)
 	, mEffectAnimData(1, 11, true, 11, 0.03f)
@@ -156,21 +158,71 @@ void CField::CreateRoom()
 			if (tile.typeId == CDangeonMap::TileType::eFloor)
 			{
 				// 床の生成
-				CFloor* floor = new CFloor(CVector(x * TILE_SIZE, 1, y * TILE_SIZE));
+				CFloor* floor = new CFloor(CVector(x * TILE_SIZE, 1, y * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
+				// 床のリストに追加
 				mpFloorObjects.push_back(floor);
 			}
 			// 壁の場合
 			else if (tile.typeId == CDangeonMap::TileType::eWall)
 			{
 				// 壁の生成
-				CWall* wall = new CWall(CVector(x * TILE_SIZE, 1, y * TILE_SIZE));
+				CWall* wall = new CWall(CVector(x * TILE_SIZE, 0, y * TILE_SIZE));
 				// 壁の回転値を設定
 				int rotY = ConvertDirectionAngle(tile.dir);
 				wall->Rotation(0.0f, rotY, 0.0f);
-
+				// 壁のリストに追加
 				mpWallObjects.push_back(wall);
 			}
+			// 柱の場合
+			else if (tile.typeId == CDangeonMap::TileType::ePillar)
+			{
+				//方向に応じて座標を修正
+				CVector pillarPos = CVector(x * TILE_SIZE, 0, y * TILE_SIZE);
+				// オフセットポジション格納用
+				CVector offSetPos;
 
+				// 北東の場合
+				if (tile.dir == CDangeonMap::Direction::eNorthEast)
+				{
+					offSetPos = CVector(-PILLAR_OFFSET_POS, 0.0f, PILLAR_OFFSET_POS);
+				}
+				// 南東の場合
+				else if (tile.dir == CDangeonMap::Direction::eSouthEast)
+				{
+					offSetPos = CVector(-PILLAR_OFFSET_POS, 0.0f, -PILLAR_OFFSET_POS);
+				}
+				// 南西の場合
+				else if (tile.dir == CDangeonMap::Direction::eSouthWest)
+				{
+					offSetPos = CVector(PILLAR_OFFSET_POS, 0.0f, -PILLAR_OFFSET_POS);
+				}
+				//北西の場合
+				else if (tile.dir == CDangeonMap::Direction::eNorthWest)
+				{
+					offSetPos = CVector(PILLAR_OFFSET_POS, 0.0f, PILLAR_OFFSET_POS);
+				}
+				pillarPos += offSetPos;
+
+				// 柱の生成
+				CPillar* pillar = new CPillar(pillarPos);
+				// 柱のリストに追加
+				mpPillarObjects.push_back(pillar);
+			}
+			// 出入口の場合
+			else if (tile.typeId == CDangeonMap::TileType::eEntrance)
+			{
+				// 出入口の生成
+				CEntrance* entrance = new CEntrance(CVector(x * TILE_SIZE, 0, y * TILE_SIZE));
+				int rotY = ConvertDirectionAngle(tile.dir);
+				entrance->Rotation(0.0f, rotY, 0.0f);
+				// 出入口のリストに追加
+				mpEntranceObjects.push_back(entrance);
+
+				CDoor* door = new CDoor(CVector(x * TILE_SIZE, 0, y * TILE_SIZE));
+				door->Rotate(0.0f, rotY, 0.0f);
+				// 扉のリストに追加
+				mpDoorObjects.push_back(door);
+			}
 		}
 	}
 
@@ -196,4 +248,20 @@ void CField::Render()
 	{
 		wall->Render();
 	}
+	// 出入口の描画
+	for (CEntrance* entrance : mpEntranceObjects)
+	{
+		entrance->Render();
+	}
+	// 柱の描画
+	for (CPillar* pillar : mpPillarObjects)
+	{
+		pillar->Render();
+	}
+	// 扉の描画
+	for (CDoor* door : mpDoorObjects)
+	{
+		door->Render();
+	}
+
 }

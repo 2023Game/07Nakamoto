@@ -6,8 +6,8 @@
 class CFloor;
 class CWall;
 class CPillar;
+class CEntrance;
 class CDoor;
-class Direction;
 
 class CField : public CObjectBase
 {
@@ -45,6 +45,7 @@ private:
 	// それぞれの3Dオブジェクトのリスト
 	std::vector<CFloor*> mpFloorObjects;	// 床のリスト
 	std::vector<CWall*> mpWallObjects;		// 壁のリスト
-	std::vector<CPillar*> mpCPillarObjects;	// 柱のリスト
+	std::vector<CPillar*> mpPillarObjects;	// 柱のリスト
+	std::vector<CEntrance*> mpEntranceObjects;	// 出入口のリスト
 	std::vector<CDoor*> mpDoorObjects;		// 扉のリスト
 };
