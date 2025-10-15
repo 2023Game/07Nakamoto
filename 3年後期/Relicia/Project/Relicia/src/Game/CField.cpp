@@ -3,12 +3,13 @@
 #include "CMoveFloor.h"
 #include "CRotateFloor.h"
 #include "CLineEffect.h"
-#include "CDangeonMap.h"
+#include "CDungeonMap.h"
 #include "CFloor.h"
 #include "CDoor.h"
 #include "CWall.h"
 #include "CPillar.h"
 #include "CEntrance.h"
+#include "CDungeonManeger.h"
 
 #define PILLAR_OFFSET_POS 10.0f
 
@@ -22,7 +23,8 @@ CField::CField()
 
 	//CreateFieldObjects();
 
-	mpMapData = new CDangeonMap();
+	//mpMapData = new CDungeonMap();
+	mpMapData = new CDungeonManeger();
 
 	CreateRoom();
 }
@@ -125,18 +127,18 @@ void CField::CreateFieldObjects()
 }
 
 // 方角によって回転値を設定
-int CField::ConvertDirectionAngle(CDangeonMap::Direction dir) const
+int CField::ConvertDirectionAngle(CDungeonMap::Direction dir) const
 {
 	switch (dir)
 	{
 		// 北の場合
-		case CDangeonMap::Direction::eNorth:	return 0;
+		case CDungeonMap::Direction::eNorth:	return 0;
 		// 東の場合
-		case CDangeonMap::Direction::eEast:		return 90;
+		case CDungeonMap::Direction::eEast:		return 90;
 		// 南の場合
-		case CDangeonMap::Direction::eSouth:	return 180;
+		case CDungeonMap::Direction::eSouth:	return 180;
 		// 西の場合
-		case CDangeonMap::Direction::eWest:		return 270;
+		case CDungeonMap::Direction::eWest:		return 270;
 
 		default:	return 0;
 	}
@@ -145,87 +147,97 @@ int CField::ConvertDirectionAngle(CDangeonMap::Direction dir) const
 // 部屋の生成
 void CField::CreateRoom()
 {
-	// 配列データの列
-	for (int y = 0; y < ROOM_HEIGHT; y++)
+	// 全体の区画の縦
+	for (int secY = 0; secY < DUNGEON_SECTION_Y; secY++)
 	{
-		// 配列データの行
-		for (int x = 0; x < ROOM_WIDTH; x++)
+		// 全体の区画の横
+		for (int secX = 0; secX < DUNGEON_SECTION_X; secX++)
 		{
-			// タイル情報の2次元配列のデータを取得
-			CDangeonMap::Tile tile = mpMapData->GetTile(x, y);
+			// 区画を取得
+			const CDungeonMap* section = mpMapData->GetSection(secX, secY);
 
-			// 床の場合
-			if (tile.typeId == CDangeonMap::TileType::eFloor)
+			// 配列データの列
+			for (int y = 0; y < ROOM_HEIGHT; y++)
 			{
-				// 床の生成
-				CFloor* floor = new CFloor(CVector(x * TILE_SIZE, 1, y * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
-				// 床のリストに追加
-				mpFloorObjects.push_back(floor);
-			}
-			// 壁の場合
-			else if (tile.typeId == CDangeonMap::TileType::eWall)
-			{
-				// 壁の生成
-				CWall* wall = new CWall(CVector(x * TILE_SIZE, 0, y * TILE_SIZE));
-				// 壁の回転値を設定
-				int rotY = ConvertDirectionAngle(tile.dir);
-				wall->Rotation(0.0f, rotY, 0.0f);
-				// 壁のリストに追加
-				mpWallObjects.push_back(wall);
-			}
-			// 柱の場合
-			else if (tile.typeId == CDangeonMap::TileType::ePillar)
-			{
-				//方向に応じて座標を修正
-				CVector pillarPos = CVector(x * TILE_SIZE, 0, y * TILE_SIZE);
-				// オフセットポジション格納用
-				CVector offSetPos;
+				// 配列データの行
+				for (int x = 0; x < ROOM_WIDTH; x++)
+				{
+					// タイル情報の2次元配列のデータを取得
+					CDungeonMap::Tile tile = section->GetTile(x, y);
 
-				// 北東の場合
-				if (tile.dir == CDangeonMap::Direction::eNorthEast)
-				{
-					offSetPos = CVector(-PILLAR_OFFSET_POS, 0.0f, PILLAR_OFFSET_POS);
-				}
-				// 南東の場合
-				else if (tile.dir == CDangeonMap::Direction::eSouthEast)
-				{
-					offSetPos = CVector(-PILLAR_OFFSET_POS, 0.0f, -PILLAR_OFFSET_POS);
-				}
-				// 南西の場合
-				else if (tile.dir == CDangeonMap::Direction::eSouthWest)
-				{
-					offSetPos = CVector(PILLAR_OFFSET_POS, 0.0f, -PILLAR_OFFSET_POS);
-				}
-				//北西の場合
-				else if (tile.dir == CDangeonMap::Direction::eNorthWest)
-				{
-					offSetPos = CVector(PILLAR_OFFSET_POS, 0.0f, PILLAR_OFFSET_POS);
-				}
-				pillarPos += offSetPos;
+					// 床の場合
+					if (tile.typeId == CDungeonMap::TileType::eFloor)
+					{
+						// 床の生成
+						CFloor* floor = new CFloor(CVector(x * TILE_SIZE, 1, y * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
+						// 床のリストに追加
+						mpFloorObjects.push_back(floor);
+					}
+					// 壁の場合
+					else if (tile.typeId == CDungeonMap::TileType::eWall)
+					{
+						// 壁の生成
+						CWall* wall = new CWall(CVector(x * TILE_SIZE, 0, y * TILE_SIZE));
+						// 壁の回転値を設定
+						int rotY = ConvertDirectionAngle(tile.dir);
+						wall->Rotation(0.0f, rotY, 0.0f);
+						// 壁のリストに追加
+						mpWallObjects.push_back(wall);
+					}
+					// 柱の場合
+					else if (tile.typeId == CDungeonMap::TileType::ePillar)
+					{
+						//方向に応じて座標を修正
+						CVector pillarPos = CVector(x * TILE_SIZE, 0, y * TILE_SIZE);
+						// オフセットポジション格納用
+						CVector offSetPos;
 
-				// 柱の生成
-				CPillar* pillar = new CPillar(pillarPos);
-				// 柱のリストに追加
-				mpPillarObjects.push_back(pillar);
-			}
-			// 出入口の場合
-			else if (tile.typeId == CDangeonMap::TileType::eEntrance)
-			{
-				// 出入口の生成
-				CEntrance* entrance = new CEntrance(CVector(x * TILE_SIZE, 0, y * TILE_SIZE));
-				int rotY = ConvertDirectionAngle(tile.dir);
-				entrance->Rotation(0.0f, rotY, 0.0f);
-				// 出入口のリストに追加
-				mpEntranceObjects.push_back(entrance);
+						// 北東の場合
+						if (tile.dir == CDungeonMap::Direction::eNorthEast)
+						{
+							offSetPos = CVector(-PILLAR_OFFSET_POS, 0.0f, PILLAR_OFFSET_POS);
+						}
+						// 南東の場合
+						else if (tile.dir == CDungeonMap::Direction::eSouthEast)
+						{
+							offSetPos = CVector(-PILLAR_OFFSET_POS, 0.0f, -PILLAR_OFFSET_POS);
+						}
+						// 南西の場合
+						else if (tile.dir == CDungeonMap::Direction::eSouthWest)
+						{
+							offSetPos = CVector(PILLAR_OFFSET_POS, 0.0f, -PILLAR_OFFSET_POS);
+						}
+						//北西の場合
+						else if (tile.dir == CDungeonMap::Direction::eNorthWest)
+						{
+							offSetPos = CVector(PILLAR_OFFSET_POS, 0.0f, PILLAR_OFFSET_POS);
+						}
+						pillarPos += offSetPos;
 
-				CDoor* door = new CDoor(CVector(x * TILE_SIZE, 0, y * TILE_SIZE));
-				door->Rotate(0.0f, rotY, 0.0f);
-				// 扉のリストに追加
-				mpDoorObjects.push_back(door);
+						// 柱の生成
+						CPillar* pillar = new CPillar(pillarPos);
+						// 柱のリストに追加
+						mpPillarObjects.push_back(pillar);
+					}
+					// 出入口の場合
+					else if (tile.typeId == CDungeonMap::TileType::eEntrance)
+					{
+						// 出入口の生成
+						CEntrance* entrance = new CEntrance(CVector(x * TILE_SIZE, 0, y * TILE_SIZE));
+						int rotY = ConvertDirectionAngle(tile.dir);
+						entrance->Rotation(0.0f, rotY, 0.0f);
+						// 出入口のリストに追加
+						mpEntranceObjects.push_back(entrance);
+
+						CDoor* door = new CDoor(CVector(x * TILE_SIZE, 0, y * TILE_SIZE));
+						door->Rotate(0.0f, rotY, 0.0f);
+						// 扉のリストに追加
+						mpDoorObjects.push_back(door);
+					}
+				}
 			}
 		}
 	}
-
 }
 
 // 更新

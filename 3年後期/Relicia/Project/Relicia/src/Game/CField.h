@@ -1,13 +1,14 @@
 #pragma once
 #include "CObjectBase.h"
 #include "CColliderMesh.h"
-#include "CDangeonMap.h"
+#include "CDungeonMap.h"
 
 class CFloor;
 class CWall;
 class CPillar;
 class CEntrance;
 class CDoor;
+class CDungeonManeger;
 
 class CField : public CObjectBase
 {
@@ -26,7 +27,7 @@ private:
 	void CreateFieldObjects();
 
 	// 方角によって回転値を設定
-	int ConvertDirectionAngle(CDangeonMap::Direction dir) const;
+	int ConvertDirectionAngle(CDungeonMap::Direction dir) const;
 
 	// 部屋の生成
 	void CreateRoom();
@@ -40,7 +41,7 @@ private:
 	TexAnimData mEffectAnimData;
 
 	// ２次元配列のマップデータ保存用
-	CDangeonMap* mpMapData;
+	CDungeonManeger* mpMapData;
 
 	// それぞれの3Dオブジェクトのリスト
 	std::vector<CFloor*> mpFloorObjects;	// 床のリスト
