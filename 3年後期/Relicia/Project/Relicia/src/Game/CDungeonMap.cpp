@@ -16,24 +16,28 @@
 // コンストラクタ
 CDungeonMap::CDungeonMap()
 {
+	// 区画の初期化
+	Initialize(ROOM_HEIGHT, ROOM_WIDTH);
 	// 扉に変更する候補格納用リストの初期化
 	mEntranceCandidates.clear();
 
+	// 区画のデータの宣言
 	RoomInfo info;
-
 	SetRoomParameters(info);
 
 	// 部屋の初期化
 	InitializeSection();
-
 	// ①部屋の床の設定
 	CreateRoomFloor(info);
 	// ②部屋の壁の設定
 	CreateRoomWall(info);
 	// ③部屋の四隅の柱を設定
 	CreateRoomPillar(info);
+
+	mRooms.push_back(info);
+
 	// ④部屋の出入口の設定
-	CreateRoomEntrance(info);
+	//CreateRoomEntrance(info);
 
 #if _DEBUG
 	// 区画タイルのデバッグ表示
@@ -46,10 +50,27 @@ CDungeonMap::~CDungeonMap()
 {
 }
 
+// 区画リストの初期化
+void CDungeonMap::Initialize(int width, int height)
+{
+	mMapData.resize(height);
+	for (int y = 0; y < height; ++y)
+	{
+		// デフォルトTileで初期化
+		mMapData[y].resize(width, Tile()); 
+	}
+}
+
 // タイルの情報を取得
 const CDungeonMap::Tile& CDungeonMap::GetTile(int x, int y) const
 {
 	return mMapData[y][x];
+}
+
+// 区画内の部屋リストを取得
+std::vector<CDungeonMap::RoomInfo> CDungeonMap::GetRooms() const
+{
+	return mRooms;
 }
 
 // 部屋の出入口のリストを取得
@@ -61,7 +82,7 @@ std::vector<CDungeonMap::Point> CDungeonMap::GetEntrances() const
 // タイルタイプの設定
 void CDungeonMap::SetTileType(int x, int y, TileType type)
 {
-	if (x >= 0 && x < ROOM_WIDTH && y >= 0 && y < ROOM_HEIGHT)
+	if (y >= 0 && y < mMapData.size() && x >= 0 && x < mMapData[y].size())
 		mMapData[y][x].typeId = type;
 }
 
@@ -182,6 +203,7 @@ void CDungeonMap::CreateRoomPillar(const RoomInfo& info)
 	mMapData[info.y + info.h - 1][info.x + info.w - 1].typeId = TileType::ePillar;	// 右下
 	mMapData[info.y + info.h - 1][info.x + info.w - 1].dir = Direction::eSouthEast;	// 南東
 }
+
 
 // 部屋の出入口の設定
 void CDungeonMap::CreateRoomEntrance(const RoomInfo& info)
