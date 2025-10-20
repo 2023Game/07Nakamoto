@@ -1,7 +1,7 @@
 #pragma once
 
-#define ROOM_WIDTH 15	// 区画の幅
-#define ROOM_HEIGHT 15	// 区画の奥行
+#define ROOM_WIDTH 15	// １区画の幅
+#define ROOM_HEIGHT 15	// １区画の奥行
 
 #define TILE_SIZE 20.0f	// タイルモデルの大きさ
 
@@ -66,14 +66,23 @@ public:
 
 	// タイルの情報を取得
 	const Tile& GetTile(int x,int y) const;
+	// 部屋の出入口のリストを取得
+	std::vector<Point> GetEntrances() const;
+
+	// タイルタイプの設定
+	void SetTileType(int x, int y, TileType type);
+
 private:
 	// 部屋の情報を設定
 	void SetRoomParameters(RoomInfo& info);
 
 	// 区画のデータ配列
 	Tile mMapData[ROOM_HEIGHT][ROOM_WIDTH];
+
 	// 出入口に変更する候補格納用リスト
 	std::vector<Point> mEntranceCandidates;
+	// 部屋の出入口を保存するためのリスト
+	std::vector<Point> mEntrances;
 
 	// 区画の初期化
 	void InitializeSection();

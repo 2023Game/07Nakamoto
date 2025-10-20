@@ -11,7 +11,7 @@
 #include "CEntrance.h"
 #include "CDungeonManeger.h"
 
-#define PILLAR_OFFSET_POS 10.0f
+#define PILLAR_OFFSET_POS 10.0f	// 柱のオフセット座標
 
 CField::CField()
 	: CObjectBase(ETag::eField, ETaskPriority::eBackground)
@@ -23,7 +23,7 @@ CField::CField()
 
 	//CreateFieldObjects();
 
-	//mpMapData = new CDungeonMap();
+	// ダンジョン生成
 	mpMapData = new CDungeonManeger();
 
 	CreateRoom();
@@ -36,6 +36,29 @@ CField::~CField()
 		delete mpColliderMesh;
 		mpColliderMesh = nullptr;
 	}
+
+	SAFE_DELETE(mpMapData);
+
+	//for (CFloor* floor : mpFloorObjects)
+	//{
+	//	SAFE_DELETE(floor);
+	//}
+	//for (CWall* wall : mpWallObjects)
+	//{
+	//	SAFE_DELETE(wall);
+	//}
+	//for (CPillar* pillar : mpPillarObjects)
+	//{
+	//	SAFE_DELETE(pillar);
+	//}
+	//for (CEntrance* entrance : mpEntranceObjects)
+	//{
+	//	SAFE_DELETE(entrance);
+	//}
+	//for (CDoor* door : mpDoorObjects)
+	//{
+	//	SAFE_DELETE(door);
+	//}
 }
 
 void CField::CreateFieldObjects()
@@ -150,9 +173,15 @@ void CField::CreateRoom()
 	// 全体の区画の縦
 	for (int secY = 0; secY < DUNGEON_SECTION_Y; secY++)
 	{
+		// Z座標の区画のオフセット
+		int offSetPosZ = secY * ROOM_HEIGHT * TILE_SIZE;
+
 		// 全体の区画の横
 		for (int secX = 0; secX < DUNGEON_SECTION_X; secX++)
 		{
+			// X座標の区画のオフセット
+			int offSetPosX = secX * ROOM_WIDTH * TILE_SIZE;
+
 			// 区画を取得
 			const CDungeonMap* section = mpMapData->GetSection(secX, secY);
 
@@ -163,13 +192,13 @@ void CField::CreateRoom()
 				for (int x = 0; x < ROOM_WIDTH; x++)
 				{
 					// タイル情報の2次元配列のデータを取得
-					CDungeonMap::Tile tile = section->GetTile(x, y);
+					const CDungeonMap::Tile& tile = section->GetTile(x, y);
 
 					// 床の場合
 					if (tile.typeId == CDungeonMap::TileType::eFloor)
 					{
 						// 床の生成
-						CFloor* floor = new CFloor(CVector(x * TILE_SIZE, 1, y * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
+						CFloor* floor = new CFloor(CVector((x + 0.5f) * TILE_SIZE + offSetPosX, 1, (y + 0.5f) *TILE_SIZE + offSetPosZ));	// コライダーが出来次第Y座標は0に変更
 						// 床のリストに追加
 						mpFloorObjects.push_back(floor);
 					}
@@ -177,7 +206,7 @@ void CField::CreateRoom()
 					else if (tile.typeId == CDungeonMap::TileType::eWall)
 					{
 						// 壁の生成
-						CWall* wall = new CWall(CVector(x * TILE_SIZE, 0, y * TILE_SIZE));
+						CWall* wall = new CWall(CVector((x + 0.5f) * TILE_SIZE + offSetPosX, 0, (y + 0.5f) * TILE_SIZE + offSetPosZ));
 						// 壁の回転値を設定
 						int rotY = ConvertDirectionAngle(tile.dir);
 						wall->Rotation(0.0f, rotY, 0.0f);
@@ -188,7 +217,7 @@ void CField::CreateRoom()
 					else if (tile.typeId == CDungeonMap::TileType::ePillar)
 					{
 						//方向に応じて座標を修正
-						CVector pillarPos = CVector(x * TILE_SIZE, 0, y * TILE_SIZE);
+						CVector pillarPos = CVector((x + 0.5f) * TILE_SIZE + offSetPosX, 0, (y + 0.5f) * TILE_SIZE + offSetPosZ);
 						// オフセットポジション格納用
 						CVector offSetPos;
 
@@ -223,16 +252,16 @@ void CField::CreateRoom()
 					else if (tile.typeId == CDungeonMap::TileType::eEntrance)
 					{
 						// 出入口の生成
-						CEntrance* entrance = new CEntrance(CVector(x * TILE_SIZE, 0, y * TILE_SIZE));
+						CEntrance* entrance = new CEntrance(CVector((x + 0.5f) * TILE_SIZE + offSetPosX, 0, (y + 0.5f) * TILE_SIZE + offSetPosZ));
 						int rotY = ConvertDirectionAngle(tile.dir);
 						entrance->Rotation(0.0f, rotY, 0.0f);
 						// 出入口のリストに追加
 						mpEntranceObjects.push_back(entrance);
 
-						CDoor* door = new CDoor(CVector(x * TILE_SIZE, 0, y * TILE_SIZE));
-						door->Rotate(0.0f, rotY, 0.0f);
-						// 扉のリストに追加
-						mpDoorObjects.push_back(door);
+						//CDoor* door = new CDoor(CVector((x + 0.5f) * TILE_SIZE + offSetPosX, 0, (y + 0.5f) * TILE_SIZE + offSetPosZ));
+						//door->Rotate(0.0f, rotY, 0.0f);
+						//// 扉のリストに追加
+						//mpDoorObjects.push_back(door);
 					}
 				}
 			}

@@ -18,8 +18,30 @@ public:
 	const CDungeonMap* GetSection(int x, int y) const;
 
 private:
-	// o“üŒû“¯m‚ğŒq‚°‚é’Ê˜H‚ğ¶¬
-	void ConnectRooms();
+	// •”‰®‚Æ•”‰®‚Ìo“üŒû‚ğŒq‚°‚é
+	//void ConnectRooms();
 
+	/// <summary>
+	/// ’Ê˜H‚ğ‚ğŒq‚°‚é
+	/// </summary>
+	/// <param name="aEntrance">Œq‚°‚éo“üŒûA</param>
+	/// <param name="bEntrance">Œq‚°‚éo“üŒûB</param>
+	/// <param name="dir">•ûŠp</param>
+	//void ConnectBetweenRooms(CDungeonMap* entranceA, CDungeonMap* entranceB, CDungeonMap::Direction dir);
+
+	/// <summary>
+	/// •”‰®“¯m‚ÌŠÔ‚Ì’Ê˜H‚ğì¬
+	/// </summary>
+	/// <param name="aPos"></param>
+	/// <param name="bPos"></param>
+	/// <param name="entranceA">Œq‚°‚éo“üŒûA</param>
+	/// <param name="entranceB">Œq‚°‚éo“üŒûB</param>
+	/// <param name="dir">•ûŠp</param>
+	//void CreateCorridorBetween(
+	//	const CDungeonMap::Point& aPos, const CDungeonMap::Point& bPos,
+	//	CDungeonMap* entranceA, CDungeonMap* entranceB,
+	//	CDungeonMap::Direction dir);
+
+	// ‘S‘Ì‚Ì‹æ‰æ‚Ì”z—ñ
 	CDungeonMap* mpSections[DUNGEON_SECTION_Y][DUNGEON_SECTION_X];
 };

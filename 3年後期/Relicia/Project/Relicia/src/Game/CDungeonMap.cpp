@@ -32,7 +32,7 @@ CDungeonMap::CDungeonMap()
 	CreateRoomWall(info);
 	// ③部屋の四隅の柱を設定
 	CreateRoomPillar(info);
-	// ④部屋の扉の設定
+	// ④部屋の出入口の設定
 	CreateRoomEntrance(info);
 
 #if _DEBUG
@@ -51,6 +51,20 @@ const CDungeonMap::Tile& CDungeonMap::GetTile(int x, int y) const
 {
 	return mMapData[y][x];
 }
+
+// 部屋の出入口のリストを取得
+std::vector<CDungeonMap::Point> CDungeonMap::GetEntrances() const
+{
+	return mEntrances;
+}
+
+// タイルタイプの設定
+void CDungeonMap::SetTileType(int x, int y, TileType type)
+{
+	if (x >= 0 && x < ROOM_WIDTH && y >= 0 && y < ROOM_HEIGHT)
+		mMapData[y][x].typeId = type;
+}
+
 
 // 部屋の情報を設定
 void CDungeonMap::SetRoomParameters(RoomInfo& info)
@@ -172,39 +186,34 @@ void CDungeonMap::CreateRoomPillar(const RoomInfo& info)
 // 部屋の出入口の設定
 void CDungeonMap::CreateRoomEntrance(const RoomInfo& info)
 {
-	// 部屋の扉の数を設定
+	// 部屋の出入口の数を設定
 	int numEntrances = Math::Rand(1, MAX_DOOR);
 
 	// 候補リストのサイズを取得
 	int currentSize = static_cast<int>(mEntranceCandidates.size());
-	// 部屋が小さすぎて扉候補数が少ない場合に対応
+	// 部屋が小さすぎて出入口の候補数が少ない場合に対応
 	numEntrances = std::min(numEntrances, currentSize);
 
-	// 生成する扉が無くなるまで
+	// 生成する出入口が無くなるまで
 	while (numEntrances > 0)
 	{
-		// 候補リストの最大インデックスを取得
-		int maxIndex = currentSize - 1;
-
 		// 0から最大インデックスまでの乱数を生成
-		int randomIndex = Math::Rand(0, maxIndex);
-
+		int randomIndex = Math::Rand(0, currentSize - 1);
 		// ランダムに選ばれた座標を取得
 		Point selectedDoorPos = mEntranceCandidates[randomIndex];
-
-		// その位置のタイルを扉に上書き
+		// その位置のタイルを出入口に上書き
 		mMapData[selectedDoorPos.y][selectedDoorPos.x].typeId = TileType::eEntrance;
 
-		// 壁から扉に上書きした要素をリストの末尾と入れ替える
-		mEntranceCandidates[randomIndex] = mEntranceCandidates.back();
+		// 出入口に変更したデータをリストに追加
+		mEntrances.push_back(selectedDoorPos);
 
+		// 壁から出入口に上書きした要素をリストの末尾と入れ替える
+		mEntranceCandidates[randomIndex] = mEntranceCandidates.back();
 		// 末尾の要素を削除する
 		mEntranceCandidates.pop_back();
-
 		// リストのサイズを更新
 		currentSize--;
-
-		// 生成する扉のカウントを減らす
+		// 生成する出入口のカウントを減らす
 		numEntrances--;
 	}
 }
