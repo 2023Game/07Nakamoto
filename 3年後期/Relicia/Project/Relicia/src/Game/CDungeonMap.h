@@ -1,10 +1,10 @@
 #pragma once
 #include "CDungeonManeger.h"
 
+#define TILE_SIZE 20.0f	// タイルモデルの大きさ
+
 #define ROOM_WIDTH 15	// １区画の幅
 #define ROOM_HEIGHT 15	// １区画の奥行
-
-#define TILE_SIZE 20.0f	// タイルモデルの大きさ
 
 class CDungeonMap
 {
@@ -39,7 +39,7 @@ public:
 		eWall,		// 壁
 		eEntrance,	// 出入口
 		ePillar,	// 柱
-
+		ePassage,	// 通路
 		eDoor,		// 扉
 	};
 
@@ -70,6 +70,7 @@ public:
 
 	// タイルの情報を取得
 	const Tile& GetTile(int x,int y) const;
+
 	// 区画内の部屋リストを取得
 	std::vector<RoomInfo> GetRooms() const;
 	// 部屋の出入口のリストを取得
@@ -77,6 +78,8 @@ public:
 
 	// タイルタイプの設定
 	void SetTileType(int x, int y, TileType type);
+	// 部屋の出入口の設定(出入口を作る方角を指定)
+	void CreateRoomEntrance(Direction dir);
 
 private:
 	// 区画内の部屋リスト

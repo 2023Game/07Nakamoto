@@ -20,6 +20,6 @@ public:
 	const CDungeonMap* GetSection(int x, int y) const;
 
 private:
-	// 全体の区画をリストに格納
+	// 全体の区画の可変長配列
 	std::vector<std::vector<CDungeonMap*>>mpSections;
 };

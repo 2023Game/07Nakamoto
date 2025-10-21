@@ -33,7 +33,7 @@ CDungeonMap::CDungeonMap()
 	CreateRoomWall(info);
 	// ③部屋の四隅の柱を設定
 	CreateRoomPillar(info);
-
+	// 設定した部屋をリストに格納
 	mRooms.push_back(info);
 
 	// ④部屋の出入口の設定
@@ -84,6 +84,37 @@ void CDungeonMap::SetTileType(int x, int y, TileType type)
 {
 	if (y >= 0 && y < mMapData.size() && x >= 0 && x < mMapData[y].size())
 		mMapData[y][x].typeId = type;
+}
+
+// 部屋の出入口の設定(出入口を作る方角を指定)
+void CDungeonMap::CreateRoomEntrance(Direction dir)
+{
+	const RoomInfo& info = mRooms[0];
+
+	if (dir == Direction::eSouth)
+	{
+		// 部屋の上端の壁（y座標が大きい方）
+		int index = Math::Rand(info.x + 2, info.x + info.w - 3);
+		mMapData[info.y][index].typeId = TileType::eEntrance;
+	}
+	else if (dir == Direction::eNorth)
+	{
+		// 部屋の下端の壁（y座標が小さい方）
+		int index = Math::Rand(info.x + 2, info.x + info.w - 3);
+		mMapData[info.y + info.h - 1][index].typeId = TileType::eEntrance;
+	}
+	else if (dir == Direction::eEast)
+	{
+		// 部屋の右端の壁(x座標が大きい方)
+		int index = Math::Rand(info.y + 2, info.y + info.h - 3);
+		mMapData[index][info.x].typeId = TileType::eEntrance;
+	}
+	else if (dir == Direction::eWest)
+	{
+		// 部屋の左端の壁 (x座標が小さい方)
+		int index = Math::Rand(info.y + 2, info.y + info.h - 3);
+		mMapData[index][info.x + info.w - 1].typeId = TileType::eEntrance;
+	}
 }
 
 
@@ -166,7 +197,6 @@ void CDungeonMap::CreateRoomWall(const RoomInfo& info)
 			// 下の壁の座標を追加
 			mEntranceCandidates.push_back({ x, info.y + info.h - 1 });
 		}
-
 	}
 	// 左右の壁を設定
 	for (int y = info.y + 1; y < info.y + info.h - 1; y++)
