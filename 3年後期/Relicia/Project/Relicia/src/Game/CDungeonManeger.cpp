@@ -40,6 +40,10 @@ CDungeonManeger::CDungeonManeger()
             }
         }
     }
+
+#if _DEBUG
+    PrintSection();
+#endif
 }
 
 // デストラクタ
@@ -71,3 +75,45 @@ const CDungeonMap* CDungeonManeger::GetSection(int x, int y) const
 {
     return mpSections[y][x];
 }
+
+#if _DEBUG
+// 全体の区画のタイルのデバック表示
+void CDungeonManeger::PrintSection()
+{
+    // 全体の幅・高さを求める
+    const int totalWidth = ROOM_WIDTH * DUNGEON_SECTION_X;
+    const int totalHeight = ROOM_HEIGHT * DUNGEON_SECTION_Y;
+
+    // 行ごとに出力
+    for (int globalY = 0; globalY < totalHeight; ++globalY)
+    {
+        for (int globalX = 0; globalX < totalWidth; ++globalX)
+        {
+            // 区画座標を求める
+            int sectionX = globalX / ROOM_WIDTH;
+            int sectionY = globalY / ROOM_HEIGHT;
+
+            // 区画内のローカル座標を求める
+            int localX = globalX % ROOM_WIDTH;
+            int localY = globalY % ROOM_HEIGHT;
+
+            // 対応する区画を取得
+            CDungeonMap* map = mpSections[sectionY][sectionX];
+            auto tile = map->GetTile(localX, localY);
+
+            // 種類ごとに表示
+            switch (tile.typeId)
+            {
+            case CDungeonMap::TileType::None:     printf("0"); break;
+            case CDungeonMap::TileType::eFloor:   printf("1"); break;
+            case CDungeonMap::TileType::eWall:    printf("2"); break;
+            case CDungeonMap::TileType::ePillar:  printf("3"); break;
+            case CDungeonMap::TileType::eEntrance:printf("4"); break;
+            default:                              printf("?"); break;
+            }
+        }
+        printf("\n");
+    }
+}
+#endif
+

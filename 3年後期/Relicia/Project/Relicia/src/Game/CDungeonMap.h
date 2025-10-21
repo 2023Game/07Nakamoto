@@ -14,9 +14,6 @@ public:
 	// デストラクタ
 	~CDungeonMap();
 
-	// 区画リストの初期化
-	void Initialize(int width, int height);
-
 	// 方向を表すデータ
 	enum class Direction
 	{
@@ -81,6 +78,8 @@ public:
 	// 部屋の出入口の設定(出入口を作る方角を指定)
 	void CreateRoomEntrance(Direction dir);
 
+	std::vector<Point> GetmEntrances();
+
 private:
 	// 区画内の部屋リスト
 	std::vector<RoomInfo> mRooms;
@@ -92,12 +91,11 @@ private:
 	// 部屋の出入口を保存するためのリスト
 	std::vector<Point> mEntrances;
 
+	// 区画リストの初期化
+	void Initialize(int width, int height);
+
 	// 部屋の情報を設定
 	void SetRoomParameters(RoomInfo& info);
-
-	// 区画の初期化
-	void InitializeSection();
-
 	// 部屋の床の設定
 	void CreateRoomFloor(const RoomInfo& info);
 	// 部屋の壁の設定
@@ -105,12 +103,14 @@ private:
 	// 部屋の四隅の柱を設定
 	void CreateRoomPillar(const RoomInfo& info);
 
+	// 出入口同士を繋げる
+	void ConnectPassage(CDungeonMap* a, CDungeonMap* b);
 
 	// 部屋の出入口の設定
 	void CreateRoomEntrance(const RoomInfo& info);
 
 #if _DEBUG
-	// 区画のタイルのデバック表示
+	// 1区画のタイルのデバック表示
 	void PrintSection();
 #endif
 };

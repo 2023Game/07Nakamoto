@@ -25,14 +25,13 @@ CDungeonMap::CDungeonMap()
 	RoomInfo info;
 	SetRoomParameters(info);
 
-	// 部屋の初期化
-	InitializeSection();
 	// ①部屋の床の設定
 	CreateRoomFloor(info);
 	// ②部屋の壁の設定
 	CreateRoomWall(info);
 	// ③部屋の四隅の柱を設定
 	CreateRoomPillar(info);
+
 	// 設定した部屋をリストに格納
 	mRooms.push_back(info);
 
@@ -40,8 +39,7 @@ CDungeonMap::CDungeonMap()
 	//CreateRoomEntrance(info);
 
 #if _DEBUG
-	// 区画タイルのデバッグ表示
-	PrintSection();
+	//PrintSection();
 #endif
 }
 
@@ -117,6 +115,10 @@ void CDungeonMap::CreateRoomEntrance(Direction dir)
 	}
 }
 
+std::vector<CDungeonMap::Point> CDungeonMap::GetmEntrances()
+{
+	return mEntrances;
+}
 
 // 部屋の情報を設定
 void CDungeonMap::SetRoomParameters(RoomInfo& info)
@@ -147,18 +149,6 @@ void CDungeonMap::SetRoomParameters(RoomInfo& info)
 	// 越えた場合は、2減らして(奇数を保って)範囲内に収める
 	if (info.x > maxX) info.x -= 2;
 	if (info.y > maxY) info.y -= 2;
-}
-
-// 区画の初期化
-void CDungeonMap::InitializeSection()
-{
-	for (int y = 0; y < ROOM_HEIGHT; y++)
-	{
-		for (int x = 0; x < ROOM_WIDTH; x++)
-		{
-			mMapData[y][x].typeId = TileType::None;
-		}
-	}
 }
 
 // 部屋の床の設定
@@ -232,6 +222,12 @@ void CDungeonMap::CreateRoomPillar(const RoomInfo& info)
 	mMapData[info.y + info.h - 1][info.x].dir = Direction::eSouthWest;	// 南西
 	mMapData[info.y + info.h - 1][info.x + info.w - 1].typeId = TileType::ePillar;	// 右下
 	mMapData[info.y + info.h - 1][info.x + info.w - 1].dir = Direction::eSouthEast;	// 南東
+}
+
+// 出入口同士を繋げる
+void CDungeonMap::ConnectPassage(CDungeonMap* a, CDungeonMap* b)
+{
+
 }
 
 

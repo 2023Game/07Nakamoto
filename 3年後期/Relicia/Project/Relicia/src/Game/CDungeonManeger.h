@@ -22,4 +22,10 @@ public:
 private:
 	// 全体の区画の可変長配列
 	std::vector<std::vector<CDungeonMap*>>mpSections;
+
+#if _DEBUG
+	// 全体の区画のタイルのデバック表示
+	void PrintSection();
+#endif
+
 };

@@ -258,6 +258,11 @@ void CField::CreateRoom()
 						// 出入口のリストに追加
 						mpEntranceObjects.push_back(entrance);
 
+						// 床の生成
+						CFloor* floor = new CFloor(CVector((x + 0.5f) * TILE_SIZE + offSetPosX, 1, (y + 0.5f) * TILE_SIZE + offSetPosZ));	// コライダーが出来次第Y座標は0に変更
+						// 床のリストに追加
+						mpFloorObjects.push_back(floor);
+
 						//CDoor* door = new CDoor(CVector((x + 0.5f) * TILE_SIZE + offSetPosX, 0, (y + 0.5f) * TILE_SIZE + offSetPosZ));
 						//door->Rotate(0.0f, rotY, 0.0f);
 						//// 扉のリストに追加
