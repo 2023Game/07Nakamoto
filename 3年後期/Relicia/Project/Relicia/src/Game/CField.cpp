@@ -10,6 +10,7 @@
 #include "CPillar.h"
 #include "CEntrance.h"
 #include "CDungeonManeger.h"
+#include "CBpsMap.h"
 
 #define PILLAR_OFFSET_POS 10.0f	// 柱のオフセット座標
 
@@ -25,6 +26,8 @@ CField::CField()
 
 	// ダンジョン生成
 	mpMapData = new CDungeonManeger();
+
+	new CBpsMap(100, 100);
 
 	CreateRoom();
 }
