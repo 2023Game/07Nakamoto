@@ -18,6 +18,29 @@ public:
 		ePillar,	// 柱
 		ePassage,	// 通路
 		eDoor,		// 扉
+
+		eBoundary   // 区画の境界線
+	};
+
+	// 方向を表すデータ
+	enum class Direction
+	{
+		eNorth,	// 北
+		eSouth,	// 南
+		eEast,	// 東
+		eWest,	// 西
+
+		eNorthEast,	// 北東
+		eSouthEast,	// 南東
+		eSouthWest,	// 南西
+		eNorthWest,	// 北西
+	};
+
+	// タイルの種類
+	struct Tile
+	{
+		TileType type;	// タイルの種類
+		Direction dir;	// 向き
 	};
 
 	// 部屋の情報
@@ -26,7 +49,16 @@ public:
 		int x, y;			// 部屋の左上の座標
 		int width, height;	// 部屋のサイズ
 
-		TileType type;		// タイルの種類
+		// 部屋の種類
+		enum class RoomType
+		{
+			eNormal,	// 通常部屋
+			eBoss,		// ボス部屋
+			eEntrance,	// 開始部屋
+			eExit,		// 脱出部屋
+		};
+
+		RoomType type;
 	};
 
 	// 区画ノード
@@ -50,17 +82,26 @@ private:
 
 	// 区画分け
 	void Split(SectionNode* node);
+
 	// 区画ごとに部屋の設定
-	void PlaceRoom(SectionNode* node, std::vector<std::vector<Room>>& map);
+	void PlaceRoom(SectionNode* node, std::vector<std::vector<Tile>>& map);
+
+	// 部屋の床データの設定
+	void CreateRoomFloor(SectionNode* node, std::vector<std::vector<Tile>>& map);
+	// 部屋の壁データの設定
+	void CreateRoomWall(const Room& room, std::vector<std::vector<Tile>>& map);
+	// 部屋の四隅データの柱を設定
+	void CreateRoomPillar(const Room& room, std::vector<std::vector<Tile>>& map);
 
 #if _DEBUG
+	// 区画の境界線設定
+	void DrawBoundary(SectionNode* node, std::vector<std::vector<Tile>>& map);
 	// 2次元配列のデバッグ表示
 	void PrintSection();
 #endif // _DEFU
 
-
 	// ルートノード(最初の区画)
 	SectionNode* mpRoot;
 	// ２次元配列(可変長配列)のマップデータ
-	std::vector<std::vector<Room>> mMapData;
+	std::vector<std::vector<Tile>> mMapData;
 };
