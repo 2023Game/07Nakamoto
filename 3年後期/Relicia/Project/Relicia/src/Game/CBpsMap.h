@@ -25,10 +25,10 @@ public:
 	// 方向を表すデータ
 	enum class Direction
 	{
-		eNorth,	// 北
-		eSouth,	// 南
-		eEast,	// 東
-		eWest,	// 西
+		eNorth,	// 北(y-1の方向)
+		eSouth,	// 南(y+1の方向)
+		eEast,	// 東(x+1の方向)
+		eWest,	// 西(x-1の方向)
 
 		eNorthEast,	// 北東
 		eSouthEast,	// 南東
@@ -36,7 +36,7 @@ public:
 		eNorthWest,	// 北西
 	};
 
-	// タイルの種類
+	// タイルの情報
 	struct Tile
 	{
 		TileType type;	// タイルの種類
@@ -92,6 +92,13 @@ private:
 	void CreateRoomWall(const Room& room, std::vector<std::vector<Tile>>& map);
 	// 部屋の四隅データの柱を設定
 	void CreateRoomPillar(const Room& room, std::vector<std::vector<Tile>>& map);
+	// 同じ階層の部屋同士を通路で繋げる
+	void ConnectRooms(SectionNode* node, std::vector<std::vector<Tile>>& map);
+
+	// 部屋の中央の座標を取得
+	CVector2 GetRoomCenter(SectionNode* node);
+	// 部屋同士の通路データの設定
+	void CreatePassage(std::vector<std::vector<Tile>>& map, CVector2 a, CVector2 b);
 
 #if _DEBUG
 	// 区画の境界線設定

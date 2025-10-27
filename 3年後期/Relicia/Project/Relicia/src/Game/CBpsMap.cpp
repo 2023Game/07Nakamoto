@@ -25,6 +25,8 @@ CBpsMap::CBpsMap(int x, int y)
 
     // 各区画に部屋を配置
     PlaceRoom(mpRoot, mMapData);
+    // 同じ階層の部屋同士を通路で繋げる
+    ConnectRooms(mpRoot, mMapData);
 
 #if _DEBUG
     // ２次元配列のデバッグ表示
@@ -53,7 +55,16 @@ void CBpsMap::Initialize(int width, int height)
 {
     mMapData.resize(height, std::vector<Tile>(width));
 
-    // 最初の大きな区画（全体）
+    // タイル情報の初期化
+    for (auto& row : mMapData)
+    {
+        for (auto& tile : row)
+        {
+            tile = { TileType::None,Direction::eNorth };
+        }
+    }
+
+    // 最初の大きな区画の初期化（全体）
     mpRoot = new SectionNode();
     mpRoot->x = 0;
     mpRoot->y = 0;
@@ -232,7 +243,98 @@ void CBpsMap::CreateRoomPillar(const Room& room, std::vector<std::vector<Tile>>&
     mMapData[room.y + room.height - 1][room.x].dir = Direction::eSouthWest;	// 南西
     mMapData[room.y + room.height - 1][room.x + room.width - 1].type = TileType::ePillar;	// 右下
     mMapData[room.y + room.height - 1][room.x + room.width - 1].dir = Direction::eSouthEast;	// 南東
+}
 
+// 同じ階層の部屋同士の通路データを設定
+void CBpsMap::ConnectRooms(SectionNode* node, std::vector<std::vector<Tile>>& map)
+{
+    if (!node || !node->right || !node->left) return;
+
+    // 左の子の部屋の中心点を取得
+    CVector2 leftRoom = GetRoomCenter(node->left);
+    // 右の子の部屋の中心点を取得
+    CVector2 rightRoom = GetRoomCenter(node->right);
+
+    // 2点を直線で結ぶように通路を作る
+    CreatePassage(map, leftRoom, rightRoom);
+
+    // 再帰
+    ConnectRooms(node->left, map);
+    ConnectRooms(node->right, map);
+}
+
+// 部屋の中央の座標を取得
+CVector2 CBpsMap::GetRoomCenter(SectionNode* node)
+{
+    if (!node) return CVector2();
+
+    // 葉ノードを探す（現在の実装と同じ）
+    if (!node->left && !node->right)
+    {
+        int cx = node->room.x + node->room.width / 2;
+        int cy = node->room.y + node->room.height / 2;
+
+        // 床領域は room.x+1 .. room.x+room.width-2
+        int minX = node->room.x + 1;
+        int maxX = node->room.x + node->room.width - 2;
+        int minY = node->room.y + 1;
+        int maxY = node->room.y + node->room.height - 2;
+
+        // 幅が小さくて床領域が無い場合は壁の内側（min..max が逆転する）を防ぐ
+        if (minX > maxX) { minX = maxX = node->room.x; }
+        if (minY > maxY) { minY = maxY = node->room.y; }
+
+        // クリップ
+        cx = std::max(minX, std::min(cx, maxX));
+        cy = std::max(minY, std::min(cy, maxY));
+
+        return CVector2(cx, cy);
+    }
+
+    // 子ノードを優先して探す
+    if (node->left) return GetRoomCenter(node->left);
+    if (node->right) return GetRoomCenter(node->right);
+
+    return CVector2();
+}
+
+// 部屋同士の通路データの設定
+void CBpsMap::CreatePassage(std::vector<std::vector<Tile>>& map, CVector2 a, CVector2 b)
+{
+    // 座標を整数で取得
+    int ax = a.X();
+    int ay = a.Y();
+    int bx = b.X();
+    int by = b.Y();
+
+    // 境界チェック用
+    int h = (int)map.size();
+    int w = (int)(h > 0 ? map[0].size() : 0);
+
+    auto inBounds = [&](int x, int y) {
+        return x >= 0 && x < w&& y >= 0 && y < h;
+    };
+
+    // 横→縦 の L 字通路
+    // まず横方向（ax -> bx）を ay 行に掘る
+    int startX = std::min(ax, bx);
+    int endX = std::max(ax, bx);
+    for (int x = startX; x <= endX; ++x)
+    {
+        if (inBounds(x, ay))
+            map[ay][x].type = TileType::ePassage;
+    }
+
+    // 次に縦方向（ay -> by）を bx 列に掘る
+    int startY = std::min(ay, by);
+    int endY = std::max(ay, by);
+    for (int y = startY; y <= endY; ++y)
+    {
+        if (inBounds(bx, y))
+            map[y][bx].type = TileType::ePassage;
+    }
+
+    // （任意）通路の周囲を床にするなどの処理を入れると自然に見える
 }
 
 #if _DEBUG
@@ -303,6 +405,7 @@ void CBpsMap::PrintSection()
             case TileType::eWall:       printf("2"); break;
             case TileType::ePillar:     printf("3"); break;
             case TileType::eEntrance:   printf("4"); break;
+            case TileType::ePassage:    printf("5"); break;
             default:                    printf("?"); break;
             }
         }
