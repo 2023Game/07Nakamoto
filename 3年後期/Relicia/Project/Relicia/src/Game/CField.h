@@ -2,6 +2,7 @@
 #include "CObjectBase.h"
 #include "CColliderMesh.h"
 #include "CDungeonMap.h"
+#include "CBpsMap.h"
 
 class CFloor;
 class CWall;
@@ -28,9 +29,13 @@ private:
 
 	// 方角によって回転値を設定
 	int ConvertDirectionAngle(CDungeonMap::Direction dir) const;
+	// 方角によって回転値を設定
+	int ConvertDirectionAngle2(CBpsMap::Direction dir) const;
 
 	// 部屋の生成
 	void CreateRoom();
+	// BPMマップの部屋の生成
+	void SetMapData(const std::vector<std::vector<CBpsMap::Tile>>& map);
 
 	CModel* mpModel;
 	CColliderMesh* mpColliderMesh;
@@ -42,6 +47,9 @@ private:
 
 	// ２次元配列のマップデータ保存用
 	CDungeonManeger* mpMapData;
+
+	CBpsMap* mpMapData2;
+	//std::vector<std::vector<CBpsMap::Tile>> mMap;
 
 	// それぞれの3Dオブジェクトのリスト
 	std::vector<CFloor*> mpFloorObjects;	// 床のリスト

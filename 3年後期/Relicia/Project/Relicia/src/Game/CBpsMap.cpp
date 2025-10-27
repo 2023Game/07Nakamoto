@@ -40,6 +40,12 @@ CBpsMap::~CBpsMap()
     DeleteNode(mpRoot);
 }
 
+
+const std::vector<std::vector<CBpsMap::Tile>>& CBpsMap::GetTileData() const
+{
+    return mMapData;
+}
+
 // ノードの削除
 void CBpsMap::DeleteNode(SectionNode* node)
 {
@@ -106,8 +112,8 @@ void CBpsMap::Split(SectionNode* node)
         int left = splitX - node->x;
         int right = node->width - left;
 
-        node->left = new SectionNode{ node->x, node->y, left, node->height, nullptr, nullptr };
-        node->right = new SectionNode{ splitX, node->y, right, node->height, nullptr, nullptr };
+        node->left = new SectionNode{ node->x, node->y, left, node->height, nullptr, nullptr, {} };
+        node->right = new SectionNode{ splitX, node->y, right, node->height, nullptr, nullptr, {} };
 
     }
     // falseなら横に分割
@@ -120,8 +126,8 @@ void CBpsMap::Split(SectionNode* node)
         int top = splitY - node->y;
         int bottom = node->height - top;
 
-        node->left = new SectionNode{ node->x, node->y, node->width, top, nullptr, nullptr };
-        node->right = new SectionNode{ node->x, splitY, node->width, bottom, nullptr, nullptr };
+        node->left = new SectionNode{ node->x, node->y, node->width, top, nullptr, nullptr, {} };
+        node->right = new SectionNode{ node->x, splitY, node->width, bottom, nullptr, nullptr, {} };
 
     }
 
@@ -255,8 +261,14 @@ void CBpsMap::ConnectRooms(SectionNode* node, std::vector<std::vector<Tile>>& ma
     // 右の子の部屋の中心点を取得
     CVector2 rightRoom = GetRoomCenter(node->right);
 
-    // 2点を直線で結ぶように通路を作る
-    CreatePassage(map, leftRoom, rightRoom);
+    // どちらかが繋がっていなければ(通路の数を制限)
+    if (!node->left->room.connected || !node->right->room.connected)
+    {
+        // 2点を直線で結ぶように通路を作る
+        CreatePassage(map, leftRoom, rightRoom);
+
+        node->left->room.connected = node->right->room.connected = true;
+    }
 
     // 再帰
     ConnectRooms(node->left, map);
@@ -268,16 +280,16 @@ CVector2 CBpsMap::GetRoomCenter(SectionNode* node)
 {
     if (!node) return CVector2();
 
-    // 葉ノードを探す（現在の実装と同じ）
+    // 葉ノードを探す
     if (!node->left && !node->right)
     {
         int cx = node->room.x + node->room.width / 2;
         int cy = node->room.y + node->room.height / 2;
 
         // 床領域は room.x+1 .. room.x+room.width-2
-        int minX = node->room.x + 1;
+        int minX = node->room.x + 2;
         int maxX = node->room.x + node->room.width - 2;
-        int minY = node->room.y + 1;
+        int minY = node->room.y + 2;
         int maxY = node->room.y + node->room.height - 2;
 
         // 幅が小さくて床領域が無い場合は壁の内側（min..max が逆転する）を防ぐ
@@ -311,6 +323,8 @@ void CBpsMap::CreatePassage(std::vector<std::vector<Tile>>& map, CVector2 a, CVe
     int h = (int)map.size();
     int w = (int)(h > 0 ? map[0].size() : 0);
 
+    // ラムダ式
+    // [&]：使用する外部変数を全て参照渡しでキャプチャする
     auto inBounds = [&](int x, int y) {
         return x >= 0 && x < w&& y >= 0 && y < h;
     };
@@ -322,7 +336,21 @@ void CBpsMap::CreatePassage(std::vector<std::vector<Tile>>& map, CVector2 a, CVe
     for (int x = startX; x <= endX; ++x)
     {
         if (inBounds(x, ay))
-            map[ay][x].type = TileType::ePassage;
+        {
+            if (map[ay][x].type == TileType::eWall)
+            {
+                map[ay][x].type = TileType::eEntrance;
+            }
+            else if (map[ay][x].type != TileType::eFloor)
+            {
+                map[ay][x].type = TileType::ePassage;
+                
+                map[ay + 1][x].type = TileType::eWall;
+                map[ay + 1][x].dir = Direction::eEast;
+                map[ay - 1][x].type = TileType::eWall;
+                map[ay - 1][x].dir = Direction::eWest;
+            }
+        }
     }
 
     // 次に縦方向（ay -> by）を bx 列に掘る
@@ -331,10 +359,23 @@ void CBpsMap::CreatePassage(std::vector<std::vector<Tile>>& map, CVector2 a, CVe
     for (int y = startY; y <= endY; ++y)
     {
         if (inBounds(bx, y))
-            map[y][bx].type = TileType::ePassage;
+        {
+            if (map[y][bx].type == TileType::eWall)
+            {
+                map[y][bx].type = TileType::eEntrance;
+            }
+             else if (map[y][bx].type != TileType::eFloor)
+            {
+                map[y][bx].type = TileType::ePassage;
+
+                map[y][bx + 1].type = TileType::eWall;
+                map[y][bx + 1].dir = Direction::eNorth;
+                map[y][bx - 1].type = TileType::eWall;
+                map[y][bx - 1].dir = Direction::eSouth;
+            }
+        }
     }
 
-    // （任意）通路の周囲を床にするなどの処理を入れると自然に見える
 }
 
 #if _DEBUG

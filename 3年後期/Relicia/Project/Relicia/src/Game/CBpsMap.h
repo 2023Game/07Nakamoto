@@ -46,7 +46,7 @@ public:
 	// 部屋の情報
 	struct Room
 	{
-		int x, y;			// 部屋の左上の座標
+		int x, y;			// 部屋の左上の床の座標
 		int width, height;	// 部屋のサイズ
 
 		// 部屋の種類
@@ -59,6 +59,8 @@ public:
 		};
 
 		RoomType type;
+
+		bool connected = false;	// 繋がっているか
 	};
 
 	// 区画ノード
@@ -72,6 +74,8 @@ public:
 
 		Room room; // 部屋データ
 	};
+
+	const std::vector<std::vector<Tile>>& GetTileData()const;
 
 private:
 	// ノードの削除
