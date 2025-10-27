@@ -412,7 +412,7 @@
     <ClCompile Include="src\Game\CDungeonManeger.cpp">
       <Filter>ソース ファイル\Game\Field</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CBpsMap.cpp">
+    <ClCompile Include="src\Game\CBspMap.cpp">
       <Filter>ソース ファイル\Game\Field</Filter>
     </ClCompile>
   </ItemGroup>
@@ -753,7 +753,7 @@
     <ClInclude Include="src\Game\CDungeonManeger.h">
       <Filter>ソース ファイル\Game\Field</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CBpsMap.h">
+    <ClInclude Include="src\Game\CBspMap.h">
       <Filter>ソース ファイル\Game\Field</Filter>
     </ClInclude>
   </ItemGroup>
