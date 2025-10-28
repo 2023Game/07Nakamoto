@@ -41,6 +41,7 @@ public:
 	{
 		TileType type;	// タイルの種類
 		Direction dir;	// 向き
+		bool passage;	// 通路かどうか
 	};
 
 	// 部屋の情報
@@ -107,6 +108,8 @@ private:
 
 	// 部屋同士の通路データの設定
 	void CreatePassage(std::vector<std::vector<Tile>>& map, CVector2 a, CVector2 b);
+
+	Direction InverseDirection(Direction dir) const;
 
 #if _DEBUG
 	// 区画の境界線設定

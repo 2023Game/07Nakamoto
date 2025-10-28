@@ -357,13 +357,21 @@ void CBspMap::CreatePassage(std::vector<std::vector<Tile>>& map, CVector2 a, CVe
     {
         if (map[y][x].type == TileType::eWall)
         {
-            map[y][x].type = TileType::eEntrance;
+            // 通路の進行方向と、壁の方向が一致(もしくは正反対)であれば、
+            // マップのタイルを出入口に変更
+            Direction curDir = map[y][x].dir;
+            if (dir == curDir || dir == InverseDirection(curDir))
+            {
+                map[y][x].type = TileType::eEntrance;
+            }
         }
         else if (map[y][x].type == TileType::None || map[y][x].type == TileType::eBoundary)
         {
             map[y][x].type = TileType::ePassage;
             map[y][x].dir = dir;
         }
+        // 通路フラグをオンにする
+        map[y][x].passage = true;
     };
 
     // 通路開始を床の内側1マス、終了も床の内側1マスにずらす
@@ -387,6 +395,19 @@ void CBspMap::CreatePassage(std::vector<std::vector<Tile>>& map, CVector2 a, CVe
     {
         carve(bx, y, Direction::eNorth);
     }
+}
+
+CBspMap::Direction CBspMap::InverseDirection(Direction dir) const
+{
+    switch (dir)
+    {
+    case Direction::eNorth: return Direction::eSouth;
+    case Direction::eSouth: return Direction::eNorth;
+    case Direction::eEast: return Direction::eWest;
+    case Direction::eWest: return Direction::eEast;
+    }
+
+    return dir;
 }
 
 #if _DEBUG

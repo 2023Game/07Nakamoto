@@ -25,15 +25,13 @@ public:
 	void Render() override;
 
 private:
+	void CreateMap();
+
 	void CreateFieldObjects();
 
 	// 方角によって回転値を設定
-	int ConvertDirectionAngle(CDungeonMap::Direction dir) const;
-	// 方角によって回転値を設定
 	int ConvertDirectionAngle2(CBspMap::Direction dir) const;
 
-	// 部屋の生成
-	//void CreateRoom();
 	// BPMマップの部屋の生成
 	void SetMapData(const std::vector<std::vector<CBspMap::Tile>>& map);
 
@@ -44,12 +42,9 @@ private:
 	CModel* mpCylinderModel;
 
 	TexAnimData mEffectAnimData;
-
-	// ２次元配列のマップデータ保存用
-	//CDungeonManeger* mpMapData;
 	
 	// ２次元配列のマップデータ保存用
-	CBspMap* mpMapData2;
+	CBspMap* mpMapData;
 
 	// それぞれの3Dオブジェクトのリスト
 	std::vector<CFloor*> mpFloorObjects;	// 床のリスト
