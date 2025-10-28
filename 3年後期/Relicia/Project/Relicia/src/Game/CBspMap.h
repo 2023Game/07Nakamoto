@@ -102,6 +102,9 @@ private:
 
 	// 部屋の中央の座標を取得
 	CVector2 GetRoomCenter(SectionNode* node);
+	// 部屋の部屋の中心に近い座標を取得
+	CVector2 GetRoomRandomPos(SectionNode* node);
+
 	// 部屋同士の通路データの設定
 	void CreatePassage(std::vector<std::vector<Tile>>& map, CVector2 a, CVector2 b);
 

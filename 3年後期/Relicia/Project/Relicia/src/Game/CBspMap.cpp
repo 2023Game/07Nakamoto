@@ -257,23 +257,25 @@ void CBspMap::ConnectRooms(SectionNode* node, std::vector<std::vector<Tile>>& ma
 {
     if (!node || !node->right || !node->left) return;
 
-    // 左の子の部屋の中心点を取得
+    // 再帰
+    ConnectRooms(node->left, map);
+    ConnectRooms(node->right, map);
+
+    // 左の子の部屋の中心点近くを取得
     CVector2 leftRoom = GetRoomCenter(node->left);
-    // 右の子の部屋の中心点を取得
+    // 右の子の部屋の中心点近くを取得
     CVector2 rightRoom = GetRoomCenter(node->right);
 
     // どちらかが繋がっていなければ(通路の数を制限するため)
-    if (!node->left->room.connected || !node->right->room.connected)
+    if (!node->left->room.connected && !node->right->room.connected)
     {
         // 2点を直線で結ぶように通路を作る
         CreatePassage(map, leftRoom, rightRoom);
 
-        node->left->room.connected = node->right->room.connected = true;
+        node->left->room.connected = true;
+        node->right->room.connected = true;
     }
 
-    // 再帰
-    ConnectRooms(node->left, map);
-    ConnectRooms(node->right, map);
 }
 
 // 部屋の中央の座標を取得
@@ -288,18 +290,21 @@ CVector2 CBspMap::GetRoomCenter(SectionNode* node)
         int cy = node->room.y + node->room.height / 2;
 
         // 床領域は room.x+1 .. room.x+room.width-2
-        int minX = node->room.x + 2;
+        int minX = node->room.x + 1;
         int maxX = node->room.x + node->room.width - 2;
-        int minY = node->room.y + 2;
+        int minY = node->room.y + 1;
         int maxY = node->room.y + node->room.height - 2;
 
         // 幅が小さくて床領域が無い場合は壁の内側（min..max が逆転する）を防ぐ
-        if (minX > maxX) { minX = maxX = node->room.x; }
-        if (minY > maxY) { minY = maxY = node->room.y; }
+        if (minX > maxX) { minX = maxX = node->room.x + 1; }
+        if (minY > maxY) { minY = maxY = node->room.y + 1; }
 
         // クリップ
-        cx = std::max(minX, std::min(cx, maxX));
-        cy = std::max(minY, std::min(cy, maxY));
+        //cx = std::max(minX, std::min(cx, maxX));
+        //cy = std::max(minY, std::min(cy, maxY));
+        
+        cx = (cx < minX) ? minX : (cx > maxX ? maxX : cx);
+        cy = (cy < minY) ? minY : (cy > maxY ? maxY : cy);
 
         return CVector2(cx, cy);
     }
@@ -311,72 +316,82 @@ CVector2 CBspMap::GetRoomCenter(SectionNode* node)
     return CVector2();
 }
 
+// 部屋の中心に近い座標を取得
+CVector2 CBspMap::GetRoomRandomPos(SectionNode* node)
+{
+    if (!node) return CVector2();
+
+    // 葉ノードを探す
+    if (!node->left && !node->right)
+    {
+        int centerX = node->room.x + node->room.width / 2;
+        int centerY = node->room.y + node->room.height / 2;
+
+        // 中央付近を維持しやすい4で割る
+        int rangeX = std::max(1, node->room.width / 4);
+        int rangeY = std::max(1, node->room.height / 4);
+
+        int cx = Math::Rand(centerX - rangeX, centerX + rangeX);
+        int cy = Math::Rand(centerY - rangeY, centerY + rangeY);
+
+        return CVector2(cx, cy);
+    }
+
+    // 子ノードを優先して探す
+    if (node->left) return GetRoomRandomPos(node->left);
+    if (node->right) return GetRoomRandomPos(node->right);
+
+    return CVector2();
+}
+
 // 部屋同士の通路データの設定
 void CBspMap::CreatePassage(std::vector<std::vector<Tile>>& map, CVector2 a, CVector2 b)
 {
     // 座標を整数で取得
-    int ax = a.X();
-    int ay = a.Y();
-    int bx = b.X();
-    int by = b.Y();
-
-    // 境界チェック用
-    int h = (int)map.size();
-    int w = (int)(h > 0 ? map[0].size() : 0);
+    int ax = a.X(), ay = a.Y();
+    int bx = b.X(), by = b.Y();
 
     // ラムダ式
     // [&]：使用する外部変数を全て参照渡しでキャプチャする
-    auto inBounds = [&](int x, int y) {
-        return x >= 0 && x < w && y >= 0 && y < h;
+    auto carve = [&](int x, int y, Direction dir)
+    {
+        if (map[y][x].type == TileType::eWall)
+        {
+            map[y][x].type = TileType::eEntrance;
+        }
+        else if (map[y][x].type == TileType::None || map[y][x].type == TileType::eBoundary)
+        {
+            map[y][x].type = TileType::ePassage;
+            map[y][x].dir = dir;
+        }
     };
 
-    // 横→縦 の L 字通路
-    // まず横方向（ax -> bx）を ay 行に掘る
+    // 通路開始を床の内側1マス、終了も床の内側1マスにずらす
+    if (ax < bx) ax += 1;
+    else if (ax > bx) ax -= 1;
+    if (ay < by) ay += 1;
+    else if (ay > by) ay -= 1;
+
+    // 横方向
     int startX = std::min(ax, bx);
     int endX = std::max(ax, bx);
     for (int x = startX; x <= endX; ++x)
     {
-        if (inBounds(x, ay))
-        {
-            if (map[ay][x].type == TileType::eWall)
-            {
-                map[ay][x].type = TileType::eEntrance;
-            }
-            else if (map[ay][x].type == TileType::None || map[ay][x].type == TileType::eBoundary)
-            {
-                map[ay][x].type = TileType::ePassage;
-                // 東向きを設定
-                map[ay][x].dir = Direction::eEast;
-            }
-        }
+        carve(x, ay, Direction::eEast);
     }
 
-    // 次に縦方向（ay -> by）を bx 列に掘る
+    // 縦方向
     int startY = std::min(ay, by);
     int endY = std::max(ay, by);
     for (int y = startY; y <= endY; ++y)
     {
-        if (inBounds(bx, y))
-        {
-            if (map[y][bx].type == TileType::eWall)
-            {
-                map[y][bx].type = TileType::eEntrance;
-            }
-             else if (map[y][bx].type == TileType::None || map[y][bx].type == TileType::eBoundary)
-            {
-                map[y][bx].type = TileType::ePassage;
-                // 北向きを設定
-                map[y][bx].dir = Direction::eNorth;
-            }
-        }
+        carve(bx, y, Direction::eNorth);
     }
-
 }
 
 #if _DEBUG
 // 区画の境界線を設定
-void CBspMap::DrawBoundary(SectionNode* node, std::vector<std::vector<Tile>>& map)
-{
+void CBspMap::DrawBoundary(SectionNode* node, std::vector<std::vector<Tile>>& map){
     if (node == nullptr) {
         return;
     }
