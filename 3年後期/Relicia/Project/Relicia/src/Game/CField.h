@@ -30,7 +30,7 @@ private:
 	void CreateFieldObjects();
 
 	// 方角によって回転値を設定
-	int ConvertDirectionAngle2(CBspMap::Direction dir) const;
+	int ConvertDirectionAngle(CBspMap::Direction dir) const;
 
 	// BPMマップの部屋の生成
 	void SetMapData(const std::vector<std::vector<CBspMap::Tile>>& map);

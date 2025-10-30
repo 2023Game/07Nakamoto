@@ -4,7 +4,7 @@
 // 区画の最小サイズ
 #define MIN_SIZE 10
 // 部屋の最小サイズ
-#define MIN_ROOM 5
+#define MIN_ROOM 7
 
 // 区画の余白(区画の端から1マス空ける)
 #define MARGIN 1
@@ -20,7 +20,7 @@ CBspMap::CBspMap(int x, int y)
 
 #if _DEBUG
     // 区画の境界線設定(境界線をみたい場合のみ使用)
-    DrawBoundary(mpRoot, mMapData);
+    //DrawBoundary(mpRoot, mMapData);
 #endif
 
     // 各区画に部屋を配置
@@ -67,7 +67,7 @@ void CBspMap::Initialize(int width, int height)
     {
         for (auto& tile : row)
         {
-            tile = { TileType::None,Direction::eNorth };
+            tile = { TileType::None,Direction::eNorth,false,false };
         }
     }
 
@@ -261,10 +261,10 @@ void CBspMap::ConnectRooms(SectionNode* node, std::vector<std::vector<Tile>>& ma
     ConnectRooms(node->left, map);
     ConnectRooms(node->right, map);
 
-    // 左の子の部屋の中心点近くを取得
-    CVector2 leftRoom = GetRoomCenter(node->left);
-    // 右の子の部屋の中心点近くを取得
-    CVector2 rightRoom = GetRoomCenter(node->right);
+    // 左の子の部屋のランダムな座標を取得
+    CVector2 leftRoom = GetRoomRandomPos(node->left);
+    // 右の子の部屋のランダムな座標を取得
+    CVector2 rightRoom = GetRoomRandomPos(node->right);
 
     // どちらかが繋がっていなければ(通路の数を制限するため)
     if (!node->left->room.connected && !node->right->room.connected)
@@ -275,48 +275,9 @@ void CBspMap::ConnectRooms(SectionNode* node, std::vector<std::vector<Tile>>& ma
         node->left->room.connected = true;
         node->right->room.connected = true;
     }
-
 }
 
-// 部屋の中央の座標を取得
-CVector2 CBspMap::GetRoomCenter(SectionNode* node)
-{
-    if (!node) return CVector2();
-
-    // 葉ノードを探す
-    if (!node->left && !node->right)
-    {
-        int cx = node->room.x + node->room.width / 2;
-        int cy = node->room.y + node->room.height / 2;
-
-        // 床領域は room.x+1 .. room.x+room.width-2
-        int minX = node->room.x + 1;
-        int maxX = node->room.x + node->room.width - 2;
-        int minY = node->room.y + 1;
-        int maxY = node->room.y + node->room.height - 2;
-
-        // 幅が小さくて床領域が無い場合は壁の内側（min..max が逆転する）を防ぐ
-        if (minX > maxX) { minX = maxX = node->room.x + 1; }
-        if (minY > maxY) { minY = maxY = node->room.y + 1; }
-
-        // クリップ
-        //cx = std::max(minX, std::min(cx, maxX));
-        //cy = std::max(minY, std::min(cy, maxY));
-        
-        cx = (cx < minX) ? minX : (cx > maxX ? maxX : cx);
-        cy = (cy < minY) ? minY : (cy > maxY ? maxY : cy);
-
-        return CVector2(cx, cy);
-    }
-
-    // 子ノードを優先して探す
-    if (node->left) return GetRoomCenter(node->left);
-    if (node->right) return GetRoomCenter(node->right);
-
-    return CVector2();
-}
-
-// 部屋の中心に近い座標を取得
+// 部屋のランダムな座標を取得
 CVector2 CBspMap::GetRoomRandomPos(SectionNode* node)
 {
     if (!node) return CVector2();
@@ -324,15 +285,18 @@ CVector2 CBspMap::GetRoomRandomPos(SectionNode* node)
     // 葉ノードを探す
     if (!node->left && !node->right)
     {
-        int centerX = node->room.x + node->room.width / 2;
-        int centerY = node->room.y + node->room.height / 2;
+        // 床領域を2マス内側にした範囲
+        int minX = node->room.x + 2;
+        int maxX = node->room.x + node->room.width - 3;
+        int minY = node->room.y + 2;
+        int maxY = node->room.y + node->room.height - 3;
 
-        // 中央付近を維持しやすい4で割る
-        int rangeX = std::max(1, node->room.width / 4);
-        int rangeY = std::max(1, node->room.height / 4);
+        // もし部屋の幅/高さが小さい場合、中央一点に固定
+        if (minX > maxX) minX = maxX = (node->room.x + node->room.width / 2);
+        if (minY > maxY) minY = maxY = (node->room.y + node->room.height / 2);
 
-        int cx = Math::Rand(centerX - rangeX, centerX + rangeX);
-        int cy = Math::Rand(centerY - rangeY, centerY + rangeY);
+        int cx = Math::Rand(minX, maxX);  // ランダムに中央付近
+        int cy = Math::Rand(minY, maxY);
 
         return CVector2(cx, cy);
     }
@@ -355,48 +319,85 @@ void CBspMap::CreatePassage(std::vector<std::vector<Tile>>& map, CVector2 a, CVe
     // [&]：使用する外部変数を全て参照渡しでキャプチャする
     auto carve = [&](int x, int y, Direction dir)
     {
+        // 壁だった場合、
         if (map[y][x].type == TileType::eWall)
         {
-            // 通路の進行方向と、壁の方向が一致(もしくは正反対)であれば、
-            // マップのタイルを出入口に変更
             Direction curDir = map[y][x].dir;
+
+            // 通路の進行方向と、壁の方向が一致(もしくは正反対)であれば、
             if (dir == curDir || dir == InverseDirection(curDir))
             {
+                // マップのタイルを出入口に変更
                 map[y][x].type = TileType::eEntrance;
             }
         }
+        // 何も設定されていなければ、
         else if (map[y][x].type == TileType::None || map[y][x].type == TileType::eBoundary)
         {
+            // 通路を設定
             map[y][x].type = TileType::ePassage;
             map[y][x].dir = dir;
         }
         // 通路フラグをオンにする
         map[y][x].passage = true;
+
+        // 壁フラグを切り替える
+        map[y][x].wall = !map[y][x].wall;
+
     };
 
-    // 通路開始を床の内側1マス、終了も床の内側1マスにずらす
-    if (ax < bx) ax += 1;
-    else if (ax > bx) ax -= 1;
-    if (ay < by) ay += 1;
-    else if (ay > by) ay -= 1;
-
-    // 横方向
-    int startX = std::min(ax, bx);
-    int endX = std::max(ax, bx);
-    for (int x = startX; x <= endX; ++x)
+    bool pattern = Math::Rand(0, 1);
+    // 横→縦
+    if (pattern)
     {
-        carve(x, ay, Direction::eEast);
+        // 横方向
+        int startX = std::min(ax, bx);
+        int endX = std::max(ax, bx);
+        for (int x = startX; x <= endX; ++x)
+        {
+            carve(x, ay, Direction::eEast);
+
+            // 曲がる場所の場合
+            if (x == endX && map[ay][x].type == TileType::ePassage)
+            {
+                map[ay][x].dir = Direction::eNorthEast;
+            }
+        }
+        // 縦方向
+        int startY = std::min(ay, by);
+        int endY = std::max(ay, by);
+        for (int y = startY; y <= endY; ++y)
+        {
+            carve(bx, y, Direction::eNorth);
+        }
     }
-
-    // 縦方向
-    int startY = std::min(ay, by);
-    int endY = std::max(ay, by);
-    for (int y = startY; y <= endY; ++y)
+    // 縦→横
+    else
     {
-        carve(bx, y, Direction::eNorth);
+        // 縦方向
+        int startY = std::min(ay, by);
+        int endY = std::max(ay, by);
+        for (int y = startY; y <= endY; ++y)
+        {
+            carve(bx, y, Direction::eNorth);
+
+            // 曲がる場所の場合
+            if (y == endY && map[y][bx].type == TileType::ePassage)
+            {
+                map[y][bx].dir = Direction::eNorthEast;
+            }
+        }
+        // 横方向
+        int startX = std::min(ax, bx);
+        int endX = std::max(ax, bx);
+        for (int x = startX; x <= endX; ++x)
+        {
+            carve(x, ay, Direction::eEast);
+        }
     }
 }
 
+// 方角の正反対を返す
 CBspMap::Direction CBspMap::InverseDirection(Direction dir) const
 {
     switch (dir)
@@ -411,6 +412,7 @@ CBspMap::Direction CBspMap::InverseDirection(Direction dir) const
 }
 
 #if _DEBUG
+
 // 区画の境界線を設定
 void CBspMap::DrawBoundary(SectionNode* node, std::vector<std::vector<Tile>>& map){
     if (node == nullptr) {

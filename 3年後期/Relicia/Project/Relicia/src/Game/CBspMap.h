@@ -42,12 +42,13 @@ public:
 		TileType type;	// タイルの種類
 		Direction dir;	// 向き
 		bool passage;	// 通路かどうか
+		bool wall;		// 壁があるかどうか
 	};
 
 	// 部屋の情報
 	struct Room
 	{
-		int x, y;			// 部屋の左上の床の座標
+		int x, y;			// 部屋の左上の柱の座標
 		int width, height;	// 部屋のサイズ
 
 		// 部屋の種類
@@ -101,14 +102,13 @@ private:
 	// 同じ階層の部屋同士を通路で繋げる
 	void ConnectRooms(SectionNode* node, std::vector<std::vector<Tile>>& map);
 
-	// 部屋の中央の座標を取得
-	CVector2 GetRoomCenter(SectionNode* node);
-	// 部屋の部屋の中心に近い座標を取得
+	// 部屋のランダムな座標を取得
 	CVector2 GetRoomRandomPos(SectionNode* node);
 
 	// 部屋同士の通路データの設定
 	void CreatePassage(std::vector<std::vector<Tile>>& map, CVector2 a, CVector2 b);
 
+	// 方角の正反対を返す
 	Direction InverseDirection(Direction dir) const;
 
 #if _DEBUG
