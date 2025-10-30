@@ -20,7 +20,7 @@ CBspMap::CBspMap(int x, int y)
 
 #if _DEBUG
     // 区画の境界線設定(境界線をみたい場合のみ使用)
-    //DrawBoundary(mpRoot, mMapData);
+    DrawBoundary(mpRoot, mMapData);
 #endif
 
     // 各区画に部屋を配置
@@ -47,6 +47,19 @@ const std::vector<std::vector<CBspMap::Tile>>& CBspMap::GetTileData() const
     return mMapData;
 }
 
+// 通路の壁を生成フラグをtrueにする
+void CBspMap::SetPassageWall(int x, int y)
+{
+    mMapData[y][x].passageWall = true;
+}
+
+// 部屋の内側で壁に近いか
+bool CBspMap::IsNearRoomWall(const CVector2& pos)
+{
+    return false;
+}
+
+
 // ノードの削除
 void CBspMap::DeleteNode(SectionNode* node)
 {
@@ -67,7 +80,7 @@ void CBspMap::Initialize(int width, int height)
     {
         for (auto& tile : row)
         {
-            tile = { TileType::None,Direction::eNorth,false,false };
+            tile = { TileType::None, Direction::eNorth, false, false };
         }
     }
 
@@ -338,34 +351,35 @@ void CBspMap::CreatePassage(std::vector<std::vector<Tile>>& map, CVector2 a, CVe
             map[y][x].type = TileType::ePassage;
             map[y][x].dir = dir;
         }
-        // 通路フラグをオンにする
-        map[y][x].passage = true;
 
-        // 壁フラグを切り替える
-        map[y][x].wall = !map[y][x].wall;
+        // 部屋の床でなければ、
+        if (map[y][x].type != TileType::eFloor)
+        {
+            // 通路フラグをオンにする
+            map[y][x].passage = true;
+        }
 
     };
 
+    // 横方向
+    int startX = std::min(ax, bx);
+    int endX = std::max(ax, bx);
+    // 縦方向
+    int startY = std::min(ay, by);
+    int endY = std::max(ay, by);
+
     bool pattern = Math::Rand(0, 1);
+
+    // L字堀
     // 横→縦
     if (pattern)
     {
         // 横方向
-        int startX = std::min(ax, bx);
-        int endX = std::max(ax, bx);
         for (int x = startX; x <= endX; ++x)
         {
             carve(x, ay, Direction::eEast);
-
-            // 曲がる場所の場合
-            if (x == endX && map[ay][x].type == TileType::ePassage)
-            {
-                map[ay][x].dir = Direction::eNorthEast;
-            }
         }
         // 縦方向
-        int startY = std::min(ay, by);
-        int endY = std::max(ay, by);
         for (int y = startY; y <= endY; ++y)
         {
             carve(bx, y, Direction::eNorth);
@@ -375,26 +389,63 @@ void CBspMap::CreatePassage(std::vector<std::vector<Tile>>& map, CVector2 a, CVe
     else
     {
         // 縦方向
-        int startY = std::min(ay, by);
-        int endY = std::max(ay, by);
         for (int y = startY; y <= endY; ++y)
         {
             carve(bx, y, Direction::eNorth);
-
-            // 曲がる場所の場合
-            if (y == endY && map[y][bx].type == TileType::ePassage)
-            {
-                map[y][bx].dir = Direction::eNorthEast;
-            }
         }
         // 横方向
-        int startX = std::min(ax, bx);
-        int endX = std::max(ax, bx);
         for (int x = startX; x <= endX; ++x)
         {
             carve(x, ay, Direction::eEast);
         }
     }
+
+    //// Z字堀（縦→横→縦 or 横→縦→横）
+    //bool verticalFirst = Math::Rand(0, 1);
+
+    //// 中間点を決める（Z字の折れ点）
+    //int midX = (ax + bx) / 2;
+    //int midY = (ay + by) / 2;
+
+    //if (verticalFirst)
+    //{
+    //    // 縦に掘る（a.y → midY）
+    //    int sy = (ay < midY) ? ay : midY;
+    //    int ey = (ay < midY) ? midY : ay;
+    //    for (int y = sy; y <= ey; ++y)
+    //        carve(ax, y, (ay < midY) ? Direction::eSouth : Direction::eNorth);
+
+    //    // 横に掘る（ax → bx, y固定）
+    //    int sx = std::min(ax, bx);
+    //    int ex = std::max(ax, bx);
+    //    for (int x = sx; x <= ex; ++x)
+    //        carve(x, midY, (ax < bx) ? Direction::eEast : Direction::eWest);
+
+    //    // 再度縦に掘る（midY → by）
+    //    sy = (midY < by) ? midY : by;
+    //    ey = (midY < by) ? by : midY;
+    //    for (int y = sy; y <= ey; ++y)
+    //        carve(bx, y, (midY < by) ? Direction::eSouth : Direction::eNorth);
+    //}
+    //else
+    //{
+    //    // 横→縦→横のZ字
+    //    int sx = (ax < midX) ? ax : midX;
+    //    int ex = (ax < midX) ? midX : ax;
+    //    for (int x = sx; x <= ex; ++x)
+    //        carve(x, ay, (ax < midX) ? Direction::eEast : Direction::eWest);
+
+    //    int sy = std::min(ay, by);
+    //    int ey = std::max(ay, by);
+    //    for (int y = sy; y <= ey; ++y)
+    //        carve(midX, y, (ay < by) ? Direction::eSouth : Direction::eNorth);
+
+    //    sx = (midX < bx) ? midX : bx;
+    //    ex = (midX < bx) ? bx : midX;
+    //    for (int x = sx; x <= ex; ++x)
+    //        carve(x, by, (midX < bx) ? Direction::eEast : Direction::eWest);
+    //}
+
 }
 
 // 方角の正反対を返す
@@ -412,7 +463,6 @@ CBspMap::Direction CBspMap::InverseDirection(Direction dir) const
 }
 
 #if _DEBUG
-
 // 区画の境界線を設定
 void CBspMap::DrawBoundary(SectionNode* node, std::vector<std::vector<Tile>>& map){
     if (node == nullptr) {
@@ -438,7 +488,7 @@ void CBspMap::DrawBoundary(SectionNode* node, std::vector<std::vector<Tile>>& ma
 
             // 分割線（X座標が boundaryX のライン）を上から下まで描画
             for (int y = node->y; y < node->y + node->height; y++) {
-                // マップの範囲チェック（任意だが安全）
+                // マップの範囲チェック
                 if (y >= 0 && y < map.size() && boundaryX >= 0 && boundaryX < map[0].size()) {
                     map[y][boundaryX].type = TileType::eBoundary;
                 }
@@ -452,7 +502,7 @@ void CBspMap::DrawBoundary(SectionNode* node, std::vector<std::vector<Tile>>& ma
 
             // 分割線（Y座標が boundaryY のライン）を左から右まで描画
             for (int x = node->x; x < node->x + node->width; x++) {
-                // マップの範囲チェック（任意だが安全）
+                // マップの範囲チェック
                 if (boundaryY >= 0 && boundaryY < map.size() && x >= 0 && x < map[0].size()) {
                     map[boundaryY][x].type = TileType::eBoundary;
                 }

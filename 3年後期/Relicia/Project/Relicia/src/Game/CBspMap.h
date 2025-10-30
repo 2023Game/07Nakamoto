@@ -25,6 +25,8 @@ public:
 	// 方向を表すデータ
 	enum class Direction
 	{
+		None,
+
 		eNorth,	// 北(y-1の方向)
 		eSouth,	// 南(y+1の方向)
 		eEast,	// 東(x+1の方向)
@@ -42,7 +44,7 @@ public:
 		TileType type;	// タイルの種類
 		Direction dir;	// 向き
 		bool passage;	// 通路かどうか
-		bool wall;		// 壁があるかどうか
+		bool passageWall;	// 通路の壁を生成したか
 	};
 
 	// 部屋の情報
@@ -79,6 +81,11 @@ public:
 
 	// BSPマップデータの取得
 	const std::vector<std::vector<Tile>>& GetTileData()const;
+	// 通路の壁を生成フラグをtrueにする
+	void SetPassageWall(int x,int y);
+
+	// 部屋の内側で壁に近いか
+	bool IsNearRoomWall(const CVector2& pos);
 
 private:
 	// ノードの削除
@@ -99,6 +106,7 @@ private:
 	void CreateRoomWall(const Room& room, std::vector<std::vector<Tile>>& map);
 	// 部屋の四隅データの柱を設定
 	void CreateRoomPillar(const Room& room, std::vector<std::vector<Tile>>& map);
+
 	// 同じ階層の部屋同士を通路で繋げる
 	void ConnectRooms(SectionNode* node, std::vector<std::vector<Tile>>& map);
 

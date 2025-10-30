@@ -170,6 +170,7 @@ int CField::ConvertDirectionAngle(CBspMap::Direction dir) const
 	}
 }
 
+// BPMマップのダンジョンの生成
 void CField::SetMapData(const std::vector<std::vector<CBspMap::Tile>>& map)
 {
 	for (int y = 0; y < map.size(); ++y)
@@ -180,6 +181,7 @@ void CField::SetMapData(const std::vector<std::vector<CBspMap::Tile>>& map)
 
 			switch (map[y][x].type)
 			{
+			// 床
 			case CBspMap::TileType::eFloor:
 			{
 				// 床の生成
@@ -189,6 +191,7 @@ void CField::SetMapData(const std::vector<std::vector<CBspMap::Tile>>& map)
 
 				break;
 			}
+			// 壁
 			case CBspMap::TileType::eWall:
 			{
 				// 壁の生成
@@ -207,27 +210,9 @@ void CField::SetMapData(const std::vector<std::vector<CBspMap::Tile>>& map)
 					// 床のリストに追加
 					mpFloorObjects.push_back(floor);
 				}
-				// 通路だったら正反対にも壁を生成する
-				if (map[y][x].wall)
-				{
-					// 壁の生成
-					CWall* wall = new CWall(CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE));
-					// 壁の回転値を設定
-					switch (tile.dir)
-					{
-					case CBspMap::Direction::eNorth: wall->Rotation(CVector(0.0f, 0.0f, 0.0f));		break;
-					case CBspMap::Direction::eEast: wall->Rotation(CVector(0.0f, 90.0f, 0.0f));		break;
-					case CBspMap::Direction::eSouth: wall->Rotation(CVector(0.0f, 180.0f, 0.0f));	break;
-					case CBspMap::Direction::eWest: wall->Rotation(CVector(0.0f, 270.0f, 0.0f));	break;
-					default:
-						break;
-					}
-					// 壁のリストに追加
-					mpWallObjects.push_back(wall);
-				}
-
 				break;
 			}
+			// 柱
 			case CBspMap::TileType::ePillar:
 			{
 				//方向に応じて座標を修正
@@ -272,6 +257,7 @@ void CField::SetMapData(const std::vector<std::vector<CBspMap::Tile>>& map)
 				}
 				break;
 			}
+			// 出入口
 			case CBspMap::TileType::eEntrance:
 			{
 				// 出入口の生成
@@ -286,12 +272,16 @@ void CField::SetMapData(const std::vector<std::vector<CBspMap::Tile>>& map)
 				// 床のリストに追加
 				mpFloorObjects.push_back(floor);
 
+				// 壁の生成
+				
+
 				//CDoor* door = new CDoor(CVector((x + 0.5f) * TILE_SIZE + offSetPosX, 0, (y + 0.5f) * TILE_SIZE + offSetPosZ));
 				//door->Rotate(0.0f, rotY, 0.0f);
 				//// 扉のリストに追加
 				//mpDoorObjects.push_back(door);
 				break;
 			}
+			// 通路
 			case CBspMap::TileType::ePassage:
 			{
 				// 床の生成
@@ -299,45 +289,70 @@ void CField::SetMapData(const std::vector<std::vector<CBspMap::Tile>>& map)
 				// 床のリストに追加
 				mpFloorObjects.push_back(floor);
 
-				// 北向きの場合
-				if (map[y][x].dir == CBspMap::Direction::eNorth && map[y][x].wall)
-				{
-					// 右の壁の生成
-					CWall* wall = new CWall(CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE));
-					// 壁の回転値を設定
-					wall->Rotation(0.0f, 90.0f, 0.0f);
-					// 壁のリストに追加
-					mpWallObjects.push_back(wall);
-					// 左の壁の生成
-					wall = new CWall(CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE));
-					// 壁の回転値を設定
-					wall->Rotation(0.0f, 270.0f, 0.0f);
-					// 壁のリストに追加
-					mpWallObjects.push_back(wall);
-				}
-				// 東向きの場合
-				else if (map[y][x].dir == CBspMap::Direction::eEast && map[y][x].wall)
-				{
-					// 上の壁の生成
-					CWall* wall = new CWall(CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE));
-					// 壁の回転値を設定
-					wall->Rotation(0.0f, 180.0f, 0.0f);
-					// 壁のリストに追加
-					mpWallObjects.push_back(wall);
-					// 下の壁の生成
-					wall = new CWall(CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE));
-					// 壁の回転値を設定
-					wall->Rotation(0.0f, 0.0f, 0.0f);
-					// 壁のリストに追加
-					mpWallObjects.push_back(wall);
-
-				}
 				break;
 			}
 			default:
 				break;
 			}
+
+			// 通路フラグがtrueなら
+			if (map[y][x].passage)
+			{
+				// 通路の壁を生成
+				CreatePassageWall(map, x, y);
+				// 通路の壁を生成したフラグをtrueにする
+				mpMapData->SetPassageWall(x, y);
+			}
 		}
+	}
+}
+
+// 通路の壁の生成
+void CField::CreatePassageWall(const std::vector<std::vector<CBspMap::Tile>>& map, int x, int y)
+{
+	// 上のタイルを確認
+	if (!map[y - 1][x].passage && map[y - 1][x].type != CBspMap::TileType::eFloor)
+	{
+		// 壁の生成
+		CWall* wall = new CWall(CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE));
+		// 壁の回転値を設定
+		int rotY = ConvertDirectionAngle(CBspMap::Direction::eSouth);
+		wall->Rotation(0.0f, rotY, 0.0f);
+		// 壁のリストに追加
+		mpWallObjects.push_back(wall);
+	}
+	// 右のタイルを確認
+	if (!map[y][x + 1].passage && map[y][x + 1].type != CBspMap::TileType::eFloor)
+	{
+		// 壁の生成
+		CWall* wall = new CWall(CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE));
+		// 壁の回転値を設定
+		int rotY = ConvertDirectionAngle(CBspMap::Direction::eWest);
+		wall->Rotation(0.0f, rotY, 0.0f);
+		// 壁のリストに追加
+		mpWallObjects.push_back(wall);
+	}
+	// 下のタイルを確認
+	if (!map[y + 1][x].passage && map[y + 1][x].type != CBspMap::TileType::eFloor)
+	{
+		// 壁の生成
+		CWall* wall = new CWall(CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE));
+		// 壁の回転値を設定
+		int rotY = ConvertDirectionAngle(CBspMap::Direction::eNorth);
+		wall->Rotation(0.0f, rotY, 0.0f);
+		// 壁のリストに追加
+		mpWallObjects.push_back(wall);
+	}
+	// 左のタイルを確認
+	if (!map[y][x - 1].passage && map[y][x - 1].type != CBspMap::TileType::eFloor)
+	{
+		// 壁の生成
+		CWall* wall = new CWall(CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE));
+		// 壁の回転値を設定
+		int rotY = ConvertDirectionAngle(CBspMap::Direction::eEast);
+		wall->Rotation(0.0f, rotY, 0.0f);
+		// 壁のリストに追加
+		mpWallObjects.push_back(wall);
 	}
 }
 

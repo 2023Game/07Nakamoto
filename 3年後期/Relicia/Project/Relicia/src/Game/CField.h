@@ -25,15 +25,18 @@ public:
 	void Render() override;
 
 private:
+	// ダンジョンマップの生成
 	void CreateMap();
 
 	void CreateFieldObjects();
 
 	// 方角によって回転値を設定
 	int ConvertDirectionAngle(CBspMap::Direction dir) const;
-
-	// BPMマップの部屋の生成
+	// BPMマップのダンジョンの生成
 	void SetMapData(const std::vector<std::vector<CBspMap::Tile>>& map);
+
+	// 通路の壁の生成
+	void CreatePassageWall(const std::vector<std::vector<CBspMap::Tile>>& map, int x, int y);
 
 	CModel* mpModel;
 	CColliderMesh* mpColliderMesh;
