@@ -47,11 +47,10 @@ public:
 		TileType type;	// タイルの種類
 		Direction dir;	// 向き
 		bool passage;	// 通路かどうか
-		bool passageWall;	// 通路の壁を生成したか
 	};
 
 	// 部屋の情報
-	struct Room : public CObjectBase
+	struct Room
 	{
 		int x, y;			// 部屋の左上の柱の座標
 		int width, height;	// 部屋のサイズ
@@ -84,14 +83,6 @@ public:
 
 	// BSPマップデータの取得
 	const std::vector<std::vector<Tile>>& GetTileData()const;
-	// ルートノードの取得
-	const SectionNode* GetRootNode() const;
-
-	// 通路の壁を生成フラグをtrueにする
-	void SetPassageWall(int x,int y);
-
-	// 部屋の内側で壁に近いか
-	bool IsNearRoomWall(const CVector2& pos);
 
 private:
 	// ノードの削除

@@ -47,25 +47,6 @@ const std::vector<std::vector<CBspMap::Tile>>& CBspMap::GetTileData() const
     return mMapData;
 }
 
-// ルートノードの取得
-const CBspMap::SectionNode* CBspMap::GetRootNode() const
-{
-    return mpRoot;
-}
-
-// 通路の壁を生成フラグをtrueにする
-void CBspMap::SetPassageWall(int x, int y)
-{
-    mMapData[y][x].passageWall = true;
-}
-
-// 部屋の内側で壁に近いか
-bool CBspMap::IsNearRoomWall(const CVector2& pos)
-{
-    return false;
-}
-
-
 // ノードの削除
 void CBspMap::DeleteNode(SectionNode* node)
 {
@@ -86,7 +67,7 @@ void CBspMap::Initialize(int width, int height)
     {
         for (auto& tile : row)
         {
-            tile = { TileType::None, Direction::eNorth, false, false };
+            tile = { TileType::None, Direction::eNorth, false};
         }
     }
 
@@ -300,9 +281,9 @@ CVector2 CBspMap::GetRoomRandomPos(SectionNode* node)
     if (!node->left && !node->right)
     {
         // 床領域を2マス内側にした範囲
-        int minX = node->room.x + 2;
+        int minX = node->room.x + 3;
         int maxX = node->room.x + node->room.width - 3;
-        int minY = node->room.y + 2;
+        int minY = node->room.y + 3;
         int maxY = node->room.y + node->room.height - 3;
 
         // もし部屋の幅/高さが小さい場合、中央一点に固定
@@ -347,8 +328,15 @@ void CBspMap::CreatePassage(std::vector<std::vector<Tile>>& map, SectionNode* no
             // 通路の進行方向と、壁の方向が一致(もしくは正反対)であれば、
             if (dir == curDir || dir == InverseDirection(curDir))
             {
-                // マップのタイルを出入口に変更
-                map[y][x].type = TileType::eEntrance;
+                if (map[y][x + 1].type != TileType::eEntrance &&
+                    map[y][x - 1].type != TileType::eEntrance &&
+                    map[y + 1][x].type != TileType::eEntrance &&
+                    map[y - 1][x].type != TileType::eEntrance)
+                {
+                    // マップのタイルを出入口に変更
+                    map[y][x].type = TileType::eEntrance;
+
+                }
             }
         }
         // 何も設定されていなければ、
@@ -377,17 +365,23 @@ void CBspMap::CreatePassage(std::vector<std::vector<Tile>>& map, SectionNode* no
 
     bool pattern = Math::Rand(0, 1);
 
+    // TODO:部屋をまたいで部屋が繋がった場合、まだ柱の隣が出入口になっている
+
     // 柱の隣の壁を出入口に変更しない処理
-    // startXとendの部屋の上下の端の床と同じ座標だった
-    if (startX == nodeA->room.x - 1 || startX == nodeA->room.x + nodeA->room.width - 1 ||
-        startX == nodeB->room.x - 1 || startX == nodeB->room.x + nodeB->room.width - 1)
+    // startXとendXの部屋の上下の端の床と同じ座標だった
+    if (startX == nodeA->room.x + 1 || startX == nodeA->room.x + nodeA->room.width - 1 ||
+        startX == nodeB->room.x + 1 || startX == nodeB->room.x + nodeB->room.width - 1 || 
+        endY == nodeA->room.y + 1 || endY == nodeA->room.y + nodeA->room.height - 1 ||
+        endY == nodeB->room.y + 1 || endY == nodeB->room.y + nodeB->room.height - 1)
     {
         // 縦→横で掘る
         pattern = false;
     }
-    // startYとendの部屋の左右の端の床と同じ座標だったら
-    else if (startY == nodeA->room.y - 1 || startY == nodeA->room.y + nodeA->room.height - 1 ||
-        startY == nodeB->room.y - 1 || startY == nodeB->room.y + nodeB->room.height - 1)
+    // startYとendYの部屋の左右の端の床と同じ座標だったら
+    else if (startY == nodeA->room.y + 1 || startY == nodeA->room.y + nodeA->room.height - 1 ||
+        startY == nodeB->room.y + 1 || startY == nodeB->room.y + nodeB->room.height - 1 ||
+        endX == nodeA->room.x + 1 || endX == nodeA->room.x + nodeA->room.width - 1 ||
+        endX == nodeB->room.x + 1 || endX == nodeB->room.x + nodeB->room.width - 1)
     {
         // 横→縦で掘る
         pattern = true;

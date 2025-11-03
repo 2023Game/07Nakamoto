@@ -298,8 +298,6 @@ void CField::SetMapData(const std::vector<std::vector<CBspMap::Tile>>& map)
 			{
 				// ’Ê˜H‚Ì•Ç‚ð¶¬
 				CreatePassageWall(map, x, y);
-				// ’Ê˜H‚Ì•Ç‚ð¶¬‚µ‚½ƒtƒ‰ƒO‚ðtrue‚É‚·‚é
-				mpMapData->SetPassageWall(x, y);
 			}
 		}
 	}
