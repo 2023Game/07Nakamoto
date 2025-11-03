@@ -47,6 +47,12 @@ const std::vector<std::vector<CBspMap::Tile>>& CBspMap::GetTileData() const
     return mMapData;
 }
 
+// ルートノードの取得
+const CBspMap::SectionNode* CBspMap::GetRootNode() const
+{
+    return mpRoot;
+}
+
 // 通路の壁を生成フラグをtrueにする
 void CBspMap::SetPassageWall(int x, int y)
 {
@@ -274,16 +280,16 @@ void CBspMap::ConnectRooms(SectionNode* node, std::vector<std::vector<Tile>>& ma
     ConnectRooms(node->left, map);
     ConnectRooms(node->right, map);
 
-    // 左の子の部屋のランダムな座標を取得
-    CVector2 leftRoom = GetRoomRandomPos(node->left);
-    // 右の子の部屋のランダムな座標を取得
-    CVector2 rightRoom = GetRoomRandomPos(node->right);
+    //// 左の子の部屋のランダムな座標を取得
+    //CVector2 leftRoom = GetRoomRandomPos(node->left);
+    //// 右の子の部屋のランダムな座標を取得
+    //CVector2 rightRoom = GetRoomRandomPos(node->right);
 
-    // どちらかが繋がっていなければ(通路の数を制限するため)
+    // 繋がっていなければ
     if (!node->left->room.connected && !node->right->room.connected)
     {
         // 2点を直線で結ぶように通路を作る
-        CreatePassage(map, leftRoom, rightRoom);
+        CreatePassage(map, node->left, node->right);
 
         node->left->room.connected = true;
         node->right->room.connected = true;
@@ -322,14 +328,20 @@ CVector2 CBspMap::GetRoomRandomPos(SectionNode* node)
 }
 
 // 部屋同士の通路データの設定
-void CBspMap::CreatePassage(std::vector<std::vector<Tile>>& map, CVector2 a, CVector2 b)
+void CBspMap::CreatePassage(std::vector<std::vector<Tile>>& map, SectionNode* nodeA, SectionNode* nodeB)
 {
+    // 左の子の部屋のランダムな座標を取得
+    CVector2 leftRoom = GetRoomRandomPos(nodeA);
+    // 右の子の部屋のランダムな座標を取得
+    CVector2 rightRoom = GetRoomRandomPos(nodeB);
+
     // 座標を整数で取得
-    int ax = a.X(), ay = a.Y();
-    int bx = b.X(), by = b.Y();
+    int ax = leftRoom.X(), ay = leftRoom.Y();
+    int bx = rightRoom.X(), by = rightRoom.Y();
 
     // ラムダ式
     // [&]：使用する外部変数を全て参照渡しでキャプチャする
+    // 通路データの書き換え
     auto carve = [&](int x, int y, Direction dir)
     {
         // 壁だった場合、
@@ -369,6 +381,22 @@ void CBspMap::CreatePassage(std::vector<std::vector<Tile>>& map, CVector2 a, CVe
     int endY = std::max(ay, by);
 
     bool pattern = Math::Rand(0, 1);
+
+    // 柱の隣の壁を出入口に変更しない処理
+    // startXとendの部屋の上下の端の床と同じ座標だった
+    if (startX == nodeA->room.x - 1 || startX == nodeA->room.x + nodeA->room.width - 1 ||
+        startX == nodeB->room.x - 1 || startX == nodeB->room.x + nodeB->room.width - 1)
+    {
+        // 縦→横で掘る
+        pattern = false;
+    }
+    // startYとendの部屋の左右の端の床と同じ座標だったら
+    else if (startY == nodeA->room.y - 1 || startY == nodeA->room.y + nodeA->room.height - 1 ||
+        startY == nodeB->room.y - 1 || startY == nodeB->room.y + nodeB->room.height - 1)
+    {
+        // 横→縦で掘る
+        pattern = true;
+    }
 
     // L字堀
     // 横→縦

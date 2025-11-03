@@ -76,6 +76,8 @@
     <ClCompile Include="src\BaseSystem\System.cpp" />
     <ClCompile Include="src\Game\CApplication.cpp" />
     <ClCompile Include="src\Game\CBspMap.cpp" />
+    <ClCompile Include="src\Game\CBspMapCollider.cpp" />
+    <ClCompile Include="src\Game\CBspMapManager.cpp" />
     <ClCompile Include="src\Game\CBullet.cpp" />
     <ClCompile Include="src\Game\CCactus.cpp" />
     <ClCompile Include="src\Game\CCactusNeedle.cpp" />
@@ -192,6 +194,8 @@
     <ClInclude Include="src\Define.h" />
     <ClInclude Include="src\Game\CApplication.h" />
     <ClInclude Include="src\Game\CBspMap.h" />
+    <ClInclude Include="src\Game\CBspMapCollider.h" />
+    <ClInclude Include="src\Game\CBspMapManager.h" />
     <ClInclude Include="src\Game\CBullet.h" />
     <ClInclude Include="src\Game\CCactus.h" />
     <ClInclude Include="src\Game\CCactusNeedle.h" />

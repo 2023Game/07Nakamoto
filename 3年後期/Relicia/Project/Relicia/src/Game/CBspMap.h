@@ -81,6 +81,9 @@ public:
 
 	// BSPマップデータの取得
 	const std::vector<std::vector<Tile>>& GetTileData()const;
+	// ルートノードの取得
+	const SectionNode* GetRootNode() const;
+
 	// 通路の壁を生成フラグをtrueにする
 	void SetPassageWall(int x,int y);
 
@@ -114,7 +117,7 @@ private:
 	CVector2 GetRoomRandomPos(SectionNode* node);
 
 	// 部屋同士の通路データの設定
-	void CreatePassage(std::vector<std::vector<Tile>>& map, CVector2 a, CVector2 b);
+	void CreatePassage(std::vector<std::vector<Tile>>& map, SectionNode* nodeA, SectionNode* nodeb);
 
 	// 方角の正反対を返す
 	Direction InverseDirection(Direction dir) const;
