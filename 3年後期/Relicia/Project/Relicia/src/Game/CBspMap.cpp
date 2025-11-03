@@ -280,11 +280,6 @@ void CBspMap::ConnectRooms(SectionNode* node, std::vector<std::vector<Tile>>& ma
     ConnectRooms(node->left, map);
     ConnectRooms(node->right, map);
 
-    //// 左の子の部屋のランダムな座標を取得
-    //CVector2 leftRoom = GetRoomRandomPos(node->left);
-    //// 右の子の部屋のランダムな座標を取得
-    //CVector2 rightRoom = GetRoomRandomPos(node->right);
-
     // 繋がっていなければ
     if (!node->left->room.connected && !node->right->room.connected)
     {

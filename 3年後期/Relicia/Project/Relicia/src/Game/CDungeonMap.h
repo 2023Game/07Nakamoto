@@ -1,7 +1,6 @@
 #pragma once
 #include "CDungeonManeger.h"
 
-#define TILE_SIZE 20.0f	// タイルモデルの大きさ
 
 #define ROOM_WIDTH 15	// １区画の幅
 #define ROOM_HEIGHT 15	// １区画の奥行

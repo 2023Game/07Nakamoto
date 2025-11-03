@@ -1,6 +1,9 @@
 #pragma once
+#include "CObjectBase.h"
 
-class CBspMap
+#define TILE_SIZE 20.0f	// タイルモデルの大きさ
+
+class CBspMap 
 {
 public:
 	// コンストラクタ
@@ -48,11 +51,11 @@ public:
 	};
 
 	// 部屋の情報
-	struct Room
+	struct Room : public CObjectBase
 	{
 		int x, y;			// 部屋の左上の柱の座標
 		int width, height;	// 部屋のサイズ
-
+		
 		// 部屋の種類
 		enum class RoomType
 		{

@@ -3,13 +3,11 @@
 #include "CMoveFloor.h"
 #include "CRotateFloor.h"
 #include "CLineEffect.h"
-#include "CDungeonMap.h"
 #include "CFloor.h"
 #include "CDoor.h"
 #include "CWall.h"
 #include "CPillar.h"
 #include "CEntrance.h"
-#include "CDungeonManeger.h"
 #include "CBspMap.h"
 
 #include "CDebugInput.h"
