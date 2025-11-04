@@ -55,4 +55,6 @@ private:
 	std::vector<CPillar*> mpPillarObjects;	// 柱のリスト
 	std::vector<CEntrance*> mpEntranceObjects;	// 出入口のリスト
 	std::vector<CDoor*> mpDoorObjects;		// 扉のリスト
+
+	CColliderTriangle* mpCol;
 };

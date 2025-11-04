@@ -27,7 +27,7 @@ CBspMap::CBspMap(int x, int y)
     PlaceRoom(mpRoot, mMapData);
     // “¯‚¶ŠK‘w‚Ì•”‰®“¯Žm‚ð’Ê˜H‚ÅŒq‚°‚é
     ConnectRooms(mpRoot, mMapData);
-
+    
 #if _DEBUG
     // ‚QŽŸŒ³”z—ñ‚ÌƒfƒoƒbƒO•\Ž¦
     PrintSection();

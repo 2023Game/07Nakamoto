@@ -9,8 +9,12 @@
 #include "CPillar.h"
 #include "CEntrance.h"
 #include "CBspMap.h"
+#include "CBspMapCollider.h"
 
+
+#include "CColliderTriangle.h"
 #include "CDebugInput.h"
+#include "CBspMapCollider.h"
 
 #define PILLAR_OFFSET_POS 10.0f	// 柱のオフセット座標
 
@@ -27,6 +31,8 @@ CField::CField()
 
 	// BSP法でダンジョン生成
 	CreateMap();
+
+	mpCol = new CColliderTriangle(this ,ELayer::eField,CVector(-5.0f, 1.5f, 5.0f), CVector(5.0f, 1.5f, 5.0f), CVector(5.0f, 1.5f, -5.0f));
 }
 
 CField::~CField()
