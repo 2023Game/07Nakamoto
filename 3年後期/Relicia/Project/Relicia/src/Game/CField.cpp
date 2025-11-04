@@ -9,7 +9,6 @@
 #include "CPillar.h"
 #include "CEntrance.h"
 #include "CBspMap.h"
-#include "CBspMapCollider.h"
 
 
 #include "CColliderTriangle.h"
@@ -31,9 +30,6 @@ CField::CField()
 
 	// BSP–@‚Åƒ_ƒ“ƒWƒ‡ƒ“¶¬
 	CreateMap();
-
-	//mpFloorCol = new CBspMapCollider(mpMapData->GetRootNode());
-	// mpCol = new CColliderTriangle(this ,ELayer::eField,CVector(-5.0f, 1.5f, 5.0f), CVector(5.0f, 1.5f, 5.0f), CVector(5.0f, 1.5f, -5.0f));
 }
 
 CField::~CField()

@@ -3,6 +3,8 @@
 
 #define TILE_SIZE 20.0f	// タイルモデルの大きさ
 
+class CBspMapCollider;
+
 class CBspMap 
 {
 public:
@@ -129,4 +131,6 @@ private:
 	SectionNode* mpRoot;
 	// ２次元配列(可変長配列)のマップデータ
 	std::vector<std::vector<Tile>> mMapData;
+
+	CBspMapCollider* mpFloorCol;
 };

@@ -17,6 +17,4 @@ public:
 	void Update() override;
 private:
 	std::vector<CColliderTriangle*> mpCollider;
-
-
 };

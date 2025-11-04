@@ -1,4 +1,5 @@
 #include "CBspMap.h"
+#include "CBspMapCollider.h"
 #include "Maths.h"
 
 // 区画の最小サイズ
@@ -11,6 +12,7 @@
 
 // コンストラクタ
 CBspMap::CBspMap(int x, int y)
+    : mpFloorCol(nullptr)
 {
     // 初期化
     Initialize(x, y);
@@ -28,6 +30,9 @@ CBspMap::CBspMap(int x, int y)
     // 同じ階層の部屋同士を通路で繋げる
     ConnectRooms(mpRoot, mMapData);
     
+    // 床のコライダーの生成
+    mpFloorCol = new CBspMapCollider(mpRoot);
+
 #if _DEBUG
     // ２次元配列のデバッグ表示
     PrintSection();
@@ -38,6 +43,9 @@ CBspMap::CBspMap(int x, int y)
 CBspMap::~CBspMap()
 {
     DeleteNode(mpRoot);
+
+    // コライダーの削除
+    mpFloorCol->Kill();
 }
 
 

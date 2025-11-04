@@ -9,6 +9,7 @@ class CWall;
 class CPillar;
 class CEntrance;
 class CDoor;
+class CBspMapCollider;
 class CDungeonManeger;
 
 class CField : public CObjectBase
@@ -56,8 +57,6 @@ private:
 	std::vector<CEntrance*> mpEntranceObjects;	// 出入口のリスト
 	std::vector<CDoor*> mpDoorObjects;		// 扉のリスト
 
-	CColliderTriangle* mpCol;
 	CBspMapCollider* mpFloorCol;
-	
-	const CBspMap::SectionNode* mpRoot;
+
 };
