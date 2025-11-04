@@ -1,9 +1,9 @@
 #include "CBspMapCollider.h"
 
 // コンストラクタ
-CBspMapCollider::CBspMapCollider()
+CBspMapCollider::CBspMapCollider(CBspMap::SectionNode* node)
 {
-
+    CreateFloorCollider(node);
 }
 
 // デストラクタ
@@ -22,25 +22,29 @@ void CBspMapCollider::CreateFloorCollider(CBspMap::SectionNode* node)
     if (!node->right || node->left)
     {
         // 床の三角形コライダー
-        CColliderTriangle collider = CColliderTriangle(this, ELayer::eField,
+        CColliderTriangle* collider =new CColliderTriangle(this, ELayer::eField,
             CVector(node->room.x + 1, 1, node->room.y + 1),
             CVector((node->room.x + node->room.width) * TILE_SIZE, 1, node->room.y - 1),
             CVector((node->room.x + node->room.width) * TILE_SIZE, 1, (node->room.y + node->room.height - 1) * TILE_SIZE));
 
-        mCollider.push_back(collider);
+        mpCollider.push_back(collider);
 
         // 床の三角形コライダー
-        collider = CColliderTriangle(this, ELayer::eField,
+        collider = new CColliderTriangle(this, ELayer::eField,
             CVector(node->room.x + 1, 1, node->room.y + 1),
             CVector(node->room.x + 1, 1, (node->room.y + node->room.height - 1) * TILE_SIZE),
             CVector((node->room.x + node->room.width) * TILE_SIZE, 1, (node->room.y + node->room.height - 1) * TILE_SIZE));
 
-        mCollider.push_back(collider);
+        mpCollider.push_back(collider);
     }
 }
 
 // 更新
 void CBspMapCollider::Update()
 {
+    for (CColliderTriangle* col : mpCollider)
+    {
+        col->Update();
+    }
 }
 

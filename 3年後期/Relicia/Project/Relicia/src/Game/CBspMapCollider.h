@@ -6,7 +6,7 @@ class CBspMapCollider : public CObjectBase
 {
 public:
 	// コンストラクタ
-	CBspMapCollider();
+	CBspMapCollider(CBspMap::SectionNode* node);
 	// デストラクタ
 	~CBspMapCollider();
 
@@ -16,7 +16,7 @@ public:
 	// 更新
 	void Update() override;
 private:
-	std::vector<CColliderTriangle> mCollider;
+	std::vector<CColliderTriangle*> mpCollider;
 
 
 };

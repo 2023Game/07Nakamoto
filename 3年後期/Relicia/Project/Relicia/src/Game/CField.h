@@ -57,4 +57,7 @@ private:
 	std::vector<CDoor*> mpDoorObjects;		// ”à‚ÌƒŠƒXƒg
 
 	CColliderTriangle* mpCol;
+	CBspMapCollider* mpFloorCol;
+	
+	const CBspMap::SectionNode* mpRoot;
 };

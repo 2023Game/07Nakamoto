@@ -83,6 +83,9 @@ public:
 
 	// BSPマップデータの取得
 	const std::vector<std::vector<Tile>>& GetTileData()const;
+	// ルートノードの取得
+	const SectionNode* GetRootNode()const;
+
 private:
 	// ノードの削除
 	void DeleteNode(SectionNode* node);

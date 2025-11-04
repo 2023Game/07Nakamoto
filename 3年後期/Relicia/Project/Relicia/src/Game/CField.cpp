@@ -32,7 +32,8 @@ CField::CField()
 	// BSP法でダンジョン生成
 	CreateMap();
 
-	mpCol = new CColliderTriangle(this ,ELayer::eField,CVector(-5.0f, 1.5f, 5.0f), CVector(5.0f, 1.5f, 5.0f), CVector(5.0f, 1.5f, -5.0f));
+	//mpFloorCol = new CBspMapCollider(mpMapData->GetRootNode());
+	// mpCol = new CColliderTriangle(this ,ELayer::eField,CVector(-5.0f, 1.5f, 5.0f), CVector(5.0f, 1.5f, 5.0f), CVector(5.0f, 1.5f, -5.0f));
 }
 
 CField::~CField()
@@ -63,8 +64,10 @@ void CField::CreateMap()
 		mpEntranceObjects.clear();
 		mpDoorObjects.clear();
 	}
-	// BSP法でダンジョン生成
+
+	// BSP法のダンジョンデータを生成
 	mpMapData = new CBspMap(50, 50);
+	// BSP法のダンジョン生成
 	SetMapData(mpMapData->GetTileData());
 }
 

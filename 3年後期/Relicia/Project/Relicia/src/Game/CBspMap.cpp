@@ -47,6 +47,12 @@ const std::vector<std::vector<CBspMap::Tile>>& CBspMap::GetTileData() const
     return mMapData;
 }
 
+// ルートノードの取得
+const CBspMap::SectionNode* CBspMap::GetRootNode() const
+{
+    return mpRoot;
+}
+
 // ノードの削除
 void CBspMap::DeleteNode(SectionNode* node)
 {
