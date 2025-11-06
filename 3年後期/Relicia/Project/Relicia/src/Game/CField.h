@@ -20,6 +20,9 @@ public:
 	// デストラクタ
 	~CField();
 
+	// 2次元配列のダンジョンデータを取得
+	const CBspMap* GetMapData() const;
+
 	// 更新
 	void Update() override;
 	// 描画

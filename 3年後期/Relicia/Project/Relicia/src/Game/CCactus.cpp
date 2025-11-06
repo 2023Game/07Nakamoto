@@ -71,7 +71,7 @@ CCactus::CCactus()
 	);
 	// フィールドと、プレイヤーの攻撃コライダーとヒットするように設定
 	mpBodyCol->SetCollisionTags({ ETag::eField, ETag::ePlayer });
-	mpBodyCol->SetCollisionLayers({ ELayer::eField, ELayer::ePlayer, ELayer::eAttackCol });
+	mpBodyCol->SetCollisionLayers({ ELayer::eFloor, ELayer::eWall, ELayer::ePlayer, ELayer::eAttackCol });
 
 	// 攻撃コライダーを作成
 	mpAttack1Col = new CColliderSphere

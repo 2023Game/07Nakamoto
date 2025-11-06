@@ -79,7 +79,7 @@ void CEnemy::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 	if (self == mpBodyCol)
 	{
 		// フィールドと衝突した
-		if (other->Layer() == ELayer::eField)
+		if (other->Layer() == ELayer::eFloor)
 		{
 			// 坂道で滑らないように、押し戻しベクトルのXとZの値を0にする
 			CVector adjust = hit.adjust;

@@ -31,7 +31,7 @@ CBspMap::CBspMap(int x, int y)
     ConnectRooms(mpRoot, mMapData);
     
     // 床のコライダーの生成
-    mpFloorCol = new CBspMapCollider(mpRoot);
+    mpFloorCol = new CBspMapCollider(this,mpRoot);
 
 #if _DEBUG
     // ２次元配列のデバッグ表示
@@ -59,6 +59,87 @@ const std::vector<std::vector<CBspMap::Tile>>& CBspMap::GetTileData() const
 const CBspMap::SectionNode* CBspMap::GetRootNode() const
 {
     return mpRoot;
+}
+
+// 部屋の壁の情報を返す
+std::vector<CBspMap::WallSegment> CBspMap::CollectWallSegments() const
+{
+    std::vector<WallSegment> walls;
+
+    // タイル走査して壁の連続範囲を検出
+    // 左から右へ走査して連続する壁をまとめる
+    for (size_t y = 0; y < mMapData.size(); ++y)
+    {
+        int xStart = -1;
+        CBspMap::Direction dir = CBspMap::Direction::None;
+
+        for (size_t x = 0; x < mMapData[y].size(); ++x)
+        {
+            const int ix = static_cast<int>(x);
+            const int iy = static_cast<int>(y);
+
+            bool isWall = (mMapData[iy][ix].type == TileType::eWall);
+
+            if (isWall && xStart == -1)
+            {
+                xStart = ix;
+                dir = mMapData[iy][ix].dir;
+            }
+            else if ((!isWall || ix == mMapData[iy].size() - 1) && xStart != -1)
+            {
+                int xEnd = isWall ? ix : ix - 1;
+                walls.push_back({ {xStart, iy},{xEnd, iy}, dir });
+                xStart = -1;
+            }
+
+            // 最終列が壁で終わった場合の補正
+            if (xStart != -1)
+            {
+                walls.push_back({
+                    {xStart, static_cast<int>(y)},
+                    {static_cast<int>(mMapData[y].size()) - 1, static_cast<int>(y)},
+                     dir });
+            }
+        }
+    }
+
+    // 上から下へ走査して連続する壁をまとめる
+    for (size_t x = 0; x < mMapData[0].size(); ++x)
+    {
+        int yStart = -1;
+        CBspMap::Direction dir = CBspMap::Direction::None;
+
+        for (size_t y = 0; y < mMapData.size(); ++y)
+        {
+            const int ix = static_cast<int>(x);
+            const int iy = static_cast<int>(y);
+
+            bool isWall = (mMapData[iy][ix].type == TileType::eWall);
+
+            if (isWall && yStart == -1)
+            {
+                yStart = iy;
+                dir = mMapData[iy][ix].dir;
+            }
+            else if ((!isWall || iy == mMapData.size() - 1) && yStart != -1)
+            {
+                int yEnd = isWall ? iy : iy - 1;
+                walls.push_back({ {ix, yStart},{ix, yEnd}, dir });
+                yStart = -1;
+            }
+        }
+
+        // 最終行が壁で終わった場合の補正
+        if (yStart != -1)
+        {
+            walls.push_back(
+                  { {static_cast<int>(x), yStart},
+                    {static_cast<int>(x), static_cast<int>(mMapData.size()) - 1},
+                     dir });
+        }
+    }
+
+    return walls;
 }
 
 // ノードの削除

@@ -83,10 +83,21 @@ public:
 		Room room; // 部屋データ
 	};
 
+	// 壁の線分情報を格納する構造体
+	struct WallSegment
+	{
+		CVector2 start;	// 壁のスタート座標
+		CVector2 end;	// 壁の終了座標
+		Direction dir;	// 向き
+	};
+
 	// BSPマップデータの取得
 	const std::vector<std::vector<Tile>>& GetTileData()const;
 	// ルートノードの取得
 	const SectionNode* GetRootNode()const;
+
+	// 部屋の壁の情報を返す
+	std::vector<WallSegment> CBspMap::CollectWallSegments() const;
 
 private:
 	// ノードの削除
@@ -131,6 +142,7 @@ private:
 	SectionNode* mpRoot;
 	// ２次元配列(可変長配列)のマップデータ
 	std::vector<std::vector<Tile>> mMapData;
-
+	
+	// コライダーのポンタ
 	CBspMapCollider* mpFloorCol;
 };

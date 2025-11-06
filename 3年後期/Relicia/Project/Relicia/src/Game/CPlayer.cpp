@@ -98,7 +98,7 @@ CPlayer::CPlayer()
 		BODY_RADIUS
 	);
 	mpBodyCol->SetCollisionTags({ ETag::eField, ETag::eRideableObject, ETag::eEnemy });
-	mpBodyCol->SetCollisionLayers({ ELayer::eField, ELayer::eEnemy, ELayer::eAttackCol });
+	mpBodyCol->SetCollisionLayers({ ELayer::eFloor, ELayer::eEnemy, ELayer::eAttackCol });
 
 	mpSlashSE = CResourceManager::Get<CSound>("SlashSound");
 
@@ -641,7 +641,7 @@ void CPlayer::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 	if (self == mpBodyCol)
 	{
 		// フィールドとの衝突
-		if (other->Layer() == ELayer::eField)
+		if (other->Layer() == ELayer::eFloor)
 		{
 			// 坂道で滑らないように、押し戻しベクトルのXとZの値を0にする
 			CVector adjust = hit.adjust;

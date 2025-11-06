@@ -24,7 +24,7 @@ CField::CField()
 {
 	mpModel = CResourceManager::Get<CModel>("Field");
 
-	mpColliderMesh = new CColliderMesh(this, ELayer::eField, mpModel, true);
+	mpColliderMesh = new CColliderMesh(this, ELayer::eFloor, mpModel, true);
 
 	//CreateFieldObjects();
 
@@ -43,6 +43,13 @@ CField::~CField()
 	SAFE_DELETE(mpMapData);
 }
 
+// 2次元配列のダンジョンデータを取得
+const CBspMap* CField::GetMapData() const
+{
+	return mpMapData;
+}
+
+// ダンジョンマップを生成
 void CField::CreateMap()
 {
 	if (mpMapData != nullptr)
