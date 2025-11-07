@@ -31,8 +31,9 @@ CBspMap::CBspMap(int x, int y)
     ConnectRooms(mpRoot, mMapData);
     
     // 床のコライダーの生成
-    mpFloorCol = new CBspMapCollider(this,mpRoot);
+    mpFloorCol = new CBspMapCollider(this);
 
+    CollectWallSegments();
 #if _DEBUG
     // ２次元配列のデバッグ表示
     PrintSection();
@@ -75,30 +76,24 @@ std::vector<CBspMap::WallSegment> CBspMap::CollectWallSegments() const
 
         for (size_t x = 0; x < mMapData[y].size(); ++x)
         {
-            const int ix = static_cast<int>(x);
-            const int iy = static_cast<int>(y);
+            // 上下の壁かどうか
+            bool isWall = ((mMapData[y][x].dir == Direction::eNorth ||
+                            mMapData[y][x].dir == Direction::eSouth) &&
+                            mMapData[y][x].type == TileType::eWall);
 
-            bool isWall = (mMapData[iy][ix].type == TileType::eWall);
-
+            // 始めの壁だったら
             if (isWall && xStart == -1)
             {
-                xStart = ix;
-                dir = mMapData[iy][ix].dir;
+                xStart = (int)x;
+                dir = mMapData[y][x].dir;
             }
-            else if ((!isWall || ix == mMapData[iy].size() - 1) && xStart != -1)
+            else if (!isWall && xStart != -1 )
             {
-                int xEnd = isWall ? ix : ix - 1;
-                walls.push_back({ {xStart, iy},{xEnd, iy}, dir });
-                xStart = -1;
-            }
-
-            // 最終列が壁で終わった場合の補正
-            if (xStart != -1)
-            {
+                int xEnd = x;
                 walls.push_back({
-                    {xStart, static_cast<int>(y)},
-                    {static_cast<int>(mMapData[y].size()) - 1, static_cast<int>(y)},
-                     dir });
+                    CVector2((float)xStart, (float)y),
+                    CVector2((float)xEnd,   (float)y), dir });
+                xStart = -1;
             }
         }
     }
@@ -111,34 +106,26 @@ std::vector<CBspMap::WallSegment> CBspMap::CollectWallSegments() const
 
         for (size_t y = 0; y < mMapData.size(); ++y)
         {
-            const int ix = static_cast<int>(x);
-            const int iy = static_cast<int>(y);
-
-            bool isWall = (mMapData[iy][ix].type == TileType::eWall);
+            // 左右の壁かどうか
+            bool isWall = ((mMapData[y][x].dir == Direction::eEast ||
+                            mMapData[y][x].dir == Direction::eWest) &&
+                            mMapData[y][x].type == TileType::eWall);
 
             if (isWall && yStart == -1)
             {
-                yStart = iy;
-                dir = mMapData[iy][ix].dir;
+                yStart = (int)y;
+                dir = mMapData[y][x].dir;
             }
-            else if ((!isWall || iy == mMapData.size() - 1) && yStart != -1)
+            else if (!isWall && yStart != -1)
             {
-                int yEnd = isWall ? iy : iy - 1;
-                walls.push_back({ {ix, yStart},{ix, yEnd}, dir });
+                int yEnd = y;
+                walls.push_back(
+                    { CVector2((float)x, (float)yStart),
+                      CVector2((float)x, (float)yEnd), dir });
                 yStart = -1;
             }
         }
-
-        // 最終行が壁で終わった場合の補正
-        if (yStart != -1)
-        {
-            walls.push_back(
-                  { {static_cast<int>(x), yStart},
-                    {static_cast<int>(x), static_cast<int>(mMapData.size()) - 1},
-                     dir });
-        }
-    }
-
+     }
     return walls;
 }
 
@@ -292,7 +279,12 @@ void CBspMap::CreateRoomFloor(SectionNode* node, std::vector<std::vector<Tile>>&
     int maxRoomY = node->y + node->height - roomHeight - MARGIN;
     int roomY = Math::Rand(std::min(minRoomY, maxRoomY), std::max(minRoomY, maxRoomY));
 
-    node->room = { roomX, roomY, roomWidth, roomHeight, Room::RoomType::eNormal};
+    // 部屋の中心座標
+    float centerX = (minRoomX + maxRoomX) / 2;
+    float centerY = (minRoomY + maxRoomY) / 2;
+    CVector2 center(centerX, centerY);
+
+    node->room = { roomX, roomY, roomWidth, roomHeight, center, Room::RoomType::eNormal};
 
     // 床の生成 (部屋の内側のみを床に設定)
     for (int y = roomY + 1; y < roomY + roomHeight - 1; y++)

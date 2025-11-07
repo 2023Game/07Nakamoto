@@ -56,6 +56,7 @@ public:
 	{
 		int x, y;			// 部屋の左上の柱の座標
 		int width, height;	// 部屋のサイズ
+		CVector2 center;
 		
 		// 部屋の種類
 		enum class RoomType
@@ -66,7 +67,7 @@ public:
 			eExit,		// 脱出部屋
 		};
 
-		RoomType type;
+		RoomType type = RoomType::eNormal;
 
 		bool connected = false;	// 繋がっているか
 	};
@@ -98,6 +99,7 @@ public:
 
 	// 部屋の壁の情報を返す
 	std::vector<WallSegment> CBspMap::CollectWallSegments() const;
+
 
 private:
 	// ノードの削除
@@ -143,6 +145,7 @@ private:
 	// ２次元配列(可変長配列)のマップデータ
 	std::vector<std::vector<Tile>> mMapData;
 	
+	std::vector<WallSegment> mWalls;
 	// コライダーのポンタ
 	CBspMapCollider* mpFloorCol;
 };

@@ -68,19 +68,45 @@ void CBspMapCollider::CreateFloorCollider(const CBspMap::SectionNode* node)
 // 壁のコライダー生成
 void CBspMapCollider::CreateWallCollider(CBspMap* map)
 {
-    if (!map) return;
+    for (CBspMap::WallSegment seg : map->CollectWallSegments())
+    {
+        if (seg.dir == CBspMap::Direction::eSouth ||
+            seg.dir == CBspMap::Direction::eWest)
+        {
+            std::swap(seg.start, seg.end);
+        }
 
-    std::vector<CBspMap::WallSegment> walls = map->CollectWallSegments();
+        int offsetX = 0;
+        int offsetY = 0;
 
-    //// 上の壁の三角形コライダー
-    //CColliderTriangle* collider = new CColliderTriangle(this, ELayer::eWall,
-    //    CVector((node->room.x + node->room.width - 1) * TILE_SIZE, 0, (node->room.y + 1) * TILE_SIZE),
-    //    CVector((node->room.x + node->room.width - 1) * TILE_SIZE, 40, (node->room.y + 1) * TILE_SIZE),
-    //    CVector((node->room.x + 1) * TILE_SIZE, 40, (node->room.y + 1) * TILE_SIZE)
-    //);
-    //mpCollider.push_back(collider);
+        switch (seg.dir)
+        {
+        case CBspMap::Direction::eNorth:    offsetY = -TILE_SIZE - 2;    break;
+        case CBspMap::Direction::eEast:     offsetX = 2;    break;
+        case CBspMap::Direction::eSouth:    offsetY = 2;    break;
+        case CBspMap::Direction::eWest:     offsetX = -TILE_SIZE - 2;    break;
+            
+        default:
+            break;
+        }
 
+        // 壁の三角形コライダー
+        CColliderTriangle* collider = new CColliderTriangle(this, ELayer::eWall,
+            CVector(seg.end.X() * TILE_SIZE - offsetX, 0, seg.end.Y() * TILE_SIZE - offsetY),
+            CVector(seg.end.X() * TILE_SIZE - offsetX, 40, seg.end.Y() * TILE_SIZE - offsetY),
+            CVector(seg.start.X() * TILE_SIZE - offsetX, 40, seg.start.Y() * TILE_SIZE - offsetY));
 
+        mpCollider.push_back(collider);
+
+        // 壁の三角形コライダー
+        collider = new CColliderTriangle(this, ELayer::eWall,
+            CVector(seg.end.X() * TILE_SIZE - offsetX, 0, seg.end.Y() * TILE_SIZE - offsetY),
+            CVector(seg.start.X() * TILE_SIZE - offsetX, 40, seg.start.Y() * TILE_SIZE - offsetY),
+            CVector(seg.start.X() * TILE_SIZE - offsetX, 0, seg.start.Y() * TILE_SIZE - offsetY));
+
+        mpCollider.push_back(collider);
+
+    }
 }
 
 // 更新
