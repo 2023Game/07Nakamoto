@@ -30,10 +30,13 @@ CBspMap::CBspMap(int x, int y)
     // 同じ階層の部屋同士を通路で繋げる
     ConnectRooms(mpRoot, mMapData);
     
+    SetPassageData();
+
     // 床のコライダーの生成
     mpFloorCol = new CBspMapCollider(this);
 
     CollectWallSegments();
+
 #if _DEBUG
     // ２次元配列のデバッグ表示
     PrintSection();
@@ -62,10 +65,16 @@ const CBspMap::SectionNode* CBspMap::GetRootNode() const
     return mpRoot;
 }
 
-// 部屋の壁の情報を返す
-std::vector<CBspMap::WallSegment> CBspMap::CollectWallSegments() const
+// タイルの開始座標と終了座標のリストを取得
+const std::vector<CBspMap::TileSegment>& CBspMap::GetSegments() const
 {
-    std::vector<WallSegment> walls;
+    return mSegments;
+}
+
+// 部屋の壁の情報を返す
+std::vector<CBspMap::TileSegment> CBspMap::CollectWallSegments() const
+{
+    std::vector<TileSegment> walls;
 
     // タイル走査して壁の連続範囲を検出
     // 左から右へ走査して連続する壁をまとめる
@@ -92,7 +101,8 @@ std::vector<CBspMap::WallSegment> CBspMap::CollectWallSegments() const
                 int xEnd = x;
                 walls.push_back({
                     CVector2((float)xStart, (float)y),
-                    CVector2((float)xEnd,   (float)y), dir });
+                    CVector2((float)xEnd,   (float)y),
+                    TileType::eWall, dir });
                 xStart = -1;
             }
         }
@@ -121,7 +131,8 @@ std::vector<CBspMap::WallSegment> CBspMap::CollectWallSegments() const
                 int yEnd = y;
                 walls.push_back(
                     { CVector2((float)x, (float)yStart),
-                      CVector2((float)x, (float)yEnd), dir });
+                      CVector2((float)x, (float)yEnd), 
+                      TileType::eWall, dir });
                 yStart = -1;
             }
         }
@@ -422,7 +433,6 @@ void CBspMap::CreatePassage(std::vector<std::vector<Tile>>& map, SectionNode* no
                 {
                     // マップのタイルを出入口に変更
                     map[y][x].type = TileType::eEntrance;
-
                 }
             }
         }
@@ -564,6 +574,90 @@ CBspMap::Direction CBspMap::InverseDirection(Direction dir) const
     }
 
     return dir;
+}
+
+// 通路のまとまりを保存
+void CBspMap::SetPassageData()
+{
+    // 横方向の走査
+    for (int y = 0; y < mMapData.size(); ++y)
+    {
+        int startX = -1;
+
+        for (int x = 0; x < mMapData[y].size(); ++x)
+        {
+            // 横方向の通路かどうか
+            bool isPassage = (
+                (mMapData[y][x].passage &&
+                 mMapData[y][x].dir == Direction::eEast) || 
+                (mMapData[y][x].type == TileType::eEntrance &&
+                 mMapData[y][x].dir == Direction::eWest));
+
+            // 横方向かつ開始座標かどうか
+            if (isPassage && startX == -1)
+            {
+                startX = x;
+            }
+            // まだ通路かどうか
+            else if (!isPassage && startX != -1)
+            {
+                mSegments.push_back({
+                    CVector2(startX,y), CVector2(x,y),
+                    TileType::ePassage, Direction::eEast
+                    });
+
+                startX = -1;
+            }
+        }
+        // 行の最後まで通路が続いていた場合
+        if (startX != -1)
+        {
+            mSegments.push_back({
+                CVector2(startX, y), CVector2((int)mMapData[y].size() - 1, y),
+                TileType::ePassage, Direction::eEast
+                });
+        }
+    }
+
+
+    // 縦方向の走査
+    for (int x = 0; x < mMapData[0].size(); ++x)
+    {
+        int startY = -1;
+
+        for (int y = 0; y < mMapData.size(); ++y)
+        {
+            // 縦方向の通路かどうか
+            bool isPassage = (
+                mMapData[y][x].passage &&
+                mMapData[y][x].dir == Direction::eNorth
+                );
+
+            // 縦方向かつ開始座標かどうか
+            if (isPassage && startY == -1)
+            {
+                startY = y;
+            }
+            // まだ通路かどうか
+            else if(!isPassage&& startY != -1)
+            {
+                mSegments.push_back({
+                    CVector2(x,startY), CVector2(x,y),
+                    TileType::ePassage, Direction::eNorth
+                    });
+
+                startY = -1;
+            }
+        }
+        // 行の最後まで通路が続いていた場合
+        if (startY != -1)
+        {
+            mSegments.push_back({
+                CVector2(x, startY), CVector2((int)mMapData.size() - 1, startY),
+                TileType::ePassage, Direction::eNorth
+                });
+        }
+    }
 }
 
 #if _DEBUG

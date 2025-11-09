@@ -280,11 +280,9 @@ void CField::SetMapData(const std::vector<std::vector<CBspMap::Tile>>& map)
 				// 床の生成
 				CFloor* floor = new CFloor(CVector((x + 0.5f) * TILE_SIZE, 1, (y + 0.5f) * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
 				// 床のリストに追加
-				mpFloorObjects.push_back(floor);
+				mpFloorObjects.push_back(floor);				
 
-				// 壁の生成
-				
-
+				// 扉の生成
 				//CDoor* door = new CDoor(CVector((x + 0.5f) * TILE_SIZE + offSetPosX, 0, (y + 0.5f) * TILE_SIZE + offSetPosZ));
 				//door->Rotate(0.0f, rotY, 0.0f);
 				//// 扉のリストに追加

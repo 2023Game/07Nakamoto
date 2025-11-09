@@ -10,12 +10,15 @@ public:
 	// デストラクタ
 	~CBspMapCollider();
 
+	// 通路のコライダーを生成
+	void CreatePassage(CBspMap* map);
+
 	// 更新
 	void Update() override;
 private:
 	// 部屋のコライダーを生成
 	void CreateRoomCollider(const CBspMap::SectionNode* node);
-	// 床のコライダー生成
+	// 部屋の床のコライダー生成
 	void CreateFloorCollider(const CBspMap::SectionNode* node);
 	// 壁のコライダー生成
 	void CreateWallCollider(CBspMap* map);

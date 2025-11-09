@@ -12,6 +12,8 @@ CBspMapCollider::CBspMapCollider(CBspMap* map)
     CreateRoomCollider(map->GetRootNode());
 
     CreateWallCollider(map);
+
+    CreatePassage(map);
 }
 
 // デストラクタ
@@ -23,6 +25,33 @@ CBspMapCollider::~CBspMapCollider()
         delete col;
     }
     mpCollider.clear();
+}
+
+// 通路のコライダーを生成
+void CBspMapCollider::CreatePassage(CBspMap* map)
+{
+    for (CBspMap::TileSegment seg : map->GetSegments())
+    {
+        if (seg.type != CBspMap::TileType::ePassage) continue;
+
+        // 床の三角形コライダー
+        CColliderTriangle* collider = new CColliderTriangle(this, ELayer::eFloor,
+            CVector(seg.end.X() * TILE_SIZE, 3, seg.end.Y() * TILE_SIZE + TILE_SIZE),
+            CVector(seg.end.X() * TILE_SIZE, 3, seg.end.Y() * TILE_SIZE),
+            CVector(seg.start.X() * TILE_SIZE, 3, seg.start.Y() * TILE_SIZE)
+        );
+
+        mpCollider.push_back(collider);
+
+        //// 床の三角形コライダー
+        //collider = new CColliderTriangle(this, ELayer::eFloor,
+        //    CVector(seg.start.X() * TILE_SIZE, 3, seg.start.Y() * TILE_SIZE),
+        //    CVector(seg.start.X() * TILE_SIZE, 3, seg.start.Y() * TILE_SIZE + TILE_SIZE),
+        //    CVector(seg.end.X() * TILE_SIZE, 3, seg.end.Y() * TILE_SIZE + TILE_SIZE)
+        //);
+
+        //mpCollider.push_back(collider);
+    }
 }
 
 // 部屋のコライダーを生成
@@ -44,7 +73,7 @@ void CBspMapCollider::CreateRoomCollider(const CBspMap::SectionNode* node)
     CreateRoomCollider(node->right);
 }
 
-// 床のコライダー生成
+// 部屋の床のコライダー生成
 void CBspMapCollider::CreateFloorCollider(const CBspMap::SectionNode* node)
 {
     // 床の三角形コライダー
@@ -68,8 +97,10 @@ void CBspMapCollider::CreateFloorCollider(const CBspMap::SectionNode* node)
 // 壁のコライダー生成
 void CBspMapCollider::CreateWallCollider(CBspMap* map)
 {
-    for (CBspMap::WallSegment seg : map->CollectWallSegments())
+    for (CBspMap::TileSegment seg : map->CollectWallSegments())
     {
+        if (seg.type != CBspMap::TileType::eWall) continue;
+
         if (seg.dir == CBspMap::Direction::eSouth ||
             seg.dir == CBspMap::Direction::eWest)
         {
@@ -85,9 +116,6 @@ void CBspMapCollider::CreateWallCollider(CBspMap* map)
         case CBspMap::Direction::eEast:     offsetX = 2;    break;
         case CBspMap::Direction::eSouth:    offsetY = 2;    break;
         case CBspMap::Direction::eWest:     offsetX = -TILE_SIZE - 2;    break;
-            
-        default:
-            break;
         }
 
         // 壁の三角形コライダー
