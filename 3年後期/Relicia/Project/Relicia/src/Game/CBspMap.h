@@ -43,12 +43,20 @@ public:
 		eNorthWest,	// 北西
 	};
 
+	// 通路の情報
+	struct Passage
+	{
+		Direction dir;	// 向き
+	};
+
 	// タイルの情報
 	struct Tile
 	{
 		TileType type;	// タイルの種類
 		Direction dir;	// 向き
 		bool passage;	// 通路かどうか
+
+		Passage passageData;
 	};
 
 	// 部屋の情報
@@ -56,7 +64,7 @@ public:
 	{
 		int x, y;			// 部屋の左上の柱の座標
 		int width, height;	// 部屋のサイズ
-		CVector2 center;
+		//CVector2 center;
 		
 		// 部屋の種類
 		enum class RoomType
@@ -102,7 +110,6 @@ public:
 
 	// 部屋の壁の情報を返す
 	std::vector<TileSegment> CBspMap::CollectWallSegments() const;
-
 
 private:
 	// ノードの削除

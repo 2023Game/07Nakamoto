@@ -10,7 +10,7 @@
 #include "CEntrance.h"
 #include "CBspMap.h"
 
-
+#include "Maths.h"
 #include "CColliderTriangle.h"
 #include "CDebugInput.h"
 #include "CBspMapCollider.h"
@@ -47,6 +47,17 @@ CField::~CField()
 const CBspMap* CField::GetMapData() const
 {
 	return mpMapData;
+}
+
+// 床タイルのランダムな座標を取得
+const CVector CField::GetRandomFloorPos() const
+{
+	if (!mpFloorObjects.empty())
+	{
+		int index = Math::Rand(0, mpFloorObjects.size() - 1);
+
+		return mpFloorObjects[index]->Position();
+	}
 }
 
 // ダンジョンマップを生成

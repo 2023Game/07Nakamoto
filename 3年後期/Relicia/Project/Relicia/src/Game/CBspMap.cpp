@@ -291,11 +291,11 @@ void CBspMap::CreateRoomFloor(SectionNode* node, std::vector<std::vector<Tile>>&
     int roomY = Math::Rand(std::min(minRoomY, maxRoomY), std::max(minRoomY, maxRoomY));
 
     // 部屋の中心座標
-    float centerX = (minRoomX + maxRoomX) / 2;
-    float centerY = (minRoomY + maxRoomY) / 2;
-    CVector2 center(centerX, centerY);
+    //float centerX = (minRoomX + maxRoomX) / 2;
+    //float centerY = (minRoomY + maxRoomY) / 2;
+    //CVector2 center(centerX, centerY);
 
-    node->room = { roomX, roomY, roomWidth, roomHeight, center, Room::RoomType::eNormal};
+    node->room = { roomX, roomY, roomWidth, roomHeight, Room::RoomType::eNormal};
 
     // 床の生成 (部屋の内側のみを床に設定)
     for (int y = roomY + 1; y < roomY + roomHeight - 1; y++)
@@ -413,6 +413,8 @@ void CBspMap::CreatePassage(std::vector<std::vector<Tile>>& map, SectionNode* no
     int ax = leftRoom.X(), ay = leftRoom.Y();
     int bx = rightRoom.X(), by = rightRoom.Y();
 
+    int startColX = -1, startColY = -1;
+
     // ラムダ式
     // [&]：使用する外部変数を全て参照渡しでキャプチャする
     // 通路データの書き換え
@@ -449,8 +451,8 @@ void CBspMap::CreatePassage(std::vector<std::vector<Tile>>& map, SectionNode* no
         {
             // 通路フラグをオンにする
             map[y][x].passage = true;
+            map[y][x].passageData.dir = dir;
         }
-
     };
 
     // 横方向
@@ -584,14 +586,14 @@ void CBspMap::SetPassageData()
     {
         int startX = -1;
 
+        int startUpWallX = -1;
+        int startDownWallX = -1;
+
         for (int x = 0; x < mMapData[y].size(); ++x)
         {
             // 横方向の通路かどうか
-            bool isPassage = (
-                (mMapData[y][x].passage &&
-                 mMapData[y][x].dir == Direction::eEast) || 
-                (mMapData[y][x].type == TileType::eEntrance &&
-                 mMapData[y][x].dir == Direction::eWest));
+            bool isPassage = mMapData[y][x].passage && 
+                mMapData[y][x].passageData.dir == Direction::eEast;
 
             // 横方向かつ開始座標かどうか
             if (isPassage && startX == -1)
@@ -608,7 +610,42 @@ void CBspMap::SetPassageData()
 
                 startX = -1;
             }
+
+            // 通路の上下の壁のコライダー
+            bool upWall = mMapData[y][x].passage && !mMapData[y - 1][x].passage &&
+                (mMapData[y - 1][x].type != TileType::eFloor || mMapData[y][x].type == TileType::eWall);
+            bool downWall = mMapData[y][x].passage && !mMapData[y + 1][x].passage && 
+                (mMapData[y + 1][x].type != TileType::eFloor || mMapData[y][x].type == TileType::eWall);
+
+            // 上の壁
+            if (upWall && startUpWallX == -1)
+            {
+                startUpWallX = x;
+            }
+            else if (!upWall && startUpWallX != -1)
+            {
+                mSegments.push_back({
+                    CVector2(startUpWallX,y), CVector2(x,y),
+                    TileType::eWall, Direction::eNorth });
+
+                startUpWallX = -1;
+            }
+
+            // 下の壁
+            if (downWall && startDownWallX == -1)
+            {
+                startDownWallX = x;
+            }
+            else if (!downWall && startDownWallX != -1)
+            {
+                mSegments.push_back({
+                    CVector2(startDownWallX,y), CVector2(x,y),
+                    TileType::eWall, Direction::eSouth });
+
+                startDownWallX = -1;
+            }
         }
+
         // 行の最後まで通路が続いていた場合
         if (startX != -1)
         {
@@ -616,7 +653,28 @@ void CBspMap::SetPassageData()
                 CVector2(startX, y), CVector2((int)mMapData[y].size() - 1, y),
                 TileType::ePassage, Direction::eEast
                 });
+
+            startX = - 1;
         }
+        // 行の最後まで上の壁が続いていた場合
+        if (startUpWallX != -1)
+        {
+            mSegments.push_back({
+            CVector2(startUpWallX,y), CVector2((int)mMapData[y].size() - 1,y),
+            TileType::eWall, Direction::eNorth });
+
+            startUpWallX = -1;
+        }
+        // 行の最後まで下の壁が続いていた場合
+        if (startDownWallX != -1)
+        {
+            mSegments.push_back({
+            CVector2(startDownWallX,y), CVector2((int)mMapData[y].size() - 1,y),
+            TileType::eWall, Direction::eSouth });
+
+            startDownWallX = -1;
+        }
+
     }
 
 
@@ -625,13 +683,14 @@ void CBspMap::SetPassageData()
     {
         int startY = -1;
 
+        int startLeftWallY = -1;
+        int startRightWallY = -1;
+
         for (int y = 0; y < mMapData.size(); ++y)
         {
             // 縦方向の通路かどうか
-            bool isPassage = (
-                mMapData[y][x].passage &&
-                mMapData[y][x].dir == Direction::eNorth
-                );
+            bool isPassage = (mMapData[y][x].passage && 
+                mMapData[y][x].passageData.dir == Direction::eNorth );
 
             // 縦方向かつ開始座標かどうか
             if (isPassage && startY == -1)
@@ -648,6 +707,41 @@ void CBspMap::SetPassageData()
 
                 startY = -1;
             }
+
+            // 通路の左右の壁のコライダー
+            bool leftWall = mMapData[y][x].passage && !mMapData[y][x - 1].passage && 
+                (mMapData[y][x - 1].type != TileType::eFloor || mMapData[y][x].type == TileType::eWall);
+            bool rightWall = mMapData[y][x].passage && !mMapData[y][x + 1].passage && 
+                (mMapData[y][x + 1].type != TileType::eFloor || mMapData[y][x].type == TileType::eWall);
+
+            // 左の壁
+            if (leftWall && startLeftWallY == -1)
+            {
+                startLeftWallY = y;
+            }
+            else if (!leftWall && startLeftWallY != -1)
+            {
+                mSegments.push_back({
+                    CVector2(x,startLeftWallY), CVector2(x,y),
+                    TileType::eWall, Direction::eWest });
+
+                startLeftWallY = -1;
+            }
+
+            // 右の壁
+            if (rightWall && startRightWallY == -1)
+            {
+                startRightWallY = y;
+            }
+            else if (!rightWall && startRightWallY != -1)
+            {
+                mSegments.push_back({
+                    CVector2(x,startRightWallY), CVector2(x,y),
+                    TileType::eWall, Direction::eEast });
+
+                startRightWallY = -1;
+            }
+
         }
         // 行の最後まで通路が続いていた場合
         if (startY != -1)

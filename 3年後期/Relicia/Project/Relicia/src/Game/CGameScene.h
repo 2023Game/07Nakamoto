@@ -1,5 +1,7 @@
 #pragma once
 #include "CSceneBase.h"
+
+class CField;
 class CGameMenu;
 class CSound;
 
@@ -17,5 +19,7 @@ public:
 	void Update();
 
 private:
+	CField* mpField;
+
 	CGameMenu* mpGameMenu;
 };

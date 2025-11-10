@@ -22,6 +22,9 @@ public:
 
 	// 2次元配列のダンジョンデータを取得
 	const CBspMap* GetMapData() const;
+	
+	// 床タイルのランダムな座標を取得
+	const CVector GetRandomFloorPos() const;
 
 	// 更新
 	void Update() override;

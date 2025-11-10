@@ -55,7 +55,7 @@ void CGameScene::Load()
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
 
-	new CField();
+	mpField = new CField();
 
 	// サボテンの敵を作成
 	CCactus* cactus = new CCactus();
@@ -63,6 +63,7 @@ void CGameScene::Load()
 
 	CPlayer* player = new CPlayer();
 	player->Scale(1.0f, 1.0f, 1.0f);
+	player->Position(mpField->GetRandomFloorPos());
 
 	// CGameCameraのテスト
 	//CGameCamera* mainCamera = new CGameCamera
