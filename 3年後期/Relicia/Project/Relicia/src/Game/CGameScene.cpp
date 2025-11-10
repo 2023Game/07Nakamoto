@@ -10,6 +10,8 @@
 #include "CLineEffect.h"
 #include "CCactus.h"
 
+#include "CDebugInput.h"
+
 //コンストラクタ
 CGameScene::CGameScene()
 	: CSceneBase(EScene::eGame)
@@ -109,4 +111,11 @@ void CGameScene::Update()
 			mpGameMenu->Open();
 		}
 	}
+
+#if _DEBUG
+	if (CDebugInput::PushKey('B'))
+	{
+		CPlayer::Instance()->Position(mpField->GetRandomFloorPos());
+	}
+#endif
 }

@@ -45,8 +45,8 @@ private:
 	// 通路の壁の生成
 	void CreatePassageWall(const std::vector<std::vector<CBspMap::Tile>>& map, int x, int y);
 
-	CModel* mpModel;
-	CColliderMesh* mpColliderMesh;
+	//CModel* mpModel;
+	//CColliderMesh* mpColliderMesh;
 
 	CModel* mpCubeModel;
 	CModel* mpCylinderModel;
@@ -62,6 +62,7 @@ private:
 	std::vector<CPillar*> mpPillarObjects;	// 柱のリスト
 	std::vector<CEntrance*> mpEntranceObjects;	// 出入口のリスト
 	std::vector<CDoor*> mpDoorObjects;		// 扉のリスト
+	std::vector<CFloor*> mpPassegeObjects;	// 通路の床リスト
 
 	CBspMapCollider* mpFloorCol;
 

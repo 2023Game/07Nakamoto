@@ -42,17 +42,17 @@ void CBspMapCollider::CreatePassage(CBspMap* map)
             {
                 // 床の三角形コライダー
                 CColliderTriangle* collider = new CColliderTriangle(this, ELayer::eFloor,
-                    CVector(seg.end.X() * TILE_SIZE, 3, seg.end.Y() * TILE_SIZE + TILE_SIZE),
-                    CVector(seg.end.X() * TILE_SIZE, 3, seg.end.Y() * TILE_SIZE),
-                    CVector(seg.start.X() * TILE_SIZE, 3, seg.start.Y() * TILE_SIZE)
+                    CVector(seg.end.X() * TILE_SIZE, 0, seg.end.Y() * TILE_SIZE + TILE_SIZE),
+                    CVector(seg.end.X() * TILE_SIZE, 0, seg.end.Y() * TILE_SIZE),
+                    CVector(seg.start.X() * TILE_SIZE, 0, seg.start.Y() * TILE_SIZE)
                 );
                 mpCollider.push_back(collider);
 
                 // 床の三角形コライダー
                 collider = new CColliderTriangle(this, ELayer::eFloor,
-                    CVector(seg.start.X() * TILE_SIZE, 3, seg.start.Y() * TILE_SIZE),
-                    CVector(seg.start.X() * TILE_SIZE, 3, seg.start.Y() * TILE_SIZE + TILE_SIZE),
-                    CVector(seg.end.X() * TILE_SIZE, 3, seg.end.Y() * TILE_SIZE + TILE_SIZE)
+                    CVector(seg.start.X() * TILE_SIZE, 0, seg.start.Y() * TILE_SIZE),
+                    CVector(seg.start.X() * TILE_SIZE, 0, seg.start.Y() * TILE_SIZE + TILE_SIZE),
+                    CVector(seg.end.X() * TILE_SIZE, 0, seg.end.Y() * TILE_SIZE + TILE_SIZE)
                 );
                 mpCollider.push_back(collider);
             
@@ -62,18 +62,18 @@ void CBspMapCollider::CreatePassage(CBspMap* map)
             {
                 // 床の三角形コライダー
                 CColliderTriangle* collider = new CColliderTriangle(this, ELayer::eFloor,
-                    CVector(seg.end.X() * TILE_SIZE, 5, seg.end.Y() * TILE_SIZE),
-                    CVector(seg.end.X() * TILE_SIZE + TILE_SIZE, 5, seg.end.Y() * TILE_SIZE),
-                    CVector(seg.start.X() * TILE_SIZE, 5, seg.start.Y() * TILE_SIZE)
+                    CVector(seg.end.X() * TILE_SIZE, 0, seg.end.Y() * TILE_SIZE),
+                    CVector(seg.end.X() * TILE_SIZE + TILE_SIZE, 0, seg.end.Y() * TILE_SIZE),
+                    CVector(seg.start.X() * TILE_SIZE, 0, seg.start.Y() * TILE_SIZE)
                 );
 
                 mpCollider.push_back(collider);
 
                 // 床の三角形コライダー
                 collider = new CColliderTriangle(this, ELayer::eFloor,
-                    CVector(seg.start.X() * TILE_SIZE + TILE_SIZE, 5, seg.start.Y() * TILE_SIZE),
-                    CVector(seg.start.X() * TILE_SIZE, 5, seg.start.Y() * TILE_SIZE),
-                    CVector(seg.end.X() * TILE_SIZE + TILE_SIZE, 5, seg.end.Y() * TILE_SIZE)
+                    CVector(seg.start.X() * TILE_SIZE + TILE_SIZE, 0, seg.start.Y() * TILE_SIZE),
+                    CVector(seg.start.X() * TILE_SIZE, 0, seg.start.Y() * TILE_SIZE),
+                    CVector(seg.end.X() * TILE_SIZE + TILE_SIZE, 0, seg.end.Y() * TILE_SIZE)
                 );
 
                 mpCollider.push_back(collider);
@@ -146,18 +146,18 @@ void CBspMapCollider::CreateFloorCollider(const CBspMap::SectionNode* node)
 {
     // 床の三角形コライダー
     CColliderTriangle* collider = new CColliderTriangle(this, ELayer::eFloor,
-        CVector((node->room.x + node->room.width - 1) * TILE_SIZE, 3, (node->room.y + node->room.height - 1) * TILE_SIZE),
-        CVector((node->room.x + node->room.width - 1) * TILE_SIZE, 3, (node->room.y + 1) * TILE_SIZE),
-        CVector((node->room.x + 1) * TILE_SIZE,                    3, (node->room.y + 1) * TILE_SIZE)
+        CVector((node->room.x + node->room.width - 1) * TILE_SIZE, 0, (node->room.y + node->room.height - 1) * TILE_SIZE),
+        CVector((node->room.x + node->room.width - 1) * TILE_SIZE, 0, (node->room.y + 1) * TILE_SIZE),
+        CVector((node->room.x + 1) * TILE_SIZE,                    0, (node->room.y + 1) * TILE_SIZE)
     );
 
     mpCollider.push_back(collider);
 
     // 床の三角形コライダー
     collider = new CColliderTriangle(this, ELayer::eFloor,
-        CVector((node->room.x + 1) * TILE_SIZE,                    3, (node->room.y + 1) * TILE_SIZE),
-        CVector((node->room.x + 1) * TILE_SIZE,                    3, (node->room.y + node->room.height - 1) * TILE_SIZE),
-        CVector((node->room.x + node->room.width - 1) * TILE_SIZE, 3, (node->room.y + node->room.height - 1) * TILE_SIZE));
+        CVector((node->room.x + 1) * TILE_SIZE,                    0, (node->room.y + 1) * TILE_SIZE),
+        CVector((node->room.x + 1) * TILE_SIZE,                    0, (node->room.y + node->room.height - 1) * TILE_SIZE),
+        CVector((node->room.x + node->room.width - 1) * TILE_SIZE, 0, (node->room.y + node->room.height - 1) * TILE_SIZE));
 
     mpCollider.push_back(collider);
 }

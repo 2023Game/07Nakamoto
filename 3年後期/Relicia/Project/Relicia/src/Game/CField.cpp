@@ -22,9 +22,9 @@ CField::CField()
 	, mEffectAnimData(1, 11, true, 11, 0.03f)
 	, mpMapData(nullptr)
 {
-	mpModel = CResourceManager::Get<CModel>("Field");
+	//mpModel = CResourceManager::Get<CModel>("Field");
 
-	mpColliderMesh = new CColliderMesh(this, ELayer::eFloor, mpModel, true);
+	//mpColliderMesh = new CColliderMesh(this, ELayer::eFloor, mpModel, true);
 
 	//CreateFieldObjects();
 
@@ -34,11 +34,11 @@ CField::CField()
 
 CField::~CField()
 {
-	if (mpColliderMesh != nullptr)
-	{
-		delete mpColliderMesh;
-		mpColliderMesh = nullptr;
-	}
+	//if (mpColliderMesh != nullptr)
+	//{
+	//	delete mpColliderMesh;
+	//	mpColliderMesh = nullptr;
+	//}
 
 	SAFE_DELETE(mpMapData);
 }
@@ -71,12 +71,14 @@ void CField::CreateMap()
 		for (CPillar* cpillar : mpPillarObjects) cpillar->Kill();
 		for (CEntrance* entrance : mpEntranceObjects) entrance->Kill();
 		for (CDoor* door : mpDoorObjects) door->Kill();
+		for (CFloor* passegeFloor : mpPassegeObjects) passegeFloor->Kill();
 
 		mpFloorObjects.clear();
 		mpWallObjects.clear();
 		mpPillarObjects.clear();
 		mpEntranceObjects.clear();
 		mpDoorObjects.clear();
+		mpPassegeObjects.clear();
 	}
 
 	// BSP法のダンジョンデータを生成
@@ -206,7 +208,7 @@ void CField::SetMapData(const std::vector<std::vector<CBspMap::Tile>>& map)
 			case CBspMap::TileType::eFloor:
 			{
 				// 床の生成
-				CFloor* floor = new CFloor(CVector((x + 0.5f) * TILE_SIZE, 1, (y + 0.5f) * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
+				CFloor* floor = new CFloor(CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
 				// 床のリストに追加
 				mpFloorObjects.push_back(floor);
 
@@ -227,7 +229,7 @@ void CField::SetMapData(const std::vector<std::vector<CBspMap::Tile>>& map)
 				if (map[y][x].passage)
 				{
 					// 床の生成
-					CFloor* floor = new CFloor(CVector((x + 0.5f) * TILE_SIZE, 1, (y + 0.5f) * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
+					CFloor* floor = new CFloor(CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
 					// 床のリストに追加
 					mpFloorObjects.push_back(floor);
 				}
@@ -272,7 +274,7 @@ void CField::SetMapData(const std::vector<std::vector<CBspMap::Tile>>& map)
 				if (map[y][x].passage)
 				{
 					// 床の生成
-					CFloor* floor = new CFloor(CVector((x + 0.5f) * TILE_SIZE, 1, (y + 0.5f) * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
+					CFloor* floor = new CFloor(CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
 					// 床のリストに追加
 					mpFloorObjects.push_back(floor);
 				}
@@ -289,9 +291,9 @@ void CField::SetMapData(const std::vector<std::vector<CBspMap::Tile>>& map)
 				mpEntranceObjects.push_back(entrance);
 
 				// 床の生成
-				CFloor* floor = new CFloor(CVector((x + 0.5f) * TILE_SIZE, 1, (y + 0.5f) * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
+				CFloor* floor = new CFloor(CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
 				// 床のリストに追加
-				mpFloorObjects.push_back(floor);				
+				mpPassegeObjects.push_back(floor);
 
 				// 扉の生成
 				//CDoor* door = new CDoor(CVector((x + 0.5f) * TILE_SIZE + offSetPosX, 0, (y + 0.5f) * TILE_SIZE + offSetPosZ));
@@ -304,9 +306,9 @@ void CField::SetMapData(const std::vector<std::vector<CBspMap::Tile>>& map)
 			case CBspMap::TileType::ePassage:
 			{
 				// 床の生成
-				CFloor* floor = new CFloor(CVector((x + 0.5f) * TILE_SIZE, 1, (y + 0.5f) * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
+				CFloor* floor = new CFloor(CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
 				// 床のリストに追加
-				mpFloorObjects.push_back(floor);
+				mpPassegeObjects.push_back(floor);
 
 				break;
 			}
@@ -388,7 +390,7 @@ void CField::Update()
 // 描画
 void CField::Render()
 {
-	mpModel->Render(Matrix());
+	//mpModel->Render(Matrix());
 
 	// 床の描画
 	for (CFloor* floor : mpFloorObjects)
@@ -414,6 +416,11 @@ void CField::Render()
 	for (CDoor* door : mpDoorObjects)
 	{
 		door->Render();
+	}
+	// 通路の床の生成
+	for (CFloor* passegeFloor : mpPassegeObjects)
+	{
+		passegeFloor->Render();
 	}
 
 }
