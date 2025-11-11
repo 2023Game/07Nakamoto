@@ -32,7 +32,7 @@ const CAdventurer::AnimData CAdventurer::ANIM_DATA[] =
 	{ "",						true,	0.0f,	1.0f	},	// Tポーズ
 	{ ANIM_PATH"idle.x",		true,	153.0f,	1.0f	},	// 待機
 	{ ANIM_PATH"walk.x",		true,	66.0f,	1.0f	},	// 歩行
-	{ ANIM_PATH"kick.x",			true,	22.0f,	1.0f	},	// 走行
+	{ ANIM_PATH"run.x",			true,	22.0f,	1.0f	},	// 走行
 	{ ANIM_PATH"attack.x",		false,	92.0f,	1.0f	},	// 斬り攻撃
 	{ ANIM_PATH"jump_start.x",	false,	25.0f,	1.0f	},	// ジャンプ開始
 	{ ANIM_PATH"jump.x",		true,	1.0f,	1.0f	},	// ジャンプ中
@@ -369,16 +369,18 @@ void CAdventurer::UpdateMove()
 		// 待機状態であれば、歩行アニメーションに切り替え
 		if (mState == EState::eIdle)
 		{
+			// スペースキーを押していたら
 			if (CInput::Key(VK_SHIFT))
 			{
 				// ダッシュする
 				isDash = true;
 
+				// 走るアニメーション
 				ChangeAnimation(EAnimType::eRun);
 			}
 		}
 
-		mMoveSpeed += move * MOVE_SPEED;
+		mMoveSpeed += move * (isDash ? RUN_SPEED : MOVE_SPEED);
 		
 		if (!isDash)
 		{
