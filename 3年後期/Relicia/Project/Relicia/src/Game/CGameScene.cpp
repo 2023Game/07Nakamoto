@@ -1,7 +1,7 @@
 #include "CGameScene.h"
 #include "CSceneManager.h"
 #include "CField.h"
-#include "CPlayer.h"
+#include "CAdventurer.h"
 #include "CGameCamera.h"
 #include "CGameCamera2.h"
 #include "CInput.h"
@@ -11,6 +11,7 @@
 #include "CCactus.h"
 
 #include "CDebugInput.h"
+#include "CPlayer.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -63,7 +64,11 @@ void CGameScene::Load()
 	CCactus* cactus = new CCactus();
 	cactus->Position(0.0f, 0.0f, -100.0f);
 
-	CPlayer* player = new CPlayer();
+	//CPlayer* player = new CPlayer();
+	//player->Scale(1.0f, 1.0f, 1.0f);
+	//player->Position(mpField->GetRandomFloorPos());
+
+	CAdventurer* player = new CAdventurer();
 	player->Scale(1.0f, 1.0f, 1.0f);
 	player->Position(mpField->GetRandomFloorPos());
 
@@ -115,7 +120,7 @@ void CGameScene::Update()
 #if _DEBUG
 	if (CDebugInput::PushKey('B'))
 	{
-		CPlayer::Instance()->Position(mpField->GetRandomFloorPos());
+		CAdventurer::Instance()->Position(mpField->GetRandomFloorPos());
 	}
 #endif
 }

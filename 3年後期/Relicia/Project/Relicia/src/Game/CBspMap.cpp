@@ -30,12 +30,11 @@ CBspMap::CBspMap(int x, int y)
     // 同じ階層の部屋同士を通路で繋げる
     ConnectRooms(mpRoot, mMapData);
     
+    // 通路のまとまりを保存
     SetPassageData();
 
     // 床のコライダーの生成
     mpFloorCol = new CBspMapCollider(this);
-
-    CollectWallSegments();
 
 #if _DEBUG
     // ２次元配列のデバッグ表示
@@ -291,11 +290,11 @@ void CBspMap::CreateRoomFloor(SectionNode* node, std::vector<std::vector<Tile>>&
     int roomY = Math::Rand(std::min(minRoomY, maxRoomY), std::max(minRoomY, maxRoomY));
 
     // 部屋の中心座標
-    //float centerX = (minRoomX + maxRoomX) / 2;
-    //float centerY = (minRoomY + maxRoomY) / 2;
-    //CVector2 center(centerX, centerY);
+    float centerX = (minRoomX + maxRoomX) / 2;
+    float centerY = (minRoomY + maxRoomY) / 2;
+    CVector2 center(centerX, centerY);
 
-    node->room = { roomX, roomY, roomWidth, roomHeight, Room::RoomType::eNormal};
+    node->room = { roomX, roomY, roomWidth, roomHeight, center, Room::RoomType::eNormal};
 
     // 床の生成 (部屋の内側のみを床に設定)
     for (int y = roomY + 1; y < roomY + roomHeight - 1; y++)

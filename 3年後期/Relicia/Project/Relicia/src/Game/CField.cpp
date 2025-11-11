@@ -22,24 +22,12 @@ CField::CField()
 	, mEffectAnimData(1, 11, true, 11, 0.03f)
 	, mpMapData(nullptr)
 {
-	//mpModel = CResourceManager::Get<CModel>("Field");
-
-	//mpColliderMesh = new CColliderMesh(this, ELayer::eFloor, mpModel, true);
-
-	//CreateFieldObjects();
-
 	// BSPñ@Ç≈É_ÉìÉWÉáÉìê∂ê¨
 	CreateMap();
 }
 
 CField::~CField()
 {
-	//if (mpColliderMesh != nullptr)
-	//{
-	//	delete mpColliderMesh;
-	//	mpColliderMesh = nullptr;
-	//}
-
 	SAFE_DELETE(mpMapData);
 }
 

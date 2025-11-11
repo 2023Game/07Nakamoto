@@ -421,6 +421,9 @@
     <ClCompile Include="src\Game\CBspMapCollider.cpp">
       <Filter>ソース ファイル\Game\Field</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CAdventurer.cpp">
+      <Filter>ソース ファイル\Game\Character</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -767,6 +770,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CBspMapCollider.h">
       <Filter>ソース ファイル\Game\Field</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CAdventurer.h">
+      <Filter>ソース ファイル\Game\Character</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

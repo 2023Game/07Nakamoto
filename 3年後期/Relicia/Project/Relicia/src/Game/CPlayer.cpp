@@ -553,9 +553,6 @@ void CPlayer::Update()
 	// モーションブラーの更新処理
 	UpdateMotionBlur();
 
-	// キャラクターの更新
-	CXCharacter::Update();
-
 	// 武器の行列を更新
 	mpSword->UpdateMtx();
 

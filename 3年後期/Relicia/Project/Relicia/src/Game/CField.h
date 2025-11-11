@@ -64,6 +64,4 @@ private:
 	std::vector<CDoor*> mpDoorObjects;		// 扉のリスト
 	std::vector<CFloor*> mpPassegeObjects;	// 通路の床リスト
 
-	CBspMapCollider* mpFloorCol;
-
 };

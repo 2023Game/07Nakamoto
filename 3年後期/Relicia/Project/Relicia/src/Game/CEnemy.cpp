@@ -167,15 +167,18 @@ void CEnemy::Update()
 	CVector moveSpeed = mMoveSpeed + CVector(0.0f, mMoveSpeedY, 0.0f);
 	Position(Position() + moveSpeed);
 
-	// キャラクターの更新
-	CXCharacter::Update();
-
 	mIsGrounded = false;
 
 	// HPゲージを更新
 	mpHpGauge->Position(Position() + mGaugeOffsetPos);
 	mpHpGauge->SetMaxPoint(mMaxHp);
 	mpHpGauge->SetCurrPoint(mHp);
+}
+
+// 後更新
+void CEnemy::LateUpdate()
+{
+	CXCharacter::LateUpdate();
 }
 
 // 描画

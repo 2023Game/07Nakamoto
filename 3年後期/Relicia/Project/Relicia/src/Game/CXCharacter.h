@@ -21,7 +21,7 @@ public:
 		bool restart = false);
 	//XVˆ—
 	void Update(const CMatrix& m);
-	void Update();
+	void LateUpdate() override;
 	//•`‰æˆ—
 	void Render();
 

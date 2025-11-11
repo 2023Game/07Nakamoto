@@ -130,7 +130,7 @@ void CXCharacter::Update(const CMatrix& matrix)
 }
 
 //更新処理
-void CXCharacter::Update()
+void CXCharacter::LateUpdate()
 {
 	//アニメーションを更新する
 	Update(Matrix());

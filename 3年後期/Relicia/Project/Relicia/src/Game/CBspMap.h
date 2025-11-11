@@ -64,7 +64,7 @@ public:
 	{
 		int x, y;			// 部屋の左上の柱の座標
 		int width, height;	// 部屋のサイズ
-		//CVector2 center;
+		CVector2 center;	// 部屋の中心座標
 		
 		// 部屋の種類
 		enum class RoomType
