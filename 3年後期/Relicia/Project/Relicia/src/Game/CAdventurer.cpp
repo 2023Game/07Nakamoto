@@ -366,26 +366,29 @@ void CAdventurer::UpdateMove()
 	// 求めた移動ベクトルの長さで入力されているか判定
 	if (move.LengthSqr() > 0.0f)
 	{
+		// スペースキーを押していたら
+		if (CInput::Key(VK_SHIFT))
+		{
+			// ダッシュする
+			isDash = true;
+		}
 		// 待機状態であれば、歩行アニメーションに切り替え
 		if (mState == EState::eIdle)
 		{
-			// スペースキーを押していたら
-			if (CInput::Key(VK_SHIFT))
+			if (isDash)
 			{
-				// ダッシュする
-				isDash = true;
-
 				// 走るアニメーション
-				ChangeAnimation(EAnimType::eRun);
+				ChangeAnimation(EAnimType::eRun); 
+			}
+			else
+			{
+				// 歩くアニメーション
+				ChangeAnimation(EAnimType::eWalk);
 			}
 		}
 
+		// 走行中かどうかで速度を変更
 		mMoveSpeed += move * (isDash ? RUN_SPEED : MOVE_SPEED);
-		
-		if (!isDash)
-		{
-			ChangeAnimation(EAnimType::eWalk);
-		}
 	}
 	// 移動キーを入力していない
 	else
@@ -553,6 +556,7 @@ void CAdventurer::Update()
 	// 「E」キーで
 	if (CInput::PushKey('E'))
 	{
+
 	}
 
 	// 「P」キーを押したら、ゲームを終了
