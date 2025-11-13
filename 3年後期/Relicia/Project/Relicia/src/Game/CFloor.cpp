@@ -3,7 +3,7 @@
 // コンストラクタ
 CFloor::CFloor(const CVector& pos)
 {
-	mpModel = CResourceManager::Get<CModel>("Floor"),
+	mpModel = CResourceManager::Get<CModel>("Floor");
 
 	Position(pos);
 }

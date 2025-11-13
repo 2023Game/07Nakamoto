@@ -11,7 +11,6 @@
 #include "CBspMap.h"
 
 #include "Maths.h"
-#include "CColliderTriangle.h"
 #include "CDebugInput.h"
 #include "CBspMapCollider.h"
 

@@ -3,7 +3,7 @@
 // コンストラクタ
 CDoor::CDoor(const CVector& pos)
 {
-	mpModel = CResourceManager::Get<CModel>("Door"),
+	mpModel = CResourceManager::Get<CModel>("Door");
 
 	Position(pos);
 

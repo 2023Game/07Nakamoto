@@ -3,7 +3,7 @@
 // コンストラクタ
 CPillar::CPillar(const CVector& pos)
 {
-	mpModel = CResourceManager::Get<CModel>("Pillar"),
+	mpModel = CResourceManager::Get<CModel>("Pillar");
 
 	Position(pos);
 

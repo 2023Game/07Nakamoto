@@ -9,6 +9,8 @@
 #include "CBGMManager.h"
 #include "CLineEffect.h"
 #include "CCactus.h"
+#include "CMashroom.h"
+#include "CCrate.h"
 
 #include "CDebugInput.h"
 #include "CPlayer.h"
@@ -55,6 +57,11 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>(		"Wall",				"Dungeon\\Wall.obj");
 	CResourceManager::Load<CModel>(		"Wall_Entrance",	"Dungeon\\Wall_Entrance.obj");
 
+	CResourceManager::Load<CModelX>(	"Bat",				"Character\\Enemy\\Bat\\bat.x");
+	CResourceManager::Load<CModelX>(	"Mushroom",			"Character\\Enemy\\Mushroom\\mushroom.x");
+
+	CResourceManager::Load<CModel>(		"Crate",			"Field\\Object\\crate.obj");
+
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
 
@@ -62,7 +69,11 @@ void CGameScene::Load()
 
 	// サボテンの敵を作成
 	CCactus* cactus = new CCactus();
-	cactus->Position(0.0f, 0.0f, -100.0f);
+	cactus->Position(mpField->GetRandomFloorPos());
+
+	//// キノコの敵を作成
+	//CMashroom* mashroom = new CMashroom();
+	//mashroom->Position(200.0f, 10.0f, 200.0f);
 
 	//CPlayer* player = new CPlayer();
 	//player->Scale(1.0f, 1.0f, 1.0f);
@@ -72,8 +83,12 @@ void CGameScene::Load()
 	player->Scale(1.0f, 1.0f, 1.0f);
 	player->Position(mpField->GetRandomFloorPos());
 
+	CCrate* crate = new CCrate(mpField->GetRandomFloorPos());
+	crate->Scale(1.0f, 3.0f, 1.0f);
+
 	// CGameCameraのテスト
-	//CGameCamera* mainCamera = new CGameCamera
+	//CGameCamera* mainCam
+	// era = new CGameCamera
 	//(
 	//	//CVector(5.0f, -15.0f, 180.0f),
 	//	CVector(0.0f, 50.0f, 75.0f),
