@@ -1,6 +1,8 @@
 #pragma once
 #include "CEnemy.h"
 
+class CColliderSphere;
+
 // 蝙蝠の敵クラス
 class CMashroom : public CEnemy
 {
@@ -10,6 +12,8 @@ public:
 	// デストラクタ
 	~CMashroom();
 
+	// 衝突処理
+	void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
 	// 更新
 	void Update() override;
 

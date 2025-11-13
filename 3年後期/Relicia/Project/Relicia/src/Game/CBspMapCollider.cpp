@@ -3,9 +3,7 @@
 
 // コンストラクタ
 CBspMapCollider::CBspMapCollider(CBspMap* map)
-    : CObjectBase(ETag::eField, 
-        ETaskPriority::eBackground, 0,
-        ETaskPauseType::eGame)
+    : CObjectBase(ETag::eField, ETaskPriority::eBackground, 0,ETaskPauseType::eGame)
 {
     if (!map) return;
 

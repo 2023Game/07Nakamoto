@@ -1,0 +1,15 @@
+CPlayer
+├─ CPlayerStatus          ← HP・スタミナなどの数値管理
+├─ CInventory             ← アイテム・エレメント結晶の所持リスト
+├─ CElementManager        ← エレメントスロット管理（UI表示も）
+├─ CPlayerController      ← 入力・移動・攻撃・スキル発動
+└─ CSwordRelic            ← 剣の情報（属性付与、攻撃演出、吸収処理）
+
+🧩 各クラスの役割詳細
+クラス名	役割	説明
+CPlayer	中心ハブ	各コンポーネントを所有。更新処理をまとめる。
+CPlayerStatus	HP・スタミナ・死亡判定	数値的なプレイヤーの状態。UIに反映される。
+CInventory	アイテム・結晶の管理	結晶を拾う、使う、装備などを扱う。
+CElementManager	5スロットUI・選択管理	5つの〇を管理。マウスホイール操作で選択移動。
+Cordelia	剣の属性付与システム	結晶吸収、攻撃に属性を乗せる、エフェクト制御。
+CPlayerController	入力＋挙動制御	移動、攻撃、スキル発動、結晶使用の入力処理。

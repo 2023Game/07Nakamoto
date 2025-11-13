@@ -4,6 +4,7 @@
 
 class CCollider;
 class CSword;
+class CPlayerUI;
 
 class CAdventurer : public CXCharacter
 {
@@ -126,6 +127,8 @@ private:
 	CSound* mpSlashSE;			// 剣のSE
 	bool mIsPlayedSlashSE;		// 剣の攻撃SEのフラグ
 	bool mIsSpawnedSlashEffect;	// 斬撃SEのフラグ
+
+	CPlayerUI* mpHpGauge;	// プレイヤーのUI
 
 	// 剣のクラス
 	CSword* mpSword;

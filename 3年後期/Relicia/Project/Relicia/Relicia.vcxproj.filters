@@ -98,6 +98,12 @@
     <Filter Include="ソース ファイル\Game\Field\InteractObject">
       <UniqueIdentifier>{8b6bd2d1-4a53-49d3-a99c-8f9880bbf170}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Character\Player">
+      <UniqueIdentifier>{4b7d3ace-ae9e-4a0a-ad08-1c043f790298}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Character\Player\UI">
+      <UniqueIdentifier>{77fcddd3-bcfd-4c9e-8707-5b141da98c45}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -162,9 +168,6 @@
     </ClCompile>
     <ClCompile Include="src\Game\CApplication.cpp">
       <Filter>ソース ファイル\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CPlayer.cpp">
-      <Filter>ソース ファイル\Game\Character</Filter>
     </ClCompile>
     <ClCompile Include="src\BaseSystem\CEffect.cpp">
       <Filter>ソース ファイル\BaseSystem\Effect</Filter>
@@ -415,20 +418,23 @@
     <ClCompile Include="src\Game\CBspMap.cpp">
       <Filter>ソース ファイル\Game\Field</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CBspMapManager.cpp">
-      <Filter>ソース ファイル\Game\Field</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CBspMapCollider.cpp">
       <Filter>ソース ファイル\Game\Field</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CAdventurer.cpp">
-      <Filter>ソース ファイル\Game\Character</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CMashroom.cpp">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CCrate.cpp">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CAdventurer.cpp">
+      <Filter>ソース ファイル\Game\Character\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPlayer.cpp">
+      <Filter>ソース ファイル\Game\Character\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPlayerUI.cpp">
+      <Filter>ソース ファイル\Game\Character\Player\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -497,9 +503,6 @@
     </ClInclude>
     <ClInclude Include="src\Game\CApplication.h">
       <Filter>ソース ファイル\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CPlayer.h">
-      <Filter>ソース ファイル\Game\Character</Filter>
     </ClInclude>
     <ClInclude Include="src\BaseSystem\CEffect.h">
       <Filter>ソース ファイル\BaseSystem\Effect</Filter>
@@ -771,20 +774,23 @@
     <ClInclude Include="src\Game\CBspMap.h">
       <Filter>ソース ファイル\Game\Field</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CBspMapManager.h">
-      <Filter>ソース ファイル\Game\Field</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\CBspMapCollider.h">
       <Filter>ソース ファイル\Game\Field</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CAdventurer.h">
-      <Filter>ソース ファイル\Game\Character</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CMashroom.h">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CCrate.h">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPlayer.h">
+      <Filter>ソース ファイル\Game\Character\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CAdventurer.h">
+      <Filter>ソース ファイル\Game\Character\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPlayerUI.h">
+      <Filter>ソース ファイル\Game\Character\Player\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

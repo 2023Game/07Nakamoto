@@ -1,7 +1,8 @@
 #pragma once
 #include "CObjectBase.h"
 #include "CModel.h"
-#include "CColliderMesh.h"
+
+class CColliderMesh;
 
 class CCrate : public CObjectBase
 {
@@ -20,4 +21,5 @@ public:
 private:
 	CModel* mpModel;
 	CColliderMesh* mpColliderMesh;
+
 };

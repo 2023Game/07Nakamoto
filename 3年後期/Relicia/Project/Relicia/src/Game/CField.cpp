@@ -69,7 +69,7 @@ void CField::CreateMap()
 	}
 
 	// BSP法のダンジョンデータを生成
-	mpMapData = new CBspMap(50, 50);
+	mpMapData = new CBspMap(40, 40);
 	// BSP法のダンジョン生成
 	SetMapData(mpMapData->GetTileData());
 }

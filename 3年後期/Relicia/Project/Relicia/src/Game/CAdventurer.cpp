@@ -6,6 +6,7 @@
 #include "CSlash.h"
 #include "CColliderCapsule.h"
 #include "CColliderSphere.h"
+#include "CPlayerUI.h"
 
 // プレイヤーのインスタンス
 CAdventurer* CAdventurer::spInstance = nullptr;
@@ -18,6 +19,9 @@ CAdventurer* CAdventurer::spInstance = nullptr;
 #define RUN_SPEED 1.2f		// 走行中の速度
 #define JUMP_SPEED 1.5f		// ジャンプ速度
 #define GRAVITY 0.0625f		// 重力加速度
+
+#define MAX_HP 100	// 体力の最大値
+#define HP_GAUGE_UI_POS 50.0f,600.0f
 
 #define ATTACK_START_FRAME 26.0f	// 斬り攻撃の開始フレーム
 #define ATTACK_END_FRAME 50.0f		// 斬り攻撃の終了フレーム
@@ -58,7 +62,7 @@ CAdventurer::CAdventurer()
 	, mIsSpawnedSlashEffect(false)
 	, mpSword(nullptr)
 {
-	mMaxHp = 100000;
+	mMaxHp = MAX_HP;
 	mHp = mMaxHp;
 
 	//インスタンスの設定
@@ -109,6 +113,12 @@ CAdventurer::CAdventurer()
 	mpSword->SetAttachMtx(&frame->CombinedMatrix());
 	mpSword->Position(ATTACK_SWORD_OFFSET_POS);
 	mpSword->Rotation(ATTACK_SWORD_OFFSET_ROT);
+
+	// プレイヤーのUI
+	mpHpGauge = new CPlayerUI(100);
+	mpHpGauge->SetMaxPoint(mMaxHp);
+	mpHpGauge->SetCurPoint(mHp);
+	mpHpGauge->SetPos(HP_GAUGE_UI_POS);
 }
 
 // デストラクタ
@@ -574,15 +584,22 @@ void CAdventurer::Update()
 	// 武器の行列を更新
 	mpSword->UpdateMtx();
 
+	
+#if _DEBUG
 	CVector pos = Position();
 	CDebugPrint::Print("PlayerHP:%d / %d\n", mHp, mMaxHp);
 	CDebugPrint::Print("PlayerPos:%.2f, %.2f, %.2f\n", pos.X(), pos.Y(), pos.Z());
 	CDebugPrint::Print("PlayerGrounded:%s\n", mIsGrounded ? "true" : "false");
 	CDebugPrint::Print("PlayerState:%d\n", mState);
+	CDebugPrint::Print("FPS:%f\n", Times::FPS());
+#endif
 
 	mIsGrounded = false;
 
-	CDebugPrint::Print("FPS:%f\n", Times::FPS());
+	// 体力ゲージの更新
+	mpHpGauge->SetMaxPoint(mMaxHp);
+	mpHpGauge->SetCurPoint(mHp);
+
 }
 
 // 後更新

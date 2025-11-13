@@ -78,9 +78,9 @@
     <ClCompile Include="src\Game\CApplication.cpp" />
     <ClCompile Include="src\Game\CBspMap.cpp" />
     <ClCompile Include="src\Game\CBspMapCollider.cpp" />
-    <ClCompile Include="src\Game\CBspMapManager.cpp" />
     <ClCompile Include="src\Game\CBullet.cpp" />
     <ClCompile Include="src\Game\CCrate.cpp" />
+    <ClCompile Include="src\Game\CPlayerUI.cpp" />
     <ClCompile Include="src\Game\CMashroom.cpp" />
     <ClCompile Include="src\Game\CCactus.cpp" />
     <ClCompile Include="src\Game\CCactusNeedle.cpp" />
@@ -199,9 +199,9 @@
     <ClInclude Include="src\Game\CApplication.h" />
     <ClInclude Include="src\Game\CBspMap.h" />
     <ClInclude Include="src\Game\CBspMapCollider.h" />
-    <ClInclude Include="src\Game\CBspMapManager.h" />
     <ClInclude Include="src\Game\CBullet.h" />
     <ClInclude Include="src\Game\CCrate.h" />
+    <ClInclude Include="src\Game\CPlayerUI.h" />
     <ClInclude Include="src\Game\CMashroom.h" />
     <ClInclude Include="src\Game\CCactus.h" />
     <ClInclude Include="src\Game\CCactusNeedle.h" />

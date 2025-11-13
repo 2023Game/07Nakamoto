@@ -71,9 +71,9 @@ void CGameScene::Load()
 	CCactus* cactus = new CCactus();
 	cactus->Position(mpField->GetRandomFloorPos());
 
-	//// ƒLƒmƒR‚Ì“G‚ðì¬
-	//CMashroom* mashroom = new CMashroom();
-	//mashroom->Position(200.0f, 10.0f, 200.0f);
+	// ƒLƒmƒR‚Ì“G‚ðì¬
+	CMashroom* mashroom = new CMashroom();
+	mashroom->Position(mpField->GetRandomFloorPos());
 
 	//CPlayer* player = new CPlayer();
 	//player->Scale(1.0f, 1.0f, 1.0f);

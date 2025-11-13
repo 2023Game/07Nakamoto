@@ -1,7 +1,8 @@
 #include "CCrate.h"
+#include "CColliderMesh.h"
 
 CCrate::CCrate(const CVector& pos)
-	: CObjectBase(ETag::eField,ETaskPriority::eBackground, 0,ETaskPauseType::eGame)
+	: CObjectBase(ETag::eField, ETaskPriority::eBackground, 0, ETaskPauseType::eGame)
 	, mpModel(nullptr)
 {
 	mpModel = CResourceManager::Get<CModel>("Crate");
