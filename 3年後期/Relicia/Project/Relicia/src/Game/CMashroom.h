@@ -31,6 +31,7 @@ private:
 		eTPose,		// Tポーズ
 		eIdle,		// 待機
 		eAttack1,	// 頭突き攻撃
+		eAttack2,	// 回転攻撃
 
 		Num
 	};

@@ -4,7 +4,8 @@
 
 class CCollider;
 class CSword;
-class CPlayerUI;
+class CPlayerHpUI;
+class CElementSlotUI;
 
 class CAdventurer : public CXCharacter
 {
@@ -128,9 +129,11 @@ private:
 	bool mIsPlayedSlashSE;		// 剣の攻撃SEのフラグ
 	bool mIsSpawnedSlashEffect;	// 斬撃SEのフラグ
 
-	CPlayerUI* mpHpGauge;	// プレイヤーのUI
+	CPlayerHpUI* mpHpGauge;	// プレイヤーのUI
 
 	// 剣のクラス
 	CSword* mpSword;
 
+	// 属性スロットの装備枠
+	CElementSlotUI* mpElementEquipment;
 };

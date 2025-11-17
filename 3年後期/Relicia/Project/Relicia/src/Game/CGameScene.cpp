@@ -104,7 +104,12 @@ void CGameScene::Load()
 	);
 
 	mainCamera->SetFollowTargetTf(player);
-	
+
+	//std::vector<CColliderTriangle*> cols = mpField->GetCollider();
+	//for (CColliderTriangle* col : cols)
+	//{
+	//	mainCamera->AddCollider(col);
+	//}
 
 	// ƒQ[ƒ€ƒƒjƒ…[‚ğì¬
 	mpGameMenu = new CGameMenu();

@@ -6,8 +6,8 @@
 #include "CSlash.h"
 #include "CColliderCapsule.h"
 #include "CColliderSphere.h"
-#include "CPlayerUI.h"
-
+#include "CPlayerHpUI.h"
+#include "CElementSlotUI.h"
 // プレイヤーのインスタンス
 CAdventurer* CAdventurer::spInstance = nullptr;
 
@@ -29,6 +29,9 @@ CAdventurer* CAdventurer::spInstance = nullptr;
 #define ATTACK_SWORD_OFFSET_POS CVector(0.0f, 7.2f, 3.5f)
 // 斬り攻撃の剣のオフセット向き
 #define ATTACK_SWORD_OFFSET_ROT CVector(-20.0f, 0.0f, -7.0f)
+
+#define ELEMENT_UI_POS CVector2(331.0f,529.0f)
+#define ELEMENT_UI_ALPHA 0.8f
 
 // プレイヤーのアニメーションデータのテーブル
 const CAdventurer::AnimData CAdventurer::ANIM_DATA[] =
@@ -115,8 +118,13 @@ CAdventurer::CAdventurer()
 	mpSword->Rotation(ATTACK_SWORD_OFFSET_ROT);
 
 	// プレイヤーのUI
-	mpHpGauge = new CPlayerUI(MAX_HP);
+	mpHpGauge = new CPlayerHpUI(MAX_HP);
 	mpHpGauge->SetPos(HP_GAUGE_UI_POS);
+
+	// 属性スロットのUI
+	mpElementEquipment = new CElementSlotUI();
+	mpElementEquipment->SetPos(ELEMENT_UI_POS);
+	mpElementEquipment->SetAlpha(ELEMENT_UI_ALPHA);
 }
 
 // デストラクタ
@@ -250,7 +258,7 @@ void CAdventurer::UpdateIdle()
 			mMoveSpeed = CVector::zero;
 			ChangeState(EState::eAttack);
 		}
-		// 右クリックで
+		// 右クリックで属性を付与した斬撃
 		else if (CInput::PushKey(VK_RBUTTON))
 		{
 		}
@@ -582,6 +590,7 @@ void CAdventurer::Update()
 	// 武器の行列を更新
 	mpSword->UpdateMtx();
 
+	//mpElementEquipment->
 	
 #if _DEBUG
 	CVector pos = Position();

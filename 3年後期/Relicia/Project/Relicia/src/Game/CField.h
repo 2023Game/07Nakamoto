@@ -25,6 +25,9 @@ public:
 	// 床タイルのランダムな座標を取得
 	const CVector GetRandomFloorPos() const;
 
+	// コライダーを取得
+	std::vector<CColliderTriangle*> GetCollider() const;
+
 	// 更新
 	void Update() override;
 	// 描画
@@ -64,6 +67,6 @@ private:
 	std::vector<CFloor*> mpPassegeObjects;	// 通路の床リスト
 
 	// コライダーのポインタ
-	CBspMapCollider* mpFloorCol;
+	CBspMapCollider* mpFieldCollider;
 
 };

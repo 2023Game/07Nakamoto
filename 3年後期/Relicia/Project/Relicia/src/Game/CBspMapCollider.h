@@ -13,6 +13,9 @@ public:
 	// 通路のコライダーを生成
 	void CreatePassage(CBspMap* map);
 
+	// コライダーを取得
+	const std::vector<CColliderTriangle*> GetCollider() const;
+
 	// 更新
 	void Update() override;
 private:

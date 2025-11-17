@@ -20,7 +20,7 @@ CField::CField()
 	: CObjectBase(ETag::eField, ETaskPriority::eBackground)
 	, mEffectAnimData(1, 11, true, 11, 0.03f)
 	, mpMapData(nullptr)
-	, mpFloorCol(nullptr)
+	, mpFieldCollider(nullptr)
 
 {
 	// BSP法でダンジョン生成
@@ -31,7 +31,7 @@ CField::~CField()
 {
 	SAFE_DELETE(mpMapData);
 	// コライダーの削除
-	SAFE_DELETE(mpFloorCol);
+	SAFE_DELETE(mpFieldCollider);
 }
 
 // 2次元配列のダンジョンデータを取得
@@ -51,6 +51,13 @@ const CVector CField::GetRandomFloorPos() const
 	}
 }
 
+// コライダーを取得
+std::vector<CColliderTriangle*> CField::GetCollider() const
+{
+	return mpFieldCollider->GetCollider();
+}
+
+
 // ダンジョンマップを生成
 void CField::CreateMap()
 {
@@ -58,7 +65,7 @@ void CField::CreateMap()
 	{
 		SAFE_DELETE(mpMapData);
 		// コライダーの削除
-		SAFE_DELETE(mpFloorCol);
+		SAFE_DELETE(mpFieldCollider);
 
 		for (CFloor* floor : mpFloorObjects) floor->Kill();
 		for (CWall* wall : mpWallObjects) wall->Kill();
@@ -81,7 +88,7 @@ void CField::CreateMap()
 	CreateDungeon(mpMapData->GetTileData());
 
 	// 床のコライダーの生成
-	mpFloorCol = new CBspMapCollider(mpMapData);
+	mpFieldCollider = new CBspMapCollider(mpMapData);
 }
 
 void CField::CreateFieldObjects()

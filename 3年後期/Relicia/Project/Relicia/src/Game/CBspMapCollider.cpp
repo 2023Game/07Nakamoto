@@ -120,6 +120,12 @@ void CBspMapCollider::CreatePassage(CBspMap* map)
     }
 }
 
+// コライダーを取得
+const std::vector<CColliderTriangle*> CBspMapCollider::GetCollider() const
+{
+    return mpCollider;
+}
+
 // 部屋のコライダーを生成
 void CBspMapCollider::CreateRoomCollider(const CBspMap::SectionNode* node)
 {

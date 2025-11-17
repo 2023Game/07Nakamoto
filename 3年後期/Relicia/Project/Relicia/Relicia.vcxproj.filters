@@ -104,6 +104,9 @@
     <Filter Include="ソース ファイル\Game\Character\Player\UI">
       <UniqueIdentifier>{77fcddd3-bcfd-4c9e-8707-5b141da98c45}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Element">
+      <UniqueIdentifier>{6a1a1815-2356-4b70-8a27-c9e97fc11b52}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -433,8 +436,17 @@
     <ClCompile Include="src\Game\CPlayer.cpp">
       <Filter>ソース ファイル\Game\Character\Player</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CPlayerUI.cpp">
+    <ClCompile Include="src\Game\CPlayerHpUI.cpp">
       <Filter>ソース ファイル\Game\Character\Player\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CElementManager.cpp">
+      <Filter>ソース ファイル\Game\Character\Player\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CElementSlotUI.cpp">
+      <Filter>ソース ファイル\Game\Character\Player\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\ElementData.cpp">
+      <Filter>ソース ファイル\Game\Element</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -789,8 +801,17 @@
     <ClInclude Include="src\Game\CAdventurer.h">
       <Filter>ソース ファイル\Game\Character\Player</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CPlayerUI.h">
+    <ClInclude Include="src\Game\CPlayerHpUI.h">
       <Filter>ソース ファイル\Game\Character\Player\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CElementManager.h">
+      <Filter>ソース ファイル\Game\Character\Player\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CElementSlotUI.h">
+      <Filter>ソース ファイル\Game\Character\Player\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\ElementData.h">
+      <Filter>ソース ファイル\Game\Element</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

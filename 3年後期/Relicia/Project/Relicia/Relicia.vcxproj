@@ -80,7 +80,9 @@
     <ClCompile Include="src\Game\CBspMapCollider.cpp" />
     <ClCompile Include="src\Game\CBullet.cpp" />
     <ClCompile Include="src\Game\CCrate.cpp" />
-    <ClCompile Include="src\Game\CPlayerUI.cpp" />
+    <ClCompile Include="src\Game\CElementManager.cpp" />
+    <ClCompile Include="src\Game\CElementSlotUI.cpp" />
+    <ClCompile Include="src\Game\CPlayerHpUI.cpp" />
     <ClCompile Include="src\Game\CMashroom.cpp" />
     <ClCompile Include="src\Game\CCactus.cpp" />
     <ClCompile Include="src\Game\CCactusNeedle.cpp" />
@@ -111,6 +113,7 @@
     <ClCompile Include="src\Game\CWeapon.cpp" />
     <ClCompile Include="src\Game\CXCharacter.cpp" />
     <ClCompile Include="src\Game\CDoor.cpp" />
+    <ClCompile Include="src\Game\ElementData.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Test\CBootMenuScene.cpp" />
     <ClCompile Include="src\Test\CColBase.cpp" />
@@ -201,7 +204,9 @@
     <ClInclude Include="src\Game\CBspMapCollider.h" />
     <ClInclude Include="src\Game\CBullet.h" />
     <ClInclude Include="src\Game\CCrate.h" />
-    <ClInclude Include="src\Game\CPlayerUI.h" />
+    <ClInclude Include="src\Game\CElementManager.h" />
+    <ClInclude Include="src\Game\CElementSlotUI.h" />
+    <ClInclude Include="src\Game\CPlayerHpUI.h" />
     <ClInclude Include="src\Game\CMashroom.h" />
     <ClInclude Include="src\Game\CCactus.h" />
     <ClInclude Include="src\Game\CCactusNeedle.h" />
@@ -232,6 +237,7 @@
     <ClInclude Include="src\Game\CWeapon.h" />
     <ClInclude Include="src\Game\CXCharacter.h" />
     <ClInclude Include="src\Game\CDoor.h" />
+    <ClInclude Include="src\Game\ElementData.h" />
     <ClInclude Include="src\Test\CBootMenuScene.h" />
     <ClInclude Include="src\Test\CColBase.h" />
     <ClInclude Include="src\Test\CColCapsule.h" />

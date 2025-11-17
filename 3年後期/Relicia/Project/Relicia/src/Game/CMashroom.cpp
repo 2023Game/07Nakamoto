@@ -12,8 +12,9 @@
 const std::vector<CEnemy::AnimData> ANIM_DATA =
 {
 	{ "",						true,	0.0f,	1.0f	},	// Tポーズ
-	//{ ANIM_PATH"idle.x",		true,	41.0f,	1.0f	},	// 待機
-	//{ ANIM_PATH"attack1.x",		true,	26.0f,	1.0f	},	// 頭突き攻撃
+	{ ANIM_PATH"idle.x",		true,	41.0f,	1.0f	},	// 待機
+	{ ANIM_PATH"attack1.x",		true,	26.0f,	1.0f	},	// 頭突き攻撃
+	{ ANIM_PATH"attack2.x",		true,	26.0f,	1.0f	},	// 回転攻撃
 
 };
 
@@ -30,7 +31,7 @@ CMashroom::CMashroom()
 	InitEnemy("Mushroom", &ANIM_DATA);
 
 	// 最初は待機アニメーションを再生
-	ChangeAnimation((int)EAnimType::eTPose);
+	ChangeAnimation((int)EAnimType::eIdle);
 
 	// 本体のコライダーを作成
 	mpBodyCol = new CColliderCapsule
