@@ -104,6 +104,7 @@ void CGameScene::Load()
 	);
 
 	mainCamera->SetFollowTargetTf(player);
+	
 
 	// ƒQ[ƒ€ƒƒjƒ…[‚ğì¬
 	mpGameMenu = new CGameMenu();

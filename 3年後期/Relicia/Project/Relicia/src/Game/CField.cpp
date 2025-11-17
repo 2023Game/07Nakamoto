@@ -20,6 +20,8 @@ CField::CField()
 	: CObjectBase(ETag::eField, ETaskPriority::eBackground)
 	, mEffectAnimData(1, 11, true, 11, 0.03f)
 	, mpMapData(nullptr)
+	, mpFloorCol(nullptr)
+
 {
 	// BSP法でダンジョン生成
 	CreateMap();
@@ -28,6 +30,8 @@ CField::CField()
 CField::~CField()
 {
 	SAFE_DELETE(mpMapData);
+	// コライダーの削除
+	SAFE_DELETE(mpFloorCol);
 }
 
 // 2次元配列のダンジョンデータを取得
@@ -53,6 +57,9 @@ void CField::CreateMap()
 	if (mpMapData != nullptr)
 	{
 		SAFE_DELETE(mpMapData);
+		// コライダーの削除
+		SAFE_DELETE(mpFloorCol);
+
 		for (CFloor* floor : mpFloorObjects) floor->Kill();
 		for (CWall* wall : mpWallObjects) wall->Kill();
 		for (CPillar* cpillar : mpPillarObjects) cpillar->Kill();
@@ -69,9 +76,12 @@ void CField::CreateMap()
 	}
 
 	// BSP法のダンジョンデータを生成
-	mpMapData = new CBspMap(40, 40);
+	mpMapData = new CBspMap(50, 50);
 	// BSP法のダンジョン生成
-	SetMapData(mpMapData->GetTileData());
+	CreateDungeon(mpMapData->GetTileData());
+
+	// 床のコライダーの生成
+	mpFloorCol = new CBspMapCollider(mpMapData);
 }
 
 void CField::CreateFieldObjects()
@@ -181,7 +191,7 @@ int CField::ConvertDirectionAngle(CBspMap::Direction dir) const
 }
 
 // BPMマップのダンジョンの生成
-void CField::SetMapData(const std::vector<std::vector<CBspMap::Tile>>& map)
+void CField::CreateDungeon(const std::vector<std::vector<CBspMap::Tile>>& map)
 {
 	for (int y = 0; y < map.size(); ++y)
 	{

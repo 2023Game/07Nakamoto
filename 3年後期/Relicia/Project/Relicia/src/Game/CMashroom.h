@@ -12,6 +12,11 @@ public:
 	// デストラクタ
 	~CMashroom();
 
+	// ダメージを受ける
+	void TakeDamage(int damage, CObjectBase* causer) override;
+	// 死亡
+	void Death() override;
+
 	// 衝突処理
 	void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
 	// 更新
@@ -35,9 +40,14 @@ private:
 	{
 		eIdle,		// 待機状態
 		eAttack1,	// 頭突き攻撃
+
+		eDeath,		// 死亡
 	};
 
 	// 状態切り替え
-	//void ChangeState(int state) override;
+	void ChangeState(int state) override;
+
+	// 死亡状態の更新処理
+	void UpdateDeath();
 
 };

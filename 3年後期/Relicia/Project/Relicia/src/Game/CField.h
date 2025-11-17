@@ -10,7 +10,6 @@ class CPillar;
 class CEntrance;
 class CDoor;
 class CBspMapCollider;
-class CDungeonManeger;
 
 class CField : public CObjectBase
 {
@@ -40,7 +39,7 @@ private:
 	// 方角によって回転値を設定
 	int ConvertDirectionAngle(CBspMap::Direction dir) const;
 	// BPMマップのダンジョンの生成
-	void SetMapData(const std::vector<std::vector<CBspMap::Tile>>& map);
+	void CreateDungeon(const std::vector<std::vector<CBspMap::Tile>>& map);
 
 	// 通路の壁の生成
 	void CreatePassageWall(const std::vector<std::vector<CBspMap::Tile>>& map, int x, int y);
@@ -63,5 +62,8 @@ private:
 	std::vector<CEntrance*> mpEntranceObjects;	// 出入口のリスト
 	std::vector<CDoor*> mpDoorObjects;		// 扉のリスト
 	std::vector<CFloor*> mpPassegeObjects;	// 通路の床リスト
+
+	// コライダーのポインタ
+	CBspMapCollider* mpFloorCol;
 
 };

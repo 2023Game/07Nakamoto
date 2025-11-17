@@ -115,9 +115,7 @@ CAdventurer::CAdventurer()
 	mpSword->Rotation(ATTACK_SWORD_OFFSET_ROT);
 
 	// ƒvƒŒƒCƒ„[‚ÌUI
-	mpHpGauge = new CPlayerUI(100);
-	mpHpGauge->SetMaxPoint(mMaxHp);
-	mpHpGauge->SetCurPoint(mHp);
+	mpHpGauge = new CPlayerUI(MAX_HP);
 	mpHpGauge->SetPos(HP_GAUGE_UI_POS);
 }
 

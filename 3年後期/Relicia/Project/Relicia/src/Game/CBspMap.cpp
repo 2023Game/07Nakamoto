@@ -12,7 +12,6 @@
 
 // コンストラクタ
 CBspMap::CBspMap(int x, int y)
-    : mpFloorCol(nullptr)
 {
     // 初期化
     Initialize(x, y);
@@ -33,8 +32,6 @@ CBspMap::CBspMap(int x, int y)
     // 通路のまとまりを保存
     SetPassageData();
 
-    // 床のコライダーの生成
-    mpFloorCol = new CBspMapCollider(this);
 
 #if _DEBUG
     // ２次元配列のデバッグ表示
@@ -46,9 +43,6 @@ CBspMap::CBspMap(int x, int y)
 CBspMap::~CBspMap()
 {
     DeleteNode(mpRoot);
-
-    // コライダーの削除
-    mpFloorCol->Kill();
 }
 
 

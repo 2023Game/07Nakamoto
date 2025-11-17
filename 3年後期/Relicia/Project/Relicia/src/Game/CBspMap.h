@@ -160,6 +160,4 @@ private:
 	
 	// タイルの開始座標と終了位置を保存
 	std::vector<TileSegment> mSegments;
-	// コライダーのポインタ
-	CBspMapCollider* mpFloorCol;
 };
