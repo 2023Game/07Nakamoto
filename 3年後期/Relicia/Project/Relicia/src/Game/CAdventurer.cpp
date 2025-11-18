@@ -589,8 +589,8 @@ void CAdventurer::Update()
 
 	// 武器の行列を更新
 	mpSword->UpdateMtx();
-
-	//mpElementEquipment->
+	// 属性スロットの更新
+	mpElementEquipment->Update();
 	
 #if _DEBUG
 	CVector pos = Position();

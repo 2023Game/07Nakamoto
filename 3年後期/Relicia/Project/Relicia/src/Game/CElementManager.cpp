@@ -22,7 +22,7 @@ CElementManager::CElementManager()
 	// 初期化
 	mSlots.resize(MAX_SLOT,ElementType::None);
 
-	// mSlots[0] = ElementType::eFire;
+	mSlots[0] = ElementType::eFire;
 }
 
 // デストラクタ

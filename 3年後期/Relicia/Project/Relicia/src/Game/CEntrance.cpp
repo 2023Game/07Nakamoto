@@ -9,6 +9,9 @@ CEntrance::CEntrance(const CVector& pos)
 
 	mpColliderMesh = new CColliderMesh(this, ELayer::eWall, mpModel, false);
 
+	// コライダー表示をオンにする
+	//mpColliderMesh->SetShow(true);
+
 	Position(pos);
 
 }

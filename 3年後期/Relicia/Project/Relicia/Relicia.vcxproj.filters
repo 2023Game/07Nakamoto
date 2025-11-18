@@ -104,8 +104,8 @@
     <Filter Include="ソース ファイル\Game\Character\Player\UI">
       <UniqueIdentifier>{77fcddd3-bcfd-4c9e-8707-5b141da98c45}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Game\Element">
-      <UniqueIdentifier>{6a1a1815-2356-4b70-8a27-c9e97fc11b52}</UniqueIdentifier>
+    <Filter Include="ソース ファイル\Game\Crystal">
+      <UniqueIdentifier>{d5d1616a-eaa1-46ba-8337-44504a867a44}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -445,8 +445,8 @@
     <ClCompile Include="src\Game\CElementSlotUI.cpp">
       <Filter>ソース ファイル\Game\Character\Player\UI</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\ElementData.cpp">
-      <Filter>ソース ファイル\Game\Element</Filter>
+    <ClCompile Include="src\Game\CrystalData.cpp">
+      <Filter>ソース ファイル\Game\Crystal</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -810,8 +810,8 @@
     <ClInclude Include="src\Game\CElementSlotUI.h">
       <Filter>ソース ファイル\Game\Character\Player\UI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\ElementData.h">
-      <Filter>ソース ファイル\Game\Element</Filter>
+    <ClInclude Include="src\Game\CrystalData.h">
+      <Filter>ソース ファイル\Game\Crystal</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

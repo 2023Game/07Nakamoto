@@ -81,6 +81,7 @@ void CElementSlotUI::EquipElement()
 // 更新
 void CElementSlotUI::Update()
 {
+	EquipElement();
 }
 
 // 描画
@@ -92,10 +93,7 @@ void CElementSlotUI::Render()
 	mpElementSlot->Render();
 
 	// 装備していたら、装備アイコンのアイテムを描画
-	//if (mpElementImage->IsShow())
-	{
-		mpElementImage->SetAlpha(GetAlpha());
-		mpElementImage->SetPos(mPosition);
-		mpElementImage->Render();
-	}
+	mpElementImage->SetAlpha(GetAlpha());
+	mpElementImage->SetPos(mPosition);
+	mpElementImage->Render();
 }
