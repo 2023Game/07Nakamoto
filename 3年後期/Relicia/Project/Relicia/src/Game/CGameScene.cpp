@@ -14,6 +14,7 @@
 
 #include "CDebugInput.h"
 #include "CPlayer.h"
+#include "CColliderTriangle.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -105,11 +106,11 @@ void CGameScene::Load()
 
 	mainCamera->SetFollowTargetTf(player);
 
-	//std::vector<CColliderTriangle*> cols = mpField->GetCollider();
-	//for (CColliderTriangle* col : cols)
-	//{
-	//	mainCamera->AddCollider(col);
-	//}
+	std::vector<CColliderTriangle*> cols = mpField->GetCollider();
+	for (CColliderTriangle* col : cols)
+	{
+		mainCamera->AddCollider(col);
+	}
 
 	// ゲームメニューを作成
 	mpGameMenu = new CGameMenu();
