@@ -5,9 +5,12 @@
 CEntrance::CEntrance(const CVector& pos)
 	: CObjectBase(ETag::eField, ETaskPriority::eBackground, 0, ETaskPauseType::eGame)
 {
-	mpModel = CResourceManager::Get<CModel>("Wall_Entrance");
+	mpModel = CResourceManager::Get<CModel>("Wall_Entrance"); 
+	CModel* col = CResourceManager::Get<CModel>("Entrance_Col");
+	CModel* archCol = CResourceManager::Get<CModel>("Entrance_Arch_Col");
 
-	mpColliderMesh = new CColliderMesh(this, ELayer::eWall, mpModel, false);
+	mpColliderMesh = new CColliderMesh(this, ELayer::eWall, col, false);
+	mpColliderMeshArch = new CColliderMesh(this, ELayer::eFloor, archCol, false);
 
 	// コライダー表示をオンにする
 	//mpColliderMesh->SetShow(true);
@@ -20,6 +23,7 @@ CEntrance::CEntrance(const CVector& pos)
 CEntrance::~CEntrance()
 {
 	SAFE_DELETE(mpColliderMesh);
+	SAFE_DELETE(mpColliderMeshArch);
 }
 
 // 更新

@@ -15,12 +15,14 @@
 #include "CBspMapCollider.h"
 
 #define PILLAR_OFFSET_POS 10.0f	// 柱のオフセット座標
+#define SECTION_SIZE_X 50		// ダンジョンの全体の区画の横サイズ
+#define SECTION_SIZE_Y 50		// ダンジョンの全体の区画の縦サイズ
 
 CField::CField()
 	: CObjectBase(ETag::eField, ETaskPriority::eBackground)
 	, mEffectAnimData(1, 11, true, 11, 0.03f)
 	, mpMapData(nullptr)
-	, mpFieldCollider(nullptr)
+	, mpDungeonCollider(nullptr)
 
 {
 	// BSP法でダンジョン生成
@@ -31,7 +33,7 @@ CField::~CField()
 {
 	SAFE_DELETE(mpMapData);
 	// コライダーの削除
-	SAFE_DELETE(mpFieldCollider);
+	SAFE_DELETE(mpDungeonCollider);
 }
 
 // 2次元配列のダンジョンデータを取得
@@ -54,7 +56,7 @@ const CVector CField::GetRandomFloorPos() const
 // コライダーを取得
 std::vector<CColliderTriangle*> CField::GetCollider() const
 {
-	return mpFieldCollider->GetCollider();
+	return mpDungeonCollider->GetCollider();
 }
 
 
@@ -65,7 +67,7 @@ void CField::CreateMap()
 	{
 		SAFE_DELETE(mpMapData);
 		// コライダーの削除
-		SAFE_DELETE(mpFieldCollider);
+		SAFE_DELETE(mpDungeonCollider);
 
 		for (CFloor* floor : mpFloorObjects) floor->Kill();
 		for (CWall* wall : mpWallObjects) wall->Kill();
@@ -83,12 +85,14 @@ void CField::CreateMap()
 	}
 
 	// BSP法のダンジョンデータを生成
-	mpMapData = new CBspMap(50, 50);
+	mpMapData = new CBspMap(SECTION_SIZE_X, SECTION_SIZE_Y);
 	// BSP法のダンジョン生成
 	CreateDungeon(mpMapData->GetTileData());
 
-	// 床のコライダーの生成
-	mpFieldCollider = new CBspMapCollider(mpMapData);
+	// ダンジョンのコライダーの生成
+	mpDungeonCollider = new CBspMapCollider(mpMapData);
+	mpDungeonCollider->CreateOptimaizedFloorMeshCollider(SECTION_SIZE_X, SECTION_SIZE_Y);
+
 }
 
 void CField::CreateFieldObjects()
@@ -325,6 +329,48 @@ void CField::CreateDungeon(const std::vector<std::vector<CBspMap::Tile>>& map)
 			{
 				// 通路の壁を生成
 				CreatePassageWall(map, x, y);
+			}
+			else if (map[y][x].pillar != CBspMap::Direction::None)
+			{
+				//方向に応じて座標を修正
+				CVector pillarPos = CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE);
+				// オフセットポジション格納用
+				CVector offSetPos;
+
+				switch (map[y][x].pillar)
+				{
+
+				// 北東の場合
+				case CBspMap::Direction::eNorthEast:
+					{
+						offSetPos = CVector(-PILLAR_OFFSET_POS, 0.0f, PILLAR_OFFSET_POS);
+					}
+				// 南東の場合
+				case CBspMap::Direction::eSouthEast:
+					{
+						offSetPos = CVector(-PILLAR_OFFSET_POS, 0.0f, -PILLAR_OFFSET_POS);
+					}
+				// 南西の場合
+				case CBspMap::Direction::eSouthWest:
+					{
+						offSetPos = CVector(PILLAR_OFFSET_POS, 0.0f, -PILLAR_OFFSET_POS);
+					}
+				//北西の場合
+				case  CBspMap::Direction::eNorthWest:
+					{
+						offSetPos = CVector(PILLAR_OFFSET_POS, 0.0f, PILLAR_OFFSET_POS);
+					}
+				default:
+					break;
+				}
+
+				pillarPos += offSetPos;
+
+				// 柱の生成
+				CPillar* pillar = new CPillar(pillarPos);
+				// 柱のリストに追加
+				mpPillarObjects.push_back(pillar);
+
 			}
 		}
 	}

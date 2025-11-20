@@ -67,6 +67,6 @@ private:
 	std::vector<CFloor*> mpPassegeObjects;	// 通路の床リスト
 
 	// コライダーのポインタ
-	CBspMapCollider* mpFieldCollider;
+	CBspMapCollider* mpDungeonCollider;
 
 };

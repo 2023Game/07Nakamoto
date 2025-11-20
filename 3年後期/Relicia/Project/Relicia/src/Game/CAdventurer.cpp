@@ -8,6 +8,7 @@
 #include "CColliderSphere.h"
 #include "CPlayerHpUI.h"
 #include "CElementSlotUI.h"
+#include "CElementManager.h"
 // プレイヤーのインスタンス
 CAdventurer* CAdventurer::spInstance = nullptr;
 
@@ -567,6 +568,18 @@ void CAdventurer::Update()
 	if (CInput::PushKey(VK_MBUTTON))
 	{
 
+	}
+
+	// マウスホイールの回転量を取得
+	int mouseWheel = CInput::GetDeltaMouseWheel();
+	// 属性スロットを変更
+	if (mouseWheel > 1)
+	{
+		mouseWheel = mouseWheel;
+	}
+	else if(mouseWheel < -1)
+	{
+		mouseWheel = mouseWheel;
 	}
 
 	// 「E」キーで

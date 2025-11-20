@@ -1,6 +1,6 @@
 #pragma once
 #include "CObjectBase.h"
-#include "CCollider.h"
+#include "CColliderMesh.h"
 #include "CModel.h"
 
 class CPillar : public CObjectBase
@@ -17,4 +17,5 @@ public:
 	void Render() override;
 private:
 	CModel* mpModel;
+	CColliderMesh* mpColliderMesh;
 };

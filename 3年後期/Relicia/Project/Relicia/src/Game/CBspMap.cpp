@@ -32,7 +32,6 @@ CBspMap::CBspMap(int x, int y)
     // 通路のまとまりを保存
     SetPassageData();
 
-
 #if _DEBUG
     // ２次元配列のデバッグ表示
     PrintSection();
@@ -596,6 +595,7 @@ void CBspMap::SetPassageData()
             // まだ通路かどうか
             else if (!isPassage && startX != -1)
             {
+                // 通路の床のコライダー情報を登録
                 mSegments.push_back({
                     CVector2(startX,y), CVector2(x,y),
                     TileType::ePassage, Direction::eEast
@@ -622,6 +622,7 @@ void CBspMap::SetPassageData()
                     TileType::eWall, Direction::eNorth });
 
                 startUpWallX = -1;
+
             }
 
             // 下の壁

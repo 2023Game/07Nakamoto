@@ -12,6 +12,8 @@ public:
 
 	// 通路のコライダーを生成
 	void CreatePassage(CBspMap* map);
+	// 床全体の四角形コライダーを生成
+	void CreateOptimaizedFloorMeshCollider(int x, int y);
 
 	// コライダーを取得
 	const std::vector<CColliderTriangle*> GetCollider() const;
@@ -25,6 +27,7 @@ private:
 	void CreateFloorCollider(const CBspMap::SectionNode* node);
 	// 壁のコライダー生成
 	void CreateWallCollider(CBspMap* map);
+
 
 	std::vector<CColliderTriangle*> mpCollider;
 

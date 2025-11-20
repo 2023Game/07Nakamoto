@@ -55,6 +55,7 @@ public:
 		TileType type;	// ƒ^ƒCƒ‹‚Ìí—Ş
 		Direction dir;	// Œü‚«
 		bool passage;	// ’Ê˜H‚©‚Ç‚¤‚©
+		Direction pillar = Direction::None;	// ’Œ‚ğ¶¬‚·‚é‚©‚Ç‚¤‚© 
 
 		Passage passageData;
 	};

@@ -55,8 +55,11 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>(		"Door",				"Dungeon\\Door.obj");
 	CResourceManager::Load<CModel>(		"Floor",			"Dungeon\\Floor.obj");
 	CResourceManager::Load<CModel>(		"Pillar",			"Dungeon\\Pillar.obj");
+	CResourceManager::Load<CModel>(		"Pillar_Col",		"Dungeon\\Pillar_Col.obj");
 	CResourceManager::Load<CModel>(		"Wall",				"Dungeon\\Wall.obj");
 	CResourceManager::Load<CModel>(		"Wall_Entrance",	"Dungeon\\Wall_Entrance.obj");
+	CResourceManager::Load<CModel>(		"Entrance_Col",		"Dungeon\\Entrance_Col.obj");
+	CResourceManager::Load<CModel>(		"Entrance_Arch_Col", "Dungeon\\Entrance_Arch_Col.obj");
 
 	CResourceManager::Load<CModelX>(	"Bat",				"Character\\Enemy\\Bat\\bat.x");
 	CResourceManager::Load<CModelX>(	"Mushroom",			"Character\\Enemy\\Mushroom\\mushroom.x");
@@ -67,6 +70,7 @@ void CGameScene::Load()
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
 
+	// ダンジョンの作成
 	mpField = new CField();
 
 	// サボテンの敵を作成
@@ -81,10 +85,12 @@ void CGameScene::Load()
 	//player->Scale(1.0f, 1.0f, 1.0f);
 	//player->Position(mpField->GetRandomFloorPos());
 
+	// プレイヤーの作成
 	CAdventurer* player = new CAdventurer();
 	player->Scale(1.0f, 1.0f, 1.0f);
 	player->Position(mpField->GetRandomFloorPos());
 
+	// 動かせる箱の作成
 	CCrate* crate = new CCrate(mpField->GetRandomFloorPos());
 	crate->Scale(1.0f, 3.0f, 1.0f);
 
