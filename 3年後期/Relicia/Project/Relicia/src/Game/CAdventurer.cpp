@@ -573,13 +573,13 @@ void CAdventurer::Update()
 	// マウスホイールの回転量を取得
 	int mouseWheel = CInput::GetDeltaMouseWheel();
 	// 属性スロットを変更
-	if (mouseWheel > 1)
+	if (mouseWheel > 0)
 	{
-		mouseWheel = mouseWheel;
+		CElementManager::Instance()->SelectNext();
 	}
-	else if(mouseWheel < -1)
+	else if(mouseWheel < 0)
 	{
-		mouseWheel = mouseWheel;
+		CElementManager::Instance()->SelectPrev();
 	}
 
 	// 「E」キーで

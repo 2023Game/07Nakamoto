@@ -23,6 +23,8 @@ CElementManager::CElementManager()
 	mSlots.resize(MAX_SLOT,ElementType::None);
 
 	mSlots[0] = ElementType::eFire;
+	mSlots[3] = ElementType::eFire;
+
 }
 
 // デストラクタ

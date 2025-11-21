@@ -90,8 +90,7 @@ void CField::CreateMap()
 	CreateDungeon(mpMapData->GetTileData());
 
 	// ダンジョンのコライダーの生成
-	mpDungeonCollider = new CBspMapCollider(mpMapData);
-	mpDungeonCollider->CreateOptimaizedFloorMeshCollider(SECTION_SIZE_X, SECTION_SIZE_Y);
+	mpDungeonCollider = new CBspMapCollider(mpMapData, SECTION_SIZE_X, SECTION_SIZE_Y);
 
 }
 

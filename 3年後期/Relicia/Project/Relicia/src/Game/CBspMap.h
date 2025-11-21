@@ -107,7 +107,7 @@ public:
 	// ルートノードの取得
 	const SectionNode* GetRootNode()const;
 	// タイルの開始座標と終了座標のリストを取得
-	const std::vector<TileSegment>& GetSegments() const;
+	std::vector<TileSegment> GetSegments() const;
 
 	// 部屋の壁の情報を返す
 	std::vector<TileSegment> CBspMap::CollectWallSegments() const;
@@ -144,8 +144,6 @@ private:
 	// 方角の正反対を返す
 	Direction InverseDirection(Direction dir) const;
 
-	// 通路のまとまりを保存
-	void SetPassageData();
 
 #if _DEBUG
 	// 区画の境界線設定
@@ -158,7 +156,5 @@ private:
 	SectionNode* mpRoot;
 	// ２次元配列(可変長配列)のマップデータ
 	std::vector<std::vector<Tile>> mMapData;
-	
-	// タイルの開始座標と終了位置を保存
-	std::vector<TileSegment> mSegments;
+
 };

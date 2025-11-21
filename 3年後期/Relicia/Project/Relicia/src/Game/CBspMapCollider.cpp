@@ -4,17 +4,24 @@
 #define WALL_COL_OFFSET 2.2f
 
 // コンストラクタ
-CBspMapCollider::CBspMapCollider(CBspMap* map)
+CBspMapCollider::CBspMapCollider(CBspMap* map, int x, int y)
     : CObjectBase(ETag::eField, ETaskPriority::eBackground, 0,ETaskPauseType::eGame)
 {
     if (!map) return;
+    
+    // 区画全体の床コライダーを生成
+    CreateOptimaizedFloorMeshCollider(x, y);
 
-    // 部屋の床コライダー生成
-    //CreateRoomCollider(map->GetRootNode());
-    // 部屋の壁コライダー生成
-    CreateWallCollider(map);
-    // 通路のコライダー生成
-    CreatePassage(map);
+    // 部屋の壁コライダーの生成
+    for (CBspMap::TileSegment seg : map->CollectWallSegments())
+    {
+        CreateWallCollider(&seg);
+    }
+    // 通路の壁コライダーの生成
+    for (CBspMap::TileSegment seg : map->GetSegments())
+    {
+        CreateWallCollider(&seg);
+    }
 }
 
 // デストラクタ
@@ -26,107 +33,6 @@ CBspMapCollider::~CBspMapCollider()
         delete col;
     }
     mpCollider.clear();
-}
-
-// 通路のコライダーを生成
-void CBspMapCollider::CreatePassage(CBspMap* map)
-{
-    for (CBspMap::TileSegment seg : map->GetSegments())
-    {
-        switch (seg.type)
-        {
-        //// 通路の場合
-        //case CBspMap::TileType::ePassage:
-        //    // 東(横)方向だったら
-        //    if (seg.dir == CBspMap::Direction::eEast)
-        //    {
-        //        // 床の三角形コライダー
-        //        CColliderTriangle* collider = new CColliderTriangle(this, ELayer::eFloor,
-        //            CVector(seg.end.X() * TILE_SIZE, 0, seg.end.Y() * TILE_SIZE + TILE_SIZE),
-        //            CVector(seg.end.X() * TILE_SIZE, 0, seg.end.Y() * TILE_SIZE),
-        //            CVector(seg.start.X() * TILE_SIZE, 0, seg.start.Y() * TILE_SIZE)
-        //        );
-        //        mpCollider.push_back(collider);
-
-        //        // 床の三角形コライダー
-        //        collider = new CColliderTriangle(this, ELayer::eFloor,
-        //            CVector(seg.start.X() * TILE_SIZE, 0, seg.start.Y() * TILE_SIZE),
-        //            CVector(seg.start.X() * TILE_SIZE, 0, seg.start.Y() * TILE_SIZE + TILE_SIZE),
-        //            CVector(seg.end.X() * TILE_SIZE, 0, seg.end.Y() * TILE_SIZE + TILE_SIZE)
-        //        );
-        //        mpCollider.push_back(collider);
-        //    
-        //    }
-        //    // 北(縦)方向だったら
-        //    else if (seg.dir == CBspMap::Direction::eNorth)
-        //    {
-        //        // 床の三角形コライダー
-        //        CColliderTriangle* collider = new CColliderTriangle(this, ELayer::eFloor,
-        //            CVector(seg.end.X() * TILE_SIZE, 0, seg.end.Y() * TILE_SIZE),
-        //            CVector(seg.end.X() * TILE_SIZE + TILE_SIZE, 0, seg.end.Y() * TILE_SIZE),
-        //            CVector(seg.start.X() * TILE_SIZE, 0, seg.start.Y() * TILE_SIZE)
-        //        );
-
-        //        mpCollider.push_back(collider);
-
-        //        // 床の三角形コライダー
-        //        collider = new CColliderTriangle(this, ELayer::eFloor,
-        //            CVector(seg.start.X() * TILE_SIZE + TILE_SIZE, 0, seg.start.Y() * TILE_SIZE),
-        //            CVector(seg.start.X() * TILE_SIZE, 0, seg.start.Y() * TILE_SIZE),
-        //            CVector(seg.end.X() * TILE_SIZE + TILE_SIZE, 0, seg.end.Y() * TILE_SIZE)
-        //        );
-
-        //        mpCollider.push_back(collider);
-        //    }
-
-        //    break;
-        // 壁の場合
-        case CBspMap::TileType::eWall:
-
-            if (seg.dir == CBspMap::Direction::eSouth ||
-                seg.dir == CBspMap::Direction::eWest)
-            {
-                std::swap(seg.start, seg.end);
-            }
-
-            float offsetX = 0;
-            float offsetY = 0;
-
-            switch (seg.dir)
-            {
-            case CBspMap::Direction::eNorth:   
-                offsetY = -WALL_COL_OFFSET; 
-                break;
-            case CBspMap::Direction::eEast:     
-                offsetX = -TILE_SIZE + WALL_COL_OFFSET; 
-                break;
-            case CBspMap::Direction::eSouth:    
-                offsetY = -TILE_SIZE + WALL_COL_OFFSET;   
-                break;
-            case CBspMap::Direction::eWest:    
-                offsetX = -WALL_COL_OFFSET;  
-                break;
-            }
-
-            // 壁の三角形コライダー
-            CColliderTriangle* collider = new CColliderTriangle(this, ELayer::eWall,
-                CVector(seg.end.X() * TILE_SIZE - offsetX, 0, seg.end.Y() * TILE_SIZE - offsetY),
-                CVector(seg.end.X() * TILE_SIZE - offsetX, 40, seg.end.Y() * TILE_SIZE - offsetY),
-                CVector(seg.start.X() * TILE_SIZE - offsetX, 40, seg.start.Y() * TILE_SIZE - offsetY));
-
-            mpCollider.push_back(collider);
-
-            // 壁の三角形コライダー
-            collider = new CColliderTriangle(this, ELayer::eWall,
-                CVector(seg.end.X() * TILE_SIZE - offsetX, 0, seg.end.Y() * TILE_SIZE - offsetY),
-                CVector(seg.start.X() * TILE_SIZE - offsetX, 40, seg.start.Y() * TILE_SIZE - offsetY),
-                CVector(seg.start.X() * TILE_SIZE - offsetX, 0, seg.start.Y() * TILE_SIZE - offsetY));
-
-            mpCollider.push_back(collider);
-
-            break;
-        }
-    }
 }
 
 // コライダーを取得
@@ -176,45 +82,40 @@ void CBspMapCollider::CreateFloorCollider(const CBspMap::SectionNode* node)
 }
 
 // 壁のコライダー生成
-void CBspMapCollider::CreateWallCollider(CBspMap* map)
+void CBspMapCollider::CreateWallCollider(CBspMap::TileSegment* seg)
 {
-    for (CBspMap::TileSegment seg : map->CollectWallSegments())
-    {
-        if (seg.type != CBspMap::TileType::eWall) continue;
-
-        if (seg.dir == CBspMap::Direction::eSouth ||
-            seg.dir == CBspMap::Direction::eWest)
+        if (seg->dir == CBspMap::Direction::eSouth ||
+            seg->dir == CBspMap::Direction::eWest)
         {
-            std::swap(seg.start, seg.end);
+            std::swap(seg->start, seg->end);
         }
 
         float offsetX = 0;
         float offsetY = 0;
 
-        switch (seg.dir)
+        switch (seg->dir)
         {
-        case CBspMap::Direction::eNorth:    offsetY = -TILE_SIZE - WALL_COL_OFFSET;    break;
-        case CBspMap::Direction::eEast:     offsetX = WALL_COL_OFFSET;    break;
-        case CBspMap::Direction::eSouth:    offsetY = WALL_COL_OFFSET;    break;
-        case CBspMap::Direction::eWest:     offsetX = -TILE_SIZE - WALL_COL_OFFSET;    break;
+        case CBspMap::Direction::eNorth:    offsetY = -TILE_SIZE + WALL_COL_OFFSET;    break;
+        case CBspMap::Direction::eEast:     offsetX = -WALL_COL_OFFSET;    break;
+        case CBspMap::Direction::eSouth:    offsetY = -WALL_COL_OFFSET;    break;
+        case CBspMap::Direction::eWest:     offsetX = -TILE_SIZE + WALL_COL_OFFSET;    break;
         }
 
         // 壁の三角形コライダー
         CColliderTriangle* collider = new CColliderTriangle(this, ELayer::eWall,
-            CVector(seg.end.X() * TILE_SIZE - offsetX, 0, seg.end.Y() * TILE_SIZE - offsetY),
-            CVector(seg.end.X() * TILE_SIZE - offsetX, 40, seg.end.Y() * TILE_SIZE - offsetY),
-            CVector(seg.start.X() * TILE_SIZE - offsetX, 40, seg.start.Y() * TILE_SIZE - offsetY));
+            CVector(seg->end.X() * TILE_SIZE - offsetX, 0, seg->end.Y() * TILE_SIZE - offsetY),
+            CVector(seg->end.X() * TILE_SIZE - offsetX, 40, seg->end.Y() * TILE_SIZE - offsetY),
+            CVector(seg->start.X() * TILE_SIZE - offsetX, 40, seg->start.Y() * TILE_SIZE - offsetY));
 
         mpCollider.push_back(collider);
 
         // 壁の三角形コライダー
         collider = new CColliderTriangle(this, ELayer::eWall,
-            CVector(seg.end.X() * TILE_SIZE - offsetX, 0, seg.end.Y() * TILE_SIZE - offsetY),
-            CVector(seg.start.X() * TILE_SIZE - offsetX, 40, seg.start.Y() * TILE_SIZE - offsetY),
-            CVector(seg.start.X() * TILE_SIZE - offsetX, 0, seg.start.Y() * TILE_SIZE - offsetY));
+            CVector(seg->end.X() * TILE_SIZE - offsetX, 0, seg->end.Y() * TILE_SIZE - offsetY),
+            CVector(seg->start.X() * TILE_SIZE - offsetX, 40, seg->start.Y() * TILE_SIZE - offsetY),
+            CVector(seg->start.X() * TILE_SIZE - offsetX, 0, seg->start.Y() * TILE_SIZE - offsetY));
 
         mpCollider.push_back(collider);
-    }
 }
 
 // 床全体の四角形コライダーを生成
