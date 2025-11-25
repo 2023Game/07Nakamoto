@@ -80,6 +80,10 @@
     <ClCompile Include="src\Game\CBspMapCollider.cpp" />
     <ClCompile Include="src\Game\CBullet.cpp" />
     <ClCompile Include="src\Game\CCrate.cpp" />
+    <ClCompile Include="src\Game\CCrystalManager.cpp" />
+    <ClCompile Include="src\Game\CCrystalObj.cpp" />
+    <ClCompile Include="src\Game\CInteractObject.cpp" />
+    <ClCompile Include="src\Game\CInteractObjectManager.cpp" />
     <ClCompile Include="src\Game\CrystalData.cpp" />
     <ClCompile Include="src\Game\CElementManager.cpp" />
     <ClCompile Include="src\Game\CElementSlotUI.cpp" />
@@ -204,6 +208,10 @@
     <ClInclude Include="src\Game\CBspMapCollider.h" />
     <ClInclude Include="src\Game\CBullet.h" />
     <ClInclude Include="src\Game\CCrate.h" />
+    <ClInclude Include="src\Game\CCrystalManager.h" />
+    <ClInclude Include="src\Game\CCrystalObj.h" />
+    <ClInclude Include="src\Game\CInteractObject.h" />
+    <ClInclude Include="src\Game\CInteractObjectManager.h" />
     <ClInclude Include="src\Game\CrystalData.h" />
     <ClInclude Include="src\Game\CElementManager.h" />
     <ClInclude Include="src\Game\CElementSlotUI.h" />

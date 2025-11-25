@@ -1,7 +1,7 @@
 #include "CBspMapCollider.h"
 #include "CField.h"
 
-#define WALL_COL_OFFSET 2.2f
+#define WALL_COL_OFFSET 5.0f
 
 // コンストラクタ
 CBspMapCollider::CBspMapCollider(CBspMap* map, int x, int y)
@@ -93,26 +93,43 @@ void CBspMapCollider::CreateWallCollider(CBspMap::TileSegment* seg)
         float offsetX = 0;
         float offsetY = 0;
 
+        // 方角によってオフセットを設定
         switch (seg->dir)
         {
-        case CBspMap::Direction::eNorth:    offsetY = -TILE_SIZE + WALL_COL_OFFSET;    break;
-        case CBspMap::Direction::eEast:     offsetX = -WALL_COL_OFFSET;    break;
-        case CBspMap::Direction::eSouth:    offsetY = -WALL_COL_OFFSET;    break;
-        case CBspMap::Direction::eWest:     offsetX = -TILE_SIZE + WALL_COL_OFFSET;    break;
+        // 北
+        case CBspMap::Direction::eNorth:    
+            offsetX = TILE_SIZE * 0.5f;
+            offsetY = TILE_SIZE * 0.5f;
+            break;
+        // 東
+        case CBspMap::Direction::eEast:    
+            offsetX = -TILE_SIZE * 0.5f;
+            offsetY = TILE_SIZE * 0.5f;
+            break;
+        // 南
+        case CBspMap::Direction::eSouth: 
+            offsetX = TILE_SIZE * 0.5f;
+            offsetY = -TILE_SIZE * 0.5f;
+            break;
+        // 西
+        case CBspMap::Direction::eWest:
+            offsetX = TILE_SIZE * 0.5f;
+            offsetY = TILE_SIZE * 0.5f;
+            break;
         }
 
         // 壁の三角形コライダー
         CColliderTriangle* collider = new CColliderTriangle(this, ELayer::eWall,
-            CVector(seg->end.X() * TILE_SIZE - offsetX, 0, seg->end.Y() * TILE_SIZE - offsetY),
+            CVector(seg->start.X() * TILE_SIZE - offsetX, 40, seg->start.Y() * TILE_SIZE - offsetY),
             CVector(seg->end.X() * TILE_SIZE - offsetX, 40, seg->end.Y() * TILE_SIZE - offsetY),
-            CVector(seg->start.X() * TILE_SIZE - offsetX, 40, seg->start.Y() * TILE_SIZE - offsetY));
+            CVector(seg->end.X() * TILE_SIZE - offsetX, 0, seg->end.Y() * TILE_SIZE - offsetY));
 
         mpCollider.push_back(collider);
 
         // 壁の三角形コライダー
         collider = new CColliderTriangle(this, ELayer::eWall,
-            CVector(seg->end.X() * TILE_SIZE - offsetX, 0, seg->end.Y() * TILE_SIZE - offsetY),
             CVector(seg->start.X() * TILE_SIZE - offsetX, 40, seg->start.Y() * TILE_SIZE - offsetY),
+            CVector(seg->end.X() * TILE_SIZE - offsetX, 0, seg->end.Y() * TILE_SIZE - offsetY),
             CVector(seg->start.X() * TILE_SIZE - offsetX, 0, seg->start.Y() * TILE_SIZE - offsetY));
 
         mpCollider.push_back(collider);

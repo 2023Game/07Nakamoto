@@ -188,15 +188,33 @@ int CField::ConvertDirectionAngle(CBspMap::Direction dir) const
 	switch (dir)
 	{
 		// 北の場合
-	case CBspMap::Direction::eSouth:	return 0;
+	case CBspMap::Direction::eNorth:	return 0;
 		// 東の場合
-	case CBspMap::Direction::eWest:		return 90;
+	case CBspMap::Direction::eEast:		return 90;
 		// 南の場合
-	case CBspMap::Direction::eNorth:	return 180;
+	case CBspMap::Direction::eSouth:	return 180;
 		// 西の場合
-	case CBspMap::Direction::eEast:		return 270;
+	case CBspMap::Direction::eWest:		return 270;
 
 	default:	return 0;
+	}
+}
+
+// 方角によってオフセット座標を設定
+CVector2 CField::CvnvertDirectionPos(CBspMap::Direction dir) const
+{
+	switch (dir)
+	{
+		// 北の場合
+	case CBspMap::Direction::eNorth:	return CVector2(0, 1);
+		// 東の場合
+	case CBspMap::Direction::eEast:		return CVector2(-1, 0);
+		// 南の場合
+	case CBspMap::Direction::eSouth:	return CVector2(0, -1);
+		// 西の場合
+	case CBspMap::Direction::eWest:		return CVector2(1, 0);
+
+	default:	return CVector2(0, 0);
 	}
 }
 
@@ -215,7 +233,7 @@ void CField::CreateDungeon(const std::vector<std::vector<CBspMap::Tile>>& map)
 			case CBspMap::TileType::eFloor:
 			{
 				// 床の生成
-				CFloor* floor = new CFloor(CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
+				CFloor* floor = new CFloor(CVector(x * TILE_SIZE, 0, y * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
 				// 床のリストに追加
 				mpFloorObjects.push_back(floor);
 
@@ -224,10 +242,12 @@ void CField::CreateDungeon(const std::vector<std::vector<CBspMap::Tile>>& map)
 			// 壁
 			case CBspMap::TileType::eWall:
 			{
-				// 壁の生成
-				CWall* wall = new CWall(CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE));
-				// 壁の回転値を設定
+				// 壁の回転値とオフセット座標を設定
 				int rotY = ConvertDirectionAngle(tile.dir);
+				CVector2 pos = CvnvertDirectionPos(tile.dir);
+
+				// 壁の生成
+				CWall* wall = new CWall(CVector((x + pos.X()) * TILE_SIZE, 0, (y + pos.Y()) * TILE_SIZE));
 				wall->Rotation(0.0f, rotY, 0.0f);
 				// 壁のリストに追加
 				mpWallObjects.push_back(wall);
@@ -236,7 +256,7 @@ void CField::CreateDungeon(const std::vector<std::vector<CBspMap::Tile>>& map)
 				if (map[y][x].passage)
 				{
 					// 床の生成
-					CFloor* floor = new CFloor(CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
+					CFloor* floor = new CFloor(CVector(x  * TILE_SIZE, 0, y  * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
 					// 床のリストに追加
 					mpFloorObjects.push_back(floor);
 				}
@@ -246,7 +266,7 @@ void CField::CreateDungeon(const std::vector<std::vector<CBspMap::Tile>>& map)
 			case CBspMap::TileType::ePillar:
 			{
 				//方向に応じて座標を修正
-				CVector pillarPos = CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE);
+				CVector pillarPos = CVector(x * TILE_SIZE, 0, y * TILE_SIZE);
 				// オフセットポジション格納用
 				CVector offSetPos;
 
@@ -281,7 +301,7 @@ void CField::CreateDungeon(const std::vector<std::vector<CBspMap::Tile>>& map)
 				if (map[y][x].passage)
 				{
 					// 床の生成
-					CFloor* floor = new CFloor(CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
+					CFloor* floor = new CFloor(CVector(x  * TILE_SIZE, 0, y  * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
 					// 床のリストに追加
 					mpFloorObjects.push_back(floor);
 				}
@@ -290,20 +310,23 @@ void CField::CreateDungeon(const std::vector<std::vector<CBspMap::Tile>>& map)
 			// 出入口
 			case CBspMap::TileType::eEntrance:
 			{
-				// 出入口の生成
-				CEntrance* entrance = new CEntrance(CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE));
+				// 壁の回転値とオフセット座標を設定
 				int rotY = ConvertDirectionAngle(tile.dir);
+				CVector2 pos = CvnvertDirectionPos(tile.dir);
+
+				// 出入口の生成
+				CEntrance* entrance = new CEntrance(CVector((x + pos.X()) * TILE_SIZE, 0, (y + pos.Y()) * TILE_SIZE));
 				entrance->Rotation(0.0f, rotY, 0.0f);
 				// 出入口のリストに追加
 				mpEntranceObjects.push_back(entrance);
 
 				// 床の生成
-				CFloor* floor = new CFloor(CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
+				CFloor* floor = new CFloor(CVector(x  * TILE_SIZE, 0, y  * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
 				// 床のリストに追加
 				mpPassegeObjects.push_back(floor);
 
 				// 扉の生成
-				//CDoor* door = new CDoor(CVector((x + 0.5f) * TILE_SIZE + offSetPosX, 0, (y + 0.5f) * TILE_SIZE + offSetPosZ));
+				//CDoor* door = new CDoor(CVector(x  * TILE_SIZE + offSetPosX, 0, y * TILE_SIZE + offSetPosZ));
 				//door->Rotate(0.0f, rotY, 0.0f);
 				//// 扉のリストに追加
 				//mpDoorObjects.push_back(door);
@@ -313,7 +336,7 @@ void CField::CreateDungeon(const std::vector<std::vector<CBspMap::Tile>>& map)
 			case CBspMap::TileType::ePassage:
 			{
 				// 床の生成
-				CFloor* floor = new CFloor(CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
+				CFloor* floor = new CFloor(CVector(x * TILE_SIZE, 0, y  * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
 				// 床のリストに追加
 				mpPassegeObjects.push_back(floor);
 
@@ -332,7 +355,7 @@ void CField::CreateDungeon(const std::vector<std::vector<CBspMap::Tile>>& map)
 			else if (map[y][x].pillar != CBspMap::Direction::None)
 			{
 				//方向に応じて座標を修正
-				CVector pillarPos = CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE);
+				CVector pillarPos = CVector(x  * TILE_SIZE, 0, y  * TILE_SIZE);
 				// オフセットポジション格納用
 				CVector offSetPos;
 
@@ -382,9 +405,9 @@ void CField::CreatePassageWall(const std::vector<std::vector<CBspMap::Tile>>& ma
 	if (!map[y - 1][x].passage && map[y - 1][x].type != CBspMap::TileType::eFloor)
 	{
 		// 壁の生成
-		CWall* wall = new CWall(CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE));
+		CWall* wall = new CWall(CVector(x  * TILE_SIZE, 0, y  * TILE_SIZE));
 		// 壁の回転値を設定
-		int rotY = ConvertDirectionAngle(CBspMap::Direction::eSouth);
+		int rotY = ConvertDirectionAngle(CBspMap::Direction::eNorth);
 		wall->Rotation(0.0f, rotY, 0.0f);
 		// 壁のリストに追加
 		mpWallObjects.push_back(wall);
@@ -393,9 +416,9 @@ void CField::CreatePassageWall(const std::vector<std::vector<CBspMap::Tile>>& ma
 	if (!map[y][x + 1].passage && map[y][x + 1].type != CBspMap::TileType::eFloor)
 	{
 		// 壁の生成
-		CWall* wall = new CWall(CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE));
+		CWall* wall = new CWall(CVector(x  * TILE_SIZE, 0, y  * TILE_SIZE));
 		// 壁の回転値を設定
-		int rotY = ConvertDirectionAngle(CBspMap::Direction::eWest);
+		int rotY = ConvertDirectionAngle(CBspMap::Direction::eEast);
 		wall->Rotation(0.0f, rotY, 0.0f);
 		// 壁のリストに追加
 		mpWallObjects.push_back(wall);
@@ -404,9 +427,9 @@ void CField::CreatePassageWall(const std::vector<std::vector<CBspMap::Tile>>& ma
 	if (!map[y + 1][x].passage && map[y + 1][x].type != CBspMap::TileType::eFloor)
 	{
 		// 壁の生成
-		CWall* wall = new CWall(CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE));
+		CWall* wall = new CWall(CVector(x  * TILE_SIZE, 0, y  * TILE_SIZE));
 		// 壁の回転値を設定
-		int rotY = ConvertDirectionAngle(CBspMap::Direction::eNorth);
+		int rotY = ConvertDirectionAngle(CBspMap::Direction::eSouth);
 		wall->Rotation(0.0f, rotY, 0.0f);
 		// 壁のリストに追加
 		mpWallObjects.push_back(wall);
@@ -415,9 +438,9 @@ void CField::CreatePassageWall(const std::vector<std::vector<CBspMap::Tile>>& ma
 	if (!map[y][x - 1].passage && map[y][x - 1].type != CBspMap::TileType::eFloor)
 	{
 		// 壁の生成
-		CWall* wall = new CWall(CVector((x + 0.5f) * TILE_SIZE, 0, (y + 0.5f) * TILE_SIZE));
+		CWall* wall = new CWall(CVector(x  * TILE_SIZE, 0, y  * TILE_SIZE));
 		// 壁の回転値を設定
-		int rotY = ConvertDirectionAngle(CBspMap::Direction::eEast);
+		int rotY = ConvertDirectionAngle(CBspMap::Direction::eWest);
 		wall->Rotation(0.0f, rotY, 0.0f);
 		// 壁のリストに追加
 		mpWallObjects.push_back(wall);

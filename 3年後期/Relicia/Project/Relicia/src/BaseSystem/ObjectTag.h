@@ -7,7 +7,10 @@ enum class ETag
 	eNone = -1,
 
 	eField,	// フィールドを構成するオブジェクト
+	eGimmick,	// へーるどに配置するギミック
 	eRideableObject,	// 乗ることができるオブジェクト
+	eInteractObject,	// 調べることの出来るオブジェクト
+
 	eItem,	// アイテムのオブジェクト
 
 	ePlayer,// プレイヤー

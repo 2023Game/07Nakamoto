@@ -26,8 +26,6 @@ private:
 	// 壁のコライダー生成
 	void CreateWallCollider(CBspMap::TileSegment* seg);
 
-
 	std::vector<CColliderTriangle*> mpCollider;
-
 
 };

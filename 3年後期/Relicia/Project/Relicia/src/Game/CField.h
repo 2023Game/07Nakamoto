@@ -41,6 +41,9 @@ private:
 
 	// 方角によって回転値を設定
 	int ConvertDirectionAngle(CBspMap::Direction dir) const;
+	// 方角によってオフセット座標を設定
+	CVector2 CvnvertDirectionPos(CBspMap::Direction dir) const;
+
 	// BPMマップのダンジョンの生成
 	void CreateDungeon(const std::vector<std::vector<CBspMap::Tile>>& map);
 

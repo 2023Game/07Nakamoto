@@ -104,8 +104,14 @@
     <Filter Include="ソース ファイル\Game\Character\Player\UI">
       <UniqueIdentifier>{77fcddd3-bcfd-4c9e-8707-5b141da98c45}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Game\Crystal">
+    <Filter Include="ソース ファイル\Game\Item">
+      <UniqueIdentifier>{198bccc8-d48d-4c42-a1e5-5fdfa0ed64ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Item\Crystal">
       <UniqueIdentifier>{d5d1616a-eaa1-46ba-8337-44504a867a44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Item\Crystal\Object">
+      <UniqueIdentifier>{e1f346f8-cfe2-4288-b99c-7679dfa31195}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -446,7 +452,19 @@
       <Filter>ソース ファイル\Game\Character\Player\UI</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CrystalData.cpp">
-      <Filter>ソース ファイル\Game\Crystal</Filter>
+      <Filter>ソース ファイル\Game\Item\Crystal</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CCrystalManager.cpp">
+      <Filter>ソース ファイル\Game\Item\Crystal\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CCrystalObj.cpp">
+      <Filter>ソース ファイル\Game\Item\Crystal\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CInteractObject.cpp">
+      <Filter>ソース ファイル\Game\Field\InteractObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CInteractObjectManager.cpp">
+      <Filter>ソース ファイル\Game\Field\InteractObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -811,7 +829,19 @@
       <Filter>ソース ファイル\Game\Character\Player\UI</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CrystalData.h">
-      <Filter>ソース ファイル\Game\Crystal</Filter>
+      <Filter>ソース ファイル\Game\Item\Crystal</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CCrystalManager.h">
+      <Filter>ソース ファイル\Game\Item\Crystal\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CCrystalObj.h">
+      <Filter>ソース ファイル\Game\Item\Crystal\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CInteractObject.h">
+      <Filter>ソース ファイル\Game\Field\InteractObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CInteractObjectManager.h">
+      <Filter>ソース ファイル\Game\Field\InteractObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -57,7 +57,7 @@ const CBspMap::SectionNode* CBspMap::GetRootNode() const
     return mpRoot;
 }
 
-// タイルの開始座標と終了座標のリストを取得
+// 通路の壁の開始座標と終了座標のリストを取得
 std::vector<CBspMap::TileSegment> CBspMap::GetSegments() const
 {
     std::vector<CBspMap::TileSegment> walls;
@@ -94,34 +94,39 @@ std::vector<CBspMap::TileSegment> CBspMap::GetSegments() const
                 startX = -1;
             }
 
-            // 通路の上下の壁のコライダー
+            // 通路の北方向に壁があるか
             bool upWall = mMapData[y][x].passage && !mMapData[y - 1][x].passage &&
-                (mMapData[y - 1][x].type != TileType::eFloor || mMapData[y][x].type == TileType::eWall);
-            bool downWall = mMapData[y][x].passage && !mMapData[y + 1][x].passage &&
-                (mMapData[y + 1][x].type != TileType::eFloor || mMapData[y][x].type == TileType::eWall);
+                (mMapData[y - 1][x].type != TileType::eFloor);
 
-            // 上の壁
+            // 北方向の壁の開始位置かどうか
             if (upWall && startUpWallX == -1)
             {
                 startUpWallX = x;
             }
+            // 北方向の壁の終了位置かどうか
             else if (!upWall && startUpWallX != -1)
             {
+                // 通路の壁のコライダー情報を登録
                 walls.push_back({
                     CVector2(startUpWallX,y), CVector2(x,y),
                     TileType::eWall, Direction::eNorth });
 
                 startUpWallX = -1;
-
             }
 
-            // 下の壁
+            // 通路の南方向に壁があるか
+            bool downWall = mMapData[y][x].passage && !mMapData[y + 1][x].passage &&
+                (mMapData[y + 1][x].type != TileType::eFloor);
+
+            // 南方向の壁の開始位置かどうか
             if (downWall && startDownWallX == -1)
             {
                 startDownWallX = x;
             }
+            // 南方向の壁の終了位置かどうか
             else if (!downWall && startDownWallX != -1)
             {
+                // 通路の壁のコライダー情報を登録
                 walls.push_back({
                     CVector2(startDownWallX,y), CVector2(x,y),
                     TileType::eWall, Direction::eSouth });
@@ -133,6 +138,7 @@ std::vector<CBspMap::TileSegment> CBspMap::GetSegments() const
         // 行の最後まで通路が続いていた場合
         if (startX != -1)
         {
+            // 通路の床のコライダー情報を登録
             floors.push_back({
                 CVector2(startX, y), CVector2((int)mMapData[y].size() - 1, y),
                 TileType::ePassage, Direction::eEast
@@ -143,6 +149,7 @@ std::vector<CBspMap::TileSegment> CBspMap::GetSegments() const
         // 行の最後まで上の壁が続いていた場合
         if (startUpWallX != -1)
         {
+            // 通路の壁のコライダー情報を登録
             walls.push_back({
             CVector2(startUpWallX,y), CVector2((int)mMapData[y].size() - 1,y),
             TileType::eWall, Direction::eNorth });
@@ -152,6 +159,7 @@ std::vector<CBspMap::TileSegment> CBspMap::GetSegments() const
         // 行の最後まで下の壁が続いていた場合
         if (startDownWallX != -1)
         {
+            // 通路の壁のコライダー情報を登録
             walls.push_back({
             CVector2(startDownWallX,y), CVector2((int)mMapData[y].size() - 1,y),
             TileType::eWall, Direction::eSouth });
@@ -184,6 +192,7 @@ std::vector<CBspMap::TileSegment> CBspMap::GetSegments() const
             // まだ通路かどうか
             else if (!isPassage && startY != -1)
             {
+                // 通路の床のコライダー情報を登録
                 floors.push_back({
                     CVector2(x,startY), CVector2(x,y),
                     TileType::ePassage, Direction::eNorth
@@ -192,19 +201,19 @@ std::vector<CBspMap::TileSegment> CBspMap::GetSegments() const
                 startY = -1;
             }
 
-            // 通路の左右の壁のコライダー
+            // 通路の西方向に壁があるか
             bool leftWall = mMapData[y][x].passage && !mMapData[y][x - 1].passage &&
                 (mMapData[y][x - 1].type != TileType::eFloor || mMapData[y][x].type == TileType::eWall);
-            bool rightWall = mMapData[y][x].passage && !mMapData[y][x + 1].passage &&
-                (mMapData[y][x + 1].type != TileType::eFloor || mMapData[y][x].type == TileType::eWall);
 
-            // 左の壁
+            // 西方向の壁の開始位置かどうか
             if (leftWall && startLeftWallY == -1)
             {
                 startLeftWallY = y;
             }
+            // 西方向の壁の終了位置かどうか
             else if (!leftWall && startLeftWallY != -1)
             {
+                // 通路の壁のコライダー情報を登録
                 walls.push_back({
                     CVector2(x,startLeftWallY), CVector2(x,y),
                     TileType::eWall, Direction::eWest });
@@ -212,13 +221,19 @@ std::vector<CBspMap::TileSegment> CBspMap::GetSegments() const
                 startLeftWallY = -1;
             }
 
-            // 右の壁
+            // 通路の東方向に壁があるか
+            bool rightWall = mMapData[y][x].passage && !mMapData[y][x + 1].passage &&
+                (mMapData[y][x + 1].type != TileType::eFloor || mMapData[y][x].type == TileType::eWall);
+
+            // 東方向の壁の開始位置かどうか
             if (rightWall && startRightWallY == -1)
             {
                 startRightWallY = y;
             }
+            // 東方向の壁の終了位置かどうか
             else if (!rightWall && startRightWallY != -1)
             {
+                // 通路の壁のコライダー情報を登録
                 walls.push_back({
                     CVector2(x,startRightWallY), CVector2(x,y),
                     TileType::eWall, Direction::eEast });
@@ -230,6 +245,7 @@ std::vector<CBspMap::TileSegment> CBspMap::GetSegments() const
         // 行の最後まで通路が続いていた場合
         if (startY != -1)
         {
+            // 通路の床のコライダー情報を登録
             floors.push_back({
                 CVector2(x, startY), CVector2((int)mMapData.size() - 1, startY),
                 TileType::ePassage, Direction::eNorth
@@ -240,6 +256,7 @@ std::vector<CBspMap::TileSegment> CBspMap::GetSegments() const
         // 行の最後まで左の壁が続いていた場合
         if (startLeftWallY != -1)
         {
+            // 通路の壁のコライダー情報を登録
             walls.push_back({
             CVector2(x,startLeftWallY), CVector2((int)mMapData.size() - 1,startLeftWallY),
             TileType::eWall, Direction::eWest });
@@ -249,6 +266,7 @@ std::vector<CBspMap::TileSegment> CBspMap::GetSegments() const
         // 行の最後まで右の壁が続いていた場合
         if (startRightWallY != -1)
         {
+            // 通路の壁のコライダー情報を登録
             walls.push_back({
             CVector2(x,startRightWallY), CVector2((int)mMapData.size() - 1,startRightWallY),
             TileType::eWall, Direction::eEast });
@@ -283,7 +301,7 @@ std::vector<CBspMap::TileSegment> CBspMap::CollectWallSegments() const
             if (isWall && xStart == -1)
             {
                 xStart = (int)x;
-                dir = InverseDirection(mMapData[y][x].dir);
+                dir =mMapData[y][x].dir;
 
             }
             else if (!isWall && xStart != -1 )
@@ -323,7 +341,7 @@ std::vector<CBspMap::TileSegment> CBspMap::CollectWallSegments() const
             if (isWall && yStart == -1)
             {
                 yStart = (int)y;
-                dir = InverseDirection(mMapData[y][x].dir);
+                dir =mMapData[y][x].dir;
             }
             else if (!isWall && yStart != -1)
             {
