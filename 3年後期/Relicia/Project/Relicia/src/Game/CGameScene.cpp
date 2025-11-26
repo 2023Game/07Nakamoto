@@ -58,8 +58,8 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>(		"Pillar_Col",		"Dungeon\\Pillar_Col.obj");
 	CResourceManager::Load<CModel>(		"Wall",				"Dungeon\\Wall.obj");
 	CResourceManager::Load<CModel>(		"Wall_Entrance",	"Dungeon\\Wall_Entrance.obj");
-	CResourceManager::Load<CModel>(		"Entrance_Col",		"Dungeon\\Entrance_Col.obj");
-	CResourceManager::Load<CModel>(		"Entrance_Arch_Col", "Dungeon\\Entrance_Arch_Col.obj");
+	CResourceManager::Load<CModel>(		"Entrance_Col",		"Dungeon\\Entrance_Wall_Col.obj");
+	CResourceManager::Load<CModel>(		"Entrance_Ceil_Col","Dungeon\\Entrance_Ceil_Col.obj");
 
 	CResourceManager::Load<CModelX>(	"Bat",				"Character\\Enemy\\Bat\\bat.x");
 	CResourceManager::Load<CModelX>(	"Mushroom",			"Character\\Enemy\\Mushroom\\mushroom.x");
@@ -112,12 +112,8 @@ void CGameScene::Load()
 	);
 
 	mainCamera->SetFollowTargetTf(player);
-
-	std::vector<CColliderTriangle*> cols = mpField->GetCollider();
-	for (CColliderTriangle* col : cols)
-	{
-		mainCamera->AddCollider(col);
-	}
+	mainCamera->AddCollider(mpField->GetFloorCollider());
+	mainCamera->AddCollider(mpField->GetWallCollider());
 
 	// ƒQ[ƒ€ƒƒjƒ…[‚ğì¬
 	mpGameMenu = new CGameMenu();

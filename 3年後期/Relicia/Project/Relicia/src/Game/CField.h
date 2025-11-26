@@ -25,8 +25,10 @@ public:
 	// 床タイルのランダムな座標を取得
 	const CVector GetRandomFloorPos() const;
 
-	// コライダーを取得
-	std::vector<CColliderTriangle*> GetCollider() const;
+	// 床コライダーを取得
+	CColliderMesh* GetFloorCollider() const;
+	// 壁コライダーを取得
+	CColliderMesh* GetWallCollider() const;
 
 	// 更新
 	void Update() override;

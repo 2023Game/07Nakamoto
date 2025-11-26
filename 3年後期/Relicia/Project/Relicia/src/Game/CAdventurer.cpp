@@ -98,7 +98,7 @@ CAdventurer::CAdventurer()
 		BODY_RADIUS
 	);
 	mpBodyCol->SetCollisionTags({ ETag::eField, ETag::eRideableObject, ETag::eEnemy });
-	mpBodyCol->SetCollisionLayers({ ELayer::eFloor, ELayer::eWall, ELayer::eEnemy, ELayer::eAttackCol });
+	mpBodyCol->SetCollisionLayers({ ELayer::eFloor, ELayer::eWall,ELayer::eCeil, ELayer::eEnemy, ELayer::eAttackCol });
 
 	mpSlashSE = CResourceManager::Get<CSound>("SlashSound");
 
@@ -497,6 +497,27 @@ void CAdventurer::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 			CVector adjust = hit.adjust;
 			adjust.Y(0.0f);
 			Position(Position() + adjust * hit.weight);
+		}
+		// 天井と衝突した場合
+		else if (other->Layer() == ELayer::eCeil)
+		{
+			// 坂道で滑らないように、押し戻しベクトルのXとZの値を0にする
+			CVector adjust = hit.adjust;
+			adjust.X(0.0f);
+			adjust.Z(0.0f);
+
+			// 押し戻す方向が下方向(マイナス)であれば、天井と衝突した
+			if (adjust.Y() < 0.0f)
+			{
+				// ジャンプなどで天井に下から衝突した時（上移動）のみ
+				// 上下の移動速度を0にする
+				if (mMoveSpeedY > 0.0f)
+				{
+					mMoveSpeedY = 0.0f;
+				}
+
+				Position(Position() + adjust * hit.weight);
+			}
 		}
 
 		// 敵と衝突した場合

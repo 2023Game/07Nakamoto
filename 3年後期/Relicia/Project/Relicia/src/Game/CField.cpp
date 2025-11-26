@@ -53,10 +53,16 @@ const CVector CField::GetRandomFloorPos() const
 	}
 }
 
-// コライダーを取得
-std::vector<CColliderTriangle*> CField::GetCollider() const
+// 床コライダーを取得
+CColliderMesh* CField::GetFloorCollider() const
 {
-	return mpDungeonCollider->GetCollider();
+	return mpDungeonCollider->GetFloorCollider();
+}
+
+// 壁コライダーを取得
+CColliderMesh* CField::GetWallCollider() const
+{
+	return mpDungeonCollider->GetWallCollider();
 }
 
 

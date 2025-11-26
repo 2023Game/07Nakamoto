@@ -61,7 +61,7 @@ const CBspMap::SectionNode* CBspMap::GetRootNode() const
 std::vector<CBspMap::TileSegment> CBspMap::GetSegments() const
 {
     std::vector<CBspMap::TileSegment> walls;
-    std::vector<CBspMap::TileSegment> floors;
+    //std::vector<CBspMap::TileSegment> floors;
 
     // ‰¡•ûŒü‚Ì‘–¸
     for (int y = 0; y < mMapData.size(); ++y)
@@ -73,26 +73,26 @@ std::vector<CBspMap::TileSegment> CBspMap::GetSegments() const
 
         for (int x = 0; x < mMapData[y].size(); ++x)
         {
-            // ‰¡•ûŒü‚Ì’Ê˜H‚©‚Ç‚¤‚©
-            bool isPassage = mMapData[y][x].passage &&
-                mMapData[y][x].passageData.dir == Direction::eEast;
+            //// ‰¡•ûŒü‚Ì’Ê˜H‚©‚Ç‚¤‚©
+            //bool isPassage = mMapData[y][x].passage &&
+            //    mMapData[y][x].passageData.dir == Direction::eEast;
 
-            // ‰¡•ûŒü‚©‚ÂŠJnÀ•W‚©‚Ç‚¤‚©
-            if (isPassage && startX == -1)
-            {
-                startX = x;
-            }
-            // ‚Ü‚¾’Ê˜H‚©‚Ç‚¤‚©
-            else if (!isPassage && startX != -1)
-            {
-                // ’Ê˜H‚Ì°‚ÌƒRƒ‰ƒCƒ_[î•ñ‚ğ“o˜^
-                floors.push_back({
-                    CVector2(startX,y), CVector2(x,y),
-                    TileType::ePassage, Direction::eEast
-                    });
+            //// ‰¡•ûŒü‚©‚ÂŠJnÀ•W‚©‚Ç‚¤‚©
+            //if (isPassage && startX == -1)
+            //{
+            //    startX = x;
+            //}
+            //// ‚Ü‚¾’Ê˜H‚©‚Ç‚¤‚©
+            //else if (!isPassage && startX != -1)
+            //{
+            //    // ’Ê˜H‚Ì°‚ÌƒRƒ‰ƒCƒ_[î•ñ‚ğ“o˜^
+            //    floors.push_back({
+            //        CVector2(startX,y), CVector2(x,y),
+            //        TileType::ePassage, Direction::eEast
+            //        });
 
-                startX = -1;
-            }
+            //    startX = -1;
+            //}
 
             // ’Ê˜H‚Ì–k•ûŒü‚É•Ç‚ª‚ ‚é‚©
             bool upWall = mMapData[y][x].passage && !mMapData[y - 1][x].passage &&
@@ -135,17 +135,18 @@ std::vector<CBspMap::TileSegment> CBspMap::GetSegments() const
             }
         }
 
-        // s‚ÌÅŒã‚Ü‚Å’Ê˜H‚ª‘±‚¢‚Ä‚¢‚½ê‡
-        if (startX != -1)
-        {
-            // ’Ê˜H‚Ì°‚ÌƒRƒ‰ƒCƒ_[î•ñ‚ğ“o˜^
-            floors.push_back({
-                CVector2(startX, y), CVector2((int)mMapData[y].size() - 1, y),
-                TileType::ePassage, Direction::eEast
-                });
+        //// s‚ÌÅŒã‚Ü‚Å’Ê˜H‚ª‘±‚¢‚Ä‚¢‚½ê‡
+        //if (startX != -1)
+        //{
+        //    // ’Ê˜H‚Ì°‚ÌƒRƒ‰ƒCƒ_[î•ñ‚ğ“o˜^
+        //    floors.push_back({
+        //        CVector2(startX, y), CVector2((int)mMapData[y].size() - 1, y),
+        //        TileType::ePassage, Direction::eEast
+        //        });
 
-            startX = -1;
-        }
+        //    startX = -1;
+        //}
+        
         // s‚ÌÅŒã‚Ü‚Åã‚Ì•Ç‚ª‘±‚¢‚Ä‚¢‚½ê‡
         if (startUpWallX != -1)
         {
@@ -180,26 +181,26 @@ std::vector<CBspMap::TileSegment> CBspMap::GetSegments() const
 
         for (int y = 0; y < mMapData.size(); ++y)
         {
-            // c•ûŒü‚Ì’Ê˜H‚©‚Ç‚¤‚©
-            bool isPassage = (mMapData[y][x].passage &&
-                mMapData[y][x].passageData.dir == Direction::eNorth);
+            //// c•ûŒü‚Ì’Ê˜H‚©‚Ç‚¤‚©
+            //bool isPassage = (mMapData[y][x].passage &&
+            //    mMapData[y][x].passageData.dir == Direction::eNorth);
 
-            // c•ûŒü‚©‚ÂŠJnÀ•W‚©‚Ç‚¤‚©
-            if (isPassage && startY == -1)
-            {
-                startY = y;
-            }
-            // ‚Ü‚¾’Ê˜H‚©‚Ç‚¤‚©
-            else if (!isPassage && startY != -1)
-            {
-                // ’Ê˜H‚Ì°‚ÌƒRƒ‰ƒCƒ_[î•ñ‚ğ“o˜^
-                floors.push_back({
-                    CVector2(x,startY), CVector2(x,y),
-                    TileType::ePassage, Direction::eNorth
-                    });
+            //// c•ûŒü‚©‚ÂŠJnÀ•W‚©‚Ç‚¤‚©
+            //if (isPassage && startY == -1)
+            //{
+            //    startY = y;
+            //}
+            //// ‚Ü‚¾’Ê˜H‚©‚Ç‚¤‚©
+            //else if (!isPassage && startY != -1)
+            //{
+            //    // ’Ê˜H‚Ì°‚ÌƒRƒ‰ƒCƒ_[î•ñ‚ğ“o˜^
+            //    floors.push_back({
+            //        CVector2(x,startY), CVector2(x,y),
+            //        TileType::ePassage, Direction::eNorth
+            //        });
 
-                startY = -1;
-            }
+            //    startY = -1;
+            //}
 
             // ’Ê˜H‚Ì¼•ûŒü‚É•Ç‚ª‚ ‚é‚©
             bool leftWall = mMapData[y][x].passage && !mMapData[y][x - 1].passage &&
@@ -242,17 +243,18 @@ std::vector<CBspMap::TileSegment> CBspMap::GetSegments() const
             }
 
         }
-        // s‚ÌÅŒã‚Ü‚Å’Ê˜H‚ª‘±‚¢‚Ä‚¢‚½ê‡
-        if (startY != -1)
-        {
-            // ’Ê˜H‚Ì°‚ÌƒRƒ‰ƒCƒ_[î•ñ‚ğ“o˜^
-            floors.push_back({
-                CVector2(x, startY), CVector2((int)mMapData.size() - 1, startY),
-                TileType::ePassage, Direction::eNorth
-                });
+        //// s‚ÌÅŒã‚Ü‚Å’Ê˜H‚ª‘±‚¢‚Ä‚¢‚½ê‡
+        //if (startY != -1)
+        //{
+        //    // ’Ê˜H‚Ì°‚ÌƒRƒ‰ƒCƒ_[î•ñ‚ğ“o˜^
+        //    floors.push_back({
+        //        CVector2(x, startY), CVector2((int)mMapData.size() - 1, startY),
+        //        TileType::ePassage, Direction::eNorth
+        //        });
 
-            startY = -1;
-        }
+        //    startY = -1;
+        //}
+        
         // s‚ÌÅŒã‚Ü‚Å¶‚Ì•Ç‚ª‘±‚¢‚Ä‚¢‚½ê‡
         if (startLeftWallY != -1)
         {
@@ -584,8 +586,6 @@ void CBspMap::ConnectRooms(SectionNode* node, std::vector<std::vector<Tile>>& ma
     // Ä‹A
     ConnectRooms(node->left, map);
     ConnectRooms(node->right, map);
-
-
 
     // Œq‚ª‚Á‚Ä‚¢‚È‚¯‚ê‚Î
     if (!node->left->room.connected && !node->right->room.connected)

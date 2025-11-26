@@ -13,19 +13,21 @@ public:
 	// 床全体の四角形コライダーを生成
 	void CreateOptimaizedFloorMeshCollider(int x, int y);
 
-	// コライダーを取得
-	const std::vector<CColliderTriangle*> GetCollider() const;
+	// 床コライダーを取得
+	CColliderMesh* GetFloorCollider() const;
+	// 壁コライダーを取得
+	CColliderMesh* GetWallCollider() const;
 
 	// 更新
 	void Update() override;
 private:
 	// 部屋のコライダーを生成
-	void CreateRoomCollider(const CBspMap::SectionNode* node);
+	//void CreateRoomCollider(const CBspMap::SectionNode* node);
 	// 部屋の床のコライダー生成
-	void CreateFloorCollider(const CBspMap::SectionNode* node);
+	//void CreateFloorCollider(const CBspMap::SectionNode* node);
 	// 壁のコライダー生成
 	void CreateWallCollider(CBspMap::TileSegment* seg);
 
-	std::vector<CColliderTriangle*> mpCollider;
-
+	CColliderMesh* mpFloorCollider;	// マップの床のコライダー
+	CColliderMesh* mpWallCollider;	// マップの壁のコライダー
 };

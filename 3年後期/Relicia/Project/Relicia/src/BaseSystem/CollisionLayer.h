@@ -8,6 +8,7 @@ enum class ELayer
 	eTest,
 	eFloor,
 	eWall,
+	eCeil,		// “Vˆä
 	eGround,
 	ePlayer,
 	eEnemy,
