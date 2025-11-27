@@ -106,11 +106,11 @@ public:
 	const std::vector<std::vector<Tile>>& GetTileData()const;
 	// ルートノードの取得
 	const SectionNode* GetRootNode()const;
-	// タイルの開始座標と終了座標のリストを取得
-	std::vector<TileSegment> GetSegments() const;
+	// 通路と部屋の壁の開始座標と終了座標のリストを取得
+	std::vector<TileSegment> GetWallSegments() const;
 
 	// 部屋の壁の情報を返す
-	std::vector<TileSegment> CBspMap::CollectWallSegments() const;
+	//std::vector<TileSegment> CBspMap::CollectWallSegments() const;
 
 private:
 	// ノードの削除
@@ -156,5 +156,8 @@ private:
 	SectionNode* mpRoot;
 	// ２次元配列(可変長配列)のマップデータ
 	std::vector<std::vector<Tile>> mMapData;
+	// 通路の柱の座標のリスト
+	std::vector<CVector2> mpPillars;
+
 
 };

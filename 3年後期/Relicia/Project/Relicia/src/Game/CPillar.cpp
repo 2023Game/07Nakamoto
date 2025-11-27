@@ -9,10 +9,9 @@ CPillar::CPillar(const CVector& pos)
 	mpColliderMesh = new CColliderMesh(this, ELayer::eFloor, col, false);
 
 	// コライダー表示をオンにする
-	mpColliderMesh->SetShow(true);
+	//mpColliderMesh->SetShow(true);
 
 	Position(pos);
-
 }
 
 // デストラクタ

@@ -1,7 +1,7 @@
 #pragma once
 
-// クリスタルの種類
-enum class CrystalType
+// 属性の種類
+enum class ElementType
 {
 	None = -1,
 
@@ -15,7 +15,7 @@ enum class CrystalType
 // クリスタルのデータ
 struct CrystalData
 {
-	CrystalType type;	// クリスタルの種類
+	ElementType type;	// 属性の種類
 
 	std::string iconPath;	// クリスタルの画像のパス
 	std::string modelPath;	// モデルデータのパス
@@ -23,8 +23,8 @@ struct CrystalData
 
 namespace Crystal
 {
-	// クリスタルの種類を指定して、クリスタルのデータ取得
-	bool GetCrystalData(CrystalType type, const CrystalData** data);
+	// 属性の種類を指定して、属性のデータ取得
+	bool GetCrystalData(ElementType type, const CrystalData** data);
 
 	// 全てのクリスタルのリソースを読み込む
 	void LoadResources();

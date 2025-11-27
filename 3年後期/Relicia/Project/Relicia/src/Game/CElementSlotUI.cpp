@@ -39,49 +39,26 @@ CElementSlotUI::~CElementSlotUI()
 }
 
 // 指定した属性を属性スロットに装備
-void CElementSlotUI::EquipElement()
+void CElementSlotUI::EquipElement(const CrystalData* crystal)
 {
-	CElementManager::ElementType typ = CElementManager::Instance()->GetCurrentElement();
-
-	switch (typ)
+	// アイテムのデータが設定されたら
+	if (crystal != nullptr)
 	{
-	// 炎属性
-	case CElementManager::ElementType::eFire:
+		// 設定されたアイテムのアイコンを読み込んで表示
 		mpElementImage->Load("UI\\fire_icon.png");
 		mpElementImage->SetShow(true);
-		break;
-	// 水属性
-	case CElementManager::ElementType::eWater:
-		mpElementImage->Load("");
-		mpElementImage->SetShow(true);
-		break;
-	// 雷属性
-	case CElementManager::ElementType::eThunder:
-		mpElementImage->Load("");
-		mpElementImage->SetShow(true);
-		break;
-	// 氷属性
-	case CElementManager::ElementType::eIce:
-		mpElementImage->Load("");
-		mpElementImage->SetShow(true);
-		break;
-	// 風属性
-	case CElementManager::ElementType::eWind:
-		mpElementImage->Load("");
-		mpElementImage->SetShow(true);
-		break;
-	// 無属性
-	default:
+	}
+	else
+	{
+		// アイテムのデータが空だったら
 		mpElementImage->Load("");
 		mpElementImage->SetShow(false);
-		break;
 	}
 }
 
 // 更新
 void CElementSlotUI::Update()
 {
-	EquipElement();
 }
 
 // 描画
@@ -92,8 +69,11 @@ void CElementSlotUI::Render()
 	mpElementSlot->SetPos(mPosition);
 	mpElementSlot->Render();
 
-	// 装備していたら、装備アイコンのアイテムを描画
-	mpElementImage->SetAlpha(GetAlpha());
-	mpElementImage->SetPos(mPosition);
-	mpElementImage->Render();
+	// 装備されていたら、装備アイコンのアイテムを描画
+	if (mpElementImage->IsShow())
+	{
+		mpElementImage->SetAlpha(GetAlpha());
+		mpElementImage->SetPos(mPosition);
+		mpElementImage->Render();
+	}
 }

@@ -1,7 +1,7 @@
 #include "CBspMapCollider.h"
 #include "CField.h"
 
-#define WALL_COL_OFFSET 5.0f
+#define WALL_COL_OFFSET 2.0f
 
 // コンストラクタ
 CBspMapCollider::CBspMapCollider(CBspMap* map, int x, int y)
@@ -21,19 +21,17 @@ CBspMapCollider::CBspMapCollider(CBspMap* map, int x, int y)
         10, 1, 10
     );
 
-    // 部屋の壁コライダーの生成
-    for (CBspMap::TileSegment seg : map->CollectWallSegments())
-    {
-        CreateWallCollider(&seg);
-    }
-    // 通路の壁コライダーの生成
-    for (CBspMap::TileSegment seg : map->GetSegments())
+    // 壁コライダーの生成
+    for (CBspMap::TileSegment seg : map->GetWallSegments())
     {
         CreateWallCollider(&seg);
     }
 
     // 壁コライダーの分割情報を更新
     mpWallCollider->DivisionMesh();
+
+    //mpFloorCollider->SetShow(true);
+    //mpWallCollider->SetShow(true);
 }
 
 // デストラクタ
@@ -87,8 +85,8 @@ CBspMapCollider::~CBspMapCollider()
 // 壁のコライダー生成
 void CBspMapCollider::CreateWallCollider(CBspMap::TileSegment* seg)
 {
-    if (seg->dir == CBspMap::Direction::eSouth ||
-        seg->dir == CBspMap::Direction::eWest)
+    if (seg->dir == CBspMap::Direction::eNorth ||
+        seg->dir == CBspMap::Direction::eEast)
     {
         std::swap(seg->start, seg->end);
     }
@@ -102,21 +100,21 @@ void CBspMapCollider::CreateWallCollider(CBspMap::TileSegment* seg)
         // 北
     case CBspMap::Direction::eNorth:
         offsetX = TILE_SIZE * 0.5f;
-        offsetY = TILE_SIZE * 0.5f;
+        offsetY = TILE_SIZE * 0.5f - WALL_COL_OFFSET;
         break;
         // 東
     case CBspMap::Direction::eEast:
-        offsetX = -TILE_SIZE * 0.5f;
+        offsetX = -TILE_SIZE * 0.5f + WALL_COL_OFFSET;
         offsetY = TILE_SIZE * 0.5f;
         break;
         // 南
     case CBspMap::Direction::eSouth:
         offsetX = TILE_SIZE * 0.5f;
-        offsetY = -TILE_SIZE * 0.5f;
+        offsetY = -TILE_SIZE * 0.5f + WALL_COL_OFFSET;
         break;
         // 西
     case CBspMap::Direction::eWest:
-        offsetX = TILE_SIZE * 0.5f;
+        offsetX = TILE_SIZE * 0.5f - WALL_COL_OFFSET;
         offsetY = TILE_SIZE * 0.5f;
         break;
     }
@@ -136,6 +134,7 @@ void CBspMapCollider::CreateWallCollider(CBspMap::TileSegment* seg)
         CVector(seg->end.X() * TILE_SIZE - offsetX, 0, seg->end.Y() * TILE_SIZE - offsetY),
         CVector(seg->start.X() * TILE_SIZE - offsetX, 0, seg->start.Y() * TILE_SIZE - offsetY)
     );
+
 
 }
 

@@ -36,6 +36,9 @@ public:
 	// ダメージを受ける
 	void TakeDamage(int damage, CObjectBase* causer) override;
 
+	// 装備したスロット番号のアイテムを装備する
+	void EquipElement(int slotIndex);
+
 	// 更新
 	void Update() override;
 	// 後更新
@@ -136,4 +139,6 @@ private:
 
 	// 属性スロットの装備枠
 	CElementSlotUI* mpElementEquipment;
+	// 属性スロットのインデックス値
+	int mEquipElementSlotIndex;
 };

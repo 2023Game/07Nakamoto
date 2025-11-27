@@ -235,121 +235,119 @@ void CField::CreateDungeon(const std::vector<std::vector<CBspMap::Tile>>& map)
 
 			switch (map[y][x].type)
 			{
-			// 床
-			case CBspMap::TileType::eFloor:
-			{
-				// 床の生成
-				CFloor* floor = new CFloor(CVector(x * TILE_SIZE, 0, y * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
-				// 床のリストに追加
-				mpFloorObjects.push_back(floor);
-
-				break;
-			}
-			// 壁
-			case CBspMap::TileType::eWall:
-			{
-				// 壁の回転値とオフセット座標を設定
-				int rotY = ConvertDirectionAngle(tile.dir);
-				CVector2 pos = CvnvertDirectionPos(tile.dir);
-
-				// 壁の生成
-				CWall* wall = new CWall(CVector((x + pos.X()) * TILE_SIZE, 0, (y + pos.Y()) * TILE_SIZE));
-				wall->Rotation(0.0f, rotY, 0.0f);
-				// 壁のリストに追加
-				mpWallObjects.push_back(wall);
-
-				// 通路だったら、床も生成する
-				if (map[y][x].passage)
+				// 床
+				case CBspMap::TileType::eFloor:
 				{
 					// 床の生成
-					CFloor* floor = new CFloor(CVector(x  * TILE_SIZE, 0, y  * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
+					CFloor* floor = new CFloor(CVector(x * TILE_SIZE, 0, y * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
 					// 床のリストに追加
 					mpFloorObjects.push_back(floor);
-				}
-				break;
-			}
-			// 柱
-			case CBspMap::TileType::ePillar:
-			{
-				//方向に応じて座標を修正
-				CVector pillarPos = CVector(x * TILE_SIZE, 0, y * TILE_SIZE);
-				// オフセットポジション格納用
-				CVector offSetPos;
 
-				// 北東の場合
-				if (tile.dir == CBspMap::Direction::eNorthEast)
-				{
-					offSetPos = CVector(-PILLAR_OFFSET_POS, 0.0f, PILLAR_OFFSET_POS);
+					break;
 				}
-				// 南東の場合
-				else if (tile.dir == CBspMap::Direction::eSouthEast)
+				// 壁
+				case CBspMap::TileType::eWall:
 				{
-					offSetPos = CVector(-PILLAR_OFFSET_POS, 0.0f, -PILLAR_OFFSET_POS);
-				}
-				// 南西の場合
-				else if (tile.dir == CBspMap::Direction::eSouthWest)
-				{
-					offSetPos = CVector(PILLAR_OFFSET_POS, 0.0f, -PILLAR_OFFSET_POS);
-				}
-				//北西の場合
-				else if (tile.dir == CBspMap::Direction::eNorthWest)
-				{
-					offSetPos = CVector(PILLAR_OFFSET_POS, 0.0f, PILLAR_OFFSET_POS);
-				}
-				pillarPos += offSetPos;
+					// 壁の回転値とオフセット座標を設定
+					int rotY = ConvertDirectionAngle(tile.dir);
+					CVector2 pos = CvnvertDirectionPos(tile.dir);
 
-				// 柱の生成
-				CPillar* pillar = new CPillar(pillarPos);
-				// 柱のリストに追加
-				mpPillarObjects.push_back(pillar);
+					// 壁の生成
+					CWall* wall = new CWall(CVector((x + pos.X()) * TILE_SIZE, 0, (y + pos.Y()) * TILE_SIZE));
+					wall->Rotation(0.0f, rotY, 0.0f);
+					// 壁のリストに追加
+					mpWallObjects.push_back(wall);
 
-				// 通路だったら、床も生成する
-				if (map[y][x].passage)
+					// 通路だったら、床も生成する
+					if (map[y][x].passage)
+					{
+						// 床の生成
+						CFloor* floor = new CFloor(CVector(x * TILE_SIZE, 0, y * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
+						// 床のリストに追加
+						mpFloorObjects.push_back(floor);
+					}
+					break;
+				}
+				// 柱
+				case CBspMap::TileType::ePillar:
+				{
+					//方向に応じて座標を修正
+					CVector pillarPos = CVector(x * TILE_SIZE, 0, y * TILE_SIZE);
+					// オフセットポジション格納用
+					CVector offSetPos;
+
+					// 北東の場合
+					if (tile.dir == CBspMap::Direction::eNorthEast)
+					{
+						offSetPos = CVector(-PILLAR_OFFSET_POS, 0.0f, PILLAR_OFFSET_POS);
+					}
+					// 南東の場合
+					else if (tile.dir == CBspMap::Direction::eSouthEast)
+					{
+						offSetPos = CVector(-PILLAR_OFFSET_POS, 0.0f, -PILLAR_OFFSET_POS);
+					}
+					// 南西の場合
+					else if (tile.dir == CBspMap::Direction::eSouthWest)
+					{
+						offSetPos = CVector(PILLAR_OFFSET_POS, 0.0f, -PILLAR_OFFSET_POS);
+					}
+					//北西の場合
+					else if (tile.dir == CBspMap::Direction::eNorthWest)
+					{
+						offSetPos = CVector(PILLAR_OFFSET_POS, 0.0f, PILLAR_OFFSET_POS);
+					}
+					pillarPos += offSetPos;
+
+					// 柱の生成
+					CPillar* pillar = new CPillar(pillarPos);
+					// 柱のリストに追加
+					mpPillarObjects.push_back(pillar);
+
+					// 通路だったら、床も生成する
+					if (map[y][x].passage)
+					{
+						// 床の生成
+						CFloor* floor = new CFloor(CVector(x * TILE_SIZE, 0, y * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
+						// 床のリストに追加
+						mpFloorObjects.push_back(floor);
+					}
+					break;
+				}
+				// 出入口
+				case CBspMap::TileType::eEntrance:
+				{
+					// 壁の回転値とオフセット座標を設定
+					int rotY = ConvertDirectionAngle(tile.dir);
+					CVector2 pos = CvnvertDirectionPos(tile.dir);
+
+					// 出入口の生成
+					CEntrance* entrance = new CEntrance(CVector((x + pos.X()) * TILE_SIZE, 0, (y + pos.Y()) * TILE_SIZE));
+					entrance->Rotation(0.0f, rotY, 0.0f);
+					// 出入口のリストに追加
+					mpEntranceObjects.push_back(entrance);
+
+					// 床の生成
+					CFloor* floor = new CFloor(CVector(x * TILE_SIZE, 0, y * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
+					// 床のリストに追加
+					mpPassegeObjects.push_back(floor);
+
+					// 扉の生成
+					//CDoor* door = new CDoor(CVector(x  * TILE_SIZE + offSetPosX, 0, y * TILE_SIZE + offSetPosZ));
+					//door->Rotate(0.0f, rotY, 0.0f);
+					//// 扉のリストに追加
+					//mpDoorObjects.push_back(door);
+					break;
+				}
+				// 通路
+				case CBspMap::TileType::ePassage:
 				{
 					// 床の生成
-					CFloor* floor = new CFloor(CVector(x  * TILE_SIZE, 0, y  * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
+					CFloor* floor = new CFloor(CVector(x * TILE_SIZE, 0, y * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
 					// 床のリストに追加
-					mpFloorObjects.push_back(floor);
+					mpPassegeObjects.push_back(floor);
+
+					break;
 				}
-				break;
-			}
-			// 出入口
-			case CBspMap::TileType::eEntrance:
-			{
-				// 壁の回転値とオフセット座標を設定
-				int rotY = ConvertDirectionAngle(tile.dir);
-				CVector2 pos = CvnvertDirectionPos(tile.dir);
-
-				// 出入口の生成
-				CEntrance* entrance = new CEntrance(CVector((x + pos.X()) * TILE_SIZE, 0, (y + pos.Y()) * TILE_SIZE));
-				entrance->Rotation(0.0f, rotY, 0.0f);
-				// 出入口のリストに追加
-				mpEntranceObjects.push_back(entrance);
-
-				// 床の生成
-				CFloor* floor = new CFloor(CVector(x  * TILE_SIZE, 0, y  * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
-				// 床のリストに追加
-				mpPassegeObjects.push_back(floor);
-
-				// 扉の生成
-				//CDoor* door = new CDoor(CVector(x  * TILE_SIZE + offSetPosX, 0, y * TILE_SIZE + offSetPosZ));
-				//door->Rotate(0.0f, rotY, 0.0f);
-				//// 扉のリストに追加
-				//mpDoorObjects.push_back(door);
-				break;
-			}
-			// 通路
-			case CBspMap::TileType::ePassage:
-			{
-				// 床の生成
-				CFloor* floor = new CFloor(CVector(x * TILE_SIZE, 0, y  * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
-				// 床のリストに追加
-				mpPassegeObjects.push_back(floor);
-
-				break;
-			}
-			default:
-				break;
 			}
 
 			// 通路フラグがtrueなら
@@ -357,48 +355,8 @@ void CField::CreateDungeon(const std::vector<std::vector<CBspMap::Tile>>& map)
 			{
 				// 通路の壁を生成
 				CreatePassageWall(map, x, y);
-			}
-			else if (map[y][x].pillar != CBspMap::Direction::None)
-			{
-				//方向に応じて座標を修正
-				CVector pillarPos = CVector(x  * TILE_SIZE, 0, y  * TILE_SIZE);
-				// オフセットポジション格納用
-				CVector offSetPos;
 
-				switch (map[y][x].pillar)
-				{
-
-				// 北東の場合
-				case CBspMap::Direction::eNorthEast:
-					{
-						offSetPos = CVector(-PILLAR_OFFSET_POS, 0.0f, PILLAR_OFFSET_POS);
-					}
-				// 南東の場合
-				case CBspMap::Direction::eSouthEast:
-					{
-						offSetPos = CVector(-PILLAR_OFFSET_POS, 0.0f, -PILLAR_OFFSET_POS);
-					}
-				// 南西の場合
-				case CBspMap::Direction::eSouthWest:
-					{
-						offSetPos = CVector(PILLAR_OFFSET_POS, 0.0f, -PILLAR_OFFSET_POS);
-					}
-				//北西の場合
-				case  CBspMap::Direction::eNorthWest:
-					{
-						offSetPos = CVector(PILLAR_OFFSET_POS, 0.0f, PILLAR_OFFSET_POS);
-					}
-				default:
-					break;
-				}
-
-				pillarPos += offSetPos;
-
-				// 柱の生成
-				CPillar* pillar = new CPillar(pillarPos);
-				// 柱のリストに追加
-				mpPillarObjects.push_back(pillar);
-
+				CreatePassagePillar(map, x, y);
 			}
 		}
 	}
@@ -450,6 +408,63 @@ void CField::CreatePassageWall(const std::vector<std::vector<CBspMap::Tile>>& ma
 		wall->Rotation(0.0f, rotY, 0.0f);
 		// 壁のリストに追加
 		mpWallObjects.push_back(wall);
+	}
+}
+
+// 通路の柱を生成
+void CField::CreatePassagePillar(const std::vector<std::vector<CBspMap::Tile>>& map, int x, int y)
+{
+	// マップデータの外周は入れない
+	if (y == 0 && y == map.size() - 1 && x == 0 && x == map[0].size() - 1) return;
+
+	//方向に応じて座標を修正
+	CVector pillarPos = CVector(x * TILE_SIZE, 0, y * TILE_SIZE);
+	// オフセットポジション格納用
+	CVector offSetPos = CVector::zero;
+
+	// 北東(右上)に柱を生成するか
+	if (map[y - 1][x].passage && map[y][x + 1].passage && !map[y - 1][x + 1].passage &&
+		(map[y - 1][x + 1].type == CBspMap::TileType::None || map[y - 1][x + 1].type == CBspMap::TileType::eWall))
+	{
+		offSetPos = CVector(PILLAR_OFFSET_POS, 0.0f, -PILLAR_OFFSET_POS);
+
+		// 柱の生成
+		CPillar* pillar = new CPillar(pillarPos + offSetPos);
+		// 柱のリストに追加
+		mpPillarObjects.push_back(pillar);
+	}
+	// 南東(右下)に柱を生成するか
+	if (map[y + 1][x].passage && map[y][x + 1].passage && !map[y + 1][x + 1].passage &&
+		(map[y + 1][x + 1].type == CBspMap::TileType::None || map[y + 1][x + 1].type == CBspMap::TileType::eWall))
+	{
+		offSetPos = CVector(PILLAR_OFFSET_POS, 0.0f, PILLAR_OFFSET_POS);
+
+		// 柱の生成
+		CPillar* pillar = new CPillar(pillarPos + offSetPos);
+		// 柱のリストに追加
+		mpPillarObjects.push_back(pillar);
+	}
+	// 北西(左上)に柱を生成するか
+	if (map[y - 1][x].passage && map[y][x - 1].passage && !map[y - 1][x - 1].passage &&
+		(map[y - 1][x - 1].type == CBspMap::TileType::None || map[y - 1][x - 1].type == CBspMap::TileType::eWall))
+	{
+		offSetPos = CVector(-PILLAR_OFFSET_POS, 0.0f, -PILLAR_OFFSET_POS);
+
+		// 柱の生成
+		CPillar* pillar = new CPillar(pillarPos + offSetPos);
+		// 柱のリストに追加
+		mpPillarObjects.push_back(pillar);
+	}
+	// 南西(左下)に柱を生成するか
+	if (map[y + 1][x].passage && map[y][x - 1].passage && !map[y + 1][x - 1].passage &&
+		(map[y + 1][x - 1].type == CBspMap::TileType::None || map[y + 1][x - 1].type == CBspMap::TileType::eWall))
+	{
+		offSetPos = CVector(-PILLAR_OFFSET_POS, 0.0f, PILLAR_OFFSET_POS);
+
+		// 柱の生成
+		CPillar* pillar = new CPillar(pillarPos + offSetPos);
+		// 柱のリストに追加
+		mpPillarObjects.push_back(pillar);
 	}
 }
 

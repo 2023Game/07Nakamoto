@@ -1,4 +1,5 @@
 #include "CElementManager.h"
+#include "CrystalData.h"
 
 #define MAX_SLOT 5
 
@@ -22,8 +23,8 @@ CElementManager::CElementManager()
 	// 初期化
 	mSlots.resize(MAX_SLOT,ElementType::None);
 
-	mSlots[0] = ElementType::eFire;
-	mSlots[3] = ElementType::eFire;
+	//mSlots[0] = ElementType::eFire;
+	//mSlots[3] = ElementType::eWater;
 
 }
 
@@ -36,6 +37,13 @@ CElementManager::~CElementManager()
 // 属性を追加する
 bool CElementManager::AddElement(ElementType type)
 {
+	// 属性データを取得できなかったら、追加できない
+	const CrystalData* crystalData = nullptr;
+	bool success = Crystal::GetCrystalData(type, &crystalData);
+	if (!success) return false;
+
+	// 属性スロットのリストの先頭から空のスロットを探して、
+	// 空の属性スロットに属性を入れる
 	for (auto& slot : mSlots)
 	{
 		// 空いているスロットを探す
@@ -50,10 +58,10 @@ bool CElementManager::AddElement(ElementType type)
 }
 
 // 現在選択中の属性を取得
-CElementManager::ElementType CElementManager::GetCurrentElement() const
-{
-	return mSlots[mCurrentIndex];
-}
+//CElementManager::Elem CElementManager::GetCurrentElement() const
+//{
+//	return mSlots[mCurrentIndex];
+//}
 
 // 属性を消費
 void CElementManager::ConsumeCurentElement()
@@ -78,10 +86,10 @@ void CElementManager::SelectPrev()
 }
 
 // スロット情報取得
-const std::vector<CElementManager::ElementType>& CElementManager::GetSlots() const
-{
-	return mSlots;
-}
+//const std::vector<CElementManager::ElementType>& CElementManager::GetSlots() const
+//{
+//	return mSlots;
+//}
 
 // 現在のスロットの番号を取得
 int CElementManager::GetCurrentIndex() const

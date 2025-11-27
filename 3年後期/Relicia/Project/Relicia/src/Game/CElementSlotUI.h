@@ -3,6 +3,7 @@
 
 class CImage;
 class CElementManager;
+struct CrystalData;
 
 class CElementSlotUI : public CUIBase
 {
@@ -13,7 +14,7 @@ public:
 	~CElementSlotUI();
 
 	// 指定した属性を属性スロットに装備
-	void EquipElement();
+	void EquipElement(const CrystalData* crystal);
 
 	// 更新
 	void Update() override;

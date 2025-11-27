@@ -2,18 +2,30 @@
 #include <map>
 #include "CModel.h"
 
+#define ICON_PATH "UI\\Element\\"
+
 namespace Crystal
 {
 	// クリスタルのデータテーブル
-	const std::map<CrystalType, CrystalData> CRYSTAL_DATA =
+	const std::map<ElementType, CrystalData> CRYSTAL_DATA =
 	{
 		// 炎のクリスタル
 		{
-			CrystalType::Fire,
+			ElementType::Fire,
 			{
-				CrystalType::Fire,
-				"UI\\fire_icon.png",
-				"Field\\Object\\key.obj"
+				ElementType::Fire,
+				ICON_PATH"fire_icon.png",
+				"Field\\Object\\key.obj" //仮
+			}
+		},
+
+		// 水のクリスタル
+		{
+			ElementType::Water,
+			{
+				ElementType::Water,
+				ICON_PATH"water_icon.png",
+				"Field\\Object\\key.obj" //仮
 			}
 		},
 	};
@@ -22,7 +34,7 @@ namespace Crystal
 	bool loadedCrystalResources = false;
 
 	// クリスタルの種類を指定して、クリスタルのデータ取得
-	bool GetCrystalData(CrystalType type, const CrystalData** data)
+	bool GetCrystalData(ElementType type, const CrystalData** data)
 	{
 		// テーブルから指定された種類のクリスタルデータを探す
 		auto find = CRYSTAL_DATA.find(type);
@@ -46,10 +58,10 @@ namespace Crystal
 		// 既にクリスタルのリソースが読み込まれていたら、再度読み込みしなおさない
 		if (loadedCrystalResources) return;
 
-		int count = (int)CrystalType::Num;
+		int count = (int)ElementType::Num;
 		for (int i = 0; i < count; i++)
 		{
-			CrystalType type = (CrystalType)i;
+			ElementType type = (ElementType)i;
 			const CrystalData* data = nullptr;
 			// クリスタルデータ取得
 			if (!GetCrystalData(type, &data)) continue;
@@ -69,10 +81,10 @@ namespace Crystal
 		// クリスタルのリソースが読み込まれてなければ、スルー
 		if (!loadedCrystalResources) return;
 
-		int count = (int)CrystalType::Num;
+		int count = (int)ElementType::Num;
 		for (int i = 0; i < count; i++)
 		{
-			CrystalType type = (CrystalType)i;
+			ElementType type = (ElementType)i;
 			const CrystalData* data = nullptr;
 			// クリスタルデータ取得
 			if (!GetCrystalData(type, &data)) continue;

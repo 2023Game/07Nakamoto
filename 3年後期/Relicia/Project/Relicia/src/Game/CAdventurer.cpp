@@ -9,6 +9,7 @@
 #include "CPlayerHpUI.h"
 #include "CElementSlotUI.h"
 #include "CElementManager.h"
+#include "CrystalData.h"
 // プレイヤーのインスタンス
 CAdventurer* CAdventurer::spInstance = nullptr;
 
@@ -65,6 +66,7 @@ CAdventurer::CAdventurer()
 	, mIsPlayedSlashSE(false)
 	, mIsSpawnedSlashEffect(false)
 	, mpSword(nullptr)
+	, mEquipElementSlotIndex(0)
 {
 	mMaxHp = MAX_HP;
 	mHp = mMaxHp;
@@ -197,6 +199,19 @@ void CAdventurer::TakeDamage(int damage, CObjectBase* causer)
 		// 移動を停止
 		mMoveSpeed = CVector::zero;
 	}
+}
+
+// 装備したスロット番号のアイテムを装備する
+void CAdventurer::EquipElement(int slotIndex)
+{
+	// 既に設定しているスロット番号と一致したら処理しない
+	if (slotIndex == mEquipElementSlotIndex) return;
+
+	// 装備しているスロット番号を記憶しておく
+	mEquipElementSlotIndex = slotIndex;
+	// 装備したアイテムをUIに設定
+	//const CrystalData* crystalData = CElementManager::Instance()->GetItemSlotData(mEquipElementSlotIndex);
+	//mpEquipment->EquipItem(itemData);
 }
 
 // オブジェクト削除を伝える
@@ -624,7 +639,7 @@ void CAdventurer::Update()
 	// 武器の行列を更新
 	mpSword->UpdateMtx();
 	// 属性スロットの更新
-	mpElementEquipment->Update();
+	//mpElementEquipment->;
 	
 #if _DEBUG
 	CVector pos = Position();

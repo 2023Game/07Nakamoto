@@ -51,6 +51,8 @@ private:
 
 	// ’Ê˜H‚Ì•Ç‚Ì¶¬
 	void CreatePassageWall(const std::vector<std::vector<CBspMap::Tile>>& map, int x, int y);
+	// ’Ê˜H‚Ì’Œ‚ğ¶¬
+	void CreatePassagePillar(const std::vector<std::vector<CBspMap::Tile>>& map, int x, int y);
 
 	//CModel* mpModel;
 	//CColliderMesh* mpColliderMesh;

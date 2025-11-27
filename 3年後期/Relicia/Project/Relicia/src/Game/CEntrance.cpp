@@ -7,17 +7,16 @@ CEntrance::CEntrance(const CVector& pos)
 {
 	mpModel = CResourceManager::Get<CModel>("Wall_Entrance"); 
 	CModel* col = CResourceManager::Get<CModel>("Entrance_Col");
-	CModel* archCol = CResourceManager::Get<CModel>("Entrance_Ceil_Col");
+	CModel* ceilCol = CResourceManager::Get<CModel>("Entrance_Ceil_Col");
 
 	mpColliderMesh = new CColliderMesh(this, ELayer::eWall, col, false);
-	mpColliderMeshCeil = new CColliderMesh(this, ELayer::eCeil, archCol, false);
+	mpColliderMeshCeil = new CColliderMesh(this, ELayer::eCeil, ceilCol, false);
 
 	// コライダー表示をオンにする
-	mpColliderMesh->SetShow(true);
-	mpColliderMeshCeil->SetShow(true);
+	//mpColliderMesh->SetShow(true);
+	//mpColliderMeshCeil->SetShow(true);
 
 	Position(pos);
-
 }
 
 // デストラクタ

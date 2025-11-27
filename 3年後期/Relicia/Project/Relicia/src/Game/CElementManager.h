@@ -1,4 +1,5 @@
 #pragma once
+#include "CrystalData.h"
 
 // 属性ストック管理クラス
 class CElementManager
@@ -12,17 +13,17 @@ public:
 	~CElementManager();
 
 	// 属性タイプ
-	enum class ElementType
-	{
-		None = -1,
+	//enum class ElementType
+	//{
+	//	None = -1,
 
-		eFire,		// 炎属性
-		eWater,		// 水属性
-		eThunder,	// 雷属性
-		eIce,		// 氷属性
-		eWind,		// 風属性
+	//	eFire,		// 炎属性
+	//	eWater,		// 水属性
+	//	eThunder,	// 雷属性
+	//	eIce,		// 氷属性
+	//	eWind,		// 風属性
 
-	};
+	//};
 
 	// 属性を追加する
 	bool AddElement(ElementType type);
@@ -39,12 +40,19 @@ public:
 	void SelectPrev();
 
 	// スロット情報取得
-	const std::vector<ElementType>& GetSlots() const;
+	//const std::vector<ElementType>& GetSlots() const;
 	// 現在のスロットの番号を取得
 	int GetCurrentIndex() const;
 
 private:
 	static CElementManager* spInstance;
+
+	// 属性スロットのデータ
+	struct ElementSlotData
+	{
+		// そのスロットに入っている属性のデータ
+		const CrystalData* data;
+	};
 
 	// 属性スロット
 	std::vector<ElementType> mSlots;
