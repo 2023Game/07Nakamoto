@@ -11,10 +11,10 @@
 #include "CCactus.h"
 #include "CMashroom.h"
 #include "CCrate.h"
+#include "CElementManager.h"
 
 #include "CDebugInput.h"
 #include "CPlayer.h"
-#include "CColliderTriangle.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -72,6 +72,8 @@ void CGameScene::Load()
 
 	// ダンジョンの作成
 	mpField = new CField();
+
+	new CElementManager();
 
 	// サボテンの敵を作成
 	CCactus* cactus = new CCactus();

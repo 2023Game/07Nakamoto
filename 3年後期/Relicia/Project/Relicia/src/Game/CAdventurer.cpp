@@ -9,7 +9,7 @@
 #include "CPlayerHpUI.h"
 #include "CElementSlotUI.h"
 #include "CElementManager.h"
-#include "CrystalData.h"
+
 // プレイヤーのインスタンス
 CAdventurer* CAdventurer::spInstance = nullptr;
 
@@ -210,8 +210,8 @@ void CAdventurer::EquipElement(int slotIndex)
 	// 装備しているスロット番号を記憶しておく
 	mEquipElementSlotIndex = slotIndex;
 	// 装備したアイテムをUIに設定
-	//const CrystalData* crystalData = CElementManager::Instance()->GetItemSlotData(mEquipElementSlotIndex);
-	//mpEquipment->EquipItem(itemData);
+	const CrystalData* data = CElementManager::Instance()->GetCurrentElement();
+	mpElementEquipment->EquipElement(data);
 }
 
 // オブジェクト削除を伝える
@@ -621,6 +621,13 @@ void CAdventurer::Update()
 	// 「E」キーで
 	if (CInput::PushKey('E'))
 	{
+		// 仮で炎属性を追加
+
+		CElementManager::Instance()->AddElement(ElementType::Fire);
+
+		// 装備したアイテムをUIに設定
+		const CrystalData* data = CElementManager::Instance()->GetCurrentElement();
+		mpElementEquipment->EquipElement(data);
 
 	}
 
@@ -630,10 +637,11 @@ void CAdventurer::Update()
 		System::ExitGame();
 	}
 
-	// 「B」キーを押したら、
-	if (CInput::PushKey('B'))
+	// 「Q」キーを押したら、
+	if (CInput::PushKey('Q'))
 	{
-
+		// 仮で水属性を追加
+		CElementManager::Instance()->AddElement(ElementType::Water);
 	}
 
 	// 武器の行列を更新

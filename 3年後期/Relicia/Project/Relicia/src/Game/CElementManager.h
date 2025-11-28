@@ -1,8 +1,9 @@
 #pragma once
 #include "CrystalData.h"
+#include "CTask.h"
 
 // 属性ストック管理クラス
-class CElementManager
+class CElementManager : public CTask
 {
 public:
 	// インスタンス
@@ -12,24 +13,11 @@ public:
 	// デストラクタ
 	~CElementManager();
 
-	// 属性タイプ
-	//enum class ElementType
-	//{
-	//	None = -1,
-
-	//	eFire,		// 炎属性
-	//	eWater,		// 水属性
-	//	eThunder,	// 雷属性
-	//	eIce,		// 氷属性
-	//	eWind,		// 風属性
-
-	//};
-
 	// 属性を追加する
-	bool AddElement(ElementType type);
+	void AddElement(ElementType type);
 
 	// 現在選択中の属性を取得
-	ElementType GetCurrentElement() const;
+	const CrystalData* GetCurrentElement() const;
 
 	// 属性を消費
 	void ConsumeCurentElement();
@@ -44,18 +32,16 @@ public:
 	// 現在のスロットの番号を取得
 	int GetCurrentIndex() const;
 
+	// 更新処理
+	void Update() override;
+	// 更新処理
+	void Render() override;
+
 private:
 	static CElementManager* spInstance;
 
-	// 属性スロットのデータ
-	struct ElementSlotData
-	{
-		// そのスロットに入っている属性のデータ
-		const CrystalData* data;
-	};
-
 	// 属性スロット
-	std::vector<ElementType> mSlots;
+	std::vector<const CrystalData*> mpSlots;
 	// 選択中の数値
 	int mCurrentIndex;
 };

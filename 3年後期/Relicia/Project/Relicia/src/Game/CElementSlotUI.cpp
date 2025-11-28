@@ -1,6 +1,7 @@
 #include "CElementSlotUI.h"
 #include "CElementManager.h"
 #include "CImage.h"
+#include "CrystalData.h"
 
 // コンストラクタ
 CElementSlotUI::CElementSlotUI()
@@ -39,13 +40,13 @@ CElementSlotUI::~CElementSlotUI()
 }
 
 // 指定した属性を属性スロットに装備
-void CElementSlotUI::EquipElement(const CrystalData* crystal)
+void CElementSlotUI::EquipElement(const CrystalData* data)
 {
 	// アイテムのデータが設定されたら
-	if (crystal != nullptr)
+	if (data != nullptr)
 	{
 		// 設定されたアイテムのアイコンを読み込んで表示
-		mpElementImage->Load("UI\\fire_icon.png");
+		mpElementImage->Load(data->iconPath.c_str());
 		mpElementImage->SetShow(true);
 	}
 	else

@@ -1,5 +1,6 @@
 #include "CElementManager.h"
 #include "CrystalData.h"
+#include "CAdventurer.h"
 
 #define MAX_SLOT 5
 
@@ -17,72 +18,77 @@ CElementManager* CElementManager::Instance()
 
 // コンストラクタ
 CElementManager::CElementManager()
-	: mCurrentIndex(0)
+	: CTask(ETaskPriority::eUI, 0, ETaskPauseType::eMenu)
+	, mCurrentIndex(0)
 {
 	// スロットの数を設定
 	// 初期化
-	mSlots.resize(MAX_SLOT,ElementType::None);
-
-	//mSlots[0] = ElementType::eFire;
-	//mSlots[3] = ElementType::eWater;
+	mpSlots.resize(MAX_SLOT, nullptr);
 
 }
 
 // デストラクタ
 CElementManager::~CElementManager()
 {
-	mSlots.clear();
+	mpSlots.clear();
 }
 
 // 属性を追加する
-bool CElementManager::AddElement(ElementType type)
+void CElementManager::AddElement(ElementType type)
 {
 	// 属性データを取得できなかったら、追加できない
 	const CrystalData* crystalData = nullptr;
 	bool success = Crystal::GetCrystalData(type, &crystalData);
-	if (!success) return false;
+	if (!success) return ;
+
+	bool isAdded = false;
 
 	// 属性スロットのリストの先頭から空のスロットを探して、
 	// 空の属性スロットに属性を入れる
-	for (auto& slot : mSlots)
+	for (auto& slot : mpSlots)
 	{
 		// 空いているスロットを探す
-		if (slot == ElementType::None)
-		{
-			slot = type;
-			return true;
-		}
+		if (slot != nullptr) continue;
+			
+		slot = crystalData;
+		isAdded = true;
+
+		break;
 	}
 
-	return false;	// 満タン
+	// 属性スロットが満杯の場合、
+	if (!isAdded)
+	{
+		// TODO:満杯の時の処理
+	}
 }
 
 // 現在選択中の属性を取得
-//CElementManager::Elem CElementManager::GetCurrentElement() const
-//{
-//	return mSlots[mCurrentIndex];
-//}
+const CrystalData* CElementManager::GetCurrentElement() const
+{
+	return mpSlots[mCurrentIndex];
+}
 
 // 属性を消費
 void CElementManager::ConsumeCurentElement()
 {
-	if (mSlots.empty()) return;
+	if (mpSlots.empty()) return;
 
-	mSlots[mCurrentIndex] = ElementType::None;
+	mpSlots[mCurrentIndex] = nullptr;
 }
 
 // マウスホイールで次へ切り替え
 void CElementManager::SelectNext()
 {
-	if (mSlots.empty()) return;
-	mCurrentIndex = (mCurrentIndex + 1) % mSlots.size();
+	if (mpSlots.empty()) return;
+	mCurrentIndex = (mCurrentIndex + 1) % mpSlots.size();
 }
 
 // マウスホイールで前へ切り替え
 void CElementManager::SelectPrev()
 {
-	if (mSlots.empty()) return;
-	mCurrentIndex = (mCurrentIndex - 1 + mSlots.size()) % mSlots.size();
+	if (mpSlots.empty()) return;
+	mCurrentIndex = (mCurrentIndex - 1 + mpSlots.size()) % mpSlots.size();
 }
 
 // スロット情報取得
@@ -95,4 +101,15 @@ void CElementManager::SelectPrev()
 int CElementManager::GetCurrentIndex() const
 {
 	return mCurrentIndex;
+}
+
+// 更新処理
+void CElementManager::Update()
+{
+	CAdventurer::Instance()->EquipElement(mCurrentIndex);
+}
+
+// 更新処理
+void CElementManager::Render()
+{
 }

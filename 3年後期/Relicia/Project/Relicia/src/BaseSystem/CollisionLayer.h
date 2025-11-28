@@ -9,6 +9,7 @@ enum class ELayer
 	eFloor,
 	eWall,
 	eCeil,		// 天井
+	eCrystal,	// クリスタル
 	eGround,
 	ePlayer,
 	eEnemy,
