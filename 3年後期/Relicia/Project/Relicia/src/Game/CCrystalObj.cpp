@@ -1,9 +1,11 @@
 #include "CCrystalObj.h"
+#include "CModel.h"
 #include "CColliderSphere.h"
+#include "CElementManager.h"
 
 // コンストラクタ
 CCrystalObj::CCrystalObj(ElementType type, CVector pos)
-	: CInteractObject(ETaskPriority::eCrystal, 0, ETaskPauseType::eGame)
+	: CObjectBase(ETag::eItem, ETaskPriority::eCrystal, 0, ETaskPauseType::eGame)
 	, mElementType(type)
 	, mpCrystalData(nullptr)
 	, mpModel(nullptr)
@@ -19,7 +21,7 @@ CCrystalObj::CCrystalObj(ElementType type, CVector pos)
 	}
 
 	// クリスタルのモデルデータを取得
-	mpModel = CResourceManager::Get <CModel>(mpCrystalData->modelPath);
+	mpModel = CResourceManager::Load <CModel>("Crystal", mpCrystalData->modelPath);
 
 	// 球コライダーを作成
 	mpCollider = new CColliderSphere
@@ -32,13 +34,37 @@ CCrystalObj::CCrystalObj(ElementType type, CVector pos)
 	mpCollider->SetCollisionLayers({ ELayer::ePlayer });
 	
 	Position(pos);
+	Scale(3, 3, 3);
 }
 
 // デストラクタ
 CCrystalObj::~CCrystalObj()
 {
-	// 読み込んだモデルデータ
-	SAFE_DELETE(mpModel);
 	// コライダーを削除
 	SAFE_DELETE(mpCollider);
+}
+
+// 衝突処理
+void CCrystalObj::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
+{
+	if (self == mpCollider)
+	{
+		// プレイヤーと衝突した場合
+		if (other->Layer() == ELayer::ePlayer)
+		{
+			Kill();
+
+			// プレイヤーの属性スロットに追加
+			CElementManager::Instance()->AddElement(mElementType);
+		}
+	}
+}
+
+void CCrystalObj::Update()
+{
+}
+
+void CCrystalObj::Render()
+{
+	mpModel->Render(Matrix());
 }

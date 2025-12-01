@@ -99,8 +99,11 @@ CAdventurer::CAdventurer()
 		CVector(0.0f, BODY_HEIGHT - BODY_RADIUS, 0.0f),
 		BODY_RADIUS
 	);
-	mpBodyCol->SetCollisionTags({ ETag::eField, ETag::eRideableObject, ETag::eEnemy });
-	mpBodyCol->SetCollisionLayers({ ELayer::eFloor, ELayer::eWall,ELayer::eCeil, ELayer::eEnemy, ELayer::eAttackCol });
+	mpBodyCol->SetCollisionTags({ ETag::eField, ETag::eRideableObject, ETag::eEnemy , ETag::eItem});
+	mpBodyCol->SetCollisionLayers
+	(
+		{ ELayer::eFloor, ELayer::eWall,ELayer::eCeil, ELayer::eEnemy,ELayer::eAttackCol ,ELayer::eCrystal}
+	);
 
 	mpSlashSE = CResourceManager::Get<CSound>("SlashSound");
 
@@ -622,13 +625,7 @@ void CAdventurer::Update()
 	if (CInput::PushKey('E'))
 	{
 		// 仮で炎属性を追加
-
 		CElementManager::Instance()->AddElement(ElementType::Fire);
-
-		// 装備したアイテムをUIに設定
-		const CrystalData* data = CElementManager::Instance()->GetCurrentElement();
-		mpElementEquipment->EquipElement(data);
-
 	}
 
 	// 「P」キーを押したら、ゲームを終了

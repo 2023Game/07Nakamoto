@@ -13,6 +13,7 @@
 #include "Maths.h"
 #include "CDebugInput.h"
 #include "CBspMapCollider.h"
+#include "CCrystalObj.h"
 
 #define PILLAR_OFFSET_POS 10.0f	// 柱のオフセット座標
 #define SECTION_SIZE_X 50		// ダンジョンの全体の区画の横サイズ
@@ -27,6 +28,10 @@ CField::CField()
 {
 	// BSP法でダンジョン生成
 	CreateMap();
+
+
+	// 属性クリスタルを生成
+	CCrystalObj* crystal = new CCrystalObj(ElementType::Fire, mpMapData->GetRoomFloorPos());
 }
 
 CField::~CField()

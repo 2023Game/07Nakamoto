@@ -112,6 +112,9 @@ public:
 	// 部屋の壁の情報を返す
 	//std::vector<TileSegment> CBspMap::CollectWallSegments() const;
 
+	// 部屋の床の座標のリストからランダムに座標を取得
+	CVector GetRoomFloorPos();
+
 private:
 	// ノードの削除
 	void DeleteNode(SectionNode* node);
@@ -144,7 +147,6 @@ private:
 	// 方角の正反対を返す
 	Direction InverseDirection(Direction dir) const;
 
-
 #if _DEBUG
 	// 区画の境界線設定
 	void DrawBoundary(SectionNode* node, std::vector<std::vector<Tile>>& map);
@@ -156,8 +158,7 @@ private:
 	SectionNode* mpRoot;
 	// ２次元配列(可変長配列)のマップデータ
 	std::vector<std::vector<Tile>> mMapData;
+
 	// 通路の柱の座標のリスト
-	std::vector<CVector2> mpPillars;
-
-
+	std::vector<CVector2> mpRoomFloors;
 };

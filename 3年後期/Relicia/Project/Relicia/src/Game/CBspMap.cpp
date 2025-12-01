@@ -61,7 +61,6 @@ const CBspMap::SectionNode* CBspMap::GetRootNode() const
 std::vector<CBspMap::TileSegment> CBspMap::GetWallSegments() const
 {
     std::vector<CBspMap::TileSegment> walls;
-    //std::vector<CBspMap::TileSegment> floors;
 
     // 横方向の走査
     for (int y = 0; y < mMapData.size(); ++y)
@@ -591,6 +590,7 @@ void CBspMap::CreateRoomFloor(SectionNode* node, std::vector<std::vector<Tile>>&
         for (int x = roomX + 1; x < roomX + roomWidth - 1; x++)
         {
             map[y][x].type = TileType::eFloor;
+            mpRoomFloors.push_back(CVector2(x, y));
         }
     }
 
@@ -864,6 +864,14 @@ CBspMap::Direction CBspMap::InverseDirection(Direction dir) const
     }
 
     return dir;
+}
+
+// 部屋の床の座標のリストからランダムに座標を取得
+CVector CBspMap::GetRoomFloorPos()
+{
+    int index = Math::Rand(0, mpRoomFloors.size() - 1);
+
+    return CVector(mpRoomFloors[index].X() * TILE_SIZE, 0, mpRoomFloors[index].Y() * TILE_SIZE);
 }
 
 #if _DEBUG
