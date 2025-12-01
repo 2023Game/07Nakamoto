@@ -1,5 +1,6 @@
 #include "CMashroom.h"
 #include "CColliderCapsule.h"
+#include "CCrystalObj.h"
 
 #define ANIM_PATH "Character\\Enemy\\Mushroom\\Anim\\"
 
@@ -160,6 +161,8 @@ void CMashroom::UpdateDeath()
 	//	}
 	//	break;
 	//}
+
+	new CCrystalObj(ElementType::Fire, Position());
 
 	Kill();
 

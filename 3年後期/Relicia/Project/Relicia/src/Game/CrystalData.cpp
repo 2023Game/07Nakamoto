@@ -15,7 +15,7 @@ namespace Crystal
 			{
 				ElementType::Fire,
 				ICON_PATH"fire_icon.png",
-				"Field\\Object\\key.obj" //‰¼
+				"Crystal_Red"
 			}
 		},
 
@@ -25,7 +25,7 @@ namespace Crystal
 			{
 				ElementType::Water,
 				ICON_PATH"water_icon.png",
-				"Field\\Object\\key.obj" //‰¼
+				"Key" //‰¼
 			}
 		},
 	};

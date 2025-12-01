@@ -67,6 +67,7 @@ CAdventurer::CAdventurer()
 	, mIsSpawnedSlashEffect(false)
 	, mpSword(nullptr)
 	, mEquipElementSlotIndex(0)
+	, mElementType(ElementType::None)
 {
 	mMaxHp = MAX_HP;
 	mHp = mMaxHp;
@@ -207,14 +208,31 @@ void CAdventurer::TakeDamage(int damage, CObjectBase* causer)
 // 装備したスロット番号のアイテムを装備する
 void CAdventurer::EquipElement(int slotIndex)
 {
-	// 既に設定しているスロット番号と一致したら処理しない
-	if (slotIndex == mEquipElementSlotIndex) return;
-
-	// 装備しているスロット番号を記憶しておく
-	mEquipElementSlotIndex = slotIndex;
-	// 装備したアイテムをUIに設定
 	const CrystalData* data = CElementManager::Instance()->GetCurrentElement();
-	mpElementEquipment->EquipElement(data);
+
+	// 既に設定しているスロット番号と一致したら処理しない
+	if (slotIndex == mEquipElementSlotIndex)
+	{
+		// 装備しているスロット番号を記憶しておく
+		mEquipElementSlotIndex = slotIndex;
+
+		// 装備したアイテムをUIに設定
+		mpElementEquipment->EquipElement(data);
+	}
+
+	// データが存在し
+	if (data)
+	{
+		// 記憶している属性と異なる場合、
+		if (mElementType != data->type)
+		{
+			// 装備している属性を記憶しておく
+			mElementType = data->type;
+
+			// 装備したアイテムをUIに設定
+			mpElementEquipment->EquipElement(data);
+		}
+	}
 }
 
 // オブジェクト削除を伝える
@@ -280,6 +298,7 @@ void CAdventurer::UpdateIdle()
 		// 右クリックで属性を付与した斬撃
 		else if (CInput::PushKey(VK_RBUTTON))
 		{
+			 CElementManager::Instance()->UseElement();
 		}
 		// SPACEキーでジャンプ開始へ移行
 		else if (CInput::PushKey(VK_SPACE))
@@ -644,7 +663,7 @@ void CAdventurer::Update()
 	// 武器の行列を更新
 	mpSword->UpdateMtx();
 	// 属性スロットの更新
-	//mpElementEquipment->;
+	EquipElement(CElementManager::Instance()->GetCurrentIndex());
 	
 #if _DEBUG
 	CVector pos = Position();

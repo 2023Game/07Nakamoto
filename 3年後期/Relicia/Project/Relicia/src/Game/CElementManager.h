@@ -27,10 +27,11 @@ public:
 	// マウスホイールで前へ切り替え
 	void SelectPrev();
 
-	// スロット情報取得
-	//const std::vector<ElementType>& GetSlots() const;
 	// 現在のスロットの番号を取得
 	int GetCurrentIndex() const;
+
+	// 装備されている属性を使用する
+	void UseElement();
 
 	// 更新処理
 	void Update() override;
@@ -44,4 +45,5 @@ private:
 	std::vector<const CrystalData*> mpSlots;
 	// 選択中の数値
 	int mCurrentIndex;
+
 };

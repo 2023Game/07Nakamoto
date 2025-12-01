@@ -3,6 +3,8 @@
 #include "CColliderSphere.h"
 #include "CElementManager.h"
 
+#define COLLIDER_RADIUS 10.0f
+
 // コンストラクタ
 CCrystalObj::CCrystalObj(ElementType type, CVector pos)
 	: CObjectBase(ETag::eItem, ETaskPriority::eCrystal, 0, ETaskPauseType::eGame)
@@ -21,20 +23,19 @@ CCrystalObj::CCrystalObj(ElementType type, CVector pos)
 	}
 
 	// クリスタルのモデルデータを取得
-	mpModel = CResourceManager::Load <CModel>("Crystal", mpCrystalData->modelPath);
+	mpModel = CResourceManager::Get <CModel>(mpCrystalData->modelPath);
 
 	// 球コライダーを作成
 	mpCollider = new CColliderSphere
 	(
 		this, ELayer::eCrystal,
-		10.0f, true
+		COLLIDER_RADIUS, true
 	);
 	// プレイヤーと衝突するように設定
 	mpCollider->SetCollisionTags({ ETag::ePlayer });
 	mpCollider->SetCollisionLayers({ ELayer::ePlayer });
 	
 	Position(pos);
-	Scale(3, 3, 3);
 }
 
 // デストラクタ

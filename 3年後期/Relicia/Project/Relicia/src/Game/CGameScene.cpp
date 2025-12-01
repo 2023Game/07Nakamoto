@@ -65,6 +65,9 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>(	"Mushroom",			"Character\\Enemy\\Mushroom\\mushroom.x");
 
 	CResourceManager::Load<CModel>(		"Crate",			"Field\\Object\\crate.obj");
+
+	CResourceManager::Load<CModel>(		"Crystal_Red",		"Field\\Object\\Crystal\\red_crystal.obj");
+
 	CResourceManager::Load<CModel>(		"Key",				"Field\\Object\\key.obj");
 
 	// ƒQ[ƒ€BGM‚ğ“Ç‚İ‚İ

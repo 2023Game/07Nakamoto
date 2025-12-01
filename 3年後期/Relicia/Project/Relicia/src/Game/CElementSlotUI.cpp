@@ -1,7 +1,6 @@
 #include "CElementSlotUI.h"
 #include "CElementManager.h"
 #include "CImage.h"
-#include "CrystalData.h"
 
 // コンストラクタ
 CElementSlotUI::CElementSlotUI()

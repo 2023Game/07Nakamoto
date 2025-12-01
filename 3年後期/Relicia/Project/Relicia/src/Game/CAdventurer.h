@@ -1,6 +1,7 @@
 #pragma once
 #include "CXCharacter.h"
 #include "CSound.h"
+#include "CrystalData.h"
 
 class CCollider;
 class CSword;
@@ -141,4 +142,8 @@ private:
 	CElementSlotUI* mpElementEquipment;
 	// 属性スロットのインデックス値
 	int mEquipElementSlotIndex;
+
+	// 現在の属性スロット記憶用
+	ElementType mElementType;
+
 };

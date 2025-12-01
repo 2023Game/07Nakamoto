@@ -1,9 +1,9 @@
 #pragma once
 #include "CUIBase.h"
+#include "CrystalData.h"
 
 class CImage;
 class CElementManager;
-class CrystalData;
 
 class CElementSlotUI : public CUIBase
 {
@@ -23,6 +23,4 @@ public:
 private:
 	CImage* mpElementSlot;	// 属性スロット枠のイメージ
 	CImage* mpElementImage;	// 装備しているアイテムのイメージ
-
-	CElementManager* mpElementManager;
 };

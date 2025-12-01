@@ -24,7 +24,6 @@ CElementManager::CElementManager()
 	// スロットの数を設定
 	// 初期化
 	mpSlots.resize(MAX_SLOT, nullptr);
-
 }
 
 // デストラクタ
@@ -91,22 +90,21 @@ void CElementManager::SelectPrev()
 	mCurrentIndex = (mCurrentIndex - 1 + mpSlots.size()) % mpSlots.size();
 }
 
-// スロット情報取得
-//const std::vector<CElementManager::ElementType>& CElementManager::GetSlots() const
-//{
-//	return mSlots;
-//}
-
 // 現在のスロットの番号を取得
 int CElementManager::GetCurrentIndex() const
 {
 	return mCurrentIndex;
 }
 
+// 装備されている属性を使用する
+void CElementManager::UseElement()
+{
+	mpSlots[mCurrentIndex] = nullptr;
+}
+
 // 更新処理
 void CElementManager::Update()
 {
-	CAdventurer::Instance()->EquipElement(mCurrentIndex);
 }
 
 // 更新処理
