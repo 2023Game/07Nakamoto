@@ -23,7 +23,7 @@ CCrystalObj::CCrystalObj(ElementType type, CVector pos)
 	}
 
 	// クリスタルのモデルデータを取得
-	mpModel = CResourceManager::Get <CModel>(mpCrystalData->modelPath);
+	mpModel = CResourceManager::Get <CModel>("Crystal");
 
 	// 球コライダーを作成
 	mpCollider = new CColliderSphere
