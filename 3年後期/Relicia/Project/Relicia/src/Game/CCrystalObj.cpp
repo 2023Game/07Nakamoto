@@ -21,9 +21,16 @@ CCrystalObj::CCrystalObj(ElementType type, CVector pos)
 		Kill();
 		return;
 	}
-
 	// クリスタルのモデルデータを取得
 	mpModel = CResourceManager::Get <CModel>("Crystal");
+
+	// クリスタルの元のマテリアルを取得
+	CMaterial* baseMat = mpModel->GetMaterial();
+	// 元のマテリアルをコピーして新しいマテリアルを生成
+	mpMaterial = new CMaterial(*baseMat);
+	// 新しいマテリアルのテクスチャを読み込む
+	std::string texPath = mpMaterial->DirPath() + mpCrystalData->texPath;
+	mpMaterial->LoadTexture(texPath, texPath, false);
 
 	// 球コライダーを作成
 	mpCollider = new CColliderSphere
@@ -41,6 +48,9 @@ CCrystalObj::CCrystalObj(ElementType type, CVector pos)
 // デストラクタ
 CCrystalObj::~CCrystalObj()
 {
+	// 設定されているマテリアルを解除してから、マテリアルを削除
+	mpModel->SetMaterial(nullptr);
+	SAFE_DELETE(mpMaterial);
 	// コライダーを削除
 	SAFE_DELETE(mpCollider);
 }
@@ -67,5 +77,7 @@ void CCrystalObj::Update()
 
 void CCrystalObj::Render()
 {
+	// マテリアルを設定して、モデルを描画
+	mpModel->SetMaterial(mpMaterial);
 	mpModel->Render(Matrix());
 }

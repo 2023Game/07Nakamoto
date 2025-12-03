@@ -4,6 +4,7 @@
 
 class CCollider;
 class CModel;
+class CMaterial;
 
 // クリスタルの
 class CCrystalObj : public CObjectBase
@@ -24,6 +25,7 @@ private:
 	ElementType mElementType;	// 属性の種類
 	const CrystalData* mpCrystalData;	// クリスタルのデータのポインタ
 	CModel* mpModel;			// クリスタルのモデルデータ
+	CMaterial* mpMaterial;		// クリスタルのマテリアルデータ
 
 	CCollider* mpCollider;		// クリスタルのコライダー
 };

@@ -23,7 +23,6 @@ CAdventurer* CAdventurer::spInstance = nullptr;
 #define GRAVITY 0.0625f		// 重力加速度
 
 #define MAX_HP 100	// 体力の最大値
-#define HP_GAUGE_UI_POS 50.0f,600.0f
 
 #define ATTACK_START_FRAME 26.0f	// 斬り攻撃の開始フレーム
 #define ATTACK_END_FRAME 50.0f		// 斬り攻撃の終了フレーム
@@ -32,8 +31,11 @@ CAdventurer* CAdventurer::spInstance = nullptr;
 // 斬り攻撃の剣のオフセット向き
 #define ATTACK_SWORD_OFFSET_ROT CVector(-20.0f, 0.0f, -7.0f)
 
-#define ELEMENT_UI_POS CVector2(331.0f,529.0f)
+//#define ELEMENT_UI_POS CVector2(331.0f,529.0f)
 #define ELEMENT_UI_ALPHA 0.8f
+// HPのUIの座標
+#define HP_GAUGE_UI_POS CVector2(50.0f,600.0f)
+
 
 // プレイヤーのアニメーションデータのテーブル
 const CAdventurer::AnimData CAdventurer::ANIM_DATA[] =
@@ -103,7 +105,10 @@ CAdventurer::CAdventurer()
 	mpBodyCol->SetCollisionTags({ ETag::eField, ETag::eRideableObject, ETag::eEnemy , ETag::eItem});
 	mpBodyCol->SetCollisionLayers
 	(
-		{ ELayer::eFloor, ELayer::eWall,ELayer::eCeil, ELayer::eEnemy,ELayer::eAttackCol ,ELayer::eCrystal}
+		{
+			ELayer::eFloor, ELayer::eWall,ELayer::eCeil,ELayer::eCrate,
+			ELayer::eEnemy,ELayer::eAttackCol ,ELayer::eCrystal
+		}
 	);
 
 	mpSlashSE = CResourceManager::Get<CSound>("SlashSound");
@@ -124,14 +129,15 @@ CAdventurer::CAdventurer()
 	mpSword->Position(ATTACK_SWORD_OFFSET_POS);
 	mpSword->Rotation(ATTACK_SWORD_OFFSET_ROT);
 
-	// プレイヤーのUI
+	// 属性スロットのUI
+	mpElementEquipment = new CElementSlotUI();
+	//mpElementEquipment->SetPos(ELEMENT_UI_POS);
+	mpElementEquipment->SetAlpha(ELEMENT_UI_ALPHA);
+
+	// プレイヤーのHPのUI
 	mpHpGauge = new CPlayerHpUI(MAX_HP);
 	mpHpGauge->SetPos(HP_GAUGE_UI_POS);
 
-	// 属性スロットのUI
-	mpElementEquipment = new CElementSlotUI();
-	mpElementEquipment->SetPos(ELEMENT_UI_POS);
-	mpElementEquipment->SetAlpha(ELEMENT_UI_ALPHA);
 }
 
 // デストラクタ
@@ -210,6 +216,8 @@ void CAdventurer::EquipElement(int slotIndex)
 {
 	const CrystalData* data = CElementManager::Instance()->GetCurrentElement();
 
+	if (!data) return;
+
 	// 既に設定しているスロット番号と一致したら処理しない
 	if (slotIndex == mEquipElementSlotIndex)
 	{
@@ -217,7 +225,7 @@ void CAdventurer::EquipElement(int slotIndex)
 		mEquipElementSlotIndex = slotIndex;
 
 		// 装備したアイテムをUIに設定
-		mpElementEquipment->EquipElement(data);
+		mpElementEquipment->SetElement(slotIndex,data);
 	}
 
 	// データが存在し
@@ -230,7 +238,7 @@ void CAdventurer::EquipElement(int slotIndex)
 			mElementType = data->type;
 
 			// 装備したアイテムをUIに設定
-			mpElementEquipment->EquipElement(data);
+			mpElementEquipment->SetElement(slotIndex, data);
 		}
 	}
 }
@@ -556,7 +564,6 @@ void CAdventurer::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 				Position(Position() + adjust * hit.weight);
 			}
 		}
-
 		// 敵と衝突した場合
 		else if (other->Layer() == ELayer::eEnemy)
 		{
@@ -565,6 +572,52 @@ void CAdventurer::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 			CVector adjust = hit.adjust;
 			adjust.Y(0.0f);
 			Position(Position() + adjust * hit.weight);
+		}
+		// 木箱と衝突した場合
+		else if (other->Layer() == ELayer::eCrate)
+		{
+			// 自身と相手の座標
+			CVector selfPos = Position();
+			CVector otherPos = other->Owner()->Position();
+
+			//　自身の座標から相手の座標までのベクトルを求める
+			CVector vec = otherPos - selfPos;
+			vec.Y(0.0f);
+			// 正規化して方向ベクトル化
+			CVector dir = vec.Normalized();
+
+			// 木箱の法線格納用
+			CVector normal = VectorZ();
+			// Y軸に90度回転する回転行列を作成
+			CMatrix rotMtx;
+			rotMtx.RotateY(90.0f);
+
+			// 4方向のベクトルと、相手までのベクトルの内積で角度を求め、
+			// 一番近い方向から押し出しベクトルを求める
+			float maxDot = -2.0f;
+			CVector pushDir = CVector::zero;
+			for (int i = 0; i < 4; i++)
+			{
+				// 内積で角度を求めて、一番近い(内積結果が大きい)方向ベクトルを取得
+				float d = CVector::Dot(normal, dir);
+				if (d > maxDot)
+				{
+					pushDir = normal;
+					maxDot = d;
+				}
+				// 調べるベクトルをY軸に90度回転
+				normal = rotMtx * normal;
+			}
+
+			// 横方向にのみ押し戻すため、
+			// 押し戻しベクトルのYの値を0にする
+			CVector adjust = hit.adjust;
+			adjust.Y(0.0f);
+
+			// 求めた4方向で一番近いベクトル方向に押し戻す
+			float length = CVector::Dot(pushDir, adjust * hit.weight);
+			adjust = pushDir * length;
+			Position(Position() + adjust);
 		}
 	}
 	// 剣のコライダーが衝突した
@@ -663,7 +716,7 @@ void CAdventurer::Update()
 	// 武器の行列を更新
 	mpSword->UpdateMtx();
 	// 属性スロットの更新
-	EquipElement(CElementManager::Instance()->GetCurrentIndex());
+	//EquipElement(CElementManager::Instance()->GetCurrentIndex());
 	
 #if _DEBUG
 	CVector pos = Position();

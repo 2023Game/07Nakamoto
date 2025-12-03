@@ -2,8 +2,6 @@
 #include "CrystalData.h"
 #include "CAdventurer.h"
 
-#define MAX_SLOT 5
-
 CElementManager* CElementManager::spInstance = nullptr;
 
 // インスタンスの生成

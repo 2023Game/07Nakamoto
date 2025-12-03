@@ -2,6 +2,8 @@
 #include "CrystalData.h"
 #include "CTask.h"
 
+#define MAX_SLOT 5
+
 // 属性ストック管理クラス
 class CElementManager : public CTask
 {

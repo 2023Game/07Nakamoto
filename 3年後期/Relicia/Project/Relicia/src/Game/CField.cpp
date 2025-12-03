@@ -32,6 +32,14 @@ CField::CField()
 
 	// ‘®«ƒNƒŠƒXƒ^ƒ‹‚ð¶¬
 	CCrystalObj* crystal = new CCrystalObj(ElementType::Fire, mpMapData->GetRoomFloorPos());
+	crystal = new CCrystalObj(ElementType::Fire, mpMapData->GetRoomFloorPos());
+	crystal = new CCrystalObj(ElementType::Water, mpMapData->GetRoomFloorPos());
+	crystal = new CCrystalObj(ElementType::Water, mpMapData->GetRoomFloorPos());
+	crystal = new CCrystalObj(ElementType::Thunder, mpMapData->GetRoomFloorPos());
+	crystal = new CCrystalObj(ElementType::Thunder, mpMapData->GetRoomFloorPos());
+	crystal = new CCrystalObj(ElementType::Wind, mpMapData->GetRoomFloorPos());
+	crystal = new CCrystalObj(ElementType::Wind, mpMapData->GetRoomFloorPos());
+
 }
 
 CField::~CField()

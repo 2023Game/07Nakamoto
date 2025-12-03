@@ -10,6 +10,7 @@ enum class ELayer
 	eWall,
 	eCeil,		// 天井
 	eCrystal,	// クリスタル
+	eCrate,		// 箱
 	eGround,
 	ePlayer,
 	eEnemy,

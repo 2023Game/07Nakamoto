@@ -8,10 +8,16 @@ class CElementManager;
 class CElementSlotUI : public CUIBase
 {
 public:
+	// インスタンス
+	static CElementSlotUI* Instance();
+
 	// コンストラクタ
 	CElementSlotUI();
 	// デストラクタ
 	~CElementSlotUI();
+
+	// 指定したスロットに属性アイコンを設定
+	void SetElement(int index, const CrystalData* data);
 
 	// 指定した属性を属性スロットに装備
 	void EquipElement(const CrystalData* data);
@@ -21,6 +27,8 @@ public:
 	// 描画
 	void Render() override;
 private:
+	static CElementSlotUI* spInstance;
+
 	CImage* mpElementSlot;	// 属性スロット枠のイメージ
-	CImage* mpElementImage;	// 装備しているアイテムのイメージ
+	std::vector<CImage*> mpElementImages;	// 属性アイコンのイメージリスト
 };
