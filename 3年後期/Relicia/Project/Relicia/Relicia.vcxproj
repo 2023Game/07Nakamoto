@@ -82,6 +82,7 @@
     <ClCompile Include="src\Game\CCrate.cpp" />
     <ClCompile Include="src\Game\CCrystalManager.cpp" />
     <ClCompile Include="src\Game\CCrystalObj.cpp" />
+    <ClCompile Include="src\Game\CElementSlotUI2.cpp" />
     <ClCompile Include="src\Game\CInteractObject.cpp" />
     <ClCompile Include="src\Game\CInteractObjectManager.cpp" />
     <ClCompile Include="src\Game\CrystalData.cpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="src\Game\CCrate.h" />
     <ClInclude Include="src\Game\CCrystalManager.h" />
     <ClInclude Include="src\Game\CCrystalObj.h" />
+    <ClInclude Include="src\Game\CElementSlotUI2.h" />
     <ClInclude Include="src\Game\CInteractObject.h" />
     <ClInclude Include="src\Game\CInteractObjectManager.h" />
     <ClInclude Include="src\Game\CrystalData.h" />

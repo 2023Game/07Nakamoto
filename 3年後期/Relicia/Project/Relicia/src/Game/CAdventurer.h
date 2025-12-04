@@ -6,7 +6,7 @@
 class CCollider;
 class CSword;
 class CPlayerHpUI;
-class CElementSlotUI;
+class CElementSlotUI2;
 
 class CAdventurer : public CXCharacter
 {
@@ -139,7 +139,7 @@ private:
 	CSword* mpSword;
 
 	// 属性スロットの装備枠
-	CElementSlotUI* mpElementEquipment;
+	CElementSlotUI2* mpElementEquipment;
 	// 属性スロットのインデックス値
 	int mEquipElementSlotIndex;
 

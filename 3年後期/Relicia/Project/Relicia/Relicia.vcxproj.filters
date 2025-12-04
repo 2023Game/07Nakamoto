@@ -466,6 +466,9 @@
     <ClCompile Include="src\Game\CInteractObjectManager.cpp">
       <Filter>ソース ファイル\Game\Field\InteractObject</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CElementSlotUI2.cpp">
+      <Filter>ソース ファイル\Game\Character\Player\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -842,6 +845,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CInteractObjectManager.h">
       <Filter>ソース ファイル\Game\Field\InteractObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CElementSlotUI2.h">
+      <Filter>ソース ファイル\Game\Character\Player\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -7,7 +7,7 @@
 #include "CColliderCapsule.h"
 #include "CColliderSphere.h"
 #include "CPlayerHpUI.h"
-#include "CElementSlotUI.h"
+#include "CElementSlotUI2.h"
 #include "CElementManager.h"
 
 // プレイヤーのインスタンス
@@ -130,7 +130,7 @@ CAdventurer::CAdventurer()
 	mpSword->Rotation(ATTACK_SWORD_OFFSET_ROT);
 
 	// 属性スロットのUI
-	mpElementEquipment = new CElementSlotUI();
+	mpElementEquipment = new CElementSlotUI2();
 	//mpElementEquipment->SetPos(ELEMENT_UI_POS);
 	mpElementEquipment->SetAlpha(ELEMENT_UI_ALPHA);
 
@@ -225,7 +225,7 @@ void CAdventurer::EquipElement(int slotIndex)
 		mEquipElementSlotIndex = slotIndex;
 
 		// 装備したアイテムをUIに設定
-		mpElementEquipment->SetElement(slotIndex,data);
+		mpElementEquipment->SetElement(slotIndex, data);
 	}
 
 	// データが存在し
