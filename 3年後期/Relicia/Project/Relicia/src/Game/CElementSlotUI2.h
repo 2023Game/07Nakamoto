@@ -23,7 +23,9 @@ public:
 	// 指定したスロットに属性アイコンを設定
 	void SetElement(int index, const CrystalData* data);
 	// 属性アイコンの設定
-	void RenderIcon(int index, float x, float scale, float alpha);
+	void RenderIcon(int index, float x, float scale, float buttom);
+	// 属性アイコンの背景を設定
+	void RenderBackIcon(int index, float x, float scale);
 
 	// 更新
 	void Update() override;

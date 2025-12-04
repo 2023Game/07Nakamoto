@@ -32,7 +32,6 @@ CAdventurer* CAdventurer::spInstance = nullptr;
 #define ATTACK_SWORD_OFFSET_ROT CVector(-20.0f, 0.0f, -7.0f)
 
 //#define ELEMENT_UI_POS CVector2(331.0f,529.0f)
-#define ELEMENT_UI_ALPHA 0.8f
 // HPのUIの座標
 #define HP_GAUGE_UI_POS CVector2(50.0f,600.0f)
 
@@ -131,8 +130,6 @@ CAdventurer::CAdventurer()
 
 	// 属性スロットのUI
 	mpElementEquipment = new CElementSlotUI2();
-	//mpElementEquipment->SetPos(ELEMENT_UI_POS);
-	mpElementEquipment->SetAlpha(ELEMENT_UI_ALPHA);
 
 	// プレイヤーのHPのUI
 	mpHpGauge = new CPlayerHpUI(MAX_HP);
@@ -697,7 +694,7 @@ void CAdventurer::Update()
 	if (CInput::PushKey('E'))
 	{
 		// 仮で炎属性を追加
-		CElementManager::Instance()->AddElement(ElementType::Fire);
+		CElementManager::Instance()->AddElementEnergy(ElementType::Fire);
 	}
 
 	// 「P」キーを押したら、ゲームを終了
@@ -710,7 +707,7 @@ void CAdventurer::Update()
 	if (CInput::PushKey('Q'))
 	{
 		// 仮で水属性を追加
-		CElementManager::Instance()->AddElement(ElementType::Water);
+		CElementManager::Instance()->AddElementEnergy(ElementType::Water);
 	}
 
 	// 武器の行列を更新

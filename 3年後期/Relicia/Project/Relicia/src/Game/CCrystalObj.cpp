@@ -66,7 +66,7 @@ void CCrystalObj::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 			Kill();
 
 			// プレイヤーの属性スロットに追加
-			CElementManager::Instance()->AddElement(mElementType);
+			CElementManager::Instance()->AddElementEnergy(mElementType);
 		}
 	}
 }
