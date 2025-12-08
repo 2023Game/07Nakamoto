@@ -26,6 +26,10 @@ CAdventurer* CAdventurer::spInstance = nullptr;
 
 #define ATTACK_START_FRAME 26.0f	// 斬り攻撃の開始フレーム
 #define ATTACK_END_FRAME 50.0f		// 斬り攻撃の終了フレーム
+
+#define ATTACK2_START_FRAME 31.0f	// 斬り攻撃の開始フレーム
+#define ATTACK2_END_FRAME 40.0f		// 斬り攻撃の終了フレーム
+
 // 斬り攻撃の剣のオフセット座標
 #define ATTACK_SWORD_OFFSET_POS CVector(0.0f, 7.2f, 3.5f)
 // 斬り攻撃の剣のオフセット向き
@@ -42,12 +46,14 @@ const CAdventurer::AnimData CAdventurer::ANIM_DATA[] =
 	{ "",						true,	0.0f,	1.0f	},	// Tポーズ
 	{ ANIM_PATH"idle.x",		true,	153.0f,	1.0f	},	// 待機
 	{ ANIM_PATH"walk.x",		true,	66.0f,	1.0f	},	// 歩行
-	{ ANIM_PATH"run.x",			true,	22.0f,	1.0f	},	// 走行
+	{ ANIM_PATH"run.x",			true,	43.0f,	1.0f	},	// 走行
 	{ ANIM_PATH"attack.x",		false,	92.0f,	1.0f	},	// 斬り攻撃
+	{ ANIM_PATH"attack2.x",		false,	79.0f,	1.0f	},	// 回転切り
 	{ ANIM_PATH"jump_start.x",	false,	25.0f,	1.0f	},	// ジャンプ開始
 	{ ANIM_PATH"jump.x",		true,	1.0f,	1.0f	},	// ジャンプ中
 	{ ANIM_PATH"jump_end.x",	false,	26.0f,	1.0f	},	// ジャンプ終了
 	{ ANIM_PATH"hit.x",			false,	44.0f,	1.0f	},	// 仰け反り
+
 };
 
 // インスタンスのポインタの取得
@@ -169,10 +175,11 @@ void CAdventurer::AttackStart()
 	CXCharacter::AttackStart();
 
 	// 斬り攻撃中であれば、剣のコライダーをオンにする
-	if (mState == EState::eAttack)
+	if (mState == EState::eAttack || mState == EState::eAttack2)
 	{
 		mpSword->SetEnableCol(true);
 	}
+	
 }
 
 // 攻撃終了
@@ -303,7 +310,10 @@ void CAdventurer::UpdateIdle()
 		// 右クリックで属性を付与した斬撃
 		else if (CInput::PushKey(VK_RBUTTON))
 		{
-			 CElementManager::Instance()->UseElement();
+			ChangeState(EState::eAttack2);
+			mMoveSpeed = CVector::zero;
+
+			CElementManager::Instance()->UseElement();
 		}
 		// SPACEキーでジャンプ開始へ移行
 		else if (CInput::PushKey(VK_SPACE))
@@ -358,6 +368,54 @@ void CAdventurer::UpdateAttack()
 		}
 		break;
 	}
+}
+
+// 回転切り
+void CAdventurer::UpdateAttack2()
+{
+	switch (mStateStep)
+	{
+	case 0:
+		// 攻撃アニメーション2を開始
+		ChangeAnimation(EAnimType::eAttack2, true);
+		//// 斬撃SEの再生済みフラグを初期化
+		//mIsPlayedSlashSE = false;
+		//// 斬撃エフェクトの生成済みフラグを初期化
+		//mIsSpawnedSlashEffect = false;
+
+		mStateStep++;
+		break;
+	case 1:
+		if (GetAnimationFrame() >= ATTACK2_START_FRAME)
+		{
+			// 斬撃SEを再生
+			//mpSlashSE->Play();
+			// 攻撃開始
+			AttackStart();
+
+			mStateStep++;
+		}
+		break;
+	case 2:
+		if (GetAnimationFrame() >= ATTACK2_END_FRAME)
+		{
+			// 攻撃終了
+			AttackEnd();
+
+			mStateStep++;
+		}
+		break;
+	case 3:
+		// 攻撃アニメーションが終了したら、
+		if (IsAnimationFinished())
+		{
+			// 待機状態へ移行
+			ChangeState(EState::eIdle);
+			ChangeAnimation(EAnimType::eIdle);
+		}
+		break;
+	}
+
 }
 
 // ジャンプ開始
@@ -639,6 +697,8 @@ void CAdventurer::Update()
 	case EState::eIdle:			UpdateIdle();		break;
 		// 斬り攻撃
 	case EState::eAttack:		UpdateAttack();		break;
+		// 回転切り
+	case EState::eAttack2:		UpdateAttack2();	break;
 		// ジャンプ開始
 	case EState::eJumpStart:	UpdateJumpStart();	break;
 		// ジャンプ中
@@ -671,12 +731,6 @@ void CAdventurer::Update()
 	target.Normalize();
 	CVector forward = CVector::Slerp(current, target, 0.125f);
 	Rotation(CQuaternion::LookRotation(forward));
-
-	// ホイールクリックで
-	if (CInput::PushKey(VK_MBUTTON))
-	{
-
-	}
 
 	// マウスホイールの回転量を取得
 	int mouseWheel = CInput::GetDeltaMouseWheel();
@@ -712,8 +766,6 @@ void CAdventurer::Update()
 
 	// 武器の行列を更新
 	mpSword->UpdateMtx();
-	// 属性スロットの更新
-	//EquipElement(CElementManager::Instance()->GetCurrentIndex());
 	
 #if _DEBUG
 	CVector pos = Position();

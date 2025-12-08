@@ -81,6 +81,7 @@
     <ClCompile Include="src\Game\CBullet.cpp" />
     <ClCompile Include="src\Game\CCrate.cpp" />
     <ClCompile Include="src\Game\CInventory.cpp" />
+    <ClCompile Include="src\Game\CInventory2.cpp" />
     <ClCompile Include="src\Game\CItemManager.cpp" />
     <ClCompile Include="src\Game\CCrystalObj.cpp" />
     <ClCompile Include="src\Game\CElementSlotUI2.cpp" />
@@ -213,6 +214,7 @@
     <ClInclude Include="src\Game\CBullet.h" />
     <ClInclude Include="src\Game\CCrate.h" />
     <ClInclude Include="src\Game\CInventory.h" />
+    <ClInclude Include="src\Game\CInventory2.h" />
     <ClInclude Include="src\Game\CItemManager.h" />
     <ClInclude Include="src\Game\CCrystalObj.h" />
     <ClInclude Include="src\Game\CElementSlotUI2.h" />

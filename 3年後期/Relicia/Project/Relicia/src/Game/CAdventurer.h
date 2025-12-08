@@ -58,6 +58,8 @@ private:
 	void UpdateIdle();
 	// 斬り攻撃
 	void UpdateAttack();
+	// 回転切り
+	void UpdateAttack2();
 	// ジャンプ開始
 	void UpdateJumpStart();
 	// ジャンプ中
@@ -80,10 +82,12 @@ private:
 		eWalk,		// 歩行
 		eRun,		// 走行
 		eAttack,	// 斬り攻撃
+		eAttack2,	// 回転切り
 		eJumpStart,	// ジャンプ開始
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了
 		eHit,		// 仰け反り
+		//eRelease,	// 属性解放
 
 		Num
 	};
@@ -109,6 +113,7 @@ private:
 	{
 		eIdle,		// 待機
 		eAttack,	// 斬り攻撃
+		eAttack2,	// 回転切り
 		eJumpStart,	// ジャンプ開始
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了
@@ -145,5 +150,8 @@ private:
 
 	// 現在の属性スロット記憶用
 	ElementType mElementType;
+
+	// 属性解放フラグ
+	bool mElementRelease;
 
 };

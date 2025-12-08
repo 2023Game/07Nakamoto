@@ -40,9 +40,9 @@ struct ItemData
 	int recovery;		// 回復量
 	int attack;			// 攻撃力
 
-	int width;	// 占有範囲の横幅
-	int height;	// 占有範囲の縦幅
-	bool shape[MAX_SHAPE][MAX_SHAPE];	// 占有マスク
+	//int width;	// 占有範囲の横幅
+	//int height;	// 占有範囲の縦幅
+	//bool shape[MAX_SHAPE][MAX_SHAPE];	// 占有マスク
 };
 
 namespace Item
