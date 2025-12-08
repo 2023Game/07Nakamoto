@@ -80,11 +80,13 @@
     <ClCompile Include="src\Game\CBspMapCollider.cpp" />
     <ClCompile Include="src\Game\CBullet.cpp" />
     <ClCompile Include="src\Game\CCrate.cpp" />
-    <ClCompile Include="src\Game\CCrystalManager.cpp" />
+    <ClCompile Include="src\Game\CInventory.cpp" />
+    <ClCompile Include="src\Game\CItemManager.cpp" />
     <ClCompile Include="src\Game\CCrystalObj.cpp" />
     <ClCompile Include="src\Game\CElementSlotUI2.cpp" />
     <ClCompile Include="src\Game\CInteractObject.cpp" />
     <ClCompile Include="src\Game\CInteractObjectManager.cpp" />
+    <ClCompile Include="src\Game\CItemObj.cpp" />
     <ClCompile Include="src\Game\CrystalData.cpp" />
     <ClCompile Include="src\Game\CElementManager.cpp" />
     <ClCompile Include="src\Game\CElementSlotUI.cpp" />
@@ -119,6 +121,7 @@
     <ClCompile Include="src\Game\CWeapon.cpp" />
     <ClCompile Include="src\Game\CXCharacter.cpp" />
     <ClCompile Include="src\Game\CDoor.cpp" />
+    <ClCompile Include="src\Game\ItemData.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Test\CBootMenuScene.cpp" />
     <ClCompile Include="src\Test\CColBase.cpp" />
@@ -209,11 +212,13 @@
     <ClInclude Include="src\Game\CBspMapCollider.h" />
     <ClInclude Include="src\Game\CBullet.h" />
     <ClInclude Include="src\Game\CCrate.h" />
-    <ClInclude Include="src\Game\CCrystalManager.h" />
+    <ClInclude Include="src\Game\CInventory.h" />
+    <ClInclude Include="src\Game\CItemManager.h" />
     <ClInclude Include="src\Game\CCrystalObj.h" />
     <ClInclude Include="src\Game\CElementSlotUI2.h" />
     <ClInclude Include="src\Game\CInteractObject.h" />
     <ClInclude Include="src\Game\CInteractObjectManager.h" />
+    <ClInclude Include="src\Game\CItemObj.h" />
     <ClInclude Include="src\Game\CrystalData.h" />
     <ClInclude Include="src\Game\CElementManager.h" />
     <ClInclude Include="src\Game\CElementSlotUI.h" />
@@ -248,6 +253,7 @@
     <ClInclude Include="src\Game\CWeapon.h" />
     <ClInclude Include="src\Game\CXCharacter.h" />
     <ClInclude Include="src\Game\CDoor.h" />
+    <ClInclude Include="src\Game\ItemData.h" />
     <ClInclude Include="src\Test\CBootMenuScene.h" />
     <ClInclude Include="src\Test\CColBase.h" />
     <ClInclude Include="src\Test\CColCapsule.h" />

@@ -11,10 +11,11 @@ enum class ELayer
 	eCeil,		// 天井
 	eCrystal,	// クリスタル
 	eCrate,		// 箱
+	eInteractObj, // 調べられるアイテム
 	eGround,
 	ePlayer,
 	eEnemy,
-
+	eInteractSearch, // 調べるオブジェクト探知用
 	eAttackCol,
 };
 // 衝突判定レイヤーの初期化リスト
