@@ -16,7 +16,6 @@
 
 #define ICON_SIZ  CVector2(54.0f,54.0f)	// 右の属性スロットのアイコンの大きさ
 
-#define ICON_OFFSET_X 72.0f	// オフセットX座標
 #define ICON_OFF_SIZE 1	// 装備されていないアイコンのサイズ
 #define ICON_BACK_A 0.5f	// アルファ値
 
