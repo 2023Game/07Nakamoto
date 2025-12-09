@@ -9,6 +9,7 @@
 #include "CPlayerHpUI.h"
 #include "CElementSlotUI2.h"
 #include "CElementManager.h"
+#include "CInventory.h"
 
 // プレイヤーのインスタンス
 CAdventurer* CAdventurer::spInstance = nullptr;
@@ -28,6 +29,7 @@ CAdventurer* CAdventurer::spInstance = nullptr;
 #define ATTACK_END_FRAME 50.0f		// 斬り攻撃の終了フレーム
 
 #define ATTACK2_START_FRAME 31.0f	// 斬り攻撃の開始フレーム
+#define ATTACK2_EFFECT_START_FRAME 36.0f	// 斬撃の開始フレーム
 #define ATTACK2_END_FRAME 40.0f		// 斬り攻撃の終了フレーム
 
 // 斬り攻撃の剣のオフセット座標
@@ -390,13 +392,37 @@ void CAdventurer::UpdateAttack2()
 		{
 			// 斬撃SEを再生
 			//mpSlashSE->Play();
+			
 			// 攻撃開始
 			AttackStart();
 
 			mStateStep++;
 		}
 		break;
+
 	case 2:
+		if (GetAnimationFrame() >= ATTACK2_EFFECT_START_FRAME)
+		{
+			// 斬撃SEを再生
+			//mpSlashSE->Play();
+
+			// 斬撃生成
+			CSlash* slash = new CSlash
+			(
+				this,
+				Position() + CVector(0.0f, 10.0f, 0.0f) + VectorZ() * 1.0f,
+				VectorZ(),
+				100.0f,
+				1000.0f
+			);
+			slash->SetColor(CColor(1.0f, 0.0f, 0.0f, 1.0f));
+			//slash->RotateAxis(VectorZ(), 45.0f);
+
+			mStateStep++;
+		}
+
+			break;
+	case 3:
 		if (GetAnimationFrame() >= ATTACK2_END_FRAME)
 		{
 			// 攻撃終了
@@ -405,7 +431,7 @@ void CAdventurer::UpdateAttack2()
 			mStateStep++;
 		}
 		break;
-	case 3:
+	case 4:
 		// 攻撃アニメーションが終了したら、
 		if (IsAnimationFinished())
 		{

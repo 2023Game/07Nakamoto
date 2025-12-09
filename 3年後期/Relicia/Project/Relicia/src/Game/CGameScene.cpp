@@ -12,6 +12,7 @@
 #include "CMashroom.h"
 #include "CCrate.h"
 #include "CElementManager.h"
+#include "CInventory.h"
 
 #include "CDebugInput.h"
 #include "CPlayer.h"
@@ -75,6 +76,9 @@ void CGameScene::Load()
 	// ダンジョンの作成
 	mpField = new CField();
 
+	// インベントリ画面の生成
+	new CInventory();
+
 	new CElementManager();
 
 	// サボテンの敵を作成
@@ -131,6 +135,20 @@ void CGameScene::Update()
 	//{
 	//	mpGameBGM->PlayLoop(-1, 1.0f, false, 1.0f);
 	//}
+
+	// ゲームメニューを開いてなければ、[Ｍ]キーでメニューを開く
+	CInventory* inv = CInventory::Instance();
+	if (CInput::PushKey(VK_TAB))
+	{
+		if (!inv->IsOpened())
+		{
+			inv->Open();
+		}
+		else
+		{
+			inv->Close();
+		}
+	}
 
 	if (CInput::PushKey('H'))
 	{

@@ -1,1 +1,306 @@
 #include "CInventory.h"
+#include "CInput.h"
+#include "CTaskManager.h"
+#include "CBGMManager.h"
+#include "CAdventurer.h"
+#include "CItemSlotUI.h"
+
+// インベントリの座標
+#define INVENTORY_POS CVector2(280.0f,220.5f)
+
+#define INITIAL_SLOT_ROW 3			// 初期のアイテムスロットの縦の数
+#define INITIAL_SLOT_COL 5			// 初期のアイテムスロットの横の数
+
+CInventory* CInventory::spInstance = nullptr;
+
+// インスタンスを取得
+CInventory* CInventory::Instance()
+{
+	return spInstance;
+}
+
+// コンストラクタ
+CInventory::CInventory()
+	: CTask(ETaskPriority::eInventry, 0, ETaskPauseType::eMenu)
+	, mSlotRow(INITIAL_SLOT_ROW)
+	, mSlotCol(INITIAL_SLOT_COL)
+	, mItemSlots(mSlotRow * mSlotCol)
+	//, mSlotButtons(SLOT_COLUMN)
+	, mIsOpened(false)
+	, mEnterSlotIndex(-1)
+	, mGrabSlotIndex(-1)
+	//, mpSlotHighlight(nullptr)
+	//, mpItemMenu(nullptr)
+	, mpMenu(nullptr)
+{
+	spInstance = this;
+
+	// 各アイテムスロットのアイテムアイコン表示用のイメージを作成
+	int slotCount = mSlotRow * mSlotCol;
+	for (int i = 0; i < slotCount; i++)
+	{
+		SlotData& slot = mItemSlots[i];
+		slot.slotUI = new CItemSlotUI(i);
+	}
+
+	// メニュー画面の背景生成
+	mpMenuBg = new CImage
+	(
+		"UI\\inventry_back.png",
+		ETaskPriority::eInventry, 0, ETaskPauseType::eMenu,
+		false, false
+	);
+
+	// インベントリの枠
+	mpInventoryFrame = new CImage
+	(
+		"UI\\inventory.png",
+		ETaskPriority::eInventry, 0, ETaskPauseType::eMenu,
+		false, false
+	);
+	mpInventoryFrame->SetCenter(mpInventoryFrame->GetSize() * 0.5f);
+	mpInventoryFrame->SetPos(INVENTORY_POS);
+
+	SetEnable(false);
+	SetShow(false);
+}
+
+// デストラクタ
+CInventory::~CInventory()
+{
+	if (spInstance == this)
+	{
+		spInstance = nullptr;
+	}
+
+	SAFE_DELETE(mpMenuBg);
+	SAFE_DELETE(mpInventoryFrame);
+	//SAFE_DELETE(mpSlotHighlight);
+	//SAFE_DELETE(mpItemMenu);
+
+	//for (SlotData& slot : mItemSlots)
+	//{
+	//	SAFE_DELETE(slot.slotUI);
+	//}
+
+}
+
+// 開く
+void CInventory::Open()
+{
+	if (mIsOpened) return;
+
+	// マウスカーソルを表示
+	CInput::ShowCursor(true);
+
+	//int size = mItemSlots.size();
+	//// アイテムスロットの位置の設定
+	//for (int i = 0; i < size; i++)
+	//{
+	//	SlotData& slot = mItemSlots[i];
+
+	//	if (slot.data != nullptr)
+	//	{
+	//		slot.slotUI->SetItemSloto(slot.data, slot.count);
+	//	}
+	//	else
+	//	{
+	//		slot.slotUI->SetItemSloto(nullptr, -1);
+	//	}
+
+	//	int w = i % SLOT_COLUMN;
+	//	int h = i / SLOT_COLUMN;
+	//	float x = ITEM_WIDTH + SLOT_FRAME * (w + 1) + ITEMSLOT_SIZE * w;
+	//	float y = ITEM_HEIGHT + SLOT_FRAME * (h + 1) + ITEMSLOT_SIZE * h;
+
+	//	slot.slotUI->SetPos(x, y);
+	//}
+
+	SetEnable(true);
+	SetShow(true);
+	CBGMManager::Instance()->Play(EBGMType::eMenu, false);
+	CTaskManager::Instance()->Pause(PAUSE_MENU_OPEN);
+
+	mIsOpened = true;
+}
+
+// 閉じる
+void CInventory::Close()
+{
+	if (!mIsOpened) return;
+
+	// マウスカーソルを非表示
+	CInput::ShowCursor(false);
+
+	SetEnable(false);
+	SetShow(false);
+	CBGMManager::Instance()->Play(EBGMType::eGame, false);
+	CTaskManager::Instance()->UnPause(PAUSE_MENU_OPEN);
+
+	mIsOpened = false;
+}
+
+// インベントリが開いているかどうか
+bool CInventory::IsOpened() const
+{
+	return mIsOpened;
+}
+
+// アイテムを追加する
+void CInventory::AddItem(ItemType type, int count)
+{
+	// アイテムデータを取得できなかったら、追加できない
+	const ItemData* itemData = nullptr;
+	bool success = Item::GetItemData(type, &itemData);
+	if (!success) return;
+
+	// 追加するアイテムの残り個数
+	int remain = count;
+
+	// ■既にアイテムが入っているスロットにアイテムを追加する
+	// アイテムスロットの中身を確認して、
+	// 同じ種類のアイテムが入っているアイテムスロットを探す
+	for (SlotData& slot : mItemSlots)
+	{
+		// 空のアイテムスロットであれば、次のアイテムスロットを調べる
+		if (slot.data == nullptr) continue;
+		// アイテムスロットに入っているアイテムの種類と
+		// 追加するアイテムの種類が一致しなければ、次のアイテムスロットを調べる
+		if (slot.data->type != type) continue;
+
+		// アイテムの種類が一致するアイテムスロットが見つかった
+
+		//　追加後のアイテム個数を算出
+		int sum = slot.count + remain;
+
+		// 追加後のアイテム個数が上限を超える場合は、
+		if (sum > slot.data->slotLimit)
+		{
+			// 溢れたアイテム個数を計算
+			remain = sum - slot.data->slotLimit;
+			// 設定するアイテム個数を上限数に設定
+			sum = slot.data->slotLimit;
+		}
+		// 上限を超えなかった場合は、残り個数を0にする
+		else
+		{
+			remain = 0;
+		}
+		// 見つかったアイテムスロットのアイテム数を設定
+		slot.count = sum;
+
+		// 残り個数が0であれば、処理を終える
+		if (remain == 0)
+		{
+			break;
+		}
+	}
+
+	// ■空のスロットにアイテムを追加する
+	// まだ追加するアイテムが残っていた場合
+	if (remain > 0)
+	{
+		// アイテムスロットのリストの先頭から空のスロットを探して、
+		// 見つかった空のアイテムスロットにアイテムを入れる
+		for (SlotData& slot : mItemSlots)
+		{
+			// 既にアイテムが入っているスロットはスルー
+			if (slot.data != nullptr) continue;
+
+			// 見つかった空のリストに。追加するアイテムのデータを設定
+			slot.data = itemData;
+
+			// 追加するアイテムの個数が上限を超えていたら、次のスロットに残す
+			int itemCount = remain;
+			if (itemCount > slot.data->slotLimit)
+			{
+				remain = itemCount - slot.data->slotLimit;
+				itemCount = slot.data->slotLimit;
+			}
+			else
+			{
+				remain = 0;
+			}
+			slot.count = itemCount;
+
+			// 追加するアイテムの個数が残ってなければ、追加処理終了
+			if (remain == 0)
+			{
+				break;
+			}
+		}
+	}
+
+	// まだ追加するアイテムが残っていた場合
+	// アイテムスロットがいっぱいの場合
+	if (remain > 0)
+	{
+		// TODO：インベントリに追加できなかったアイテムはドロップする
+
+		// 一旦削除しておく
+		remain = 0;
+	}
+}
+
+// 指定された番号のアイテムスロットを返す
+const ItemData* CInventory::GetItemSlotData(int slotIndex) const
+{
+	return nullptr;
+}
+
+// 指定したアイテムスロットのアイテムを使用
+void CInventory::UseItemSlot(int index)
+{
+}
+
+// カーソルがスロットに重なった
+void CInventory::EnterItemSlot(int index)
+{
+}
+
+// カーソルがアイテムスロットから離れた
+void CInventory::ExitItemSlot(int index)
+{
+}
+
+// アイテムスロットを掴んだ
+void CInventory::GrabItemSlot(int index)
+{
+}
+
+// 掴んでいるアイテムスロットを離した
+void CInventory::ReleaseItemSlot(int index)
+{
+}
+
+// 指定したアイテムスロットのアイテムを装備
+void CInventory::EquipItemSlot(int index)
+{
+}
+
+// 更新
+void CInventory::Update()
+{
+}
+
+// 描画
+void CInventory::Render()
+{
+	mpMenuBg->Render();
+	mpInventoryFrame->Render();
+
+	// アイテムスロットのアイテムの描画
+	int count = mItemSlots.size();
+	for (int i = 0; i < count; i++)
+	{
+		SlotData& slot = mItemSlots[i];
+		// 空のスロットは描画しない
+		if (slot.data == nullptr) continue;
+		// 現在つまんでいるアイテムスロットはこのタイミングでは描画しない
+		if (i == mGrabSlotIndex) continue;
+
+		slot.slotUI->Render();
+	}
+
+}
+

@@ -80,6 +80,7 @@
     <ClCompile Include="src\Game\CBspMapCollider.cpp" />
     <ClCompile Include="src\Game\CBullet.cpp" />
     <ClCompile Include="src\Game\CCrate.cpp" />
+    <ClCompile Include="src\Game\CGameMenu2.cpp" />
     <ClCompile Include="src\Game\CInventory.cpp" />
     <ClCompile Include="src\Game\CInventory2.cpp" />
     <ClCompile Include="src\Game\CItemManager.cpp" />
@@ -88,6 +89,7 @@
     <ClCompile Include="src\Game\CInteractObject.cpp" />
     <ClCompile Include="src\Game\CInteractObjectManager.cpp" />
     <ClCompile Include="src\Game\CItemObj.cpp" />
+    <ClCompile Include="src\Game\CItemSlotUI.cpp" />
     <ClCompile Include="src\Game\CrystalData.cpp" />
     <ClCompile Include="src\Game\CElementManager.cpp" />
     <ClCompile Include="src\Game\CElementSlotUI.cpp" />
@@ -221,6 +223,7 @@
     <ClInclude Include="src\Game\CInteractObject.h" />
     <ClInclude Include="src\Game\CInteractObjectManager.h" />
     <ClInclude Include="src\Game\CItemObj.h" />
+    <ClInclude Include="src\Game\CItemSlotUI.h" />
     <ClInclude Include="src\Game\CrystalData.h" />
     <ClInclude Include="src\Game\CElementManager.h" />
     <ClInclude Include="src\Game\CElementSlotUI.h" />
@@ -255,6 +258,7 @@
     <ClInclude Include="src\Game\CWeapon.h" />
     <ClInclude Include="src\Game\CXCharacter.h" />
     <ClInclude Include="src\Game\CDoor.h" />
+    <ClInclude Include="src\Game\CGameMenu2.h" />
     <ClInclude Include="src\Game\ItemData.h" />
     <ClInclude Include="src\Test\CBootMenuScene.h" />
     <ClInclude Include="src\Test\CColBase.h" />

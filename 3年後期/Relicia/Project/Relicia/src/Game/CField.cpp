@@ -14,6 +14,7 @@
 #include "CDebugInput.h"
 #include "CBspMapCollider.h"
 #include "CCrystalObj.h"
+#include "CItemObj.h"
 
 #define PILLAR_OFFSET_POS 10.0f	// 柱のオフセット座標
 #define SECTION_SIZE_X 50		// ダンジョンの全体の区画の横サイズ
@@ -39,6 +40,15 @@ CField::CField()
 	crystal = new CCrystalObj(ElementType::Thunder, mpMapData->GetRoomFloorPos());
 	crystal = new CCrystalObj(ElementType::Wind, mpMapData->GetRoomFloorPos());
 	crystal = new CCrystalObj(ElementType::Wind, mpMapData->GetRoomFloorPos());
+
+	CItemObj* obj = new CItemObj(ItemType::Key, mpMapData->GetRoomFloorPos());
+	obj = new CItemObj(ItemType::Key, mpMapData->GetRoomFloorPos());
+	obj = new CItemObj(ItemType::HealingPotion, mpMapData->GetRoomFloorPos());
+	obj = new CItemObj(ItemType::HealingPotion, mpMapData->GetRoomFloorPos());
+	obj = new CItemObj(ItemType::HealingPotion, mpMapData->GetRoomFloorPos());
+	obj = new CItemObj(ItemType::HealingPotion, mpMapData->GetRoomFloorPos());
+	obj = new CItemObj(ItemType::HealingPotion, mpMapData->GetRoomFloorPos());
+	obj = new CItemObj(ItemType::HealingPotion, mpMapData->GetRoomFloorPos());
 
 }
 

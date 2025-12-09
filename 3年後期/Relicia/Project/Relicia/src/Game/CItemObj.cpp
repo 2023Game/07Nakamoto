@@ -1,10 +1,10 @@
 #include "CItemObj.h"
 #include "CColliderSphere.h"
-//#include "CInventory.h"
+#include "CInventory.h"
 #include "CImage3D.h"
 #include "Maths.h"
 
-#define INTERACT_TEXT_PATH "UI\\Interact\\pickup.png"
+//#define INTERACT_TEXT_PATH "UI\\Interact\\pickup.png"
 #define WORLD_UNIT_PER_PIXEL 80.0f
 
 // 1秒間で回転する角度
@@ -26,7 +26,7 @@ CItemObj::CItemObj(ItemType type, CVector pos)
 	, mpCollider(nullptr)
 {
 	// 調べるテキストの画像を読み込む
-	CResourceManager::Load<CTexture>(INTERACT_TEXT_PATH, INTERACT_TEXT_PATH);
+	//CResourceManager::Load<CTexture>(INTERACT_TEXT_PATH, INTERACT_TEXT_PATH);
 
 	// 指定されたアイテムの種類からアイテムデータを取得
 	bool success = Item::GetItemData(mItemTyope, &mpItemData);
@@ -86,7 +86,7 @@ bool CItemObj::CanInteract() const
 void CItemObj::Interact()
 {
 	//インベントリに追加
-	//CInventory::Instance()->AddItem(mItemTyope, 1);
+	CInventory::Instance()->AddItem(mItemTyope, 1);
 
 	Kill();
 }
@@ -121,10 +121,22 @@ void CItemObj::CreateCollider()
 // 更新処理
 void CItemObj::Update()
 {
+	// 時間経過に合わせて拡縮アニメーションを再生
+	float alpha = fmodf(Times::Time(), SCALING_TIME) / SCALING_TIME;
+	float t = (sinf(M_PI * 2.0f * alpha) + 1.0f) * 0.5f;
+	float scale = Math::Lerp(SCALING_MIN, SCALING_MAX, t);
+	mpItemImage->Scale(scale, scale, scale);
+
+	// Z軸回転
+	mpItemImage->Rotate(0.0f, 0.0f, ROTATE_SPEED * Times::DeltaTime());
+
+	mpItemImage->Position(Position());
+	mpItemImage->Update();
 }
 
 // 描画処理
 void CItemObj::Render()
 {
+	mpItemImage->Render();
 }
 

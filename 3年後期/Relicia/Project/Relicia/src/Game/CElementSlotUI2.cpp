@@ -16,8 +16,10 @@
 
 #define ICON_SIZ  CVector2(54.0f,54.0f)	// 右の属性スロットのアイコンの大きさ
 
-#define ICON_OFF_SIZE 1	// 装備されていないアイコンのサイズ
-#define ICON_BACK_A 0.5f	// アルファ値
+#define ICON_ON_SIZE 1.5f	// 装備しているアイコンのサイズ
+#define ICON_OFF_SIZE 1.0f	// 装備されていないアイコンのサイズ
+
+#define ICON_BACK_A 0.3f	// アルファ値
 
 // コンストラクタ
 CElementSlotUI2::CElementSlotUI2()
@@ -100,8 +102,18 @@ void CElementSlotUI2::RenderIcon(int index, CVector2 pos, float scale, float but
 	if (!data) return;
 
 	mpElementImages[index]->Load(data->iconPath.c_str());
+
+	CVector2 size = ICON_SIZ * scale;
+
+	pos.Y(pos.Y() + size.Y() * 0.5f);
 	mpElementImages[index]->SetPos(pos);
-	mpElementImages[index]->SetScale(buttom);
+
+	size.Y(size.Y() * buttom);
+	mpElementImages[index]->SetSize(size);
+	mpElementImages[index]->SetCenter(size.X() * 0.5f, size.Y());
+
+	//mpElementImages[index]->SetScale(buttom);
+	mpElementBackImages[index]->SetAlpha(1.0f);
 	mpElementImages[index]->SetUV(0.0f, 0.0f, 1.0f, buttom);
 	mpElementImages[index]->Render();
 }
@@ -114,7 +126,9 @@ void CElementSlotUI2::RenderBackIcon(int index, CVector2 pos, float scale)
 
 	mpElementBackImages[index]->Load(data->iconPath.c_str());
 	mpElementBackImages[index]->SetPos(pos);
-	mpElementBackImages[index]->SetScale(scale);
+	mpElementBackImages[index]->SetSize(ICON_SIZ * scale);
+	//mpElementImages[index]->SetScale(scale);
+	mpElementBackImages[index]->SetCenter(ICON_SIZ * scale * 0.5f);
 	mpElementBackImages[index]->SetAlpha(ICON_BACK_A);
 	mpElementBackImages[index]->SetUV(0.0f, 0.0f, 1.0f, 1.0f);
 	mpElementBackImages[index]->Render();
@@ -141,11 +155,11 @@ void CElementSlotUI2::Render()
 
 	// 属性ゲージの背景アイコン画像
 	RenderBackIcon(left,  ICON_POS1, ICON_OFF_SIZE);
-	RenderBackIcon(cur,	  ICON_POS2, 1.0f);
+	RenderBackIcon(cur,	  ICON_POS2, ICON_ON_SIZE);
 	RenderBackIcon(right, ICON_POS3, ICON_OFF_SIZE);
 
 	// 属性ゲージが貯まっている分、属性アイコンの描画
 	RenderIcon(left,  ICON_POS1, ICON_OFF_SIZE, mgr->GetEnergy(left) / MAX_ENERGY);
-	RenderIcon(cur,   ICON_POS2, 1, mgr->GetEnergy(cur) / MAX_ENERGY);
+	RenderIcon(cur,   ICON_POS2, ICON_ON_SIZE, mgr->GetEnergy(cur) / MAX_ENERGY);
 	RenderIcon(right, ICON_POS3, ICON_OFF_SIZE, mgr->GetEnergy(right) / MAX_ENERGY);
 }

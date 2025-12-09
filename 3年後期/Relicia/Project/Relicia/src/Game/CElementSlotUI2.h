@@ -39,5 +39,4 @@ private:
 	CImage* mpElementSlot;	// 属性スロット枠のイメージ
 	std::vector<CImage*> mpElementImages;		// 属性アイコンのイメージリスト
 	std::vector<CImage*> mpElementBackImages;	// 属性アイコンの背景のイメージリスト
-
 };
