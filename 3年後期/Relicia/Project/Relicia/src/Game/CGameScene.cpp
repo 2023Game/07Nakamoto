@@ -12,6 +12,7 @@
 #include "CMashroom.h"
 #include "CCrate.h"
 #include "CElementManager.h"
+#include "CInteractObjectManager.h"
 #include "CInventory.h"
 
 #include "CDebugInput.h"
@@ -73,12 +74,17 @@ void CGameScene::Load()
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
 
+	// 調べるオブジェクトの管理クラスの生成
+	new CInteractObjectManager();
+
 	// ダンジョンの作成
 	mpField = new CField();
+
 
 	// インベントリ画面の生成
 	new CInventory();
 
+	// 属性の管理クラスを生成
 	new CElementManager();
 
 	// サボテンの敵を作成

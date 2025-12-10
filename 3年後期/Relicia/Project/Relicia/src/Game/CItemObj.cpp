@@ -20,7 +20,7 @@
 // コンストラクタ
 CItemObj::CItemObj(ItemType type, CVector pos)
 	: CInteractObject(ETaskPriority::eItem, 0, ETaskPauseType::eGame)
-	, mItemTyope(type)
+	, mItemType(type)
 	, mpItemData(nullptr)
 	, mpItemImage(nullptr)
 	, mpCollider(nullptr)
@@ -29,7 +29,7 @@ CItemObj::CItemObj(ItemType type, CVector pos)
 	//CResourceManager::Load<CTexture>(INTERACT_TEXT_PATH, INTERACT_TEXT_PATH);
 
 	// 指定されたアイテムの種類からアイテムデータを取得
-	bool success = Item::GetItemData(mItemTyope, &mpItemData);
+	bool success = Item::GetItemData(mItemType, &mpItemData);
 	// アイテムデータが存在しなかったら、自身を削除
 	if (!success)
 	{
@@ -86,7 +86,7 @@ bool CItemObj::CanInteract() const
 void CItemObj::Interact()
 {
 	//インベントリに追加
-	CInventory::Instance()->AddItem(mItemTyope, 1);
+	CInventory::Instance()->AddItem(mItemType, 1);
 
 	Kill();
 }
@@ -115,7 +115,21 @@ void CItemObj::CreateCollider()
 
 	// プレイヤーと衝突するように設定
 	mpCollider->SetCollisionTags({ ETag::ePlayer });
-	mpCollider->SetCollisionLayers({ ELayer::eInteractSearch });
+	mpCollider->SetCollisionLayers({ ELayer::ePlayer });
+}
+
+// 衝突処理
+void CItemObj::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
+{
+	if (self == mpCollider)
+	{
+		if (other->Layer() == ELayer::ePlayer)
+		{
+			CInventory::Instance()->AddItem(mItemType, 1);
+
+			Kill();
+		}
+	}
 }
 
 // 更新処理

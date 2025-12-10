@@ -109,12 +109,12 @@ CAdventurer::CAdventurer()
 		CVector(0.0f, BODY_HEIGHT - BODY_RADIUS, 0.0f),
 		BODY_RADIUS
 	);
-	mpBodyCol->SetCollisionTags({ ETag::eField, ETag::eRideableObject, ETag::eEnemy , ETag::eItem});
+	mpBodyCol->SetCollisionTags({ ETag::eField, ETag::eRideableObject, ETag::eEnemy , ETag::eItem, ETag::eInteractObject });
 	mpBodyCol->SetCollisionLayers
 	(
 		{
 			ELayer::eFloor, ELayer::eWall,ELayer::eCeil,ELayer::eCrate,
-			ELayer::eEnemy,ELayer::eAttackCol ,ELayer::eCrystal
+			ELayer::eEnemy,ELayer::eAttackCol ,ELayer::eCrystal,ELayer::eInteractObj
 		}
 	);
 

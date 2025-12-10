@@ -24,6 +24,8 @@ public:
 	// 調べるUIを表示する座標を返す
 	virtual CVector GetInteractUIPos() const override;
 
+	// 衝突処理
+	void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
 	// 更新処理
 	void Update() override;
 	// 描画処理
@@ -33,7 +35,7 @@ protected:
 	// コライダー作成(継承先で上書き可)
 	virtual void CreateCollider();
 
-	ItemType mItemTyope;	// アイテムの種類
+	ItemType mItemType;	// アイテムの種類
 	const ItemData* mpItemData;	// アイテムデータのポインタ
 	CImage3D* mpItemImage;		// アイテムのイメージデータ
 	CCollider* mpCollider;	// アイテムのコライダー

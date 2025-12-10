@@ -11,6 +11,9 @@
 #define INITIAL_SLOT_ROW 3			// 初期のアイテムスロットの縦の数
 #define INITIAL_SLOT_COL 5			// 初期のアイテムスロットの横の数
 
+// アイテムスロット数
+#define SLOT_COUNT (INITIAL_SLOT_ROW * INITIAL_SLOT_COL)
+
 CInventory* CInventory::spInstance = nullptr;
 
 // インスタンスを取得
@@ -24,7 +27,7 @@ CInventory::CInventory()
 	: CTask(ETaskPriority::eInventry, 0, ETaskPauseType::eMenu)
 	, mSlotRow(INITIAL_SLOT_ROW)
 	, mSlotCol(INITIAL_SLOT_COL)
-	, mItemSlots(mSlotRow * mSlotCol)
+	, mItemSlots(SLOT_COUNT)
 	//, mSlotButtons(SLOT_COLUMN)
 	, mIsOpened(false)
 	, mEnterSlotIndex(-1)
