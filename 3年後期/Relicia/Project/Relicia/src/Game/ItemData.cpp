@@ -35,7 +35,7 @@ namespace Item
 			ItemType::Key,
 			{
 				ItemType::Key,
-				1,
+				3,
 				"åÆ",
 				"ê‡ñæï∂",
 				"Item\\2D\\key.png",

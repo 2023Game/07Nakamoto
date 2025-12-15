@@ -20,6 +20,7 @@
 #define ICON_INTERVAL 19.0f	// アイコン同士の間隔
 #define ICON_PITCH ICON_SIZE + ICON_INTERVAL // アイコン同士の間隔と大きさを合わせた値
 
+#define HIGHLIGHT_SIZE 64.0f
 CInventory* CInventory::spInstance = nullptr;
 
 // インスタンスを取得
@@ -84,6 +85,20 @@ CInventory::CInventory()
 	mpInventoryFrame->SetCenter(mpInventoryFrame->GetSize() * 0.5f);
 	mpInventoryFrame->SetPos(INVENTORY_POS);
 
+	// カーソルが重なっているアイテムスロットを強調表示する
+	mpSlotHighlight = new CImage
+	(
+		"UI\\white.png",
+		ETaskPriority::eInventry, 0,
+		ETaskPauseType::eMenu,
+		false, false
+	);
+	mpSlotHighlight->SetSize(CVector2(ICON_SIZE, ICON_SIZE) * 1.1f);
+	mpSlotHighlight->SetCenter(mpSlotHighlight->GetSize() * 0.5f);
+	mpSlotHighlight->SetColor(CColor::yellow);
+	mpSlotHighlight->SetAlpha(0.5f);
+	mpSlotHighlight->SetEnable(false);
+
 	//// スプレッドシートの生成
 	//mpSpreadsheet = new CImage
 	//(
@@ -113,6 +128,7 @@ CInventory::~CInventory()
 
 	SAFE_DELETE(mpMenuBg);
 	SAFE_DELETE(mpInventoryFrame);
+	SAFE_DELETE(mpSlotHighlight);
 	//SAFE_DELETE(mpItemMenu);
 
 	for (SlotData& slot : mItemSlots)
@@ -361,6 +377,35 @@ void CInventory::Update()
 	{
 		slot.slotUI->Update();
 	}
+
+	if (mEnterSlotIndex != -1)
+	{
+		SlotData& itemData = mItemSlots[mEnterSlotIndex];
+
+		//// アイテムアイコンの上で右クリックしたら
+		//if (CInput::Key(VK_RBUTTON) && !mpItemMenu->IsShow())
+		//{
+		//	// アイテムアイコンがある場合
+		//	if (itemData.data != nullptr)
+		//	{
+		//		mpItemMenu->SetPos(itemData.slotUI->GetPos());
+		//		// アイテムメニューを表示する
+		//		mpItemMenu->Open();
+		//		mpItemMenu->Update();
+		//	}
+		//}
+		//else
+		//{
+			mpSlotHighlight->SetPos(itemData.slotUI->GetPos().X() - 4.0f, itemData.slotUI->GetPos().Y() - 4.0f);
+			mpSlotHighlight->SetEnable(true);
+			mpSlotHighlight->Update();
+		//}
+	}
+	else if (mEnterSlotIndex == -1)
+	{
+		mpSlotHighlight->SetEnable(false);
+	}
+
 }
 
 // 描画
@@ -368,6 +413,11 @@ void CInventory::Render()
 {
 	mpMenuBg->Render();
 	mpInventoryFrame->Render();
+
+	if (mpSlotHighlight->IsEnable())
+	{
+		mpSlotHighlight->Render();
+	}
 
 	// アイテムスロットのアイテムの描画
 	int count = mItemSlots.size();

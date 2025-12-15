@@ -53,7 +53,7 @@ private:
 
 	CImage* mpMenuBg;			// メニュー背景
 	CImage* mpInventoryFrame;	// インベントリの枠
-	//CImage* mpSlotHighlight;	// カーソルが重なっているアイテムスロットを強調表示する
+	CImage* mpSlotHighlight;	// カーソルが重なっているアイテムスロットを強調表示する
 	//CItemMenu* mpItemMenu;	// アイテム選択のメニュー覧
 
 	//CImage* mpSpreadsheet;

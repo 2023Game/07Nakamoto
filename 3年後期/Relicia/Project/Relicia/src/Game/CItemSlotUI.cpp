@@ -64,6 +64,10 @@ void CItemSlotUI::SetItemSloto(const ItemData* data, int count)
 			// 個数のテキストを設定する
 			mpCountText->SetText("%d", count);
 		}
+		else
+		{
+			mpCountText->SetText("");
+		}
 	}
 	else
 	{
