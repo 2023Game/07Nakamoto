@@ -10,6 +10,7 @@
 #include "CElementSlotUI2.h"
 #include "CElementManager.h"
 #include "CInventory.h"
+#include "ItemData.h"
 
 // プレイヤーのインスタンス
 CAdventurer* CAdventurer::spInstance = nullptr;
@@ -247,6 +248,61 @@ void CAdventurer::EquipElement(int slotIndex)
 			mpElementEquipment->SetElement(slotIndex, data);
 		}
 	}
+}
+
+// 指定したアイテムを使用できるかどうか
+bool CAdventurer::CanUseItem(const ItemData* item)
+{
+	switch (item->effectType)
+	{
+		// HP回復アイテムは、現在のHPが減っている時は使用可
+	case ItemEffectType::RecoveryHP:
+		return mHp < mMaxHp;
+
+	case ItemEffectType::Key:
+		return true;
+
+	}
+
+	return false;
+}
+
+// アイテムの効果を使う
+void CAdventurer::UseItem(const ItemData* item)
+{
+	switch (item->effectType)
+	{
+		// 回復アイテムの場合
+	case ItemEffectType::RecoveryHP:
+		mHp = mHp + item->recovery;
+
+		if (mHp > mMaxHp)
+		{
+			mHp = mMaxHp;
+		}
+		break;
+	case ItemEffectType::Key:
+		break;
+	}
+}
+
+// 指定したスロット番号のアイテムを装備
+void CAdventurer::EquipItem(int slotIndex)
+{
+	// 既に設定しているスロット番号と一致したら処理しない
+	if (slotIndex == mEquipItemSlotIndex) return;
+
+	// 装備しているスロット番号を記憶しておく
+	mEquipItemSlotIndex = slotIndex;
+	// 装備したアイテムをUIに設定
+	const ItemData* itemData = CInventory::Instance()->GetItemSlotData(mEquipItemSlotIndex);
+	//mpEquipment->EquipItem(itemData);
+}
+
+// 装備しているアイテムスロットの番号を返す
+int CAdventurer::GetEquipItemSlotIndex() const
+{
+	return mEquipItemSlotIndex;
 }
 
 // オブジェクト削除を伝える

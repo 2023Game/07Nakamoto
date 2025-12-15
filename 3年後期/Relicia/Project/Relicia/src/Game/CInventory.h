@@ -5,6 +5,7 @@
 #include "ItemData.h"
 
 class CItemSlotUI;
+class CItemMenu;
 
 // インベントリのクラス
 class CInventory : public CTask
@@ -56,10 +57,13 @@ private:
 
 	CImage* mpMenuBg;			// メニュー背景
 	CImage* mpInventoryFrame;	// インベントリの枠
-	//CImage* mpSlotHighlight;	// カーソルが重なっているアイテムスロットを強調表示する
-	//CItemMenu* mpItemMenu;	// アイテム選択のメニュー覧
+	CImage* mpSlotHighlight;	// カーソルが重なっているアイテムスロットを強調表示する
+	CItemMenu* mpItemMenu;	// アイテム選択のメニュー覧
 
-	CImage* mpMenu;
+	//CImage* mpSpreadsheet;
+	//std::vector<CImage*> mpItems;	// スプレッドシートのアイテム
+
+	//CImage* mpMenu;
 	// アイテムスロットのデータ
 	struct SlotData
 	{

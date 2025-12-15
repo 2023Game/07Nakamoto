@@ -8,6 +8,7 @@ enum class ItemType
 	None = -1,
 
 	HealingPotion,		// ‰ñ•œ–ò
+	Bread,				// ƒpƒ“
 	Key,				// Œ®
 
 	Num,

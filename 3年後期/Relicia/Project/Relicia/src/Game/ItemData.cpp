@@ -30,7 +30,6 @@ namespace Item
 				//}
 			}
 		},
-
 		// 鍵
 		{
 			ItemType::Key,
@@ -54,6 +53,22 @@ namespace Item
 				//}
 			}
 		},
+		// パン
+		{
+			ItemType::Bread,
+			{
+				ItemType::Bread,
+				3,
+				"鍵",
+				"説明文",
+				"Item\\2D\\bread",
+				"",
+				ItemEffectType::RecoveryHP,
+				30,
+				0,
+			}
+		},
+
 	};
 
 	// アイコンのリソースを既に読み込んでいるかどうか

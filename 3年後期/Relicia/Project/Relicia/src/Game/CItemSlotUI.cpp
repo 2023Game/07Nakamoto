@@ -5,7 +5,7 @@
 #include "CInput.h"
 
 #define COUNT_TEXT_POS CVector2(40.0f, 30.0f)
-#define SLOT_SIZE 75.0f
+#define SLOT_SIZE 56.0f
 #define FONT_SIZE 24
 
 // コンストラクタ

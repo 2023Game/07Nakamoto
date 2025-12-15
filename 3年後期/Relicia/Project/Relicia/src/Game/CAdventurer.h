@@ -7,6 +7,7 @@ class CCollider;
 class CSword;
 class CPlayerHpUI;
 class CElementSlotUI2;
+struct ItemData;
 
 class CAdventurer : public CXCharacter
 {
@@ -37,8 +38,17 @@ public:
 	// ダメージを受ける
 	void TakeDamage(int damage, CObjectBase* causer) override;
 
-	// 装備したスロット番号のアイテムを装備する
+	// 装備したスロット番号の属性を装備する
 	void EquipElement(int slotIndex);
+
+	// 指定したアイテムを使用できるかどうか
+	bool CanUseItem(const ItemData* item);
+	// アイテムの効果を使う
+	void UseItem(const ItemData* item);
+	// 指定したスロット番号のアイテムを装備
+	void EquipItem(int slotIndex);
+	// 装備しているアイテムスロットの番号を返す
+	int GetEquipItemSlotIndex() const;
 
 	// 更新
 	void Update() override;
@@ -153,5 +163,8 @@ private:
 
 	// 属性解放フラグ
 	bool mElementRelease;
+
+	// 装備しているアイテムのスロットインデックス値
+	int mEquipItemSlotIndex;
 
 };

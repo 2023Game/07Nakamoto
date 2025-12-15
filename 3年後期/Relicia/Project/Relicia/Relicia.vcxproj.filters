@@ -487,6 +487,9 @@
     <ClCompile Include="src\Game\CItemSlotUI.cpp">
       <Filter>ソース ファイル\Game\UI\Menu</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CItemMenu.cpp">
+      <Filter>ソース ファイル\Game\UI\Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -883,6 +886,9 @@
       <Filter>ソース ファイル\Game\UI\Menu</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CItemSlotUI.h">
+      <Filter>ソース ファイル\Game\UI\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CItemMenu.h">
       <Filter>ソース ファイル\Game\UI\Menu</Filter>
     </ClInclude>
   </ItemGroup>
