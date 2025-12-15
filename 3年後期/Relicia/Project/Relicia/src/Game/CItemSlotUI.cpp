@@ -4,9 +4,8 @@
 #include "CInventory.h"
 #include "CInput.h"
 
-#define COUNT_TEXT_POS CVector2(40.0f, 30.0f)
-#define SLOT_SIZE 56.0f
-#define FONT_SIZE 24
+#define COUNT_TEXT_POS CVector2(8.0f, -2.0f)
+#define FONT_SIZE 22
 
 // コンストラクタ
 CItemSlotUI::CItemSlotUI(int slotIdx)
@@ -52,7 +51,7 @@ void CItemSlotUI::SetItemSloto(const ItemData* data, int count)
 {
 	mpItemData = data;
 
-	CVector2 size(SLOT_SIZE, SLOT_SIZE);
+	CVector2 size(ICON_SIZE, ICON_SIZE);
 
 	if (data != nullptr)
 	{
@@ -142,7 +141,7 @@ void CItemSlotUI::Update()
 			CDebugPrint::Print("Touch:%p\n", mpItemData);
 #endif
 
-			if (mpIcon->GetSize() == CVector2(SLOT_SIZE, SLOT_SIZE))
+			if (mpIcon->GetSize() == CVector2(ICON_SIZE, ICON_SIZE))
 			{
 				// アイテムをドラッグ中のアイテムを少し大きくする
 				mpIcon->SetSize(mpIcon->GetSize() * 1.1f);
@@ -152,7 +151,7 @@ void CItemSlotUI::Update()
 		else
 		{
 			// アイテムを元の位置に戻す
-			mpIcon->SetSize(SLOT_SIZE, SLOT_SIZE);
+			mpIcon->SetSize(ICON_SIZE, ICON_SIZE);
 			mpIcon->SetPos(mPosition);
 			mpCountText->SetPos(mPosition + COUNT_TEXT_POS);
 		}

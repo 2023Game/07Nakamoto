@@ -3,6 +3,7 @@
 #include "CImage.h"
 #include "ItemData.h"
 
+// アイテムスロットのUIクラス
 class CItemSlotUI : public CUIBase
 {
 public:

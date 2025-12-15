@@ -7,6 +7,8 @@
 class CItemSlotUI;
 class CItemMenu;
 
+#define ICON_SIZE 56.0f		// アイコンの大きさ
+
 // インベントリのクラス
 class CInventory : public CTask
 {
@@ -32,9 +34,6 @@ public:
 	// 指定された番号のアイテムスロットを返す
 	const ItemData* GetItemSlotData(int slotIndex) const;
 
-	// 指定したアイテムスロットのアイテムを使用
-	void UseItemSlot(int index);
-
 	// カーソルがスロットに重なった
 	void EnterItemSlot(int index);
 	// カーソルがアイテムスロットから離れた
@@ -50,20 +49,16 @@ public:
 	void Render() override;
 
 private:
-	// 指定したアイテムスロットのアイテムを装備
-	void EquipItemSlot(int index);
-
 	static CInventory* spInstance;
 
 	CImage* mpMenuBg;			// メニュー背景
 	CImage* mpInventoryFrame;	// インベントリの枠
-	CImage* mpSlotHighlight;	// カーソルが重なっているアイテムスロットを強調表示する
-	CItemMenu* mpItemMenu;	// アイテム選択のメニュー覧
+	//CImage* mpSlotHighlight;	// カーソルが重なっているアイテムスロットを強調表示する
+	//CItemMenu* mpItemMenu;	// アイテム選択のメニュー覧
 
 	//CImage* mpSpreadsheet;
 	//std::vector<CImage*> mpItems;	// スプレッドシートのアイテム
 
-	//CImage* mpMenu;
 	// アイテムスロットのデータ
 	struct SlotData
 	{
@@ -73,7 +68,6 @@ private:
 		CItemSlotUI* slotUI;	// アイテムスロットのUI
 		SlotData()
 			: data(nullptr)
-			, count(0)
 			, slotUI(nullptr)
 		{}
 	};
@@ -85,9 +79,6 @@ private:
 
 	// 開いているか
 	bool mIsOpened;
-
-	// ボタンのリスト
-	//std::vector<CExpandButton*> mSlotButtons;
 
 	int mEnterSlotIndex;		// カーソルが重なっているアイテムの番号
 	int mGrabSlotIndex;			// 現在掴んでいるアイテムの番号

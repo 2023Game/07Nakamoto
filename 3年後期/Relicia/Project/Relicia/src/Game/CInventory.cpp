@@ -8,22 +8,27 @@
 
 // インベントリの座標
 #define INVENTORY_POS CVector2(280.0f,220.5f)
+#define INVENTORY_SIZE CVector2(360.0f,285.0f)
 
-#define INITIAL_SLOT_ROW 3			// 初期のアイテムスロットの縦の数
+#define INITIAL_SLOT_ROW 4			// 初期のアイテムスロットの縦の数
 #define INITIAL_SLOT_COL 5			// 初期のアイテムスロットの横の数
 // アイテムスロット数
 #define SLOT_COUNT (INITIAL_SLOT_ROW * INITIAL_SLOT_COL)
 
-#define ICON_POS_X 130.0f	// アイテムアイコンの開始座標
-#define ICON_POS_Y 108.5f
-#define ICON_INTERVAL 18.0f
-#define ICON_SIZE 56.0f
+#define ICON_POS_X 134.0f	// アイテムアイコンの開始座標X
+#define ICON_POS_Y 112.0f	// アイテムアイコンの開始座標Y
+#define ICON_INTERVAL 19.0f	// アイコン同士の間隔
+#define ICON_PITCH ICON_SIZE + ICON_INTERVAL // アイコン同士の間隔と大きさを合わせた値
 
 CInventory* CInventory::spInstance = nullptr;
 
 // インスタンスを取得
 CInventory* CInventory::Instance()
 {
+	if (spInstance == nullptr)
+	{
+		spInstance = new CInventory();
+	}
 	return spInstance;
 }
 
@@ -33,22 +38,31 @@ CInventory::CInventory()
 	, mSlotRow(INITIAL_SLOT_ROW)
 	, mSlotCol(INITIAL_SLOT_COL)
 	, mItemSlots(SLOT_COUNT)
-	//, mSlotButtons(SLOT_COLUMN)
 	, mIsOpened(false)
 	, mEnterSlotIndex(-1)
 	, mGrabSlotIndex(-1)
-	//, mpSlotHighlight(nullptr)
-	, mpItemMenu(nullptr)
-	//, mpMenu(nullptr)
+	//, mpItemMenu(nullptr)
 {
 	spInstance = this;
+	mItemSlots.reserve(INITIAL_SLOT_ROW * INITIAL_SLOT_COL);
 
 	// 各アイテムスロットのアイテムアイコン表示用のイメージを作成
-	int slotCount = mSlotRow * mSlotCol;
-	for (int i = 0; i < slotCount; i++)
+	for (int i = 0; i < mItemSlots.size(); i++)
 	{
 		SlotData& slot = mItemSlots[i];
+
 		slot.slotUI = new CItemSlotUI(i);
+
+		slot.slotUI->SetSize(CVector2(ICON_SIZE, ICON_SIZE));
+		slot.slotUI->SetCenter(slot.slotUI->GetSize() * 0.5f);
+
+		int col = i % INITIAL_SLOT_COL;
+		int row = i / INITIAL_SLOT_COL;
+
+		float x = ICON_POS_X  + (ICON_SIZE + ICON_INTERVAL) * col;
+		float y = ICON_POS_Y  + (ICON_SIZE + ICON_INTERVAL) * row;
+
+		slot.slotUI->SetPos(x, y);
 	}
 
 	// メニュー画面の背景生成
@@ -66,6 +80,7 @@ CInventory::CInventory()
 		ETaskPriority::eInventry, 0, ETaskPauseType::eMenu,
 		false, false
 	);
+	mpInventoryFrame->SetSize(INVENTORY_SIZE);
 	mpInventoryFrame->SetCenter(mpInventoryFrame->GetSize() * 0.5f);
 	mpInventoryFrame->SetPos(INVENTORY_POS);
 
@@ -82,22 +97,10 @@ CInventory::CInventory()
 	//mpSpreadsheet->SetPos(CVector2(50.0f, 50.0f));
 
 	// 選択したアイテムのメニュー覧
-	mpItemMenu = new CItemMenu();
+	//mpItemMenu = new CItemMenu();
 
 	SetEnable(false);
 	SetShow(false);
-
-	AddItem(ItemType::HealingPotion, 1);
-	AddItem(ItemType::Key, 1);
-	AddItem(ItemType::Key, 1);
-	AddItem(ItemType::Key, 1);
-	AddItem(ItemType::Key, 1);
-	AddItem(ItemType::Key, 1);
-	AddItem(ItemType::Key, 1);
-	AddItem(ItemType::Key, 1);
-	AddItem(ItemType::Key, 1);
-	AddItem(ItemType::Key, 1);
-
 }
 
 // デストラクタ
@@ -110,8 +113,7 @@ CInventory::~CInventory()
 
 	SAFE_DELETE(mpMenuBg);
 	SAFE_DELETE(mpInventoryFrame);
-	//SAFE_DELETE(mpSlotHighlight);
-	SAFE_DELETE(mpItemMenu);
+	//SAFE_DELETE(mpItemMenu);
 
 	for (SlotData& slot : mItemSlots)
 	{
@@ -142,12 +144,6 @@ void CInventory::Open()
 		{
 			slot.slotUI->SetItemSloto(nullptr, -1);
 		}
-		int w = i % INITIAL_SLOT_COL;
-		int h = i / INITIAL_SLOT_ROW;
-		float x = ICON_POS_X + 4.0f + ICON_INTERVAL * w + ICON_SIZE * w;
-		float y = ICON_POS_Y + 4.0f + ICON_INTERVAL * h + ICON_SIZE * h;
-
-		slot.slotUI->SetPos(x, y);
 	}
 
 	SetEnable(true);
@@ -284,28 +280,6 @@ const ItemData* CInventory::GetItemSlotData(int slotIndex) const
 	return mItemSlots[slotIndex].data;
 }
 
-// 指定したアイテムスロットのアイテムを使用
-void CInventory::UseItemSlot(int index)
-{
-	CAdventurer* adventurer = CAdventurer::Instance();
-	SlotData& slot = mItemSlots[index];
-
-	// アイテムを使用
-	adventurer->UseItem(slot.data);
-	// 使用したアイテムの個数を減らす
-	slot.count--;
-	// アイテムが無くなれば、アイテムスロットを空にする
-	if (slot.count == 0)
-	{
-		slot.data = nullptr;
-
-		// プレイヤーに装備解除を伝える
-		adventurer->EquipItem(-1);
-	}
-	// アイテムスロットの情報をUIに反映
-	slot.slotUI->SetItemSloto(slot.data, slot.count);
-}
-
 // カーソルがスロットに重なった
 void CInventory::EnterItemSlot(int index)
 {
@@ -362,122 +336,31 @@ void CInventory::ReleaseItemSlot(int index)
 	enterData.count = tmpCount;
 	enterData.slotUI->SetItemSloto(enterData.data, enterData.count);
 
-	// プレイヤーがアイテムを装備しているか
-	CAdventurer* adventurer = CAdventurer::Instance();
-	int equipSlotIndex = adventurer->GetEquipItemSlotIndex();
-	if (equipSlotIndex >= 0)
-	{
-		// 掴んで移動したアイテムが装備アイテムであれば、
-		// 移動後のスロットのアイテムを装備アイテムとして設定
-		if (equipSlotIndex == mGrabSlotIndex) adventurer->EquipItem(mEnterSlotIndex);
-		// 離したスロットのアイテムが装備アイテムであれば、
-		// 掴んだスロットと入れ替えたアイテムを装備アイテムとして設定
-		else if (equipSlotIndex == mEnterSlotIndex) adventurer->EquipItem(mGrabSlotIndex);
-	}
+	//// プレイヤーがアイテムを装備しているか
+	//CAdventurer* adventurer = CAdventurer::Instance();
+	//int equipSlotIndex = adventurer->GetEquipItemSlotIndex();
+	//if (equipSlotIndex >= 0)
+	//{
+	//	// 掴んで移動したアイテムが装備アイテムであれば、
+	//	// 移動後のスロットのアイテムを装備アイテムとして設定
+	//	if (equipSlotIndex == mGrabSlotIndex) adventurer->EquipItem(mEnterSlotIndex);
+	//	// 離したスロットのアイテムが装備アイテムであれば、
+	//	// 掴んだスロットと入れ替えたアイテムを装備アイテムとして設定
+	//	else if (equipSlotIndex == mEnterSlotIndex) adventurer->EquipItem(mGrabSlotIndex);
+	//}
 
 	// 掴んでいた状態を解除
 	mGrabSlotIndex = -1;
 }
 
-// 指定したアイテムスロットのアイテムを装備
-void CInventory::EquipItemSlot(int index)
-{
-	CAdventurer* adventurer = CAdventurer::Instance();
-	adventurer->EquipItem(index);
-}
-
 // 更新
 void CInventory::Update()
 {
-	// アイテムメニューが表示されていない場合
-	if (!mpItemMenu->IsShow())
+	// アイテムスロットのイメージの更新
+	for (SlotData& slot : mItemSlots)
 	{
-		mpMenuBg->Update();
-		mpInventoryFrame->Update();
-
-		// アイテムスロットのイメージの更新
-		for (SlotData& slot : mItemSlots)
-		{
-			slot.slotUI->Update();
-		}
-
-		if (mEnterSlotIndex != -1)
-		{
-			SlotData& itemData = mItemSlots[mEnterSlotIndex];
-
-			// アイテムアイコンの上で右クリックしたら
-			if (CInput::Key(VK_RBUTTON) && !mpItemMenu->IsShow())
-			{
-				// アイテムアイコンがある場合
-				if (itemData.data != nullptr)
-				{
-					mpItemMenu->SetPos(itemData.slotUI->GetPos());
-					// アイテムメニューを表示する
-					mpItemMenu->Open();
-					mpItemMenu->Update();
-				}
-			}
-			else
-			{
-				mpSlotHighlight->SetPos(itemData.slotUI->GetPos());
-				mpSlotHighlight->SetEnable(true);
-				mpSlotHighlight->Update();
-			}
-		}
-		else if (mEnterSlotIndex == -1)
-		{
-			mpSlotHighlight->SetEnable(false);
-		}
+		slot.slotUI->Update();
 	}
-	// アイテムメニューが表示されていなければ
-	else
-	{
-		mpItemMenu->Update();
-
-		// 「使う」を押した場合
-		if (mpItemMenu->IsUse())
-		{
-			CAdventurer* adventurer = CAdventurer::Instance();
-			SlotData& slot = mItemSlots[mEnterSlotIndex];
-
-			// アイテムが使用できるかどうか
-			if (adventurer->CanUseItem(slot.data))
-			{
-				// アイテムを使用する前に、アイテムメニューとインベントリを閉じる
-				mpItemMenu->Close();
-				Close();
-
-				// アイテムを使用
-				UseItemSlot(mEnterSlotIndex);
-			}
-			// アイテムが使用できなかった場合
-			else
-			{
-				// TODO:アイテムが使用できなかった理由を画面に表示
-				mpItemMenu->Close();
-			}
-		}
-		// 「装備」を押した場合
-		else if (mpItemMenu->IsEquipment())
-		{
-			// アイテムを装備したら、アイテムメニューとインベントリを閉じる
-			mpItemMenu->Close();
-			Close();
-
-			EquipItemSlot(mEnterSlotIndex);
-		}
-		// 「閉じる」を押した場合
-		else if (mpItemMenu->IsClose())
-		{
-			mpItemMenu->Close();
-		}
-	}
-
-	//// アイテムスロットのイメージの更新
-	//for (SlotData& slot : mItemSlots)
-	//{
-	//	slot.slotUI->Update();
-	//}
 }
 
 // 描画
@@ -499,6 +382,15 @@ void CInventory::Render()
 		slot.slotUI->Render();
 	}
 
-	//mpSpreadsheet->Render();
+	// アイテムスロットを掴んでいる場合
+	if (mGrabSlotIndex >= 0)
+	{
+		// 空スロットでなければ、このタイミングで描画
+		SlotData& slot = mItemSlots[mGrabSlotIndex];
+		if (slot.data != nullptr)
+		{
+			slot.slotUI->Render();
+		}
+	}
 }
 
