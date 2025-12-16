@@ -1,6 +1,6 @@
 #pragma once
 
-static const int MAX_SHAPE = 5;
+class CImage;
 
 // アイテムの種類
 enum class ItemType
@@ -25,6 +25,20 @@ enum class ItemEffectType
 	Num,
 };
 
+struct Rect
+{
+	int x;
+	int y;
+	int w;
+	int h;
+};
+
+struct SpriteIndex
+{
+	int col;	// 横何番目
+	int row;	// 縦何番目
+};
+
 // アイテムのデータ
 struct ItemData
 {
@@ -34,7 +48,10 @@ struct ItemData
 	std::string name;		// アイテム名
 	std::string desc;		// アイテムの説明文
 
-	std::string iconPath;	// アイテム画像のパス
+	std::string iconSheetPath; // 共通のスプライトシート
+	SpriteIndex iconIndex;     // 切り出し番号
+
+	//std::string iconPath;	// アイテム画像のパス
 	std::string modelPath;	// モデルデータのパス
 
 	ItemEffectType effectType;	// アイテムの効果の種類
@@ -55,4 +72,8 @@ namespace Item
 	void LoadItemResources();
 	// 全てのアイテムのリソースを破棄
 	void DeleteItemResources();
+	// 切り取るアイコンの場所を計算
+	Rect CalcIconRect(const SpriteIndex& index);
+	// 切り取るアイコンの座標をUVに変換
+	CVector4 RectToUV(int x, int y, int w, int h, int texW, int texH);
 }

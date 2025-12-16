@@ -70,8 +70,6 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>(		"Crystal",			"Field\\Object\\Crystal\\red_crystal.obj");
 	CResourceManager::Load<CModel>(		"Key",				"Field\\Object\\key.obj");
 
-	CResourceManager::Load<CTexture>(	"ItemSpreadSheet",	"Item\\2D\\spreadsheet.png");
-
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
 
@@ -80,7 +78,6 @@ void CGameScene::Load()
 
 	// ダンジョンの作成
 	mpField = new CField();
-
 
 	// インベントリ画面の生成
 	new CInventory();

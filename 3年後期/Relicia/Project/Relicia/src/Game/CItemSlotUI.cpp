@@ -51,17 +51,22 @@ void CItemSlotUI::SetItemSloto(const ItemData* data, int count)
 {
 	mpItemData = data;
 
-	CVector2 size(ICON_SIZE, ICON_SIZE);
-
 	if (data != nullptr)
 	{
-		mpIcon->Load(data->iconPath.c_str());
-		mpIcon->SetCenter(mpIcon->GetSize() * 0.5f);
+		mpIcon->Load(data->iconSheetPath.c_str());
+		
+		// Recctを計算
+		auto rect = Item::CalcIconRect(data->iconIndex);
+		// UVに変換
+		CVector4 uv = Item::RectToUV(rect.x, rect.y, rect.w, rect.h, 
+						mpIcon->GetSize().X(), mpIcon->GetSize().Y());
+		// UVに設定
+		mpIcon->SetUV(uv);
 
 		// 同じ位置に複数入れれる場合は
 		if (data->slotLimit > 1)
 		{
-			// 個数のテキストを設定する
+			// 個数のテキストを設定する	
 			mpCountText->SetText("%d", count);
 		}
 		else
@@ -75,8 +80,8 @@ void CItemSlotUI::SetItemSloto(const ItemData* data, int count)
 		mpCountText->SetText("");
 	}
 
-	SetSize(size);
-	SetCenter(size * 0.5);
+	mpIcon->SetSize(ICON_SIZE, ICON_SIZE);
+	mpIcon->SetCenter(mpIcon->GetSize() * 0.5f);
 	mpIcon->SetPos(mPosition);
 }
 

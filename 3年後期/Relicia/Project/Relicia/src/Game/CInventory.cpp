@@ -20,7 +20,9 @@
 #define ICON_INTERVAL 19.0f	// アイコン同士の間隔
 #define ICON_PITCH ICON_SIZE + ICON_INTERVAL // アイコン同士の間隔と大きさを合わせた値
 
-#define HIGHLIGHT_SIZE 64.0f
+#define HIGHLIGHT_SIZE 64.0f		// ハイライトのサイズ
+#define HIGHLTGHT_OFFSET_POS 4.0f	// ハイライトのオフセット座標
+
 CInventory* CInventory::spInstance = nullptr;
 
 // インスタンスを取得
@@ -99,21 +101,6 @@ CInventory::CInventory()
 	mpSlotHighlight->SetAlpha(0.5f);
 	mpSlotHighlight->SetEnable(false);
 
-	//// スプレッドシートの生成
-	//mpSpreadsheet = new CImage
-	//(
-	//	"Item\\2D\\spreadsheet.png",
-	//	ETaskPriority::eInventry, 0, ETaskPauseType::eMenu,
-	//	false, false
-	//);
-	//mpSpreadsheet->SetUV(2.0f, 2.0f, 66.0f, 66.0f);
-	//mpSpreadsheet->SetSize(CVector2(64.0f, 64.0f));
-	//mpSpreadsheet->SetCenter(CVector2(64.0f * 0.5f, 64.0f * 0.5f));
-	//mpSpreadsheet->SetPos(CVector2(50.0f, 50.0f));
-
-	// 選択したアイテムのメニュー覧
-	//mpItemMenu = new CItemMenu();
-
 	SetEnable(false);
 	SetShow(false);
 }
@@ -129,7 +116,6 @@ CInventory::~CInventory()
 	SAFE_DELETE(mpMenuBg);
 	SAFE_DELETE(mpInventoryFrame);
 	SAFE_DELETE(mpSlotHighlight);
-	//SAFE_DELETE(mpItemMenu);
 
 	for (SlotData& slot : mItemSlots)
 	{
@@ -396,7 +382,11 @@ void CInventory::Update()
 		//}
 		//else
 		//{
-			mpSlotHighlight->SetPos(itemData.slotUI->GetPos().X() - 4.0f, itemData.slotUI->GetPos().Y() - 4.0f);
+			mpSlotHighlight->SetPos
+			(
+				itemData.slotUI->GetPos().X() - HIGHLTGHT_OFFSET_POS, 
+				itemData.slotUI->GetPos().Y() - HIGHLTGHT_OFFSET_POS
+			);
 			mpSlotHighlight->SetEnable(true);
 			mpSlotHighlight->Update();
 		//}

@@ -56,9 +56,6 @@ private:
 	CImage* mpSlotHighlight;	// カーソルが重なっているアイテムスロットを強調表示する
 	//CItemMenu* mpItemMenu;	// アイテム選択のメニュー覧
 
-	//CImage* mpSpreadsheet;
-	//std::vector<CImage*> mpItems;	// スプレッドシートのアイテム
-
 	// アイテムスロットのデータ
 	struct SlotData
 	{
