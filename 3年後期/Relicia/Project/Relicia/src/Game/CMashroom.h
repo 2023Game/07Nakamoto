@@ -30,8 +30,11 @@ private:
 
 		eTPose,		// Tポーズ
 		eIdle,		// 待機
+		eIdleBattle,// 戦闘中の待機
+		eWalk,		// 歩行
 		eAttack1,	// 頭突き攻撃
 		eAttack2,	// 回転攻撃
+		eHit,		// 仰け反り
 		eDeash,		// 死亡
 		
 		Num

@@ -14,9 +14,12 @@ const std::vector<CEnemy::AnimData> ANIM_DATA =
 {
 	{ "",						true,	0.0f,	1.0f	},	// Tポーズ
 	{ ANIM_PATH"idle.x",		true,	41.0f,	1.0f	},	// 待機
-	{ ANIM_PATH"attack1.x",		true,	26.0f,	1.0f	},	// 頭突き攻撃
-	{ ANIM_PATH"attack2.x",		true,	26.0f,	1.0f	},	// 回転攻撃
-	{ ANIM_PATH"death.x",		true,	26.0f,	1.0f	},	// 死亡
+	{ ANIM_PATH"idle_battle.x",	true,	36.0f,	1.0f	},	// 戦闘中の待機
+	{ ANIM_PATH"walk.x",		true,	60.0f,	1.0f	},	// 歩行
+	{ ANIM_PATH"attack1.x",		false,	52.0f,	1.0f	},	// 頭突き攻撃
+	{ ANIM_PATH"attack2.x",		false,	52.0f,	1.0f	},	// 回転攻撃
+	{ ANIM_PATH"hit.x",			false,	48.0f,	1.0f	},	// 仰け反り
+	{ ANIM_PATH"death.x",		false,	52.0f,	1.0f	},	// 死亡
 };
 
 // コンストラクタ
@@ -32,7 +35,7 @@ CMashroom::CMashroom()
 	InitEnemy("Mushroom", &ANIM_DATA);
 
 	// 最初は待機アニメーションを再生
-	ChangeAnimation((int)EAnimType::eDeash);
+	ChangeAnimation((int)EAnimType::eIdleBattle);
 
 	// 本体のコライダーを作成
 	mpBodyCol = new CColliderCapsule
