@@ -41,14 +41,14 @@ CField::CField()
 	crystal = new CCrystalObj(ElementType::Wind, mpMapData->GetRoomFloorPos());
 	crystal = new CCrystalObj(ElementType::Wind, mpMapData->GetRoomFloorPos());
 
-	CItemObj* obj = new CItemObj(ItemType::Key, mpMapData->GetRoomFloorPos());
-	obj = new CItemObj(ItemType::Key, mpMapData->GetRoomFloorPos());
-	obj = new CItemObj(ItemType::HealingPotion, mpMapData->GetRoomFloorPos());
-	obj = new CItemObj(ItemType::HealingPotion, mpMapData->GetRoomFloorPos());
-	obj = new CItemObj(ItemType::HealingPotion, mpMapData->GetRoomFloorPos());
-	obj = new CItemObj(ItemType::HealingPotion, mpMapData->GetRoomFloorPos());
-	obj = new CItemObj(ItemType::HealingPotion, mpMapData->GetRoomFloorPos());
-	obj = new CItemObj(ItemType::HealingPotion, mpMapData->GetRoomFloorPos());
+	CItemObj* obj = new CItemObj(ItemId::Key, mpMapData->GetRoomFloorPos());
+	obj = new CItemObj(ItemId::Key, mpMapData->GetRoomFloorPos());
+	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomFloorPos());
+	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomFloorPos());
+	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomFloorPos());
+	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomFloorPos());
+	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomFloorPos());
+	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomFloorPos());
 
 }
 

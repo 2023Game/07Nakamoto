@@ -7,7 +7,8 @@
 class CItemSlotUI;
 class CItemMenu;
 
-#define ICON_SIZE 56.0f		// アイコンの大きさ
+#define ICON_SIZE 60.0f			// アイコンの大きさ
+#define DISP_ICON_SIZE 56.0f	// 表示するアイコンの大きさ
 
 // インベントリのクラス
 class CInventory : public CTask
@@ -29,7 +30,7 @@ public:
 	bool IsOpened() const;
 
 	// アイテムを追加する
-	void AddItem(ItemType type, int count);
+	void AddItem(ItemId type, int count);
 
 	// 指定された番号のアイテムスロットを返す
 	const ItemData* GetItemSlotData(int slotIndex) const;

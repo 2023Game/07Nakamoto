@@ -15,13 +15,12 @@
 // アイテムスロット数
 #define SLOT_COUNT (INITIAL_SLOT_ROW * INITIAL_SLOT_COL)
 
-#define ICON_POS_X 134.0f	// アイテムアイコンの開始座標X
-#define ICON_POS_Y 112.0f	// アイテムアイコンの開始座標Y
-#define ICON_INTERVAL 19.0f	// アイコン同士の間隔
+#define ICON_POS_X 130.0f	// アイテムアイコンの開始座標X
+#define ICON_POS_Y 108.0f	// アイテムアイコンの開始座標Y
+#define ICON_INTERVAL 15.0f	// アイコン同士の間隔
 #define ICON_PITCH ICON_SIZE + ICON_INTERVAL // アイコン同士の間隔と大きさを合わせた値
 
 #define HIGHLIGHT_SIZE 64.0f		// ハイライトのサイズ
-#define HIGHLTGHT_OFFSET_POS 4.0f	// ハイライトのオフセット座標
 
 CInventory* CInventory::spInstance = nullptr;
 
@@ -56,7 +55,7 @@ CInventory::CInventory()
 
 		slot.slotUI = new CItemSlotUI(i);
 
-		slot.slotUI->SetSize(CVector2(ICON_SIZE, ICON_SIZE));
+		slot.slotUI->SetSize(CVector2(DISP_ICON_SIZE, DISP_ICON_SIZE));
 		slot.slotUI->SetCenter(slot.slotUI->GetSize() * 0.5f);
 
 		int col = i % INITIAL_SLOT_COL;
@@ -179,7 +178,7 @@ bool CInventory::IsOpened() const
 }
 
 // アイテムを追加する
-void CInventory::AddItem(ItemType type, int count)
+void CInventory::AddItem(ItemId type, int count)
 {
 	// アイテムデータを取得できなかったら、追加できない
 	const ItemData* itemData = nullptr;
@@ -198,7 +197,7 @@ void CInventory::AddItem(ItemType type, int count)
 		if (slot.data == nullptr) continue;
 		// アイテムスロットに入っているアイテムの種類と
 		// 追加するアイテムの種類が一致しなければ、次のアイテムスロットを調べる
-		if (slot.data->type != type) continue;
+		if (slot.data->id != type) continue;
 
 		// アイテムの種類が一致するアイテムスロットが見つかった
 
@@ -382,13 +381,9 @@ void CInventory::Update()
 		//}
 		//else
 		//{
-			mpSlotHighlight->SetPos
-			(
-				itemData.slotUI->GetPos().X() - HIGHLTGHT_OFFSET_POS, 
-				itemData.slotUI->GetPos().Y() - HIGHLTGHT_OFFSET_POS
-			);
-			mpSlotHighlight->SetEnable(true);
-			mpSlotHighlight->Update();
+		mpSlotHighlight->SetPos(itemData.slotUI->GetPos().X(), itemData.slotUI->GetPos().Y());
+		mpSlotHighlight->SetEnable(true);
+		mpSlotHighlight->Update();
 		//}
 	}
 	else if (mEnterSlotIndex == -1)

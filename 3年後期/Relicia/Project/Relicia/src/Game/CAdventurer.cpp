@@ -782,7 +782,7 @@ void CAdventurer::Update()
 		// ‰¼‚Å‰Š‘®«‚ð’Ç‰Á
 		CElementManager::Instance()->AddElementEnergy(ElementType::Fire);
 		// ‰ñ•œ–ò‚ð’Ç‰Á
-		CInventory::Instance()->AddItem(ItemType::HealingPotion, 1);
+		CInventory::Instance()->AddItem(ItemId::HealingPotion, 1);
 
 	}
 
@@ -798,7 +798,7 @@ void CAdventurer::Update()
 		// ‰¼‚Å…‘®«‚ð’Ç‰Á
 		CElementManager::Instance()->AddElementEnergy(ElementType::Water);
 		// Œ®‚ð’Ç‰Á
-		CInventory::Instance()->AddItem(ItemType::Key, 1);
+		CInventory::Instance()->AddItem(ItemId::Key, 1);
 	}
 	
 

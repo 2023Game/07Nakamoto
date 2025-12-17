@@ -25,6 +25,9 @@ public:
 	//テクスチャの読み込み
 	void Load(const char* path, bool dontDelete = false);
 
+	// テクスチャのサイズを取得
+	const CVector2& GetTexSize() const;
+
 	//表示する範囲を設定（CVector4版）
 	void SetUV(const CVector4& uv);
 	//表示する範囲を設定

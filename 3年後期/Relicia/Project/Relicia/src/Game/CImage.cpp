@@ -32,6 +32,14 @@ void CImage::Load(const char* path, bool dontDelete)
 	}
 }
 
+// テクスチャのサイズを取得
+const CVector2& CImage::GetTexSize() const
+{
+	if (mpTexture == nullptr) return CVector2(0.0f, 0.0f);
+	const STgamHeader& header = mpTexture->Header();
+	return CVector2(header.width, header.height);
+}
+
 //表示する範囲を設定（CVector4版）
 void CImage::SetUV(const CVector4& uv)
 {

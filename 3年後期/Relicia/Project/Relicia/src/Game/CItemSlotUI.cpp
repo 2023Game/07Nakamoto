@@ -20,7 +20,7 @@ CItemSlotUI::CItemSlotUI(int slotIdx)
 	// アイテムのアイコン生成
 	mpIcon = new CImage
 	(
-		"", ETaskPriority::eUI, 0,
+		"Item\\2D\\spreadsheet.png", ETaskPriority::eUI, 0,
 		ETaskPauseType::eMenu,
 		false, false
 	);
@@ -53,15 +53,12 @@ void CItemSlotUI::SetItemSloto(const ItemData* data, int count)
 
 	if (data != nullptr)
 	{
-		mpIcon->Load(data->iconSheetPath.c_str());
-		
+		mpIcon->SetShow(true);
+
 		// Recctを計算
-		auto rect = Item::CalcIconRect(data->iconIndex);
-		// UVに変換
-		CVector4 uv = Item::RectToUV(rect.x, rect.y, rect.w, rect.h, 
-						mpIcon->GetSize().X(), mpIcon->GetSize().Y());
+		CRect uv = Item::CalcIconUV(data->id,mpIcon->GetTexSize());
 		// UVに設定
-		mpIcon->SetUV(uv);
+		mpIcon->SetUV(uv.Left(),uv.Top(),uv.Right(),uv.Bottom());
 
 		// 同じ位置に複数入れれる場合は
 		if (data->slotLimit > 1)
@@ -76,11 +73,11 @@ void CItemSlotUI::SetItemSloto(const ItemData* data, int count)
 	}
 	else
 	{
-		mpIcon->Load("");
+		mpIcon->SetShow(false);
 		mpCountText->SetText("");
 	}
 
-	mpIcon->SetSize(ICON_SIZE, ICON_SIZE);
+	mpIcon->SetSize(DISP_ICON_SIZE, DISP_ICON_SIZE);
 	mpIcon->SetCenter(mpIcon->GetSize() * 0.5f);
 	mpIcon->SetPos(mPosition);
 }
@@ -150,7 +147,7 @@ void CItemSlotUI::Update()
 			CDebugPrint::Print("Touch:%p\n", mpItemData);
 #endif
 
-			if (mpIcon->GetSize() == CVector2(ICON_SIZE, ICON_SIZE))
+			if (mpIcon->GetSize() == CVector2(DISP_ICON_SIZE, DISP_ICON_SIZE))
 			{
 				// アイテムをドラッグ中のアイテムを少し大きくする
 				mpIcon->SetSize(mpIcon->GetSize() * 1.1f);
@@ -160,7 +157,7 @@ void CItemSlotUI::Update()
 		else
 		{
 			// アイテムを元の位置に戻す
-			mpIcon->SetSize(ICON_SIZE, ICON_SIZE);
+			mpIcon->SetSize(DISP_ICON_SIZE, DISP_ICON_SIZE);
 			mpIcon->SetPos(mPosition);
 			mpCountText->SetPos(mPosition + COUNT_TEXT_POS);
 		}

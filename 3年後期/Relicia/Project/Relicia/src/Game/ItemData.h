@@ -1,15 +1,22 @@
 #pragma once
+#include "CRect.h"
 
 class CImage;
 
-// アイテムの種類
-enum class ItemType
+// アイテムのID
+enum class ItemId
 {
 	None = -1,
 
 	HealingPotion,		// 回復薬
+	HealingPotion2,		// 回復薬
+	HealingPotion3,		// 回復薬
+	Bomb,				// 爆弾
 	Bread,				// パン
+	Chicken,			// チキン
 	Key,				// 鍵
+	Key2,				// 鍵
+	Key3,				// 鍵
 
 	Num,
 };
@@ -42,14 +49,11 @@ struct SpriteIndex
 // アイテムのデータ
 struct ItemData
 {
-	ItemType type;			// アイテムの種類
+	ItemId id;			// アイテムの種類
 	int slotLimit;			// アイテムスロットに入る上限
 
 	std::string name;		// アイテム名
 	std::string desc;		// アイテムの説明文
-
-	std::string iconSheetPath; // 共通のスプライトシート
-	SpriteIndex iconIndex;     // 切り出し番号
 
 	//std::string iconPath;	// アイテム画像のパス
 	std::string modelPath;	// モデルデータのパス
@@ -66,14 +70,14 @@ struct ItemData
 namespace Item
 {
 	// アイテムの種類を指定して、アイテムのデータを取得
-	bool GetItemData(ItemType type, const ItemData** data);
+	bool GetItemData(ItemId type, const ItemData** data);
 
 	// 全てのアイテムのリソースを読み込む
 	void LoadItemResources();
 	// 全てのアイテムのリソースを破棄
 	void DeleteItemResources();
 	// 切り取るアイコンの場所を計算
-	Rect CalcIconRect(const SpriteIndex& index);
+	CRect CalcIconUV(ItemId id, const CVector2& texSize);
 	// 切り取るアイコンの座標をUVに変換
 	CVector4 RectToUV(int x, int y, int w, int h, int texW, int texH);
 }

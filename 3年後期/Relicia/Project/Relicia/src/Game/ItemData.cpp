@@ -10,19 +10,16 @@
 namespace Item
 {
 	// アイテムのデータテーブル
-	const std::map<ItemType, ItemData> ITEM_DATA =
+	const std::map<ItemId, ItemData> ITEM_DATA =
 	{
 		// 回復薬
 		{
-			ItemType::HealingPotion,
+			ItemId::HealingPotion,
 			{
-				ItemType::HealingPotion,
+				ItemId::HealingPotion,
 				5,
 				"回復薬",
 				"説明文",
-				//"Item\\2D\\healing_potion.png",
-				"Item\\2D\\spreadsheet.png",
-				{0,0},
 				"",
 				ItemEffectType::RecoveryHP,
 				50,
@@ -37,17 +34,100 @@ namespace Item
 				//}
 			}
 		},
+		// 回復薬
+		{
+			ItemId::HealingPotion2,
+			{
+				ItemId::HealingPotion2,
+				5,
+				"回復薬",
+				"説明文",
+				"",
+				ItemEffectType::RecoveryHP,
+				50,
+				0,
+				//1,2,
+				//{
+				//	{1,0,0,0,0},
+				//	{1,0,0,0,0},
+				//	{0,0,0,0,0},
+				//	{0,0,0,0,0},
+				//	{0,0,0,0,0}
+				//}
+			}
+		},
+		// 回復薬
+		{
+			ItemId::HealingPotion3,
+			{
+				ItemId::HealingPotion3,
+				5,
+				"回復薬",
+				"説明文",
+				"",
+				ItemEffectType::RecoveryHP,
+				50,
+				0,
+				//1,2,
+				//{
+				//	{1,0,0,0,0},
+				//	{1,0,0,0,0},
+				//	{0,0,0,0,0},
+				//	{0,0,0,0,0},
+				//	{0,0,0,0,0}
+				//}
+			}
+		},
+		// 爆弾
+		{
+			ItemId::Bomb,
+			{
+				ItemId::Bomb,
+				3,
+				"爆弾",
+				"説明文",
+				"",
+				ItemEffectType::RecoveryHP,
+				30,
+				0,
+			}
+		},
+		// パン
+		{
+			ItemId::Bread,
+			{
+				ItemId::Bread,
+				3,
+				"パン",
+				"説明文",
+				"",
+				ItemEffectType::RecoveryHP,
+				30,
+				0,
+			}
+		},
+		// チキン
+		{
+			ItemId::Chicken,
+			{
+				ItemId::Chicken,
+				3,
+				"チキン",
+				"説明文",
+				"",
+				ItemEffectType::RecoveryHP,
+				30,
+				0,
+			}
+		},
 		// 鍵
 		{
-			ItemType::Key,
+			ItemId::Key,
 			{
-				ItemType::Key,
+				ItemId::Key,
 				1,
 				"鍵",
 				"説明文",
-				//"Item\\2D\\key.png",
-				"Item\\2D\\spreadsheet.png",
-				{1,0},
 				"",
 				ItemEffectType::Key,
 				0,
@@ -62,31 +142,57 @@ namespace Item
 				//}
 			}
 		},
-		// パン
+			// 鍵
 		{
-			ItemType::Bread,
+			ItemId::Key2,
 			{
-				ItemType::Bread,
-				3,
+				ItemId::Key2,
+				1,
 				"鍵",
 				"説明文",
-				//"Item\\2D\\bread",
-				"Item\\2D\\spreadsheet.png",
-				{2,0},
 				"",
-				ItemEffectType::RecoveryHP,
-				30,
+				ItemEffectType::Key,
 				0,
+				0,
+				//1,1,
+				//{
+				//	{1,0,0,0,0},
+				//	{0,0,0,0,0},
+				//	{0,0,0,0,0},
+				//	{0,0,0,0,0},
+				//	{0,0,0,0,0}
+				//}
 			}
 		},
-
+			// 鍵
+		{
+			ItemId::Key3,
+			{
+				ItemId::Key3,
+				1,
+				"鍵",
+				"説明文",
+				"",
+				ItemEffectType::Key,
+				0,
+				0,
+				//1,1,
+				//{
+				//	{1,0,0,0,0},
+				//	{0,0,0,0,0},
+				//	{0,0,0,0,0},
+				//	{0,0,0,0,0},
+				//	{0,0,0,0,0}
+				//}
+			}
+		},
 	};
 
 	// アイコンのリソースを既に読み込んでいるかどうか
 	bool loadedItemResources = false;
 
 	// アイテムの種類を指定して、アイテムのデータを取得
-	bool GetItemData(ItemType type, const ItemData** data)
+	bool GetItemData(ItemId type, const ItemData** data)
 	{
 		// テーブルから指定された種類のアイテムデータを探す
 		auto find = ITEM_DATA.find(type);
@@ -112,10 +218,10 @@ namespace Item
 
 		CResourceManager::Load<CTexture>("ItemSpreadSheet", "Item\\2D\\spreadsheet.png");
 
-		int count = (int)ItemType::Num;
+		int count = (int)ItemId::Num;
 		for (int i = 0; i < count; i++)
 		{
-			ItemType type = (ItemType)i;
+			ItemId type = (ItemId)i;
 			const ItemData* data = nullptr;
 			// アイテムデータ取得
 			if (!GetItemData(type, &data)) continue;
@@ -138,10 +244,10 @@ namespace Item
 		// アイテムのアイコン画像とモデルデータを削除
 		CResourceManager::Delete("Item\\2D\\spreadsheet.png");
 
-		int count = (int)ItemType::Num;
+		int count = (int)ItemId::Num;
 		for (int i = 0; i < count; i++)
 		{
-			ItemType type = (ItemType)i;
+			ItemId type = (ItemId)i;
 			const ItemData* data = nullptr;
 			// アイテムデータ取得
 			if (!GetItemData(type, &data)) continue;
@@ -153,15 +259,22 @@ namespace Item
 		loadedItemResources = false;
 	}
 
-	Rect CalcIconRect(const SpriteIndex& index)
+	CRect CalcIconUV(ItemId id, const CVector2& texSize)
 	{
-		Rect r;
+		CRect r;
 
-		r.x = ICON_START_X + index.col * (ICON_SIZE + ICON_PADDING);
-		r.y = ICON_START_Y + index.row * (ICON_SIZE + ICON_PADDING);
+		float iconSpace = ICON_SIZE + ICON_PADDING * 2.0f;
 
-		r.w = ICON_SIZE;
-		r.h = ICON_SIZE;
+		int countW = (int)(texSize.X() / iconSpace);
+
+		int x, y;
+		x = (int)id % countW;
+		y = (int)id / countW;
+
+		r.X((ICON_PADDING + iconSpace * x) / texSize.X());
+		r.Y((texSize.Y() - (iconSpace * (y + 1) - ICON_PADDING)) / texSize.Y());
+		r.W(ICON_SIZE / texSize.X());
+		r.H(ICON_SIZE / texSize.Y());
 
 		return r;
 	}

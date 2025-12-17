@@ -10,7 +10,7 @@ class CItemObj :public CInteractObject
 {
 public:
 	// コンストラクタ
-	CItemObj(ItemType type, CVector pos);
+	CItemObj(ItemId type, CVector pos);
 	// デストラクタ
 	~CItemObj();
 
@@ -35,7 +35,7 @@ protected:
 	// コライダー作成(継承先で上書き可)
 	virtual void CreateCollider();
 
-	ItemType mItemType;	// アイテムの種類
+	ItemId mItemType;	// アイテムの種類
 	const ItemData* mpItemData;	// アイテムデータのポインタ
 	CImage3D* mpItemImage;		// アイテムのイメージデータ
 	CCollider* mpCollider;	// アイテムのコライダー

@@ -18,7 +18,7 @@
 #define SCALING_MAX 1.25f
 
 // コンストラクタ
-CItemObj::CItemObj(ItemType type, CVector pos)
+CItemObj::CItemObj(ItemId type, CVector pos)
 	: CInteractObject(ETaskPriority::eItem, 0, ETaskPauseType::eGame)
 	, mItemType(type)
 	, mpItemData(nullptr)
