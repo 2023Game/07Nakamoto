@@ -42,7 +42,7 @@ CNavManager::~CNavManager()
 	}
 }
 
-// 経路単サック用のノードを追加
+// 経路探索用のノードを追加
 void CNavManager::AddNode(CNavNode* node)
 {
 	mNodes.push_back(node);

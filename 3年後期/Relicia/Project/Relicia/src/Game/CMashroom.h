@@ -32,7 +32,8 @@ private:
 		eIdle,		// ‘Ò‹@
 		eAttack1,	// “ª“Ë‚«UŒ‚
 		eAttack2,	// ‰ñ“]UŒ‚
-
+		eDeash,		// €–S
+		
 		Num
 	};
 

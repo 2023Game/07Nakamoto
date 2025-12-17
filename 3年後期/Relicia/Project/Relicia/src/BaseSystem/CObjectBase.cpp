@@ -12,6 +12,7 @@ CObjectBase::CObjectBase(ETag tag,
 	, mIsEnableCol(true)
 	, mDepth(0.0f)
 	, mColor(CColor::white)
+	, mpNavNode(nullptr)
 {
 }
 

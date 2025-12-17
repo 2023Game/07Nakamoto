@@ -7,7 +7,7 @@
 #define BODY_HEIGHT 13.0f
 #define BODY_RADIUS 5.0f
 
-#define MAX_HP 1
+#define MAX_HP 10
 
 // 敵のアニメーションデータのテーブル
 const std::vector<CEnemy::AnimData> ANIM_DATA =
@@ -16,14 +16,14 @@ const std::vector<CEnemy::AnimData> ANIM_DATA =
 	{ ANIM_PATH"idle.x",		true,	41.0f,	1.0f	},	// 待機
 	{ ANIM_PATH"attack1.x",		true,	26.0f,	1.0f	},	// 頭突き攻撃
 	{ ANIM_PATH"attack2.x",		true,	26.0f,	1.0f	},	// 回転攻撃
-
+	{ ANIM_PATH"death.x",		true,	26.0f,	1.0f	},	// 死亡
 };
 
 // コンストラクタ
 CMashroom::CMashroom()
 {
 	mMaxHp = MAX_HP;
-	mHp = 1;
+	mHp = mMaxHp;
 
 	// ゲージのオフセット位置を設定
 	mGaugeOffsetPos = CVector(0.0f, 10.0f, 0.0f);
@@ -32,7 +32,7 @@ CMashroom::CMashroom()
 	InitEnemy("Mushroom", &ANIM_DATA);
 
 	// 最初は待機アニメーションを再生
-	ChangeAnimation((int)EAnimType::eIdle);
+	ChangeAnimation((int)EAnimType::eDeash);
 
 	// 本体のコライダーを作成
 	mpBodyCol = new CColliderCapsule
@@ -43,7 +43,7 @@ CMashroom::CMashroom()
 		BODY_RADIUS
 	);
 	// フィールドと、プレイヤーの攻撃コライダーとヒットするように設定
-	mpBodyCol->SetCollisionTags({ ETag::eField, ETag::ePlayer });
+	mpBodyCol->SetCollisionTags({ ETag::eField, ETag::ePlayer, ETag::eSlash });
 	mpBodyCol->SetCollisionLayers({ ELayer::eFloor, ELayer::eWall, ELayer::ePlayer, ELayer::eAttackCol });
 }
 

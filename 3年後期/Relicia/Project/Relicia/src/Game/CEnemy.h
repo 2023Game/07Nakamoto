@@ -46,6 +46,17 @@ public:
 	void Render() override;
 
 protected:
+
+	//// “G‚Ìó‘Ô
+	//enum class EState
+	//{
+	//	eIdle,		// ‘Ò‹@ó‘Ô
+	//	eChase,		// ’Ç‚¢‚©‚¯‚é
+	//	eAttack,	// UŒ‚
+	//	eHit,		// ‹Â‚¯”½‚è
+	//	eDeath,		// €–S
+	//};
+
 	// “G‚Ì‰Šú‰»
 	void InitEnemy(std::string path, const std::vector<AnimData>* pAnimData);
 

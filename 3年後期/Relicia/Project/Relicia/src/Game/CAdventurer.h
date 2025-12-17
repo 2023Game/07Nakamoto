@@ -7,6 +7,7 @@ class CCollider;
 class CSword;
 class CPlayerHpUI;
 class CElementSlotUI2;
+class CNavNode;
 struct ItemData;
 
 class CAdventurer : public CXCharacter
@@ -40,6 +41,9 @@ public:
 
 	// 装備したスロット番号の属性を装備する
 	void EquipElement(int slotIndex);
+
+	// 経路探索用のノード取得
+	CNavNode* GetNavNode() const;
 
 	// 更新
 	void Update() override;
@@ -157,5 +161,7 @@ private:
 
 	// 装備しているアイテムのスロットインデックス値
 	int mEquipItemSlotIndex;
+
+	CNavNode* mpNavNode;// 経路探索用のノードポインタ
 
 };

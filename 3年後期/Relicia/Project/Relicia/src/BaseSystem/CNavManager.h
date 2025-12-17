@@ -16,7 +16,7 @@ public:
 	// デストラクタ
 	~CNavManager();
 
-	// 経路単サック用のノードを追加
+	// 経路探索用のノードを追加
 	void AddNode(CNavNode* node);
 	// 経路探索用のノードを取り除く
 	void RemoveNode(CNavNode* node);

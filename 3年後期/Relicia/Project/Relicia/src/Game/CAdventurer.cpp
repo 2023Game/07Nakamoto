@@ -11,6 +11,7 @@
 #include "CElementManager.h"
 #include "ItemData.h"
 #include "CInventory.h"
+#include "CNavNode.h"
 
 // プレイヤーのインスタンス
 CAdventurer* CAdventurer::spInstance = nullptr;
@@ -78,6 +79,7 @@ CAdventurer::CAdventurer()
 	, mpSword(nullptr)
 	, mEquipElementSlotIndex(0)
 	, mElementType(ElementType::None)
+	, mpNavNode(nullptr)
 {
 	mMaxHp = MAX_HP;
 	mHp = mMaxHp;
@@ -143,6 +145,10 @@ CAdventurer::CAdventurer()
 	// プレイヤーのHPのUI
 	mpHpGauge = new CPlayerHpUI(MAX_HP);
 	mpHpGauge->SetPos(HP_GAUGE_UI_POS);
+
+	// 経路探索用のノードを作成
+	mpNavNode = new CNavNode(Position(), true);
+	mpNavNode->SetColor(CColor::white);
 
 }
 
@@ -248,6 +254,12 @@ void CAdventurer::EquipElement(int slotIndex)
 			mpElementEquipment->SetElement(slotIndex, data);
 		}
 	}
+}
+
+// 経路探索用のノード取得
+CNavNode* CAdventurer::GetNavNode() const
+{
+	return mpNavNode;
 }
 
 // オブジェクト削除を伝える
@@ -763,6 +775,12 @@ void CAdventurer::Update()
 	target.Normalize();
 	CVector forward = CVector::Slerp(current, target, 0.125f);
 	Rotation(CQuaternion::LookRotation(forward));
+
+	// 経路探索用のノードが存在すれば、座標を更新
+	if (mpNavNode != nullptr)
+	{
+		mpNavNode->SetPos(Position());
+	}
 
 	// マウスホイールの回転量を取得
 	int mouseWheel = CInput::GetDeltaMouseWheel();

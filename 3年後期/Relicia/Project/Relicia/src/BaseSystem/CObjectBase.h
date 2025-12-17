@@ -5,6 +5,8 @@
 #include "CCollider.h"
 #include "CColor.h"
 
+class CNavNode;
+
 /// <summary>
 /// 3D空間に配置するオブジェクトのベースクラス
 /// </summary>
@@ -100,4 +102,7 @@ protected:
 
 	// 攻撃がヒットしたオブジェクトのリスト
 	std::list<CObjectBase*> mAttackHitObjects;
+
+	CNavNode* mpNavNode;// 経路探索用のノードポインタ
+
 };

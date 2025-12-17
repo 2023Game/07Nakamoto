@@ -17,7 +17,9 @@ public:
 	CSlash(CObjectBase* owner, const CVector& pos, const CVector& dir, float speed, float dist);
 	// デストラクタ
 	~CSlash();
-
+	
+	// 衝突判定
+	void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
 	// 更新
 	void Update() override;
 	// 描画
@@ -26,6 +28,7 @@ public:
 private:
 	CObjectBase* mpOwner;	// このエフェクトの持ち主
 	CModel* mpModel;		// エフェクトのモデルデータ
+	CCollider* mpCollider;
 	CVector mMoveSpeed;		// 移動速度
 	float mKillMoveDist;	// 移動したら消える距離
 	float mMovedDist;		// 現在移動した距離
