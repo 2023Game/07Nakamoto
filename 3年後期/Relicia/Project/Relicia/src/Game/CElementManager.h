@@ -23,7 +23,7 @@ public:
 	// 属性エネルギーの減少
 	void SubtractElementEnergy(float subtract);
 
-	// 現在選択中の属性を取得
+	// 現在装備中の属性を取得
 	const CrystalData* GetCurrentElement() const;
 	// 指定した属性スロットのデータを取得
 	const CrystalData* GetCurrentElementData(int index) const;

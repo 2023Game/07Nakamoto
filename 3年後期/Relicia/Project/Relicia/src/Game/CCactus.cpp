@@ -554,6 +554,7 @@ void CCactus::Update()
 	// 敵のベースクラスの更新
 	CEnemy::Update();
 
+#if _DEBUG
 	// 戦闘相手までの距離をデバッグ表示
 	if (mpBattleTarget != nullptr)
 	{
@@ -563,4 +564,6 @@ void CCactus::Update()
 		float dist = CVector::Distance(targetPos, pos);
 		CDebugPrint::Print("Dist:%.2f\n", dist);
 	}
+#endif // _DEBUG
+
 }

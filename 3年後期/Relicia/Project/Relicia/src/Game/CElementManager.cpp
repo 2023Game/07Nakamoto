@@ -107,7 +107,7 @@ void CElementManager::SubtractElementEnergy(float subtract)
 	mSlots[mCurrentIndex].currentEnergy -= subtract;
 }
 
-// Œ»İ‘I‘ğ’†‚Ì‘®«‚ğæ“¾
+// Œ»İ‘•”õ’†‚Ì‘®«‚ğæ“¾
 const CrystalData* CElementManager::GetCurrentElement() const
 {
 	return mSlots[mCurrentIndex].data;

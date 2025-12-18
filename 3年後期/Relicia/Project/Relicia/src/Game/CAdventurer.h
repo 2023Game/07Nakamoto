@@ -40,7 +40,7 @@ public:
 	void TakeDamage(int damage, CObjectBase* causer) override;
 
 	// 装備したスロット番号の属性を装備する
-	void EquipElement(int slotIndex);
+	//void EquipElement(int slotIndex);
 
 	// 経路探索用のノード取得
 	CNavNode* GetNavNode() const;

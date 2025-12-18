@@ -8,15 +8,15 @@ enum class ItemId
 {
 	None = -1,
 
-	HealingPotion,		// ‰ñ•œ–ò
-	HealingPotion2,		// ‰ñ•œ–ò
-	HealingPotion3,		// ‰ñ•œ–ò
+	HealingPotion,		// ‰ñ•œ–ò¬
+	HealingPotion2,		// ‰ñ•œ–ò’†
+	HealingPotion3,		// ‰ñ•œ–ò‘å
 	Bomb,				// ”š’e
 	Bread,				// ƒpƒ“
 	Chicken,			// ƒ`ƒLƒ“
-	Key,				// Œ®
-	Key2,				// Œ®
-	Key3,				// Œ®
+	Key,				// ‹à‚ÌŒ®
+	Key2,				// Šï–­‚ÈŒ®
+	Key3,				// K‚Ñ‚½Œ®
 
 	Num,
 };

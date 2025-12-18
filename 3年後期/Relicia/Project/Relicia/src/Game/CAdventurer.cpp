@@ -39,7 +39,6 @@ CAdventurer* CAdventurer::spInstance = nullptr;
 // 斬り攻撃の剣のオフセット向き
 #define ATTACK_SWORD_OFFSET_ROT CVector(-20.0f, 0.0f, -7.0f)
 
-//#define ELEMENT_UI_POS CVector2(331.0f,529.0f)
 // HPのUIの座標
 #define HP_GAUGE_UI_POS CVector2(50.0f,600.0f)
 
@@ -224,37 +223,37 @@ void CAdventurer::TakeDamage(int damage, CObjectBase* causer)
 	}
 }
 
-// 装備したスロット番号のアイテムを装備する
-void CAdventurer::EquipElement(int slotIndex)
-{
-	const CrystalData* data = CElementManager::Instance()->GetCurrentElement();
-
-	if (!data) return;
-
-	// 既に設定しているスロット番号と一致したら処理しない
-	if (slotIndex == mEquipElementSlotIndex)
-	{
-		// 装備しているスロット番号を記憶しておく
-		mEquipElementSlotIndex = slotIndex;
-
-		// 装備したアイテムをUIに設定
-		mpElementEquipment->SetElement(slotIndex, data);
-	}
-
-	// データが存在し
-	if (data)
-	{
-		// 記憶している属性と異なる場合、
-		if (mElementType != data->type)
-		{
-			// 装備している属性を記憶しておく
-			mElementType = data->type;
-
-			// 装備したアイテムをUIに設定
-			mpElementEquipment->SetElement(slotIndex, data);
-		}
-	}
-}
+//// 装備したスロット番号のアイテムを装備する
+//void CAdventurer::EquipElement(int slotIndex)
+//{
+//	const CrystalData* data = CElementManager::Instance()->GetCurrentElement();
+//
+//	if (!data) return;
+//
+//	// 既に設定しているスロット番号と一致したら処理しない
+//	if (slotIndex == mEquipElementSlotIndex)
+//	{
+//		// 装備しているスロット番号を記憶しておく
+//		mEquipElementSlotIndex = slotIndex;
+//
+//		// 装備したアイテムをUIに設定
+//		mpElementEquipment->SetElement(slotIndex, data);
+//	}
+//
+//	// データが存在し
+//	if (data)
+//	{
+//		// 記憶している属性と異なる場合、
+//		if (mElementType != data->type)
+//		{
+//			// 装備している属性を記憶しておく
+//			mElementType = data->type;
+//
+//			// 装備したアイテムをUIに設定
+//			mpElementEquipment->SetElement(slotIndex, data);
+//		}
+//	}
+//}
 
 // 経路探索用のノード取得
 CNavNode* CAdventurer::GetNavNode() const
@@ -333,6 +332,7 @@ void CAdventurer::UpdateIdle()
 				mMoveSpeed = CVector::zero;
 
 				element->UseElement();
+				//mElementType = element->GetCurrentElement();
 			}
 		}
 		// SPACEキーでジャンプ開始へ移行
@@ -433,8 +433,30 @@ void CAdventurer::UpdateAttack2()
 				100.0f,
 				1000.0f
 			);
-			slash->SetColor(CColor(1.0f, 0.0f, 0.0f, 1.0f));
-			//slash->RotateAxis(VectorZ(), 45.0f);
+
+			const CrystalData* data = CElementManager::Instance()->GetCurrentElement();
+
+			if (data->type == ElementType::Fire)
+			{
+				// 赤
+				slash->SetColor(CColor(1.0f, 0.0f, 0.0f, 1.0f));
+			}
+			else if (data->type == ElementType::Water)
+			{
+				// 青
+				slash->SetColor(CColor::blue);
+			}
+			else if (data->type == ElementType::Thunder)
+			{
+				// 紫
+				slash->SetColor(CColor(1.0f, 0.0f, 1.0f, 1.0f));
+			}
+			else
+			{
+				// 白
+				slash->SetColor(CColor::white);
+			}
+			//slash->RotateAxis(VectorZ(), 45.0f);	// 斜めにする
 
 			mStateStep++;
 		}

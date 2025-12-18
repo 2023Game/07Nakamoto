@@ -40,10 +40,10 @@ CSlash::~CSlash()
 // 衝突判定
 void CSlash::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
-	// プレイヤーに衝突した
+	// 敵に衝突した
 	if (other->Layer() == ELayer::eEnemy)
 	{
-		// プレイヤーにダメージを与える
+		// 敵にダメージを与える
 		CCharaBase* chara = dynamic_cast<CCharaBase*>(other->Owner());
 		if (chara != nullptr)
 		{
