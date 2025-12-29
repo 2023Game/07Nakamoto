@@ -418,12 +418,6 @@
     <ClCompile Include="src\Game\CEntrance.cpp">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CDungeonMap.cpp">
-      <Filter>ソース ファイル\Game\Field</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CDungeonManeger.cpp">
-      <Filter>ソース ファイル\Game\Field</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CBspMap.cpp">
       <Filter>ソース ファイル\Game\Field</Filter>
     </ClCompile>
@@ -815,12 +809,6 @@
     </ClInclude>
     <ClInclude Include="src\Game\CEntrance.h">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CDungeonMap.h">
-      <Filter>ソース ファイル\Game\Field</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CDungeonManeger.h">
-      <Filter>ソース ファイル\Game\Field</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CBspMap.h">
       <Filter>ソース ファイル\Game\Field</Filter>

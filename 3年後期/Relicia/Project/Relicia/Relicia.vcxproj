@@ -97,8 +97,6 @@
     <ClCompile Include="src\Game\CMashroom.cpp" />
     <ClCompile Include="src\Game\CCactus.cpp" />
     <ClCompile Include="src\Game\CCactusNeedle.cpp" />
-    <ClCompile Include="src\Game\CDungeonManeger.cpp" />
-    <ClCompile Include="src\Game\CDungeonMap.cpp" />
     <ClCompile Include="src\Game\CEnemy.cpp" />
     <ClCompile Include="src\Game\CEntrance.cpp" />
     <ClCompile Include="src\Game\CField.cpp" />
@@ -232,8 +230,6 @@
     <ClInclude Include="src\Game\CMashroom.h" />
     <ClInclude Include="src\Game\CCactus.h" />
     <ClInclude Include="src\Game\CCactusNeedle.h" />
-    <ClInclude Include="src\Game\CDungeonMap.h" />
-    <ClInclude Include="src\Game\CDungeonManeger.h" />
     <ClInclude Include="src\Game\CEnemy.h" />
     <ClInclude Include="src\Game\CEntrance.h" />
     <ClInclude Include="src\Game\CField.h" />

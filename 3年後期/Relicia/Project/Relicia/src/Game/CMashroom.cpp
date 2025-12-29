@@ -5,7 +5,7 @@
 #include "CCrystalObj.h"
 
 #define ANIM_PATH "Character\\Enemy\\Mushroom\\Anim\\"
-#define BODY_HEIGHT 10.0f
+#define BODY_HEIGHT 9.0f
 #define BODY_RADIUS 5.0f
 
 #define GAUGE_OFFSET_Y 15.0f
@@ -13,8 +13,8 @@
 #define ATTACK_RANGE 10.0f
 #define ATTACK_START_FRAME 20.0f
 #define ATTACK_END_FRAME 30.0f
-#define ATTACK_COL_RADIUS 3.0f
-#define ATTACK_COL_POS CVector(0.0f, 2.5f, 4.0f)
+#define ATTACK_COL_RADIUS 4.0f
+#define ATTACK_COL_POS CVector(0.0f, 2.5f, 3.0f)
 #define CHAISE_SPEED 20.0f
 #define LOOKAT_SPEED 90.0f
 #define BATTLE_IDLE_TIME_MIN 2.0f
@@ -87,7 +87,6 @@ CMashroom::CMashroom()
 // デストラクタ
 CMashroom::~CMashroom()
 {
-	SAFE_DELETE(mpBodyCol);
 	// 攻撃コライダーを削除
 	SAFE_DELETE(mpAttack1Col);
 }

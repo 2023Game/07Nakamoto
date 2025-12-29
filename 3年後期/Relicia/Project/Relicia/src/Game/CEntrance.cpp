@@ -13,7 +13,7 @@ CEntrance::CEntrance(const CVector& pos)
 	mpColliderMesh = new CColliderMesh(this, ELayer::eWall, col, false);
 	mpColliderMeshCeil = new CColliderMesh(this, ELayer::eCeil, ceilCol, false);
 
-	new CNavNode(CVector(pos.X(),pos.Y(),pos.Z() + 10.0f));
+	//new CNavNode(CVector(pos.X(),pos.Y(),pos.Z() + 10.0f));
 	// コライダー表示をオンにする
 	//mpColliderMesh->SetShow(true);
 	//mpColliderMeshCeil->SetShow(true);

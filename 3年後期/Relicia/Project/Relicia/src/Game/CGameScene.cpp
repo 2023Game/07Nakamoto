@@ -14,6 +14,7 @@
 #include "CElementManager.h"
 #include "CInteractObjectManager.h"
 #include "CInventory.h"
+#include "CNavManager.h"
 
 #include "CDebugInput.h"
 #include "CPlayer.h"
@@ -75,6 +76,9 @@ void CGameScene::Load()
 
 	// 調べるオブジェクトの管理クラスの生成
 	new CInteractObjectManager();
+
+	// 経路探索管理クラスを生成
+	new CNavManager();
 
 	// ダンジョンの作成
 	mpField = new CField();

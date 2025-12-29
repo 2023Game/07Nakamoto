@@ -600,7 +600,7 @@ void CBspMap::CreateRoomFloor(SectionNode* node, std::vector<std::vector<Tile>>&
 void CBspMap::CreateRoomWall(const Room& room, std::vector<std::vector<Tile>>& map)
 {
     // ã‰º‚Ì•Ç‚Ìİ’è
-    for (int x = room.x + 1; x < room.x + room.width - 1; x++)
+    for (int x = room.x; x < room.x + room.width; x++)
     {
         // ã‚Ì•Ç
         mMapData[room.y][x].type = TileType::eWall;
@@ -612,7 +612,7 @@ void CBspMap::CreateRoomWall(const Room& room, std::vector<std::vector<Tile>>& m
 
     }
     // ¶‰E‚Ì•Ç‚ğİ’è
-    for (int y = room.y + 1; y < room.y + room.height - 1; y++)
+    for (int y = room.y; y < room.y + room.height; y++)
     {
         // ¶‚Ì•Ç
         mMapData[y][room.x].type = TileType::eWall;

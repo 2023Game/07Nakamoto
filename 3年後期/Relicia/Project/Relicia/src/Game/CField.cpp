@@ -16,6 +16,9 @@
 #include "CCrystalObj.h"
 #include "CItemObj.h"
 
+#include "CNavManager.h"
+#include "CNavNode.h"
+
 #define PILLAR_OFFSET_POS 10.0f	// 柱のオフセット座標
 #define SECTION_SIZE_X 50		// ダンジョンの全体の区画の横サイズ
 #define SECTION_SIZE_Y 50		// ダンジョンの全体の区画の縦サイズ
@@ -32,14 +35,14 @@ CField::CField()
 
 
 	// 属性クリスタルを生成
-	CCrystalObj* crystal = new CCrystalObj(ElementType::Fire, mpMapData->GetRoomFloorPos());
-	crystal = new CCrystalObj(ElementType::Fire, mpMapData->GetRoomFloorPos());
-	crystal = new CCrystalObj(ElementType::Water, mpMapData->GetRoomFloorPos());
-	crystal = new CCrystalObj(ElementType::Water, mpMapData->GetRoomFloorPos());
-	crystal = new CCrystalObj(ElementType::Thunder, mpMapData->GetRoomFloorPos());
-	crystal = new CCrystalObj(ElementType::Thunder, mpMapData->GetRoomFloorPos());
-	crystal = new CCrystalObj(ElementType::Wind, mpMapData->GetRoomFloorPos());
-	crystal = new CCrystalObj(ElementType::Wind, mpMapData->GetRoomFloorPos());
+	CCrystalObj* crystal = new CCrystalObj(ElementType::Fire, GetRandomFloorPos());
+	crystal = new CCrystalObj(ElementType::Fire, GetRandomFloorPos());
+	crystal = new CCrystalObj(ElementType::Water, GetRandomFloorPos());
+	crystal = new CCrystalObj(ElementType::Water, GetRandomFloorPos());
+	crystal = new CCrystalObj(ElementType::Thunder, GetRandomFloorPos());
+	crystal = new CCrystalObj(ElementType::Thunder, GetRandomFloorPos());
+	crystal = new CCrystalObj(ElementType::Wind, GetRandomFloorPos());
+	crystal = new CCrystalObj(ElementType::Wind, GetRandomFloorPos());
 
 	CItemObj* obj = new CItemObj(ItemId::Key, mpMapData->GetRoomFloorPos());
 	obj = new CItemObj(ItemId::Key, mpMapData->GetRoomFloorPos());
@@ -49,6 +52,12 @@ CField::CField()
 	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomFloorPos());
 	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomFloorPos());
 	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomFloorPos());
+
+	//CNavNode* nav = new CNavNode(mpMapData->GetRoomFloorPos());
+	//nav = new CNavNode(mpMapData->GetRoomFloorPos());
+	//nav = new CNavNode(mpMapData->GetRoomFloorPos());
+	//nav = new CNavNode(mpMapData->GetRoomFloorPos());
+	//nav = new CNavNode(mpMapData->GetRoomFloorPos());
 
 }
 
@@ -72,7 +81,9 @@ const CVector CField::GetRandomFloorPos() const
 	{
 		int index = Math::Rand(0, mpFloorObjects.size() - 1);
 
-		return mpFloorObjects[index]->Position();
+		CVector pos = mpFloorObjects[index]->Position();
+
+		return CVector(pos.X() + 10.0f, pos.Y(), pos.Z() + 10.0f);
 	}
 }
 
@@ -445,6 +456,8 @@ void CField::CreatePassagePillar(const std::vector<std::vector<CBspMap::Tile>>& 
 	// オフセットポジション格納用
 	CVector offSetPos = CVector::zero;
 
+	bool node = false;
+
 	// 北東(右上)に柱を生成するか
 	if (map[y - 1][x].passage && map[y][x + 1].passage && !map[y - 1][x + 1].passage &&
 		(map[y - 1][x + 1].type == CBspMap::TileType::None || map[y - 1][x + 1].type == CBspMap::TileType::eWall))
@@ -455,6 +468,12 @@ void CField::CreatePassagePillar(const std::vector<std::vector<CBspMap::Tile>>& 
 		CPillar* pillar = new CPillar(pillarPos + offSetPos);
 		// 柱のリストに追加
 		mpPillarObjects.push_back(pillar);
+
+		if (!node)
+		{
+			new CNavNode(pillarPos);
+			node = true;
+		}
 	}
 	// 南東(右下)に柱を生成するか
 	if (map[y + 1][x].passage && map[y][x + 1].passage && !map[y + 1][x + 1].passage &&
@@ -466,6 +485,13 @@ void CField::CreatePassagePillar(const std::vector<std::vector<CBspMap::Tile>>& 
 		CPillar* pillar = new CPillar(pillarPos + offSetPos);
 		// 柱のリストに追加
 		mpPillarObjects.push_back(pillar);
+
+		if (!node)
+		{
+			new CNavNode(pillarPos);
+			node = true;
+		}
+
 	}
 	// 北西(左上)に柱を生成するか
 	if (map[y - 1][x].passage && map[y][x - 1].passage && !map[y - 1][x - 1].passage &&
@@ -477,6 +503,12 @@ void CField::CreatePassagePillar(const std::vector<std::vector<CBspMap::Tile>>& 
 		CPillar* pillar = new CPillar(pillarPos + offSetPos);
 		// 柱のリストに追加
 		mpPillarObjects.push_back(pillar);
+
+		if (!node)
+		{
+			new CNavNode(pillarPos);
+			node = true;
+		}
 	}
 	// 南西(左下)に柱を生成するか
 	if (map[y + 1][x].passage && map[y][x - 1].passage && !map[y + 1][x - 1].passage &&
@@ -488,6 +520,12 @@ void CField::CreatePassagePillar(const std::vector<std::vector<CBspMap::Tile>>& 
 		CPillar* pillar = new CPillar(pillarPos + offSetPos);
 		// 柱のリストに追加
 		mpPillarObjects.push_back(pillar);
+
+		if (!node)
+		{
+			new CNavNode(pillarPos);
+			node = true;
+		}
 	}
 }
 
