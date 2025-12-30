@@ -142,7 +142,7 @@ namespace Item
 				//}
 			}
 		},
-			// Мо
+		// Мо
 		{
 			ItemId::Key2,
 			{
@@ -164,7 +164,7 @@ namespace Item
 				//}
 			}
 		},
-			// Мо
+		// Мо
 		{
 			ItemId::Key3,
 			{
