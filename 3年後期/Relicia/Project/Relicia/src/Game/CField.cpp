@@ -361,6 +361,8 @@ void CField::CreateDungeon(const std::vector<std::vector<CBspMap::Tile>>& map)
 					// °‚ÌƒŠƒXƒg‚É’Ç‰Á
 					mpPassegeObjects.push_back(floor);
 
+					new CNavNode(floor->Position());
+
 					// ”à‚Ì¶¬
 					//CDoor* door = new CDoor(CVector(x  * TILE_SIZE + offSetPosX, 0, y * TILE_SIZE + offSetPosZ));
 					//door->Rotate(0.0f, rotY, 0.0f);
