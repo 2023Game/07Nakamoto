@@ -93,11 +93,11 @@ void CGameScene::Load()
 
 	// サボテンの敵を作成
 	CCactus* cactus = new CCactus();
-	cactus->Position(mpField->GetRandomFloorPos());
+	cactus->Position(mpField->GetMapData()->GetRoomRandomFloorPos());
 
 	// キノコの敵を作成
 	CMashroom* mashroom = new CMashroom();
-	mashroom->Position(mpField->GetRandomFloorPos());
+	mashroom->Position(mpField->GetMapData()->GetRoomRandomFloorPos());
 
 	//CPlayer* player = new CPlayer();
 	//player->Scale(1.0f, 1.0f, 1.0f);
@@ -106,10 +106,10 @@ void CGameScene::Load()
 	// プレイヤーの作成
 	CAdventurer* player = new CAdventurer();
 	player->Scale(1.0f, 1.0f, 1.0f);
-	player->Position(mpField->GetRandomFloorPos());
+	player->Position(mpField->GetMapData()->GetRoomRandomFloorPos());
 
 	// 動かせる箱の作成
-	CCrate* crate = new CCrate(mpField->GetRandomFloorPos());
+	CCrate* crate = new CCrate(mpField->GetMapData()->GetRoomRandomFloorPos());
 	crate->Scale(1.0f, 3.0f, 1.0f);
 
 	// CGameCameraのテスト
@@ -177,7 +177,7 @@ void CGameScene::Update()
 #if _DEBUG
 	if (CDebugInput::PushKey('B'))
 	{
-		CAdventurer::Instance()->Position(mpField->GetRandomFloorPos());
+		CAdventurer::Instance()->Position(mpField->GetMapData()->GetRoomRandomFloorPos());
 	}
 #endif
 }

@@ -34,6 +34,7 @@ CField::CField()
 	// BSP法でダンジョン生成
 	CreateMap();
 
+	CNavManager::Instance()->AddCollider(GetWallCollider());
 }
 
 CField::~CField()
@@ -44,23 +45,23 @@ CField::~CField()
 }
 
 // 2次元配列のダンジョンデータを取得
-const CBspMap* CField::GetMapData() const
+CBspMap* CField::GetMapData() const
 {
 	return mpMapData;
 }
 
-// 床タイルのランダムな座標を取得
-const CVector CField::GetRandomFloorPos() const
-{
-	if (!mpFloorObjects.empty())
-	{
-		int index = Math::Rand(0, mpFloorObjects.size() - 1);
-
-		CVector pos = mpFloorObjects[index]->Position();
-
-		return CVector(pos.X() + 10.0f, pos.Y(), pos.Z() + 10.0f);
-	}
-}
+//// 床タイルのランダムな座標を取得
+//const CVector CField::GetRandomFloorPos() const
+//{
+//	if (!mpFloorObjects.empty())
+//	{
+//		int index = Math::Rand(0, mpFloorObjects.size() - 1);
+//
+//		CVector pos = mpFloorObjects[index]->Position();
+//
+//		return CVector(pos.X() + 10.0f, pos.Y(), pos.Z() + 10.0f);
+//	}
+//}
 
 // 床コライダーを取得
 CColliderMesh* CField::GetFloorCollider() const
@@ -108,25 +109,25 @@ void CField::CreateMap()
 	mpDungeonCollider = new CBspMapCollider(mpMapData, SECTION_SIZE_X, SECTION_SIZE_Y);
 
 	// 属性クリスタルを生成
-	CCrystalObj* crystal = new CCrystalObj(ElementType::Fire, GetRandomFloorPos());
-	crystal = new CCrystalObj(ElementType::Fire, GetRandomFloorPos());
-	crystal = new CCrystalObj(ElementType::Water, GetRandomFloorPos());
-	crystal = new CCrystalObj(ElementType::Water, GetRandomFloorPos());
-	crystal = new CCrystalObj(ElementType::Thunder, GetRandomFloorPos());
-	crystal = new CCrystalObj(ElementType::Thunder, GetRandomFloorPos());
-	crystal = new CCrystalObj(ElementType::Wind, GetRandomFloorPos());
-	crystal = new CCrystalObj(ElementType::Wind, GetRandomFloorPos());
+	CCrystalObj* crystal = new CCrystalObj(ElementType::Fire, mpMapData->GetRoomRandomFloorPos());
+	crystal = new CCrystalObj(ElementType::Fire, mpMapData->GetRoomRandomFloorPos());
+	crystal = new CCrystalObj(ElementType::Water, mpMapData->GetRoomRandomFloorPos());
+	crystal = new CCrystalObj(ElementType::Water, mpMapData->GetRoomRandomFloorPos());
+	crystal = new CCrystalObj(ElementType::Thunder, mpMapData->GetRoomRandomFloorPos());
+	crystal = new CCrystalObj(ElementType::Thunder, mpMapData->GetRoomRandomFloorPos());
+	crystal = new CCrystalObj(ElementType::Wind, mpMapData->GetRoomRandomFloorPos());
+	crystal = new CCrystalObj(ElementType::Wind, mpMapData->GetRoomRandomFloorPos());
 
-	CItemObj* obj = new CItemObj(ItemId::Key, mpMapData->GetRoomFloorPos());
-	obj = new CItemObj(ItemId::Key, mpMapData->GetRoomFloorPos());
-	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomFloorPos());
-	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomFloorPos());
-	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomFloorPos());
-	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomFloorPos());
-	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomFloorPos());
-	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomFloorPos());
+	CItemObj* obj = new CItemObj(ItemId::Key, mpMapData->GetRoomRandomFloorPos());
+	obj = new CItemObj(ItemId::Key, mpMapData->GetRoomRandomFloorPos());
+	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomRandomFloorPos());
+	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomRandomFloorPos());
+	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomRandomFloorPos());
+	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomRandomFloorPos());
+	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomRandomFloorPos());
+	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomRandomFloorPos());
 
-	new CEscapeArea(CVector(mpMapData->GetRoomFloorPos().X(), 3.0f, mpMapData->GetRoomFloorPos().Z())
+	new CEscapeArea(CVector(mpMapData->GetRoomRandomFloorPos().X(), 3.0f, mpMapData->GetRoomRandomFloorPos().Z())
 		, CVector::zero, CVector(0.5f, 0.5f, 0.5f));
 }
 
@@ -265,7 +266,7 @@ void CField::CreateDungeon(const std::vector<std::vector<CBspMap::Tile>>& map)
 
 			switch (map[y][x].type)
 			{
-				// 床
+				// 部屋の床
 				case CBspMap::TileType::eFloor:
 				{
 					// 床の生成
@@ -361,7 +362,7 @@ void CField::CreateDungeon(const std::vector<std::vector<CBspMap::Tile>>& map)
 					// 床のリストに追加
 					mpPassegeObjects.push_back(floor);
 
-					new CNavNode(floor->Position());
+					//new CNavNode(floor->Position());
 
 					// 扉の生成
 					//CDoor* door = new CDoor(CVector(x  * TILE_SIZE + offSetPosX, 0, y * TILE_SIZE + offSetPosZ));

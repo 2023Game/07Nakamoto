@@ -19,6 +19,9 @@ CEntrance::CEntrance(const CVector& pos)
 	//mpColliderMeshCeil->SetShow(true);
 
 	Position(pos);
+
+	new CNavNode(pos);
+
 }
 
 // デストラクタ

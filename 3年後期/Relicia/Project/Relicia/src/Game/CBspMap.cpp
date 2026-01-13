@@ -600,7 +600,7 @@ void CBspMap::CreateRoomFloor(SectionNode* node, std::vector<std::vector<Tile>>&
 void CBspMap::CreateRoomWall(const Room& room, std::vector<std::vector<Tile>>& map)
 {
     // 上下の壁の設定
-    for (int x = room.x + 1; x < room.x + room.width - 1; x++)
+    for (int x = room.x; x < room.x + room.width; x++)
     {
         // 上の壁
         mMapData[room.y][x].type = TileType::eWall;
@@ -612,7 +612,7 @@ void CBspMap::CreateRoomWall(const Room& room, std::vector<std::vector<Tile>>& m
 
     }
     // 左右の壁を設定
-    for (int y = room.y + 1; y < room.y + room.height - 1; y++)
+    for (int y = room.y; y < room.y + room.height; y++)
     {
         // 左の壁
         mMapData[y][room.x].type = TileType::eWall;
@@ -686,6 +686,11 @@ CVector2 CBspMap::GetRoomRandomPos(SectionNode* node)
     if (node->left) return GetRoomRandomPos(node->left);
     if (node->right) return GetRoomRandomPos(node->right);
 
+    return CVector2();
+}
+
+CVector2 CBspMap::GetRoomEntrancePos(const Room& room)
+{
     return CVector2();
 }
 
@@ -867,7 +872,7 @@ CBspMap::Direction CBspMap::InverseDirection(Direction dir) const
 }
 
 // 部屋の床の座標のリストからランダムに座標を取得
-CVector CBspMap::GetRoomFloorPos()
+CVector CBspMap::GetRoomRandomFloorPos()
 {
     int index = Math::Rand(0, mpRoomFloors.size() - 1);
 

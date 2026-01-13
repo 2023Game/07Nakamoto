@@ -1,4 +1,5 @@
 #include "CFloor.h"
+#include "CNavNode.h"
 
 // コンストラクタ
 CFloor::CFloor(const CVector& pos)

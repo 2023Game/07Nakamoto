@@ -20,10 +20,10 @@ public:
 	~CField();
 
 	// 2次元配列のダンジョンデータを取得
-	const CBspMap* GetMapData() const;
+	CBspMap* GetMapData() const;
 	
 	// 床タイルのランダムな座標を取得
-	const CVector GetRandomFloorPos() const;
+	//const CVector GetRandomFloorPos() const;
 
 	// 床コライダーを取得
 	CColliderMesh* GetFloorCollider() const;
@@ -53,9 +53,6 @@ private:
 	void CreatePassageWall(const std::vector<std::vector<CBspMap::Tile>>& map, int x, int y);
 	// 通路の柱を生成
 	void CreatePassagePillar(const std::vector<std::vector<CBspMap::Tile>>& map, int x, int y);
-
-	//CModel* mpModel;
-	//CColliderMesh* mpColliderMesh;
 
 	CModel* mpCubeModel;
 	CModel* mpCylinderModel;

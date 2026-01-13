@@ -113,7 +113,7 @@ public:
 	//std::vector<TileSegment> CBspMap::CollectWallSegments() const;
 
 	// 部屋の床の座標のリストからランダムに座標を取得
-	CVector GetRoomFloorPos();
+	CVector GetRoomRandomFloorPos();
 
 private:
 	// ノードの削除
@@ -141,6 +141,9 @@ private:
 	// 部屋のランダムな座標を取得
 	CVector2 GetRoomRandomPos(SectionNode* node);
 
+	// 出入口にする座標を取得
+	CVector2 GetRoomEntrancePos(const Room& room);
+
 	// 部屋同士の通路データの設定
 	void CreatePassage(std::vector<std::vector<Tile>>& map, SectionNode* nodeA, SectionNode* nodeb);
 
@@ -159,6 +162,6 @@ private:
 	// ２次元配列(可変長配列)のマップデータ
 	std::vector<std::vector<Tile>> mMapData;
 
-	// 通路の柱の座標のリスト
+	// 部屋の床データのリスト
 	std::vector<CVector2> mpRoomFloors;
 };
