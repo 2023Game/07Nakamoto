@@ -35,7 +35,7 @@ void CEscapeArea::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 	// プレイヤーに衝突した
 	if (other->Layer() == ELayer::ePlayer)
 	{
-		// ゲームオーバーシーンを読み込む
+		// リザルトシーンを読み込む
 		CSceneManager::Instance()->LoadScene(EScene::eResult);
 	}
 }

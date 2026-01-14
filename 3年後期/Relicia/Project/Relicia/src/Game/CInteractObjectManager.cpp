@@ -30,7 +30,7 @@ CInteractObjectManager::~CInteractObjectManager()
 }
 
 // インスタンスを破棄
-void CInteractObjectManager::CIearInstance()
+void CInteractObjectManager::ClearInstance()
 {
 	SAFE_DELETE(spInstance);
 }

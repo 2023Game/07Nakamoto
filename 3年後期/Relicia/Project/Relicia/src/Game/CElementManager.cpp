@@ -40,6 +40,12 @@ CElementManager::CElementManager()
 CElementManager::~CElementManager()
 {
 	mSlots.clear();
+
+	// 破棄されたら、インスタンス変数を空にする
+	if (spInstance == this)
+	{
+		spInstance = nullptr;
+	}
 }
 
 // 属性を追加する

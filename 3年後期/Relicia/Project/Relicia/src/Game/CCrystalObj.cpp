@@ -11,6 +11,7 @@ CCrystalObj::CCrystalObj(ElementType type, CVector pos)
 	, mElementType(type)
 	, mpCrystalData(nullptr)
 	, mpModel(nullptr)
+	, mpMaterial(nullptr)
 	, mpCollider(nullptr)
 {
 	// 指定された属性の種類からクリスタルのデータを取得
@@ -48,8 +49,12 @@ CCrystalObj::CCrystalObj(ElementType type, CVector pos)
 // デストラクタ
 CCrystalObj::~CCrystalObj()
 {
-	// 設定されているマテリアルを解除してから、マテリアルを削除
-	mpModel->SetMaterial(nullptr);
+	if (mpModel != nullptr)
+	{
+		// 設定されているマテリアルを解除してから、マテリアルを削除
+		mpModel->SetMaterial(nullptr);
+	}
+
 	SAFE_DELETE(mpMaterial);
 	// コライダーを削除
 	SAFE_DELETE(mpCollider);

@@ -10,7 +10,7 @@ public:
 	// インスタンスを取得
 	static CInteractObjectManager* Instance();
 	// インスタンスを破棄
-	static void CIearInstance();
+	static void ClearInstance();
 
 	// コンストラクタ
 	CInteractObjectManager();

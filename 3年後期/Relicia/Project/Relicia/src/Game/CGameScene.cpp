@@ -29,6 +29,7 @@ CGameScene::CGameScene()
 //デストラクタ
 CGameScene::~CGameScene()
 {
+	CInteractObjectManager::ClearInstance();
 }
 
 //シーン読み込み

@@ -127,8 +127,9 @@ void CField::CreateMap()
 	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomRandomFloorPos());
 	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomRandomFloorPos());
 
-	new CEscapeArea(CVector(mpMapData->GetRoomRandomFloorPos().X(), 3.0f, mpMapData->GetRoomRandomFloorPos().Z())
-		, CVector::zero, CVector(0.5f, 0.5f, 0.5f));
+	CVector pos = mpMapData->GetRoomRandomFloorPos();
+	new CEscapeArea(CVector(pos.X(), pos.Y() + 3.0f, pos.Z()), CVector::zero, CVector(0.5f, 0.5f, 0.5f));
+
 }
 
 void CField::CreateFieldObjects()

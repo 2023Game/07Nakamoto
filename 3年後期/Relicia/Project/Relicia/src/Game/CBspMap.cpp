@@ -689,11 +689,6 @@ CVector2 CBspMap::GetRoomRandomPos(SectionNode* node)
     return CVector2();
 }
 
-CVector2 CBspMap::GetRoomEntrancePos(const Room& room)
-{
-    return CVector2();
-}
-
 // •”‰®“¯m‚Ì’Ê˜Hƒf[ƒ^‚Ìİ’è
 void CBspMap::CreatePassage(std::vector<std::vector<Tile>>& map, SectionNode* nodeA, SectionNode* nodeB)
 {
