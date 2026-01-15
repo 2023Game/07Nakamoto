@@ -76,6 +76,11 @@ public:
 	// ノード更新中か
 	bool IsUpdating() const;
 
+	// 
+	void AddPatrolLink(CNavNode* node);
+
+	CNavNode* GetNextPatrolNode();
+
 	// ノードの色設定（デバッグ用）
 	void SetColor(const CColor& color);
 	// ノードを更新
@@ -115,6 +120,10 @@ private:
 	CNavNode* mpCalcFromNode;	// 最短経路での前のノードのポインタ
 	bool mIsUpdateConnectNode;	// 接続ノードを更新する必要があるか
 	bool mIsUpdaingConnectNode;	// 接続ノードを更新中か
+
+	// 巡回専用リンク
+	std::vector<CNavNode*> mPatrolLinks;
+	int mPatrolIndex = 0;   // 次に行く巡回ノード
 
 	// デバッグ関連
 	CColor mColor;		// ノードの色
