@@ -19,6 +19,10 @@ CEnemy::CEnemy()
 	, mpBodyCol(nullptr)
 	, mpHpGauge(nullptr)
 	, mAttackIndex(0)
+	, mIsBattle(false)
+	, mBattleIdletime(0.0f)
+	, mpBattleTarget(nullptr)
+	
 {
 	// HPƒQ[ƒW‚ğì¬
 	mpHpGauge = new CGaugeUI3D(this);
@@ -49,6 +53,16 @@ void CEnemy::DeleteObject(CObjectBase* obj)
 	{
 		mpHpGauge = nullptr;
 	}
+}
+
+// UŒ‚’†‚©
+bool CEnemy::IsAttacking() const
+{
+	// UŒ‚’†
+	if (mState == EState::eAttack) return true;
+
+	// UŒ‚’†‚Å‚È‚¢
+	return false;
 }
 
 // “G‚Ì‰Šú‰»
@@ -175,11 +189,6 @@ void CEnemy::UpdateChase()
 
 // ’Ç‚¢‚©‚¯‚é‚ÌXVˆ—
 void CEnemy::UpdateLost()
-{
-}
-
-// UŒ‚‚ÌXVˆ—
-void CEnemy::UpdateAttack()
 {
 }
 

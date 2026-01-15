@@ -10,8 +10,8 @@ public:
 	// デストラクタ
 	~CCactus();
 
-	// 攻撃中か
-	bool IsAttacking() const override;
+	//// 攻撃中か
+	//bool IsAttacking() const override;
 	// 攻撃開始
 	void AttackStart() override;
 	// 攻撃終了
@@ -61,6 +61,8 @@ private:
 	// 攻撃の種類
 	enum class EAttackID
 	{
+		None = -1,
+
 		ePunch,		// パンチ攻撃
 		eNeedle,	// 棘攻撃
 
@@ -77,21 +79,23 @@ private:
 	void ChangeState(EState state) override;
 
 	// 待機状態の更新処理
-	void UpdateIdle();
+	void UpdateIdle() override;
 	// 追いかける時の更新処理
-	void UpdateChase();
+	void UpdateChase() override;
+	// 攻撃時の更新処理
+	void UpdateAttack(int index);
 	// パンチ攻撃時の更新処理
-	void UpdateAttack1();
+	void UpdatePunch();
 	// 針攻撃時の更新処理
-	void UpdateAttack2();
+	void UpdateNeedle();
 	// 仰け反り状態の更新処理
 	void UpdateHit();
 	// 死亡状態の更新処理
 	void UpdateDeath();
 
-	bool mIsBattle;					// 戦闘状態か
-	float mBattleIdletime;			// 戦闘時の待機時間
-	CObjectBase* mpBattleTarget;	// 戦闘相手
+	//bool mIsBattle;					// 戦闘状態か
+	//float mBattleIdletime;			// 戦闘時の待機時間
+	//CObjectBase* mpBattleTarget;	// 戦闘相手
 	CCollider* mpAttack1Col;		// パンチ攻撃用のコライダー
 	int mShotNeedleCount;			// 針を発射した回数
 };

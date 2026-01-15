@@ -30,6 +30,9 @@ public:
 	// オブジェクト削除を伝える関数
 	void DeleteObject(CObjectBase* obj) override;
 
+	// 攻撃中か
+	bool IsAttacking() const override;
+
 	/// <summary>
 	/// 衝突処理
 	/// </summary>
@@ -73,23 +76,20 @@ protected:
 	virtual void UpdateChase();
 	// プレイヤーを見失ったときの更新処理
 	virtual void UpdateLost();
-	// 攻撃時の更新処理
-	virtual void UpdateAttack();
 	// 仰け反り状態の更新処理
 	virtual void UpdateHit();
 	// 死亡状態の更新処理
 	virtual void UpdateDeath();
 
-	// 今使っている攻撃の種類
-	int mAttackIndex;
-
 	// アニメーション切り替え
 	void ChangeAnimation(int type, bool restart = false);
-
 
 	EState mState;			// 状態
 	int mStateStep;			// 状態内のステップ管理用
 	float mElapsedTime;		// 経過時間計測用
+
+	// 今使っている攻撃の種類
+	int mAttackIndex;
 
 	// アニメーションデータのテーブル
 	const std::vector<AnimData>* mpAnimData;
@@ -104,6 +104,11 @@ protected:
 
 	CGaugeUI3D* mpHpGauge;	// HPゲージ
 	CVector mGaugeOffsetPos;// ゲージのオフセット座標
+
+	bool mIsBattle;					// 戦闘状態か
+	float mBattleIdletime;			// 戦闘時の待機時間
+	CObjectBase* mpBattleTarget;	// 戦闘相手
+
 };
 
 #endif

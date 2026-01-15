@@ -46,10 +46,7 @@ const std::vector<CEnemy::AnimData> ANIM_DATA =
 
 // コンストラクタ
 CCactus::CCactus()
-	: mIsBattle(false)
-	, mBattleIdletime(0.0f)
-	, mpBattleTarget(nullptr)
-	, mpAttack1Col(nullptr)
+	: mpAttack1Col(nullptr)
 	, mShotNeedleCount(0)
 {
 	// ゲージのオフセット位置を設定
@@ -93,15 +90,6 @@ CCactus::~CCactus()
 {
 	// 攻撃コライダーを削除
 	SAFE_DELETE(mpAttack1Col);
-}
-
-// 攻撃中か
-bool CCactus::IsAttacking() const
-{
-	if (mState == EState::eAttack)	return true;
-
-	// 攻撃中でない
-	return false;
 }
 
 // 攻撃開始
@@ -237,6 +225,7 @@ void CCactus::ChangeState(EState state)
 	if (mState != state && IsAttacking())
 	{
 		AttackEnd();
+		mAttackIndex = (int)EAttackID::None;
 	}
 
 	// 状態切り替え
@@ -301,7 +290,7 @@ void CCactus::UpdateIdle()
 						if (rand < ATTACK2_PROB)
 						{
 							nextState = EState::eAttack;
-							mAttackIndex = 1;
+							mAttackIndex = (int)EAttackID::eNeedle;
 						}
 						
 					}
@@ -334,6 +323,7 @@ void CCactus::UpdateChase()
 	{
 		// 攻撃状態へ移行
 		ChangeState(EState::eAttack);
+		mAttackIndex = (int)EAttackID::ePunch;
 	}
 	// 攻撃範囲外
 	else
@@ -361,8 +351,25 @@ void CCactus::UpdateChase()
 	LookAtBattleTarget();
 }
 
+// 攻撃時の更新処理
+void CCactus::UpdateAttack(int index)
+{
+	switch (index)
+	{
+	case 0:
+		// パンチ攻撃
+		UpdatePunch();
+		break;
+
+	case 1:
+		// 棘攻撃
+		UpdateNeedle();
+		break;
+	}
+}
+
 // パンチ攻撃時の更新処理
-void CCactus::UpdateAttack1()
+void CCactus::UpdatePunch()
 {
 	// ステップごとに処理を分ける
 	switch (mStateStep)
@@ -407,7 +414,7 @@ void CCactus::UpdateAttack1()
 }
 
 // 針攻撃時の更新処理
-void CCactus::UpdateAttack2()
+void CCactus::UpdateNeedle()
 {
 	// 攻撃終了まで、徐々に戦闘相手の方向へ向く
 	if (mStateStep < 3)
@@ -545,10 +552,8 @@ void CCactus::Update()
 	case EState::eChase:	UpdateChase();	break;
 	// プレイヤーを見失う
 	case EState::eLost:		UpdateLost();	break;
-	// パンチ攻撃
-	case EState::eAttack1:	UpdateAttack1();break;
-	// 針攻撃
-	case EState::eAttack2:	UpdateAttack2();break;
+	// 攻撃
+	case EState::eAttack:	UpdateAttack(mAttackIndex); break;
 	// 仰け反り
 	case EState::eHit:		UpdateHit();	break;
 	// 死亡状態

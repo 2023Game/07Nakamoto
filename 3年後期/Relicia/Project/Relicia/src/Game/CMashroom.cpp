@@ -8,7 +8,7 @@
 #define BODY_HEIGHT 9.0f
 #define BODY_RADIUS 5.0f
 
-#define GAUGE_OFFSET_Y 15.0f
+#define GAUGE_OFFSET_Y 10.0f
 #define DEATH_WAIT_TIME 3.0f
 #define ATTACK_RANGE 10.0f
 #define ATTACK_START_FRAME 20.0f
@@ -40,16 +40,13 @@ const std::vector<CEnemy::AnimData> ANIM_DATA =
 
 // コンストラクタ
 CMashroom::CMashroom()
-	: mIsBattle(false)
-	, mBattleIdletime(0.0f)
-	, mpBattleTarget(nullptr)
-	, mpAttack1Col(nullptr)
+	: mpAttack1Col(nullptr)
 {
 	mMaxHp = MAX_HP;
 	mHp = mMaxHp;
 
 	// ゲージのオフセット位置を設定
-	mGaugeOffsetPos = CVector(0.0f, 10.0f, 0.0f);
+	mGaugeOffsetPos = CVector(0.0f, GAUGE_OFFSET_Y, 0.0f);
 
 	// 敵を初期化
 	InitEnemy("Mushroom", &ANIM_DATA);
@@ -91,18 +88,6 @@ CMashroom::~CMashroom()
 	SAFE_DELETE(mpAttack1Col);
 }
 
-// 攻撃中か
-bool CMashroom::IsAttacking() const
-{
-	// 頭突き攻撃中
-	if (mState == (int)EState::eAttack1) return true;
-	// スピン攻撃中
-	if (mState == (int)EState::eAttack2) return true;
-
-	// 攻撃中でない
-	return false;
-}
-
 // 攻撃開始
 void CMashroom::AttackStart()
 {
@@ -110,7 +95,7 @@ void CMashroom::AttackStart()
 	CEnemy::AttackStart();
 
 	// 頭突き攻撃中であれば、頭突き攻撃のコライダーをオンにする
-	if (mState == (int)EState::eAttack1)
+	if (mAttackIndex == (int)EAttackID::eHeadbutt)
 	{
 		mpAttack1Col->SetEnable(true);
 	}
@@ -136,7 +121,7 @@ void CMashroom::TakeDamage(int damage, CObjectBase* causer)
 	if (!IsDeath())
 	{
 		// 仰け反り状態へ移行
-		ChangeState((int)EState::eHit);
+		ChangeState(EState::eHit);
 
 		// 攻撃を加えた相手を戦闘相手に設定
 		mpBattleTarget = causer;
@@ -156,7 +141,7 @@ void CMashroom::TakeDamage(int damage, CObjectBase* causer)
 void CMashroom::Death()
 {
 	// 死亡状態に切り替え
-	ChangeState((int)EState::eDeath);
+	ChangeState(EState::eDeath);
 }
 
 // 戦闘相手の方へ向く
@@ -195,6 +180,7 @@ void CMashroom::ChangeState(EState state)
 	if (mState != state && IsAttacking())
 	{
 		AttackEnd();
+		mAttackIndex = (int)EAttackID::None;
 	}
 
 	// 状態切り替え
@@ -256,11 +242,15 @@ void CMashroom::UpdateIdle()
 				{
 					// 一定確率で、針攻撃に変更
 					int rand = Math::Rand(0, 99);
-					if (rand < ATTACK2_PROB) nextState = EState::eAttack2;
+					if (rand < ATTACK2_PROB)
+					{
+						nextState = EState::eAttack;
+						mAttackIndex = (int)EAttackID::eSpin;
+					}
 				}
 
 				// 次の状態へ移行
-				ChangeState((int)nextState);
+				ChangeState(nextState);
 
 				// 戦闘待機時間を初期化
 				mBattleIdletime = 0.0f;
@@ -286,7 +276,8 @@ void CMashroom::UpdateChase()
 	if (dist <= ATTACK_RANGE)
 	{
 		// 攻撃状態へ移行
-		ChangeState((int)EState::eAttack1);
+		ChangeState(EState::eAttack);
+		mAttackIndex = (int)EAttackID::eHeadbutt;
 	}
 	// 攻撃範囲外
 	else
@@ -306,7 +297,7 @@ void CMashroom::UpdateChase()
 		else
 		{
 			mMoveSpeed = dir * dist;
-			ChangeState((int)EState::eIdle);
+			ChangeState(EState::eIdle);
 		}
 	}
 
@@ -314,8 +305,24 @@ void CMashroom::UpdateChase()
 	LookAtBattleTarget();
 }
 
-// パンチ攻撃時の更新処理
-void CMashroom::UpdateAttack1()
+// 攻撃時の更新処理
+void CMashroom::UpdateAttack(int index)
+{
+	switch (index)
+	{
+	case 0:
+		// 頭突き攻撃
+		UpdateHeadbutt();
+		break;
+	case 1:
+		// スピン攻撃
+		UpdateSpin();
+		break;
+	}
+}
+
+// 頭突き攻撃時の更新処理
+void CMashroom::UpdateHeadbutt()
 {
 	// ステップごとに処理を分ける
 	switch (mStateStep)
@@ -353,16 +360,18 @@ void CMashroom::UpdateAttack1()
 		// アニメーション終了したら、待機状態へ戻す
 		if (IsAnimationFinished())
 		{
-			ChangeState((int)EState::eIdle);
+			ChangeState(EState::eIdle);
 		}
 		break;
 	}
 }
 
-// 針攻撃時の更新処理
-void CMashroom::UpdateAttack2()
+// スピン攻撃時の更新処理
+void CMashroom::UpdateSpin()
 {
-	ChangeState((int)EState::eIdle);
+	Position(CVector(Position().X(), Position().Y() + 5.0f, Position().Z()));
+	ChangeState(EState::eIdle);
+	
 }
 
 // 仰け反り状態の更新処理
@@ -382,7 +391,7 @@ void CMashroom::UpdateHit()
 		// 待機状態へ戻す
 		if (IsAnimationFinished())
 		{
-			ChangeState((int)EState::eIdle);
+			ChangeState(EState::eIdle);
 		}
 		break;
 	}
@@ -456,9 +465,7 @@ void CMashroom::Update()
 		// 追いかける
 	case EState::eChase:	UpdateChase();	break;
 		// パンチ攻撃
-	case EState::eAttack1:	UpdateAttack1(); break;
-		// 針攻撃
-	case EState::eAttack2:	UpdateAttack2(); break;
+	case EState::eAttack:	UpdateAttack(mAttackIndex); break;
 		// 仰け反り
 	case EState::eHit:		UpdateHit();	break;
 		// 死亡状態

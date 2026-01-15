@@ -12,8 +12,6 @@ public:
 	// デストラクタ
 	~CMashroom();
 
-	// 攻撃中か
-	bool IsAttacking() const override;
 	// 攻撃開始
 	void AttackStart() override;
 	// 攻撃終了
@@ -47,16 +45,16 @@ private:
 		Num
 	};
 
-	// 状態
-	//enum class EState
-	//{
-	//	eIdle,		// 待機状態
-	//	eChase,		// 追いかける
-	//	eAttack1,	// 頭突き攻撃
-	//	eAttack2,	// スピン攻撃
-	//	eHit,		// 仰け反り
-	//	eDeath,		// 死亡
-	//};
+	// 攻撃の種類
+	enum class EAttackID
+	{
+		None = -1,
+
+		eHeadbutt,	// 頭突き
+		eSpin,		// スピン攻撃
+
+		Num
+	};
 
 	// 戦闘相手の方へ向く
 	void LookAtBattleTarget(bool immediate = false);
@@ -68,17 +66,16 @@ private:
 	void UpdateIdle();
 	// 追いかける時の更新処理
 	void UpdateChase();
+	// 攻撃時の更新処理
+	void UpdateAttack(int index);
 	// 頭突き攻撃時の更新処理
-	void UpdateAttack1();
+	void UpdateHeadbutt();
 	// スピン攻撃時の更新処理
-	void UpdateAttack2();
+	void UpdateSpin();
 	// 仰け反り状態の更新処理
 	void UpdateHit();
 	// 死亡状態の更新処理
 	void UpdateDeath();
 
-	bool mIsBattle;					// 戦闘状態か
-	float mBattleIdletime;			// 戦闘時の待機時間
-	CObjectBase* mpBattleTarget;	// 戦闘相手
 	CCollider* mpAttack1Col;		// 攻撃用のコライダー
 };
