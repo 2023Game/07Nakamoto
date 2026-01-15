@@ -35,7 +35,7 @@ CDoorBase::CDoorBase(const CVector& pos, const CVector& angle,
 			ELayer::eAttackCol
 		}
 	);
-
+	
 	// 経路探索用の遮蔽物チェックのコライダーに、扉のコライダーを登録
 	CNavManager::Instance()->AddCollider(mpDoorColliderMesh);
 
