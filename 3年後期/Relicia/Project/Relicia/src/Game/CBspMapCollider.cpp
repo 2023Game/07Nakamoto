@@ -1,5 +1,6 @@
 #include "CBspMapCollider.h"
 #include "CField.h"
+#include "CNavManager.h"
 
 #define WALL_COL_OFFSET 2.0f
 
@@ -29,6 +30,9 @@ CBspMapCollider::CBspMapCollider(CBspMap* map, int x, int y)
 
     // 壁コライダーの分割情報を更新
     mpWallCollider->DivisionMesh();
+
+    // 経路探索用の遮蔽物チェックのコライダーに、壁のコライダーを登録
+    CNavManager::Instance()->AddCollider(mpWallCollider);
 
     //mpFloorCollider->SetShow(true);
     //mpWallCollider->SetShow(true);

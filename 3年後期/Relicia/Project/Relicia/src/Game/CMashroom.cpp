@@ -188,7 +188,7 @@ void CMashroom::LookAtBattleTarget(bool immediate)
 }
 
 // ó‘ÔØ‚è‘Ö‚¦
-void CMashroom::ChangeState(int state)
+void CMashroom::ChangeState(EState state)
 {
 	// UŒ‚’†‚É‘¼‚Ìó‘Ô‚ÖˆÚs‚·‚éê‡‚Í
 	// UŒ‚I—¹ˆ—‚ğŒÄ‚Ño‚·

@@ -9,7 +9,7 @@
 // コンストラクタ
 CEnemy::CEnemy()
 	: CXCharacter(ETag::eEnemy, ETaskPriority::eEnemy)
-	, mState(0)
+	, mState(EState::eIdle)
 	, mStateStep(0)
 	, mElapsedTime(0.0f)
 	, mMoveSpeed(CVector::zero)
@@ -18,6 +18,7 @@ CEnemy::CEnemy()
 	, mGroundNormal(CVector::up)
 	, mpBodyCol(nullptr)
 	, mpHpGauge(nullptr)
+	, mAttackIndex(0)
 {
 	// HPゲージを作成
 	mpHpGauge = new CGaugeUI3D(this);
@@ -146,7 +147,7 @@ void CEnemy::ChangeAnimation(int type, bool restart)
 }
 
 // 状態切り替え
-void CEnemy::ChangeState(int state)
+void CEnemy::ChangeState(EState state)
 {
 	// 同じ状態の場合は切り替えない
 	if (state == mState) return;
@@ -155,6 +156,41 @@ void CEnemy::ChangeState(int state)
 	mState = state;
 	mStateStep = 0;
 	mElapsedTime = 0.0f;
+}
+
+// 待機状態の更新処理
+void CEnemy::UpdateIdle()
+{
+}
+
+// 巡回中の更新処理
+void CEnemy::UpdatePatrol()
+{
+}
+
+// 追いかける時の更新処理
+void CEnemy::UpdateChase()
+{
+}
+
+// 追いかける時の更新処理
+void CEnemy::UpdateLost()
+{
+}
+
+// 攻撃時の更新処理
+void CEnemy::UpdateAttack()
+{
+}
+
+// 仰け反り状態の更新処理
+void CEnemy::UpdateHit()
+{
+}
+
+// 死亡状態の更新処理
+void CEnemy::UpdateDeath()
+{
 }
 
 // 更新

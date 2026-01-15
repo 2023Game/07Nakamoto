@@ -275,6 +275,10 @@ void CField::CreateDungeon(const std::vector<std::vector<CBspMap::Tile>>& map)
 					// è∞ÇÃÉäÉXÉgÇ…í«â¡
 					mpFloorObjects.push_back(floor);
 
+					if (map[y][x].node)
+					{
+						new CNavNode(CVector(x * TILE_SIZE, 0, y * TILE_SIZE));
+					}
 					break;
 				}
 				// ï«

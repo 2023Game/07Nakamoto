@@ -98,10 +98,7 @@ CCactus::~CCactus()
 // 攻撃中か
 bool CCactus::IsAttacking() const
 {
-	// パンチ攻撃中
-	if (mState == (int)EState::eAttack1) return true;
-	// 針攻撃中
-	if (mState == (int)EState::eAttack2) return true;
+	if (mState == EState::eAttack)	return true;
 
 	// 攻撃中でない
 	return false;
@@ -114,7 +111,7 @@ void CCactus::AttackStart()
 	CEnemy::AttackStart();
 
 	// パンチ攻撃中であれば、パンチ攻撃のコライダーをオンにする
-	if (mState == (int)EState::eAttack1)
+	if (mAttackIndex == (int)EAttackID::ePunch)
 	{
 		mpAttack1Col->SetEnable(true);
 	}
@@ -140,7 +137,7 @@ void CCactus::TakeDamage(int damage, CObjectBase* causer)
 	if (!IsDeath())
 	{
 		// 仰け反り状態へ移行
-		ChangeState((int)EState::eHit);
+		ChangeState(EState::eHit);
 
 		// 攻撃を加えた相手を戦闘相手に設定
 		mpBattleTarget = causer;
@@ -160,7 +157,7 @@ void CCactus::TakeDamage(int damage, CObjectBase* causer)
 void CCactus::Death()
 {
 	// 死亡状態に切り替え
-	ChangeState((int)EState::eDeath);
+	ChangeState(EState::eDeath);
 }
 
 // 衝突処理
@@ -233,7 +230,7 @@ void CCactus::ShotNeedle()
 }
 
 // 状態切り替え
-void CCactus::ChangeState(int state)
+void CCactus::ChangeState(EState state)
 {
 	// 攻撃中に他の状態へ移行する場合は
 	// 攻撃終了処理を呼び出す
@@ -301,11 +298,16 @@ void CCactus::UpdateIdle()
 					{
 						// 一定確率で、針攻撃に変更
 						int rand = Math::Rand(0, 99);
-						if (rand < ATTACK2_PROB) nextState = EState::eAttack2;
+						if (rand < ATTACK2_PROB)
+						{
+							nextState = EState::eAttack;
+							mAttackIndex = 1;
+						}
+						
 					}
 
 					// 次の状態へ移行
-					ChangeState((int)nextState);
+					ChangeState(nextState);
 
 					// 戦闘待機時間を初期化
 					mBattleIdletime = 0.0f;
@@ -331,7 +333,7 @@ void CCactus::UpdateChase()
 	if (dist <= ATTACK_RANGE)
 	{
 		// 攻撃状態へ移行
-		ChangeState((int)EState::eAttack1);
+		ChangeState(EState::eAttack);
 	}
 	// 攻撃範囲外
 	else
@@ -351,7 +353,7 @@ void CCactus::UpdateChase()
 		else
 		{
 			mMoveSpeed = dir * dist;
-			ChangeState((int)EState::eIdle);
+			ChangeState(EState::eIdle);
 		}
 	}
 
@@ -398,7 +400,7 @@ void CCactus::UpdateAttack1()
 			// アニメーション終了したら、待機状態へ戻す
 			if (IsAnimationFinished())
 			{
-				ChangeState((int)EState::eIdle);
+				ChangeState(EState::eIdle);
 			}
 			break;
 	}
@@ -468,7 +470,7 @@ void CCactus::UpdateAttack2()
 			// アニメーション終了したら、待機状態へ戻す
 			if (IsAnimationFinished())
 			{
-				ChangeState((int)EState::eIdle);
+				ChangeState(EState::eIdle);
 			}
 			break;
 	}
@@ -491,7 +493,7 @@ void CCactus::UpdateHit()
 			// 待機状態へ戻す
 			if (IsAnimationFinished())
 			{
-				ChangeState((int)EState::eIdle);
+				ChangeState(EState::eIdle);
 			}
 			break;
 	}
@@ -541,6 +543,8 @@ void CCactus::Update()
 	case EState::eIdle:		UpdateIdle();	break;
 	// 追いかける
 	case EState::eChase:	UpdateChase();	break;
+	// プレイヤーを見失う
+	case EState::eLost:		UpdateLost();	break;
 	// パンチ攻撃
 	case EState::eAttack1:	UpdateAttack1();break;
 	// 針攻撃

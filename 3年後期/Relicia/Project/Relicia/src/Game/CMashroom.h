@@ -48,21 +48,21 @@ private:
 	};
 
 	// 状態
-	enum class EState
-	{
-		eIdle,		// 待機状態
-		eChase,		// 追いかける
-		eAttack1,	// 頭突き攻撃
-		eAttack2,	// スピン攻撃
-		eHit,		// 仰け反り
-		eDeath,		// 死亡
-	};
+	//enum class EState
+	//{
+	//	eIdle,		// 待機状態
+	//	eChase,		// 追いかける
+	//	eAttack1,	// 頭突き攻撃
+	//	eAttack2,	// スピン攻撃
+	//	eHit,		// 仰け反り
+	//	eDeath,		// 死亡
+	//};
 
 	// 戦闘相手の方へ向く
 	void LookAtBattleTarget(bool immediate = false);
 
 	// 状態切り替え
-	void ChangeState(int state) override;
+	void ChangeState(EState state) override;
 
 	// 待機状態の更新処理
 	void UpdateIdle();

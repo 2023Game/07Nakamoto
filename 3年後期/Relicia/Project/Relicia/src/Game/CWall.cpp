@@ -1,4 +1,5 @@
 #include "CWall.h"
+#include "CNavManager.h"
 
 // コンストラクタ
 CWall::CWall(const CVector& pos)

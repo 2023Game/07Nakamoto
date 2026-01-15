@@ -5,7 +5,7 @@
 // ノードのY座標のオフセット値
 #define NODE_OFFSET_Y 5.0f
 // 探すノードの距離の限界値
-#define FIND_NODE_DISTANCE 180.0f
+#define FIND_NODE_DISTANCE 300.0f
 // ノードの位置を更新する距離
 #define UPDATE_DISTANCE 1.0f
 

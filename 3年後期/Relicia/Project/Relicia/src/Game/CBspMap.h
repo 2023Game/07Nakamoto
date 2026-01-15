@@ -58,6 +58,7 @@ public:
 		Direction pillar = Direction::None;	// ’Œ‚ğ¶¬‚·‚é‚©‚Ç‚¤‚© 
 
 		Passage passageData;
+		bool node = false;	// ƒm[ƒh‚ğİ’u‚·‚é‚©
 	};
 
 	// •”‰®‚Ìî•ñ

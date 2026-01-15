@@ -45,15 +45,26 @@ private:
 		Num
 	};
 
-	// プレイヤーの状態
-	enum class EState
+	// サボテンの敵の状態
+	//enum class EState
+	//{
+	//	eIdle,		// 待機状態
+	//	ePatrol,	// 巡回中
+	//	eChase,		// 追いかける
+	//	eLost,		// 見失う
+	//	eAttack1,	// パンチ攻撃
+	//	eAttack2,	// 針攻撃
+	//	eHit,		// 仰け反り
+	//	eDeath,		// 死亡
+	//};
+
+	// 攻撃の種類
+	enum class EAttackID
 	{
-		eIdle,		// 待機状態
-		eChase,		// 追いかける
-		eAttack1,	// パンチ攻撃
-		eAttack2,	// 針攻撃
-		eHit,		// 仰け反り
-		eDeath,		// 死亡
+		ePunch,		// パンチ攻撃
+		eNeedle,	// 棘攻撃
+
+		Num
 	};
 
 	// 戦闘相手の方へ向く
@@ -63,7 +74,7 @@ private:
 	void ShotNeedle();
 
 	// 状態切り替え
-	void ChangeState(int state) override;
+	void ChangeState(EState state) override;
 
 	// 待機状態の更新処理
 	void UpdateIdle();
