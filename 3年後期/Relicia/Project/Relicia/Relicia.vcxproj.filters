@@ -116,6 +116,9 @@
     <Filter Include="ソース ファイル\Game\UI\Result">
       <UniqueIdentifier>{8bb79dfb-5143-4bb7-9923-873a4a66a1dd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Debug">
+      <UniqueIdentifier>{013e4004-edc3-46dd-8a54-cb1112641026}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -492,6 +495,9 @@
     </ClCompile>
     <ClCompile Include="src\Game\CEscapeArea.cpp">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CDebugFieldOfView.cpp">
+      <Filter>ソース ファイル\Game\Debug</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -893,6 +899,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CEscapeArea.h">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CDebugFieldOfView.h">
+      <Filter>ソース ファイル\Game\Debug</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

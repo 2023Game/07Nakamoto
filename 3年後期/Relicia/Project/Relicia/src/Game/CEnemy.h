@@ -5,6 +5,7 @@
 #include "CModel.h"
 
 class CGaugeUI3D;
+class CNavNode;
 
 /*
 エネミークラス
@@ -108,6 +109,19 @@ protected:
 	bool mIsBattle;					// 戦闘状態か
 	float mBattleIdletime;			// 戦闘時の待機時間
 	CObjectBase* mpBattleTarget;	// 戦闘相手
+
+	CNavNode* mpLostPlayerNode;	// プレイヤーを見失った位置のノード
+	float mLostElapsedTime;		// 見失ってからの経過時間
+
+	// 巡回ポイントのリスト
+	std::vector<CVector>* mpCurrentPatrolRoute;
+	std::vector<std::vector<CVector>> mPatrolRoutes;
+	CNavNode* mpPatrolStartPoint;
+
+	int mNextPatrolIndex;	// 次に巡回する番号
+
+	std::vector<CNavNode*> mMoveRoute;	// 求めた最短経路記憶用
+	int mNextMoveIndex;					// 次に移動するノードのインデックス値
 
 };
 

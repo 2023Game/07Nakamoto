@@ -3,6 +3,8 @@
 #include "CCollisionManager.h"
 #include "CColliderCapsule.h"
 #include "CGaugeUI3D.h"
+#include "CNavNode.h"
+#include "CNavManager.h"
 
 #define GRAVITY 0.0625f
 
@@ -22,7 +24,11 @@ CEnemy::CEnemy()
 	, mIsBattle(false)
 	, mBattleIdletime(0.0f)
 	, mpBattleTarget(nullptr)
-	
+	, mpLostPlayerNode(nullptr)
+	, mLostElapsedTime(0.0f)
+	, mpCurrentPatrolRoute(nullptr)
+	, mpPatrolStartPoint(nullptr)
+	, mNextPatrolIndex(0)
 {
 	// HPÉQÅ[ÉWÇçÏê¨
 	mpHpGauge = new CGaugeUI3D(this);
