@@ -147,7 +147,7 @@ CAdventurer::CAdventurer()
 	mpHpGauge->SetPos(HP_GAUGE_UI_POS);
 
 	// Œo˜H’Tõ—p‚Ìƒm[ƒh‚ğì¬
-	mpNavNode = new CNavNode(Position(), true);
+	mpNavNode = new CNavNode(Position(), CNavNode::ENodeType::ePlayer, true);
 	mpNavNode->SetColor(CColor::white);
 
 }
@@ -165,6 +165,8 @@ CAdventurer::~CAdventurer()
 		mpSword->SetOwner(nullptr);
 		mpSword->Kill();
 	}
+
+	spInstance = nullptr;
 }
 
 // UŒ‚’†‚©

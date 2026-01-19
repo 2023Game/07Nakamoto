@@ -56,6 +56,7 @@ protected:
 	enum class EState
 	{
 		eIdle,		// 待機状態
+		eJoinNavGraph,	// 巡回状態に戻る
 		ePatrol,	// 巡回中
 		eChase,		// 追いかける
 		eLost,		// 見失う
@@ -67,17 +68,33 @@ protected:
 	// 敵の初期化
 	void InitEnemy(std::string path, const std::vector<AnimData>* pAnimData);
 
+	// 指定した位置まで移動する
+	bool MoveTo(const CVector& targetPos, float speed);
+	// 移動速度を取得
+	virtual float GetMoveSpeed() const = 0;
+	// カプセルコライダーの半径を取得
+	virtual float GetBodyRadius() const = 0;
+
+	// 指定したターゲットが視野範囲内に入ったかどうか
+	bool IsFoundTarget(CObjectBase* target) const;
+	// 現在位置からターゲットが見えているかどうか
+	bool IsLookTarget(CObjectBase* target) const;
+
 	// 状態切り替え
 	virtual void ChangeState(EState state);
 
 	// 待機状態の更新処理
 	virtual void UpdateIdle();
+	// 最寄りのノードに移動
+	virtual void UpdateJoinNavGraph();
 	// 巡回中の更新処理
 	virtual void UpdatePatrol();
 	// 追いかける時の更新処理
 	virtual void UpdateChase();
 	// プレイヤーを見失ったときの更新処理
 	virtual void UpdateLost();
+	// 攻撃時の更新処理
+	virtual void UpdateAttack(int index);
 	// 仰け反り状態の更新処理
 	virtual void UpdateHit();
 	// 死亡状態の更新処理
@@ -114,15 +131,12 @@ protected:
 	CNavNode* mpLostPlayerNode;	// プレイヤーを見失った位置のノード
 	float mLostElapsedTime;		// 見失ってからの経過時間
 
-	// 巡回ポイントのリスト
-	std::vector<CVector>* mpCurrentPatrolRoute;
-	std::vector<std::vector<CVector>> mPatrolRoutes;
-	CNavNode* mpPatrolStartPoint;
+	// 最寄りのノード保存用
+	CNavNode* mpNearNode;
+	// 巡回ノード保存用
+	CNavNode* mpCurrentNode;
 
-	int mNextPatrolIndex;	// 次に巡回する番号
 
-	std::vector<CNavNode*> mMoveRoute;	// 求めた最短経路記憶用
-	int mNextMoveIndex;					// 次に移動するノードのインデックス値
 
 	float mFovAngle;	// 視野範囲の角度
 	float mFovLength;	// 視野範囲の距離

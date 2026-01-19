@@ -2,6 +2,7 @@
 #include "CEnemy.h"
 
 class CColliderSphere;
+class CNavNode;
 
 // 蝙蝠の敵クラス
 class CMashroom : public CEnemy
@@ -58,24 +59,32 @@ private:
 
 	// 戦闘相手の方へ向く
 	void LookAtBattleTarget(bool immediate = false);
+	// 移動速度を取得
+	float GetMoveSpeed() const override;
+	// カプセルコライダーの半径を取得
+	float GetBodyRadius() const override;
 
 	// 状態切り替え
 	void ChangeState(EState state) override;
 
 	// 待機状態の更新処理
-	void UpdateIdle();
+	void UpdateIdle() override;
+	// 最寄りのノードに移動
+	void UpdateJoinNavGraph() override;
+	// 巡回中の更新処理
+	void UpdatePatrol() override;
 	// 追いかける時の更新処理
-	void UpdateChase();
+	void UpdateChase() override;
 	// 攻撃時の更新処理
-	void UpdateAttack(int index);
+	void UpdateAttack(int index) override;
 	// 頭突き攻撃時の更新処理
 	void UpdateHeadbutt();
 	// スピン攻撃時の更新処理
 	void UpdateSpin();
 	// 仰け反り状態の更新処理
-	void UpdateHit();
+	void UpdateHit() override;
 	// 死亡状態の更新処理
-	void UpdateDeath();
+	void UpdateDeath() override;
 
 	CCollider* mpAttack1Col;		// 攻撃用のコライダー
 };

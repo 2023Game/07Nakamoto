@@ -14,6 +14,9 @@ class CBspMapCollider;
 class CField : public CObjectBase
 {
 public:
+	// フィールドのインスタンスを返す
+	static CField* Instance();
+
 	// コンストラクタ
 	CField();
 	// デストラクタ
@@ -53,6 +56,9 @@ private:
 	void CreatePassageWall(const std::vector<std::vector<CBspMap::Tile>>& map, int x, int y);
 	// 通路の柱を生成
 	void CreatePassagePillar(const std::vector<std::vector<CBspMap::Tile>>& map, int x, int y);
+
+	// フィールドのインスタンス
+	static CField* spInstance;
 
 	CModel* mpCubeModel;
 	CModel* mpCylinderModel;

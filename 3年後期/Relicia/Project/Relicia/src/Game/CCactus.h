@@ -71,6 +71,10 @@ private:
 
 	// 戦闘相手の方へ向く
 	void LookAtBattleTarget(bool immediate = false);
+	// 移動速度を取得
+	float GetMoveSpeed() const override;
+	// カプセルコライダーの半径を取得
+	float GetBodyRadius() const override;
 
 	// 針を発射
 	void ShotNeedle();
@@ -80,18 +84,20 @@ private:
 
 	// 待機状態の更新処理
 	void UpdateIdle() override;
+	// 最寄りのノードに移動
+	void UpdateJoinNavGraph() override;
 	// 追いかける時の更新処理
 	void UpdateChase() override;
 	// 攻撃時の更新処理
-	void UpdateAttack(int index);
+	void UpdateAttack(int index) override;
 	// パンチ攻撃時の更新処理
 	void UpdatePunch();
 	// 針攻撃時の更新処理
 	void UpdateNeedle();
 	// 仰け反り状態の更新処理
-	void UpdateHit();
+	void UpdateHit() override;
 	// 死亡状態の更新処理
-	void UpdateDeath();
+	void UpdateDeath() override;
 
 	//bool mIsBattle;					// 戦闘状態か
 	//float mBattleIdletime;			// 戦闘時の待機時間

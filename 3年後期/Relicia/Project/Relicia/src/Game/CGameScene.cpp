@@ -92,14 +92,6 @@ void CGameScene::Load()
 	// ‘®«‚ÌŠÇ—ƒNƒ‰ƒX‚ð¶¬
 	new CElementManager();
 
-	// ƒTƒ{ƒeƒ“‚Ì“G‚ðì¬
-	CCactus* cactus = new CCactus();
-	cactus->Position(mpField->GetMapData()->GetRoomRandomFloorPos());
-
-	// ƒLƒmƒR‚Ì“G‚ðì¬
-	CMashroom* mashroom = new CMashroom();
-	mashroom->Position(mpField->GetMapData()->GetRoomRandomFloorPos());
-
 	//CPlayer* player = new CPlayer();
 	//player->Scale(1.0f, 1.0f, 1.0f);
 	//player->Position(mpField->GetRandomFloorPos());
@@ -108,6 +100,14 @@ void CGameScene::Load()
 	CAdventurer* player = new CAdventurer();
 	player->Scale(1.0f, 1.0f, 1.0f);
 	player->Position(mpField->GetMapData()->GetRoomRandomFloorPos());
+
+	// ƒTƒ{ƒeƒ“‚Ì“G‚ðì¬
+	CCactus* cactus = new CCactus();
+	cactus->Position(mpField->GetMapData()->GetRoomRandomFloorPos());
+
+	// ƒLƒmƒR‚Ì“G‚ðì¬
+	CMashroom* mashroom = new CMashroom();
+	mashroom->Position(mpField->GetMapData()->GetRoomRandomFloorPos());
 
 	// “®‚©‚¹‚é” ‚Ìì¬
 	CCrate* crate = new CCrate(mpField->GetMapData()->GetRoomRandomFloorPos());

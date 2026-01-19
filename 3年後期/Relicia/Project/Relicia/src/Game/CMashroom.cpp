@@ -3,6 +3,9 @@
 #include "CColliderSphere.h"
 #include "Maths.h"
 #include "CCrystalObj.h"
+#include "CNavManager.h"
+#include "CNavNode.h"
+#include "CAdventurer.h"
 
 #define ANIM_PATH "Character\\Enemy\\Mushroom\\Anim\\"
 #define BODY_HEIGHT 9.0f
@@ -15,6 +18,7 @@
 #define ATTACK_END_FRAME 30.0f
 #define ATTACK_COL_RADIUS 4.0f
 #define ATTACK_COL_POS CVector(0.0f, 2.5f, 3.0f)
+#define MOVE_SPEED 20.0f
 #define CHAISE_SPEED 20.0f
 #define LOOKAT_SPEED 90.0f
 #define BATTLE_IDLE_TIME_MIN 2.0f
@@ -172,6 +176,18 @@ void CMashroom::LookAtBattleTarget(bool immediate)
 	}
 }
 
+// 移動速度を取得
+float CMashroom::GetMoveSpeed() const
+{
+	return MOVE_SPEED;
+}
+
+// カプセルコライダーの半径を取得
+float CMashroom::GetBodyRadius() const
+{
+	return BODY_RADIUS;
+}
+
 // 状態切り替え
 void CMashroom::ChangeState(EState state)
 {
@@ -190,10 +206,28 @@ void CMashroom::ChangeState(EState state)
 // 待機状態の更新処理
 void CMashroom::UpdateIdle()
 {
+	CAdventurer* player = CAdventurer::Instance();
+
+	if (IsFoundTarget(player))
+	{
+		ChangeState(EState::eChase);
+		mpBattleTarget = player;
+		return;
+	}
+
 	// 通常時の待機
 	if (!mIsBattle)
 	{
-		ChangeAnimation((int)EAnimType::eIdle);
+		if (!mpCurrentNode)
+		{
+			ChangeState(EState::eJoinNavGraph);
+		}
+		else
+		{
+			// 巡回状態に移行
+			ChangeState(EState::ePatrol);
+			//ChangeAnimation((int)EAnimType::eIdle);
+		}
 	}
 	// 戦闘時の待機
 	else
@@ -258,6 +292,20 @@ void CMashroom::UpdateIdle()
 			break;
 		}
 	}
+}
+
+// 最寄りのノードに移動
+void CMashroom::UpdateJoinNavGraph()
+{
+	ChangeAnimation((int)EAnimType::eWalk);
+
+	CEnemy::UpdateJoinNavGraph();
+}
+
+// 巡回中の更新処理
+void CMashroom::UpdatePatrol()
+{
+
 }
 
 // 追いかける時の更新処理
@@ -457,21 +505,6 @@ void CMashroom::Collision(CCollider* self, CCollider* other, const CHitInfo& hit
 // 更新
 void CMashroom::Update()
 {
-	// 状態に合わせて、更新処理を切り替える
-	switch ((EState)mState)
-	{
-		// 待機状態
-	case EState::eIdle:		UpdateIdle();	break;
-		// 追いかける
-	case EState::eChase:	UpdateChase();	break;
-		// パンチ攻撃
-	case EState::eAttack:	UpdateAttack(mAttackIndex); break;
-		// 仰け反り
-	case EState::eHit:		UpdateHit();	break;
-		// 死亡状態
-	case EState::eDeath:	UpdateDeath();	break;
-	}
-
 	// 敵のベースクラスの更新
 	CEnemy::Update();
 

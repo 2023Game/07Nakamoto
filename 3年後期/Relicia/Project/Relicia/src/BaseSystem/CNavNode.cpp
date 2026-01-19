@@ -5,12 +5,12 @@
 // ノードのY座標のオフセット値
 #define NODE_OFFSET_Y 5.0f
 // 探すノードの距離の限界値
-#define FIND_NODE_DISTANCE 300.0f
+#define FIND_NODE_DISTANCE 500.0f
 // ノードの位置を更新する距離
 #define UPDATE_DISTANCE 1.0f
 
 // コンストラクタ
-CNavNode::CNavNode(const CVector& pos, bool isDestNode)
+CNavNode::CNavNode(const CVector& pos, ENodeType node, bool isDestNode)
 	: mIsEnable(true)
 	, mIsKill(false)
 	, mIsDestNode(isDestNode)
@@ -20,6 +20,7 @@ CNavNode::CNavNode(const CVector& pos, bool isDestNode)
 	, mIsUpdateConnectNode(false)
 	, mIsUpdaingConnectNode(false)
 	, mColor(0.0f, 1.0f, 0.0f, 1.0f)
+	, mNodeype(node)
 {
 	// 管理クラスのリストに自身を追加
 	CNavManager* navMgr = CNavManager::Instance();
@@ -28,6 +29,7 @@ CNavNode::CNavNode(const CVector& pos, bool isDestNode)
 		navMgr->AddNode(this);
 	}
 
+	mNodeype = node;
 	// 座標を設定
 	SetPos(mPosition, true);
 }
@@ -311,6 +313,12 @@ bool CNavNode::IsUpdating() const
 	if (mIsUpdateConnectNode) return true;
 	if (mIsUpdaingConnectNode) return true;
 	return false;
+}
+
+// ノードの種類を取得
+CNavNode::ENodeType CNavNode::GetNodeType()
+{
+	return mNodeype;
 }
 
 //void CNavNode::AddPatrolLink(CNavNode* node)

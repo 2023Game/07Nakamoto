@@ -22,8 +22,14 @@ class CNavNode
 	friend CNavManager;
 
 public:
+	enum class ENodeType
+	{
+		ePlayer,	// プレイヤー
+		eNode		// 経路探索用
+	};
+
 	// コンストラクタ
-	CNavNode(const CVector& pos, bool isDestNode = false);
+	CNavNode(const CVector& pos, ENodeType node = ENodeType::eNode, bool isDestNode = false);
 
 	// 有効状態を設定
 	void SetEnable(bool enable);
@@ -76,10 +82,8 @@ public:
 	// ノード更新中か
 	bool IsUpdating() const;
 
-	//// 
-	//void AddPatrolLink(CNavNode* node);
-
-	//CNavNode* GetNextPatrolNode();
+	// ノードの種類を取得
+	ENodeType GetNodeType();
 
 	// ノードの色設定（デバッグ用）
 	void SetColor(const CColor& color);
@@ -120,6 +124,8 @@ private:
 	CNavNode* mpCalcFromNode;	// 最短経路での前のノードのポインタ
 	bool mIsUpdateConnectNode;	// 接続ノードを更新する必要があるか
 	bool mIsUpdaingConnectNode;	// 接続ノードを更新中か
+
+	ENodeType mNodeype;	// ノードの種類
 
 	//// 巡回専用リンク
 	//std::vector<CNavNode*> mPatrolLinks;

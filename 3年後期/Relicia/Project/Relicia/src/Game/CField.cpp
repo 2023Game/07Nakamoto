@@ -24,13 +24,22 @@
 #define SECTION_SIZE_X 50		// ダンジョンの全体の区画の横サイズ
 #define SECTION_SIZE_Y 50		// ダンジョンの全体の区画の縦サイズ
 
+CField* CField::spInstance = nullptr;
+
+// インスタンスのポインタを取得
+CField* CField::Instance()
+{
+	return spInstance;
+}
+
 CField::CField()
 	: CObjectBase(ETag::eField, ETaskPriority::eBackground)
 	, mEffectAnimData(1, 11, true, 11, 0.03f)
 	, mpMapData(nullptr)
 	, mpDungeonCollider(nullptr)
-
 {
+	spInstance = this;
+
 	// BSP法でダンジョン生成
 	CreateMap();
 
@@ -42,6 +51,8 @@ CField::~CField()
 	SAFE_DELETE(mpMapData);
 	// コライダーの削除
 	SAFE_DELETE(mpDungeonCollider);
+
+	spInstance = nullptr;
 }
 
 // 2次元配列のダンジョンデータを取得

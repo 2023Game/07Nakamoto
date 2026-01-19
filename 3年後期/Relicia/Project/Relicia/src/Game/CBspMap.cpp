@@ -592,15 +592,15 @@ void CBspMap::CreateRoomFloor(SectionNode* node, std::vector<std::vector<Tile>>&
             map[y][x].type = TileType::eFloor;
             mpRoomFloors.push_back(CVector2(x, y));
 
-            // もし、部屋の角だった場合、
-            if (y == roomY + 1 && x == roomX + 1 ||
-                y == roomY + 1 && x == roomX + roomWidth - 2 ||
-                y == roomY + roomHeight - 2 && x == roomX + 1 ||
-                y == roomY + roomHeight - 2 && x == roomX + roomWidth - 2)
-            {
-                // ノード生成フラグをtrueにする
-                map[y][x].node = true;
-            }
+            //// もし、部屋の角だった場合、
+            //if (y == roomY + 1 && x == roomX + 1 ||
+            //    y == roomY + 1 && x == roomX + roomWidth - 2 ||
+            //    y == roomY + roomHeight - 2 && x == roomX + 1 ||
+            //    y == roomY + roomHeight - 2 && x == roomX + roomWidth - 2)
+            //{
+            //    // ノード生成フラグをtrueにする
+            //    map[y][x].node = true;
+            //}
         }
     }
 }

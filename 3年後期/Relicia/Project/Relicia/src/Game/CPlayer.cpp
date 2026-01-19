@@ -153,6 +153,8 @@ CPlayer::~CPlayer()
 		mpSword->SetOwner(nullptr);
 		mpSword->Kill();
 	}
+
+	spInstance = nullptr;
 }
 
 CPlayer* CPlayer::Instance()

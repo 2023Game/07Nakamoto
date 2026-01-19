@@ -14,6 +14,7 @@
 #define ATTACK_END_FRAME 30.0f
 #define ATTACK_COL_RADIUS 6.0f
 #define ATTACK_COL_POS CVector(0.0f, 2.5f, 5.0f)
+#define MOVE_SPEED 20.0f
 #define CHAISE_SPEED 20.0f
 #define LOOKAT_SPEED 90.0f
 #define BATTLE_IDLE_TIME_MIN 2.0f
@@ -198,6 +199,17 @@ void CCactus::LookAtBattleTarget(bool immediate)
 	}
 }
 
+float CCactus::GetMoveSpeed() const
+{
+	return MOVE_SPEED;
+}
+
+// カプセルコライダーの半径を取得
+float CCactus::GetBodyRadius() const
+{
+	return BODY_RADIUS;
+}
+
 // 針を発射
 void CCactus::ShotNeedle()
 {
@@ -238,7 +250,14 @@ void CCactus::UpdateIdle()
 	// 通常時の待機
 	if (!mIsBattle)
 	{
-		ChangeAnimation((int)EAnimType::eIdle);
+		if (!mpCurrentNode)
+		{
+			ChangeState(EState::eJoinNavGraph);
+		}
+		else
+		{
+			ChangeAnimation((int)EAnimType::eIdle);
+		}
 	}
 	// 戦闘時の待機
 	else
@@ -304,6 +323,14 @@ void CCactus::UpdateIdle()
 				break;
 		}
 	}
+}
+
+// 最寄りのノードに移動
+void CCactus::UpdateJoinNavGraph()
+{
+	ChangeAnimation((int)EAnimType::eWalk);
+
+	CEnemy::UpdateJoinNavGraph();
 }
 
 // 追いかける時の更新処理
@@ -543,22 +570,6 @@ void CCactus::UpdateDeath()
 // 更新
 void CCactus::Update()
 {
-	// 状態に合わせて、更新処理を切り替える
-	switch ((EState)mState)
-	{
-	// 待機状態
-	case EState::eIdle:		UpdateIdle();	break;
-	// 追いかける
-	case EState::eChase:	UpdateChase();	break;
-	// プレイヤーを見失う
-	case EState::eLost:		UpdateLost();	break;
-	// 攻撃
-	case EState::eAttack:	UpdateAttack(mAttackIndex); break;
-	// 仰け反り
-	case EState::eHit:		UpdateHit();	break;
-	// 死亡状態
-	case EState::eDeath:	UpdateDeath();	break;
-	}
 
 	// 敵のベースクラスの更新
 	CEnemy::Update();

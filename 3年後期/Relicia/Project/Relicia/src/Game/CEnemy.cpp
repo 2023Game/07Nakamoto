@@ -6,8 +6,13 @@
 #include "CNavNode.h"
 #include "CNavManager.h"
 #include "CDebugFieldOfView.h"
+#include "Maths.h"
+#include "CField.h"
 
 #define GRAVITY 0.0625f
+
+#define ROTATE_SPEED	6.0f	// 回転速度
+#define FOV_HEIGHT		10.0f	// 視野範囲の高さ
 
 #define FOV_ANGLE 45.0f		// 視野範囲の角度
 #define FOV_LENGTH 100.0f	// 視野範囲の距離
@@ -30,9 +35,11 @@ CEnemy::CEnemy()
 	, mpBattleTarget(nullptr)
 	, mpLostPlayerNode(nullptr)
 	, mLostElapsedTime(0.0f)
-	, mpCurrentPatrolRoute(nullptr)
-	, mpPatrolStartPoint(nullptr)
-	, mNextPatrolIndex(0)
+	, mpNearNode(nullptr)
+	, mpCurrentNode(nullptr)
+	//, mpCurrentPatrolRoute(nullptr)
+	//, mpPatrolStartPoint(nullptr)
+	//, mNextPatrolIndex(0)
 	, mFovAngle(FOV_ANGLE)
 	, mFovLength(FOV_LENGTH)
 {
@@ -124,6 +131,53 @@ void CEnemy::InitEnemy(std::string path, const std::vector<AnimData>* pAnimData)
 	Init(model);
 }
 
+// 指定した位置まで移動する
+bool CEnemy::MoveTo(const CVector& targetPos, float speed)
+{
+	// 目的地までのベクトルを求める
+	CVector pos = Position();
+	CVector vec = targetPos - pos;
+	vec.Y(0.0f);
+	// 移動方向ベクトルを求める
+	CVector moveDir = vec.Normalized();
+
+	// 徐々に移動方向へ移動
+	CVector forward = CVector::Slerp
+	(
+		VectorZ(),	// 現在の正面方向
+		moveDir,	// 移動方向
+		ROTATE_SPEED * Times::DeltaTime()
+	);
+	Rotation(CQuaternion::LookRotation(forward));
+
+	// 今回の移動距離を求める
+	float moveDist = speed * Times::DeltaTime();
+	// 目的地までの残りの距離を求める
+	float remainDist = vec.Length();
+	// 残りの距離が移動距離より短い場合
+	if (remainDist <= moveDist)
+	{
+		// 目的地まで移動する
+		pos = CVector(targetPos.X(), pos.Y(), targetPos.Z());
+		Position(pos);
+		return true;	// 目的地に到着したので、trueを返す
+	}
+	// 残りの距離がキャラクターの半径より短い場合
+	else if (remainDist <= GetBodyRadius())
+	{
+		// そこで移動を終了とする
+		return true;
+	}
+
+	// 残りの距離が移動距離より長い場合は、
+	// 移動距離分目的地へ移動する
+	pos += moveDir * moveDist;
+	Position(pos);
+
+	// 目的地には到着しなかった
+	return false;
+}
+
 // 衝突処理
 void CEnemy::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
@@ -169,6 +223,16 @@ void CEnemy::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 				}
 			}
 		}
+		// 壁と衝突した場合
+		else if (other->Layer() == ELayer::eWall)
+		{
+			// 横方向にのみ押し戻すため、
+			// 押し戻しベクトルのYの値を0にする
+			CVector adjust = hit.adjust;
+			adjust.Y(0.0f);
+			Position(Position() + adjust * hit.weight);
+		}
+
 		// プレイヤーと衝突した場合
 		else if (other->Layer() == ELayer::ePlayer)
 		{
@@ -197,6 +261,71 @@ void CEnemy::ChangeAnimation(int type, bool restart)
 	CXCharacter::SetAnimationSpeed(data.speed);
 }
 
+// 指定したターゲットが視野範囲内に入ったかどうか
+bool CEnemy::IsFoundTarget(CObjectBase* target) const
+{
+	// ターゲット座標を取得
+	CVector targetPos = target->Position();
+	// 自分自身の座標を取得
+	CVector pos = Position();
+	// 自身からターゲットまでのベクトルを求める
+	CVector  vec = targetPos - pos;
+
+	vec.Y(0.0f);	//ターゲットとの高さの差を考慮しない
+
+	// ① 視野角度内か求める
+	// ベクトルを正規化して長さを1にする
+	CVector dir = vec.Normalized();
+	// 自身の正面方向ベクトルを取得
+	CVector forward = VectorZ();
+	// ターゲットまでのベクトルと
+	// 自身の正面方向ベクトルの内積を求めて角度を出す
+	float dot = CVector::Dot(dir, forward);
+	// 視野角度のラジアンを求める
+	float angleR = Math::DegreeToRadian(mFovAngle);
+	// 求めた内積と視野角度で、視野範囲内か判断する
+	if (dot < cosf(angleR))	return false;
+
+	// ② 視野距離内か求める
+	//ターゲットまでの距離と視野距離で、視野範囲内か判断する
+	float dist = vec.Length();
+	if (dist > mFovLength)	return false;
+
+	// ターゲットとの間に遮蔽物がないかチェックする
+	if (!IsLookTarget(target)) return false;
+
+	//全ての条件をクリアしたので、視野範囲内である
+	return true;
+}
+
+// 現在位置からターゲットが見えているかどうか
+bool CEnemy::IsLookTarget(CObjectBase* target) const
+{
+	CVector targetPos = target->Position();
+	CVector selfPos = Position();
+
+	// ターゲットの高さで視野範囲内か判定
+	float diffY = abs(targetPos.Y() - selfPos.Y());
+	if (diffY >= FOV_HEIGHT) return false;
+
+	// フィールドが存在しない場合は、遮蔽物がないので見える
+	CField* field = CField::Instance();
+	if (field == nullptr) return true;
+
+	CVector offsetPos = CVector(0.0f, 1.0f, 0.0f);
+	// ターゲットの座標を取得
+	targetPos += offsetPos;
+	// 自分自身の座標を取得
+	selfPos += offsetPos;
+
+	CHitInfo hit;
+	//フィールドとレイ判定を行い、遮蔽物が存在した場合は、ターゲットが見えない
+	if (field->CollisionRay(selfPos, targetPos, &hit)) return false;
+
+	// ターゲットとの間に遮蔽物がないので、ターゲットが見えている
+	return true;
+}
+
 // 状態切り替え
 void CEnemy::ChangeState(EState state)
 {
@@ -214,6 +343,23 @@ void CEnemy::UpdateIdle()
 {
 }
 
+// 最寄りのノードに移動
+void CEnemy::UpdateJoinNavGraph()
+{
+	if (mpNearNode == nullptr)
+	{
+		mpNearNode = CNavManager::Instance()->FindNearestNode(mPosition);
+		if (mpNearNode == nullptr) return;
+	}
+
+	if (MoveTo(mpNearNode->GetPos(), GetMoveSpeed()))
+	{
+		mpCurrentNode = mpNearNode;
+		mpNearNode = nullptr;
+		ChangeState(EState::eIdle());
+	}
+}
+
 // 巡回中の更新処理
 void CEnemy::UpdatePatrol()
 {
@@ -226,6 +372,10 @@ void CEnemy::UpdateChase()
 
 // 追いかける時の更新処理
 void CEnemy::UpdateLost()
+{
+}
+
+void CEnemy::UpdateAttack(int index)
 {
 }
 
@@ -242,6 +392,25 @@ void CEnemy::UpdateDeath()
 // 更新
 void CEnemy::Update()
 {
+	// 状態に合わせて、更新処理を切り替える
+	switch ((EState)mState)
+	{
+		// 待機状態
+	case EState::eIdle:		UpdateIdle();	break;
+		// 巡回に戻る状態
+	case EState::eJoinNavGraph:	UpdateJoinNavGraph();	break;
+		// 追いかける
+	case EState::eChase:	UpdateChase();	break;
+		// プレイヤーを見失う
+	case EState::eLost:		UpdateLost();	break;
+		// 攻撃
+	case EState::eAttack:	UpdateAttack(mAttackIndex); break;
+		// 仰け反り
+	case EState::eHit:		UpdateHit();	break;
+		// 死亡状態
+	case EState::eDeath:	UpdateDeath();	break;
+	}
+
 	// 重力
 	mMoveSpeedY -= GRAVITY;
 
@@ -279,6 +448,7 @@ CColor CEnemy::GetStateColor(EState state) const
 	switch (state)
 	{
 	case CEnemy::EState::eIdle:		return CColor::white;
+	case CEnemy::EState::eJoinNavGraph:	return CColor::green;
 	case CEnemy::EState::ePatrol:	return CColor::green;
 	case CEnemy::EState::eChase:	return CColor::red;
 	case CEnemy::EState::eLost:		return CColor::yellow;
