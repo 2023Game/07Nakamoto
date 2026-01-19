@@ -313,19 +313,19 @@ bool CNavNode::IsUpdating() const
 	return false;
 }
 
-void CNavNode::AddPatrolLink(CNavNode* node)
-{
-	mPatrolLinks.push_back(node);
-}
-
-CNavNode* CNavNode::GetNextPatrolNode()
-{
-	if (mPatrolLinks.empty()) return nullptr;
-
-	CNavNode* next = mPatrolLinks[mPatrolIndex];
-	mPatrolIndex = (mPatrolIndex + 1) % mPatrolLinks.size();
-	return next;
-}
+//void CNavNode::AddPatrolLink(CNavNode* node)
+//{
+//	mPatrolLinks.push_back(node);
+//}
+//
+//CNavNode* CNavNode::GetNextPatrolNode()
+//{
+//	if (mPatrolLinks.empty()) return nullptr;
+//
+//	CNavNode* next = mPatrolLinks[mPatrolIndex];
+//	mPatrolIndex = (mPatrolIndex + 1) % mPatrolLinks.size();
+//	return next;
+//}
 
 // ノードの色設定（デバッグ用）
 void CNavNode::SetColor(const CColor& color)

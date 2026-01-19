@@ -65,6 +65,11 @@ public:
 	/// <param name="col"></param>
 	void RemoveCollider(CCollider* col);
 
+	//// 一番近いノードを取得
+	//CNavNode* FindNearestNode(const CVector& pos);
+	//// 追跡用の経路を作成
+	//bool NavigateFromPosition(const CVector& from, const CVector& to, std::vector<CNavNode*>& outRoute);
+
 	// 全てのノードを更新
 	void Update() override;
 	// 全てのノードと経路を描画

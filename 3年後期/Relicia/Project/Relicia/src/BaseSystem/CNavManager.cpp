@@ -289,6 +289,33 @@ void CNavManager::RemoveCollider(CCollider* col)
 	mColliders.erase(result, mColliders.end());
 }
 
+//// 一番近いノードを取得
+//CNavNode* CNavManager::FindNearestNode(const CVector& pos)
+//{
+//	CNavNode* best = nullptr;
+//	float bestDist = FLT_MAX;
+//
+//	for (CNavNode* node : mNodes)
+//	{
+//		if (!node->IsEnable()) continue;
+//		float d = (node->GetPos() - pos).LengthSqr();
+//		if (d < bestDist)
+//		{
+//			bestDist = d;
+//			best = node;
+//		}
+//	}
+//	return best;
+//}
+//
+//// 次の移動目標座標を取得
+//bool CNavManager::NavigateFromPosition(const CVector& from, const CVector& to, std::vector<CNavNode*>& outRoute)
+//{
+//	CNavNode* start = FindNearestNode(from);
+//	CNavNode* goal = FindNearestNode(to);
+//	return Navigate(start, goal, outRoute);
+//}
+
 // 接続ノードを更新
 void CNavManager::UpdateConnectNavNode()
 {

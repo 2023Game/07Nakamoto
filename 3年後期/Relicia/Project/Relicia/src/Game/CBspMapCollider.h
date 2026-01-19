@@ -18,6 +18,7 @@ public:
 	// 壁コライダーを取得
 	CColliderMesh* GetWallCollider() const;
 
+
 	// 更新
 	void Update() override;
 private:

@@ -5,6 +5,7 @@
 #include "CModel.h"
 
 class CGaugeUI3D;
+class CDebugFieldOfView;
 class CNavNode;
 
 /*
@@ -123,6 +124,14 @@ protected:
 	std::vector<CNavNode*> mMoveRoute;	// 求めた最短経路記憶用
 	int mNextMoveIndex;					// 次に移動するノードのインデックス値
 
+	float mFovAngle;	// 視野範囲の角度
+	float mFovLength;	// 視野範囲の距離
+
+#if _DEBUG
+	CColor GetStateColor(EState state) const;
+
+	CDebugFieldOfView* mpDebugFov;	// 視野範囲のデバッグ表示
+#endif
 };
 
 #endif

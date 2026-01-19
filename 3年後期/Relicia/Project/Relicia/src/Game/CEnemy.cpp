@@ -5,8 +5,12 @@
 #include "CGaugeUI3D.h"
 #include "CNavNode.h"
 #include "CNavManager.h"
+#include "CDebugFieldOfView.h"
 
 #define GRAVITY 0.0625f
+
+#define FOV_ANGLE 45.0f		// 視野範囲の角度
+#define FOV_LENGTH 100.0f	// 視野範囲の距離
 
 // コンストラクタ
 CEnemy::CEnemy()
@@ -29,11 +33,19 @@ CEnemy::CEnemy()
 	, mpCurrentPatrolRoute(nullptr)
 	, mpPatrolStartPoint(nullptr)
 	, mNextPatrolIndex(0)
+	, mFovAngle(FOV_ANGLE)
+	, mFovLength(FOV_LENGTH)
 {
 	// HPゲージを作成
 	mpHpGauge = new CGaugeUI3D(this);
 	mpHpGauge->SetMaxPoint(mMaxHp);
 	mpHpGauge->SetCurrPoint(mHp);
+
+#if _DEBUG
+	// 視野範囲のデバッグ表示クラスを作成
+	mpDebugFov = new CDebugFieldOfView(this, mFovAngle, mFovLength);
+#endif
+
 }
 
 // デストラクタ
@@ -48,6 +60,16 @@ CEnemy::~CEnemy()
 		mpHpGauge->SetOwner(nullptr);
 		mpHpGauge->Kill();
 	}
+
+#if _DEBUG
+	// 視野範囲のデバッグ表示の削除
+	if (mpDebugFov != nullptr)
+	{
+		mpDebugFov->SetOwner(nullptr);
+		mpDebugFov->Kill();
+	}
+#endif
+
 }
 
 // オブジェクト削除を伝える関数
@@ -59,6 +81,15 @@ void CEnemy::DeleteObject(CObjectBase* obj)
 	{
 		mpHpGauge = nullptr;
 	}
+
+#if _DEBUG
+	// 削除されたオブジェクトが視野範囲のデバッグ表示であれば、
+	// 視野範囲のデバッグ表示のポインタを空にする
+	if (obj == mpDebugFov)
+	{
+		mpDebugFov = nullptr;
+	}
+#endif
 }
 
 // 攻撃中か
@@ -224,6 +255,10 @@ void CEnemy::Update()
 	mpHpGauge->Position(Position() + mGaugeOffsetPos);
 	mpHpGauge->SetMaxPoint(mMaxHp);
 	mpHpGauge->SetCurrPoint(mHp);
+
+#if _DEBUG
+	mpDebugFov->SetColor(GetStateColor(mState));
+#endif
 }
 
 // 後更新
@@ -237,3 +272,19 @@ void CEnemy::Render()
 {
 	CXCharacter::Render();
 }
+
+#if _DEBUG
+CColor CEnemy::GetStateColor(EState state) const
+{
+	switch (state)
+	{
+	case CEnemy::EState::eIdle:		return CColor::white;
+	case CEnemy::EState::ePatrol:	return CColor::green;
+	case CEnemy::EState::eChase:	return CColor::red;
+	case CEnemy::EState::eLost:		return CColor::yellow;
+	case CEnemy::EState::eAttack:	return CColor::magenta;
+	}
+
+	return CColor::white;
+}
+#endif 
