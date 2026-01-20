@@ -20,7 +20,7 @@ CEntrance::CEntrance(const CVector& pos)
 
 	Position(pos);
 
-	new CNavNode(pos);
+	//new CNavNode(pos);
 
 }
 

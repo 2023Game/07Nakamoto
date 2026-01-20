@@ -33,6 +33,16 @@ public:
 	// 壁コライダーを取得
 	CColliderMesh* GetWallCollider() const;
 
+	/// <summary>
+	/// レイとフィールドオブジェクトの衝突判定
+	/// </summary>
+	/// <param name="start">レイの開始位置</param>
+	/// <param name="end">レイの終了位置</param>
+	/// <param name="hit">衝突情報返却用</param>
+	/// <returns>衝突したら、trueを返す</returns>
+	bool CollisionRay(const CVector& start, const CVector& end,
+		CHitInfo* hit) override;
+
 	// 更新
 	void Update() override;
 	// 描画
@@ -75,6 +85,8 @@ private:
 	std::vector<CEntrance*> mpEntranceObjects;	// 出入口のリスト
 	std::vector<CDoor*> mpDoorObjects;		// 扉のリスト
 	std::vector<CFloor*> mpPassegeObjects;	// 通路の床リスト
+	std::vector<CVector> mNavNodePositions;	// NavNodeを配置する座標のリスト
+	std::vector<CNavNode*> mpNavNodes;		// NavNodeリスト
 
 	// コライダーのポインタ
 	CBspMapCollider* mpDungeonCollider;

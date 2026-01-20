@@ -206,19 +206,13 @@ void CMashroom::ChangeState(EState state)
 // 待機状態の更新処理
 void CMashroom::UpdateIdle()
 {
-	CAdventurer* player = CAdventurer::Instance();
-
-	if (IsFoundTarget(player))
-	{
-		ChangeState(EState::eChase);
-		mpBattleTarget = player;
-		return;
-	}
+	// プレイヤーを攻撃するか確認
+	CheckAttackPlayer();
 
 	// 通常時の待機
 	if (!mIsBattle)
 	{
-		if (!mpCurrentNode)
+		if (!mpCurrentNode && !mpNearNode)
 		{
 			ChangeState(EState::eJoinNavGraph);
 		}
@@ -305,6 +299,12 @@ void CMashroom::UpdateJoinNavGraph()
 // 巡回中の更新処理
 void CMashroom::UpdatePatrol()
 {
+	// 攻撃するキャラクターが見つかった場合は、この処理を実行しない
+	if (CheckAttackPlayer())
+	{
+		return;
+	}
+
 
 }
 

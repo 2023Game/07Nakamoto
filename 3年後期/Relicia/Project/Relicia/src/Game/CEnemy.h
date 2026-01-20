@@ -3,6 +3,7 @@
 #include "CXCharacter.h"
 #include "CCollider.h"
 #include "CModel.h"
+#include <unordered_map>
 
 class CGaugeUI3D;
 class CDebugFieldOfView;
@@ -79,6 +80,8 @@ protected:
 	bool IsFoundTarget(CObjectBase* target) const;
 	// 現在位置からターゲットが見えているかどうか
 	bool IsLookTarget(CObjectBase* target) const;
+	// プレイヤーを攻撃するか確認
+	bool CheckAttackPlayer();
 
 	// 状態切り替え
 	virtual void ChangeState(EState state);
@@ -135,8 +138,8 @@ protected:
 	CNavNode* mpNearNode;
 	// 巡回ノード保存用
 	CNavNode* mpCurrentNode;
-
-
+	// 
+	std::unordered_map<CNavNode*, int> mVisitCount;
 
 	float mFovAngle;	// 視野範囲の角度
 	float mFovLength;	// 視野範囲の距離

@@ -250,7 +250,7 @@ void CCactus::UpdateIdle()
 	// �ʏ펞�̑ҋ@
 	if (!mIsBattle)
 	{
-		if (!mpCurrentNode)
+		if (!mpCurrentNode && !mpNearNode)
 		{
 			ChangeState(EState::eJoinNavGraph);
 		}

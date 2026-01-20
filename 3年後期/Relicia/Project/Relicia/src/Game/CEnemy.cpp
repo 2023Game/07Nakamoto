@@ -8,6 +8,7 @@
 #include "CDebugFieldOfView.h"
 #include "Maths.h"
 #include "CField.h"
+#include "CAdventurer.h"
 
 #define GRAVITY 0.0625f
 
@@ -317,13 +318,33 @@ bool CEnemy::IsLookTarget(CObjectBase* target) const
 	targetPos += offsetPos;
 	// 自分自身の座標を取得
 	selfPos += offsetPos;
-
+	
 	CHitInfo hit;
 	//フィールドとレイ判定を行い、遮蔽物が存在した場合は、ターゲットが見えない
 	if (field->CollisionRay(selfPos, targetPos, &hit)) return false;
 
 	// ターゲットとの間に遮蔽物がないので、ターゲットが見えている
 	return true;
+}
+
+// プレイヤーを攻撃するか確認
+bool CEnemy::CheckAttackPlayer()
+{
+	CAdventurer* adventurer = CAdventurer::Instance();
+
+	// プレイヤーが死亡していたら、追跡対象としない
+	if (adventurer->IsDeath()) return false;
+
+	// プレイヤーが視界範囲に入ったら追跡状態にする
+	if (IsFoundTarget(adventurer))
+	{
+		// 戦闘相手（キャラクター）を設定
+		mpBattleTarget = adventurer;
+		ChangeState(EState::eChase);
+		return true;
+	}
+
+	return false;
 }
 
 // 状態切り替え
@@ -349,7 +370,11 @@ void CEnemy::UpdateJoinNavGraph()
 	if (mpNearNode == nullptr)
 	{
 		mpNearNode = CNavManager::Instance()->FindNearestNode(mPosition);
-		if (mpNearNode == nullptr) return;
+	}
+
+	if (CheckAttackPlayer())
+	{
+		return;
 	}
 
 	if (MoveTo(mpNearNode->GetPos(), GetMoveSpeed()))
@@ -399,6 +424,8 @@ void CEnemy::Update()
 	case EState::eIdle:		UpdateIdle();	break;
 		// 巡回に戻る状態
 	case EState::eJoinNavGraph:	UpdateJoinNavGraph();	break;
+		// 巡回状態
+	case EState::ePatrol:	UpdatePatrol(); break;
 		// 追いかける
 	case EState::eChase:	UpdateChase();	break;
 		// プレイヤーを見失う

@@ -93,6 +93,7 @@ void CField::CreateMap()
 	if (mpMapData != nullptr)
 	{
 		SAFE_DELETE(mpMapData);
+		CNavManager::Instance()->RemoveCollider(GetWallCollider());
 		// コライダーの削除
 		SAFE_DELETE(mpDungeonCollider);
 
@@ -102,6 +103,7 @@ void CField::CreateMap()
 		for (CEntrance* entrance : mpEntranceObjects) entrance->Kill();
 		for (CDoor* door : mpDoorObjects) door->Kill();
 		for (CFloor* passegeFloor : mpPassegeObjects) passegeFloor->Kill();
+		for (CNavNode* node : mpNavNodes) node->Kill();
 
 		mpFloorObjects.clear();
 		mpWallObjects.clear();
@@ -109,6 +111,8 @@ void CField::CreateMap()
 		mpEntranceObjects.clear();
 		mpDoorObjects.clear();
 		mpPassegeObjects.clear();
+		mNavNodePositions.clear();
+		mpNavNodes.clear();
 	}
 
 	// BSP法のダンジョンデータを生成
@@ -140,6 +144,16 @@ void CField::CreateMap()
 
 	CVector pos = mpMapData->GetRoomRandomFloorPos();
 	new CEscapeArea(CVector(pos.X(), pos.Y() + 3.0f, pos.Z()), CVector::zero, CVector(0.5f, 0.5f, 0.5f));
+
+	//// 経路探索管理クラスに壁のコライダーを設定
+	//CNavManager::Instance()->AddCollider(GetWallCollider());
+
+	// 経路探索ノードを作成
+	for (CVector& pos : mNavNodePositions)
+	{
+		// 作成したノードをリストに追加
+		mpNavNodes.push_back(new CNavNode(pos));
+	}
 
 }
 
@@ -286,10 +300,10 @@ void CField::CreateDungeon(const std::vector<std::vector<CBspMap::Tile>>& map)
 					// 床のリストに追加
 					mpFloorObjects.push_back(floor);
 
-					if (map[y][x].node)
-					{
-						new CNavNode(CVector(x * TILE_SIZE, 0, y * TILE_SIZE));
-					}
+					//if (map[y][x].node)
+					//{
+					//	mNavNodePositions.push_back(CVector(x * TILE_SIZE, 0, y * TILE_SIZE));
+					//}
 					break;
 				}
 				// 壁
@@ -368,17 +382,35 @@ void CField::CreateDungeon(const std::vector<std::vector<CBspMap::Tile>>& map)
 					CVector2 pos = CvnvertDirectionPos(tile.dir);
 
 					// 出入口の生成
-					CEntrance* entrance = new CEntrance(CVector((x + pos.X()) * TILE_SIZE, 0, (y + pos.Y()) * TILE_SIZE));
+					CVector entrancePos = CVector((x + pos.X()) * TILE_SIZE, 0, (y + pos.Y()) * TILE_SIZE);
+					CEntrance* entrance = new CEntrance(entrancePos);
 					entrance->Rotation(0.0f, rotY, 0.0f);
 					// 出入口のリストに追加
 					mpEntranceObjects.push_back(entrance);
+					mNavNodePositions.push_back(entrancePos);
+
+					// TODO:出入口の隣で曲がり角が出来た時にノードが配置されないの応急処置として
+					// 方角を見て追加でノードを生成
+					switch (tile.dir)
+					{
+					case CBspMap::Direction::eNorth:
+						mNavNodePositions.push_back(CVector(entrancePos.X(),0,entrancePos.Z() - TILE_SIZE));
+						break;
+					case CBspMap::Direction::eEast:
+						mNavNodePositions.push_back(CVector(entrancePos.X() + TILE_SIZE, 0, entrancePos.Z()));
+						break;
+					case CBspMap::Direction::eSouth:
+						mNavNodePositions.push_back(CVector(entrancePos.X(), 0, entrancePos.Z() + TILE_SIZE));
+						break;
+					case CBspMap::Direction::eWest:
+						mNavNodePositions.push_back(CVector(entrancePos.X() - TILE_SIZE, 0, entrancePos.Z()));
+						break;
+					}
 
 					// 床の生成
 					CFloor* floor = new CFloor(CVector(x * TILE_SIZE, 0, y * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
 					// 床のリストに追加
 					mpPassegeObjects.push_back(floor);
-
-					//new CNavNode(floor->Position());
 
 					// 扉の生成
 					//CDoor* door = new CDoor(CVector(x  * TILE_SIZE + offSetPosX, 0, y * TILE_SIZE + offSetPosZ));
@@ -486,7 +518,7 @@ void CField::CreatePassagePillar(const std::vector<std::vector<CBspMap::Tile>>& 
 
 		if (!node)
 		{
-			new CNavNode(pillarPos);
+			mNavNodePositions.push_back(pillarPos);
 			node = true;
 		}
 	}
@@ -503,7 +535,7 @@ void CField::CreatePassagePillar(const std::vector<std::vector<CBspMap::Tile>>& 
 
 		if (!node)
 		{
-			new CNavNode(pillarPos);
+			mNavNodePositions.push_back(pillarPos);
 			node = true;
 		}
 
@@ -521,7 +553,7 @@ void CField::CreatePassagePillar(const std::vector<std::vector<CBspMap::Tile>>& 
 
 		if (!node)
 		{
-			new CNavNode(pillarPos);
+			mNavNodePositions.push_back(pillarPos);
 			node = true;
 		}
 	}
@@ -538,10 +570,34 @@ void CField::CreatePassagePillar(const std::vector<std::vector<CBspMap::Tile>>& 
 
 		if (!node)
 		{
-			new CNavNode(pillarPos);
+			mNavNodePositions.push_back(pillarPos);
 			node = true;
 		}
 	}
+}
+
+// レイとフィールドオブジェクトの衝突判定
+bool CField::CollisionRay(const CVector& start, const CVector& end, CHitInfo* hit)
+{
+	// 衝突情報保存用
+	CHitInfo tHit;
+	// 衝突したかどうかのフラグ
+	bool isHit = false;
+
+	// 床のオブジェクトとの衝突判定
+	if (CCollider::CollisionRay(GetFloorCollider(), start, end, &tHit))
+	{
+		*hit = tHit;
+		isHit = true;
+	}
+	// 壁のオブジェクトとの衝突判定
+	if (CCollider::CollisionRay(GetWallCollider(), start, end, &tHit))
+	{
+		*hit = tHit;
+		isHit = true;
+	}
+
+	return isHit;
 }
 
 // 更新

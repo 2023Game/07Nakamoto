@@ -30,6 +30,7 @@ CGameScene::CGameScene()
 CGameScene::~CGameScene()
 {
 	CInteractObjectManager::ClearInstance();
+	SAFE_DELETE(mpField);
 }
 
 //ƒV[ƒ““Ç‚İ‚İ

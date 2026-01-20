@@ -58,7 +58,7 @@ public:
 		Direction pillar = Direction::None;	// 柱を生成するかどうか 
 
 		Passage passageData;
-		bool node = false;	// ノードを設置するか
+		//bool node = false;	// ノードを設置するか
 	};
 
 	// 部屋の情報
@@ -109,6 +109,8 @@ public:
 	const SectionNode* GetRootNode()const;
 	// 通路と部屋の壁の開始座標と終了座標のリストを取得
 	std::vector<TileSegment> GetWallSegments() const;
+	// マップデータを走査して経路探索用のノードを設定
+	//void SetNavNodes();
 
 	// 部屋の壁の情報を返す
 	//std::vector<TileSegment> CBspMap::CollectWallSegments() const;
