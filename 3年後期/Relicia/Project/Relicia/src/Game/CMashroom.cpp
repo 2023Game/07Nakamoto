@@ -20,7 +20,7 @@
 #define ATTACK_COL_POS CVector(0.0f, 2.5f, 3.0f)
 #define MOVE_SPEED 20.0f
 #define CHAISE_SPEED 20.0f
-#define LOOKAT_SPEED 90.0f
+#define LOOKAT_SPEED 5.0f
 #define BATTLE_IDLE_TIME_MIN 2.0f
 #define BATTLE_IDLE_TIME_MAX 5.0f
 
