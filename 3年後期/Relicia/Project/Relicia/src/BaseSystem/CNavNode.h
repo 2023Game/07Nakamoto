@@ -84,6 +84,8 @@ public:
 
 	// ノードの種類を取得
 	ENodeType GetNodeType();
+	// 接続しているノードを取得
+	const std::vector<CNavConnectData>& GetConnects() const;
 
 	// ノードの色設定（デバッグ用）
 	void SetColor(const CColor& color);

@@ -296,19 +296,35 @@ CNavNode* CNavManager::FindNearestNode(const CVector& pos)
 	// とりあえず、最大の距離を入れておく
 	float bestDist = FLT_MAX;
 
+	// 全てのノードをチェック
 	for (CNavNode* node : mNodes)
 	{
 		if (!node->IsEnable()) continue;
 		if (node->GetNodeType() != CNavNode::ENodeType::eNode) continue;
 
+		// 距離をチェック
 		float d = (node->GetPos() - pos).LengthSqr();
-		if (d < bestDist)
-		{
-			bestDist = d;
-			nearNode = node;
-		}
+		if (d >= bestDist)	continue;
+
+		// 到達可能かをチェック
+		if (!IsReachableByRay(pos, node->GetOffsetPos())) continue;
+
+		bestDist = d;
+		nearNode = node;
 	}
 	return nearNode;
+}
+
+// 登録しているコライダーとのレイ判定
+bool CNavManager::IsReachableByRay(const CVector& start, const CVector& end)
+{
+	CHitInfo hit;
+	for (CCollider* col : mColliders)
+	{
+		if (CCollider::CollisionRay(col, start, end, &hit))
+			return false;
+	}
+	return true;
 }
 
 // 接続ノードを更新
@@ -412,7 +428,7 @@ void CNavManager::Update()
 void CNavManager::Render()
 {
 #if _DEBUG
-	// [SPACE]キーで経路探索ノードの描画モードを切り替え
+	// [N]キーで経路探索ノードの描画モードを切り替え
 	if (CDebugInput::PushKey('N'))
 	{
 		mIsRender = !mIsRender;

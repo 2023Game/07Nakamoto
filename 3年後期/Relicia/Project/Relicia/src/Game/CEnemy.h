@@ -36,6 +36,11 @@ public:
 	// 攻撃中か
 	bool IsAttacking() const override;
 
+	// ダメージを受ける
+	void TakeDamage(int damage, CObjectBase* causer) override;
+	// 死亡状態にする
+	void Death();
+
 	/// <summary>
 	/// 衝突処理
 	/// </summary>
@@ -82,6 +87,12 @@ protected:
 	bool IsLookTarget(CObjectBase* target) const;
 	// プレイヤーを攻撃するか確認
 	bool CheckAttackPlayer();
+
+	// 戦闘相手の方へ向く
+	void LookAtBattleTarget(bool immediate = false);
+
+	// 次に移動するノードを設定する
+	CNavNode* SelectNextPatrolNode();
 
 	// 状態切り替え
 	virtual void ChangeState(EState state);
@@ -134,12 +145,10 @@ protected:
 	CNavNode* mpLostPlayerNode;	// プレイヤーを見失った位置のノード
 	float mLostElapsedTime;		// 見失ってからの経過時間
 
-	// 最寄りのノード保存用
-	CNavNode* mpNearNode;
-	// 巡回ノード保存用
-	CNavNode* mpCurrentNode;
-	// 
-	std::unordered_map<CNavNode*, int> mVisitCount;
+	CNavNode* mpNearNode;		// 最寄りのノード保存用
+	CNavNode* mpCurrentNode;	// 巡回ノード保存用
+	CNavNode* mpNextNode;		// 次に移動するノード保存用
+	CNavNode* mpPrevNode;		// 戻り防止用
 
 	float mFovAngle;	// 視野範囲の角度
 	float mFovLength;	// 視野範囲の距離

@@ -67,8 +67,8 @@ public:
 
 	// 一番近いノードを取得
 	CNavNode* FindNearestNode(const CVector& pos);
-	//// 追跡用の経路を作成
-	//bool NavigateFromPosition(const CVector& from, const CVector& to, std::vector<CNavNode*>& outRoute);
+	// 登録しているコライダーとのレイ判定
+	bool IsReachableByRay(const CVector& start, const CVector& end);
 
 	// 全てのノードを更新
 	void Update() override;

@@ -20,7 +20,6 @@
 #define ATTACK_COL_POS CVector(0.0f, 2.5f, 3.0f)
 #define MOVE_SPEED 20.0f
 #define CHAISE_SPEED 20.0f
-#define LOOKAT_SPEED 5.0f
 #define BATTLE_IDLE_TIME_MIN 2.0f
 #define BATTLE_IDLE_TIME_MAX 5.0f
 
@@ -113,67 +112,6 @@ void CMashroom::AttackEnd()
 
 	// 攻撃コライダーをオフ
 	mpAttack1Col->SetEnable(false);
-}
-
-// ダメージを受ける
-void CMashroom::TakeDamage(int damage, CObjectBase* causer)
-{
-	// ベースクラスのダメージ処理を呼び出す
-	CEnemy::TakeDamage(damage, causer);
-
-	// 死亡していなければ、
-	if (!IsDeath())
-	{
-		// 仰け反り状態へ移行
-		ChangeState(EState::eHit);
-
-		// 攻撃を加えた相手を戦闘相手に設定
-		mpBattleTarget = causer;
-
-		// 攻撃を加えた相手の方向へ向く
-		LookAtBattleTarget(true);
-
-		// 戦闘状態へ切り替え
-		mIsBattle = true;
-
-		// 移動を停止
-		mMoveSpeed = CVector::zero;
-	}
-}
-
-// 死亡
-void CMashroom::Death()
-{
-	// 死亡状態に切り替え
-	ChangeState(EState::eDeath);
-}
-
-// 戦闘相手の方へ向く
-void CMashroom::LookAtBattleTarget(bool immediate)
-{
-	// 戦闘相手がいなければ、処理しない
-	if (mpBattleTarget == nullptr) return;
-
-	// 戦闘相手までの方向ベクトルを求める
-	CVector targetPos = mpBattleTarget->Position();
-	CVector vec = targetPos - Position();
-	vec.Y(0.0f);
-	vec.Normalize();
-	// すぐに戦闘相手の方向へ向く
-	if (immediate)
-	{
-		Rotation(CQuaternion::LookRotation(vec));
-	}
-	// 徐々に戦闘相手の方向へ向く
-	else
-	{
-		CVector forward = CVector::Slerp
-		(
-			VectorZ(), vec,
-			LOOKAT_SPEED * Times::DeltaTime()
-		);
-		Rotation(CQuaternion::LookRotation(forward));
-	}
 }
 
 // 移動速度を取得
@@ -305,6 +243,9 @@ void CMashroom::UpdatePatrol()
 		return;
 	}
 
+	ChangeAnimation((int)EAnimType::eWalk);
+
+	CEnemy::UpdatePatrol();
 
 }
 
@@ -417,6 +358,8 @@ void CMashroom::UpdateHeadbutt()
 // スピン攻撃時の更新処理
 void CMashroom::UpdateSpin()
 {
+	// 仮処理
+	// TODO:スピン攻撃
 	Position(CVector(Position().X(), Position().Y() + 5.0f, Position().Z()));
 	ChangeState(EState::eIdle);
 	

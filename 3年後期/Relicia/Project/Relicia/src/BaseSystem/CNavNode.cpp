@@ -5,7 +5,7 @@
 // ノードのY座標のオフセット値
 #define NODE_OFFSET_Y 5.0f
 // 探すノードの距離の限界値
-#define FIND_NODE_DISTANCE 500.0f
+#define FIND_NODE_DISTANCE 700.0f
 // ノードの位置を更新する距離
 #define UPDATE_DISTANCE 1.0f
 
@@ -319,6 +319,12 @@ bool CNavNode::IsUpdating() const
 CNavNode::ENodeType CNavNode::GetNodeType()
 {
 	return mNodeype;
+}
+
+// 接続しているノードを取得
+const std::vector<CNavConnectData>& CNavNode::GetConnects() const
+{
+	return mConnectData;
 }
 
 //void CNavNode::AddPatrolLink(CNavNode* node)

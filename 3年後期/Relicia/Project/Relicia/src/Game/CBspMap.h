@@ -52,21 +52,21 @@ public:
 	// タイルの情報
 	struct Tile
 	{
-		TileType type;	// タイルの種類
-		Direction dir;	// 向き
-		bool passage;	// 通路かどうか
+		TileType type = TileType::None;	// タイルの種類
+		Direction dir = Direction::None;	// 向き
+		bool passage = false;	// 通路かどうか
 		Direction pillar = Direction::None;	// 柱を生成するかどうか 
 
-		Passage passageData;
+		Passage passageData{};
 		//bool node = false;	// ノードを設置するか
 	};
 
 	// 部屋の情報
 	struct Room
 	{
-		int x, y;			// 部屋の左上の柱の座標
-		int width, height;	// 部屋のサイズ
-		CVector2 center;	// 部屋の中心座標
+		int x = 0, y = 0;			// 部屋の左上の柱の座標
+		int width = 0, height = 0;	// 部屋のサイズ
+		CVector2 center{ 0.0f,0.0f };	// 部屋の中心座標
 		
 		// 部屋の種類
 		enum class RoomType
@@ -85,22 +85,22 @@ public:
 	// 区画ノード
 	struct SectionNode
 	{
-		int x, y;			// 区画の左上座標
-		int width, height;	// 区画サイズ
+		int x = 0, y = 0;			// 区画の左上座標
+		int width = 0, height = 0;	// 区画サイズ
 
-		SectionNode* left;	// 左（または上）子ノード
-		SectionNode* right;	// 右（または下）子ノード
+		SectionNode* left = nullptr;	// 左（または上）子ノード
+		SectionNode* right = nullptr;	// 右（または下）子ノード
 
-		Room room; // 部屋データ
+		Room room{}; // 部屋データ
 	};
 
 	// 壁の線分情報を格納する構造体
 	struct TileSegment
 	{
-		CVector2 start;	// 壁のスタート座標
-		CVector2 end;	// 壁の終了座標
-		TileType type;	// タイルの種類
-		Direction dir;	// 向き
+		CVector2 start{ 0.0f,0.0f };	// 壁のスタート座標
+		CVector2 end{ 0.0f,0.0f };	// 壁の終了座標
+		TileType type = TileType::None;	// タイルの種類
+		Direction dir = Direction::None;	// 向き
 	};
 
 	// BSPマップデータの取得

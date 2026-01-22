@@ -63,8 +63,10 @@ std::vector<CBspMap::TileSegment> CBspMap::GetWallSegments() const
     std::vector<CBspMap::TileSegment> walls;
 
     // 横方向の走査
-    for (int y = 0; y < mMapData.size(); ++y)
+    for (size_t y = 0; y < mMapData.size(); ++y)
     {
+        int iy = static_cast<int>(y);
+
         int xStart = -1;
         CBspMap::Direction dir = CBspMap::Direction::None;
 
@@ -73,6 +75,8 @@ std::vector<CBspMap::TileSegment> CBspMap::GetWallSegments() const
 
         for (int x = 0; x < mMapData[y].size(); ++x)
         {
+            int ix = static_cast<int>(x);
+
             //// 横方向の通路かどうか
             //bool isPassage = mMapData[y][x].passage &&
             //    mMapData[y][x].passageData.dir == Direction::eEast;
@@ -95,70 +99,78 @@ std::vector<CBspMap::TileSegment> CBspMap::GetWallSegments() const
             //}
 
             // 上下の部屋の壁かどうか
-            bool isWall = ((mMapData[y][x].dir == Direction::eNorth ||
-                mMapData[y][x].dir == Direction::eSouth) &&
-                mMapData[y][x].type == TileType::eWall);
+            bool isWall = ((mMapData[iy][ix].dir == Direction::eNorth ||
+                mMapData[iy][ix].dir == Direction::eSouth) &&
+                mMapData[iy][ix].type == TileType::eWall);
 
             // 始めの壁だったら
             if (isWall && xStart == -1)
             {
-                xStart = (int)x;
-                dir = mMapData[y][x].dir;
+                xStart = static_cast<int>(ix);
+                dir = mMapData[iy][ix].dir;
             }
-            else if (!isWall && xStart != -1)
+            else if (!isWall && xStart != -1 & & ix > 0)
             {
-                if (mMapData[y][x - 1].dir == Direction::eNorth)
+                if (mMapData[iy][ix - 1].dir == Direction::eNorth)
                 {
                     walls.push_back({
-                        CVector2((float)xStart, (float)y + 1),
-                        CVector2((float)x,   (float)y + 1),
+                        CVector2(static_cast<float>(xStart), static_cast<float>(iy) + 1.0f),
+                        CVector2(static_cast<float>(ix),static_cast<float>(iy + 1)),
                         TileType::eWall, dir });
                 }
-                else if (mMapData[y][x - 1].dir == Direction::eSouth)
+                else if (mMapData[y][ix - 1].dir == Direction::eSouth)
                 {
                     walls.push_back({
-                        CVector2((float)xStart, (float)y - 1),
-                        CVector2((float)x,   (float)y - 1),
+                        CVector2(static_cast<float>(xStart), static_cast<float>(iy) - 1.0f),
+                        CVector2(static_cast<float>(ix),   static_cast<float>(iy) - 1.0f),
                         TileType::eWall, dir });
                 }
                 xStart = -1;
             }
 
             // 通路の北方向に壁があるか
-            bool upWall = mMapData[y][x].passage && !mMapData[y - 1][x].passage &&
-                (mMapData[y - 1][x].type != TileType::eFloor);
+            bool upWall = 
+                iy > 0 &&
+                mMapData[iy][ix].passage && 
+                !mMapData[iy - 1][ix].passage &&
+                (mMapData[iy - 1][ix].type != TileType::eFloor);
 
             // 北方向の壁の開始位置かどうか
             if (upWall && startUpWallX == -1)
             {
-                startUpWallX = x;
+                startUpWallX = ix;
             }
             // 北方向の壁の終了位置かどうか
             else if (!upWall && startUpWallX != -1)
             {
                 // 通路の壁のコライダー情報を登録
                 walls.push_back({
-                    CVector2(startUpWallX,y), CVector2(x,y),
+                    CVector2(static_cast<float>(startUpWallX),static_cast<float>(iy)), 
+                    CVector2(static_cast<float>(x),static_cast<float>(iy)),
                     TileType::eWall, Direction::eNorth });
 
                 startUpWallX = -1;
             }
 
             // 通路の南方向に壁があるか
-            bool downWall = mMapData[y][x].passage && !mMapData[y + 1][x].passage &&
-                (mMapData[y + 1][x].type != TileType::eFloor);
+            bool downWall = 
+                iy + 1 < mMapData.size() && 
+                mMapData[iy][ix].passage &&
+                !mMapData[iy + 1][ix].passage &&
+                (mMapData[iy + 1][ix].type != TileType::eFloor);
 
             // 南方向の壁の開始位置かどうか
             if (downWall && startDownWallX == -1)
             {
-                startDownWallX = x;
+                startDownWallX = ix;
             }
             // 南方向の壁の終了位置かどうか
             else if (!downWall && startDownWallX != -1)
             {
                 // 通路の壁のコライダー情報を登録
                 walls.push_back({
-                    CVector2(startDownWallX,y), CVector2(x,y),
+                    CVector2(static_cast<float>(startDownWallX),static_cast<float>(iy)),
+                    CVector2(static_cast<float>(ix),static_cast<float>(iy)),
                     TileType::eWall, Direction::eSouth });
 
                 startDownWallX = -1;
@@ -177,12 +189,15 @@ std::vector<CBspMap::TileSegment> CBspMap::GetWallSegments() const
         //    startX = -1;
         //}
         
+        float endX = static_cast<float>(mMapData[iy].size() - 1);
+
         // 行の最後まで上の壁が続いていた場合
         if (startUpWallX != -1)
         {
             // 通路の壁のコライダー情報を登録
             walls.push_back({
-            CVector2(startUpWallX,y), CVector2((int)mMapData[y].size() - 1,y),
+            CVector2(static_cast<float>(startUpWallX),static_cast<float>(iy)), 
+            CVector2(endX,static_cast<float>(iy)),
             TileType::eWall, Direction::eNorth });
 
             startUpWallX = -1;
@@ -192,7 +207,8 @@ std::vector<CBspMap::TileSegment> CBspMap::GetWallSegments() const
         {
             // 通路の壁のコライダー情報を登録
             walls.push_back({
-            CVector2(startDownWallX,y), CVector2((int)mMapData[y].size() - 1,y),
+            CVector2(static_cast<float>(startDownWallX),static_cast<float>(iy)), 
+            CVector2(endX,static_cast<float>(iy)),
             TileType::eWall, Direction::eSouth });
 
             startDownWallX = -1;
@@ -200,16 +216,20 @@ std::vector<CBspMap::TileSegment> CBspMap::GetWallSegments() const
     }
 
     // 縦方向の走査
-    for (int x = 0; x < mMapData[0].size(); ++x)
+    for (size_t x = 0; x < mMapData[0].size(); ++x)
     {
+        int ix = static_cast<int>(x);
+
         int yStart = -1;
         CBspMap::Direction dir = CBspMap::Direction::None;
 
         int startLeftWallY = -1;
         int startRightWallY = -1;
 
-        for (int y = 0; y < mMapData.size(); ++y)
+        for (size_t y = 0; y < mMapData.size(); ++y)
         {
+            int iy = static_cast<int>(y);
+
             //// 縦方向の通路かどうか
             //bool isPassage = (mMapData[y][x].passage &&
             //    mMapData[y][x].passageData.dir == Direction::eNorth);
@@ -232,29 +252,29 @@ std::vector<CBspMap::TileSegment> CBspMap::GetWallSegments() const
             //}
 
             // 左右の部屋の壁かどうか
-            bool isWall = ((mMapData[y][x].dir == Direction::eEast ||
-                mMapData[y][x].dir == Direction::eWest) &&
-                mMapData[y][x].type == TileType::eWall);
+            bool isWall = ((mMapData[iy][ix].dir == Direction::eEast ||
+                mMapData[iy][ix].dir == Direction::eWest) &&
+                mMapData[iy][ix].type == TileType::eWall);
 
             if (isWall && yStart == -1)
             {
-                yStart = (int)y;
-                dir = mMapData[y][x].dir;
+                yStart = static_cast<int>(y);
+                dir = mMapData[iy][ix].dir;
             }
-            else if (!isWall && yStart != -1)
+            else if (!isWall && yStart != -1 && iy > 0)
             {
-                if (mMapData[y - 1][x].dir == Direction::eEast)
+                if (mMapData[iy - 1][ix].dir == Direction::eEast)
                 {
                     walls.push_back({
-                        CVector2((float)x - 1, (float)yStart),
-                        CVector2((float)x - 1, (float)y),
+                        CVector2(static_cast<float>(ix) - 1.0f, static_cast<float>(yStart)),
+                        CVector2(static_cast<float>(ix) - 1.0f, static_cast<float>(iy)),
                         TileType::eWall, dir });
                 }
-                else if (mMapData[y - 1][x].dir == Direction::eWest)
+                else if (mMapData[iy - 1][ix].dir == Direction::eWest)
                 {
                     walls.push_back({
-                        CVector2((float)x + 1, (float)yStart),
-                        CVector2((float)x + 1, (float)y),
+                        CVector2(static_cast<float>(ix) + 1.0f, static_cast<float>(yStart)),
+                        CVector2(static_cast<float>(ix) + 1.0f, static_cast<float>(iy)),
                         TileType::eWall, dir });
                 }
                 yStart = -1;
@@ -262,40 +282,49 @@ std::vector<CBspMap::TileSegment> CBspMap::GetWallSegments() const
 
 
             // 通路の西方向に壁があるか
-            bool leftWall = mMapData[y][x].passage && !mMapData[y][x - 1].passage &&
-                (mMapData[y][x - 1].type != TileType::eFloor || mMapData[y][x].type == TileType::eWall);
+            bool leftWall = 
+                ix > 0 &&
+                mMapData[iy][ix].passage &&
+                !mMapData[iy][ix - 1].passage &&
+                (mMapData[iy][ix - 1].type != TileType::eFloor || 
+                 mMapData[iy][ix].type == TileType::eWall);
 
             // 西方向の壁の開始位置かどうか
             if (leftWall && startLeftWallY == -1)
             {
-                startLeftWallY = y;
+                startLeftWallY = iy;
             }
             // 西方向の壁の終了位置かどうか
             else if (!leftWall && startLeftWallY != -1)
             {
                 // 通路の壁のコライダー情報を登録
                 walls.push_back({
-                    CVector2(x,startLeftWallY), CVector2(x,y),
+                    CVector2(static_cast<float>(ix),static_cast<float>(startLeftWallY)), 
+                    CVector2(static_cast<float>(ix),static_cast<float>(iy)),
                     TileType::eWall, Direction::eWest });
 
                 startLeftWallY = -1;
             }
 
             // 通路の東方向に壁があるか
-            bool rightWall = mMapData[y][x].passage && !mMapData[y][x + 1].passage &&
-                (mMapData[y][x + 1].type != TileType::eFloor || mMapData[y][x].type == TileType::eWall);
+            bool rightWall = 
+                ix + 1 < mMapData[iy].size() &&
+                mMapData[iy][ix].passage && 
+                !mMapData[iy][ix + 1].passage &&
+                (mMapData[iy][ix + 1].type != TileType::eFloor || mMapData[iy][ix].type == TileType::eWall);
 
             // 東方向の壁の開始位置かどうか
             if (rightWall && startRightWallY == -1)
             {
-                startRightWallY = y;
+                startRightWallY = iy;
             }
             // 東方向の壁の終了位置かどうか
             else if (!rightWall && startRightWallY != -1)
             {
                 // 通路の壁のコライダー情報を登録
                 walls.push_back({
-                    CVector2(x,startRightWallY), CVector2(x,y),
+                    CVector2(static_cast<float>(ix),static_cast<float>(startRightWallY)), 
+                    CVector2(static_cast<float>(ix),static_cast<float>(iy)),
                     TileType::eWall, Direction::eEast });
 
                 startRightWallY = -1;
@@ -313,13 +342,16 @@ std::vector<CBspMap::TileSegment> CBspMap::GetWallSegments() const
 
         //    startY = -1;
         //}
+
+        float endY = static_cast<float>(mMapData.size() - 1);
         
         // 行の最後まで左の壁が続いていた場合
         if (startLeftWallY != -1)
         {
             // 通路の壁のコライダー情報を登録
             walls.push_back({
-            CVector2(x,startLeftWallY), CVector2((int)mMapData.size() - 1,startLeftWallY),
+            CVector2(static_cast<float>(ix),static_cast<float>(startLeftWallY)), 
+            CVector2(static_cast<float>(ix), static_cast<float>(endY)),
             TileType::eWall, Direction::eWest });
 
             startLeftWallY = -1;
@@ -329,7 +361,8 @@ std::vector<CBspMap::TileSegment> CBspMap::GetWallSegments() const
         {
             // 通路の壁のコライダー情報を登録
             walls.push_back({
-            CVector2(x,startRightWallY), CVector2((int)mMapData.size() - 1,startRightWallY),
+            CVector2(static_cast<float>(ix),static_cast<float>(startRightWallY)),
+            CVector2(static_cast<float>(ix), static_cast<float>(endY)),
             TileType::eWall, Direction::eEast });
 
             startRightWallY = -1;
@@ -578,8 +611,8 @@ void CBspMap::CreateRoomFloor(SectionNode* node, std::vector<std::vector<Tile>>&
     int roomY = Math::Rand(std::min(minRoomY, maxRoomY), std::max(minRoomY, maxRoomY));
 
     // 部屋の中心座標
-    float centerX = (minRoomX + maxRoomX) / 2;
-    float centerY = (minRoomY + maxRoomY) / 2;
+    float centerX = roomX + roomWidth * 0.5f;
+    float centerY = roomY + roomHeight * 0.5f;
     CVector2 center(centerX, centerY);
 
     node->room = { roomX, roomY, roomWidth, roomHeight, center, Room::RoomType::eNormal};
@@ -590,7 +623,7 @@ void CBspMap::CreateRoomFloor(SectionNode* node, std::vector<std::vector<Tile>>&
         for (int x = roomX + 1; x < roomX + roomWidth - 1; x++)
         {
             map[y][x].type = TileType::eFloor;
-            mpRoomFloors.push_back(CVector2(x, y));
+            mpRoomFloors.push_back(CVector2(static_cast<float>(x), static_cast<float>(y)));
 
             //// もし、部屋の角だった場合、
             //if (y == roomY + 1 && x == roomX + 1 ||
@@ -688,7 +721,7 @@ CVector2 CBspMap::GetRoomRandomPos(SectionNode* node)
         int cx = Math::Rand(minX, maxX);  // ランダムに中央付近
         int cy = Math::Rand(minY, maxY);
 
-        return CVector2(cx, cy);
+        return CVector2(static_cast<float>(cx), static_cast<float>(cy));
     }
 
     // 子ノードを優先して探す
@@ -707,8 +740,8 @@ void CBspMap::CreatePassage(std::vector<std::vector<Tile>>& map, SectionNode* no
     CVector2 rightRoom = GetRoomRandomPos(nodeB);
 
     // 座標を整数で取得
-    int ax = leftRoom.X(), ay = leftRoom.Y();
-    int bx = rightRoom.X(), by = rightRoom.Y();
+    float ax = leftRoom.X(), ay = leftRoom.Y();
+    float bx = rightRoom.X(), by = rightRoom.Y();
 
     int startColX = -1, startColY = -1;
 
@@ -753,11 +786,11 @@ void CBspMap::CreatePassage(std::vector<std::vector<Tile>>& map, SectionNode* no
     };
 
     // 横方向
-    int startX = std::min(ax, bx);
-    int endX = std::max(ax, bx);
+    int startX = static_cast<int>(std::min(ax, bx));
+    int endX = static_cast<int>(std::max(ax, bx));
     // 縦方向
-    int startY = std::min(ay, by);
-    int endY = std::max(ay, by);
+    int startY = static_cast<int>(std::min(ay, by));
+    int endY = static_cast<int>(std::max(ay, by));
 
     bool pattern = Math::Rand(0, 1);
 
@@ -790,12 +823,12 @@ void CBspMap::CreatePassage(std::vector<std::vector<Tile>>& map, SectionNode* no
         // 横方向
         for (int x = startX; x <= endX; ++x)
         {
-            carve(x, ay, Direction::eEast);
+            carve(x, static_cast<int>(ay), Direction::eEast);
         }
         // 縦方向
         for (int y = startY; y <= endY; ++y)
         {
-            carve(bx, y, Direction::eNorth);
+            carve(static_cast<int>(bx), y, Direction::eNorth);
         }
     }
     // 縦→横
@@ -804,12 +837,12 @@ void CBspMap::CreatePassage(std::vector<std::vector<Tile>>& map, SectionNode* no
         // 縦方向
         for (int y = startY; y <= endY; ++y)
         {
-            carve(bx, y, Direction::eNorth);
+            carve(static_cast<int>(bx), y, Direction::eNorth);
         }
         // 横方向
         for (int x = startX; x <= endX; ++x)
         {
-            carve(x, ay, Direction::eEast);
+            carve(x, static_cast<int>(ay), Direction::eEast);
         }
     }
 

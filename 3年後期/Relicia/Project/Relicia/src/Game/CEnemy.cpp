@@ -15,6 +15,8 @@
 #define ROTATE_SPEED	6.0f	// 回転速度
 #define FOV_HEIGHT		10.0f	// 視野範囲の高さ
 
+#define LOOKAT_SPEED 5.0f	// 戦闘相手の方を向く速度
+
 #define FOV_ANGLE 45.0f		// 視野範囲の角度
 #define FOV_LENGTH 100.0f	// 視野範囲の距離
 
@@ -38,9 +40,8 @@ CEnemy::CEnemy()
 	, mLostElapsedTime(0.0f)
 	, mpNearNode(nullptr)
 	, mpCurrentNode(nullptr)
-	//, mpCurrentPatrolRoute(nullptr)
-	//, mpPatrolStartPoint(nullptr)
-	//, mNextPatrolIndex(0)
+	, mpNextNode(nullptr)
+	, mpPrevNode(nullptr)
 	, mFovAngle(FOV_ANGLE)
 	, mFovLength(FOV_LENGTH)
 {
@@ -347,6 +348,90 @@ bool CEnemy::CheckAttackPlayer()
 	return false;
 }
 
+// ダメージを受ける
+void CEnemy::TakeDamage(int damage, CObjectBase* causer)
+{	
+	// ベースクラスのダメージ処理を呼び出す
+	CCharaBase::TakeDamage(damage, causer);
+
+	// 死亡していなければ、
+	if (!IsDeath())
+	{
+		// 仰け反り状態へ移行
+		ChangeState(EState::eHit);
+
+		// 攻撃を加えた相手を戦闘相手に設定
+		mpBattleTarget = causer;
+
+		// 攻撃を加えた相手の方向へ向く
+		LookAtBattleTarget(true);
+
+		// 戦闘状態へ切り替え
+		mIsBattle = true;
+
+		// 移動を停止
+		mMoveSpeed = CVector::zero;
+	}
+
+}
+
+// 死亡状態にする
+void CEnemy::Death()
+{
+	ChangeState(EState::eDeath);
+}
+
+// 戦闘相手の方へ向く
+void CEnemy::LookAtBattleTarget(bool immediate)
+{
+	// 戦闘相手がいなければ、処理しない
+	if (mpBattleTarget == nullptr) return;
+
+	// 戦闘相手までの方向ベクトルを求める
+	CVector targetPos = mpBattleTarget->Position();
+	CVector vec = targetPos - Position();
+	vec.Y(0.0f);
+	vec.Normalize();
+	// すぐに戦闘相手の方向へ向く
+	if (immediate)
+	{
+		Rotation(CQuaternion::LookRotation(vec));
+	}
+	// 徐々に戦闘相手の方向へ向く
+	else
+	{
+		CVector forward = CVector::Slerp
+		(
+			VectorZ(), vec,
+			LOOKAT_SPEED * Times::DeltaTime()
+		);
+		Rotation(CQuaternion::LookRotation(forward));
+	}
+}
+
+// 次に移動するノードを設定する
+CNavNode* CEnemy::SelectNextPatrolNode()
+{
+	auto& connects = mpCurrentNode->GetConnects();
+
+	std::vector<CNavNode*> candidates;
+	for (auto& c : connects)
+	{
+		if (!c.enabled) continue;	// 有効であるかどうか
+		if (c.node == mpPrevNode) continue; // 直前ノードを避ける
+		candidates.push_back(c.node);
+	}
+
+	if (candidates.empty())
+	{
+		// 行き止まり → 戻る
+		return mpPrevNode;
+	}
+
+	int idx = Math::Rand(0, candidates.size() - 1);
+	return candidates[idx];
+}
+
 // 状態切り替え
 void CEnemy::ChangeState(EState state)
 {
@@ -381,13 +466,24 @@ void CEnemy::UpdateJoinNavGraph()
 	{
 		mpCurrentNode = mpNearNode;
 		mpNearNode = nullptr;
-		ChangeState(EState::eIdle());
+		ChangeState(EState::eIdle);
 	}
 }
 
 // 巡回中の更新処理
 void CEnemy::UpdatePatrol()
 {
+	if (!mpNextNode)
+	{
+		mpNextNode = SelectNextPatrolNode();
+	}
+
+	if (MoveTo(mpNextNode->GetPos(), GetMoveSpeed()))
+	{
+		mpPrevNode = mpCurrentNode;
+		mpCurrentNode = mpNextNode;
+		mpNextNode = nullptr;
+	}
 }
 
 // 追いかける時の更新処理

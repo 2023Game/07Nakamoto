@@ -67,6 +67,13 @@ private:
 	// 通路の柱を生成
 	void CreatePassagePillar(const std::vector<std::vector<CBspMap::Tile>>& map, int x, int y);
 
+	// 通路タイルの接続数を数える
+	int CountPassageConnections(const std::vector<std::vector<CBspMap::Tile>>& map, int x, int y);
+	// 曲がり角かどうかを判定
+	bool IsCorner(const std::vector<std::vector<CBspMap::Tile>>& map, int x, int y);
+	// ノード配置ルール
+	void TryAddNavNode(const std::vector<std::vector<CBspMap::Tile>>& map, int x, int y);
+
 	// フィールドのインスタンス
 	static CField* spInstance;
 

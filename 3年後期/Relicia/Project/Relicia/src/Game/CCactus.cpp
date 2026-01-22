@@ -116,39 +116,6 @@ void CCactus::AttackEnd()
 	mpAttack1Col->SetEnable(false);
 }
 
-// ダメージを受ける
-void CCactus::TakeDamage(int damage, CObjectBase* causer)
-{
-	// ベースクラスのダメージ処理を呼び出す
-	CEnemy::TakeDamage(damage, causer);
-
-	// 死亡していなければ、
-	if (!IsDeath())
-	{
-		// 仰け反り状態へ移行
-		ChangeState(EState::eHit);
-
-		// 攻撃を加えた相手を戦闘相手に設定
-		mpBattleTarget = causer;
-
-		// 攻撃を加えた相手の方向へ向く
-		LookAtBattleTarget(true);
-
-		// 戦闘状態へ切り替え
-		mIsBattle = true;
-
-		// 移動を停止
-		mMoveSpeed = CVector::zero;
-	}
-}
-
-// 死亡
-void CCactus::Death()
-{
-	// 死亡状態に切り替え
-	ChangeState(EState::eDeath);
-}
-
 // 衝突処理
 void CCactus::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
@@ -168,34 +135,6 @@ void CCactus::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			// 攻撃ヒット済みリストに登録
 			AddAttackHitObj(chara);
 		}
-	}
-}
-
-// 戦闘相手の方へ向く
-void CCactus::LookAtBattleTarget(bool immediate)
-{
-	// 戦闘相手がいなければ、処理しない
-	if (mpBattleTarget == nullptr) return;
-
-	// 戦闘相手までの方向ベクトルを求める
-	CVector targetPos = mpBattleTarget->Position();
-	CVector vec = targetPos - Position();
-	vec.Y(0.0f);
-	vec.Normalize();
-	// すぐに戦闘相手の方向へ向く
-	if (immediate)
-	{
-		Rotation(CQuaternion::LookRotation(vec));
-	}
-	// 徐々に戦闘相手の方向へ向く
-	else
-	{
-		CVector forward = CVector::Slerp
-		(
-			VectorZ(), vec,
-			LOOKAT_SPEED * Times::DeltaTime()
-		);
-		Rotation(CQuaternion::LookRotation(forward));
 	}
 }
 

@@ -18,11 +18,6 @@ public:
 	// 攻撃終了
 	void AttackEnd() override;
 
-	// ダメージを受ける
-	void TakeDamage(int damage, CObjectBase* causer) override;
-	// 死亡
-	void Death() override;
-
 	// 衝突処理
 	void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
 	// 更新
@@ -57,8 +52,6 @@ private:
 		Num
 	};
 
-	// 戦闘相手の方へ向く
-	void LookAtBattleTarget(bool immediate = false);
 	// 移動速度を取得
 	float GetMoveSpeed() const override;
 	// カプセルコライダーの半径を取得

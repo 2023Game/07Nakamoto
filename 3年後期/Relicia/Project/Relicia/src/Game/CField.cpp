@@ -389,24 +389,6 @@ void CField::CreateDungeon(const std::vector<std::vector<CBspMap::Tile>>& map)
 					mpEntranceObjects.push_back(entrance);
 					mNavNodePositions.push_back(entrancePos);
 
-					// TODO:出入口の隣で曲がり角が出来た時にノードが配置されないの応急処置として
-					// 方角を見て追加でノードを生成
-					switch (tile.dir)
-					{
-					case CBspMap::Direction::eNorth:
-						mNavNodePositions.push_back(CVector(entrancePos.X(),0,entrancePos.Z() - TILE_SIZE));
-						break;
-					case CBspMap::Direction::eEast:
-						mNavNodePositions.push_back(CVector(entrancePos.X() + TILE_SIZE, 0, entrancePos.Z()));
-						break;
-					case CBspMap::Direction::eSouth:
-						mNavNodePositions.push_back(CVector(entrancePos.X(), 0, entrancePos.Z() + TILE_SIZE));
-						break;
-					case CBspMap::Direction::eWest:
-						mNavNodePositions.push_back(CVector(entrancePos.X() - TILE_SIZE, 0, entrancePos.Z()));
-						break;
-					}
-
 					// 床の生成
 					CFloor* floor = new CFloor(CVector(x * TILE_SIZE, 0, y * TILE_SIZE));	// コライダーが出来次第Y座標は0に変更
 					// 床のリストに追加
@@ -436,8 +418,10 @@ void CField::CreateDungeon(const std::vector<std::vector<CBspMap::Tile>>& map)
 			{
 				// 通路の壁を生成
 				CreatePassageWall(map, x, y);
-
+				// 通路の柱を生成
 				CreatePassagePillar(map, x, y);
+				// 経路探索ノードを生成
+				TryAddNavNode(map, x, y);
 			}
 		}
 	}
@@ -503,7 +487,7 @@ void CField::CreatePassagePillar(const std::vector<std::vector<CBspMap::Tile>>& 
 	// オフセットポジション格納用
 	CVector offSetPos = CVector::zero;
 
-	bool node = false;
+	//bool node = false;
 
 	// 北東(右上)に柱を生成するか
 	if (map[y - 1][x].passage && map[y][x + 1].passage && !map[y - 1][x + 1].passage &&
@@ -516,11 +500,11 @@ void CField::CreatePassagePillar(const std::vector<std::vector<CBspMap::Tile>>& 
 		// 柱のリストに追加
 		mpPillarObjects.push_back(pillar);
 
-		if (!node)
-		{
-			mNavNodePositions.push_back(pillarPos);
-			node = true;
-		}
+		//if (!node)
+		//{
+		//	mNavNodePositions.push_back(pillarPos);
+		//	node = true;
+		//}
 	}
 	// 南東(右下)に柱を生成するか
 	if (map[y + 1][x].passage && map[y][x + 1].passage && !map[y + 1][x + 1].passage &&
@@ -533,11 +517,11 @@ void CField::CreatePassagePillar(const std::vector<std::vector<CBspMap::Tile>>& 
 		// 柱のリストに追加
 		mpPillarObjects.push_back(pillar);
 
-		if (!node)
-		{
-			mNavNodePositions.push_back(pillarPos);
-			node = true;
-		}
+		//if (!node)
+		//{
+		//	mNavNodePositions.push_back(pillarPos);
+		//	node = true;
+		//}
 
 	}
 	// 北西(左上)に柱を生成するか
@@ -551,11 +535,11 @@ void CField::CreatePassagePillar(const std::vector<std::vector<CBspMap::Tile>>& 
 		// 柱のリストに追加
 		mpPillarObjects.push_back(pillar);
 
-		if (!node)
-		{
-			mNavNodePositions.push_back(pillarPos);
-			node = true;
-		}
+		//if (!node)
+		//{
+		//	mNavNodePositions.push_back(pillarPos);
+		//	node = true;
+		//}
 	}
 	// 南西(左下)に柱を生成するか
 	if (map[y + 1][x].passage && map[y][x - 1].passage && !map[y + 1][x - 1].passage &&
@@ -568,11 +552,52 @@ void CField::CreatePassagePillar(const std::vector<std::vector<CBspMap::Tile>>& 
 		// 柱のリストに追加
 		mpPillarObjects.push_back(pillar);
 
-		if (!node)
-		{
-			mNavNodePositions.push_back(pillarPos);
-			node = true;
-		}
+		//if (!node)
+		//{
+		//	mNavNodePositions.push_back(pillarPos);
+		//	node = true;
+		//}
+	}
+}
+
+// 通路タイルの接続数を数える
+int CField::CountPassageConnections(const std::vector<std::vector<CBspMap::Tile>>& map, int x, int y)
+{
+	int count = 0;
+
+	if (y > 0 && map[y - 1][x].passage) count++;
+	if (y + 1 < map.size() && map[y + 1][x].passage) count++;
+	if (x > 0 && map[y][x - 1].passage) count++;
+	if (x + 1 < map[y].size() && map[y][x + 1].passage) count++;
+
+	return count;
+}
+
+// 曲がり角かどうかを判定
+bool CField::IsCorner(const std::vector<std::vector<CBspMap::Tile>>& map, int x, int y)
+{
+	bool up = y > 0 && map[y - 1][x].passage;
+	bool down = y + 1 < map.size() && map[y + 1][x].passage;
+	bool left = x > 0 && map[y][x - 1].passage;
+	bool right = x + 1 < map[y].size() && map[y][x + 1].passage;
+
+	// L字判定
+	return (up && right) || (right && down) || (down && left) || (left && up);
+}
+
+// ノード配置ルール
+void CField::TryAddNavNode(const std::vector<std::vector<CBspMap::Tile>>& map, int x, int y)
+{
+	if (!map[y][x].passage) return;
+
+	int connections = CountPassageConnections(map, x, y);
+
+	// 分岐・行き止まり・曲がり角
+	if (connections != 2 || IsCorner(map, x, y))
+	{
+		mNavNodePositions.push_back(
+			CVector(x * TILE_SIZE, 0, y * TILE_SIZE)
+		);
 	}
 }
 
