@@ -15,6 +15,7 @@
 #include "CBspMapCollider.h"
 #include "CCrystalObj.h"
 #include "CItemObj.h"
+#include "CItemManager.h"
 #include "CEscapeArea.h"
 
 #include "CNavManager.h"
@@ -37,6 +38,7 @@ CField::CField()
 	, mEffectAnimData(1, 11, true, 11, 0.03f)
 	, mpMapData(nullptr)
 	, mpDungeonCollider(nullptr)
+	, mpEscapeArea(nullptr)
 {
 	spInstance = this;
 
@@ -103,6 +105,10 @@ void CField::CreateMap()
 		for (CEntrance* entrance : mpEntranceObjects) entrance->Kill();
 		for (CDoor* door : mpDoorObjects) door->Kill();
 		for (CFloor* passegeFloor : mpPassegeObjects) passegeFloor->Kill();
+		//for (CCrystalObj* crystal : mpCrystals) crystal->Kill();
+		
+		CItemManager::Instance()->AllRemoveItems();
+		//for (CItemObj* item : mpItemObjs) item->Kill();
 		for (CNavNode* node : mpNavNodes) node->Kill();
 
 		mpFloorObjects.clear();
@@ -111,6 +117,8 @@ void CField::CreateMap()
 		mpEntranceObjects.clear();
 		mpDoorObjects.clear();
 		mpPassegeObjects.clear();
+		//mpCrystals.clear();
+		//mpItemObjs.clear();
 		mNavNodePositions.clear();
 		mpNavNodes.clear();
 	}
@@ -123,30 +131,29 @@ void CField::CreateMap()
 	// ダンジョンのコライダーの生成
 	mpDungeonCollider = new CBspMapCollider(mpMapData, SECTION_SIZE_X, SECTION_SIZE_Y);
 
-	// 属性クリスタルを生成
-	CCrystalObj* crystal = new CCrystalObj(ElementType::Fire, mpMapData->GetRoomRandomFloorPos());
-	crystal = new CCrystalObj(ElementType::Fire, mpMapData->GetRoomRandomFloorPos());
-	crystal = new CCrystalObj(ElementType::Water, mpMapData->GetRoomRandomFloorPos());
-	crystal = new CCrystalObj(ElementType::Water, mpMapData->GetRoomRandomFloorPos());
-	crystal = new CCrystalObj(ElementType::Thunder, mpMapData->GetRoomRandomFloorPos());
-	crystal = new CCrystalObj(ElementType::Thunder, mpMapData->GetRoomRandomFloorPos());
-	crystal = new CCrystalObj(ElementType::Wind, mpMapData->GetRoomRandomFloorPos());
-	crystal = new CCrystalObj(ElementType::Wind, mpMapData->GetRoomRandomFloorPos());
+	//// 属性クリスタルを生成
+	//for (int i = 0; i < 4; ++i)
+	//{
+	//	mpCrystals.push_back(new CCrystalObj(ElementType::Fire, mpMapData->GetRoomRandomFloorPos()));
+	//	mpCrystals.push_back(new CCrystalObj(ElementType::Thunder, mpMapData->GetRoomRandomFloorPos()));
+	//	mpCrystals.push_back(new CCrystalObj(ElementType::Water, mpMapData->GetRoomRandomFloorPos()));
+	//	mpCrystals.push_back(new CCrystalObj(ElementType::Wind, mpMapData->GetRoomRandomFloorPos()));
+	//}
 
-	CItemObj* obj = new CItemObj(ItemId::Key, mpMapData->GetRoomRandomFloorPos());
-	obj = new CItemObj(ItemId::Key, mpMapData->GetRoomRandomFloorPos());
-	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomRandomFloorPos());
-	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomRandomFloorPos());
-	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomRandomFloorPos());
-	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomRandomFloorPos());
-	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomRandomFloorPos());
-	obj = new CItemObj(ItemId::HealingPotion, mpMapData->GetRoomRandomFloorPos());
+	// アイテムの生成
+	CItemManager::Instance()->SpawnItems();
 
 	CVector pos = mpMapData->GetRoomRandomFloorPos();
-	new CEscapeArea(CVector(pos.X(), pos.Y() + 3.0f, pos.Z()), CVector::zero, CVector(0.5f, 0.5f, 0.5f));
 
-	//// 経路探索管理クラスに壁のコライダーを設定
-	//CNavManager::Instance()->AddCollider(GetWallCollider());
+	if (!mpEscapeArea)
+	{
+		CVector pos = mpMapData->GetRoomRandomFloorPos();
+		mpEscapeArea = new CEscapeArea(CVector(pos.X(), pos.Y() + 3.0f, pos.Z()), CVector::zero, CVector(0.5f, 0.5f, 0.5f));
+	}
+	else
+	{
+		mpEscapeArea->Position(pos.X(), pos.Y() + 3.0f, pos.Z());
+	}
 
 	// 経路探索ノードを作成
 	for (CVector& pos : mNavNodePositions)
@@ -300,10 +307,6 @@ void CField::CreateDungeon(const std::vector<std::vector<CBspMap::Tile>>& map)
 					// 床のリストに追加
 					mpFloorObjects.push_back(floor);
 
-					//if (map[y][x].node)
-					//{
-					//	mNavNodePositions.push_back(CVector(x * TILE_SIZE, 0, y * TILE_SIZE));
-					//}
 					break;
 				}
 				// 壁
@@ -387,6 +390,7 @@ void CField::CreateDungeon(const std::vector<std::vector<CBspMap::Tile>>& map)
 					entrance->Rotation(0.0f, rotY, 0.0f);
 					// 出入口のリストに追加
 					mpEntranceObjects.push_back(entrance);
+
 					mNavNodePositions.push_back(entrancePos);
 
 					// 床の生成
@@ -499,12 +503,6 @@ void CField::CreatePassagePillar(const std::vector<std::vector<CBspMap::Tile>>& 
 		CPillar* pillar = new CPillar(pillarPos + offSetPos);
 		// 柱のリストに追加
 		mpPillarObjects.push_back(pillar);
-
-		//if (!node)
-		//{
-		//	mNavNodePositions.push_back(pillarPos);
-		//	node = true;
-		//}
 	}
 	// 南東(右下)に柱を生成するか
 	if (map[y + 1][x].passage && map[y][x + 1].passage && !map[y + 1][x + 1].passage &&
@@ -516,12 +514,6 @@ void CField::CreatePassagePillar(const std::vector<std::vector<CBspMap::Tile>>& 
 		CPillar* pillar = new CPillar(pillarPos + offSetPos);
 		// 柱のリストに追加
 		mpPillarObjects.push_back(pillar);
-
-		//if (!node)
-		//{
-		//	mNavNodePositions.push_back(pillarPos);
-		//	node = true;
-		//}
 
 	}
 	// 北西(左上)に柱を生成するか
@@ -535,11 +527,6 @@ void CField::CreatePassagePillar(const std::vector<std::vector<CBspMap::Tile>>& 
 		// 柱のリストに追加
 		mpPillarObjects.push_back(pillar);
 
-		//if (!node)
-		//{
-		//	mNavNodePositions.push_back(pillarPos);
-		//	node = true;
-		//}
 	}
 	// 南西(左下)に柱を生成するか
 	if (map[y + 1][x].passage && map[y][x - 1].passage && !map[y + 1][x - 1].passage &&
@@ -552,11 +539,6 @@ void CField::CreatePassagePillar(const std::vector<std::vector<CBspMap::Tile>>& 
 		// 柱のリストに追加
 		mpPillarObjects.push_back(pillar);
 
-		//if (!node)
-		//{
-		//	mNavNodePositions.push_back(pillarPos);
-		//	node = true;
-		//}
 	}
 }
 
@@ -588,13 +570,16 @@ bool CField::IsCorner(const std::vector<std::vector<CBspMap::Tile>>& map, int x,
 // ノード配置ルール
 void CField::TryAddNavNode(const std::vector<std::vector<CBspMap::Tile>>& map, int x, int y)
 {
+	// 通路でなければスルー
 	if (!map[y][x].passage) return;
 
+	// 通路タイルの接続数を数える
 	int connections = CountPassageConnections(map, x, y);
 
-	// 分岐・行き止まり・曲がり角
-	if (connections != 2 || IsCorner(map, x, y))
+	// 分岐・行き止まり・曲がり角の場合
+	if (connections > 2 || IsCorner(map, x, y))
 	{
+		// 経路探索ノードを生成
 		mNavNodePositions.push_back(
 			CVector(x * TILE_SIZE, 0, y * TILE_SIZE)
 		);
@@ -628,7 +613,6 @@ bool CField::CollisionRay(const CVector& start, const CVector& end, CHitInfo* hi
 // 更新
 void CField::Update()
 {
-
 #if _DEBUG
 	if (CDebugInput::PushKey('B'))
 	{
@@ -672,5 +656,4 @@ void CField::Render()
 	{
 		passegeFloor->Render();
 	}
-
 }

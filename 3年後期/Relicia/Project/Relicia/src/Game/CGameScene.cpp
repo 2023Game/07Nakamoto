@@ -23,6 +23,7 @@
 CGameScene::CGameScene()
 	: CSceneBase(EScene::eGame)
 	, mpGameMenu(nullptr)
+	, mpNavManager(nullptr)
 {
 }
 
@@ -31,6 +32,11 @@ CGameScene::~CGameScene()
 {
 	CInteractObjectManager::ClearInstance();
 	SAFE_DELETE(mpField);
+	SAFE_DELETE(mpNavManager);
+	
+	for (CEnemy* enemy : mpEnemys) enemy->Kill();
+
+	mpEnemys.clear();
 }
 
 //シーン読み込み
@@ -82,7 +88,7 @@ void CGameScene::Load()
 	new CInteractObjectManager();
 
 	// 経路探索管理クラスを生成
-	new CNavManager();
+	mpNavManager = new CNavManager();
 
 	// ダンジョンの作成
 	mpField = new CField();
@@ -102,13 +108,8 @@ void CGameScene::Load()
 	player->Scale(1.0f, 1.0f, 1.0f);
 	player->Position(mpField->GetMapData()->GetRoomRandomFloorPos());
 
-	// サボテンの敵を作成
-	CCactus* cactus = new CCactus();
-	cactus->Position(mpField->GetMapData()->GetRoomRandomFloorPos());
-
-	// キノコの敵を作成
-	CMashroom* mashroom = new CMashroom();
-	mashroom->Position(mpField->GetMapData()->GetRoomRandomFloorPos());
+	// 敵の生成
+	CreateEnemys();
 
 	// 動かせる箱の作成
 	CCrate* crate = new CCrate(mpField->GetMapData()->GetRoomRandomFloorPos());
@@ -137,6 +138,27 @@ void CGameScene::Load()
 
 	// ゲームメニューを作成
 	mpGameMenu = new CGameMenu();
+}
+
+// 敵を生成
+void CGameScene::CreateEnemys()
+{
+	// 初期化
+	for (CEnemy* enemy : mpEnemys) enemy->Kill();
+
+	mpEnemys.clear();
+
+	// サボテンの敵を作成
+	CCactus* cactus = new CCactus();
+	cactus->Position(mpField->GetMapData()->GetRoomRandomFloorPos());
+	cactus->InitNav();
+	mpEnemys.push_back(cactus);
+
+	// キノコの敵を作成
+	CMashroom* mashroom = new CMashroom();
+	mashroom->Position(mpField->GetMapData()->GetRoomRandomFloorPos());
+	mashroom->InitNav();
+	mpEnemys.push_back(mashroom);
 }
 
 //シーンの更新処理
@@ -179,7 +201,10 @@ void CGameScene::Update()
 #if _DEBUG
 	if (CDebugInput::PushKey('B'))
 	{
+		// プレイヤーの座標を再設定
 		CAdventurer::Instance()->Position(mpField->GetMapData()->GetRoomRandomFloorPos());
+		// 敵の生成
+		CreateEnemys();
 	}
 #endif
 }

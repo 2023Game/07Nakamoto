@@ -9,7 +9,11 @@ class CWall;
 class CPillar;
 class CEntrance;
 class CDoor;
+class CCrystalObj;
+class CItemObj;
+class CColliderMesh;
 class CBspMapCollider;
+class CEscapeArea;
 
 class CField : public CObjectBase
 {
@@ -92,8 +96,12 @@ private:
 	std::vector<CEntrance*> mpEntranceObjects;	// 出入口のリスト
 	std::vector<CDoor*> mpDoorObjects;		// 扉のリスト
 	std::vector<CFloor*> mpPassegeObjects;	// 通路の床リスト
+	//std::vector<CCrystalObj*> mpCrystals;	// クリスタルのリスト
+	//std::vector<CItemObj*> mpItemObjs;		// アイテムのリスト
 	std::vector<CVector> mNavNodePositions;	// NavNodeを配置する座標のリスト
 	std::vector<CNavNode*> mpNavNodes;		// NavNodeリスト
+
+	CEscapeArea* mpEscapeArea;	// 脱出エリア
 
 	// コライダーのポインタ
 	CBspMapCollider* mpDungeonCollider;

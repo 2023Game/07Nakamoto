@@ -109,7 +109,7 @@ std::vector<CBspMap::TileSegment> CBspMap::GetWallSegments() const
                 xStart = static_cast<int>(ix);
                 dir = mMapData[iy][ix].dir;
             }
-            else if (!isWall && xStart != -1 & & ix > 0)
+            else if (!isWall && xStart != -1 && ix > 0)
             {
                 if (mMapData[iy][ix - 1].dir == Direction::eNorth)
                 {

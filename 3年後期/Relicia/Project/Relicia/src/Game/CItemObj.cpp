@@ -3,6 +3,7 @@
 #include "CInventory.h"
 #include "CImage3D.h"
 #include "Maths.h"
+#include "CItemManager.h"
 
 //#define INTERACT_TEXT_PATH "UI\\Interact\\pickup.png"
 #define WORLD_UNIT_PER_PIXEL 80.0f
@@ -62,6 +63,8 @@ CItemObj::CItemObj(ItemId type, CVector pos)
 	mpItemImage->Rotation(0.0f, 0.0f, angleZ);
 
 	Position(pos);
+
+	CItemManager::Instance()->AddItem(this);
 }
 
 // デストラクタ
@@ -128,6 +131,8 @@ void CItemObj::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			CInventory::Instance()->AddItem(mItemType, 1);
 
 			Kill();
+
+			CItemManager::Instance()->RemoveItem(this);
 		}
 	}
 }

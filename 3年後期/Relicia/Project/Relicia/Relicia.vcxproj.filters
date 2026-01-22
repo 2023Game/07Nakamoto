@@ -454,9 +454,6 @@
     <ClCompile Include="src\Game\CrystalData.cpp">
       <Filter>ソース ファイル\Game\Item\Crystal</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CItemManager.cpp">
-      <Filter>ソース ファイル\Game\Item\Crystal\Object</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CCrystalObj.cpp">
       <Filter>ソース ファイル\Game\Item\Crystal\Object</Filter>
     </ClCompile>
@@ -501,6 +498,12 @@
     </ClCompile>
     <ClCompile Include="src\Game\CEnemyManager.cpp">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CItemManager.cpp">
+      <Filter>ソース ファイル\Game\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CCrystalManager.cpp">
+      <Filter>ソース ファイル\Game\Item\Crystal\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -861,9 +864,6 @@
     <ClInclude Include="src\Game\CrystalData.h">
       <Filter>ソース ファイル\Game\Item\Crystal</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CItemManager.h">
-      <Filter>ソース ファイル\Game\Item\Crystal\Object</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\CCrystalObj.h">
       <Filter>ソース ファイル\Game\Item\Crystal\Object</Filter>
     </ClInclude>
@@ -908,6 +908,12 @@
     </ClInclude>
     <ClInclude Include="src\Game\CEnemyManager.h">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CItemManager.h">
+      <Filter>ソース ファイル\Game\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CCrystalManager.h">
+      <Filter>ソース ファイル\Game\Item\Crystal\Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

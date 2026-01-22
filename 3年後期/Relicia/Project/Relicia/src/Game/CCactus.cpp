@@ -509,7 +509,6 @@ void CCactus::UpdateDeath()
 // 更新
 void CCactus::Update()
 {
-
 	// 敵のベースクラスの更新
 	CEnemy::Update();
 

@@ -80,6 +80,7 @@
     <ClCompile Include="src\Game\CBspMapCollider.cpp" />
     <ClCompile Include="src\Game\CBullet.cpp" />
     <ClCompile Include="src\Game\CCrate.cpp" />
+    <ClCompile Include="src\Game\CCrystalManager.cpp" />
     <ClCompile Include="src\Game\CDebugFieldOfView.cpp" />
     <ClCompile Include="src\Game\CEnemyManager.cpp" />
     <ClCompile Include="src\Game\CEscapeArea.cpp" />
@@ -218,6 +219,7 @@
     <ClInclude Include="src\Game\CBspMapCollider.h" />
     <ClInclude Include="src\Game\CBullet.h" />
     <ClInclude Include="src\Game\CCrate.h" />
+    <ClInclude Include="src\Game\CCrystalManager.h" />
     <ClInclude Include="src\Game\CDebugFieldOfView.h" />
     <ClInclude Include="src\Game\CEnemyManager.h" />
     <ClInclude Include="src\Game\CEscapeArea.h" />

@@ -30,6 +30,8 @@ public:
 	// デストラクタ
 	virtual ~CEnemy();
 
+	// 持っているノードの初期化
+	void InitNav();
 	// オブジェクト削除を伝える関数
 	void DeleteObject(CObjectBase* obj) override;
 
@@ -39,7 +41,7 @@ public:
 	// ダメージを受ける
 	void TakeDamage(int damage, CObjectBase* causer) override;
 	// 死亡状態にする
-	void Death();
+	void Death() override;
 
 	/// <summary>
 	/// 衝突処理

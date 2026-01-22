@@ -81,6 +81,18 @@ CEnemy::~CEnemy()
 
 }
 
+// 持っているノードの初期化
+void CEnemy::InitNav()
+{
+	mpNearNode = nullptr;
+	mpCurrentNode = nullptr;
+	mpNextNode = nullptr;
+	mpPrevNode = nullptr;
+
+	mpNearNode = CNavManager::Instance()->FindNearestNode(Position());
+	mpCurrentNode = mpNearNode;
+}
+
 // オブジェクト削除を伝える関数
 void CEnemy::DeleteObject(CObjectBase* obj)
 {
@@ -455,6 +467,7 @@ void CEnemy::UpdateJoinNavGraph()
 	if (mpNearNode == nullptr)
 	{
 		mpNearNode = CNavManager::Instance()->FindNearestNode(mPosition);
+		if (mpNearNode == nullptr) return;
 	}
 
 	if (CheckAttackPlayer())
@@ -477,8 +490,7 @@ void CEnemy::UpdatePatrol()
 	{
 		mpNextNode = SelectNextPatrolNode();
 	}
-
-	if (MoveTo(mpNextNode->GetPos(), GetMoveSpeed()))
+	else if(MoveTo(mpNextNode->GetPos(), GetMoveSpeed()))
 	{
 		mpPrevNode = mpCurrentNode;
 		mpCurrentNode = mpNextNode;

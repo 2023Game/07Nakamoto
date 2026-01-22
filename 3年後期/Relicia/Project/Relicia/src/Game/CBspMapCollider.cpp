@@ -1,6 +1,7 @@
 #include "CBspMapCollider.h"
 #include "CField.h"
 #include "CNavManager.h"
+#include "CColliderMesh.h"
 
 #define WALL_COL_OFFSET 2.0f
 
