@@ -25,10 +25,7 @@ private:
 	// “G‚ğ¶¬
 	void CreateEnemys();
 
-
-
 	CField* mpField;
-	CNavManager* mpNavManager;
 	std::vector<CEnemy*> mpEnemys;
 
 	CGameMenu* mpGameMenu;

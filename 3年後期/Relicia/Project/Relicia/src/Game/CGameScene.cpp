@@ -23,7 +23,6 @@
 CGameScene::CGameScene()
 	: CSceneBase(EScene::eGame)
 	, mpGameMenu(nullptr)
-	, mpNavManager(nullptr)
 {
 }
 
@@ -32,9 +31,14 @@ CGameScene::~CGameScene()
 {
 	CInteractObjectManager::ClearInstance();
 	SAFE_DELETE(mpField);
-	SAFE_DELETE(mpNavManager);
 	
-	for (CEnemy* enemy : mpEnemys) enemy->Kill();
+	for (CEnemy* enemy : mpEnemys)
+	{
+		if (enemy != nullptr)
+		{
+			enemy->Kill();
+		}
+	}
 
 	mpEnemys.clear();
 }
@@ -88,7 +92,7 @@ void CGameScene::Load()
 	new CInteractObjectManager();
 
 	// 経路探索管理クラスを生成
-	mpNavManager = new CNavManager();
+	new CNavManager();
 
 	// ダンジョンの作成
 	mpField = new CField();
@@ -144,8 +148,10 @@ void CGameScene::Load()
 void CGameScene::CreateEnemys()
 {
 	// 初期化
-	for (CEnemy* enemy : mpEnemys) enemy->Kill();
-
+	for (CEnemy* enemy : mpEnemys)
+	{
+		enemy->Kill();
+	}
 	mpEnemys.clear();
 
 	// サボテンの敵を作成

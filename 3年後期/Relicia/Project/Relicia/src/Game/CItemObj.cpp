@@ -74,6 +74,8 @@ CItemObj::~CItemObj()
 	SAFE_DELETE(mpItemImage);
 	// コライダーを削除
 	SAFE_DELETE(mpCollider);
+	// アイテム管理璃リストから削除
+	CItemManager::Instance()->RemoveItem(this);
 }
 
 // 調べられる状態かどうか
@@ -132,6 +134,7 @@ void CItemObj::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 
 			Kill();
 
+			// アイテム管理璃リストから削除
 			CItemManager::Instance()->RemoveItem(this);
 		}
 	}

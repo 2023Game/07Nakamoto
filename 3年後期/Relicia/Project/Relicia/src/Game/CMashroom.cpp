@@ -150,15 +150,17 @@ void CMashroom::UpdateIdle()
 	// 通常時の待機
 	if (!mIsBattle)
 	{
+		// 目的地のノードが無ければ、
 		if (!mpCurrentNode && !mpNearNode)
 		{
+			// 最寄りのノードに移動
 			ChangeState(EState::eJoinNavGraph);
 		}
-		else
+		// 巡回ノードがあれば、
+		if (mpCurrentNode == nullptr)
 		{
 			// 巡回状態に移行
 			ChangeState(EState::ePatrol);
-			//ChangeAnimation((int)EAnimType::eIdle);
 		}
 	}
 	// 戦闘時の待機

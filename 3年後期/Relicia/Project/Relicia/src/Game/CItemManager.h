@@ -21,6 +21,8 @@ public:
 	void RemoveItem(CItemObj* item);
 	// 全てのアイテムを削除する
 	void AllRemoveItems();
+	// インスタンスを破棄する
+	void Destroy();
 
 private:
 	// コンストラクタ
@@ -28,6 +30,6 @@ private:
 	// デストラクタ
 	~CItemManager();
 
-	static CItemManager* mpInstance;
-	std::vector<CItemObj*> mpItemObjs;	// アイテムの配置のリスト
+	static CItemManager* spInstance;	// インスタンス
+	std::vector<CItemObj*> mpCrystalObjs;	// アイテムの配置のリスト
 };

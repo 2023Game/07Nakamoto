@@ -80,6 +80,8 @@ private:
 	void UpdateIdle() override;
 	// 最寄りのノードに移動
 	void UpdateJoinNavGraph() override;
+	// 巡回中の更新処理
+	void UpdatePatrol() override;
 	// 追いかける時の更新処理
 	void UpdateChase() override;
 	// 攻撃時の更新処理

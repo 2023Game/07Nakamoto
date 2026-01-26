@@ -327,6 +327,30 @@ bool CNavManager::IsReachableByRay(const CVector& start, const CVector& end)
 	return true;
 }
 
+// 初期化
+void CNavManager::Clear()
+{
+	// 更新中ノードをリセット
+	mpUpdateNode = nullptr;
+	mNextFindNodeIndex = -1;
+
+	// 更新待ちリストをクリア
+	mUpdateConnectNodes.clear();
+
+	// 経路データクリア
+	mLastCalcRoute.clear();
+
+	// コライダー参照をクリア（超重要）
+	mColliders.clear();
+
+	// ノードを全削除
+	for (CNavNode* node : mNodes)
+	{
+		delete node;
+	}
+	mNodes.clear();
+}
+
 // 接続ノードを更新
 void CNavManager::UpdateConnectNavNode()
 {

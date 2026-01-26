@@ -70,6 +70,9 @@ public:
 	// 登録しているコライダーとのレイ判定
 	bool IsReachableByRay(const CVector& start, const CVector& end);
 
+	// 初期化
+	void Clear();
+
 	// 全てのノードを更新
 	void Update() override;
 	// 全てのノードと経路を描画

@@ -89,8 +89,8 @@ void CEnemy::InitNav()
 	mpNextNode = nullptr;
 	mpPrevNode = nullptr;
 
-	mpNearNode = CNavManager::Instance()->FindNearestNode(Position());
-	mpCurrentNode = mpNearNode;
+	//mpNearNode = CNavManager::Instance()->FindNearestNode(Position());
+	//mpCurrentNode = mpNearNode;
 }
 
 // オブジェクト削除を伝える関数

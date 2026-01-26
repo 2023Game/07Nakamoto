@@ -4,6 +4,8 @@
 #include "CCamera.h"
 #include "CResultUI.h"
 #include "CBGMManager.h"
+#include "CItemManager.h"
+#include "CCrystalManager.h"
 
 // コンストラクタ
 CResultScene::CResultScene()
@@ -46,6 +48,11 @@ void CResultScene::Update()
 		// コンティニューならば、ゲームシーンを読み込む
 		if (mpResultUI->IsContinue())
 		{
+			// アイテムマネージャーを破棄
+			CItemManager::Instance()->Destroy();
+			// クリスタルマネージャーを破棄
+			CCrystalManager::Instance()->Destroy();
+\
 			CSceneManager::Instance()->LoadScene(EScene::eGame);
 		}
 		// タイトルならば、タイトルシーンを読み込む

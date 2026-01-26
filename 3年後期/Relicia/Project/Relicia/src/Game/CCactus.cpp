@@ -191,11 +191,13 @@ void CCactus::UpdateIdle()
 	{
 		if (!mpCurrentNode && !mpNearNode)
 		{
+			// 最寄りのノードに移動
 			ChangeState(EState::eJoinNavGraph);
 		}
 		else
 		{
-			ChangeAnimation((int)EAnimType::eIdle);
+			// 巡回状態に移行
+			ChangeState(EState::ePatrol);
 		}
 	}
 	// 戦闘時の待機
@@ -270,6 +272,20 @@ void CCactus::UpdateJoinNavGraph()
 	ChangeAnimation((int)EAnimType::eWalk);
 
 	CEnemy::UpdateJoinNavGraph();
+}
+
+// 巡回中の更新処理
+void CCactus::UpdatePatrol()
+{
+	// 攻撃するキャラクターが見つかった場合は、この処理を実行しない
+	if (CheckAttackPlayer())
+	{
+		return;
+	}
+
+	ChangeAnimation((int)EAnimType::eWalk);
+
+	CEnemy::UpdatePatrol();
 }
 
 // 追いかける時の更新処理

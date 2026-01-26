@@ -2,6 +2,7 @@
 #include "CModel.h"
 #include "CColliderSphere.h"
 #include "CElementManager.h"
+#include "CCrystalManager.h"
 
 #define COLLIDER_RADIUS 10.0f
 
@@ -44,6 +45,8 @@ CCrystalObj::CCrystalObj(ElementType type, CVector pos)
 	mpCollider->SetCollisionLayers({ ELayer::ePlayer });
 	
 	Position(pos);
+
+	CCrystalManager::Instance()->AddCrystal(this);
 }
 
 // デストラクタ
@@ -58,6 +61,8 @@ CCrystalObj::~CCrystalObj()
 	SAFE_DELETE(mpMaterial);
 	// コライダーを削除
 	SAFE_DELETE(mpCollider);
+
+	CCrystalManager::Instance()->RemoveCrystal(this);
 }
 
 // 衝突処理
@@ -72,6 +77,8 @@ void CCrystalObj::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 
 			// プレイヤーの属性スロットに追加
 			CElementManager::Instance()->AddElementEnergy(mElementType);
+			// クリスタル管理リストから削除
+			CCrystalManager::Instance()->RemoveCrystal(this);
 		}
 	}
 }

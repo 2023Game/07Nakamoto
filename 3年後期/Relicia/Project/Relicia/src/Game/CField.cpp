@@ -14,6 +14,7 @@
 #include "CDebugInput.h"
 #include "CBspMapCollider.h"
 #include "CCrystalObj.h"
+#include "CCrystalManager.h"
 #include "CItemObj.h"
 #include "CItemManager.h"
 #include "CEscapeArea.h"
@@ -105,10 +106,6 @@ void CField::CreateMap()
 		for (CEntrance* entrance : mpEntranceObjects) entrance->Kill();
 		for (CDoor* door : mpDoorObjects) door->Kill();
 		for (CFloor* passegeFloor : mpPassegeObjects) passegeFloor->Kill();
-		//for (CCrystalObj* crystal : mpCrystals) crystal->Kill();
-		
-		CItemManager::Instance()->AllRemoveItems();
-		//for (CItemObj* item : mpItemObjs) item->Kill();
 		for (CNavNode* node : mpNavNodes) node->Kill();
 
 		mpFloorObjects.clear();
@@ -117,10 +114,14 @@ void CField::CreateMap()
 		mpEntranceObjects.clear();
 		mpDoorObjects.clear();
 		mpPassegeObjects.clear();
-		//mpCrystals.clear();
-		//mpItemObjs.clear();
 		mNavNodePositions.clear();
 		mpNavNodes.clear();
+
+		CItemManager::Instance()->AllRemoveItems();
+		CCrystalManager::Instance()->AllRemoveCrystals();
+
+		// ノード管理クラスをリセット
+		CNavManager::Instance()->Clear();
 	}
 
 	// BSP法のダンジョンデータを生成
@@ -131,17 +132,10 @@ void CField::CreateMap()
 	// ダンジョンのコライダーの生成
 	mpDungeonCollider = new CBspMapCollider(mpMapData, SECTION_SIZE_X, SECTION_SIZE_Y);
 
-	//// 属性クリスタルを生成
-	//for (int i = 0; i < 4; ++i)
-	//{
-	//	mpCrystals.push_back(new CCrystalObj(ElementType::Fire, mpMapData->GetRoomRandomFloorPos()));
-	//	mpCrystals.push_back(new CCrystalObj(ElementType::Thunder, mpMapData->GetRoomRandomFloorPos()));
-	//	mpCrystals.push_back(new CCrystalObj(ElementType::Water, mpMapData->GetRoomRandomFloorPos()));
-	//	mpCrystals.push_back(new CCrystalObj(ElementType::Wind, mpMapData->GetRoomRandomFloorPos()));
-	//}
-
 	// アイテムの生成
 	CItemManager::Instance()->SpawnItems();
+	// クリスタルの生成
+	CCrystalManager::Instance()->SpawnCrystals();
 
 	CVector pos = mpMapData->GetRoomRandomFloorPos();
 
