@@ -67,7 +67,10 @@ CMashroom::CMashroom()
 	);
 	// フィールドと、プレイヤーの攻撃コライダーとヒットするように設定
 	mpBodyCol->SetCollisionTags({ ETag::eField, ETag::ePlayer, ETag::eSlash });
-	mpBodyCol->SetCollisionLayers({ ELayer::eFloor, ELayer::eWall, ELayer::ePlayer, ELayer::eAttackCol });
+	mpBodyCol->SetCollisionLayers
+	(
+		{ ELayer::eFloor, ELayer::eWall, ELayer::ePlayer, ELayer::eAttackCol,ELayer::eMoveCrate }
+	);
 
 	// 攻撃コライダーを作成
 	mpAttack1Col = new CColliderSphere
@@ -76,8 +79,8 @@ CMashroom::CMashroom()
 		ATTACK_COL_RADIUS
 	);
 	// プレイヤーの本体コライダーとのみヒットするように設定
-	mpAttack1Col->SetCollisionTags({ ETag::ePlayer });
-	mpAttack1Col->SetCollisionLayers({ ELayer::ePlayer });
+	mpAttack1Col->SetCollisionTags({ ETag::ePlayer ,ETag::eField});
+	mpAttack1Col->SetCollisionLayers({ ELayer::ePlayer, ELayer::eMoveCrate });
 	// 攻撃コライダーの座標を設定
 	mpAttack1Col->Position(ATTACK_COL_POS);
 	// 攻撃コライダーを最初はオフにしておく
@@ -157,7 +160,7 @@ void CMashroom::UpdateIdle()
 			ChangeState(EState::eJoinNavGraph);
 		}
 		// 巡回ノードがあれば、
-		if (mpCurrentNode == nullptr)
+		if (mpCurrentNode != nullptr)
 		{
 			// 巡回状態に移行
 			ChangeState(EState::ePatrol);
@@ -231,6 +234,13 @@ void CMashroom::UpdateIdle()
 // 最寄りのノードに移動
 void CMashroom::UpdateJoinNavGraph()
 {
+	// 進路を塞いでいるオブジェクトを攻撃するか
+	if (TryAttackBlockingObj())
+	{
+		mAttackIndex = (int)EAttackID::eHeadbutt;
+		return;
+	}
+
 	ChangeAnimation((int)EAnimType::eWalk);
 
 	CEnemy::UpdateJoinNavGraph();
@@ -239,9 +249,10 @@ void CMashroom::UpdateJoinNavGraph()
 // 巡回中の更新処理
 void CMashroom::UpdatePatrol()
 {
-	// 攻撃するキャラクターが見つかった場合は、この処理を実行しない
-	if (CheckAttackPlayer())
+	// 進路を塞いでいるオブジェクトを攻撃するか
+	if (TryAttackBlockingObj())
 	{
+		mAttackIndex = (int)EAttackID::eHeadbutt;
 		return;
 	}
 
@@ -254,6 +265,13 @@ void CMashroom::UpdatePatrol()
 // 追いかける時の更新処理
 void CMashroom::UpdateChase()
 {
+	// 進路を塞いでいるオブジェクトを攻撃するか
+	if (TryAttackBlockingObj())
+	{
+		mAttackIndex = (int)EAttackID::eHeadbutt;
+		return;
+	}
+
 	mMoveSpeed = CVector::zero;
 
 	// 現在地と目的地を取得
@@ -351,6 +369,7 @@ void CMashroom::UpdateHeadbutt()
 		// アニメーション終了したら、待機状態へ戻す
 		if (IsAnimationFinished())
 		{
+			mAttackIndex = (int)EAttackID::None;
 			ChangeState(EState::eIdle);
 		}
 		break;
@@ -364,6 +383,7 @@ void CMashroom::UpdateSpin()
 	// TODO:スピン攻撃
 	Position(CVector(Position().X(), Position().Y() + 5.0f, Position().Z()));
 	ChangeState(EState::eIdle);
+	mAttackIndex = (int)EAttackID::None;
 	
 }
 
@@ -440,7 +460,7 @@ void CMashroom::Collision(CCollider* self, CCollider* other, const CHitInfo& hit
 		if (chara != nullptr && !IsAttackHitObj(chara))
 		{
 			// ダメージを与える
-			chara->TakeDamage(1, this);
+			chara->TakeDamage(5, this);
 			// 攻撃ヒット済みリストに登録
 			AddAttackHitObj(chara);
 		}

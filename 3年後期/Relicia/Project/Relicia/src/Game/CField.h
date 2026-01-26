@@ -36,6 +36,10 @@ public:
 	CColliderMesh* GetFloorCollider() const;
 	// 壁コライダーを取得
 	CColliderMesh* GetWallCollider() const;
+	// フィールドのオブジェクトのコライダーを取得
+	std::vector<CColliderMesh*> GetObjectCollider() const;
+	// フィールドのオブジェクトのコライダーを追加
+	void AddObjectCollider(CColliderMesh* col);
 
 	/// <summary>
 	/// レイとフィールドオブジェクトの衝突判定
@@ -96,10 +100,10 @@ private:
 	std::vector<CEntrance*> mpEntranceObjects;	// 出入口のリスト
 	std::vector<CDoor*> mpDoorObjects;		// 扉のリスト
 	std::vector<CFloor*> mpPassegeObjects;	// 通路の床リスト
-	//std::vector<CCrystalObj*> mpCrystals;	// クリスタルのリスト
-	//std::vector<CItemObj*> mpItemObjs;		// アイテムのリスト
 	std::vector<CVector> mNavNodePositions;	// NavNodeを配置する座標のリスト
 	std::vector<CNavNode*> mpNavNodes;		// NavNodeリスト
+	std::vector<CObjectBase*> mpObjects;	// 遮蔽物になるオブジェクトのリスト
+	std::vector<CColliderMesh*> mpObjectColliders;	// 遮蔽になるオブジェクトのコライダーリスト
 
 	CEscapeArea* mpEscapeArea;	// 脱出エリア
 

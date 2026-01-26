@@ -68,8 +68,13 @@ CCactus::CCactus()
 		BODY_RADIUS
 	);
 	// フィールドと、プレイヤーの攻撃コライダーとヒットするように設定
-	mpBodyCol->SetCollisionTags({ ETag::eField, ETag::ePlayer });
-	mpBodyCol->SetCollisionLayers({ ELayer::eFloor, ELayer::eWall, ELayer::ePlayer, ELayer::eAttackCol });
+	mpBodyCol->SetCollisionTags({ ETag::eField, ETag::ePlayer, ETag::eSlash });
+	mpBodyCol->SetCollisionLayers
+	(
+		{ 
+			ELayer::eFloor, ELayer::eWall, ELayer::ePlayer, ELayer::eAttackCol, ELayer::eMoveCrate
+		}
+	);
 
 	// 攻撃コライダーを作成
 	mpAttack1Col = new CColliderSphere
@@ -78,8 +83,8 @@ CCactus::CCactus()
 		ATTACK_COL_RADIUS
 	);
 	// プレイヤーの本体コライダーとのみヒットするように設定
-	mpAttack1Col->SetCollisionTags({ ETag::ePlayer });
-	mpAttack1Col->SetCollisionLayers({ ELayer::ePlayer });
+	mpAttack1Col->SetCollisionTags({ ETag::ePlayer, ETag::eField });
+	mpAttack1Col->SetCollisionLayers({ ELayer::ePlayer, ELayer::eMoveCrate });
 	// 攻撃コライダーの座標を設定
 	mpAttack1Col->Position(ATTACK_COL_POS);
 	// 攻撃コライダーを最初はオフにしておく
@@ -131,7 +136,7 @@ void CCactus::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		if (chara != nullptr && !IsAttackHitObj(chara))
 		{
 			// ダメージを与える
-			chara->TakeDamage(1, this);
+			chara->TakeDamage(10, this);
 			// 攻撃ヒット済みリストに登録
 			AddAttackHitObj(chara);
 		}
@@ -189,15 +194,21 @@ void CCactus::UpdateIdle()
 	// 通常時の待機
 	if (!mIsBattle)
 	{
-		if (!mpCurrentNode && !mpNearNode)
+		// 通常時の待機
+		if (!mIsBattle)
 		{
-			// 最寄りのノードに移動
-			ChangeState(EState::eJoinNavGraph);
-		}
-		else
-		{
-			// 巡回状態に移行
-			ChangeState(EState::ePatrol);
+			// 目的地のノードが無ければ、
+			if (!mpCurrentNode && !mpNearNode)
+			{
+				// 最寄りのノードに移動
+				ChangeState(EState::eJoinNavGraph);
+			}
+			// 巡回ノードがあれば、
+			if (mpCurrentNode != nullptr)
+			{
+				// 巡回状態に移行
+				ChangeState(EState::ePatrol);
+			}
 		}
 	}
 	// 戦闘時の待機
@@ -269,6 +280,13 @@ void CCactus::UpdateIdle()
 // 最寄りのノードに移動
 void CCactus::UpdateJoinNavGraph()
 {
+	// 進路を塞いでいるオブジェクトを攻撃するか
+	if (TryAttackBlockingObj())
+	{
+		mAttackIndex = (int)EAttackID::ePunch;
+		return;
+	}
+
 	ChangeAnimation((int)EAnimType::eWalk);
 
 	CEnemy::UpdateJoinNavGraph();
@@ -277,12 +295,13 @@ void CCactus::UpdateJoinNavGraph()
 // 巡回中の更新処理
 void CCactus::UpdatePatrol()
 {
-	// 攻撃するキャラクターが見つかった場合は、この処理を実行しない
-	if (CheckAttackPlayer())
+	// 進路を塞いでいるオブジェクトを攻撃するか
+	if (TryAttackBlockingObj())
 	{
+		mAttackIndex = (int)EAttackID::ePunch;
 		return;
 	}
-
+	
 	ChangeAnimation((int)EAnimType::eWalk);
 
 	CEnemy::UpdatePatrol();
@@ -291,6 +310,13 @@ void CCactus::UpdatePatrol()
 // 追いかける時の更新処理
 void CCactus::UpdateChase()
 {
+	// 進路を塞いでいるオブジェクトを攻撃するか
+	if (TryAttackBlockingObj())
+	{
+		mAttackIndex = (int)EAttackID::ePunch;
+		return;
+	}
+
 	mMoveSpeed = CVector::zero;
 
 	// 現在地と目的地を取得
@@ -389,6 +415,7 @@ void CCactus::UpdatePunch()
 			// アニメーション終了したら、待機状態へ戻す
 			if (IsAnimationFinished())
 			{
+				mAttackIndex = (int)EAttackID::None;
 				ChangeState(EState::eIdle);
 			}
 			break;
@@ -459,6 +486,7 @@ void CCactus::UpdateNeedle()
 			// アニメーション終了したら、待機状態へ戻す
 			if (IsAnimationFinished())
 			{
+				mAttackIndex = (int)EAttackID::None;
 				ChangeState(EState::eIdle);
 			}
 			break;

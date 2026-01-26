@@ -1,15 +1,23 @@
 #include "CCrate.h"
 #include "CColliderMesh.h"
+#include "CField.h"
 
-CCrate::CCrate(const CVector& pos)
-	: CObjectBase(ETag::eField, ETaskPriority::eBackground, 0, ETaskPauseType::eGame)
+#define MAX_HP 1
+
+CCrate::CCrate(const CVector& pos, ETag tag, ETaskPriority prio, int sortOrder, ETaskPauseType pause)
+	: CCharaBase(tag, prio, sortOrder, pause)
 	, mpModel(nullptr)
 {
 	mpModel = CResourceManager::Get<CModel>("Crate");
 
-	mpColliderMesh = new CColliderMesh(this, ELayer::eCrate, mpModel, false);
+	mpColliderMesh = new CColliderMesh(this, ELayer::eMoveCrate, mpModel, false);
 	mpColliderMesh->SetCollisionTags({ ETag::eField,ETag::ePlayer,ETag::eEnemy });
 	mpColliderMesh->SetCollisionLayers({ ELayer::eWall, ELayer::ePlayer,ELayer::eEnemy });
+
+	CField::Instance()->AddObjectCollider(mpColliderMesh);
+
+	mMaxHp = MAX_HP;
+	mHp = mMaxHp;
 
 	Position(pos);
 }
@@ -75,6 +83,10 @@ void CCrate::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 
 void CCrate::Update()
 {
+	if (mHp <= 0)
+	{
+		Kill();
+	}
 }
 
 void CCrate::Render()

@@ -10,7 +10,6 @@
 #include "CLineEffect.h"
 #include "CCactus.h"
 #include "CMashroom.h"
-#include "CCrate.h"
 #include "CElementManager.h"
 #include "CInteractObjectManager.h"
 #include "CInventory.h"
@@ -32,15 +31,15 @@ CGameScene::~CGameScene()
 	CInteractObjectManager::ClearInstance();
 	SAFE_DELETE(mpField);
 	
-	for (CEnemy* enemy : mpEnemys)
-	{
-		if (enemy != nullptr)
-		{
-			enemy->Kill();
-		}
-	}
+	//for (CEnemy* enemy : mpEnemys)
+	//{
+	//	if (enemy != nullptr)
+	//	{
+	//		enemy->Kill();
+	//	}
+	//}
 
-	mpEnemys.clear();
+	//mpEnemys.clear();
 }
 
 //シーン読み込み
@@ -115,9 +114,6 @@ void CGameScene::Load()
 	// 敵の生成
 	CreateEnemys();
 
-	// 動かせる箱の作成
-	CCrate* crate = new CCrate(mpField->GetMapData()->GetRoomRandomFloorPos());
-	crate->Scale(1.0f, 3.0f, 1.0f);
 
 	// CGameCameraのテスト
 	//CGameCamera* mainCam
@@ -148,10 +144,8 @@ void CGameScene::Load()
 void CGameScene::CreateEnemys()
 {
 	// 初期化
-	for (CEnemy* enemy : mpEnemys)
-	{
-		enemy->Kill();
-	}
+	for (CEnemy* enemy : mpEnemys) enemy->Kill();
+
 	mpEnemys.clear();
 
 	// サボテンの敵を作成
@@ -165,6 +159,7 @@ void CGameScene::CreateEnemys()
 	mashroom->Position(mpField->GetMapData()->GetRoomRandomFloorPos());
 	mashroom->InitNav();
 	mpEnemys.push_back(mashroom);
+
 }
 
 //シーンの更新処理

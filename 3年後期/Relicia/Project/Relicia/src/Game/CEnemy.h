@@ -119,6 +119,13 @@ protected:
 	// アニメーション切り替え
 	void ChangeAnimation(int type, bool restart = false);
 
+	// 動かせるオブジェクトに当たっている時間
+	void UpdateMoveObj(float delta);
+	// 一定時間塞がれているか
+	bool ShouldAttackBlockingObj() const;
+	// 進路を塞いでいるオブジェクトを攻撃するか
+	bool TryAttackBlockingObj();
+
 	EState mState;			// 状態
 	int mStateStep;			// 状態内のステップ管理用
 	float mElapsedTime;		// 経過時間計測用
@@ -154,6 +161,10 @@ protected:
 
 	float mFovAngle;	// 視野範囲の角度
 	float mFovLength;	// 視野範囲の距離
+
+	float mMoveObjElapsed;	// 動かせるオブジェクトに当たっている時間
+	CObjectBase* mpBlockingObj;	// 進路を阻んでいるオブジェクト保存用
+	bool mIsBlockedThisFrame;	// 動かせるオブジェクトと当たっているか
 
 #if _DEBUG
 	CColor GetStateColor(EState state) const;

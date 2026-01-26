@@ -116,7 +116,7 @@ CAdventurer::CAdventurer()
 	mpBodyCol->SetCollisionLayers
 	(
 		{
-			ELayer::eFloor, ELayer::eWall,ELayer::eCeil,ELayer::eCrate,
+			ELayer::eFloor, ELayer::eWall,ELayer::eCeil,ELayer::eMoveCrate,
 			ELayer::eEnemy,ELayer::eAttackCol ,ELayer::eCrystal,ELayer::eInteractObj
 		}
 	);
@@ -698,7 +698,7 @@ void CAdventurer::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 			Position(Position() + adjust * hit.weight);
 		}
 		// –Ø” ‚ÆÕ“Ë‚µ‚½ê‡
-		else if (other->Layer() == ELayer::eCrate)
+		else if (other->Layer() == ELayer::eMoveCrate)
 		{
 			// ©g‚Æ‘Šè‚ÌÀ•W
 			CVector selfPos = Position();

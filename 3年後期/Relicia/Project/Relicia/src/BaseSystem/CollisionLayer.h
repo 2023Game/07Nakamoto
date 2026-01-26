@@ -10,7 +10,7 @@ enum class ELayer
 	eWall,
 	eCeil,		// 天井
 	eCrystal,	// クリスタル
-	eCrate,		// 箱
+	eMoveCrate,		// 動かせる箱
 	eInteractObj, // 調べられるアイテム
 	eGround,
 	ePlayer,

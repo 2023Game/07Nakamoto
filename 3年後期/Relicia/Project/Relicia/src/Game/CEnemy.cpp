@@ -44,6 +44,9 @@ CEnemy::CEnemy()
 	, mpPrevNode(nullptr)
 	, mFovAngle(FOV_ANGLE)
 	, mFovLength(FOV_LENGTH)
+	, mMoveObjElapsed(0.0f)
+	, mpBlockingObj(nullptr)
+	, mIsBlockedThisFrame(false)
 {
 	// HPゲージを作成
 	mpHpGauge = new CGaugeUI3D(this);
@@ -256,6 +259,25 @@ void CEnemy::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			adjust.Y(0.0f);
 			Position(Position() + adjust * hit.weight);
 		}
+		// 動かせるオブジェクトと衝突した場合
+		else if (other->Layer() == ELayer::eMoveCrate)
+		{
+			// 進行方向に当たっているか確認
+			CVector hitDir = hit.adjust.Normalized();
+			CVector forward = VectorZ();
+
+			// 正面 ±45° 以内なら「進行妨害」とみなす
+			if (CVector::Dot(hitDir, -forward) > 0.7f)
+			{
+				mIsBlockedThisFrame = true;
+				mpBlockingObj = other->Owner();
+			}
+
+			// 押し戻し処理
+			CVector adjust = hit.adjust;
+			adjust.Y(0.0f);
+			Position(Position() + adjust * hit.weight);
+		}
 	}
 }
 
@@ -273,6 +295,31 @@ void CEnemy::ChangeAnimation(int type, bool restart)
 		restart
 	);
 	CXCharacter::SetAnimationSpeed(data.speed);
+}
+
+// 動かせるオブジェクトに当たっている時間
+void CEnemy::UpdateMoveObj(float delta)
+{
+
+}
+
+bool CEnemy::ShouldAttackBlockingObj() const
+{
+	if (mMoveObjElapsed < 1.0f) return false;
+	if (!mpBlockingObj) return false;
+
+	return true;
+}
+
+// 進路を塞いでいるオブジェクトを攻撃するか
+bool CEnemy::TryAttackBlockingObj()
+{
+	if (!ShouldAttackBlockingObj())
+		return false;
+
+	mpBattleTarget = mpBlockingObj;
+	ChangeState(EState::eAttack);
+	return true;
 }
 
 // 指定したターゲットが視野範囲内に入ったかどうか
@@ -335,6 +382,14 @@ bool CEnemy::IsLookTarget(CObjectBase* target) const
 	CHitInfo hit;
 	//フィールドとレイ判定を行い、遮蔽物が存在した場合は、ターゲットが見えない
 	if (field->CollisionRay(selfPos, targetPos, &hit)) return false;
+
+	// 遮蔽物になるオブジェクトを取得
+	std::vector<CColliderMesh*> cols = field->GetObjectCollider();
+	// 遮蔽物のオブジェクトがないか
+	for (CColliderMesh* col : cols)
+	{
+		if (col->CollisionRay(mpBodyCol,selfPos, targetPos, &hit)) return false;
+	}
 
 	// ターゲットとの間に遮蔽物がないので、ターゲットが見えている
 	return true;
@@ -486,6 +541,15 @@ void CEnemy::UpdateJoinNavGraph()
 // 巡回中の更新処理
 void CEnemy::UpdatePatrol()
 {
+	// 進路を塞いでいるオブジェクトを攻撃するか
+	if (TryAttackBlockingObj()) return;
+
+	// 攻撃するキャラクターが見つかった場合は、この処理を実行しない
+	if (CheckAttackPlayer())
+	{
+		return;
+	}
+
 	if (!mpNextNode)
 	{
 		mpNextNode = SelectNextPatrolNode();
@@ -560,6 +624,19 @@ void CEnemy::Update()
 	mpHpGauge->SetMaxPoint(mMaxHp);
 	mpHpGauge->SetCurrPoint(mHp);
 
+	// 進路が動かせるオブジェクトに妨害されていたら
+	if (mIsBlockedThisFrame)
+	{
+		mMoveObjElapsed += Times::DeltaTime();
+	}
+	else
+	{
+		mMoveObjElapsed = 0.0f;
+		mpBlockingObj = nullptr;
+	}
+
+	mIsBlockedThisFrame = false;
+
 #if _DEBUG
 	mpDebugFov->SetColor(GetStateColor(mState));
 #endif
@@ -584,7 +661,7 @@ CColor CEnemy::GetStateColor(EState state) const
 	{
 	case CEnemy::EState::eIdle:		return CColor::white;
 	case CEnemy::EState::eJoinNavGraph:	return CColor::green;
-	case CEnemy::EState::ePatrol:	return CColor::green;
+	case CEnemy::EState::ePatrol:	return CColor::black;
 	case CEnemy::EState::eChase:	return CColor::red;
 	case CEnemy::EState::eLost:		return CColor::yellow;
 	case CEnemy::EState::eAttack:	return CColor::magenta;

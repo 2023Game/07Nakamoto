@@ -6,6 +6,7 @@ class CGameMenu;
 class CSound;
 class CEnemy;
 class CNavManager;
+class CObjectBase;
 
 //タイトルシーン
 class CGameScene :public CSceneBase

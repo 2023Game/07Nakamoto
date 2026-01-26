@@ -12,6 +12,7 @@ enum class ETaskPriority
 	eDefault,	// デフォルト
 	ePlayer,	// プレイヤー
 	eEnemy,		// 敵
+	eObject,	// オブジェクト
 	eWeapon,	// 武器
 	eItem,		// アイテム
 	eCrystal,	// クリスタル

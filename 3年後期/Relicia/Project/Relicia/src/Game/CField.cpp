@@ -18,6 +18,7 @@
 #include "CItemObj.h"
 #include "CItemManager.h"
 #include "CEscapeArea.h"
+#include "CCrate.h"
 
 #include "CNavManager.h"
 #include "CNavNode.h"
@@ -89,6 +90,17 @@ CColliderMesh* CField::GetWallCollider() const
 	return mpDungeonCollider->GetWallCollider();
 }
 
+// フィールドのオブジェクトのコライダーを取得
+std::vector<CColliderMesh*> CField::GetObjectCollider() const
+{
+	return mpObjectColliders;
+}
+
+// フィールドのオブジェクトのコライダーを追加
+void CField::AddObjectCollider(CColliderMesh* col)
+{
+	mpObjectColliders.push_back(col);
+}
 
 // ダンジョンマップを生成
 void CField::CreateMap()
@@ -107,6 +119,8 @@ void CField::CreateMap()
 		for (CDoor* door : mpDoorObjects) door->Kill();
 		for (CFloor* passegeFloor : mpPassegeObjects) passegeFloor->Kill();
 		for (CNavNode* node : mpNavNodes) node->Kill();
+		for (CObjectBase* obj : mpObjects) obj->Kill();
+		for (CColliderMesh* objcol : mpObjectColliders) objcol = nullptr;
 
 		mpFloorObjects.clear();
 		mpWallObjects.clear();
@@ -116,6 +130,8 @@ void CField::CreateMap()
 		mpPassegeObjects.clear();
 		mNavNodePositions.clear();
 		mpNavNodes.clear();
+		mpObjects.clear();
+		mpObjectColliders.clear();
 
 		CItemManager::Instance()->AllRemoveItems();
 		CCrystalManager::Instance()->AllRemoveCrystals();
@@ -148,6 +164,11 @@ void CField::CreateMap()
 	{
 		mpEscapeArea->Position(pos.X(), pos.Y() + 3.0f, pos.Z());
 	}
+
+	// 動かせる箱の作成
+	CCrate* crate = new CCrate(mpMapData->GetRoomRandomFloorPos(), ETag::eField, ETaskPriority::eObject);
+	crate->Scale(1.0f, 3.0f, 1.0f);
+	mpObjects.push_back(crate);
 
 	// 経路探索ノードを作成
 	for (CVector& pos : mNavNodePositions)

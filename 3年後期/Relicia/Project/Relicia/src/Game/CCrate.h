@@ -1,14 +1,15 @@
 #pragma once
-#include "CObjectBase.h"
+#include "CCharaBase.h"
 #include "CModel.h"
 
 class CColliderMesh;
 
-class CCrate : public CObjectBase
+class CCrate : public CCharaBase
 {
 public:
 	// コンストラクタ
-	CCrate(const CVector& pos);
+	CCrate(const CVector& pos, ETag tag, ETaskPriority prio, int sortOrder = 0,
+		ETaskPauseType pause = ETaskPauseType::eGame);
 	// デストラクタ
 	~CCrate();
 
