@@ -272,11 +272,7 @@ void CMashroom::UpdateChase()
 		return;
 	}
 
-	if (!IsLookTarget(mpBattleTarget))
-	{
-		ChangeState(EState::eLost);
-		return;
-	}
+	CEnemy::UpdateChase();
 
 	mMoveSpeed = CVector::zero;
 

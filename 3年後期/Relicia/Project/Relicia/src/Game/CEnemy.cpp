@@ -566,15 +566,22 @@ void CEnemy::UpdatePatrol()
 // 追いかける時の更新処理
 void CEnemy::UpdateChase()
 {
+	// 見失ったか
+	if (!IsLookTarget(mpBattleTarget))
+	{
+		ChangeState(EState::eLost);
+		return;
+	}
 }
 
-// 追いかける時の更新処理
+// プレイヤーを見失った時の更新処理
 void CEnemy::UpdateLost()
 {
 	mpBattleTarget = nullptr;
 	ChangeState(EState::eIdle());
 }
 
+// 攻撃時の更新処理
 void CEnemy::UpdateAttack(int index)
 {
 }

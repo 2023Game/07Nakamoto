@@ -317,6 +317,8 @@ void CCactus::UpdateChase()
 		return;
 	}
 
+	CEnemy::UpdateChase();
+
 	mMoveSpeed = CVector::zero;
 
 	// Œ»İ’n‚Æ–Ú“I’n‚ğæ“¾
