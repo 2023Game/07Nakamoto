@@ -409,6 +409,7 @@ bool CEnemy::CheckAttackPlayer()
 		// 戦闘相手（キャラクター）を設定
 		mpBattleTarget = adventurer;
 		ChangeState(EState::eChase);
+		InitNav();
 		return true;
 	}
 
@@ -570,6 +571,8 @@ void CEnemy::UpdateChase()
 // 追いかける時の更新処理
 void CEnemy::UpdateLost()
 {
+	mpBattleTarget = nullptr;
+	ChangeState(EState::eIdle());
 }
 
 void CEnemy::UpdateAttack(int index)

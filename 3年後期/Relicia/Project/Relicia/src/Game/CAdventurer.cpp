@@ -128,8 +128,8 @@ CAdventurer::CAdventurer()
 	(
 		this,
 		ETag::ePlayer,
-		{ ETag::eEnemy },	// 敵のタグが設定されたコライダーと衝突
-		{ ELayer::eEnemy }	// 敵のレイヤーが設定されたコライダーと衝突
+		{ ETag::eEnemy,ETag::eField },	// タグが設定されたコライダーと衝突
+		{ ELayer::eEnemy, ELayer::eMoveCrate }	// レイヤーが設定されたコライダーと衝突
 	);
 
 	// 右手のフレームを取得し、
