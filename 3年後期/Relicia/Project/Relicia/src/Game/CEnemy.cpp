@@ -180,22 +180,21 @@ bool CEnemy::MoveTo(const CVector& targetPos, float speed)
 	// 残りの距離が移動距離より短い場合
 	if (remainDist <= moveDist)
 	{
-		// 目的地まで移動する
-		pos = CVector(targetPos.X(), pos.Y(), targetPos.Z());
-		Position(pos);
+		// 目的地まで移動ベクトルをこのフレームでの移動量に設定
+		mMoveSpeed = vec;
 		return true;	// 目的地に到着したので、trueを返す
 	}
 	// 残りの距離がキャラクターの半径より短い場合
 	else if (remainDist <= GetBodyRadius())
 	{
 		// そこで移動を終了とする
+		mMoveSpeed = CVector::zero;
 		return true;
 	}
 
 	// 残りの距離が移動距離より長い場合は、
-	// 移動距離分目的地へ移動する
-	pos += moveDir * moveDist;
-	Position(pos);
+	// 移動距離分目的地へ移動ベクトルを設定
+	mMoveSpeed += moveDir * moveDist;
 
 	// 目的地には到着しなかった
 	return false;
@@ -595,6 +594,8 @@ void CEnemy::UpdateChase()
 // プレイヤーを見失った時の更新処理
 void CEnemy::UpdateLost()
 {
+	mMoveSpeed = CVector::zero;
+
 	CNavManager* navMgr = CNavManager::Instance();
 
 	// 戦闘相手が存在しなかった場合は、
