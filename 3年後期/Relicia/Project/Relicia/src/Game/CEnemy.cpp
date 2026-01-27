@@ -10,7 +10,8 @@
 #include "CField.h"
 #include "CAdventurer.h"
 
-#define GRAVITY 0.0625f
+#define GRAVITY 0.0625f			// 重力
+#define JUMP_SPEED 1.25f		// ジャンプ速度
 
 #define ROTATE_SPEED	6.0f	// 回転速度
 #define EYE_HEIGHT		10.0f	// 視点の高さ
@@ -194,7 +195,7 @@ bool CEnemy::MoveTo(const CVector& targetPos, float speed)
 
 	// 残りの距離が移動距離より長い場合は、
 	// 移動距離分目的地へ移動ベクトルを設定
-	mMoveSpeed += moveDir * moveDist;
+	mMoveSpeed = moveDir * moveDist;
 
 	// 目的地には到着しなかった
 	return false;
@@ -517,7 +518,6 @@ void CEnemy::ChangeState(EState state)
 	mState = state;
 	mStateStep = 0;
 	mElapsedTime = 0.0f;
-	mStopElapsedTime = 0.0f;
 }
 
 // 待機状態の更新処理
@@ -633,22 +633,40 @@ void CEnemy::UpdateAlert()
 	{
 		// ステップ１：ジャンプ
 	case 0:
-		mMoveSpeedY = 1.25f;
+		mMoveSpeedY = JUMP_SPEED;
 		mStateStep++;
 		break;
 		// ステップ２：右を向く
 	case 1:
 		mStopElapsedTime += Times::DeltaTime();
-
-		if (mStopElapsedTime > 30.0f)
+		
+		if (mStopElapsedTime > 3.0f)
 		{
-			mStateStep--;
+			mMoveSpeedY = JUMP_SPEED;
+			mStateStep++;
 			mStopElapsedTime = 0;
 		}
 
 		break;
+		// ステップ3：左を向く
+	case 2:
+		mStopElapsedTime += Times::DeltaTime();
+		mRote.Set(0.0f, mRote.Y() + 1.0f, 0.0f);
+
+		if (mStopElapsedTime > 3.0f)
+		{
+			mStateStep++;
+			mStopElapsedTime = 0;
+		}
+		break;
+		// ステップ４：待機状態に戻す
+	case 3:
+		mStopElapsedTime = 0.0f;
+		ChangeState(EState::eIdle);
+		break;
 	}
 
+	// プレイヤーを見つけたら
 	if (CheckAttackPlayer())
 	{
 		ChangeState(EState::eChase);

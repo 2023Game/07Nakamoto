@@ -171,6 +171,8 @@ protected:
 	CObjectBase* mpBlockingObj;	// 進路を阻んでいるオブジェクト保存用
 	bool mIsBlockedThisFrame;	// 動かせるオブジェクトと当たっているか
 
+	CVector mRote;
+
 #if _DEBUG
 	CColor GetStateColor(EState state) const;
 
