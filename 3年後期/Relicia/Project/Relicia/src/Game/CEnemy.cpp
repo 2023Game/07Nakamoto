@@ -13,12 +13,17 @@
 #define GRAVITY 0.0625f
 
 #define ROTATE_SPEED	6.0f	// 回転速度
-#define FOV_HEIGHT		10.0f	// 視野範囲の高さ
+#define EYE_HEIGHT		10.0f	// 視点の高さ
+#define FOV_HEIGHT		30.0f	// 視野範囲の高さ
 
 #define LOOKAT_SPEED 5.0f	// 戦闘相手の方を向く速度
 
 #define FOV_ANGLE 45.0f		// 視野範囲の角度
 #define FOV_LENGTH 100.0f	// 視野範囲の距離
+
+#define ALERT_STOP_TIME		  2.0f	// 警戒状態へ遷移する静止時間
+#define ALERT_FOV_ANGLE		 60.0f	// 警戒時の視野範囲の角度
+#define ALERT_FOV_LENGTH	300.0f	// 警戒時の視野範囲の距離
 
 // コンストラクタ
 CEnemy::CEnemy()
@@ -47,6 +52,7 @@ CEnemy::CEnemy()
 	, mMoveObjElapsed(0.0f)
 	, mpBlockingObj(nullptr)
 	, mIsBlockedThisFrame(false)
+	, mStopElapsedTime(0.0f)
 {
 	// HPゲージを作成
 	mpHpGauge = new CGaugeUI3D(this);
@@ -367,13 +373,14 @@ bool CEnemy::IsLookTarget(CObjectBase* target) const
 
 	// ターゲットの高さで視野範囲内か判定
 	float diffY = abs(targetPos.Y() - selfPos.Y());
-	if (diffY >= FOV_HEIGHT) return false;
+	if (diffY >= FOV_HEIGHT) 
+		return false;
 
 	// フィールドが存在しない場合は、遮蔽物がないので見える
 	CField* field = CField::Instance();
-	if (field == nullptr) return true;
+	if (field == nullptr)	return true;
 
-	CVector offsetPos = CVector(0.0f, 1.0f, 0.0f);
+	CVector offsetPos = CVector(0.0f, EYE_HEIGHT, 0.0f);
 	// ターゲットの座標を取得
 	targetPos += offsetPos;
 	// 自分自身の座標を取得
@@ -381,7 +388,8 @@ bool CEnemy::IsLookTarget(CObjectBase* target) const
 	
 	CHitInfo hit;
 	//フィールドとレイ判定を行い、遮蔽物が存在した場合は、ターゲットが見えない
-	if (field->CollisionRay(selfPos, targetPos, &hit)) return false;
+	if (field->CollisionRay(selfPos, targetPos, &hit)) 
+		return false;
 
 	// 遮蔽物になるオブジェクトを取得
 	std::vector<CColliderMesh*> cols = field->GetObjectCollider();
@@ -510,6 +518,7 @@ void CEnemy::ChangeState(EState state)
 	mState = state;
 	mStateStep = 0;
 	mElapsedTime = 0.0f;
+	mStopElapsedTime = 0.0f;
 }
 
 // 待機状態の更新処理
@@ -566,9 +575,18 @@ void CEnemy::UpdatePatrol()
 // 追いかける時の更新処理
 void CEnemy::UpdateChase()
 {
+	CAdventurer* target =  CAdventurer::Instance();
+
 	// 見失ったか
-	if (!IsLookTarget(mpBattleTarget))
-	{
+	if (!IsLookTarget(target))
+	{		
+		// ターゲットの座標へ向けて移動する
+		CVector targetPos = mpBattleTarget->Position();
+
+		// 見失った位置にノードを配置
+		//mpLostPlayerNode->SetPos(targetPos);
+		//mpLostPlayerNode->SetEnable(true);
+
 		ChangeState(EState::eLost);
 		return;
 	}
@@ -577,8 +595,64 @@ void CEnemy::UpdateChase()
 // プレイヤーを見失った時の更新処理
 void CEnemy::UpdateLost()
 {
+	CNavManager* navMgr = CNavManager::Instance();
+
+	// 戦闘相手が存在しなかった場合は、
+	if (mpBattleTarget == nullptr)
+	{
+		// ターゲットを解除し、待機状態へ戻す
+		ChangeState(EState::eIdle);
+		return;
+	}
+
+	// ターゲットが見えたら、追跡状態へ移行
+	if (IsLookTarget(mpBattleTarget))
+	{
+		ChangeState(EState::eChase);
+		return;
+	}
+
+	// 一定時間静止すると、警戒状態へ移行
+	else
+	{
+		// 移動が終われば警戒状態へ移行
+		ChangeState(EState::eAlert);
+		return;
+	}
+
 	mpBattleTarget = nullptr;
 	ChangeState(EState::eIdle());
+}
+
+// 警戒している時の処理
+void CEnemy::UpdateAlert()
+{
+	// ステップごとに処理を切り替える
+	switch (mStateStep)
+	{
+		// ステップ１：ジャンプ
+	case 0:
+		mMoveSpeedY = 1.25f;
+		mStateStep++;
+		break;
+		// ステップ２：右を向く
+	case 1:
+		mStopElapsedTime += Times::DeltaTime();
+
+		if (mStopElapsedTime > 30.0f)
+		{
+			mStateStep--;
+			mStopElapsedTime = 0;
+		}
+
+		break;
+	}
+
+	if (CheckAttackPlayer())
+	{
+		ChangeState(EState::eChase);
+	}
+
 }
 
 // 攻撃時の更新処理
@@ -610,6 +684,8 @@ void CEnemy::Update()
 	case EState::ePatrol:	UpdatePatrol(); break;
 		// 追いかける
 	case EState::eChase:	UpdateChase();	break;
+		// 警戒状態
+	case EState::eAlert:	UpdateAlert();	break;
 		// プレイヤーを見失う
 	case EState::eLost:		UpdateLost();	break;
 		// 攻撃
@@ -673,6 +749,7 @@ CColor CEnemy::GetStateColor(EState state) const
 	case CEnemy::EState::eJoinNavGraph:	return CColor::green;
 	case CEnemy::EState::ePatrol:	return CColor::black;
 	case CEnemy::EState::eChase:	return CColor::red;
+	case CEnemy::EState::eAlert:	return CColor::cyan;
 	case CEnemy::EState::eLost:		return CColor::yellow;
 	case CEnemy::EState::eAttack:	return CColor::magenta;
 	}

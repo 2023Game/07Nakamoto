@@ -118,6 +118,7 @@ public:
 	// 部屋の床の座標のリストからランダムに座標を取得
 	CVector GetRoomRandomFloorPos();
 
+	bool IsWalkable(const Tile& tile) const;
 private:
 	// ノードの削除
 	void DeleteNode(SectionNode* node);

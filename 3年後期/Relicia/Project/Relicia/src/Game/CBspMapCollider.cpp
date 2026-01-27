@@ -23,8 +23,9 @@ CBspMapCollider::CBspMapCollider(CBspMap* map, int x, int y)
         10, 1, 10
     );
 
-    // 壁コライダーの生成
-    for (CBspMap::TileSegment seg : map->GetWallSegments())
+    std::vector<CBspMap::TileSegment> segs = map->GetWallSegments();
+        // 壁コライダーの生成
+    for (CBspMap::TileSegment seg : segs)
     {
         CreateWallCollider(&seg);
     }
@@ -36,7 +37,7 @@ CBspMapCollider::CBspMapCollider(CBspMap* map, int x, int y)
     CNavManager::Instance()->AddCollider(mpWallCollider);
 
     //mpFloorCollider->SetShow(true);
-    //mpWallCollider->SetShow(true);
+    mpWallCollider->SetShow(true);
 }
 
 // デストラクタ

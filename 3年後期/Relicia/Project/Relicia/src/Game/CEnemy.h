@@ -68,6 +68,7 @@ protected:
 		ePatrol,	// 巡回中
 		eChase,		// 追いかける
 		eLost,		// 見失う
+		eAlert,		// 警戒
 		eAttack,	// 攻撃
 		eHit,		// 仰け反り
 		eDeath,		// 死亡
@@ -109,6 +110,8 @@ protected:
 	virtual void UpdateChase();
 	// プレイヤーを見失ったときの更新処理
 	virtual void UpdateLost();
+	// 警戒している時の処理
+	virtual void UpdateAlert();
 	// 攻撃時の更新処理
 	virtual void UpdateAttack(int index);
 	// 仰け反り状態の更新処理
@@ -153,6 +156,8 @@ protected:
 
 	CNavNode* mpLostPlayerNode;	// プレイヤーを見失った位置のノード
 	float mLostElapsedTime;		// 見失ってからの経過時間
+
+	float mStopElapsedTime;	// 警戒している経過時間
 
 	CNavNode* mpNearNode;		// 最寄りのノード保存用
 	CNavNode* mpCurrentNode;	// 巡回ノード保存用

@@ -23,7 +23,7 @@ CAdventurer* CAdventurer::spInstance = nullptr;
 #define BODY_RADIUS 3.0f	// 本体のコライダーの幅
 #define MOVE_SPEED 0.75f	// 移動速度
 #define RUN_SPEED 1.2f		// 走行中の速度
-#define JUMP_SPEED 1.5f		// ジャンプ速度
+#define JUMP_SPEED 1.25f		// ジャンプ速度
 #define GRAVITY 0.0625f		// 重力加速度
 
 #define MAX_HP 100	// 体力の最大値
