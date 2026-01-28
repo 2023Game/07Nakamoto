@@ -2,6 +2,7 @@
 #include "CColliderSphere.h"
 #include "CSceneManager.h"
 #include "CModel.h"
+#include "CField.h"
 
 // コンストラクタ
 CEscapeArea::CEscapeArea(const CVector& pos, const CVector& angle, const CVector& size)
@@ -35,8 +36,10 @@ void CEscapeArea::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 	// プレイヤーに衝突した
 	if (other->Layer() == ELayer::ePlayer)
 	{
+		CField::Instance()->CreateMap();
+
 		// リザルトシーンを読み込む
-		CSceneManager::Instance()->LoadScene(EScene::eResult);
+		//CSceneManager::Instance()->LoadScene(EScene::eResult);
 	}
 }
 

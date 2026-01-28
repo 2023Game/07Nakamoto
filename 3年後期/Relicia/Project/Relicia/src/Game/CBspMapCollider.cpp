@@ -37,7 +37,7 @@ CBspMapCollider::CBspMapCollider(CBspMap* map, int x, int y)
     CNavManager::Instance()->AddCollider(mpWallCollider);
 
     //mpFloorCollider->SetShow(true);
-    mpWallCollider->SetShow(true);
+    //mpWallCollider->SetShow(true);
 }
 
 // デストラクタ

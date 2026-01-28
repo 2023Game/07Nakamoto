@@ -300,7 +300,7 @@ CNavNode* CNavManager::FindNearestNode(const CVector& pos)
 	for (CNavNode* node : mNodes)
 	{
 		if (!node->IsEnable()) continue;
-		if (node->GetNodeType() != CNavNode::ENodeType::eNode) continue;
+		if (node->GetNodeType() == CNavNode::ENodeType::ePlayer) continue;
 
 		// 距離をチェック
 		float d = (node->GetPos() - pos).LengthSqr();

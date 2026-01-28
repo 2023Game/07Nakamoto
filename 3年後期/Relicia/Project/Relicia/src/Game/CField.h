@@ -31,6 +31,9 @@ public:
 	
 	// 床タイルのランダムな座標を取得
 	//const CVector GetRandomFloorPos() const;
+	
+	// ダンジョンマップの生成
+	void CreateMap();
 
 	// 床コライダーを取得
 	CColliderMesh* GetFloorCollider() const;
@@ -57,8 +60,6 @@ public:
 	void Render() override;
 
 private:
-	// ダンジョンマップの生成
-	void CreateMap();
 
 	void CreateFieldObjects();
 
@@ -79,6 +80,12 @@ private:
 	int CountPassageConnections(const std::vector<std::vector<CBspMap::Tile>>& map, int x, int y);
 	// 曲がり角かどうかを判定
 	bool IsCorner(const std::vector<std::vector<CBspMap::Tile>>& map, int x, int y);
+	// 斜めの通路の数
+	bool IsInsideWidePassage(const std::vector<std::vector<CBspMap::Tile>>& map, int x, int y);
+
+	// 出入口があるかどうか
+	//bool IsWidePassageEntrance(const std::vector<std::vector<CBspMap::Tile>>& map, int x, int y);
+	
 	// ノード配置ルール
 	void TryAddNavNode(const std::vector<std::vector<CBspMap::Tile>>& map, int x, int y);
 

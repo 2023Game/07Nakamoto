@@ -473,16 +473,16 @@ void CBspMap::DeleteNode(SectionNode* node)
 // 初期化
 void CBspMap::Initialize(int width, int height)
 {
+    // タイル情報の初期化
     mMapData.resize(height, std::vector<Tile>(width));
 
-    // タイル情報の初期化
-    for (auto& row : mMapData)
-    {
-        for (auto& tile : row)
-        {
-            tile = { TileType::None, Direction::eNorth, false};
-        }
-    }
+    //for (auto& row : mMapData)
+    //{
+    //    for (auto& tile : row)
+    //    {
+    //        tile = { TileType::None, Direction::eNorth, false};
+    //    }
+    //}
 
     // 最初の大きな区画の初期化（全体）
     mpRoot = new SectionNode();
@@ -783,6 +783,13 @@ void CBspMap::CreatePassage(std::vector<std::vector<Tile>>& map, SectionNode* no
             map[y][x].passage = true;
             map[y][x].passageData.dir = dir;
         }
+
+        //// 出入口であれば、
+        //if (map[y][x].type == TileType::eEntrance)
+        //{
+        //    // 通路フラグをオフにする
+        //    map[y][x].passage = false;
+        //}
     };
 
     // 横方向
@@ -911,9 +918,13 @@ CBspMap::Direction CBspMap::InverseDirection(Direction dir) const
 // 部屋の床の座標のリストからランダムに座標を取得
 CVector CBspMap::GetRoomRandomFloorPos()
 {
+    // mpRoomFloorsが空の場合
+    if (mpRoomFloors.empty())   return CVector::zero;
+
     int index = Math::Rand(0, mpRoomFloors.size() - 1);
 
-    return CVector(mpRoomFloors[index].X() * TILE_SIZE, 0, mpRoomFloors[index].Y() * TILE_SIZE);
+    return CVector(mpRoomFloors[index].X() * TILE_SIZE, 0, 
+                   mpRoomFloors[index].Y() * TILE_SIZE);
 }
 
 #if _DEBUG

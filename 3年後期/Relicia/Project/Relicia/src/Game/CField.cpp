@@ -405,7 +405,7 @@ void CField::CreateDungeon(const std::vector<std::vector<CBspMap::Tile>>& map)
 					entrance->Rotation(0.0f, rotY, 0.0f);
 					// 出入口のリストに追加
 					mpEntranceObjects.push_back(entrance);
-
+					// 出入口にノードを生成
 					mNavNodePositions.push_back(entrancePos);
 
 					// 床の生成
@@ -582,6 +582,30 @@ bool CField::IsCorner(const std::vector<std::vector<CBspMap::Tile>>& map, int x,
 	return (up && right) || (right && down) || (down && left) || (left && up);
 }
 
+// 斜めの通路の数
+bool CField::IsInsideWidePassage(const std::vector<std::vector<CBspMap::Tile>>& map, int x, int y)
+{
+	// 斜めがある場合は内側の大通路の可能性がある
+	bool diag =
+		(y > 0 && x > 0 && map[y - 1][x - 1].passage) ||
+		(y > 0 && x + 1 < map[y].size() && map[y - 1][x + 1].passage) ||
+		(y + 1 < map.size() && x > 0 && map[y + 1][x - 1].passage) ||
+		(y + 1 < map.size() && map[y + 1][x + 1].passage);
+
+	return diag;
+}
+
+//// 出入口があるかどうか
+//bool CField::IsWidePassageEntrance(const std::vector<std::vector<CBspMap::Tile>>& map, int x, int y)
+//{
+//	if (y > 0 && map[y - 1][x].type == CBspMap::TileType::eEntrance) return true;
+//	if (y + 1 < map.size() && map[y + 1][x].type == CBspMap::TileType::eEntrance) return true;
+//	if (x > 0 && map[y][x - 1].type == CBspMap::TileType::eEntrance) return true;
+//	if (x + 1 < map[y].size() && map[y][x + 1].type == CBspMap::TileType::eEntrance) return true;
+//
+//	return false;
+//}
+
 // ノード配置ルール
 void CField::TryAddNavNode(const std::vector<std::vector<CBspMap::Tile>>& map, int x, int y)
 {
@@ -591,13 +615,19 @@ void CField::TryAddNavNode(const std::vector<std::vector<CBspMap::Tile>>& map, i
 	// 通路タイルの接続数を数える
 	int connections = CountPassageConnections(map, x, y);
 
+	// 3つ以上繋がっているか
+	if (connections > 2)
+	{
+		// 大通路かどうか(斜めのタイルをみる)
+		if (IsInsideWidePassage(map, x, y)) return;
+	}
+
 	// 分岐・行き止まり・曲がり角の場合
 	if (connections > 2 || IsCorner(map, x, y))
 	{
 		// 経路探索ノードを生成
 		mNavNodePositions.push_back(
-			CVector(x * TILE_SIZE, 0, y * TILE_SIZE)
-		);
+			CVector(x * TILE_SIZE, 0, y * TILE_SIZE));
 	}
 }
 

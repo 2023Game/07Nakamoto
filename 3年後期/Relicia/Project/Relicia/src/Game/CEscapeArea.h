@@ -23,4 +23,5 @@ private:
 	CModel* mpModel;	// 脱出エリアのモデルデータ
 	CCollider* mpCollider;	// 脱出エリアのコリジョンデータ
 
+	int mStateStep;
 };

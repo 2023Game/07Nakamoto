@@ -58,7 +58,8 @@ public:
 		Direction pillar = Direction::None;	// 柱を生成するかどうか 
 
 		Passage passageData{};
-		//bool node = false;	// ノードを設置するか
+		bool spawnChar = false;		// 敵かプレイヤーのスポーンしたか
+		bool spawnObj = false;		// オブジェクトがあるか
 	};
 
 	// 部屋の情報
@@ -118,7 +119,6 @@ public:
 	// 部屋の床の座標のリストからランダムに座標を取得
 	CVector GetRoomRandomFloorPos();
 
-	bool IsWalkable(const Tile& tile) const;
 private:
 	// ノードの削除
 	void DeleteNode(SectionNode* node);
