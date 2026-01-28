@@ -87,7 +87,6 @@ void CCrate::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			adjust.Y(0.0f);
 			Position(Position() + adjust * hit.weight);
 		}
-
 	}
 }
 

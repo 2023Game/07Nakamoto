@@ -396,7 +396,7 @@ bool CEnemy::IsLookTarget(CObjectBase* target) const
 	// 遮蔽物のオブジェクトがないか
 	for (CColliderMesh* col : cols)
 	{
-		if (col->CollisionRay(mpBodyCol,selfPos, targetPos, &hit)) return false;
+		if (CCollider::CollisionRay(col, selfPos, targetPos, &hit)) return false;
 	}
 
 	// ターゲットとの間に遮蔽物がないので、ターゲットが見えている
