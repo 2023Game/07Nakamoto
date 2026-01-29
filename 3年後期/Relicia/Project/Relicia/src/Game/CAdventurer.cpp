@@ -147,7 +147,7 @@ CAdventurer::CAdventurer()
 	mpHpGauge->SetPos(HP_GAUGE_UI_POS);
 
 	// Œo˜H’Tõ—p‚Ìƒm[ƒh‚ðì¬
-	mpNavNode = new CNavNode(Position(), CNavNode::ENodeType::ePlayer, true);
+	mpNavNode = new CNavNode(Position(), true);
 	mpNavNode->SetColor(CColor::white);
 
 }

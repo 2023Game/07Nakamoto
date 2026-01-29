@@ -29,7 +29,7 @@ CGameScene::CGameScene()
 CGameScene::~CGameScene()
 {
 	CInteractObjectManager::ClearInstance();
-	SAFE_DELETE(mpField);
+	//SAFE_DELETE(mpField);
 	
 	//for (CEnemy* enemy : mpEnemys)
 	//{

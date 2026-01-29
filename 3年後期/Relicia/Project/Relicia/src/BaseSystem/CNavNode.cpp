@@ -10,7 +10,7 @@
 #define UPDATE_DISTANCE 1.0f
 
 // コンストラクタ
-CNavNode::CNavNode(const CVector& pos, ENodeType node, bool isDestNode)
+CNavNode::CNavNode(const CVector& pos, bool isDestNode)
 	: mIsEnable(true)
 	, mIsKill(false)
 	, mIsDestNode(isDestNode)
@@ -313,12 +313,6 @@ bool CNavNode::IsUpdating() const
 	if (mIsUpdateConnectNode) return true;
 	if (mIsUpdaingConnectNode) return true;
 	return false;
-}
-
-// ノードの種類を取得
-CNavNode::ENodeType CNavNode::GetNodeType()
-{
-	return mNodeype;
 }
 
 // 接続しているノードを取得
