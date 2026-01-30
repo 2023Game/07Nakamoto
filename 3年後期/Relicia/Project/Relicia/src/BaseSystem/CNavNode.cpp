@@ -20,7 +20,6 @@ CNavNode::CNavNode(const CVector& pos, bool isDestNode)
 	, mIsUpdateConnectNode(false)
 	, mIsUpdaingConnectNode(false)
 	, mColor(0.0f, 1.0f, 0.0f, 1.0f)
-	, mNodeype(node)
 {
 	// 管理クラスのリストに自身を追加
 	CNavManager* navMgr = CNavManager::Instance();
@@ -29,7 +28,6 @@ CNavNode::CNavNode(const CVector& pos, bool isDestNode)
 		navMgr->AddNode(this);
 	}
 
-	mNodeype = node;
 	// 座標を設定
 	SetPos(mPosition, true);
 }

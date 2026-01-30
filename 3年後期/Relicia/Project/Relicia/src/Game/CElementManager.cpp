@@ -76,7 +76,7 @@ void CElementManager::AddElement(ElementType type)
 	// 属性スロットが満杯の場合、
 	if (!isAdded)
 	{
-		// TODO:満杯の時の処理
+		// 加算しない
 	}
 }
 

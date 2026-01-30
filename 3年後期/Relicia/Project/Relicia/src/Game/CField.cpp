@@ -19,9 +19,10 @@
 #include "CItemManager.h"
 #include "CEscapeArea.h"
 #include "CCrate.h"
-
 #include "CNavManager.h"
 #include "CNavNode.h"
+
+#include "CBspMap2.h"
 
 #define PILLAR_OFFSET_POS 10.0f	// 柱のオフセット座標
 #define SECTION_SIZE_X 50		// ダンジョンの全体の区画の横サイズ

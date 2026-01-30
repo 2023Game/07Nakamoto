@@ -3,8 +3,6 @@
 
 #define TILE_SIZE 20.0f	// タイルモデルの大きさ
 
-class CBspMapCollider;
-
 class CBspMap 
 {
 public:
@@ -43,11 +41,11 @@ public:
 		eNorthWest,	// 北西
 	};
 
-	// 通路の情報
-	struct Passage
-	{
-		Direction dir;	// 向き
-	};
+	//// 通路の情報
+	//struct Passage
+	//{
+	//	Direction dir;	// 向き
+	//};
 
 	// タイルの情報
 	struct Tile
@@ -56,10 +54,9 @@ public:
 		Direction dir = Direction::None;	// 向き
 		bool passage = false;	// 通路かどうか
 		Direction pillar = Direction::None;	// 柱を生成するかどうか 
+		Direction passageDir = Direction::None;	// 通路の向き
 
-		Passage passageData{};
-		bool spawnChar = false;		// 敵かプレイヤーのスポーンしたか
-		bool spawnObj = false;		// オブジェクトがあるか
+		// Passage passageData{};
 	};
 
 	// 部屋の情報

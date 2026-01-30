@@ -781,7 +781,7 @@ void CBspMap::CreatePassage(std::vector<std::vector<Tile>>& map, SectionNode* no
         {
             // 通路フラグをオンにする
             map[y][x].passage = true;
-            map[y][x].passageData.dir = dir;
+            map[y][x].passageDir = dir;
         }
 
         //// 出入口であれば、

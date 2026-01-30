@@ -6,7 +6,7 @@ CWall::CWall(const CVector& pos)
 {
 	mpModel = CResourceManager::Get<CModel>("Wall");
 
-	Position(pos);
+	Position(pos.X(),pos.Y(),pos.Z());
 }
 
 // デストラクタ

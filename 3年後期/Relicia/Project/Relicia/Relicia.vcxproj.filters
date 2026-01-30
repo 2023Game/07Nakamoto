@@ -505,6 +505,12 @@
     <ClCompile Include="src\Game\CCrystalManager.cpp">
       <Filter>ソース ファイル\Game\Item\Crystal\Object</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CBspMap2.cpp">
+      <Filter>ソース ファイル\Game\Field</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CField2.cpp">
+      <Filter>ソース ファイル\Game\Field</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -914,6 +920,12 @@
     </ClInclude>
     <ClInclude Include="src\Game\CCrystalManager.h">
       <Filter>ソース ファイル\Game\Item\Crystal\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CBspMap2.h">
+      <Filter>ソース ファイル\Game\Field</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CField2.h">
+      <Filter>ソース ファイル\Game\Field</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

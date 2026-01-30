@@ -77,6 +77,7 @@
     <ClCompile Include="src\Game\CAdventurer.cpp" />
     <ClCompile Include="src\Game\CApplication.cpp" />
     <ClCompile Include="src\Game\CBspMap.cpp" />
+    <ClCompile Include="src\Game\CBspMap2.cpp" />
     <ClCompile Include="src\Game\CBspMapCollider.cpp" />
     <ClCompile Include="src\Game\CBullet.cpp" />
     <ClCompile Include="src\Game\CCrate.cpp" />
@@ -84,6 +85,7 @@
     <ClCompile Include="src\Game\CDebugFieldOfView.cpp" />
     <ClCompile Include="src\Game\CEnemyManager.cpp" />
     <ClCompile Include="src\Game\CEscapeArea.cpp" />
+    <ClCompile Include="src\Game\CField2.cpp" />
     <ClCompile Include="src\Game\CInventory.cpp" />
     <ClCompile Include="src\Game\CInventory2.cpp" />
     <ClCompile Include="src\Game\CItemManager.cpp" />
@@ -216,6 +218,7 @@
     <ClInclude Include="src\Game\CAdventurer.h" />
     <ClInclude Include="src\Game\CApplication.h" />
     <ClInclude Include="src\Game\CBspMap.h" />
+    <ClInclude Include="src\Game\CBspMap2.h" />
     <ClInclude Include="src\Game\CBspMapCollider.h" />
     <ClInclude Include="src\Game\CBullet.h" />
     <ClInclude Include="src\Game\CCrate.h" />
@@ -223,6 +226,7 @@
     <ClInclude Include="src\Game\CDebugFieldOfView.h" />
     <ClInclude Include="src\Game\CEnemyManager.h" />
     <ClInclude Include="src\Game\CEscapeArea.h" />
+    <ClInclude Include="src\Game\CField2.h" />
     <ClInclude Include="src\Game\CInventory.h" />
     <ClInclude Include="src\Game\CInventory2.h" />
     <ClInclude Include="src\Game\CItemManager.h" />
