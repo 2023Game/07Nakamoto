@@ -63,6 +63,12 @@ void CBspMap2::InitializeForFloor(int floorNum)
     Initialize(fs.mapWidth, fs.mapHeight);
 }
 
+// 2次元配列のマップデータの取得
+const std::vector<std::vector<CBspMap2::Tile>>& CBspMap2::GetMapData() const
+{
+    return mMapData;
+}
+
 // 初期化
 void CBspMap2::Initialize(int width, int height)
 {

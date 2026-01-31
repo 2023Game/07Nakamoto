@@ -18,6 +18,8 @@
 #include "CDebugInput.h"
 #include "CPlayer.h"
 
+#include "CField2.h"
+
 //コンストラクタ
 CGameScene::CGameScene()
 	: CSceneBase(EScene::eGame)
@@ -84,10 +86,10 @@ void CGameScene::Load()
 
 	CResourceManager::Load<CModel>(		"Escape",			"Field\\Object\\escape.obj");
 
-	CResourceManager::Load<CModel>("Wall2", "Dungeon\\Wall2.obj");
-	CResourceManager::Load<CModel>("Wall_Entrance2", "Dungeon\\Wall_Entrance2.obj");
-	CResourceManager::Load<CModel>("Entrance_Col2", "Dungeon\\Entrance_Wall_Col2.obj");
-	CResourceManager::Load<CModel>("Entrance_Ceil_Col2", "Dungeon\\Entrance_Ceil_Col2.obj");
+	CResourceManager::Load<CModel>(		"Wall2",				"Dungeon\\Wall2.obj");
+	CResourceManager::Load<CModel>(		"Wall_Entrance2",		"Dungeon\\Wall_Entrance2.obj");
+	CResourceManager::Load<CModel>(		"Entrance_Col2",		"Dungeon\\Entrance_Wall_Col2.obj");
+	CResourceManager::Load<CModel>(		"Entrance_Ceil_Col2",	"Dungeon\\Entrance_Ceil_Col2.obj");
 
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
@@ -100,6 +102,8 @@ void CGameScene::Load()
 
 	// ダンジョンの作成
 	mpField = new CField();
+
+	new CField2(0);
 
 	// インベントリ画面の生成
 	new CInventory();

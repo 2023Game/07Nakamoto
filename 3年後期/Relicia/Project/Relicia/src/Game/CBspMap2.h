@@ -66,6 +66,8 @@ public:
 	
 	// 階層に応じた初期化
 	void InitializeForFloor(int floor);
+	// 2次元配列のマップデータの取得
+	const std::vector<std::vector<Tile>>& GetMapData() const;
 
 private:
 	// 区画の大きさ
