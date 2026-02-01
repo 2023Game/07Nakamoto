@@ -1,6 +1,7 @@
 #include "CElementManager.h"
 #include "CrystalData.h"
 #include "CAdventurer.h"
+#include "CGameData.h"
 
 #define TRUE_ADD_ENERGY 20.0f	// 同じ属性の時のエネルギーの増加量
 #define FALSE_ADD_ENERGY 10.0f	// 異なる属性の時のエネルギーの増加量
@@ -24,9 +25,7 @@ CElementManager::CElementManager()
 	: CTask(ETaskPriority::eUI, 0, ETaskPauseType::eMenu)
 	, mCurrentIndex(0)
 {
-	// スロットの数を設定
 	// 初期化
-	mSlots.resize(MAX_SLOT);
 	
 	// 一旦3つの属性を設定
 	// TODO:インベントリで変更できるようにする
@@ -39,8 +38,6 @@ CElementManager::CElementManager()
 // デストラクタ
 CElementManager::~CElementManager()
 {
-	mSlots.clear();
-
 	// 破棄されたら、インスタンス変数を空にする
 	if (spInstance == this)
 	{
@@ -58,32 +55,38 @@ void CElementManager::AddElement(ElementType type)
 
 	bool isAdded = false;
 
+	// 追加する属性のスロットが既にある場合は追加しない
+	for (auto& slot : CGameData::crystalSlots)
+	{
+		// 空いているスロットを探す
+		if (slot.data == crystalData) return;
+	}
+
 	// 属性スロットのリストの先頭から空のスロットを探して、
 	// 空の属性スロットに属性を入れる
-	for (auto& slot : mSlots)
+	for (auto& slot : CGameData::crystalSlots)
 	{
 		// 空いているスロットを探す
 		if (slot.data != nullptr) continue;
 			
 		slot.data = crystalData;
-		//slot.currentEnergy = 0.0f;
-		slot.maxEnergy = 100.0f;	// 仮の最大値
+		slot.maxEnergy = MAX_CRYSTAL_ENERGY;
 		isAdded = true;
 
 		break;
 	}
 
-	// 属性スロットが満杯の場合、
-	if (!isAdded)
-	{
-		// 加算しない
-	}
+	//// 属性スロットが満杯の場合、
+	//if (!isAdded)
+	//{
+	//	// 加算しない
+	//}
 }
 
 // 属性エネルギーを加算
 void CElementManager::AddElementEnergy(ElementType type)
 {
-	for (auto& slot : mSlots)
+	for (auto& slot : CGameData::crystalSlots)
 	{
 		// 属性スロットが空か確認
 		if (slot.data == nullptr) continue;
@@ -100,9 +103,9 @@ void CElementManager::AddElementEnergy(ElementType type)
 		}
 
 		// エネルギー上限を越えた場合、
-		if (slot.currentEnergy > MAX_ENERGY)
+		if (slot.currentEnergy > MAX_CRYSTAL_ENERGY)
 		{
-			slot.currentEnergy = MAX_ENERGY;
+			slot.currentEnergy = MAX_CRYSTAL_ENERGY;
 		}
 	}
 }
@@ -110,25 +113,25 @@ void CElementManager::AddElementEnergy(ElementType type)
 // 属性エネルギーの減少
 void CElementManager::SubtractElementEnergy(float subtract)
 {
-	mSlots[mCurrentIndex].currentEnergy -= subtract;
+	CGameData::crystalSlots[mCurrentIndex].currentEnergy -= subtract;
 }
 
 // 現在装備中の属性を取得
 const CrystalData* CElementManager::GetCurrentElement() const
 {
-	return mSlots[mCurrentIndex].data;
+	return CGameData::crystalSlots[mCurrentIndex].data;
 }
 
 // 指定した属性スロットのデータを取得
 const CrystalData* CElementManager::GetCurrentElementData(int index) const
 {
-	return mSlots[index].data;
+	return CGameData::crystalSlots[index].data;
 }
 
 // 現在取得している属性ゲージを取得
 const float CElementManager::GetEnergy(int index)
 {
-	return mSlots[index].currentEnergy;
+	return CGameData::crystalSlots[index].currentEnergy;
 }
 
 //// 属性を消費
@@ -143,15 +146,15 @@ const float CElementManager::GetEnergy(int index)
 // マウスホイールで次へ切り替え
 void CElementManager::SelectNext()
 {
-	if (mSlots.empty()) return;
-	mCurrentIndex = (mCurrentIndex + 1) % mSlots.size();
+	if (CGameData::crystalSlots.empty()) return;
+	mCurrentIndex = (mCurrentIndex + 1) % CGameData::crystalSlots.size();
 }
 
 // マウスホイールで前へ切り替え
 void CElementManager::SelectPrev()
 {
-	if (mSlots.empty()) return;
-	mCurrentIndex = (mCurrentIndex - 1 + mSlots.size()) % mSlots.size();
+	if (CGameData::crystalSlots.empty()) return;
+	mCurrentIndex = (mCurrentIndex - 1 + CGameData::crystalSlots.size()) % CGameData::crystalSlots.size();
 }
 
 // 現在のスロットの番号を取得
@@ -163,7 +166,7 @@ int CElementManager::GetCurrentIndex() const
 // 装備されている属性ゲージがスキルを使うのに足りているか
 bool CElementManager::IsUseElementEnergy()
 {
-	if (mSlots[mCurrentIndex].currentEnergy > ENERGY_CONSUMPTION) return true;
+	if (CGameData::crystalSlots[mCurrentIndex].currentEnergy > ENERGY_CONSUMPTION) return true;
 	
 	return false;
 }

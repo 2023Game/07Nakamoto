@@ -2,9 +2,6 @@
 #include "CrystalData.h"
 #include "CTask.h"
 
-#define MAX_SLOT 3
-#define MAX_ENERGY 100.0f
-
 // 属性ストック管理クラス
 class CElementManager : public CTask
 {
@@ -53,17 +50,9 @@ public:
 	void Render() override;
 
 private:
-	struct CrystalSlot
-	{
-		const CrystalData* data = nullptr;	// クリスタルのデータ
-		float currentEnergy = 0.0f;			// 現在のゲージの量
-		float maxEnergy = MAX_ENERGY;		// 最大ゲージ量
-	};
 
 	static CElementManager* spInstance;
 
-	// 属性スロット
-	std::vector<CrystalSlot> mSlots;
 	// 選択中の数値
 	int mCurrentIndex;
 

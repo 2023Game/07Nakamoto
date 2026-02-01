@@ -23,14 +23,17 @@ CNavManager::CNavManager()
 	, mFindNodeDistance(0.0f)
 	, mNextFindNodeIndex(-1)
 {
-	assert(spInstance == nullptr);
+	assert(spInstance == nullptr || spInstance->IsKill());
 	spInstance = this;
 }
 
 // デストラクタ
 CNavManager::~CNavManager()
 {
-	spInstance = nullptr;
+	if (spInstance == this)
+	{
+		spInstance = nullptr;
+	}
 
 	auto itr = mNodes.begin();
 	auto end = mNodes.end();

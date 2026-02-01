@@ -86,6 +86,7 @@
     <ClCompile Include="src\Game\CEnemyManager.cpp" />
     <ClCompile Include="src\Game\CEscapeArea.cpp" />
     <ClCompile Include="src\Game\CField2.cpp" />
+    <ClCompile Include="src\Game\CGameData.cpp" />
     <ClCompile Include="src\Game\CInventory.cpp" />
     <ClCompile Include="src\Game\CInventory2.cpp" />
     <ClCompile Include="src\Game\CItemManager.cpp" />
@@ -227,6 +228,7 @@
     <ClInclude Include="src\Game\CEnemyManager.h" />
     <ClInclude Include="src\Game\CEscapeArea.h" />
     <ClInclude Include="src\Game\CField2.h" />
+    <ClInclude Include="src\Game\CGameData.h" />
     <ClInclude Include="src\Game\CInventory.h" />
     <ClInclude Include="src\Game\CInventory2.h" />
     <ClInclude Include="src\Game\CItemManager.h" />

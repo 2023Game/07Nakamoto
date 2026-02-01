@@ -3,6 +3,7 @@
 #include "CSceneManager.h"
 #include "CModel.h"
 #include "CField.h"
+#include "CGameData.h"
 
 // コンストラクタ
 CEscapeArea::CEscapeArea(const CVector& pos, const CVector& angle, const CVector& size)
@@ -36,8 +37,21 @@ void CEscapeArea::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 	// プレイヤーに衝突した
 	if (other->Layer() == ELayer::ePlayer)
 	{
-		// リザルトシーンを読み込む
-		CSceneManager::Instance()->LoadScene(EScene::eGame);
+		// 一度触れたらコライダーをオフにする
+		mpCollider->SetEnable(false);
+
+		// クリアしたのが5階層目より下の場合
+		if (CGameData::floorNum < 3)
+		{
+			CGameData::floorNum++;
+			CSceneManager::Instance()->LoadScene(EScene::eGame);
+		}
+		// 全階層クリアした場合
+		else
+		{
+			// リザルトシーンを読み込む
+			CSceneManager::Instance()->LoadScene(EScene::eResult);
+		}
 	}
 }
 

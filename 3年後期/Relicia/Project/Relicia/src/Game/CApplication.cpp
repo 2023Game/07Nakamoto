@@ -8,6 +8,7 @@
 #include "CSceneManager.h"
 #include "CGamePause.h"
 #include "CFade.h"
+#include "CGameData.h"
 
 CApplication::~CApplication()
 {
@@ -15,6 +16,8 @@ CApplication::~CApplication()
 
 void CApplication::Start()
 {
+	// 開始時にゲームデータをリセット
+	CGameData::Reset();
 #if _DEBUG
 	// デバッグカメラを作成
 	CDebugCamera::DebugCamera();

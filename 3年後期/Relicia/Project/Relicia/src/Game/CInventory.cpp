@@ -5,15 +5,11 @@
 #include "CAdventurer.h"
 #include "CItemSlotUI.h"
 #include "CItemMenu.h"
+#include "CGameData.h"
 
 // インベントリの座標
 #define INVENTORY_POS CVector2(280.0f,220.5f)
 #define INVENTORY_SIZE CVector2(360.0f,285.0f)
-
-#define INITIAL_SLOT_ROW 4			// 初期のアイテムスロットの縦の数
-#define INITIAL_SLOT_COL 5			// 初期のアイテムスロットの横の数
-// アイテムスロット数
-#define SLOT_COUNT (INITIAL_SLOT_ROW * INITIAL_SLOT_COL)
 
 #define ICON_POS_X 130.0f	// アイテムアイコンの開始座標X
 #define ICON_POS_Y 108.0f	// アイテムアイコンの開始座標Y
@@ -39,24 +35,22 @@ CInventory::CInventory()
 	: CTask(ETaskPriority::eInventry, 0, ETaskPauseType::eMenu)
 	, mSlotRow(INITIAL_SLOT_ROW)
 	, mSlotCol(INITIAL_SLOT_COL)
-	, mItemSlots(SLOT_COUNT)
 	, mIsOpened(false)
 	, mEnterSlotIndex(-1)
 	, mGrabSlotIndex(-1)
 	//, mpItemMenu(nullptr)
 {
 	spInstance = this;
-	mItemSlots.reserve(INITIAL_SLOT_ROW * INITIAL_SLOT_COL);
 
 	// 各アイテムスロットのアイテムアイコン表示用のイメージを作成
-	for (int i = 0; i < mItemSlots.size(); i++)
+	for (int i = 0; i < CGameData::ItemSlots.size(); i++)
 	{
-		SlotData& slot = mItemSlots[i];
+		SlotData& slot = CGameData::ItemSlots[i];
 
-		slot.slotUI = new CItemSlotUI(i);
+		CItemSlotUI* slotUI = new CItemSlotUI(i);
 
-		slot.slotUI->SetSize(CVector2(DISP_ICON_SIZE, DISP_ICON_SIZE));
-		slot.slotUI->SetCenter(slot.slotUI->GetSize() * 0.5f);
+		slotUI->SetSize(CVector2(DISP_ICON_SIZE, DISP_ICON_SIZE));
+		slotUI->SetCenter(slotUI->GetSize() * 0.5f);
 
 		int col = i % INITIAL_SLOT_COL;
 		int row = i / INITIAL_SLOT_COL;
@@ -64,7 +58,9 @@ CInventory::CInventory()
 		float x = ICON_POS_X  + (ICON_SIZE + ICON_INTERVAL) * col;
 		float y = ICON_POS_Y  + (ICON_SIZE + ICON_INTERVAL) * row;
 
-		slot.slotUI->SetPos(x, y);
+		slotUI->SetPos(x, y);
+
+		mItemSlotUIs.push_back(slotUI);
 	}
 
 	// メニュー画面の背景生成
@@ -116,9 +112,9 @@ CInventory::~CInventory()
 	SAFE_DELETE(mpInventoryFrame);
 	SAFE_DELETE(mpSlotHighlight);
 
-	for (SlotData& slot : mItemSlots)
+	for (CItemSlotUI* slot : mItemSlotUIs)
 	{
-		SAFE_DELETE(slot.slotUI);
+		SAFE_DELETE(slot);
 	}
 
 }
@@ -131,19 +127,19 @@ void CInventory::Open()
 	// マウスカーソルを表示
 	CInput::ShowCursor(true);
 
-	int size = mItemSlots.size();
+	int size = CGameData::ItemSlots.size();
 	// アイテムスロットの位置の設定
 	for (int i = 0; i < size; i++)
 	{
-		SlotData& slot = mItemSlots[i];
-
+		SlotData& slot = CGameData::ItemSlots[i];
+		CItemSlotUI* slotUI = mItemSlotUIs[i];
 		if (slot.data != nullptr)
 		{
-			slot.slotUI->SetItemSloto(slot.data, slot.count);
+			slotUI->SetItemSloto(slot.data, slot.count);
 		}
 		else
 		{
-			slot.slotUI->SetItemSloto(nullptr, -1);
+			slotUI->SetItemSloto(nullptr, -1);
 		}
 	}
 
@@ -191,7 +187,7 @@ void CInventory::AddItem(ItemId type, int count)
 	// ■既にアイテムが入っているスロットにアイテムを追加する
 	// アイテムスロットの中身を確認して、
 	// 同じ種類のアイテムが入っているアイテムスロットを探す
-	for (SlotData& slot : mItemSlots)
+	for (SlotData& slot : CGameData::ItemSlots)
 	{
 		// 空のアイテムスロットであれば、次のアイテムスロットを調べる
 		if (slot.data == nullptr) continue;
@@ -233,7 +229,7 @@ void CInventory::AddItem(ItemId type, int count)
 	{
 		// アイテムスロットのリストの先頭から空のスロットを探して、
 		// 見つかった空のアイテムスロットにアイテムを入れる
-		for (SlotData& slot : mItemSlots)
+		for (SlotData& slot : CGameData::ItemSlots)
 		{
 			// 既にアイテムが入っているスロットはスルー
 			if (slot.data != nullptr) continue;
@@ -277,8 +273,8 @@ void CInventory::AddItem(ItemId type, int count)
 const ItemData* CInventory::GetItemSlotData(int slotIndex) const
 {
 	// 範囲がいであれば、nullptrを返す
-	if (!(0 <= slotIndex && slotIndex < mItemSlots.size())) return nullptr;
-	return mItemSlots[slotIndex].data;
+	if (!(0 <= slotIndex && slotIndex < CGameData::ItemSlots.size())) return nullptr;
+	return CGameData::ItemSlots[slotIndex].data;
 }
 
 // カーソルがスロットに重なった
@@ -318,8 +314,10 @@ void CInventory::ReleaseItemSlot(int index)
 	// カーソルが重なっているアイテムスロットが同じであれば、処理しない
 	if (mGrabSlotIndex == mEnterSlotIndex) return;
 
-	SlotData& grabData = mItemSlots[mGrabSlotIndex];
-	SlotData& enterData = mItemSlots[mEnterSlotIndex];
+	SlotData& grabData = CGameData::ItemSlots[mGrabSlotIndex];
+	SlotData& enterData = CGameData::ItemSlots[mEnterSlotIndex];
+	CItemSlotUI* grabSlotUI = mItemSlotUIs[mGrabSlotIndex];
+	CItemSlotUI* enterSlotUI = mItemSlotUIs[mEnterSlotIndex];
 
 	// 掴んでいるアイテムのスロットの情報を保持しておく
 	const ItemData* tmpData = grabData.data;
@@ -329,13 +327,13 @@ void CInventory::ReleaseItemSlot(int index)
 	// カーソルが重なっていたアイテムスロットのデータを入れる
 	grabData.data = enterData.data;
 	grabData.count = enterData.count;
-	grabData.slotUI->SetItemSloto(grabData.data, grabData.count);
+	grabSlotUI->SetItemSloto(grabData.data, grabData.count);
 
 	// カーソルが重なっていたアイテムスロットには、
 	// 掴んでいたアイテムスロットのデータを入れる
 	enterData.data = tmpData;
 	enterData.count = tmpCount;
-	enterData.slotUI->SetItemSloto(enterData.data, enterData.count);
+	enterSlotUI->SetItemSloto(enterData.data, enterData.count);
 
 	//// プレイヤーがアイテムを装備しているか
 	//CAdventurer* adventurer = CAdventurer::Instance();
@@ -358,14 +356,15 @@ void CInventory::ReleaseItemSlot(int index)
 void CInventory::Update()
 {
 	// アイテムスロットのイメージの更新
-	for (SlotData& slot : mItemSlots)
+	for (CItemSlotUI* slotUI : mItemSlotUIs)
 	{
-		slot.slotUI->Update();
+		slotUI->Update();
 	}
 
 	if (mEnterSlotIndex != -1)
 	{
-		SlotData& itemData = mItemSlots[mEnterSlotIndex];
+		//SlotData& itemData = CGameData::ItemSlots[mEnterSlotIndex];
+		CItemSlotUI* slotUI = mItemSlotUIs[mEnterSlotIndex];
 
 		//// アイテムアイコンの上で右クリックしたら
 		//if (CInput::Key(VK_RBUTTON) && !mpItemMenu->IsShow())
@@ -381,7 +380,7 @@ void CInventory::Update()
 		//}
 		//else
 		//{
-		mpSlotHighlight->SetPos(itemData.slotUI->GetPos().X(), itemData.slotUI->GetPos().Y());
+		mpSlotHighlight->SetPos(slotUI->GetPos().X(), slotUI->GetPos().Y());
 		mpSlotHighlight->SetEnable(true);
 		mpSlotHighlight->Update();
 		//}
@@ -405,26 +404,26 @@ void CInventory::Render()
 	}
 
 	// アイテムスロットのアイテムの描画
-	int count = mItemSlots.size();
+	int count = CGameData::ItemSlots.size();
 	for (int i = 0; i < count; i++)
 	{
-		SlotData& slot = mItemSlots[i];
+		SlotData& slot = CGameData::ItemSlots[i];
 		// 空のスロットは描画しない
 		if (slot.data == nullptr) continue;
 		// 現在つまんでいるアイテムスロットはこのタイミングでは描画しない
 		if (i == mGrabSlotIndex) continue;
 
-		slot.slotUI->Render();
+		mItemSlotUIs[i]->Render();
 	}
 
 	// アイテムスロットを掴んでいる場合
 	if (mGrabSlotIndex >= 0)
 	{
 		// 空スロットでなければ、このタイミングで描画
-		SlotData& slot = mItemSlots[mGrabSlotIndex];
+		SlotData& slot = CGameData::ItemSlots[mGrabSlotIndex];
 		if (slot.data != nullptr)
 		{
-			slot.slotUI->Render();
+			mItemSlotUIs[mGrabSlotIndex]->Render();
 		}
 	}
 }

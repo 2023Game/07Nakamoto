@@ -5,6 +5,7 @@
 #include "CSound.h"
 #include "CBGMManager.h"
 #include "CTitleUI.h"
+#include "CGameData.h"
 
 //コンストラクタ
 CTitleScene::CTitleScene()
@@ -55,6 +56,9 @@ void CTitleScene::Update()
 		// ゲーム開始ならば、ゲームシーンを読み込む
 		if (mpTitleUI->IsStartGame())
 		{
+			// ゲームが開始するので、ゲームデータをリセット
+			CGameData::Reset();
+
 			CSceneManager::Instance()->LoadScene(EScene::eGame);
 		}
 		// ゲーム終了ならば、アプリを閉じる

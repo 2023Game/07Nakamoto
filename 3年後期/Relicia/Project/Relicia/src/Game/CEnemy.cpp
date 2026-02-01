@@ -22,9 +22,10 @@
 #define FOV_ANGLE 45.0f		// 視野範囲の角度
 #define FOV_LENGTH 100.0f	// 視野範囲の距離
 
-#define ALERT_STOP_TIME		  2.0f	// 警戒状態へ遷移する静止時間
-#define ALERT_FOV_ANGLE		 60.0f	// 警戒時の視野範囲の角度
-#define ALERT_FOV_LENGTH	300.0f	// 警戒時の視野範囲の距離
+#define LOOK_AROUND_TIME	0.5f	// 警戒時の振り向き速度
+#define LOOK_AROUND_WAIT_TIME 0.25f
+#define LOOK_AROUND_END_TIME 0.5f
+#define LOOK_AROUND_ANGLE	45.0f	// 警戒時の振り向く角度
 
 // コンストラクタ
 CEnemy::CEnemy()
@@ -53,7 +54,9 @@ CEnemy::CEnemy()
 	, mMoveObjElapsed(0.0f)
 	, mpBlockingObj(nullptr)
 	, mIsBlockedThisFrame(false)
-	, mStopElapsedTime(0.0f)
+	, mLookForwad(0.0f, 0.0f, 0.0f)
+	, mLookStarDir(0.0f, 0.0f, 0.0f)
+	, mLookEndDir(0.0f, 0.0f, 0.0f)
 {
 	// HPゲージを作成
 	mpHpGauge = new CGaugeUI3D(this);
@@ -631,44 +634,122 @@ void CEnemy::UpdateAlert()
 	// ステップごとに処理を切り替える
 	switch (mStateStep)
 	{
-		// ステップ１：ジャンプ
+		// ステップ0：振り向き前の設定
 	case 0:
-		mMoveSpeedY = JUMP_SPEED;
+	{
+		mLookForwad = VectorZ();
+		mLookStarDir = mLookForwad;		// 見渡し開始方向ベクトル（現在の正面方向）
+		// 見渡し終了方向ベクトル（見渡す前の正面方向からY軸に見渡す角度分回転したベクトル）
+		mLookEndDir = CQuaternion(0.0f, LOOK_AROUND_ANGLE, 0.0f) * mLookForwad;
 		mStateStep++;
 		break;
-		// ステップ２：右を向く
+	}
+	// ステップ1：右を向く
 	case 1:
-		mStopElapsedTime += Times::DeltaTime();
-		
-		if (mStopElapsedTime > 3.0f)
+		// 右へ向く時間が経過していない場合
+		if (mElapsedTime < LOOK_AROUND_TIME)
 		{
-			mMoveSpeedY = JUMP_SPEED;
-			mStateStep++;
-			mStopElapsedTime = 0;
-		}
+			// 経過時間が何パーセント進行しているか
+			float per = mElapsedTime / LOOK_AROUND_TIME;
+			CVector dir = CVector::Slerp(mLookStarDir, mLookEndDir, per);
+			Rotation(CQuaternion::LookRotation(dir));
 
+			mElapsedTime += Times::DeltaTime();
+		}
+		// 右へ向く時間が経過した
+		else
+		{
+			mStateStep++;
+			mElapsedTime = 0.0f;
+		}
+		break;
+		// ステップ2：右に振り向き後の待ち時間
+	case 2:
+		if (mElapsedTime < LOOK_AROUND_WAIT_TIME)
+		{
+			mElapsedTime += Times::DeltaTime();
+		}
+		else
+		{
+			mLookStarDir = mLookEndDir;		// 見渡し開始方向ベクトル（現在の正面方向）
+			// 見渡し終了方向ベクトル（見渡す前の正面方向からY軸に見渡す角度のマイナス分回転したベクトル）
+			mLookEndDir = CQuaternion(0.0f, -LOOK_AROUND_ANGLE, 0.0f) * mLookForwad;
+
+			mStateStep++;
+			mElapsedTime = 0.0f;
+		}
 		break;
 		// ステップ3：左を向く
-	case 2:
-		mStopElapsedTime += Times::DeltaTime();
-		mRote.Set(0.0f, mRote.Y() + 1.0f, 0.0f);
+	case 3:
+		// 左へ向く時間が経過していない場合
+		if (mElapsedTime < LOOK_AROUND_TIME * 2.0f)
+		{
+			// 経過時間が何パーセント進行しているか
+			float per = mElapsedTime / LOOK_AROUND_TIME;
+			CVector dir = CVector::Slerp(mLookStarDir, mLookEndDir, per);
+			Rotation(CQuaternion::LookRotation(dir));
 
-		if (mStopElapsedTime > 3.0f)
+			mElapsedTime += Times::DeltaTime();
+		}
+		// 左へ向く時間が経過した
+		else
 		{
 			mStateStep++;
-			mStopElapsedTime = 0;
+			mElapsedTime = 0.0f;
 		}
 		break;
-		// ステップ４：待機状態に戻す
-	case 3:
-		mStopElapsedTime = 0.0f;
-		ChangeState(EState::eIdle);
+		// ステップ4：左に振り向き後の待ち時間
+	case 4:
+		if (mElapsedTime < LOOK_AROUND_WAIT_TIME)
+		{
+			mElapsedTime += Times::DeltaTime();
+		}
+		else
+		{
+			mLookStarDir = mLookEndDir;		// 見渡し開始方向ベクトル（現在の正面方向）
+			// 見渡し終了方向ベクトル（見渡す前の正面方向）
+			mLookEndDir = mLookForwad;
+
+			mStateStep++;
+			mElapsedTime = 0.0f;
+		}
+		break;
+		// ステップ5：正面方向に戻る
+	case 5:
+		// 正面方向へ戻る時間が経過していない場合
+		if (mElapsedTime < LOOK_AROUND_TIME)
+		{
+			// 経過時間が何パーセント進行しているか
+			float per = mElapsedTime / LOOK_AROUND_TIME;
+			CVector dir = CVector::Slerp(mLookStarDir, mLookEndDir, per);
+			Rotation(CQuaternion::LookRotation(dir));
+
+			mElapsedTime += Times::DeltaTime();
+		}
+		// 正面方向へ向いた
+		else
+		{
+			mStateStep++;
+			mElapsedTime = 0.0f;
+		}
+		break;
+		// ステップ6：正面方向へ戻った後の待ち時間
+	case 6:
+		if (mElapsedTime < LOOK_AROUND_END_TIME)
+		{
+			mElapsedTime += Times::DeltaTime();
+		}
+		else
+		{
+			// 待機状態へ戻す
+			ChangeState(EState::eIdle);
+		}
 		break;
 	}
-
 	// プレイヤーを見つけたら
 	if (CheckAttackPlayer())
 	{
+		// 追いかける
 		ChangeState(EState::eChase);
 	}
 

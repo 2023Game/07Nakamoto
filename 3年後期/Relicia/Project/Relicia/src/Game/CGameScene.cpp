@@ -14,11 +14,11 @@
 #include "CInteractObjectManager.h"
 #include "CInventory.h"
 #include "CNavManager.h"
-
 #include "CDebugInput.h"
 #include "CPlayer.h"
-
-#include "CField2.h"
+#include "CItemManager.h"
+#include "CCrystalManager.h"
+#include "CGameData.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -31,17 +31,8 @@ CGameScene::CGameScene()
 CGameScene::~CGameScene()
 {
 	CInteractObjectManager::ClearInstance();
-	//SAFE_DELETE(mpField);
-	
-	//for (CEnemy* enemy : mpEnemys)
-	//{
-	//	if (enemy != nullptr)
-	//	{
-	//		enemy->Kill();
-	//	}
-	//}
-
-	//mpEnemys.clear();
+	CItemManager::ClearInstance();
+	CCrystalManager::ClearInstance();
 }
 
 //シーン読み込み
@@ -103,7 +94,7 @@ void CGameScene::Load()
 	// ダンジョンの作成
 	mpField = new CField();
 
-	new CField2(0);
+	//new CField2(0);
 
 	// インベントリ画面の生成
 	new CInventory();
@@ -216,5 +207,7 @@ void CGameScene::Update()
 		// 敵の生成
 		CreateEnemys();
 	}
+
+	CDebugPrint::Print("階層：%d階\n", CGameData::floorNum);
 #endif
 }

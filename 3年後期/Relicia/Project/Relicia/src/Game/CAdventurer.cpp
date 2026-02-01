@@ -13,6 +13,7 @@
 #include "CInventory.h"
 #include "CNavNode.h"
 #include "CResultScene.h"
+#include "CGameData.h"
 
 // プレイヤーのインスタンス
 CAdventurer* CAdventurer::spInstance = nullptr;
@@ -25,8 +26,6 @@ CAdventurer* CAdventurer::spInstance = nullptr;
 #define RUN_SPEED 1.2f		// 走行中の速度
 #define JUMP_SPEED 1.25f		// ジャンプ速度
 #define GRAVITY 0.0625f		// 重力加速度
-
-#define MAX_HP 100	// 体力の最大値
 
 #define ATTACK_START_FRAME 26.0f	// 斬り攻撃の開始フレーム
 #define ATTACK_END_FRAME 50.0f		// 斬り攻撃の終了フレーム
@@ -81,8 +80,8 @@ CAdventurer::CAdventurer()
 	, mElementType(ElementType::None)
 	, mpNavNode(nullptr)
 {
-	mMaxHp = MAX_HP;
-	mHp = mMaxHp;
+	mMaxHp = CGameData::playerMaxHp;
+	mHp = CGameData::playerHp;
 
 	//インスタンスの設定
 	spInstance = this;
@@ -143,7 +142,7 @@ CAdventurer::CAdventurer()
 	mpElementEquipment = new CElementSlotUI2();
 
 	// プレイヤーのHPのUI
-	mpHpGauge = new CPlayerHpUI(MAX_HP);
+	mpHpGauge = new CPlayerHpUI(MAX_PLAYER_HP);
 	mpHpGauge->SetPos(HP_GAUGE_UI_POS);
 
 	// 経路探索用のノードを作成
@@ -166,7 +165,10 @@ CAdventurer::~CAdventurer()
 		mpSword->Kill();
 	}
 
-	spInstance = nullptr;
+	if (spInstance == this)
+	{
+		spInstance = nullptr;
+	}
 }
 
 // 攻撃中か
@@ -224,6 +226,10 @@ void CAdventurer::TakeDamage(int damage, CObjectBase* causer)
 		// 移動を停止
 		mMoveSpeed = CVector::zero;
 	}
+
+	// ゲームデータに最大HPと現在のHPを反映
+	CGameData::playerMaxHp = mMaxHp;
+	CGameData::playerHp = mHp;
 }
 
 //// 装備したスロット番号のアイテムを装備する

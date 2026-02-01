@@ -31,9 +31,9 @@ CBspMap2::CBspMap2(int floorNum)
     // Ä‹A“I‚É‹æ‰æ‚ğ•ªŠ„
     Split(mpRoot, 0);
     // °‚Ì¶¬
-    CreateRoom(mpRoot);
+    BuildRoom(mpRoot);
     // ’Ê˜H‚Ì¶¬
-    CreateCorridor(mpRoot);
+    BuildCorridor(mpRoot);
     // •Ç‚Ì¶¬
     BuildWalls();
 
@@ -152,16 +152,16 @@ void CBspMap2::Split(SectionNode* node, int depth)
     }
 }
 
-// •”‰®‚Ì°‚ğ¶¬
-void CBspMap2::CreateRoom(SectionNode* node)
+// •”‰®‚Ì°‚ğ\’z
+void CBspMap2::BuildRoom(SectionNode* node)
 {
     if (!node) return;
 
     if (node->left || node->right)
     {
         // Ä‹A
-        CreateRoom(node->left);
-        CreateRoom(node->right);
+        BuildRoom(node->left);
+        BuildRoom(node->right);
         return;
     }
 
@@ -196,7 +196,7 @@ void CBspMap2::CreateRoom(SectionNode* node)
     node->room = room;
     node->connectPoint = room.center;
 
-    // °‚ğ¶¬
+    // °‚ğİ’è
     for (int iy = y; iy < y + h; iy++)
     {
         for (int ix = x; ix < x + w; ix++)
@@ -206,7 +206,7 @@ void CBspMap2::CreateRoom(SectionNode* node)
     }
 }
 
-// •Ç‚Ì¶¬
+// •Ç‚Ì\’z
 void CBspMap2::BuildWalls()
 {
     for (int y = 0; y < mMapHeight; y++)
@@ -235,19 +235,20 @@ void CBspMap2::BuildWalls()
     }
 }
 
-// ’Ê˜H‚Ì¶¬
-void CBspMap2::CreateCorridor(SectionNode* node)
+// ’Ê˜H‚Ì\’z
+void CBspMap2::BuildCorridor(SectionNode* node)
 {
     if (!node || !node->left || !node->right)
         return;
 
     // Ä‹A
-    CreateCorridor(node->left);
-    CreateCorridor(node->right);
+    BuildCorridor(node->left);
+    BuildCorridor(node->right);
 
     CVector2 p1 = node->left->connectPoint;
     CVector2 p2 = node->right->connectPoint;
 
+    // ’Ê˜H‚ğŒ@‚é
     DigCorridor(p1, p2);
 
     node->connectPoint = (p1 + p2) * 0.5f;

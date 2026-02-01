@@ -1,6 +1,7 @@
 #include "CElementSlotUI.h"
 #include "CElementManager.h"
 #include "CImage.h"
+#include "CGameData.h"
 
 // 属性スロットの座標
 #define ELEMENT_UI_POS CVector2(40.0f,518.0f)
@@ -41,7 +42,7 @@ CElementSlotUI::CElementSlotUI()
 
 	float offsetPosX = 0;
 	// 属性アイコンのイメージを属性スロット分読み込む
-	for (int i = 0; i < MAX_SLOT; i++)
+	for (int i = 0; i < MAX_CRYSTAL_SLOT; i++)
 	{
 		// 属性アイコンのイメージを読み込み
 		CImage* icon = new CImage

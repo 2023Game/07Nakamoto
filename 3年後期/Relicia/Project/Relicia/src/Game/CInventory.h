@@ -57,20 +57,8 @@ private:
 	CImage* mpSlotHighlight;	// カーソルが重なっているアイテムスロットを強調表示する
 	//CItemMenu* mpItemMenu;	// アイテム選択のメニュー覧
 
-	// アイテムスロットのデータ
-	struct SlotData
-	{
-		// そのスロットに入っているアイテムのデータ
-		const ItemData* data;
-		int count;		// 入っているアイテムの個数
-		CItemSlotUI* slotUI;	// アイテムスロットのUI
-		SlotData()
-			: data(nullptr)
-			, slotUI(nullptr)
-		{}
-	};
-	// アイテムスロットのリスト
-	std::vector<SlotData> mItemSlots;
+	// アイテムスロットのUIのリスト
+	std::vector<CItemSlotUI*> mItemSlotUIs;
 
 	int mSlotRow;	// アイテムスロットの縦の数
 	int mSlotCol;	// アイテムスロットの横の数

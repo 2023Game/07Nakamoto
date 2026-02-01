@@ -508,6 +508,9 @@
     <ClCompile Include="src\Game\CBspMap2.cpp">
       <Filter>ソース ファイル\Game\Field</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CGameData.cpp">
+      <Filter>ソース ファイル\Game</Filter>
+    </ClCompile>
     <ClCompile Include="src\Game\CField2.cpp">
       <Filter>ソース ファイル\Game\Field</Filter>
     </ClCompile>
@@ -923,6 +926,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CBspMap2.h">
       <Filter>ソース ファイル\Game\Field</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CGameData.h">
+      <Filter>ソース ファイル\Game</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CField2.h">
       <Filter>ソース ファイル\Game\Field</Filter>

@@ -36,17 +36,23 @@ public:
 
 	// ダンジョン生成
 	void CreateDungeon();
-	// マップの生成
-	void CreateMap();
-
-	// 壁の生成
-	void SpawnWall(const CVector& pos, float rotY);
-	// 方角で回転値を取得
-	float GetWallRotation(Direction dir);
 
 private:
 	// フィールドのインスタンス
 	static CField2* spInstance;
+
+	// マップの生成
+	void BuildStage();
+	// 床の生成
+	void CreateFloor(const CVector& pos);
+	// 壁の生成
+	void CreateWall(const CVector& pos, float rotY);
+	// 方角で回転値を取得
+	float GetWallRotation(Direction dir);
+	// 柱を生成
+	void CreatePillar(const CVector& pos);
+	// 通路の柱を生成
+	void CreatePassagePillar();
 
 	// ダンジョンの2次元配列データ
 	CBspMap2* mpMapData;

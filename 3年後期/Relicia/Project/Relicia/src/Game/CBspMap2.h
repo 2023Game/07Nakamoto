@@ -91,12 +91,12 @@ private:
 
 	// ‹æ‰æ•ª‚¯
 	void Split(SectionNode* node, int depth);
-	// •”‰®‚Ì°‚ğ¶¬
-	void CreateRoom(SectionNode* node);
-	// •Ç‚Ì¶¬
+	// •”‰®‚Ì°‚ğ\’z
+	void BuildRoom(SectionNode* node);
+	// •Ç‚Ì\’z
 	void BuildWalls();
-	// ’Ê˜H‚Ì¶¬
-	void CreateCorridor(SectionNode* node);
+	// ’Ê˜H‚Ì\’z
+	void BuildCorridor(SectionNode* node);
 	// ’Ê˜H‚ğŒ@‚é
 	void DigCorridor(CVector2 from, CVector2 to);
 

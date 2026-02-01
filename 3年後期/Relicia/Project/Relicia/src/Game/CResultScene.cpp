@@ -6,6 +6,7 @@
 #include "CBGMManager.h"
 #include "CItemManager.h"
 #include "CCrystalManager.h"
+#include "CGameData.h"
 
 // コンストラクタ
 CResultScene::CResultScene()
@@ -52,12 +53,18 @@ void CResultScene::Update()
 			CItemManager::Instance()->Destroy();
 			// クリスタルマネージャーを破棄
 			CCrystalManager::Instance()->Destroy();
-\
+
+			// ゲームが終了したので、ゲームデータをリセット
+			CGameData::Reset();
+
 			CSceneManager::Instance()->LoadScene(EScene::eGame);
 		}
 		// タイトルならば、タイトルシーンを読み込む
 		else if (mpResultUI->IsTitle())
 		{
+			// ゲームが終了したので、ゲームデータをリセット
+			CGameData::Reset();
+
 			CSceneManager::Instance()->LoadScene(EScene::eTitle);
 		}
 	}

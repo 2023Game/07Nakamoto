@@ -157,8 +157,6 @@ protected:
 	CNavNode* mpLostPlayerNode;	// プレイヤーを見失った位置のノード
 	float mLostElapsedTime;		// 見失ってからの経過時間
 
-	float mStopElapsedTime;	// 警戒している経過時間
-
 	CNavNode* mpNearNode;		// 最寄りのノード保存用
 	CNavNode* mpCurrentNode;	// 巡回ノード保存用
 	CNavNode* mpNextNode;		// 次に移動するノード保存用
@@ -172,6 +170,10 @@ protected:
 	bool mIsBlockedThisFrame;	// 動かせるオブジェクトと当たっているか
 
 	CVector mRote;
+
+	CVector mLookForwad;	// 見渡す前の正面方向ベクトル
+	CVector mLookStarDir;	// 見渡しアニメーションの開始時の方向ベクトル
+	CVector mLookEndDir ;	// 見渡しアニメーションの終了時の方向ベクトル
 
 #if _DEBUG
 	CColor GetStateColor(EState state) const;

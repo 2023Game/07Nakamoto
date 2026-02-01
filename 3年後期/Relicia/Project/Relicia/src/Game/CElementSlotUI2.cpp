@@ -1,6 +1,7 @@
 #include "CElementSlotUI2.h"
 #include "CElementManager.h"
 #include "CImage.h"
+#include "CGameData.h"
 
 // 属性スロット
 #define ELEMENT_UI_POS CVector2(640.0f,600.0f)	// 中心座標
@@ -40,7 +41,7 @@ CElementSlotUI2::CElementSlotUI2()
 	mpElementSlot->SetPos(ELEMENT_UI_POS);
 	mpElementSlot->SetAlpha(ELEMENT_UI_ALPHA);
 
-	mpElementImages.reserve(MAX_SLOT);
+	mpElementImages.reserve(MAX_CRYSTAL_SLOT);
 
 	CreateIcon(ICON_POS1);
 	CreateIcon(ICON_POS2);
@@ -148,7 +149,7 @@ void CElementSlotUI2::Render()
 
 	CElementManager* mgr = CElementManager::Instance();
 	int cur = mgr->GetCurrentIndex();
-	int size = MAX_SLOT;
+	int size = MAX_CRYSTAL_SLOT;
 
 	int left = (cur - 1 + size) % size;
 	int right = (cur + 1) % size;
@@ -159,7 +160,7 @@ void CElementSlotUI2::Render()
 	RenderBackIcon(right, ICON_POS3, ICON_OFF_SIZE);
 
 	// 属性ゲージが貯まっている分、属性アイコンの描画
-	RenderIcon(left,  ICON_POS1, ICON_OFF_SIZE, mgr->GetEnergy(left) / MAX_ENERGY);
-	RenderIcon(cur,   ICON_POS2, ICON_ON_SIZE, mgr->GetEnergy(cur) / MAX_ENERGY);
-	RenderIcon(right, ICON_POS3, ICON_OFF_SIZE, mgr->GetEnergy(right) / MAX_ENERGY);
+	RenderIcon(left,  ICON_POS1, ICON_OFF_SIZE, mgr->GetEnergy(left) / MAX_CRYSTAL_ENERGY);
+	RenderIcon(cur,   ICON_POS2, ICON_ON_SIZE, mgr->GetEnergy(cur) / MAX_CRYSTAL_ENERGY);
+	RenderIcon(right, ICON_POS3, ICON_OFF_SIZE, mgr->GetEnergy(right) / MAX_CRYSTAL_ENERGY);
 }
