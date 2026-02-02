@@ -52,8 +52,8 @@ void CItemManager::SpawnItems()
 	// Ç∆ÇËÇ†Ç¶Ç∏4âÒê∂ê¨
 	for (int i = 0; i < 4; ++i)
 	{
-		mpCrystalObjs.push_back(new CItemObj(ItemId::Key, CField::Instance()->GetMapData()->GetRoomRandomFloorPos()));
-		mpCrystalObjs.push_back(new CItemObj(ItemId::HealingPotion, CField::Instance()->GetMapData()->GetRoomRandomFloorPos()));
+		mpCrystalObjs.push_back(new CItemObj(ItemId::Key, CField::Instance()->GetMapData()->GetRoomRandomFloorPos(CBspMap::EOccupyType::Crystal)));
+		mpCrystalObjs.push_back(new CItemObj(ItemId::HealingPotion, CField::Instance()->GetMapData()->GetRoomRandomFloorPos(CBspMap::EOccupyType::Crystal)));
 	}
 }
 

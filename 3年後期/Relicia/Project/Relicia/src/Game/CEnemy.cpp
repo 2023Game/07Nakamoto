@@ -27,6 +27,8 @@
 #define LOOK_AROUND_END_TIME 0.5f
 #define LOOK_AROUND_ANGLE	45.0f	// 警戒時の振り向く角度
 
+#define UPDATE_LOST_POS_TIME 2.0f	// 見失った位置を更新する時間
+
 // コンストラクタ
 CEnemy::CEnemy()
 	: CXCharacter(ETag::eEnemy, ETaskPriority::eEnemy)
@@ -63,6 +65,14 @@ CEnemy::CEnemy()
 	mpHpGauge->SetMaxPoint(mMaxHp);
 	mpHpGauge->SetCurrPoint(mHp);
 
+	// 経路探索用のノードを作成
+	mpNavNode = new CNavNode(Position(), true);
+	mpNavNode->SetColor(CColor::blue);
+
+	// ターゲットを見失った位置のノードを作成
+	mpLostPlayerNode = new CNavNode(CVector::zero, true);
+	mpLostPlayerNode->SetEnable(false);
+
 #if _DEBUG
 	// 視野範囲のデバッグ表示クラスを作成
 	mpDebugFov = new CDebugFieldOfView(this, mFovAngle, mFovLength);
@@ -81,6 +91,13 @@ CEnemy::~CEnemy()
 	{
 		mpHpGauge->SetOwner(nullptr);
 		mpHpGauge->Kill();
+	}
+
+	// 経路探索用のノードを破棄
+	CNavManager* navMgr = CNavManager::Instance();
+	if (navMgr != nullptr)
+	{
+		mpLostPlayerNode->Kill();
 	}
 
 #if _DEBUG
@@ -586,9 +603,9 @@ void CEnemy::UpdateChase()
 		CVector targetPos = mpBattleTarget->Position();
 
 		// 見失った位置にノードを配置
-		//mpLostPlayerNode->SetPos(targetPos);
-		//mpLostPlayerNode->SetEnable(true);
-
+		mpLostPlayerNode->SetPos(targetPos);
+		mpLostPlayerNode->SetEnable(true);
+		// 見失った状態に移行
 		ChangeState(EState::eLost);
 		return;
 	}
@@ -599,8 +616,6 @@ void CEnemy::UpdateLost()
 {
 	mMoveSpeed = CVector::zero;
 
-	CNavManager* navMgr = CNavManager::Instance();
-
 	// 戦闘相手が存在しなかった場合は、
 	if (mpBattleTarget == nullptr)
 	{
@@ -608,7 +623,6 @@ void CEnemy::UpdateLost()
 		ChangeState(EState::eIdle);
 		return;
 	}
-
 	// ターゲットが見えたら、追跡状態へ移行
 	if (IsLookTarget(mpBattleTarget))
 	{
@@ -616,16 +630,66 @@ void CEnemy::UpdateLost()
 		return;
 	}
 
-	// 一定時間静止すると、警戒状態へ移行
-	else
+	CNavManager* navMgr = CNavManager::Instance();
+
+	switch (mStateStep)
 	{
-		// 移動が終われば警戒状態へ移行
-		ChangeState(EState::eAlert);
-		return;
+		// ステップ0：見失った位置までの最短経路を求める
+	case 0:
+		mLostElapsedTime = 0.0f;
+		mStateStep++;
+		break;
+	case 1:
+		// 経路探索用のノード座標を更新
+		mpLostPlayerNode->SetPos(CAdventurer::Instance()->Position());
+
+		// 自身のノードと見失った位置のノードが更新中でなければ
+		if (!mpNavNode->IsUpdating() && !mpLostPlayerNode->IsUpdating())
+		{
+			if (!navMgr->Navigate(mpNavNode, mpLostPlayerNode, mMoveRoute))
+			{
+				// 経路がつながっていなければ、待機状態へ戻す
+				ChangeState(EState::eIdle);
+				mpLostPlayerNode->SetEnable(false);
+			}
+			else
+			{
+				// 見失った位置まで経路が繋がっていたら、次のステップへ
+				// 次の移動先を１番近い場所に設定
+				mNextMoveIndex = 1;
+			}
+		}
+	case 2:
+		// 次の移動先のインデックス値が不正値でなければ
+		if (0 <= mNextMoveIndex && mNextMoveIndex < mMoveRoute.size())
+		{
+			// ターゲットを見失った位置まで移動
+			if (MoveTo(mMoveRoute[mNextMoveIndex]->GetPos(), GetMoveSpeed()))
+			{
+				mNextMoveIndex++;
+				if (mNextMoveIndex >= mMoveRoute.size())
+				{
+					// 移動が終われば警戒状態へ移行
+					ChangeState(EState::eAlert);
+					mpLostPlayerNode->SetEnable(false);
+				}
+			}
+
+			if (mLostElapsedTime < UPDATE_LOST_POS_TIME)
+			{
+				// 見失った時間を加算
+				mLostElapsedTime += Times::DeltaTime();
+				if (mLostElapsedTime >= UPDATE_LOST_POS_TIME)
+				{
+					mStateStep++;
+				}
+			}
+		}
+		break;
 	}
 
-	mpBattleTarget = nullptr;
-	ChangeState(EState::eIdle());
+	//mpBattleTarget = nullptr;
+	//ChangeState(EState::eIdle());
 }
 
 // 警戒している時の処理

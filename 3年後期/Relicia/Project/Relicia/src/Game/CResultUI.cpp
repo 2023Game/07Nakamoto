@@ -7,6 +7,8 @@
 #include "CFade.h"
 #include "CExpandButton.h"
 #include "Easing.h"
+#include "CFont.h"
+#include "CInventory.h"
 
 // メニューのアニメーション時間
 #define OPEN_ANIM_TIME 0.25f
@@ -20,6 +22,9 @@ CResultUI::CResultUI()
 	, mStateStep(0)
 	, mElapsedTime(0.0f)
 	, mIsEnd(false)
+	, mTotalSellPrice(0)
+	, mpLogoFont(nullptr)
+	, mpTotalSellPriceText(nullptr)
 {
 	// ゲームクリア画面の背景イメージを生成
 	mpResultBg = new CImage
@@ -31,6 +36,31 @@ CResultUI::CResultUI()
 		false,
 		false
 	);
+
+	mpLogoFont = new CFont("res\\Font\\toroman.ttf");
+	mpLogoFont->SetFontSize(128);
+	mpLogoFont->SetAlignment(FTGL::TextAlignment::ALIGN_CENTER);
+	mpLogoFont->SetLineLength(WINDOW_WIDTH);
+
+	// 合計価格のテキストを生成
+	mpTotalSellPriceText = new CText
+	(
+		mpLogoFont, 128,
+		CVector2(0.0f, 32.0f),
+		CVector2(WINDOW_WIDTH, WINDOW_HEIGHT),
+		CColor(0.11f, 0.1f, 0.1f),
+		ETaskPriority::eUI,
+		0,
+		ETaskPauseType::eDefault,
+		false,
+		false
+	);
+
+	mTotalSellPrice = CInventory::Instance()->GetTotalSellPrice();
+
+	mpTotalSellPriceText->SetText("TotalSellPrice:%d\n", mTotalSellPrice);
+	mpTotalSellPriceText->SetEnableOutline(true);
+	mpTotalSellPriceText->SetOutlineColor(CColor(0.9f, 0.9f, 0.9f));
 
 	// [コンティニュー]ボタンを生成
 	CExpandButton* btn1 = new CExpandButton
@@ -130,6 +160,8 @@ void CResultUI::Render()
 {
 	// 背景描画
 	mpResultBg->Render();
+	// スコア描画
+	mpTotalSellPriceText->Render();
 	// メニューボタンを表示
 	for (CButton* btn : mButtons)
 	{

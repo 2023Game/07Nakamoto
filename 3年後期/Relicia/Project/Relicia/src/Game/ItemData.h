@@ -62,6 +62,9 @@ struct ItemData
 	int recovery;		// ‰ñ•œ—Ê
 	int attack;			// UŒ‚—Í
 
+	int buyPrice;	// w“ü‰¿Ši
+	int sellPrice;	// ”„‹p‰¿Ši
+
 	//int width;	// è—L”ÍˆÍ‚Ì‰¡•
 	//int height;	// è—L”ÍˆÍ‚Ìc•
 	//bool shape[MAX_SHAPE][MAX_SHAPE];	// è—Lƒ}ƒXƒN

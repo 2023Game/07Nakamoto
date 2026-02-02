@@ -24,6 +24,8 @@ namespace Item
 				ItemEffectType::RecoveryHP,
 				50,
 				0,
+				300,
+				100,
 				//1,2,
 				//{
 				//	{1,0,0,0,0},
@@ -46,6 +48,8 @@ namespace Item
 				ItemEffectType::RecoveryHP,
 				50,
 				0,
+				500,
+				200,
 				//1,2,
 				//{
 				//	{1,0,0,0,0},
@@ -68,6 +72,8 @@ namespace Item
 				ItemEffectType::RecoveryHP,
 				50,
 				0,
+				1000,
+				500,
 				//1,2,
 				//{
 				//	{1,0,0,0,0},
@@ -90,6 +96,8 @@ namespace Item
 				ItemEffectType::RecoveryHP,
 				30,
 				0,
+				1300,
+				800,
 			}
 		},
 		// ƒpƒ“
@@ -104,6 +112,8 @@ namespace Item
 				ItemEffectType::RecoveryHP,
 				30,
 				0,
+				150,
+				50,
 			}
 		},
 		// ƒ`ƒLƒ“
@@ -118,6 +128,8 @@ namespace Item
 				ItemEffectType::RecoveryHP,
 				30,
 				0,
+				1000,
+				600,
 			}
 		},
 		// Œ®
@@ -132,6 +144,8 @@ namespace Item
 				ItemEffectType::Key,
 				0,
 				0,
+				1000,
+				10,
 				//1,1,
 				//{
 				//	{1,0,0,0,0},
@@ -154,6 +168,8 @@ namespace Item
 				ItemEffectType::Key,
 				0,
 				0,
+				1000,
+				10,
 				//1,1,
 				//{
 				//	{1,0,0,0,0},
@@ -176,6 +192,8 @@ namespace Item
 				ItemEffectType::Key,
 				0,
 				0,
+				1000,
+				10,
 				//1,1,
 				//{
 				//	{1,0,0,0,0},

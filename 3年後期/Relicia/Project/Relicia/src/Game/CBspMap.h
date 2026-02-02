@@ -41,12 +41,6 @@ public:
 		eNorthWest,	// 北西
 	};
 
-	//// 通路の情報
-	//struct Passage
-	//{
-	//	Direction dir;	// 向き
-	//};
-
 	// タイルの情報
 	struct Tile
 	{
@@ -56,7 +50,7 @@ public:
 		Direction pillar = Direction::None;	// 柱を生成するかどうか 
 		Direction passageDir = Direction::None;	// 通路の向き
 
-		// Passage passageData{};
+		bool occupy = false;	// タイルが占有されているか
 	};
 
 	// 部屋の情報
@@ -113,8 +107,38 @@ public:
 	// 部屋の壁の情報を返す
 	//std::vector<TileSegment> CBspMap::CollectWallSegments() const;
 
+	// 占有管理用のタイプ
+	enum class EOccupyType
+	{
+		None,
+		Player,
+		Enemy,
+		Item,
+		Crystal,
+		Object,
+	};
+
+	// 指定したタイル座標(x, y)がすでに他オブジェクトにより
+	// 占有されているかを判定する（スポーン判定用）
+	bool IsOccupied(int x, int y);
+	// 指定したタイル座標(x, y)を占有状態に設定する
+	// type : 占有しているオブジェクトの種別
+	void SetOccupied(int x, int y, EOccupyType type);
+	// 指定したワールド座標を中心として、
+	// オブジェクトが占有するタイル範囲（例: 2×2）が
+	// すべて未占有であるかを判定する
+	// true  : 配置可能
+	// false : すでに他オブジェクトが存在する
+	bool CanPlaceObject(float worldX, float worldZ);
+	// 指定したワールド座標を中心として、
+	// オブジェクトが使用するタイル範囲（例: 2×2）を
+	// 占有状態として登録する
+	void OccupyObject(float worldX, float worldZ, EOccupyType type);
+
+	bool IsBlocking(EOccupyType type);
+
 	// 部屋の床の座標のリストからランダムに座標を取得
-	CVector GetRoomRandomFloorPos();
+	CVector GetRoomRandomFloorPos(EOccupyType occupyType);
 
 private:
 	// ノードの削除
@@ -162,4 +186,6 @@ private:
 
 	// 部屋の床データのリスト
 	std::vector<CVector2> mpRoomFloors;
+	// 占有管理用の2次元配列
+	std::vector<std::vector<EOccupyType>> mOccupyMap;
 };

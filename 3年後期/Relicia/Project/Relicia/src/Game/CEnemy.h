@@ -154,6 +154,9 @@ protected:
 	float mBattleIdletime;			// 戦闘時の待機時間
 	CObjectBase* mpBattleTarget;	// 戦闘相手
 
+	std::vector<CNavNode*> mMoveRoute;	// 求めた最短経路記憶用
+	int mNextMoveIndex;					// 次に移動するノードのインデックス値
+
 	CNavNode* mpLostPlayerNode;	// プレイヤーを見失った位置のノード
 	float mLostElapsedTime;		// 見失ってからの経過時間
 

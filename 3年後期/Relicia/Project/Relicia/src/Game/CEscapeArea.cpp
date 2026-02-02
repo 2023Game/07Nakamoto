@@ -5,6 +5,8 @@
 #include "CField.h"
 #include "CGameData.h"
 
+#define CLEAR_FLOOR 1
+
 // コンストラクタ
 CEscapeArea::CEscapeArea(const CVector& pos, const CVector& angle, const CVector& size)
 	: CObjectBase(ETag::eField, ETaskPriority::eDefault, 0, ETaskPauseType::eGame)
@@ -41,7 +43,7 @@ void CEscapeArea::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 		mpCollider->SetEnable(false);
 
 		// クリアしたのが5階層目より下の場合
-		if (CGameData::floorNum < 3)
+		if (CGameData::floorNum < CLEAR_FLOOR)
 		{
 			CGameData::floorNum++;
 			CSceneManager::Instance()->LoadScene(EScene::eGame);

@@ -5,7 +5,6 @@
 #include "CCrystalObj.h"
 #include "CNavManager.h"
 #include "CNavNode.h"
-#include "CAdventurer.h"
 
 #define ANIM_PATH "Character\\Enemy\\Mushroom\\Anim\\"
 #define BODY_HEIGHT 9.0f
@@ -25,6 +24,8 @@
 
 #define ATTACK2_DIST 50.0f			// 針攻撃を行う距離
 #define ATTACK2_PROB 70				// 針攻撃を行う確率（パーセント）
+
+#define ATTACK_WAIT_TIME 1.0f	// 攻撃終了時の待ち時間
 
 #define MAX_HP 10
 
@@ -371,11 +372,48 @@ void CMashroom::UpdateHeadbutt()
 		// アニメーション終了したら、待機状態へ戻す
 		if (IsAnimationFinished())
 		{
-			mAttackIndex = (int)EAttackID::None;
-			ChangeState(EState::eIdle);
+			mStateStep++;
+
+			//mAttackIndex = (int)EAttackID::None;
+			//ChangeState(EState::eIdle);
+		}
+		break;
+		// ステップ４ : 攻撃終了後の待ち時間
+	case 4:
+		if (mElapsedTime < ATTACK_WAIT_TIME)
+		{
+			ChangeAnimation((int)EAnimType::eIdle);
+			mElapsedTime += Times::DeltaTime();
+		}
+		else
+		{
+			// 戦闘相手が存在しなかった場合
+			if(mpBattleTarget == nullptr)
+			{
+				mAttackIndex = (int)EAttackID::None;
+				// 待機状態へ移行
+				ChangeState(EState::eIdle);
+			}
+			// 戦闘相手が存在した場合
+			else
+			{
+				// 戦闘相手が視野範囲内にいた場合は、追跡状態へ移行
+				if (IsLookTarget(mpBattleTarget))
+				{
+					ChangeState(EState::eChase);
+				}
+				// 戦闘相手が視野範囲内にいなかった場合、見失った状態へ移行
+				else
+				{
+					mpLostPlayerNode->SetPos(mpBattleTarget->Position());
+					mpLostPlayerNode->SetEnable(true);
+					ChangeState(EState::eLost);
+				}
+			}
 		}
 		break;
 	}
+
 }
 
 // スピン攻撃時の更新処理

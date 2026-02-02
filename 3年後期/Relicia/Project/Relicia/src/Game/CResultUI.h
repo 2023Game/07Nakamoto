@@ -20,7 +20,7 @@ public:
 	// タイトルへ戻るか
 	bool IsTitle();
 	// ゲームを終了するか
-	bool IsExitGame() const;
+	//bool IsExitGame() const;
 
 	// 更新
 	void Update() override;
@@ -48,7 +48,7 @@ private:
 	// [タイトルへ]クリック時のコールバック関数
 	void OnClickTitle();
 	// [おわる]クリック時のコールバック関数
-	void OnClickQuit();
+	//void OnClickQuit();
 
 	EState mState;		// 現在の状態
 	int mStateStep;		// 状態内でのステップ管理用
@@ -58,5 +58,9 @@ private:
 
 	CImage* mpResultBg;	// リザルト画面の背景イメージ
 	std::vector<CExpandButton*> mButtons;
+
+	int mTotalSellPrice;	// インベントリの合計売却価格
+	CFont* mpLogoFont;	// ロゴのフォント
+	CText* mpTotalSellPriceText;	// 合計価格のテキスト
 
 };

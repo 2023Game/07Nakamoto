@@ -460,6 +460,71 @@ std::vector<CBspMap::TileSegment> CBspMap::GetWallSegments() const
 //    return walls;
 //}
 
+// 占有しているかどうか
+bool CBspMap::IsOccupied(int x, int y)
+{
+    return mOccupyMap[y][x] != EOccupyType::None;
+}
+
+// 占有情報を設定
+void CBspMap::SetOccupied(int x, int y, EOccupyType type)
+{
+    mOccupyMap[y][x] = type;
+}
+
+bool CBspMap::CanPlaceObject(float worldX, float worldZ)
+{
+    int centerX = static_cast<int>(worldX / TILE_SIZE);
+    int centerY = static_cast<int>(worldZ / TILE_SIZE);
+
+    // 2×2マス（中心±1）
+    for (int dy = 0; dy <= 1; dy++)
+    {
+        for (int dx = 0; dx <= 1; dx++)
+        {
+            EOccupyType type = mOccupyMap[centerY + dy][centerX + dx];
+
+            if (IsBlocking(type))
+                return false;
+            //int tx = centerX + dx;
+            //int ty = centerY + dy;
+
+            //if (IsOccupied(tx, ty))
+            //    return false;
+        }
+    }
+    return true;
+}
+
+void CBspMap::OccupyObject(float worldX, float worldZ, EOccupyType type)
+{
+    int centerX = static_cast<int>(worldX / TILE_SIZE);
+    int centerY = static_cast<int>(worldZ / TILE_SIZE);
+
+    for (int dy = 0; dy <= 1; dy++)
+    {
+        for (int dx = 0; dx <= 1; dx++)
+        {
+            SetOccupied(centerX + dx, centerY + dy, type);
+        }
+    }
+}
+
+bool CBspMap::IsBlocking(EOccupyType type)
+{
+    switch (type)
+    {
+    case EOccupyType::Player:
+        return true;    // 重なりNG
+    case EOccupyType::Enemy:
+        return true;    // 重なりNG
+    case EOccupyType::Item:
+        return false;   // 重なってOK
+    default:
+        return false;
+    }
+}
+
 // ノードの削除
 void CBspMap::DeleteNode(SectionNode* node)
 {
@@ -476,13 +541,12 @@ void CBspMap::Initialize(int width, int height)
     // タイル情報の初期化
     mMapData.resize(height, std::vector<Tile>(width));
 
-    //for (auto& row : mMapData)
-    //{
-    //    for (auto& tile : row)
-    //    {
-    //        tile = { TileType::None, Direction::eNorth, false};
-    //    }
-    //}
+    // 占有管理用の2次元配列の初期化
+    mOccupyMap.resize(height);
+    for (int y = 0; y < height; y++)
+    {
+        mOccupyMap[y].resize(width, EOccupyType::None);
+    }
 
     // 最初の大きな区画の初期化（全体）
     mpRoot = new SectionNode();
@@ -916,15 +980,28 @@ CBspMap::Direction CBspMap::InverseDirection(Direction dir) const
 }
 
 // 部屋の床の座標のリストからランダムに座標を取得
-CVector CBspMap::GetRoomRandomFloorPos()
+CVector CBspMap::GetRoomRandomFloorPos(EOccupyType occupyType)
 {
     // mpRoomFloorsが空の場合
     if (mpRoomFloors.empty())   return CVector::zero;
 
-    int index = Math::Rand(0, mpRoomFloors.size() - 1);
+    for (int i = 0; i < 100; i++) // リトライ上限
+    {
+        int index = Math::Rand(0, mpRoomFloors.size() - 1);
 
-    return CVector(mpRoomFloors[index].X() * TILE_SIZE, 0, 
-                   mpRoomFloors[index].Y() * TILE_SIZE);
+        CVector pos = CVector(mpRoomFloors[index].X() * TILE_SIZE, 0,
+            mpRoomFloors[index].Y() * TILE_SIZE);
+
+        // 配置してある物と被らないか
+        if (CanPlaceObject(pos.X(), pos.Z()))
+        {
+            // 占有情報を設定
+            OccupyObject(pos.X(), pos.Z(), occupyType);
+            return pos;
+        }
+    }
+    
+    return CVector::zero;
 }
 
 #if _DEBUG

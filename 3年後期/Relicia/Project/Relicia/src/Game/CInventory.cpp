@@ -277,6 +277,23 @@ const ItemData* CInventory::GetItemSlotData(int slotIndex) const
 	return CGameData::ItemSlots[slotIndex].data;
 }
 
+// インベントリ内の合計売却価格を取得
+const int CInventory::GetTotalSellPrice() const
+{
+	int totalSellPrice = 0;
+
+	// インベントリの中の合計売却金額を集計
+	for (SlotData& slot : CGameData::ItemSlots)
+	{
+		// 空のアイテムスロットであれば、次のアイテムスロットを調べる
+		if (slot.data == nullptr) continue;
+
+		totalSellPrice += slot.data->sellPrice * slot.count;
+	}
+
+	return totalSellPrice;
+}
+
 // カーソルがスロットに重なった
 void CInventory::EnterItemSlot(int index)
 {

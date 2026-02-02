@@ -3,6 +3,7 @@
 #include "CColliderSphere.h"
 #include "Maths.h"
 #include "CCactusNeedle.h"
+#include "CNavNode.h"
 
 #define ANIM_PATH "Character\\Enemy\\Cactus\\Anim\\"
 #define BODY_HEIGHT 13.0f
@@ -31,6 +32,8 @@
 #define ATTACK2_NEEDLE_SHOT_COUNT 3	// 針を発射する回数
 #define ATTACK2_NEEDLE_SHOT_DIR_COUNT 3	// 針を発射する方向の数
 #define ATTACK2_NEEDLE_SHOT_ANGLE 15.0f	// 針を発射する角度
+
+#define ATTACK_WAIT_TIME 1.0f	// 攻撃終了時の待ち時間
 
 // 敵のアニメーションデータのテーブル
 const std::vector<CEnemy::AnimData> ANIM_DATA =
@@ -417,10 +420,47 @@ void CCactus::UpdatePunch()
 			// アニメーション終了したら、待機状態へ戻す
 			if (IsAnimationFinished())
 			{
-				mAttackIndex = (int)EAttackID::None;
-				ChangeState(EState::eIdle);
+				mStateStep++;
+
+				//mAttackIndex = (int)EAttackID::None;
+				//ChangeState(EState::eIdle);
 			}
 			break;
+			// ステップ４ : 攻撃終了後の待ち時間
+		case 4:
+			if (mElapsedTime < ATTACK_WAIT_TIME)
+			{
+				ChangeAnimation((int)EAnimType::eIdle);
+				mElapsedTime += Times::DeltaTime();
+			}
+			else
+			{
+				// 戦闘相手が存在しなかった場合
+				if (mpBattleTarget == nullptr)
+				{
+					mAttackIndex = (int)EAttackID::None;
+					// 待機状態へ移行
+					ChangeState(EState::eIdle);
+				}
+				// 戦闘相手が存在した場合
+				else
+				{
+					// 戦闘相手が視野範囲内にいた場合は、追跡状態へ移行
+					if (IsLookTarget(mpBattleTarget))
+					{
+						ChangeState(EState::eChase);
+					}
+					// 戦闘相手が視野範囲内にいなかった場合、見失った状態へ移行
+					else
+					{
+						mpLostPlayerNode->SetPos(mpBattleTarget->Position());
+						mpLostPlayerNode->SetEnable(true);
+						ChangeState(EState::eLost);
+					}
+				}
+			}
+			break;
+
 	}
 }
 

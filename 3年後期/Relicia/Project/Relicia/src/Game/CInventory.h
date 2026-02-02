@@ -34,6 +34,8 @@ public:
 
 	// 指定された番号のアイテムスロットを返す
 	const ItemData* GetItemSlotData(int slotIndex) const;
+	// インベントリ内の合計売却価格を取得
+	const int GetTotalSellPrice() const;
 
 	// カーソルがスロットに重なった
 	void EnterItemSlot(int index);

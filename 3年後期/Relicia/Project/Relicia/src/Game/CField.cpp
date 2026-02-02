@@ -154,11 +154,11 @@ void CField::CreateMap()
 	// ƒNƒŠƒXƒ^ƒ‹‚Ì¶¬
 	CCrystalManager::Instance()->SpawnCrystals();
 
-	CVector pos = mpMapData->GetRoomRandomFloorPos();
+	CVector pos = mpMapData->GetRoomRandomFloorPos(CBspMap::EOccupyType::Object);
 
 	if (!mpEscapeArea)
 	{
-		CVector pos = mpMapData->GetRoomRandomFloorPos();
+		CVector pos = mpMapData->GetRoomRandomFloorPos(CBspMap::EOccupyType::Object);
 		mpEscapeArea = new CEscapeArea(CVector(pos.X(), pos.Y() + 3.0f, pos.Z()), CVector::zero, CVector(0.5f, 0.5f, 0.5f));
 	}
 	else
@@ -167,7 +167,7 @@ void CField::CreateMap()
 	}
 
 	// “®‚©‚¹‚é” ‚Ìì¬
-	CCrate* crate = new CCrate(mpMapData->GetRoomRandomFloorPos(), ETag::eField, ETaskPriority::eObject);
+	CCrate* crate = new CCrate(mpMapData->GetRoomRandomFloorPos(CBspMap::EOccupyType::Object), ETag::eField, ETaskPriority::eObject);
 	crate->Scale(1.0f, 3.0f, 1.0f);
 	mpObjects.push_back(crate);
 

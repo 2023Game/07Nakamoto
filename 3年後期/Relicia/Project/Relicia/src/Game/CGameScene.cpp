@@ -19,6 +19,7 @@
 #include "CItemManager.h"
 #include "CCrystalManager.h"
 #include "CGameData.h"
+#include "CBspMap.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -109,7 +110,7 @@ void CGameScene::Load()
 	// プレイヤーの作成
 	CAdventurer* player = new CAdventurer();
 	player->Scale(1.0f, 1.0f, 1.0f);
-	player->Position(mpField->GetMapData()->GetRoomRandomFloorPos());
+	player->Position(mpField->GetMapData()->GetRoomRandomFloorPos(CBspMap::EOccupyType::Player));
 
 	// 敵の生成
 	CreateEnemys();
@@ -150,13 +151,13 @@ void CGameScene::CreateEnemys()
 
 	// サボテンの敵を作成
 	CCactus* cactus = new CCactus();
-	cactus->Position(mpField->GetMapData()->GetRoomRandomFloorPos());
+	cactus->Position(mpField->GetMapData()->GetRoomRandomFloorPos(CBspMap::EOccupyType::Enemy));
 	cactus->InitNav();
 	mpEnemys.push_back(cactus);
 
 	// キノコの敵を作成
 	CMashroom* mashroom = new CMashroom();
-	mashroom->Position(mpField->GetMapData()->GetRoomRandomFloorPos());
+	mashroom->Position(mpField->GetMapData()->GetRoomRandomFloorPos(CBspMap::EOccupyType::Enemy));
 	mashroom->InitNav();
 	mpEnemys.push_back(mashroom);
 
@@ -203,7 +204,7 @@ void CGameScene::Update()
 	if (CDebugInput::PushKey('B'))
 	{
 		// プレイヤーの座標を再設定
-		CAdventurer::Instance()->Position(mpField->GetMapData()->GetRoomRandomFloorPos());
+		CAdventurer::Instance()->Position(mpField->GetMapData()->GetRoomRandomFloorPos(CBspMap::EOccupyType::Player));
 		// 敵の生成
 		CreateEnemys();
 	}
