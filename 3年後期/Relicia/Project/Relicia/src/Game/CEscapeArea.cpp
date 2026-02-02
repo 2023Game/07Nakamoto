@@ -7,9 +7,14 @@
 
 #define CLEAR_FLOOR 1
 
+#define SPEED 1.0f
+#define MAX_HIGHT 8
+#define MIN_HIGHT 3
+
 // コンストラクタ
 CEscapeArea::CEscapeArea(const CVector& pos, const CVector& angle, const CVector& size)
 	: CObjectBase(ETag::eField, ETaskPriority::eDefault, 0, ETaskPauseType::eGame)
+	, mStateStep(0)
 {
 	// クリアエリアのモデルデータを取得
 	mpModel = CResourceManager::Get<CModel>("Escape");
@@ -55,6 +60,33 @@ void CEscapeArea::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 			CSceneManager::Instance()->LoadScene(EScene::eResult);
 		}
 	}
+}
+
+// 更新処理
+void CEscapeArea::Update()
+{
+	CVector pos = Position();
+	float nextY = pos.Y();
+
+	switch (mStateStep)
+	{
+	case 0: // 上昇
+		nextY += SPEED * Times::DeltaTime();
+		if (nextY >= MAX_HIGHT) {
+			nextY = MAX_HIGHT;
+			mStateStep = 1; // 次のフレームから下降
+		}
+		break;
+	case 1: // 下降
+		nextY -= SPEED * Times::DeltaTime();
+		if (nextY <= MIN_HIGHT) {
+			nextY = MIN_HIGHT;
+			mStateStep = 0; // 次のフレームから上昇
+		}
+		break;
+	}
+
+	Position(CVector(pos.X(), nextY, pos.Z()));
 }
 
 // 描画処理

@@ -25,6 +25,7 @@ CResultUI::CResultUI()
 	, mTotalSellPrice(0)
 	, mpLogoFont(nullptr)
 	, mpTotalSellPriceText(nullptr)
+	, mpAppraisal(nullptr)
 {
 	// ゲームクリア画面の背景イメージを生成
 	mpResultBg = new CImage
@@ -42,11 +43,23 @@ CResultUI::CResultUI()
 	mpLogoFont->SetAlignment(FTGL::TextAlignment::ALIGN_CENTER);
 	mpLogoFont->SetLineLength(WINDOW_WIDTH);
 
+	// 鑑定額の画像を生成
+	mpAppraisal = new CImage
+	(
+		"UI\\appraisal.png",
+		ETaskPriority::eUI,
+		0,
+		ETaskPauseType::eDefault,
+		false,
+		false
+	);
+	mpAppraisal->SetPos(CVector2(600.0f, 200.0f));
+
 	// 合計価格のテキストを生成
 	mpTotalSellPriceText = new CText
 	(
 		mpLogoFont, 128,
-		CVector2(0.0f, 32.0f),
+		CVector2(100.0f, 200.0f),
 		CVector2(WINDOW_WIDTH, WINDOW_HEIGHT),
 		CColor(0.11f, 0.1f, 0.1f),
 		ETaskPriority::eUI,
@@ -58,14 +71,14 @@ CResultUI::CResultUI()
 
 	mTotalSellPrice = CInventory::Instance()->GetTotalSellPrice();
 
-	mpTotalSellPriceText->SetText("TotalSellPrice:%d\n", mTotalSellPrice);
+	mpTotalSellPriceText->SetText("%dG\n", mTotalSellPrice);
 	mpTotalSellPriceText->SetEnableOutline(true);
 	mpTotalSellPriceText->SetOutlineColor(CColor(0.9f, 0.9f, 0.9f));
 
 	// [コンティニュー]ボタンを生成
 	CExpandButton* btn1 = new CExpandButton
 	(
-		CVector2(WINDOW_WIDTH * 0.5f, 350.0f),
+		CVector2(WINDOW_WIDTH * 0.5f, 450.0f),
 		CVector2(224.0f, 50.0f),
 		ETaskPriority::eUI, 0, ETaskPauseType::eGame,
 		false, false
@@ -79,11 +92,10 @@ CResultUI::CResultUI()
 	// ボタンリストに追加
 	mButtons.push_back(btn1);
 
-
 	// [タイトルへ]ボタンを生成
 	CExpandButton* btn2 = new CExpandButton
 	(
-		CVector2(WINDOW_WIDTH * 0.5f, 450.0f),
+		CVector2(WINDOW_WIDTH * 0.5f, 550.0f),
 		CVector2(224.0f, 50.0f),
 		ETaskPriority::eUI, 0, ETaskPauseType::eGame,
 		false, false
@@ -160,6 +172,8 @@ void CResultUI::Render()
 {
 	// 背景描画
 	mpResultBg->Render();
+	// 鑑定額の描画
+	mpAppraisal->Render();
 	// スコア描画
 	mpTotalSellPriceText->Render();
 	// メニューボタンを表示

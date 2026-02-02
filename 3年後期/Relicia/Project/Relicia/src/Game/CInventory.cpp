@@ -280,7 +280,7 @@ const ItemData* CInventory::GetItemSlotData(int slotIndex) const
 // インベントリ内の合計売却価格を取得
 const int CInventory::GetTotalSellPrice() const
 {
-	int totalSellPrice = 0;
+	int totalSellPrice = 100;
 
 	// インベントリの中の合計売却金額を集計
 	for (SlotData& slot : CGameData::ItemSlots)

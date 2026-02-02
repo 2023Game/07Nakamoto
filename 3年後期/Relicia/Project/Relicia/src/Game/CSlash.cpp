@@ -1,6 +1,7 @@
 #include "CSlash.h"
-#include "CColliderSphere.h"
 #include "CCharaBase.h"
+#include "CColliderSphere.h"
+//#include "CColliderMesh.h"
 
 // コンストラクタ
 CSlash::CSlash(CObjectBase* owner, const CVector& pos, const CVector& dir,
@@ -22,8 +23,10 @@ CSlash::CSlash(CObjectBase* owner, const CVector& pos, const CVector& dir,
 	mpCollider = new CColliderSphere
 	(
 		this, ELayer::eAttackCol,
-		3.0f
+		6.0f
 	);
+	//mpCollider = new CColliderMesh(this, ELayer::eAttackCol, mpModel);
+
 	// プレイヤーとフィールドと衝突するように設定
 	mpCollider->SetCollisionTags({ ETag::eField ,ETag::eEnemy});
 	mpCollider->SetCollisionLayers({ ELayer::eFloor, ELayer::eWall, ELayer::eEnemy });
@@ -47,7 +50,7 @@ void CSlash::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		CCharaBase* chara = dynamic_cast<CCharaBase*>(other->Owner());
 		if (chara != nullptr)
 		{
-			chara->TakeDamage(1, this);
+			chara->TakeDamage(1, mpOwner);
 		}
 	}
 

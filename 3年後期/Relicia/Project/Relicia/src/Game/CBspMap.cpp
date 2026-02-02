@@ -510,6 +510,7 @@ void CBspMap::OccupyObject(float worldX, float worldZ, EOccupyType type)
     }
 }
 
+// 占有の共用タイプを取得
 bool CBspMap::IsBlocking(EOccupyType type)
 {
     switch (type)

@@ -134,7 +134,7 @@ public:
 	// オブジェクトが使用するタイル範囲（例: 2×2）を
 	// 占有状態として登録する
 	void OccupyObject(float worldX, float worldZ, EOccupyType type);
-
+	// 占有の共用タイプを取得
 	bool IsBlocking(EOccupyType type);
 
 	// 部屋の床の座標のリストからランダムに座標を取得
