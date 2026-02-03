@@ -26,6 +26,7 @@ CResultUI::CResultUI()
 	, mpLogoFont(nullptr)
 	, mpTotalSellPriceText(nullptr)
 	, mpAppraisal(nullptr)
+	, mpAppraisalBg(nullptr)
 {
 	// ƒQ[ƒ€ƒNƒŠƒA‰æ–Ê‚Ì”wŒiƒCƒ[ƒW‚ğ¶¬
 	mpResultBg = new CImage
@@ -43,6 +44,21 @@ CResultUI::CResultUI()
 	mpLogoFont->SetAlignment(FTGL::TextAlignment::ALIGN_CENTER);
 	mpLogoFont->SetLineLength(WINDOW_WIDTH);
 
+	// ŠÓ’èŠz‚ğŒ©‚â‚·‚­‚·‚é‚½‚ß‚Ì”wŒi‚ğ•`‰æ
+	mpAppraisalBg = new CImage
+	(
+		"UI\\inventry_back.png",
+		ETaskPriority::eUI,
+		0,
+		ETaskPauseType::eDefault,
+		false,
+		false
+	);
+	mpAppraisalBg->SetAlpha(0.5f);
+	mpAppraisalBg->SetSize(mpAppraisalBg->GetSize() * 0.8f);
+	mpAppraisalBg->SetCenter(mpAppraisalBg->GetSize() * 0.5f);
+	mpAppraisalBg->SetPos(CVector2(WINDOW_WIDTH * 0.5f, WINDOW_HEIGHT * 0.5f));
+
 	// ŠÓ’èŠz‚Ì‰æ‘œ‚ğ¶¬
 	mpAppraisal = new CImage
 	(
@@ -53,13 +69,14 @@ CResultUI::CResultUI()
 		false,
 		false
 	);
-	mpAppraisal->SetPos(CVector2(600.0f, 200.0f));
+	mpAppraisal->SetCenter(mpAppraisal->GetSize() * 0.5f);
+	mpAppraisal->SetPos(CVector2(WINDOW_WIDTH * 0.5f, WINDOW_HEIGHT * 0.2f));
 
 	// ‡Œv‰¿Ši‚ÌƒeƒLƒXƒg‚ğ¶¬
 	mpTotalSellPriceText = new CText
 	(
 		mpLogoFont, 128,
-		CVector2(100.0f, 200.0f),
+		CVector2(0.0f, 200.0f),
 		CVector2(WINDOW_WIDTH, WINDOW_HEIGHT),
 		CColor(0.11f, 0.1f, 0.1f),
 		ETaskPriority::eUI,
@@ -172,6 +189,8 @@ void CResultUI::Render()
 {
 	// ”wŒi•`‰æ
 	mpResultBg->Render();
+	// ŠÓ’èŠz‚Ì”wŒi•`‰æ
+	mpAppraisalBg->Render();
 	// ŠÓ’èŠz‚Ì•`‰æ
 	mpAppraisal->Render();
 	// ƒXƒRƒA•`‰æ

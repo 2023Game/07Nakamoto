@@ -10,8 +10,11 @@
 // 区画の余白(区画の端から1マス空ける)
 #define MARGIN 1
 
+#define RESET_TIME 5.0f // 占有状態をリセットする時間
+
 // コンストラクタ
 CBspMap::CBspMap(int x, int y)
+    : mTimer(0)
 {
     // 初期化
     Initialize(x, y);
@@ -484,13 +487,11 @@ bool CBspMap::CanPlaceObject(float worldX, float worldZ)
         {
             EOccupyType type = mOccupyMap[centerY + dy][centerX + dx];
 
-            if (IsBlocking(type))
-                return false;
-            //int tx = centerX + dx;
-            //int ty = centerY + dy;
+            int tx = centerX + dx;
+            int ty = centerY + dy;
 
-            //if (IsOccupied(tx, ty))
-            //    return false;
+            if (IsOccupied(tx, ty))
+                return false;
         }
     }
     return true;
@@ -524,6 +525,40 @@ bool CBspMap::IsBlocking(EOccupyType type)
     default:
         return false;
     }
+}
+
+// 占有状態のリセット
+void CBspMap::ResetOccupy()
+{
+    if (mTimer > RESET_TIME)
+    {
+        for (int y = 0; y < mOccupyMap.size(); y++)
+        {
+            for (int x = 0; x < mOccupyMap[y].size(); x++)
+            {
+                CBspMap::EOccupyType type = mOccupyMap[y][x];
+
+                switch (type)
+                {
+                case EOccupyType::Item:
+                    mOccupyMap[y][x] = EOccupyType::None;
+                    break;
+                case EOccupyType::Crystal:
+                    mOccupyMap[y][x] = EOccupyType::None;
+                    break;
+                    //case EOccupyType::Player:
+                //    mOccupyMap[y][x] = EOccupyType::None;
+                //    break;
+                //case EOccupyType::Enemy:
+                //    mOccupyMap[y][x] = EOccupyType::None;
+                //    break;
+                }
+            }
+        }
+        mTimer = 0;
+    }
+
+    mTimer += Times::DeltaTime();
 }
 
 // ノードの削除

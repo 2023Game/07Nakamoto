@@ -136,6 +136,8 @@ public:
 	void OccupyObject(float worldX, float worldZ, EOccupyType type);
 	// 占有の共用タイプを取得
 	bool IsBlocking(EOccupyType type);
+	// 占有状態のリセット
+	void ResetOccupy();
 
 	// 部屋の床の座標のリストからランダムに座標を取得
 	CVector GetRoomRandomFloorPos(EOccupyType occupyType);
@@ -188,4 +190,6 @@ private:
 	std::vector<CVector2> mpRoomFloors;
 	// 占有管理用の2次元配列
 	std::vector<std::vector<EOccupyType>> mOccupyMap;
+
+	float mTimer;	// 経過時間
 };

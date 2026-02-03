@@ -23,11 +23,9 @@ public:
 	void Update() override;
 
 private:
-	// “G‚ğ¶¬
-	void CreateEnemys();
 
 	CField* mpField;
-	std::vector<CEnemy*> mpEnemys;
+	//std::vector<CEnemy*> mpEnemys;
 
 	CGameMenu* mpGameMenu;
 };

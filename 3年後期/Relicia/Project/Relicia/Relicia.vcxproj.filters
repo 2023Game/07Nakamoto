@@ -119,6 +119,9 @@
     <Filter Include="ソース ファイル\Game\Debug">
       <UniqueIdentifier>{013e4004-edc3-46dd-8a54-cb1112641026}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Field\Object\Gimmick">
+      <UniqueIdentifier>{aea8c517-059f-41f9-bf80-d4693f7ceb17}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -433,9 +436,6 @@
     <ClCompile Include="src\Game\CMashroom.cpp">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CCrate.cpp">
-      <Filter>ソース ファイル\Game\Field\Object</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CAdventurer.cpp">
       <Filter>ソース ファイル\Game\Character\Player</Filter>
     </ClCompile>
@@ -513,6 +513,12 @@
     </ClCompile>
     <ClCompile Include="src\Game\CField2.cpp">
       <Filter>ソース ファイル\Game\Field</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CCrate.cpp">
+      <Filter>ソース ファイル\Game\Field\Object\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CSwitchFloor.cpp">
+      <Filter>ソース ファイル\Game\Field\Object\Gimmick</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -852,9 +858,6 @@
     <ClInclude Include="src\Game\CMashroom.h">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CCrate.h">
-      <Filter>ソース ファイル\Game\Field\Object</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\CPlayer.h">
       <Filter>ソース ファイル\Game\Character\Player</Filter>
     </ClInclude>
@@ -932,6 +935,12 @@
     </ClInclude>
     <ClInclude Include="src\Game\CField2.h">
       <Filter>ソース ファイル\Game\Field</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CCrate.h">
+      <Filter>ソース ファイル\Game\Field\Object\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CSwitchFloor.h">
+      <Filter>ソース ファイル\Game\Field\Object\Gimmick</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

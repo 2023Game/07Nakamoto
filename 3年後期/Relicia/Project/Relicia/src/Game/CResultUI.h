@@ -59,6 +59,7 @@ private:
 	CImage* mpResultBg;	// リザルト画面の背景イメージ
 	std::vector<CExpandButton*> mButtons;
 
+	CImage* mpAppraisalBg;	// 鑑定額を見やすくするための背景
 	CImage* mpAppraisal;	// 鑑定額の文字画像
 	int mTotalSellPrice;	// インベントリの合計売却価格
 	CFont* mpLogoFont;	// ロゴのフォント

@@ -3,15 +3,15 @@
 #include "CColliderSphere.h"
 #include "Maths.h"
 #include "CCrystalObj.h"
-#include "CNavManager.h"
 #include "CNavNode.h"
+#include "CEnemyManager.h"
 
 #define ANIM_PATH "Character\\Enemy\\Mushroom\\Anim\\"
 #define BODY_HEIGHT 9.0f
 #define BODY_RADIUS 5.0f
 
 #define GAUGE_OFFSET_Y 10.0f
-#define DEATH_WAIT_TIME 3.0f
+#define DEATH_WAIT_TIME 1.0f
 #define ATTACK_RANGE 10.0f
 #define ATTACK_START_FRAME 20.0f
 #define ATTACK_END_FRAME 30.0f
@@ -458,6 +458,7 @@ void CMashroom::UpdateDeath()
 	{
 		// ステップ0：死亡アニメーション再生
 	case 0:
+		mMoveSpeed = CVector::zero;
 		ChangeAnimation((int)EAnimType::eDeath, true);
 		mStateStep++;
 		break;
@@ -478,7 +479,7 @@ void CMashroom::UpdateDeath()
 		// 待ち時間が終了したら、削除
 		else
 		{
-			Kill();
+			CEnemyManager::Instance()->RemoveEnemy(this);
 			new CCrystalObj(ElementType::Fire, Position());
 		}
 		break;

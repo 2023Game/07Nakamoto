@@ -8,6 +8,8 @@ class CEnemyManager : public CTask
 public:
     // インスタンスのポインタの取得
     static CEnemyManager* Instance();
+    // インスタンスを削除
+    static void ClearInstance();
 
     // コンストラクタ
     CEnemyManager();
@@ -20,6 +22,11 @@ public:
 
     // 全ての敵をリストから削除
     void AllClear();
+
+    // 敵を生成
+    void CreateEnemys();
+    // 敵をランダムに選んでスポーンさせる
+    void RandomEnemySpawn();
 
 private:
     // 敵の管理クラスのインスタンス

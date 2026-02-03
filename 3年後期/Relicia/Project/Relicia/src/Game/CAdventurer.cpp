@@ -825,6 +825,10 @@ void CAdventurer::Update()
 		CElementManager::Instance()->SelectPrev();
 	}
 
+	// 武器の行列を更新
+	mpSword->UpdateMtx();
+	
+#if _DEBUG
 	// 「E」キーで
 	if (CInput::PushKey('E'))
 	{
@@ -849,12 +853,7 @@ void CAdventurer::Update()
 		// 鍵を追加
 		CInventory::Instance()->AddItem(ItemId::Key, 1);
 	}
-	
 
-	// 武器の行列を更新
-	mpSword->UpdateMtx();
-	
-#if _DEBUG
 	CVector pos = Position();
 	CDebugPrint::Print("PlayerHP:%d / %d\n", mHp, mMaxHp);
 	CDebugPrint::Print("PlayerPos:%.2f, %.2f, %.2f\n", pos.X(), pos.Y(), pos.Z());

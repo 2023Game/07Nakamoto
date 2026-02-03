@@ -4,12 +4,14 @@
 #include "Maths.h"
 #include "CCactusNeedle.h"
 #include "CNavNode.h"
+#include "CCrystalObj.h"
+#include "CEnemyManager.h"
 
 #define ANIM_PATH "Character\\Enemy\\Cactus\\Anim\\"
 #define BODY_HEIGHT 13.0f
 #define BODY_RADIUS 5.0f
 #define GAUGE_OFFSET_Y 15.0f
-#define DEATH_WAIT_TIME 3.0f
+#define DEATH_WAIT_TIME 1.0f
 #define ATTACK_RANGE 15.0f
 #define ATTACK_START_FRAME 20.0f
 #define ATTACK_END_FRAME 30.0f
@@ -566,6 +568,7 @@ void CCactus::UpdateDeath()
 	{
 		// ステップ0：死亡アニメーション再生
 		case 0:
+			mMoveSpeed = CVector::zero;
 			ChangeAnimation((int)EAnimType::eDeath, true);
 			mStateStep++;
 			break;
@@ -586,7 +589,8 @@ void CCactus::UpdateDeath()
 			// 待ち時間が終了したら、削除
 			else
 			{
-				Kill();
+				CEnemyManager::Instance()->RemoveEnemy(this);
+				new CCrystalObj(ElementType::Wind, Position());
 			}
 			break;
 	}

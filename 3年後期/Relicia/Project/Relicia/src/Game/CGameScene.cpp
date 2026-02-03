@@ -20,6 +20,9 @@
 #include "CCrystalManager.h"
 #include "CGameData.h"
 #include "CBspMap.h"
+#include "Maths.h"
+#include "CEnemyManager.h"
+
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -34,6 +37,7 @@ CGameScene::~CGameScene()
 	CInteractObjectManager::ClearInstance();
 	CItemManager::ClearInstance();
 	CCrystalManager::ClearInstance();
+	CEnemyManager::ClearInstance();
 }
 
 //シーン読み込み
@@ -83,6 +87,8 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>(		"Entrance_Col2",		"Dungeon\\Entrance_Wall_Col2.obj");
 	CResourceManager::Load<CModel>(		"Entrance_Ceil_Col2",	"Dungeon\\Entrance_Ceil_Col2.obj");
 
+	CResourceManager::Load<CModel>(		"Switch_Floor",			"Gimmick\\switch_floor.obj");
+
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
 
@@ -112,9 +118,10 @@ void CGameScene::Load()
 	player->Scale(1.0f, 1.0f, 1.0f);
 	player->Position(mpField->GetMapData()->GetRoomRandomFloorPos(CBspMap::EOccupyType::Player));
 
+	// 敵の生成前に初期化しておく
+	CEnemyManager::Instance()->AllClear();
 	// 敵の生成
-	CreateEnemys();
-
+	CEnemyManager::Instance()->CreateEnemys();
 
 	// CGameCameraのテスト
 	//CGameCamera* mainCam
@@ -141,28 +148,6 @@ void CGameScene::Load()
 	mpGameMenu = new CGameMenu();
 }
 
-// 敵を生成
-void CGameScene::CreateEnemys()
-{
-	// 初期化
-	for (CEnemy* enemy : mpEnemys) enemy->Kill();
-
-	mpEnemys.clear();
-
-	// サボテンの敵を作成
-	CCactus* cactus = new CCactus();
-	cactus->Position(mpField->GetMapData()->GetRoomRandomFloorPos(CBspMap::EOccupyType::Enemy));
-	cactus->InitNav();
-	mpEnemys.push_back(cactus);
-
-	// キノコの敵を作成
-	CMashroom* mashroom = new CMashroom();
-	mashroom->Position(mpField->GetMapData()->GetRoomRandomFloorPos(CBspMap::EOccupyType::Enemy));
-	mashroom->InitNav();
-	mpEnemys.push_back(mashroom);
-
-}
-
 //シーンの更新処理
 void CGameScene::Update()
 {
@@ -186,27 +171,29 @@ void CGameScene::Update()
 		}
 	}
 
-	if (CInput::PushKey('H'))
+#if _DEBUG
+	if (CDebugInput::PushKey('H'))
 	{
-		CSceneManager::Instance()->LoadScene(EScene::eTitle);
+		CEnemyManager::Instance()->RandomEnemySpawn();
+
+		//CSceneManager::Instance()->LoadScene(EScene::eTitle);
 	}
 
 	// ゲームメニューを開いてなければ、[Ｍ]キーでメニューを開く
 	if (!mpGameMenu->IsOpened())
 	{
-		if (CInput::PushKey('M'))
+		if (CDebugInput::PushKey('M'))
 		{
 			mpGameMenu->Open();
 		}
 	}
 
-#if _DEBUG
 	if (CDebugInput::PushKey('B'))
 	{
 		// プレイヤーの座標を再設定
 		CAdventurer::Instance()->Position(mpField->GetMapData()->GetRoomRandomFloorPos(CBspMap::EOccupyType::Player));
 		// 敵の生成
-		CreateEnemys();
+		CEnemyManager::Instance()->CreateEnemys();
 	}
 
 	CDebugPrint::Print("階層：%d階\n", CGameData::floorNum);
