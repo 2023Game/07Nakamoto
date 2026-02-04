@@ -120,7 +120,7 @@ void CField::CreateMap()
 		for (CFloor* passegeFloor : mpPassegeObjects) passegeFloor->Kill();
 		for (CNavNode* node : mpNavNodes) node->Kill();
 		for (CObjectBase* obj : mpObjects) obj->Kill();
-		for (CColliderMesh* objcol : mpObjectColliders) objcol = nullptr;
+		for (CColliderMesh* objcol : mpObjectColliders) objcol ;
 
 		mpFloorObjects.clear();
 		mpWallObjects.clear();

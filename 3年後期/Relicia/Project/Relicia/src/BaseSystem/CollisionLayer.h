@@ -8,10 +8,11 @@ enum class ELayer
 	eTest,
 	eFloor,
 	eWall,
-	eCeil,		// 天井
-	eCrystal,	// クリスタル
+	eCeil,			// 天井
+	eCrystal,		// クリスタル
 	eMoveCrate,		// 動かせる箱
-	eInteractObj, // 調べられるアイテム
+	eInteractObj,	// 調べられるアイテム
+	eSwitchFloor,	// 感圧板
 	eGround,
 	ePlayer,
 	eEnemy,

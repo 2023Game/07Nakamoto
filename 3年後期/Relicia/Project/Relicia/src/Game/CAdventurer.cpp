@@ -116,7 +116,8 @@ CAdventurer::CAdventurer()
 	(
 		{
 			ELayer::eFloor, ELayer::eWall,ELayer::eCeil,ELayer::eMoveCrate,
-			ELayer::eEnemy,ELayer::eAttackCol ,ELayer::eCrystal,ELayer::eInteractObj
+			ELayer::eEnemy,ELayer::eAttackCol ,ELayer::eCrystal,ELayer::eInteractObj,
+			ELayer::eSwitchFloor,
 		}
 	);
 

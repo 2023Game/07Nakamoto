@@ -23,6 +23,7 @@
 #include "Maths.h"
 #include "CEnemyManager.h"
 
+#include "CSwitchFloor.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -122,6 +123,9 @@ void CGameScene::Load()
 	CEnemyManager::Instance()->AllClear();
 	// 敵の生成
 	CEnemyManager::Instance()->CreateEnemys();
+
+	// 感圧板の生成
+	new CSwitchFloor(mpField->GetMapData()->GetRoomRandomFloorPos(CBspMap::EOccupyType::Object));
 
 	// CGameCameraのテスト
 	//CGameCamera* mainCam

@@ -12,7 +12,14 @@ CCrate::CCrate(const CVector& pos, ETag tag, ETaskPriority prio, int sortOrder, 
 
 	mpColliderMesh = new CColliderMesh(this, ELayer::eMoveCrate, mpModel, false);
 	mpColliderMesh->SetCollisionTags({ ETag::eField,ETag::ePlayer,ETag::eEnemy });
-	mpColliderMesh->SetCollisionLayers({ ELayer::eWall, ELayer::ePlayer,ELayer::eEnemy,ELayer::eAttackCol });
+	mpColliderMesh->SetCollisionLayers
+	(
+		{
+			ELayer::eWall, ELayer::ePlayer,
+			ELayer::eEnemy,ELayer::eAttackCol,
+			ELayer::eSwitchFloor
+		}
+	);
 
 	CField::Instance()->AddObjectCollider(mpColliderMesh);
 
