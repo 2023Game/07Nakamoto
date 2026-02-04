@@ -6,7 +6,7 @@
 #include "CBspMap.h"
 #include "CField.h"
 
-#define INITIAL_ENEMY_SPAWN 3	// ‰Šú‚Ì“G‚ÌƒXƒ|[ƒ“”
+#define INITIAL_ENEMY_SPAWN 1	// ‰Šú‚Ì“G‚ÌƒXƒ|[ƒ“”
 
 CEnemyManager* CEnemyManager::spInstance = nullptr;
 
@@ -49,11 +49,11 @@ void CEnemyManager::AddEnemy(CEnemy* enemy)
 // “G‚ðƒŠƒXƒg‚©‚çíœ
 void CEnemyManager::RemoveEnemy(CEnemy* enemy)
 {
-	auto it = std::remove(mEnemys.begin(), mEnemys.end(), enemy);
-	mEnemys.erase(it, mEnemys.end());
-	
-	(*it)->Kill();
-	mEnemys.erase(it);
+	auto it = std::find(mEnemys.begin(), mEnemys.end(), enemy);
+	if (it == mEnemys.end()) return;
+
+	(*it)->Kill();          // æ‚ÉKill
+	mEnemys.erase(it);      // ‚»‚ÌŒãíœ
 }
 
 // “G‚ÌƒŠƒXƒg‚ðíœ
@@ -83,10 +83,10 @@ void CEnemyManager::CreateEnemys()
 		CEnemyManager::Instance()->AddEnemy(cactus);
 
 		// ƒLƒmƒR‚Ì“G‚ðì¬
-		CMashroom* mashroom = new CMashroom();
-		mashroom->Position(field->GetMapData()->GetRoomRandomFloorPos(CBspMap::EOccupyType::Enemy));
-		mashroom->InitNav();
-		CEnemyManager::Instance()->AddEnemy(mashroom);
+		//CMashroom* mashroom = new CMashroom();
+		//mashroom->Position(field->GetMapData()->GetRoomRandomFloorPos(CBspMap::EOccupyType::Enemy));
+		//mashroom->InitNav();
+		//CEnemyManager::Instance()->AddEnemy(mashroom);
 	}
 }
 

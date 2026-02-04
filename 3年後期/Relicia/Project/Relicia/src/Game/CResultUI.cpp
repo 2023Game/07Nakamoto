@@ -27,6 +27,7 @@ CResultUI::CResultUI()
 	, mpTotalSellPriceText(nullptr)
 	, mpAppraisal(nullptr)
 	, mpAppraisalBg(nullptr)
+	, mpRank(nullptr)
 {
 	// ゲームクリア画面の背景イメージを生成
 	mpResultBg = new CImage
@@ -87,10 +88,41 @@ CResultUI::CResultUI()
 	);
 
 	mTotalSellPrice = CInventory::Instance()->GetTotalSellPrice();
-
 	mpTotalSellPriceText->SetText("%dG\n", mTotalSellPrice);
 	mpTotalSellPriceText->SetEnableOutline(true);
 	mpTotalSellPriceText->SetOutlineColor(CColor(0.9f, 0.9f, 0.9f));
+
+	const char* c;
+	// 表示画像を設定
+	if (mTotalSellPrice < 300)
+	{
+		c = "UI\\RankC_T.png";
+	}
+	else if (300 <= mTotalSellPrice && mTotalSellPrice < 700)
+	{
+		c = "UI\\RankB_T.png";
+	}
+	else if (700 <= mTotalSellPrice && mTotalSellPrice < 1000)
+	{
+		c = "UI\\RankA_T.png";
+	}
+	else if (1000 <= mTotalSellPrice)
+	{
+		c = "UI\\RankS_T.png";
+	}
+	// 評価の画像を生成
+	mpRank = new CImage
+	(
+		c,
+		ETaskPriority::eUI,
+		0,
+		ETaskPauseType::eDefault,
+		false,
+		false
+	);
+	mpRank->SetSize(mpRank->GetSize() * 0.4f);
+	mpRank->SetCenter(mpAppraisal->GetSize() * 0.5f);
+	mpRank->SetPos(900.0f, 100.0f);
 
 	// [コンティニュー]ボタンを生成
 	CExpandButton* btn1 = new CExpandButton
@@ -193,6 +225,8 @@ void CResultUI::Render()
 	mpAppraisalBg->Render();
 	// 鑑定額の描画
 	mpAppraisal->Render();
+	// 評価の画像の描画
+	mpRank->Render();
 	// スコア描画
 	mpTotalSellPriceText->Render();
 	// メニューボタンを表示

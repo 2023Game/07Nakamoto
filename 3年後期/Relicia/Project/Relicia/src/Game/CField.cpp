@@ -24,8 +24,8 @@
 #include "CSwitchFloor.h"
 
 #define PILLAR_OFFSET_POS 10.0f	// 柱のオフセット座標
-#define SECTION_SIZE_X 50		// ダンジョンの全体の区画の横サイズ
-#define SECTION_SIZE_Y 50		// ダンジョンの全体の区画の縦サイズ
+#define SECTION_SIZE_X 30		// ダンジョンの全体の区画の横サイズ
+#define SECTION_SIZE_Y 30		// ダンジョンの全体の区画の縦サイズ
 
 CField* CField::spInstance = nullptr;
 
@@ -91,15 +91,21 @@ CColliderMesh* CField::GetWallCollider() const
 }
 
 // フィールドのオブジェクトのコライダーを取得
-std::vector<CColliderMesh*> CField::GetObjectCollider() const
+std::vector<CCollider*> CField::GetObjectCollider() const
 {
 	return mpObjectColliders;
 }
 
 // フィールドのオブジェクトのコライダーを追加
-void CField::AddObjectCollider(CColliderMesh* col)
+void CField::AddObjectCollider(CCollider* col)
 {
 	mpObjectColliders.push_back(col);
+}
+
+// 徘徊用のノードを取得
+std::vector<CNavNode*> CField::GetNavNodes()
+{
+	return mpNavNodes;
 }
 
 // ダンジョンマップを生成
@@ -120,7 +126,6 @@ void CField::CreateMap()
 		for (CFloor* passegeFloor : mpPassegeObjects) passegeFloor->Kill();
 		for (CNavNode* node : mpNavNodes) node->Kill();
 		for (CObjectBase* obj : mpObjects) obj->Kill();
-		for (CColliderMesh* objcol : mpObjectColliders) objcol ;
 
 		mpFloorObjects.clear();
 		mpWallObjects.clear();
@@ -168,6 +173,10 @@ void CField::CreateMap()
 	CCrate* crate = new CCrate(mpMapData->GetRoomRandomFloorPos(CBspMap::EOccupyType::Object), ETag::eField, ETaskPriority::eObject);
 	crate->Scale(1.0f, 3.0f, 1.0f);
 	mpObjects.push_back(crate);
+
+	// 感圧板の生成
+	CSwitchFloor* swichFloor = new CSwitchFloor(mpMapData->GetRoomRandomFloorPos(CBspMap::EOccupyType::Object));
+	mpObjects.push_back(swichFloor);
 
 	// 経路探索ノードを作成
 	for (CVector& pos : mNavNodePositions)

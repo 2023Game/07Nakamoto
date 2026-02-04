@@ -1,6 +1,7 @@
 #include "ItemData.h"
 #include <map>
 #include "CModel.h"
+#include "Maths.h"
 
 #define ICON_SIZE 64	// アイコンのサイズ
 #define ICON_PADDING 2	// アイコン同士の隙間
@@ -18,7 +19,7 @@ namespace Item
 			{
 				ItemId::HealingPotion,
 				5,
-				"回復薬",
+				"回復薬(小)",
 				"説明文",
 				"",
 				ItemEffectType::RecoveryHP,
@@ -42,7 +43,7 @@ namespace Item
 			{
 				ItemId::HealingPotion2,
 				5,
-				"回復薬",
+				"回復薬(中)",
 				"説明文",
 				"",
 				ItemEffectType::RecoveryHP,
@@ -66,7 +67,7 @@ namespace Item
 			{
 				ItemId::HealingPotion3,
 				5,
-				"回復薬",
+				"回復薬(大)",
 				"説明文",
 				"",
 				ItemEffectType::RecoveryHP,
@@ -226,6 +227,14 @@ namespace Item
 		// 見つかったアイテムデータのアドレスを返す
 		*data = &find->second;
 		return true;
+	}
+
+	// ランダムにItemIdを返す
+	ItemId GetRandomItemId()
+	{
+		int rd = Math::Rand(0, (int)ItemId::Num - 1);
+
+		return static_cast<ItemId>(rd);
 	}
 
 	// 全てのアイテムのリソースを読み込む

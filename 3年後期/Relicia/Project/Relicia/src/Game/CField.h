@@ -11,7 +11,7 @@ class CEntrance;
 class CDoor;
 class CCrystalObj;
 class CItemObj;
-class CColliderMesh;
+class CCollider;
 class CBspMapCollider;
 class CEscapeArea;
 
@@ -40,9 +40,12 @@ public:
 	// 壁コライダーを取得
 	CColliderMesh* GetWallCollider() const;
 	// フィールドのオブジェクトのコライダーを取得
-	std::vector<CColliderMesh*> GetObjectCollider() const;
+	std::vector<CCollider*> GetObjectCollider() const;
 	// フィールドのオブジェクトのコライダーを追加
-	void AddObjectCollider(CColliderMesh* col);
+	void AddObjectCollider(CCollider* col);
+
+	// 徘徊用のノードを取得
+	std::vector<CNavNode*> GetNavNodes();
 
 	/// <summary>
 	/// レイとフィールドオブジェクトの衝突判定
@@ -110,7 +113,7 @@ private:
 	std::vector<CVector> mNavNodePositions;	// NavNodeを配置する座標のリスト
 	std::vector<CNavNode*> mpNavNodes;		// NavNodeリスト
 	std::vector<CObjectBase*> mpObjects;	// 遮蔽物になるオブジェクトのリスト
-	std::vector<CColliderMesh*> mpObjectColliders;	// 遮蔽になるオブジェクトのコライダーリスト
+	std::vector<CCollider*> mpObjectColliders;	// 遮蔽になるオブジェクトのコライダーリスト
 
 	CEscapeArea* mpEscapeArea;	// 脱出エリア
 

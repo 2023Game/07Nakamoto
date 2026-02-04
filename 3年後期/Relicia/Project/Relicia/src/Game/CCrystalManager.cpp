@@ -49,7 +49,7 @@ void CCrystalManager::SpawnCrystals()
 	AllRemoveCrystals();
 
 	// Ç∆ÇËÇ†Ç¶Ç∏4âÒê∂ê¨
-	for (int i = 0; i < 4; ++i)
+	for (int i = 0; i < 3; ++i)
 	{
 		AddCrystal(new CCrystalObj(ElementType::Fire, CField::Instance()->GetMapData()->GetRoomRandomFloorPos(CBspMap::EOccupyType::Item)));
 		AddCrystal(new CCrystalObj(ElementType::Water, CField::Instance()->GetMapData()->GetRoomRandomFloorPos(CBspMap::EOccupyType::Item)));

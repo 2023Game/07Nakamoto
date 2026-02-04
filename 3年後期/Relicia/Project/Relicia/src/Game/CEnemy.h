@@ -122,8 +122,6 @@ protected:
 	// アニメーション切り替え
 	void ChangeAnimation(int type, bool restart = false);
 
-	// 動かせるオブジェクトに当たっている時間
-	void UpdateMoveObj(float delta);
 	// 一定時間塞がれているか
 	bool ShouldAttackBlockingObj() const;
 	// 進路を塞いでいるオブジェクトを攻撃するか

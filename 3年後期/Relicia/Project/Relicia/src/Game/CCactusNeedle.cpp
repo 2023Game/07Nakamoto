@@ -45,7 +45,7 @@ void CCactusNeedle::Collision(CCollider* self, CCollider* other, const CHitInfo&
 		CCharaBase* chara = dynamic_cast<CCharaBase*>(other->Owner());
 		if (chara != nullptr)
 		{
-			chara->TakeDamage(1, this);
+			chara->TakeDamage(3, this);
 		}
 	}
 

@@ -1,16 +1,17 @@
 #include "CSlash.h"
 #include "CCharaBase.h"
 #include "CColliderSphere.h"
+#include "CCrystalManager.h"
 //#include "CColliderMesh.h"
 
 // コンストラクタ
 CSlash::CSlash(CObjectBase* owner, const CVector& pos, const CVector& dir,
-	float speed, float dist)
+	float speed, float dist, ElementType type)
 	: CObjectBase(ETag::eSlash, ETaskPriority::eEffect, 0, ETaskPauseType::eGame)
 	, mpOwner(owner)
 	, mKillMoveDist(dist)
 	, mMovedDist(0.0f)
-
+	, mType(type)
 {
 	Position(pos);
 	mMoveSpeed = dir.Normalized() * speed;
@@ -50,7 +51,8 @@ void CSlash::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		CCharaBase* chara = dynamic_cast<CCharaBase*>(other->Owner());
 		if (chara != nullptr)
 		{
-			chara->TakeDamage(1, mpOwner);
+			// 属性ダメージを与える
+			chara->TakeDamage(1, mType, mpOwner);
 		}
 	}
 

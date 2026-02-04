@@ -4,7 +4,7 @@
 class CColliderSphere;
 class CNavNode;
 
-// 蝙蝠の敵クラス
+// キノコの敵クラス
 class CMashroom : public CEnemy
 {
 public:
@@ -17,6 +17,9 @@ public:
 	void AttackStart() override;
 	// 攻撃終了
 	void AttackEnd() override;
+
+	// 属性ダメージを受ける
+	void TakeDamage(int damage, ElementType type, CObjectBase* causer) override;
 
 	// 衝突処理
 	void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;

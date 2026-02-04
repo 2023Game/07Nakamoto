@@ -6,6 +6,8 @@
 
 // 1フレームで調べる接続ノードの数
 #define FIND_CONNECT_NODE_COUNT 10
+// レイの幅
+#define RAY_WIDTH 10.0f
 
 CNavManager* CNavManager::spInstance = nullptr;
 
@@ -140,7 +142,7 @@ bool CNavManager::CanConnectNavNode(CNavNode* node, CNavNode* other, float dista
 	for (CCollider* col : mColliders)
 	{
 		// ヒットしていたら、ヒットフラグをtrueにしてチェック終了
-		if (CCollider::CollisionRay(col, start, end, &hit))
+		if (CCollider::CollisionRay(col, start, end, &hit, RAY_WIDTH))
 		{
 			isHit = true;
 			break;
@@ -323,7 +325,7 @@ bool CNavManager::IsReachableByRay(const CVector& start, const CVector& end)
 	CHitInfo hit;
 	for (CCollider* col : mColliders)
 	{
-		if (CCollider::CollisionRay(col, start, end, &hit))
+		if (CCollider::CollisionRay(col, start, end, &hit, RAY_WIDTH))
 			return false;
 	}
 	return true;

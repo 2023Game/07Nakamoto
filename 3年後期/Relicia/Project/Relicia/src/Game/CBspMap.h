@@ -162,6 +162,9 @@ private:
 	// 部屋の四隅データの柱を設定
 	void CreateRoomPillar(const Room& room, std::vector<std::vector<Tile>>& map);
 
+	// 部屋の床をリストに保存
+	void RoomFloorData(std::vector<std::vector<Tile>>& map);
+
 	// 同じ階層の部屋同士を通路で繋げる
 	void ConnectRooms(SectionNode* node, std::vector<std::vector<Tile>>& map);
 

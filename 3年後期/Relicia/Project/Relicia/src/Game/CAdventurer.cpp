@@ -14,6 +14,7 @@
 #include "CNavNode.h"
 #include "CResultScene.h"
 #include "CGameData.h"
+#include "CSceneManager.h"
 
 // プレイヤーのインスタンス
 CAdventurer* CAdventurer::spInstance = nullptr;
@@ -56,7 +57,7 @@ const CAdventurer::AnimData CAdventurer::ANIM_DATA[] =
 	{ ANIM_PATH"jump.x",		true,	1.0f,	1.0f	},	// ジャンプ中
 	{ ANIM_PATH"jump_end.x",	false,	26.0f,	1.0f	},	// ジャンプ終了
 	{ ANIM_PATH"hit.x",			false,	44.0f,	1.0f	},	// 仰け反り
-
+	{ ANIM_PATH"death.x",		false,	155.0f,	1.0f	},	// 死亡
 };
 
 // インスタンスのポインタの取得
@@ -76,8 +77,6 @@ CAdventurer::CAdventurer()
 	, mIsPlayedSlashSE(false)
 	, mIsSpawnedSlashEffect(false)
 	, mpSword(nullptr)
-	, mEquipElementSlotIndex(0)
-	, mElementType(ElementType::None)
 	, mpNavNode(nullptr)
 {
 	mMaxHp = CGameData::playerMaxHp;
@@ -193,7 +192,6 @@ void CAdventurer::AttackStart()
 	{
 		mpSword->SetEnableCol(true);
 	}
-	
 }
 
 // 攻撃終了
@@ -434,6 +432,8 @@ void CAdventurer::UpdateAttack2()
 			// 斬撃SEを再生
 			//mpSlashSE->Play();
 
+			const CrystalData* data = CElementManager::Instance()->GetCurrentElement();
+
 			// 斬撃生成
 			CSlash* slash = new CSlash
 			(
@@ -441,10 +441,10 @@ void CAdventurer::UpdateAttack2()
 				Position() + CVector(0.0f, 10.0f, 0.0f) + VectorZ() * 1.0f,
 				VectorZ(),
 				100.0f,
-				1000.0f
+				1000.0f,
+				data->type
 			);
 
-			const CrystalData* data = CElementManager::Instance()->GetCurrentElement();
 
 			if (data->type == ElementType::Fire)
 			{
@@ -545,6 +545,26 @@ void CAdventurer::UpdateHit()
 		}
 		break;
 	}
+}
+
+// 死亡
+void CAdventurer::UpdateDeath()
+{
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
+	// 死亡アニメーションを設定
+	ChangeAnimation(EAnimType::eDeath);
+
+	// アニメーションが終了したら、
+	if (IsAnimationFinished())
+	{
+		CGameData::ItemSlots.clear();
+		CGameData::ItemSlots.resize(SLOT_COUNT);
+
+		// ゲームオーバーシーンを読み込む
+		CSceneManager::Instance()->LoadScene(EScene::eResult);
+	}
+
 }
 
 // 移動の更新処理
@@ -766,6 +786,11 @@ void CAdventurer::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 // 更新
 void CAdventurer::Update()
 {
+	if (mHp <= 0)
+	{
+		ChangeState(EState::eDeath);
+	}
+
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
 	{
@@ -783,6 +808,8 @@ void CAdventurer::Update()
 	case EState::eJumpEnd:		UpdateJumpEnd();	break;
 		// 仰け反り
 	case EState::eHit:			UpdateHit();		break;
+		// 死亡
+	case EState::eDeath:		UpdateDeath();		break;
 	}
 
 	// 待機中とジャンプ中は、移動処理を行う

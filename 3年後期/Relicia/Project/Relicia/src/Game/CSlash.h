@@ -1,6 +1,7 @@
 #pragma once
 #include "CObjectBase.h"
 #include "CModel.h"
+#include "CrystalData.h"
 
 // 斬撃エフェクト
 class CSlash : public CObjectBase
@@ -14,7 +15,7 @@ public:
 	/// <param name="dir">移動方向</param>
 	/// <param name="speed">移動速度</param>
 	/// <param name="dist">移動したら消える距離</param>
-	CSlash(CObjectBase* owner, const CVector& pos, const CVector& dir, float speed, float dist);
+	CSlash(CObjectBase* owner, const CVector& pos, const CVector& dir, float speed, float dist,ElementType type);
 	// デストラクタ
 	~CSlash();
 	
@@ -32,4 +33,5 @@ private:
 	CVector mMoveSpeed;		// 移動速度
 	float mKillMoveDist;	// 移動したら消える距離
 	float mMovedDist;		// 現在移動した距離
+	ElementType mType;		// 属性
 };

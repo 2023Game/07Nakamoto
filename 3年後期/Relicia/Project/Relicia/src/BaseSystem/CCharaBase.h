@@ -1,5 +1,6 @@
 #pragma once
 #include "CObjectBase.h"
+#include "CrystalData.h"
 
 /// <summary>
 /// キャラクターのベースクラス
@@ -20,6 +21,8 @@ public:
 
 	// ダメージを受ける
 	virtual void TakeDamage(int damage, CObjectBase* causer);
+	// 属性ダメージを受ける
+	virtual void TakeDamage(int damage, ElementType type, CObjectBase* causer);
 
 	// 死亡
 	virtual void Death();

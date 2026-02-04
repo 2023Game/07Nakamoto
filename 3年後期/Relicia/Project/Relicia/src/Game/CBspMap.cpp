@@ -31,7 +31,9 @@ CBspMap::CBspMap(int x, int y)
     PlaceRoom(mpRoot, mMapData);
     // “¯‚¶ŠK‘w‚Ì•”‰®“¯m‚ğ’Ê˜H‚ÅŒq‚°‚é
     ConnectRooms(mpRoot, mMapData);
-    
+    // ƒ_ƒ“ƒWƒ‡ƒ“‚Ì°‚ğ•Û‘¶
+    RoomFloorData(mMapData);
+
     // ’Ê˜H‚Ì‚Ü‚Æ‚Ü‚è‚ğ•Û‘¶
     //SetPassageData();
 
@@ -723,7 +725,7 @@ void CBspMap::CreateRoomFloor(SectionNode* node, std::vector<std::vector<Tile>>&
         for (int x = roomX + 1; x < roomX + roomWidth - 1; x++)
         {
             map[y][x].type = TileType::eFloor;
-            mpRoomFloors.push_back(CVector2(static_cast<float>(x), static_cast<float>(y)));
+            //mpRoomFloors.push_back(CVector2(static_cast<float>(x), static_cast<float>(y)));
 
             //// ‚à‚µA•”‰®‚ÌŠp‚¾‚Á‚½ê‡A
             //if (y == roomY + 1 && x == roomX + 1 ||
@@ -778,6 +780,21 @@ void CBspMap::CreateRoomPillar(const Room& room, std::vector<std::vector<Tile>>&
     mMapData[room.y + room.height - 1][room.x].dir = Direction::eSouthWest;	// “ì¼
     mMapData[room.y + room.height - 1][room.x + room.width - 1].type = TileType::ePillar;	// ‰E‰º
     mMapData[room.y + room.height - 1][room.x + room.width - 1].dir = Direction::eSouthEast;	// “ì“Œ
+}
+
+// •”‰®‚Ì°‚ğƒŠƒXƒg‚É•Û‘¶
+void CBspMap::RoomFloorData(std::vector<std::vector<Tile>>& map)
+{
+    for (int y = 0; y < map.size(); y++)
+    {
+        for (int x = 0; x < map[y].size(); x++)
+        {
+            if (map[y][x].type == TileType::eFloor && !map[y][x].passage)
+            {
+                mpRoomFloors.push_back(CVector2(x, y));
+            }
+        }
+    }
 }
 
 // “¯‚¶ŠK‘w‚Ì•”‰®“¯m‚Ì’Ê˜Hƒf[ƒ^‚ğİ’è

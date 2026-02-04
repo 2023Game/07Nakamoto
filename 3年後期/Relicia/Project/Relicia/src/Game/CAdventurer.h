@@ -73,6 +73,8 @@ private:
 	void UpdateJumpEnd();
 	// 仰け反り
 	void UpdateHit();
+	// 死亡
+	void UpdateDeath();
 
 	// 移動の更新処理
 	void UpdateMove();
@@ -92,7 +94,7 @@ private:
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了
 		eHit,		// 仰け反り
-		//eRelease,	// 属性解放
+		eDeath,		// 死亡
 
 		Num
 	};
@@ -123,6 +125,7 @@ private:
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了
 		eHit,		// 仰け反り
+		eDeath,		// 死亡
 	};
 	// 状態を切り替え
 	void ChangeState(EState state);
@@ -150,17 +153,6 @@ private:
 
 	// 属性スロットの装備枠
 	CElementSlotUI2* mpElementEquipment;
-	// 属性スロットのインデックス値
-	int mEquipElementSlotIndex;
-
-	// 現在の属性スロット記憶用
-	ElementType mElementType;
-
-	// 属性解放フラグ
-	bool mElementRelease;
-
-	// 装備しているアイテムのスロットインデックス値
-	int mEquipItemSlotIndex;
 
 	CNavNode* mpNavNode;// 経路探索用のノードポインタ
 

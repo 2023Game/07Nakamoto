@@ -1,18 +1,25 @@
 #include "CCrate.h"
-#include "CColliderMesh.h"
+#include "CColliderBox.h"
 #include "CField.h"
+#include "CItemObj.h"
+#include "CItemManager.h"
 
 #define MAX_HP 1
+#define COLLIDER_BOX_HALF_SIZEZ CVector(4.0f, 4.0f, 4.0f)
 
 CCrate::CCrate(const CVector& pos, ETag tag, ETaskPriority prio, int sortOrder, ETaskPauseType pause)
 	: CCharaBase(tag, prio, sortOrder, pause)
 	, mpModel(nullptr)
+	, mElapsedTime(0.0f)
+	, mPush(false)
+	, mLastPush(false)
 {
 	mpModel = CResourceManager::Get<CModel>("Crate");
 
-	mpColliderMesh = new CColliderMesh(this, ELayer::eMoveCrate, mpModel, false);
-	mpColliderMesh->SetCollisionTags({ ETag::eField,ETag::ePlayer,ETag::eEnemy });
-	mpColliderMesh->SetCollisionLayers
+	mpColliderBox = new CColliderBox(this, ELayer::eMoveCrate, COLLIDER_BOX_HALF_SIZEZ, false);
+	mpColliderBox->Position(0.0f, 4.0f, 0.0f);
+	mpColliderBox->SetCollisionTags({ ETag::eField,ETag::ePlayer,ETag::eEnemy });
+	mpColliderBox->SetCollisionLayers
 	(
 		{
 			ELayer::eWall, ELayer::ePlayer,
@@ -21,7 +28,7 @@ CCrate::CCrate(const CVector& pos, ETag tag, ETaskPriority prio, int sortOrder, 
 		}
 	);
 
-	CField::Instance()->AddObjectCollider(mpColliderMesh);
+	CField::Instance()->AddObjectCollider(mpColliderBox);
 
 	mMaxHp = MAX_HP;
 	mHp = mMaxHp;
@@ -31,13 +38,13 @@ CCrate::CCrate(const CVector& pos, ETag tag, ETaskPriority prio, int sortOrder, 
 
 CCrate::~CCrate()
 {
-	SAFE_DELETE(mpColliderMesh);
+	SAFE_DELETE(mpColliderBox);
 }
 
 // 衝突判定
 void CCrate::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
-	if (self == mpColliderMesh)
+	if (self == mpColliderBox)
 	{
 		// プレイヤーと衝突した場合
 		if (other->Layer() == ELayer::ePlayer)
@@ -94,6 +101,17 @@ void CCrate::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			adjust.Y(0.0f);
 			Position(Position() + adjust * hit.weight);
 		}
+		else if (other->Layer() == ELayer::eSwitchFloor)
+		{
+			// 前回のフレームでも触れていたオブジェクトであれば、処理しない
+			if (mPush)	return;
+
+			mPush = true;
+			mElapsedTime += Times::DeltaTime();
+		}
+
+		// 持ち主の座標が変更されたので、コライダーの一も更新
+		mpColliderBox->Update();
 	}
 }
 
@@ -101,6 +119,22 @@ void CCrate::Update()
 {
 	if (mHp <= 0)
 	{
+		Kill();
+	}
+
+	if (!mPush)
+	{
+		mElapsedTime = 0.0f;
+	}
+
+	mPush = false;
+
+	// スイッチの上に3秒いたら
+	if (mElapsedTime > 3.0f)
+	{
+		// 高いアイテムをドロップ
+		CItemManager::Instance()->AddItem(new CItemObj(ItemId::Bomb, Position()));
+
 		Kill();
 	}
 }

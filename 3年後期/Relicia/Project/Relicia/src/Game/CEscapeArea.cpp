@@ -5,7 +5,7 @@
 #include "CField.h"
 #include "CGameData.h"
 
-#define CLEAR_FLOOR 1
+#define CLEAR_FLOOR 3
 
 #define SPEED 1.0f
 #define MAX_HIGHT 8

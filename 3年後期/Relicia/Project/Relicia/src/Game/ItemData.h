@@ -75,6 +75,9 @@ namespace Item
 	// アイテムの種類を指定して、アイテムのデータを取得
 	bool GetItemData(ItemId type, const ItemData** data);
 
+	// ランダムにItemIdを返す
+	ItemId GetRandomItemId();
+
 	// 全てのアイテムのリソースを読み込む
 	void LoadItemResources();
 	// 全てのアイテムのリソースを破棄

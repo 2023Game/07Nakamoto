@@ -45,6 +45,25 @@ void CCharaBase::TakeDamage(int damage, CObjectBase* causer)
 	}
 }
 
+void CCharaBase::TakeDamage(int damage, ElementType type, CObjectBase* causer)
+{
+	// 既に死亡していたら、ダメージを受けない
+	if (IsDeath()) return;
+
+	// 受けたダメージが現在HP以上なら
+	if (damage >= mHp)
+	{
+		// HPを0にして、死亡
+		mHp = 0;
+		Death();
+	}
+	// 現在HPの方が多い場合は、ダメージ分減らす
+	else
+	{
+		mHp -= damage;
+	}
+}
+
 // 死亡
 void CCharaBase::Death()
 {

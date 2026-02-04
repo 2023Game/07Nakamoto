@@ -1,6 +1,9 @@
 #include "CItemManager.h"
 #include "CField.h"
 #include "CItemObj.h"
+#include "ItemData.h"
+
+#define SPAWN 4
 
 CItemManager* CItemManager::spInstance = nullptr;
 
@@ -50,10 +53,9 @@ void CItemManager::SpawnItems()
 	AllRemoveItems();
 
 	// Ç∆ÇËÇ†Ç¶Ç∏4âÒê∂ê¨
-	for (int i = 0; i < 4; ++i)
+	for (int i = 0; i < SPAWN; ++i)
 	{
-		mpCrystalObjs.push_back(new CItemObj(ItemId::Key, CField::Instance()->GetMapData()->GetRoomRandomFloorPos(CBspMap::EOccupyType::Crystal)));
-		mpCrystalObjs.push_back(new CItemObj(ItemId::HealingPotion, CField::Instance()->GetMapData()->GetRoomRandomFloorPos(CBspMap::EOccupyType::Crystal)));
+		mpCrystalObjs.push_back(new CItemObj(Item::GetRandomItemId(), CField::Instance()->GetMapData()->GetRoomRandomFloorPos(CBspMap::EOccupyType::Crystal)));
 	}
 }
 

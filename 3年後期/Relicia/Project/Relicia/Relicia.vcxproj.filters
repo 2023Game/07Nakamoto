@@ -520,6 +520,12 @@
     <ClCompile Include="src\Game\CSwitchFloor.cpp">
       <Filter>ソース ファイル\Game\Field\Object\Gimmick</Filter>
     </ClCompile>
+    <ClCompile Include="src\BaseSystem\CColliderBox.cpp">
+      <Filter>ソース ファイル\BaseSystem\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Test\CColBox.cpp">
+      <Filter>ソース ファイル\Test\CollisionTest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -941,6 +947,12 @@
     </ClInclude>
     <ClInclude Include="src\Game\CSwitchFloor.h">
       <Filter>ソース ファイル\Game\Field\Object\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BaseSystem\CColliderBox.h">
+      <Filter>ソース ファイル\BaseSystem\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Test\CColBox.h">
+      <Filter>ソース ファイル\Test\CollisionTest</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

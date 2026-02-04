@@ -64,8 +64,9 @@ void CGameCamera2::LateUpdate()
 		mEye = mTargetEye;
 	}
 
+#if _DEBUG
 	CDebugPrint::Print("Angle:%f, %f, %f\n", mRotateAngle.X(), mRotateAngle.Y(), mRotateAngle.Z());
-
+#endif
 	// 設定されているコライダーと衝突する場合は、
 	// カメラの位置を押し出す
 	ApplyCollision();

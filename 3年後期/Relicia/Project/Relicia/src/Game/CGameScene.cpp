@@ -23,8 +23,6 @@
 #include "Maths.h"
 #include "CEnemyManager.h"
 
-#include "CSwitchFloor.h"
-
 //コンストラクタ
 CGameScene::CGameScene()
 	: CSceneBase(EScene::eGame)
@@ -99,10 +97,15 @@ void CGameScene::Load()
 	// 経路探索管理クラスを生成
 	new CNavManager();
 
+	// プレイヤーの作成
+	CAdventurer* player = new CAdventurer();
+	player->Scale(1.0f, 1.0f, 1.0f);
+
 	// ダンジョンの作成
 	mpField = new CField();
 
-	//new CField2(0);
+	// フィールドを作成してからプレイヤーの座標を設定
+	player->Position(mpField->GetMapData()->GetRoomRandomFloorPos(CBspMap::EOccupyType::Player));
 
 	// インベントリ画面の生成
 	new CInventory();
@@ -114,18 +117,10 @@ void CGameScene::Load()
 	//player->Scale(1.0f, 1.0f, 1.0f);
 	//player->Position(mpField->GetRandomFloorPos());
 
-	// プレイヤーの作成
-	CAdventurer* player = new CAdventurer();
-	player->Scale(1.0f, 1.0f, 1.0f);
-	player->Position(mpField->GetMapData()->GetRoomRandomFloorPos(CBspMap::EOccupyType::Player));
-
 	// 敵の生成前に初期化しておく
 	CEnemyManager::Instance()->AllClear();
 	// 敵の生成
 	CEnemyManager::Instance()->CreateEnemys();
-
-	// 感圧板の生成
-	new CSwitchFloor(mpField->GetMapData()->GetRoomRandomFloorPos(CBspMap::EOccupyType::Object));
 
 	// CGameCameraのテスト
 	//CGameCamera* mainCam

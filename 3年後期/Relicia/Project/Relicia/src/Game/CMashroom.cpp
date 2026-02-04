@@ -19,8 +19,8 @@
 #define ATTACK_COL_POS CVector(0.0f, 2.5f, 3.0f)
 #define MOVE_SPEED 20.0f
 #define CHAISE_SPEED 20.0f
-#define BATTLE_IDLE_TIME_MIN 2.0f
-#define BATTLE_IDLE_TIME_MAX 5.0f
+#define BATTLE_IDLE_TIME_MIN 1.0f
+#define BATTLE_IDLE_TIME_MAX 2.0f
 
 #define ATTACK2_DIST 50.0f			// 針攻撃を行う距離
 #define ATTACK2_PROB 70				// 針攻撃を行う確率（パーセント）
@@ -118,6 +118,51 @@ void CMashroom::AttackEnd()
 	mpAttack1Col->SetEnable(false);
 }
 
+// 属性ダメージを受ける
+void CMashroom::TakeDamage(int damage, ElementType type, CObjectBase* causer)
+{
+	// 既に死亡していたら、ダメージを受けない
+	if (IsDeath()) return;
+
+	if (type == ElementType::Fire)
+	{
+		damage = damage * 2.0f;
+	}
+
+	// 受けたダメージが現在HP以上なら
+	if (damage >= mHp)
+	{
+		// HPを0にして、死亡
+		mHp = 0;
+		Death();
+	}
+	// 現在HPの方が多い場合は、ダメージ分減らす
+	else
+	{
+		mHp -= damage;
+	}
+
+	// 死亡していなければ、
+	if (!IsDeath())
+	{
+		// 仰け反り状態へ移行
+		ChangeState(EState::eHit);
+
+		// 攻撃を加えた相手を戦闘相手に設定
+		mpBattleTarget = causer;
+
+		// 攻撃を加えた相手の方向へ向く
+		LookAtBattleTarget(true);
+
+		// 戦闘状態へ切り替え
+		mIsBattle = true;
+
+		// 移動を停止
+		mMoveSpeed = CVector::zero;
+	}
+
+}
+
 // 移動速度を取得
 float CMashroom::GetMoveSpeed() const
 {
@@ -204,25 +249,26 @@ void CMashroom::UpdateIdle()
 				// 次の状態（デフォルトは追跡状態）
 				EState nextState = EState::eChase;
 
-				// 戦闘相手までの距離を求める
-				CVector targetPos = mpBattleTarget->Position();
-				CVector vec = targetPos - Position();
-				vec.Y(0.0f);
-				float dist = vec.Length();
-				// 戦闘相手までの距離が離れていたら、
-				if (dist >= ATTACK2_DIST)
-				{
-					// 一定確率で、針攻撃に変更
-					int rand = Math::Rand(0, 99);
-					if (rand < ATTACK2_PROB)
-					{
-						nextState = EState::eAttack;
-						mAttackIndex = (int)EAttackID::eSpin;
-					}
-				}
+				//// 戦闘相手までの距離を求める
+				//CVector targetPos = mpBattleTarget->Position();
+				//CVector vec = targetPos - Position();
+				//vec.Y(0.0f);
+				//float dist = vec.Length();
+				//// 戦闘相手までの距離が離れていたら、
+				//if (dist >= ATTACK2_DIST)
+				//{
+				//	// 一定確率で、針攻撃に変更
+				//	int rand = Math::Rand(0, 99);
+				//	if (rand < ATTACK2_PROB)
+				//	{
+				//		nextState = EState::eAttack;
+				//		mAttackIndex = (int)EAttackID::eSpin;
+				//	}
+				//}
 
 				// 次の状態へ移行
-				ChangeState(nextState);
+				ChangeState(EState::eChase);
+				mAttackIndex = (int)EAttackID::eHeadbutt;
 
 				// 戦闘待機時間を初期化
 				mBattleIdletime = 0.0f;
@@ -383,6 +429,10 @@ void CMashroom::UpdateHeadbutt()
 		if (mElapsedTime < ATTACK_WAIT_TIME)
 		{
 			ChangeAnimation((int)EAnimType::eIdle);
+
+			// 徐々に戦闘相手の方向へ向く
+			LookAtBattleTarget();
+
 			mElapsedTime += Times::DeltaTime();
 		}
 		else
@@ -501,7 +551,7 @@ void CMashroom::Collision(CCollider* self, CCollider* other, const CHitInfo& hit
 		if (chara != nullptr && !IsAttackHitObj(chara))
 		{
 			// ダメージを与える
-			chara->TakeDamage(5, this);
+			chara->TakeDamage(1, this);
 			// 攻撃ヒット済みリストに登録
 			AddAttackHitObj(chara);
 		}
@@ -518,6 +568,8 @@ void CMashroom::Update()
 	// 戦闘相手までの距離をデバッグ表示
 	if (mpBattleTarget != nullptr)
 	{
+		if (mpBattleTarget->IsKill()) return;
+
 		CVector targetPos = mpBattleTarget->Position();
 		CVector pos = Position();
 		targetPos.Y(pos.Y());

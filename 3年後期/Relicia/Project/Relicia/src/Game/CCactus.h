@@ -10,8 +10,9 @@ public:
 	// デストラクタ
 	~CCactus();
 
-	//// 攻撃中か
-	//bool IsAttacking() const override;
+	// 属性ダメージを受ける
+	void TakeDamage(int damage, ElementType type, CObjectBase* causer) override;
+
 	// 攻撃開始
 	void AttackStart() override;
 	// 攻撃終了

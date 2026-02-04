@@ -25,14 +25,30 @@ CColTriangle::~CColTriangle()
 	SAFE_DELETE(mpCollider);
 }
 
+// è’ìÀèàóù
+void CColTriangle::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
+{
+	CColBase::Collision(self, other, hit);
+
+	//if (mIsSelect)
+	{
+		//CColliderSphere* cs = dynamic_cast<CColliderSphere*>(other);
+		//if (cs != nullptr)
+		{
+			Position(Position() + hit.adjust * hit.weight);
+		}
+	}
+}
+
 // ï`âÊ
 void CColTriangle::Render()
 {
-	Primitive::DrawTriangle
+	CMatrix m = mpCollider->Matrix();
+	Primitive::DrawWireTriangle
 	(
-		mVertices[0],
-		mVertices[1],
-		mVertices[2],
+		m * mVertices[0],
+		m * mVertices[1],
+		m * mVertices[2],
 		GetColor()
 	);
 }

@@ -61,6 +61,7 @@ private:
 
 	CImage* mpAppraisalBg;	// 鑑定額を見やすくするための背景
 	CImage* mpAppraisal;	// 鑑定額の文字画像
+	CImage* mpRank;			// 評価の画像
 	int mTotalSellPrice;	// インベントリの合計売却価格
 	CFont* mpLogoFont;	// ロゴのフォント
 	CText* mpTotalSellPriceText;	// 合計価格のテキスト

@@ -5,7 +5,7 @@
 // アイテムスロット数
 #define SLOT_COUNT (INITIAL_SLOT_ROW * INITIAL_SLOT_COL)
 
-#define MAX_PLAYER_HP 100	// 体力の最大値
+#define MAX_PLAYER_HP 20	// 体力の最大値
 
 #define MAX_CRYSTAL_SLOT 3
 #define MAX_CRYSTAL_ENERGY 100.0f

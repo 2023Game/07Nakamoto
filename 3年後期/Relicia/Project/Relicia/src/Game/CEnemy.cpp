@@ -14,7 +14,7 @@
 #define JUMP_SPEED 1.25f		// ジャンプ速度
 
 #define ROTATE_SPEED	6.0f	// 回転速度
-#define EYE_HEIGHT		10.0f	// 視点の高さ
+#define EYE_HEIGHT		5.0f	// 視点の高さ
 #define FOV_HEIGHT		30.0f	// 視野範囲の高さ
 
 #define LOOKAT_SPEED 5.0f	// 戦闘相手の方を向く速度
@@ -97,6 +97,7 @@ CEnemy::~CEnemy()
 	CNavManager* navMgr = CNavManager::Instance();
 	if (navMgr != nullptr)
 	{
+		mpNavNode->Kill();
 		mpLostPlayerNode->Kill();
 	}
 
@@ -323,12 +324,6 @@ void CEnemy::ChangeAnimation(int type, bool restart)
 	CXCharacter::SetAnimationSpeed(data.speed);
 }
 
-// 動かせるオブジェクトに当たっている時間
-void CEnemy::UpdateMoveObj(float delta)
-{
-
-}
-
 bool CEnemy::ShouldAttackBlockingObj() const
 {
 	if (mMoveObjElapsed < 1.0f) return false;
@@ -412,9 +407,9 @@ bool CEnemy::IsLookTarget(CObjectBase* target) const
 		return false;
 
 	// 遮蔽物になるオブジェクトを取得
-	std::vector<CColliderMesh*> cols = field->GetObjectCollider();
+	std::vector<CCollider*> cols = field->GetObjectCollider();
 	// 遮蔽物のオブジェクトがないか
-	for (CColliderMesh* col : cols)
+	for (CCollider* col : cols)
 	{
 		if (CCollider::CollisionRay(col, selfPos, targetPos, &hit)) return false;
 	}
@@ -571,7 +566,7 @@ void CEnemy::UpdateJoinNavGraph()
 void CEnemy::UpdatePatrol()
 {
 	// 進路を塞いでいるオブジェクトを攻撃するか
-	if (TryAttackBlockingObj()) return;
+	//if (TryAttackBlockingObj()) return;
 
 	// 攻撃するキャラクターが見つかった場合は、この処理を実行しない
 	if (CheckAttackPlayer())
@@ -614,6 +609,7 @@ void CEnemy::UpdateChase()
 // プレイヤーを見失った時の更新処理
 void CEnemy::UpdateLost()
 {
+
 	mMoveSpeed = CVector::zero;
 
 	// 戦闘相手が存在しなかった場合は、
@@ -630,66 +626,69 @@ void CEnemy::UpdateLost()
 		return;
 	}
 
-	CNavManager* navMgr = CNavManager::Instance();
+	// 見失った位置まで行く処理が上手くいかないので
+	ChangeState(EState::eAlert);
+	mpLostPlayerNode->SetEnable(false);
 
-	switch (mStateStep)
-	{
-		// ステップ0：見失った位置までの最短経路を求める
-	case 0:
-		mLostElapsedTime = 0.0f;
-		mStateStep++;
-		break;
-	case 1:
-		// 経路探索用のノード座標を更新
-		mpLostPlayerNode->SetPos(CAdventurer::Instance()->Position());
+	//CNavManager* navMgr = CNavManager::Instance();
 
-		// 自身のノードと見失った位置のノードが更新中でなければ
-		if (!mpNavNode->IsUpdating() && !mpLostPlayerNode->IsUpdating())
-		{
-			if (!navMgr->Navigate(mpNavNode, mpLostPlayerNode, mMoveRoute))
-			{
-				// 経路がつながっていなければ、待機状態へ戻す
-				ChangeState(EState::eIdle);
-				mpLostPlayerNode->SetEnable(false);
-			}
-			else
-			{
-				// 見失った位置まで経路が繋がっていたら、次のステップへ
-				// 次の移動先を１番近い場所に設定
-				mNextMoveIndex = 1;
-			}
-		}
-	case 2:
-		// 次の移動先のインデックス値が不正値でなければ
-		if (0 <= mNextMoveIndex && mNextMoveIndex < mMoveRoute.size())
-		{
-			// ターゲットを見失った位置まで移動
-			if (MoveTo(mMoveRoute[mNextMoveIndex]->GetPos(), GetMoveSpeed()))
-			{
-				mNextMoveIndex++;
-				if (mNextMoveIndex >= mMoveRoute.size())
-				{
-					// 移動が終われば警戒状態へ移行
-					ChangeState(EState::eAlert);
-					mpLostPlayerNode->SetEnable(false);
-				}
-			}
+	//switch (mStateStep)
+	//{
+	//	// ステップ0：見失った位置までの最短経路を求める
+	//case 0:
+	//	mLostElapsedTime = 0.0f;
+	//	mStateStep++;
+	//	break;
+	//case 1:
+	//	// 経路探索用のノード座標を更新
+	//	mpLostPlayerNode->SetPos(CAdventurer::Instance()->Position());
 
-			if (mLostElapsedTime < UPDATE_LOST_POS_TIME)
-			{
-				// 見失った時間を加算
-				mLostElapsedTime += Times::DeltaTime();
-				if (mLostElapsedTime >= UPDATE_LOST_POS_TIME)
-				{
-					mStateStep++;
-				}
-			}
-		}
-		break;
-	}
+	//	// 自身のノードと見失った位置のノードが更新中でなければ
+	//	if (!mpNavNode->IsUpdating() && !mpLostPlayerNode->IsUpdating())
+	//	{
+	//		if (!navMgr->Navigate(mpNavNode, mpLostPlayerNode, mMoveRoute))
+	//		{
+	//			// 経路がつながっていなければ、待機状態へ戻す
+	//			ChangeState(EState::eIdle);
+	//			mpLostPlayerNode->SetEnable(false);
+	//		}
+	//		else
+	//		{
+	//			// 見失った位置まで経路が繋がっていたら、次のステップへ
+	//			// 次の移動先を１番近い場所に設定
+	//			mNextMoveIndex = 1;
+	//			//mStateStep++;
+	//		}
+	//	}
+	//	//break;
+	//case 2:
+	//	// 次の移動先のインデックス値が不正値でなければ
+	//	if (0 <= mNextMoveIndex && mNextMoveIndex < mMoveRoute.size())
+	//	{
+	//		// ターゲットを見失った位置まで移動
+	//		if (MoveTo(mMoveRoute[mNextMoveIndex]->GetPos(), GetMoveSpeed()))
+	//		{
+	//			mNextMoveIndex++;
+	//			if (mNextMoveIndex >= mMoveRoute.size())
+	//			{
+	//				// 移動が終われば警戒状態へ移行
+	//				ChangeState(EState::eAlert);
+	//				mpLostPlayerNode->SetEnable(false);
+	//			}
+	//		}
 
-	//mpBattleTarget = nullptr;
-	//ChangeState(EState::eIdle());
+	//		if (mLostElapsedTime < UPDATE_LOST_POS_TIME)
+	//		{
+	//			// 見失った時間を加算
+	//			mLostElapsedTime += Times::DeltaTime();
+	//			if (mLostElapsedTime >= UPDATE_LOST_POS_TIME)
+	//			{
+	//				mStateStep++;
+	//			}
+	//		}
+	//	}
+	//	break;
+	//}
 }
 
 // 警戒している時の処理
@@ -807,6 +806,8 @@ void CEnemy::UpdateAlert()
 		{
 			// 待機状態へ戻す
 			ChangeState(EState::eIdle);
+			mpBattleTarget = nullptr;
+			mIsBattle = false;
 		}
 		break;
 	}
@@ -866,6 +867,12 @@ void CEnemy::Update()
 	// 移動
 	CVector moveSpeed = mMoveSpeed + CVector(0.0f, mMoveSpeedY, 0.0f);
 	Position(Position() + moveSpeed);
+
+	// 自身の経路探索ノードの位置を更新
+	if (mpNavNode != nullptr)
+	{
+		mpNavNode->SetPos(Position());
+	}
 
 	mIsGrounded = false;
 

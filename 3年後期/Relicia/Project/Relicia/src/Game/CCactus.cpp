@@ -20,8 +20,8 @@
 #define MOVE_SPEED 20.0f
 #define CHAISE_SPEED 20.0f
 #define LOOKAT_SPEED 90.0f
-#define BATTLE_IDLE_TIME_MIN 2.0f
-#define BATTLE_IDLE_TIME_MAX 5.0f
+#define BATTLE_IDLE_TIME_MIN 1.0f
+#define BATTLE_IDLE_TIME_MAX 2.0f
 
 #define ATTACK2_DIST 50.0f			// 針攻撃を行う距離
 #define ATTACK2_PROB 70				// 針攻撃を行う確率（パーセント）
@@ -103,6 +103,50 @@ CCactus::~CCactus()
 	SAFE_DELETE(mpAttack1Col);
 }
 
+void CCactus::TakeDamage(int damage, ElementType type, CObjectBase* causer)
+{
+	// 既に死亡していたら、ダメージを受けない
+	if (IsDeath()) return;
+
+	if (type == ElementType::Thunder)
+	{
+		damage = damage * 2.0f;
+	}
+
+	// 受けたダメージが現在HP以上なら
+	if (damage >= mHp)
+	{
+		// HPを0にして、死亡
+		mHp = 0;
+		Death();
+	}
+	// 現在HPの方が多い場合は、ダメージ分減らす
+	else
+	{
+		mHp -= damage;
+	}
+
+	// 死亡していなければ、
+	if (!IsDeath())
+	{
+		// 仰け反り状態へ移行
+		ChangeState(EState::eHit);
+
+		// 攻撃を加えた相手を戦闘相手に設定
+		mpBattleTarget = causer;
+
+		// 攻撃を加えた相手の方向へ向く
+		LookAtBattleTarget(true);
+
+		// 戦闘状態へ切り替え
+		mIsBattle = true;
+
+		// 移動を停止
+		mMoveSpeed = CVector::zero;
+	}
+
+}
+
 // 攻撃開始
 void CCactus::AttackStart()
 {
@@ -141,7 +185,7 @@ void CCactus::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		if (chara != nullptr && !IsAttackHitObj(chara))
 		{
 			// ダメージを与える
-			chara->TakeDamage(10, this);
+			chara->TakeDamage(2, this);
 			// 攻撃ヒット済みリストに登録
 			AddAttackHitObj(chara);
 		}
@@ -199,21 +243,17 @@ void CCactus::UpdateIdle()
 	// 通常時の待機
 	if (!mIsBattle)
 	{
-		// 通常時の待機
-		if (!mIsBattle)
+		// 目的地のノードが無ければ、
+		if (!mpCurrentNode && !mpNearNode)
 		{
-			// 目的地のノードが無ければ、
-			if (!mpCurrentNode && !mpNearNode)
-			{
-				// 最寄りのノードに移動
-				ChangeState(EState::eJoinNavGraph);
-			}
-			// 巡回ノードがあれば、
-			if (mpCurrentNode != nullptr)
-			{
-				// 巡回状態に移行
-				ChangeState(EState::ePatrol);
-			}
+			// 最寄りのノードに移動
+			ChangeState(EState::eJoinNavGraph);
+		}
+		// 巡回ノードがあれば、
+		if (mpCurrentNode != nullptr)
+		{
+			// 巡回状態に移行
+			ChangeState(EState::ePatrol);
 		}
 	}
 	// 戦闘時の待機
@@ -433,6 +473,9 @@ void CCactus::UpdatePunch()
 			if (mElapsedTime < ATTACK_WAIT_TIME)
 			{
 				ChangeAnimation((int)EAnimType::eIdle);
+				// 徐々に戦闘相手の方向へ向く
+				LookAtBattleTarget();
+
 				mElapsedTime += Times::DeltaTime();
 			}
 			else
@@ -462,7 +505,6 @@ void CCactus::UpdatePunch()
 				}
 			}
 			break;
-
 	}
 }
 
@@ -606,11 +648,14 @@ void CCactus::Update()
 	// 戦闘相手までの距離をデバッグ表示
 	if (mpBattleTarget != nullptr)
 	{
-		CVector targetPos = mpBattleTarget->Position();
-		CVector pos = Position();
-		targetPos.Y(pos.Y());
-		float dist = CVector::Distance(targetPos, pos);
-		CDebugPrint::Print("Dist:%.2f\n", dist);
+		if (!mpBattleTarget->IsKill())
+		{
+			CVector targetPos = mpBattleTarget->Position();
+			CVector pos = Position();
+			targetPos.Y(pos.Y());
+			float dist = CVector::Distance(targetPos, pos);
+			CDebugPrint::Print("Dist:%.2f\n", dist);
+		}
 	}
 #endif // _DEBUG
 

@@ -2,7 +2,7 @@
 #include "CCharaBase.h"
 #include "CModel.h"
 
-class CColliderMesh;
+class CColliderBox;
 
 class CCrate : public CCharaBase
 {
@@ -21,6 +21,10 @@ public:
 	void Render() override;
 private:
 	CModel* mpModel;
-	CColliderMesh* mpColliderMesh;
+	CColliderBox* mpColliderBox;
 
+	bool mPush;
+	bool mLastPush;
+
+	float mElapsedTime;
 };
