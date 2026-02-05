@@ -6,6 +6,7 @@
 #include "CNavNode.h"
 #include "CCrystalObj.h"
 #include "CEnemyManager.h"
+#include "CItemObj.h"
 
 #define ANIM_PATH "Character\\Enemy\\Cactus\\Anim\\"
 #define BODY_HEIGHT 13.0f
@@ -633,6 +634,7 @@ void CCactus::UpdateDeath()
 			{
 				CEnemyManager::Instance()->RemoveEnemy(this);
 				new CCrystalObj(ElementType::Wind, Position());
+				new CItemObj(ItemId::Chicken, Position());
 			}
 			break;
 	}

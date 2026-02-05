@@ -15,6 +15,7 @@
 #include "CResultScene.h"
 #include "CGameData.h"
 #include "CSceneManager.h"
+#include "CNavManager.h"
 
 // プレイヤーのインスタンス
 CAdventurer* CAdventurer::spInstance = nullptr;
@@ -154,6 +155,15 @@ CAdventurer::CAdventurer()
 // デストラクタ
 CAdventurer::~CAdventurer()
 {
+	CNavManager* navMgr = CNavManager::Instance();
+	if (navMgr != nullptr)
+	{
+		if (mpNavNode != nullptr)
+		{
+			mpNavNode->Kill();
+		}
+	}
+
 	// コライダーを削除
 	SAFE_DELETE(mpBodyCol);
 

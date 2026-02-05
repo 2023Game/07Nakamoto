@@ -5,6 +5,7 @@
 #include "CCrystalObj.h"
 #include "CNavNode.h"
 #include "CEnemyManager.h"
+#include "CItemObj.h"
 
 #define ANIM_PATH "Character\\Enemy\\Mushroom\\Anim\\"
 #define BODY_HEIGHT 9.0f
@@ -514,6 +515,7 @@ void CMashroom::UpdateDeath()
 		{
 			CEnemyManager::Instance()->RemoveEnemy(this);
 			new CCrystalObj(ElementType::Fire, Position());
+			new CItemObj(ItemId::HealingPotion, Position());
 		}
 		break;
 	}

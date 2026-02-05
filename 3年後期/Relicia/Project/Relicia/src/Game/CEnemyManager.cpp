@@ -57,10 +57,10 @@ void CEnemyManager::AddEnemy(CEnemy* enemy)
 // 敵をリストから削除
 void CEnemyManager::RemoveEnemy(CEnemy* enemy)
 {
-	auto it = std::find(mpEnemys.begin(), mpEnemys.end(), enemy);
+	auto it = std::remove(mpEnemys.begin(), mpEnemys.end(), enemy);
 	mpEnemys.erase(it, mpEnemys.end());
 
-	(*it)->Kill();
+	enemy->Kill();
 }
 
 // 敵のリストを削除

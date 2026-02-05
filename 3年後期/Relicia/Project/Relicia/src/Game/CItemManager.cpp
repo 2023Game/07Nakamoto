@@ -3,7 +3,7 @@
 #include "CItemObj.h"
 #include "ItemData.h"
 
-#define SPAWN 4
+#define SPAWN 8
 
 CItemManager* CItemManager::spInstance = nullptr;
 
@@ -52,10 +52,10 @@ void CItemManager::SpawnItems()
 	// ‰Šú‰»
 	AllRemoveItems();
 
-	// ‚Æ‚è‚ ‚¦‚¸4‰ñ¶¬
+	// ƒXƒ|[ƒ“‚Ì”‚¾‚¯¶¬
 	for (int i = 0; i < SPAWN; ++i)
 	{
-		mpCrystalObjs.push_back(new CItemObj(Item::GetRandomItemId(), CField::Instance()->GetMapData()->GetRoomRandomFloorPos(CBspMap::EOccupyType::Crystal)));
+		mpCrystalObjs.push_back(new CItemObj(Item::GetRandomItemId(), CField::Instance()->GetMapData()->GetRoomRandomFloorPos(CBspMap::EOccupyType::Item)));
 	}
 }
 

@@ -25,7 +25,6 @@ public:
 private:
 
 	CField* mpField;
-	//std::vector<CEnemy*> mpEnemys;
 
 	CGameMenu* mpGameMenu;
 };

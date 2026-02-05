@@ -15,6 +15,10 @@
 // メニューのアニメーション後の待ち時間
 #define OPENED_WAIT_TIME 0.5f
 
+#define RANK_B 500
+#define RANK_A 1000
+#define RANK_S 1500
+
 // コンストラクタ
 CResultUI::CResultUI()
 	: CTask(ETaskPriority::eUI, 0, ETaskPauseType::eDefault)
@@ -94,19 +98,19 @@ CResultUI::CResultUI()
 
 	const char* c;
 	// 表示画像を設定
-	if (mTotalSellPrice < 300)
+	if (mTotalSellPrice < RANK_B)
 	{
 		c = "UI\\RankC_T.png";
 	}
-	else if (300 <= mTotalSellPrice && mTotalSellPrice < 700)
+	else if (RANK_B <= mTotalSellPrice && mTotalSellPrice < RANK_A)
 	{
 		c = "UI\\RankB_T.png";
 	}
-	else if (700 <= mTotalSellPrice && mTotalSellPrice < 1000)
+	else if (RANK_A <= mTotalSellPrice && mTotalSellPrice < RANK_S)
 	{
 		c = "UI\\RankA_T.png";
 	}
-	else if (1000 <= mTotalSellPrice)
+	else if (RANK_S <= mTotalSellPrice)
 	{
 		c = "UI\\RankS_T.png";
 	}

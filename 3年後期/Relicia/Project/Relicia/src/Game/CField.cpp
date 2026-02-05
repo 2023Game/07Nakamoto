@@ -22,6 +22,7 @@
 #include "CNavManager.h"
 #include "CNavNode.h"
 #include "CSwitchFloor.h"
+#include "CEnemyManager.h"
 
 #define PILLAR_OFFSET_POS 10.0f	// 柱のオフセット座標
 #define SECTION_SIZE_X 50		// ダンジョンの全体の区画の横サイズ
@@ -151,6 +152,8 @@ void CField::CreateMap()
 		CCrystalManager::Instance()->AllRemoveCrystals();
 		// ノード管理クラスをリセット
 		CNavManager::Instance()->Clear();
+		// 敵キャラのリセット
+		CEnemyManager::Instance()->AllClear();
 	}
 
 	// BSP法のダンジョンデータを生成

@@ -1,4 +1,5 @@
 #pragma once
+#include "ItemData.h"
 
 class CItemObj;
 
