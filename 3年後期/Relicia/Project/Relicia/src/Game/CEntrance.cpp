@@ -2,6 +2,7 @@
 #include "CColliderMesh.h"
 #include "CNavNode.h"
 #include "CNavManager.h"
+#include "CField.h"
 
 // コンストラクタ
 CEntrance::CEntrance(const CVector& pos)
@@ -21,11 +22,24 @@ CEntrance::CEntrance(const CVector& pos)
 	Position(pos);
 
 	CNavManager::Instance()->AddCollider(mpColliderMesh);
+	CField::Instance()->AddObjectCollider(mpColliderMesh);
 }
 
 // デストラクタ
 CEntrance::~CEntrance()
 {
+	CNavManager* navMgr = CNavManager::Instance();
+	if (navMgr != nullptr)
+	{
+		navMgr->RemoveCollider(mpColliderMesh);
+	}
+
+	CField* field = CField::Instance();
+	if (field != nullptr)
+	{
+		field->RemoveObjectCollider(mpColliderMesh);
+	}
+
 	SAFE_DELETE(mpColliderMesh);
 	SAFE_DELETE(mpColliderMeshCeil);
 }

@@ -249,23 +249,6 @@ void CMashroom::UpdateIdle()
 				// 次の状態（デフォルトは追跡状態）
 				EState nextState = EState::eChase;
 
-				//// 戦闘相手までの距離を求める
-				//CVector targetPos = mpBattleTarget->Position();
-				//CVector vec = targetPos - Position();
-				//vec.Y(0.0f);
-				//float dist = vec.Length();
-				//// 戦闘相手までの距離が離れていたら、
-				//if (dist >= ATTACK2_DIST)
-				//{
-				//	// 一定確率で、針攻撃に変更
-				//	int rand = Math::Rand(0, 99);
-				//	if (rand < ATTACK2_PROB)
-				//	{
-				//		nextState = EState::eAttack;
-				//		mAttackIndex = (int)EAttackID::eSpin;
-				//	}
-				//}
-
 				// 次の状態へ移行
 				ChangeState(EState::eChase);
 				mAttackIndex = (int)EAttackID::eHeadbutt;

@@ -189,10 +189,13 @@ void CGameScene::Update()
 
 	if (CDebugInput::PushKey('B'))
 	{
-		// プレイヤーの座標を再設定
-		CAdventurer::Instance()->Position(mpField->GetMapData()->GetRoomRandomFloorPos(CBspMap::EOccupyType::Player));
+		// 敵の生成前に初期化しておく
+		CEnemyManager::Instance()->AllClear();
 		// 敵の生成
 		CEnemyManager::Instance()->CreateEnemys();
+
+		// プレイヤーの座標を再設定
+		CAdventurer::Instance()->Position(mpField->GetMapData()->GetRoomRandomFloorPos(CBspMap::EOccupyType::Player));
 	}
 
 	CDebugPrint::Print("階層：%d階\n", CGameData::floorNum);

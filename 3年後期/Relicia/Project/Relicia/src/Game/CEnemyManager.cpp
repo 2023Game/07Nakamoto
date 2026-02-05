@@ -31,42 +31,49 @@ CEnemyManager::CEnemyManager()
 CEnemyManager::~CEnemyManager()
 {
 	AllClear();
-	spInstance = nullptr;
+
+	if (spInstance == this)
+	{
+		spInstance = nullptr;
+	}
 }
 
 // ƒCƒ“ƒXƒ^ƒ“ƒX‚ðíœ
 void CEnemyManager::ClearInstance()
 {
-	SAFE_DELETE(spInstance);
+	if (spInstance != nullptr)
+	{
+		spInstance->Kill();
+		spInstance = nullptr;
+	}
 }
 
 // “G‚ðƒŠƒXƒg‚É’Ç‰Á
 void CEnemyManager::AddEnemy(CEnemy* enemy)
 {
-	mEnemys.push_back(enemy);
+	mpEnemys.push_back(enemy);
 }
 
 // “G‚ðƒŠƒXƒg‚©‚çíœ
 void CEnemyManager::RemoveEnemy(CEnemy* enemy)
 {
-	auto it = std::find(mEnemys.begin(), mEnemys.end(), enemy);
-	if (it == mEnemys.end()) return;
+	auto it = std::find(mpEnemys.begin(), mpEnemys.end(), enemy);
+	mpEnemys.erase(it, mpEnemys.end());
 
-	(*it)->Kill();          // æ‚ÉKill
-	mEnemys.erase(it);      // ‚»‚ÌŒãíœ
+	(*it)->Kill();
 }
 
 // “G‚ÌƒŠƒXƒg‚ðíœ
 void CEnemyManager::AllClear()
 {
-	for (CEnemy* enemy : mEnemys)
+	for (CEnemy* enemy : mpEnemys)
 	{
 		if (enemy || !enemy->IsKill())
 		{
 			enemy->Kill();
 		}
 	}
-	mEnemys.clear();
+	mpEnemys.clear();
 }
 
 // “G‚ð¶¬
@@ -83,10 +90,10 @@ void CEnemyManager::CreateEnemys()
 		CEnemyManager::Instance()->AddEnemy(cactus);
 
 		// ƒLƒmƒR‚Ì“G‚ðì¬
-		//CMashroom* mashroom = new CMashroom();
-		//mashroom->Position(field->GetMapData()->GetRoomRandomFloorPos(CBspMap::EOccupyType::Enemy));
-		//mashroom->InitNav();
-		//CEnemyManager::Instance()->AddEnemy(mashroom);
+		CMashroom* mashroom = new CMashroom();
+		mashroom->Position(field->GetMapData()->GetRoomRandomFloorPos(CBspMap::EOccupyType::Enemy));
+		mashroom->InitNav();
+		CEnemyManager::Instance()->AddEnemy(mashroom);
 	}
 }
 

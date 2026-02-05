@@ -32,5 +32,5 @@ private:
     // 敵の管理クラスのインスタンス
     static CEnemyManager* spInstance;
     // 敵のリスト
-    std::vector<CEnemy*> mEnemys;
+    std::vector<CEnemy*> mpEnemys;
 };

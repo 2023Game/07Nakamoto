@@ -38,6 +38,11 @@ CCrate::CCrate(const CVector& pos, ETag tag, ETaskPriority prio, int sortOrder, 
 
 CCrate::~CCrate()
 {
+	CField* field = CField::Instance();
+	if (field != nullptr)
+	{
+		field->RemoveObjectCollider(mpColliderBox);
+	}
 	SAFE_DELETE(mpColliderBox);
 }
 

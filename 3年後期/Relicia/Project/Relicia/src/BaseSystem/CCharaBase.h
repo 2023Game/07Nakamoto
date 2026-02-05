@@ -26,10 +26,6 @@ public:
 
 	// €–S
 	virtual void Death();
-	// €‚ñ‚Å‚¢‚é‚©‚Ç‚¤‚©
-	bool IsDeath() const;
 
 protected:
-	int mMaxHp;	// Å‘åHP
-	int mHp;	// Œ»İHP
 };

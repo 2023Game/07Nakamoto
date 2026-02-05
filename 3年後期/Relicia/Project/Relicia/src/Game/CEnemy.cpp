@@ -627,68 +627,72 @@ void CEnemy::UpdateLost()
 	}
 
 	// 見失った位置まで行く処理が上手くいかないので
-	ChangeState(EState::eAlert);
-	mpLostPlayerNode->SetEnable(false);
+	//ChangeState(EState::eAlert);
+	//mpLostPlayerNode->SetEnable(false);
 
-	//CNavManager* navMgr = CNavManager::Instance();
+	CNavManager* navMgr = CNavManager::Instance();
 
-	//switch (mStateStep)
-	//{
-	//	// ステップ0：見失った位置までの最短経路を求める
-	//case 0:
-	//	mLostElapsedTime = 0.0f;
-	//	mStateStep++;
-	//	break;
-	//case 1:
-	//	// 経路探索用のノード座標を更新
-	//	mpLostPlayerNode->SetPos(CAdventurer::Instance()->Position());
+	switch (mStateStep)
+	{
+		// ステップ0：見失った位置までの最短経路を求める
+	case 0:
+		mLostElapsedTime = 0.0f;
+		mStateStep++;
+		break;
+	case 1:
+		// 経路探索用のノード座標を更新
+		mpLostPlayerNode->SetPos(CAdventurer::Instance()->Position());
 
-	//	// 自身のノードと見失った位置のノードが更新中でなければ
-	//	if (!mpNavNode->IsUpdating() && !mpLostPlayerNode->IsUpdating())
-	//	{
-	//		if (!navMgr->Navigate(mpNavNode, mpLostPlayerNode, mMoveRoute))
-	//		{
-	//			// 経路がつながっていなければ、待機状態へ戻す
-	//			ChangeState(EState::eIdle);
-	//			mpLostPlayerNode->SetEnable(false);
-	//		}
-	//		else
-	//		{
-	//			// 見失った位置まで経路が繋がっていたら、次のステップへ
-	//			// 次の移動先を１番近い場所に設定
-	//			mNextMoveIndex = 1;
-	//			//mStateStep++;
-	//		}
-	//	}
-	//	//break;
-	//case 2:
-	//	// 次の移動先のインデックス値が不正値でなければ
-	//	if (0 <= mNextMoveIndex && mNextMoveIndex < mMoveRoute.size())
-	//	{
-	//		// ターゲットを見失った位置まで移動
-	//		if (MoveTo(mMoveRoute[mNextMoveIndex]->GetPos(), GetMoveSpeed()))
-	//		{
-	//			mNextMoveIndex++;
-	//			if (mNextMoveIndex >= mMoveRoute.size())
-	//			{
-	//				// 移動が終われば警戒状態へ移行
-	//				ChangeState(EState::eAlert);
-	//				mpLostPlayerNode->SetEnable(false);
-	//			}
-	//		}
+		// 自身のノードと見失った位置のノードが更新中でなければ
+		if (!mpNavNode->IsUpdating() && !mpLostPlayerNode->IsUpdating())
+		{
+			if (!navMgr->Navigate(mpNavNode, mpLostPlayerNode, mMoveRoute))
+			{
+				// 経路がつながっていなければ、待機状態へ戻す
+				ChangeState(EState::eIdle);
+				mpLostPlayerNode->SetEnable(false);
+			}
+			else
+			{
+				// 見失った位置まで経路が繋がっていたら、次のステップへ
+				// 次の移動先を１番近い場所に設定
+				mNextMoveIndex = 1;
+			}
+		}
+	case 2:
+		// 次の移動先のインデックス値が不正値でなければ
+		if (0 <= mNextMoveIndex && mNextMoveIndex < mMoveRoute.size())
+		{
+			// ターゲットを見失った位置まで移動
+			if (MoveTo(mMoveRoute[mNextMoveIndex]->GetPos(), GetMoveSpeed()))
+			{
+				mNextMoveIndex++;
+				if (mNextMoveIndex >= mMoveRoute.size())
+				{
+					// 移動が終われば警戒状態へ移行
+					ChangeState(EState::eAlert);
+					mpLostPlayerNode->SetEnable(false);
+				}
+			}
 
-	//		if (mLostElapsedTime < UPDATE_LOST_POS_TIME)
-	//		{
-	//			// 見失った時間を加算
-	//			mLostElapsedTime += Times::DeltaTime();
-	//			if (mLostElapsedTime >= UPDATE_LOST_POS_TIME)
-	//			{
-	//				mStateStep++;
-	//			}
-	//		}
-	//	}
-	//	break;
-	//}
+			if (mLostElapsedTime < UPDATE_LOST_POS_TIME)
+			{
+				// 見失った時間を加算
+				mLostElapsedTime += Times::DeltaTime();
+				if (mLostElapsedTime >= UPDATE_LOST_POS_TIME)
+				{
+					mStateStep++;
+				}
+			}
+		}
+		break;
+	}
+
+	if(TryAttackBlockingObj())
+	{
+		mAttackIndex = 0;
+		mMoveSpeed = CVector::zero;
+	}
 }
 
 // 警戒している時の処理
@@ -838,6 +842,11 @@ void CEnemy::UpdateDeath()
 // 更新
 void CEnemy::Update()
 {
+	if (mpBattleTarget != nullptr && mpBattleTarget->IsDeath())
+	{
+		mpBattleTarget = nullptr;
+	}
+
 	// 状態に合わせて、更新処理を切り替える
 	switch ((EState)mState)
 	{

@@ -3,8 +3,6 @@
 // コンストラクタ
 CCharaBase::CCharaBase(ETag tag, ETaskPriority prio, int sortOrder, ETaskPauseType pause)
 	: CObjectBase(tag, prio, sortOrder, pause)
-	, mMaxHp(10)
-	, mHp(mMaxHp)
 {
 }
 
@@ -69,9 +67,3 @@ void CCharaBase::Death()
 {
 }
 
-// 死んでいるかどうか
-bool CCharaBase::IsDeath() const
-{
-	// 現在HPが0ならば、死亡
-	return mHp <= 0;
-}

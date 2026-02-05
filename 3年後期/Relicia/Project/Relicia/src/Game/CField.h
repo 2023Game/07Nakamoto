@@ -43,7 +43,8 @@ public:
 	std::vector<CCollider*> GetObjectCollider() const;
 	// フィールドのオブジェクトのコライダーを追加
 	void AddObjectCollider(CCollider* col);
-
+	// フィールドのオブジェクトのコライダーを取り除く
+	void RemoveObjectCollider(CCollider* col);
 	// 徘徊用のノードを取得
 	std::vector<CNavNode*> GetNavNodes();
 
@@ -119,5 +120,4 @@ private:
 
 	// コライダーのポインタ
 	CBspMapCollider* mpDungeonCollider;
-
 };

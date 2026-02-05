@@ -80,6 +80,9 @@ public:
 	/// </summary>
 	virtual void AttackEnd();
 
+	// 死んでいるかどうか
+	bool IsDeath() const;
+
 private:
 	ETag mTag;			// オブジェクト識別用のタグ
 	bool mIsEnableCol;	// 衝突判定を行うかどうか
@@ -105,4 +108,6 @@ protected:
 
 	CNavNode* mpNavNode;// 経路探索用のノードポインタ
 
+	int mMaxHp;	// 最大HP
+	int mHp;	// 現在HP
 };

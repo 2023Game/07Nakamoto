@@ -13,6 +13,8 @@ CObjectBase::CObjectBase(ETag tag,
 	, mDepth(0.0f)
 	, mColor(CColor::white)
 	, mpNavNode(nullptr)
+	, mMaxHp(10)
+	, mHp(mMaxHp)
 {
 }
 
@@ -113,6 +115,13 @@ void CObjectBase::AttackStart()
 // 攻撃終了
 void CObjectBase::AttackEnd()
 {
+}
+
+// 死んでいるかどうか
+bool CObjectBase::IsDeath() const
+{
+	// 現在HPが0ならば、死亡
+	return mHp <= 0;
 }
 
 // 攻撃がヒットしたオブジェクトを追加

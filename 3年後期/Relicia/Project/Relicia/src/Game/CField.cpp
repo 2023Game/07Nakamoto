@@ -24,8 +24,8 @@
 #include "CSwitchFloor.h"
 
 #define PILLAR_OFFSET_POS 10.0f	// 柱のオフセット座標
-#define SECTION_SIZE_X 30		// ダンジョンの全体の区画の横サイズ
-#define SECTION_SIZE_Y 30		// ダンジョンの全体の区画の縦サイズ
+#define SECTION_SIZE_X 50		// ダンジョンの全体の区画の横サイズ
+#define SECTION_SIZE_Y 50		// ダンジョンの全体の区画の縦サイズ
 
 CField* CField::spInstance = nullptr;
 
@@ -100,6 +100,15 @@ std::vector<CCollider*> CField::GetObjectCollider() const
 void CField::AddObjectCollider(CCollider* col)
 {
 	mpObjectColliders.push_back(col);
+}
+
+// フィールドのオブジェクトのコライダーを取り除く
+void CField::RemoveObjectCollider(CCollider* col)
+{
+	auto it = std::remove(mpObjectColliders.begin(), mpObjectColliders.end(), col);
+	if (it == mpObjectColliders.end())return;
+
+	mpObjectColliders.erase(it, mpObjectColliders.end());
 }
 
 // 徘徊用のノードを取得
